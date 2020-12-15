@@ -317,15 +317,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   };
 
   const getBlockStyle = (block: ContentBlock): string => {
-    switch (block.getType()) {
-      case 'blockquote': {
-        return 'RichEditor-blockquote';
-      }
-
-      default: {
-        return '';
-      }
+    if (block.getType() === 'blockquote') {
+      return 'RichEditor-blockquote';
     }
+
+    return '';
   };
 
   const handleSubmit = (): void => {
@@ -336,6 +332,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     }, 0);
   };
 
+  // TODO: `keyCode` is deprecated.
   const getKeyBinding = (e: KeyboardEvent<Record<symbol, unknown>>): string | null => {
     switch (e.keyCode) {
       // CMD + Shift + X
