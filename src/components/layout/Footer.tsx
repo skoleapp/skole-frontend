@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
 
   const renderCompany = (
     <Grid item xs={4} container justify="center">
-      <Grid item xs={2} container direction="column">
+      <Box display="flex" flexDirection="column">
         <Typography variant="subtitle1" color="secondary" gutterBottom>
           {t('common:company').toUpperCase()}
         </Typography>
@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
         <TextLink href={urls.privacy} color="secondary">
           {t('common:privacy')}
         </TextLink>
-      </Grid>
+      </Box>
     </Grid>
   );
 
@@ -55,7 +55,7 @@ export const Footer: React.FC = () => {
 
   const renderSocial = (
     <Grid item xs={4} container justify="center">
-      <Grid item xs={2} container direction="column">
+      <Box display="flex" flexDirection="column">
         <Typography variant="subtitle1" color="secondary" gutterBottom>
           {t('common:social').toUpperCase()}
         </Typography>
@@ -91,7 +91,7 @@ export const Footer: React.FC = () => {
         >
           LinkedIn
         </TextLink>
-      </Grid>
+      </Box>
     </Grid>
   );
 
