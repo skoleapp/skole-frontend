@@ -129,7 +129,6 @@ export const AvatarField = <T extends FormikValues>({
         id="avatar-input"
         type="file"
         accept={ACCEPTED_AVATAR_FILES.toString()}
-        capture="user" // User-facing camera.
         onChange={handleAvatarChange}
       />
       <Button

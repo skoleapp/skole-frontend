@@ -541,7 +541,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         value=""
         type="file"
         accept={ACCEPTED_ATTACHMENT_FILES.toString()}
-        capture="environment" // Outward-facing camera.
         onChange={handleAttachmentChange}
         disabled={!userMe}
       />
