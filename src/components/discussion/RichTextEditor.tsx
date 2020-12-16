@@ -134,7 +134,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const classes = useStyles();
   const ref = useRef<Editor>(null!);
   const { t } = useTranslation();
-  const { isTabletOrDesktop, isMobile } = useMediaQueries();
+  const { isTabletOrDesktop, isMobile, isMobileOrTablet } = useMediaQueries();
   const { toggleNotification } = useNotificationsContext();
   const placeholder = `${t('forms:createComment')}...`;
   const contentState = editorState.getCurrentContent();
@@ -370,7 +370,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     e: KeyboardEvent<Record<symbol, unknown>>,
     editorState: EditorState,
   ): DraftHandleValue => {
-    if (e.shiftKey) {
+    if (e.shiftKey || isMobileOrTablet) {
       setEditorState(RichUtils.insertSoftNewline(editorState));
       return 'handled';
     }
