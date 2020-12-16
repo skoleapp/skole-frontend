@@ -97,13 +97,17 @@ export const AvatarField = <T extends FormikValues>({
     handleCloseDialog();
   };
 
-  const renderChangeAvatar = (
+  const addOrChangeAvatarText = preview
+    ? t('edit-profile:changeAvatar')
+    : t('edit-profile:addAvatar');
+
+  const renderAddOrChangeAvatarIcon = preview ? <EditOutlined /> : <AddCircleOutlineOutlined />;
+
+  const renderAddOrChangeAvatar = (
     <label htmlFor="avatar-input">
-      <MenuItem disabled={!preview}>
-        <ListItemIcon>
-          <EditOutlined />
-        </ListItemIcon>
-        <ListItemText>{t('edit-profile:changeAvatar')}</ListItemText>
+      <MenuItem>
+        <ListItemIcon>{renderAddOrChangeAvatarIcon}</ListItemIcon>
+        <ListItemText>{addOrChangeAvatarText}</ListItemText>
       </MenuItem>
     </label>
   );
@@ -115,17 +119,6 @@ export const AvatarField = <T extends FormikValues>({
       </ListItemIcon>
       <ListItemText>{t('edit-profile:clearAvatar')}</ListItemText>
     </MenuItem>
-  );
-
-  const renderAddAvatar = (
-    <label htmlFor="avatar-input">
-      <MenuItem disabled={!!preview}>
-        <ListItemIcon>
-          <AddCircleOutlineOutlined />
-        </ListItemIcon>
-        <ListItemText>{t('edit-profile:addAvatar')}</ListItemText>
-      </MenuItem>
-    </label>
   );
 
   const renderPreview = (
@@ -162,9 +155,8 @@ export const AvatarField = <T extends FormikValues>({
       dialogHeaderProps={dialogHeaderProps}
     >
       <List>
-        {renderChangeAvatar}
+        {renderAddOrChangeAvatar}
         {renderRemoveAvatar}
-        {renderAddAvatar}
       </List>
     </ResponsiveDialog>
   );
