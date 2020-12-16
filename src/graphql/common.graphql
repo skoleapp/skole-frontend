@@ -356,6 +356,10 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
       resourceType {
         name
       }
+      user {
+        id
+        username
+      }
     }
   }
 }
