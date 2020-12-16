@@ -92,7 +92,6 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       value=""
       type="file"
       accept={ACCEPTED_RESOURCE_FILES.toString()}
-      capture="environment" // Outward-facing camera.
       onChange={handleFileInputChange}
     />
   );
