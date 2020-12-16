@@ -37,7 +37,7 @@ export const ShareDialog: React.FC = () => {
   const url = `${process.env.FRONTEND_URL}${asPath}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`; // Does not work from localhost.
   const whatsAppUrl = `whatsapp://send?text=${title}: ${url}`;
-  const telegramUrl = `https://telegram.me/share/url=${url}&text=${text}`; // TODO: Check that this works in production.
+  const telegramUrl = `https://telegram.me/share?url=${url}&text=${text}`;
   const redditUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
   const twitterUrl = `https://twitter.com/share?url=${url}&text=${text}`;
   const mailUrl = `mailto:?subject=${title}&body=${text}: ${url}`;
