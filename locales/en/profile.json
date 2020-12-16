@@ -1,6 +1,8 @@
 {
   "description": "View Skole profile for user {{ username }}.",
   "score": "score",
+  "courses": "courses",
+  "resources": "resources",
   "rank": "Rank",
   "badges": "Badges",
   "editProfile": "Edit Profile",

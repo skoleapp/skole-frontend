@@ -1,6 +1,8 @@
 {
   "description": "Visa Skole-profilen för användaren {{ username }}.",
   "score": "poäng",
+  "courses": "kurser",
+  "resources": "resurser",
   "rank": "Rang",
   "badges": "Märken",
   "editProfile": "Redigera Profil",

@@ -258,13 +258,13 @@ const UserPage: NextPage = () => {
 
   const renderCourseCountTitle = (
     <Typography variant="body2" color="textSecondary">
-      {t('common:courses')}
+      {t('profile:courses')}
     </Typography>
   );
 
   const renderResourceCountTitle = (
     <Typography variant="body2" color="textSecondary">
-      {t('common:resources')}
+      {t('profile:resources')}
     </Typography>
   );
 
@@ -382,7 +382,7 @@ const UserPage: NextPage = () => {
   const statsDirection = isMobile ? 'column' : 'row';
 
   const renderStats = (
-    <Grid item container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
+    <Grid item container xs={12} sm={8} md={5} spacing={2} className={classes.statsContainer}>
       <Grid item xs={4} container direction={statsDirection}>
         {renderScoreValue}
         {renderScoreTitle}
