@@ -133,7 +133,7 @@ const GetStartedPage: NextPage = () => {
   const renderCta = (
     <Box className={classes.ctaContainer}>
       <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary">
-        {t('marketing:slogan')}
+        {t('marketing:description')}
       </Typography>
       <ButtonLink
         className={classes.ctaButton}
