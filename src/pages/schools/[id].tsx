@@ -249,6 +249,7 @@ const SchoolDetailPage: NextPage = () => {
       tableHeadProps={commonTableHeadProps}
       renderTableBody={renderSubjectsTableBody}
       count={subjectCount}
+      extraFilters={variables}
     />
   );
 
@@ -257,6 +258,7 @@ const SchoolDetailPage: NextPage = () => {
       tableHeadProps={courseTableHeadProps}
       renderTableBody={renderCourseTableBody}
       count={courseCount}
+      extraFilters={variables}
     />
   );
 

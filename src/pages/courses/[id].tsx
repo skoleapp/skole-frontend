@@ -304,6 +304,7 @@ const CourseDetailPage: NextPage = () => {
       tableHeadProps={resourceTableHeadProps}
       renderTableBody={renderResourceTableBody}
       count={resourceCount}
+      extraFilters={variables}
     />
   );
 

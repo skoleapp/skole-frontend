@@ -476,6 +476,7 @@ const UserPage: NextPage = () => {
       tableHeadProps={commonTableHeadProps}
       renderTableBody={renderCourseTableBody}
       count={courseCount}
+      extraFilters={variables}
     />
   );
 
@@ -484,6 +485,7 @@ const UserPage: NextPage = () => {
       tableHeadProps={commonTableHeadProps}
       renderTableBody={renderResourceTableBody}
       count={resourceCount}
+      extraFilters={variables}
     />
   );
 
