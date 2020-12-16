@@ -20,9 +20,8 @@ import { ExternalLink, ResponsiveDialog } from '../shared';
 export const ShareDialog: React.FC = () => {
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-
   const { asPath } = useRouter();
-  const { isMobile, isMobileOrTablet } = useMediaQueries();
+  const { isMobile } = useMediaQueries();
 
   const {
     shareDialogOpen,
@@ -37,12 +36,8 @@ export const ShareDialog: React.FC = () => {
 
   const url = `${process.env.FRONTEND_URL}${asPath}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`; // Does not work from localhost.
-  const whatsAppUrl = `whatsapp://send?text=${title}: ${url}`;
-
-  let telegramUrl = `https://telegram.me/share?url=${url}&text=${text}`;
-  if (isMobileOrTablet) {
-    telegramUrl = `tg://msg_url?url=${url}&text=${text}`;
-  }
+  const whatsAppUrl = `https://api.whatsapp.com/send?text=${title}: ${url}`;
+  const telegramUrl = `https://t.me/share/url?url=${url}&text=${text}`; // TODO: Ensure this works on QA, this is from: https://core.telegram.org/widgets/share#custom-buttons
   const redditUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
   const twitterUrl = `https://twitter.com/share?url=${url}&text=${text}`;
   const mailUrl = `mailto:?subject=${title}&body=${text}: ${url}`;
