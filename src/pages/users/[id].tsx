@@ -39,7 +39,6 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
@@ -85,8 +84,11 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     padding: `${spacing(6)} 0`,
   },
   bio: {
-    overflow: 'hidden',
     wordBreak: 'break-word',
+    marginTop: spacing(4),
+  },
+  rankContainer: {
+    marginTop: spacing(4),
   },
   badgeContainer: {
     marginTop: spacing(4),
@@ -256,13 +258,13 @@ const UserPage: NextPage = () => {
 
   const renderCourseCountTitle = (
     <Typography variant="body2" color="textSecondary">
-      {t('common:courses')}
+      {t('profile:courses')}
     </Typography>
   );
 
   const renderResourceCountTitle = (
     <Typography variant="body2" color="textSecondary">
-      {t('common:resources')}
+      {t('profile:resources')}
     </Typography>
   );
 
@@ -286,7 +288,7 @@ const UserPage: NextPage = () => {
 
   const renderBio = !!bio && (
     <Typography className={classes.bio} variant="body2">
-      <ReactMarkdown>{bio}</ReactMarkdown>
+      {bio}
     </Typography>
   );
 
@@ -297,7 +299,7 @@ const UserPage: NextPage = () => {
   );
 
   const renderRank = !!rank && (
-    <Box>
+    <Box className={classes.rankContainer}>
       <Typography variant="body2" color="textSecondary" gutterBottom>
         {t('profile:rank')}
       </Typography>
@@ -380,7 +382,7 @@ const UserPage: NextPage = () => {
   const statsDirection = isMobile ? 'column' : 'row';
 
   const renderStats = (
-    <Grid item container xs={12} sm={8} md={4} spacing={2} className={classes.statsContainer}>
+    <Grid item container xs={12} sm={8} md={5} spacing={2} className={classes.statsContainer}>
       <Grid item xs={4} container direction={statsDirection}>
         {renderScoreValue}
         {renderScoreTitle}
