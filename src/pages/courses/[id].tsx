@@ -264,7 +264,9 @@ const CourseDetailPage: NextPage = () => {
   const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
-  const renderCustomBottomNavbar = (
+  // Only render the custom bottom navbar if the user is verified since all of the actions are only available for verified users.
+  // The default bottom navbar will be automatically shown for non-verified users.
+  const renderCustomBottomNavbar = !!verified && (
     <BottomNavigation>
       <CustomBottomNavbarContainer>
         <Grid container>
