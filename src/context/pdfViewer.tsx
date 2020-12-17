@@ -2,7 +2,6 @@ import React, { createContext, useRef, useState, useContext } from 'react';
 
 import { Document } from 'react-pdf';
 import { PdfViewerContextType } from 'types';
-import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION } from 'utils';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const PdfViewerContext = createContext<PdfViewerContextType>({});
@@ -19,8 +18,6 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
   const [fullscreen, setFullscreen] = useState(true);
-  const [scale, setScale] = useState(PDF_DEFAULT_SCALE);
-  const [translation, setTranslation] = useState(PDF_DEFAULT_TRANSLATION);
 
   const getMapContainerNode = (): HTMLDivElement =>
     document.querySelector('#map-container') as HTMLDivElement;
@@ -50,10 +47,6 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
     setFullscreen,
     getMapContainerNode,
     centerHorizontalScroll,
-    scale,
-    setScale,
-    translation,
-    setTranslation,
   };
 
   return <PdfViewerContext.Provider value={value}>{children}</PdfViewerContext.Provider>;

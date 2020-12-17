@@ -45,10 +45,6 @@ export interface PdfViewerContextType {
   setFullscreen: Dispatch<SetStateAction<boolean>>;
   getMapContainerNode: () => HTMLDivElement;
   centerHorizontalScroll: () => void;
-  scale: number;
-  setScale: Dispatch<SetStateAction<number>>;
-  translation: PdfTranslation;
-  setTranslation: Dispatch<SetStateAction<PdfTranslation>>;
 }
 
 export interface DiscussionContextType {

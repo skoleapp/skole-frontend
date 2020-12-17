@@ -7,8 +7,8 @@ import {
 } from '@material-ui/icons';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
-import React from 'react';
-import { MuiColor } from 'types';
+import React, { Dispatch, SetStateAction } from 'react';
+import { MuiColor, PdfTranslation } from 'types';
 import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION, PDF_MIN_SCALE, PDF_MAX_SCALE } from 'utils';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -25,16 +25,19 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-export const MapControls: React.FC = () => {
+interface Props {
+  scale: number;
+  setScale: Dispatch<SetStateAction<number>>;
+  setTranslation: Dispatch<SetStateAction<PdfTranslation>>;
+}
+
+export const MapControls: React.FC<Props> = ({ setTranslation, scale, setScale }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
   const {
     fullscreen,
     setFullscreen,
-    setTranslation,
-    scale,
-    setScale,
     controlsDisabled,
     centerHorizontalScroll,
   } = usePdfViewerContext();
