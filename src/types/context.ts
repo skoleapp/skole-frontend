@@ -1,7 +1,6 @@
 import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
-import SwipeableViews from 'react-swipeable-views';
 
 export interface AuthContextType {
   userMe: UserObjectType | null;
@@ -41,9 +40,6 @@ export interface PdfViewerContextType {
   setPageNumber: Dispatch<SetStateAction<number>>;
   controlsDisabled: boolean;
   setControlsDisabled: Dispatch<SetStateAction<boolean>>;
-  swipingDisabled: boolean;
-  setSwipingDisabled: Dispatch<SetStateAction<boolean>>;
-  swipeableViewsRef: string & MutableRefObject<SwipeableViews>;
 }
 
 export interface DiscussionContextType {

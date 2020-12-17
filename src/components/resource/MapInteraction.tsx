@@ -41,8 +41,6 @@ export const MapInteraction: React.FC = ({ children }) => {
     controlsDisabled,
     setPageNumber,
     pageNumberInputRef,
-    setSwipingDisabled,
-    swipeableViewsRef,
   } = usePdfViewerContext();
 
   const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
@@ -224,14 +222,8 @@ export const MapInteraction: React.FC = ({ children }) => {
   const onTouchMove = (e: TouchEvent): void => {
     if (startPointersInfo.current) {
       const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
-      const isSwiping = swipeableViewsRef.current.state.isDragging;
 
-      // Prevent swiping when pinching or panning as zoomed in.
-      if (isPinchAction || translation !== DEFAULT_TRANSLATION) {
-        setSwipingDisabled(true);
-      }
-
-      if (isPinchAction && !isSwiping) {
+      if (isPinchAction) {
         e.preventDefault(); // Prevent scrolling.
         scaleFromMultiTouch(e);
       } else if (e.touches.length === 1 && scale > DEFAULT_SCALE) {
@@ -243,7 +235,6 @@ export const MapInteraction: React.FC = ({ children }) => {
 
   const onTouchEnd = (e: TouchEvent): void => {
     setPointerState(e.touches);
-    setSwipingDisabled(false);
 
     // Reset original scale/translation if pinched out.
     if (scale < DEFAULT_SCALE) {

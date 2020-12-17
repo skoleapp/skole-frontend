@@ -278,6 +278,11 @@ let theme = createMuiTheme({
         paddingRight: 'env(safe-area-inset-right)',
       },
     },
+    MuiTabs: {
+      root: {
+        height: TOP_NAVBAR_HEIGHT_MOBILE,
+      },
+    },
     MuiCssBaseline: {
       '@global': {
         body: {
@@ -303,15 +308,6 @@ let theme = createMuiTheme({
         },
         "input[type='submit']": {
           display: 'none',
-        },
-        '.react-swipeable-view-container': {
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          '& > div': {
-            display: 'flex',
-            overflow: 'hidden !important',
-          },
         },
         '.screenshot-border': {
           border: `0.05rem dashed ${COLORS.black}`,

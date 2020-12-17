@@ -29,17 +29,17 @@ import {
   ResourceTableBody,
   SettingsButton,
   TextLink,
+  TabPanel,
 } from 'components';
 import { useAuthContext } from 'context';
 import { BadgeObjectType, useUserQuery } from 'generated';
 import { withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useMediaQueries, useSwipeableTabs } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useMediaQueries, useTabs } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
 
@@ -126,7 +126,7 @@ const UserPage: NextPage = () => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
-  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
+  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
   const { userMe, verified } = useAuthContext();
   const { query } = useRouter();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
@@ -204,6 +204,7 @@ const UserPage: NextPage = () => {
     }
   };
 
+  const renderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
   const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
   const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
@@ -496,30 +497,16 @@ const UserPage: NextPage = () => {
   const renderCreatedCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
   const renderCreatedResources = resources.length ? renderResourceTable : renderResourcesNotFound;
 
-  const renderTabs = (
-    <Tabs value={tabValue} onChange={handleTabChange}>
-      <Tab label={`${coursesTabLabel} (${courseCount})`} />
-      <Tab label={`${resourcesTabLabel} (${resourceCount})`} />
-    </Tabs>
-  );
-
-  const renderSwipeableViews = (
-    <Box flexGrow="1" position="relative" minHeight="30rem" overflow="hidden">
-      <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-        {renderCreatedCourses}
-        {renderCreatedResources}
-      </SwipeableViews>
-    </Box>
-  );
-
   const renderCreatedContent = (
     <Paper className={classes.createdContent}>
-      {renderTabs}
-      {renderSwipeableViews}
+      <Tabs {...tabsProps}>
+        <Tab label={`${coursesTabLabel} (${courseCount})`} />
+        <Tab label={`${resourcesTabLabel} (${resourceCount})`} />
+      </Tabs>
+      <TabPanel {...leftTabPanelProps}>{renderCreatedCourses}</TabPanel>
+      <TabPanel {...rightTabPanelProps}>{renderCreatedResources}</TabPanel>
     </Paper>
   );
-
-  const renderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
 
   const layoutProps = {
     seoProps: {

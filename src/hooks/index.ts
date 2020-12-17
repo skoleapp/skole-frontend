@@ -8,6 +8,6 @@ export * from './useLanguageHeaderContext';
 export * from './useMediaQueries';
 export * from './useForm';
 export * from './useSearch';
-export * from './useSwipeableTabs';
+export * from './useTabs';
 export * from './useSettings';
 export * from './useUserMe';

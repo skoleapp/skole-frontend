@@ -6,3 +6,4 @@ export * from './layout';
 export * from './mui';
 export * from './pdfJs';
 export * from './tables';
+export * from './tabs';

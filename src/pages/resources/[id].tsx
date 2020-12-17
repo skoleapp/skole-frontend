@@ -1,6 +1,5 @@
 import {
   BottomNavigation,
-  Box,
   Grid,
   List,
   ListItemIcon,
@@ -29,6 +28,7 @@ import {
   RotateButton,
   ShareButton,
   StarButton,
+  TabPanel,
   TextLink,
   TopLevelCommentThread,
 } from 'components';
@@ -54,7 +54,7 @@ import {
   useInfoDialog,
   useLanguageHeaderContext,
   useMediaQueries,
-  useSwipeableTabs,
+  useTabs,
   useVotes,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -62,7 +62,6 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { mediaUrl, urls } from 'utils';
 import { PdfViewerProps } from 'types';
@@ -137,9 +136,12 @@ const ResourceDetailPage: NextPage = () => {
   const shareParams = { shareTitle, shareText };
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
-  const { tabValue, setTabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
   const { commentModalOpen } = useDiscussionContext();
-  const { drawMode, setDrawMode, swipingDisabled, swipeableViewsRef } = usePdfViewerContext();
+  const { drawMode, setDrawMode } = usePdfViewerContext();
+
+  const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs(
+    comments,
+  );
 
   const {
     infoDialogOpen,
@@ -392,21 +394,12 @@ const ResourceDetailPage: NextPage = () => {
 
   const renderMobileContent = isMobile && (
     <Paper className={classes.mobileContainer}>
-      <Tabs value={tabValue} onChange={handleTabChange}>
+      <Tabs {...tabsProps}>
         <Tab label={t('common:resource')} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <Box flexGrow="1" position="relative" overflow="hidden">
-        <SwipeableViews
-          disabled={swipingDisabled}
-          index={tabValue}
-          onChangeIndex={handleIndexChange}
-          ref={swipeableViewsRef}
-        >
-          {renderPdfViewer}
-          {renderDiscussion}
-        </SwipeableViews>
-      </Box>
+      <TabPanel {...leftTabPanelProps}>{renderPdfViewer}</TabPanel>
+      <TabPanel {...rightTabPanelProps}>{renderDiscussion}</TabPanel>
     </Paper>
   );
 

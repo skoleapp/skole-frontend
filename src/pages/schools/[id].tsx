@@ -1,5 +1,4 @@
 import {
-  Box,
   CardActionArea,
   CardHeader,
   Grid,
@@ -33,6 +32,7 @@ import {
   ResponsiveDialog,
   ShareButton,
   TextLink,
+  TabPanel,
 } from 'components';
 import { useAuthContext } from 'context';
 import { SubjectObjectType, useSchoolQuery } from 'generated';
@@ -43,7 +43,7 @@ import {
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
-  useSwipeableTabs,
+  useTabs,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
@@ -51,7 +51,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
@@ -103,7 +102,7 @@ const SchoolDetailPage: NextPage = () => {
   const shareText = t('school:shareText', { schoolName });
   const shareParams = { shareTitle, shareText };
   const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
-  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
+  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
 
   const {
     infoDialogOpen,
@@ -185,7 +184,9 @@ const SchoolDetailPage: NextPage = () => {
     },
   ];
 
-  const renderAddCourseButton = (
+  // On desktop, render a disabled button for non-verified users.
+  // On mobile, do not render the button at all for non-verified users.
+  const renderAddCourseButton = (isTabletOrDesktop || (isMobile && !!verified)) && (
     <Tooltip title={addCourseTooltip}>
       <Typography component="span">
         <IconButtonLink
@@ -281,26 +282,20 @@ const SchoolDetailPage: NextPage = () => {
   );
 
   const renderTabs = (
-    <Tabs value={tabValue} onChange={handleTabChange}>
-      <Tab label={`${t('common:subjects')} (${subjectCount})`} />
-      <Tab label={`${t('common:courses')} (${courseCount})`} />
-    </Tabs>
-  );
-
-  const renderSwipeableViews = (
-    <Box flexGrow="1" position="relative">
-      <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-        {renderSubjects}
-        {renderCourses}
-      </SwipeableViews>
-    </Box>
+    <>
+      <Tabs {...tabsProps}>
+        <Tab label={`${t('common:subjects')} (${subjectCount})`} />
+        <Tab label={`${t('common:courses')} (${courseCount})`} />
+      </Tabs>
+      <TabPanel {...leftTabPanelProps}>{renderSubjects}</TabPanel>
+      <TabPanel {...rightTabPanelProps}>{renderCourses}</TabPanel>
+    </>
   );
 
   const renderContent = (
     <Paper className={classes.root}>
       {renderSchoolHeader}
       {renderTabs}
-      {renderSwipeableViews}
     </Paper>
   );
 

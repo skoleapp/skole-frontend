@@ -32,6 +32,7 @@ import {
   ResponsiveDialog,
   ShareButton,
   StarButton,
+  TabPanel,
   TextLink,
   TopLevelCommentThread,
 } from 'components';
@@ -54,7 +55,7 @@ import {
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
-  useSwipeableTabs,
+  useTabs,
   useVotes,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -63,7 +64,6 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import SwipeableViews from 'react-swipeable-views';
 import { BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
@@ -127,7 +127,7 @@ const CourseDetailPage: NextPage = () => {
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
-  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs(comments);
+  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs(comments);
 
   const {
     infoDialogOpen,
@@ -340,16 +340,12 @@ const CourseDetailPage: NextPage = () => {
 
   const renderMobileContent = isMobile && (
     <Paper className={classes.mobileContainer}>
-      <Tabs value={tabValue} onChange={handleTabChange}>
+      <Tabs {...tabsProps}>
         <Tab label={`${t('common:resources')} (${resourceCount})`} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <Box flexGrow="1" position="relative" overflow="hidden">
-        <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-          {renderResources}
-          {renderDiscussion}
-        </SwipeableViews>
-      </Box>
+      <TabPanel {...leftTabPanelProps}>{renderResources}</TabPanel>
+      <TabPanel {...rightTabPanelProps}>{renderDiscussion}</TabPanel>
     </Paper>
   );
 
