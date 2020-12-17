@@ -64,6 +64,13 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
+  cardHeader: {
+    position: 'relative',
+  },
+  cardHeaderAction: {
+    position: 'absolute',
+    right: spacing(4),
+  },
   icon: {
     marginRight: spacing(0.5),
     marginLeft: spacing(1.5),
@@ -278,7 +285,11 @@ const SchoolDetailPage: NextPage = () => {
   );
 
   const renderSchoolHeader = isTabletOrDesktop && (
-    <CardHeader title={schoolName} action={renderAction} />
+    <CardHeader
+      classes={{ root: classes.cardHeader, action: classes.cardHeaderAction }}
+      title={schoolName}
+      action={renderAction}
+    />
   );
 
   const renderTabs = (
