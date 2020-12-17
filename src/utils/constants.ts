@@ -3,7 +3,10 @@ import {
   ContactSupportOutlined,
   EditOutlined,
   LockOutlined,
+  MessageOutlined,
   NotificationsOutlined,
+  SchoolOutlined,
+  ScoreOutlined,
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
   StarBorderOutlined,
@@ -47,6 +50,29 @@ export const IMAGE_TYPES = [
   'image/svg+xml',
   'image/tiff',
   'image/webp	',
+];
+
+export const PITCH_ITEMS = [
+  {
+    subheader: 'get-started:coursesPitchSubheader',
+    icon: SchoolOutlined,
+    text: 'get-started:coursesPitchText',
+  },
+  {
+    subheader: 'get-started:materialsPitchSubheader',
+    icon: AssignmentOutlined,
+    text: 'get-started:materialsPitchText',
+  },
+  {
+    subheader: 'get-started:discussionPitchSubheader',
+    icon: MessageOutlined,
+    text: 'get-started:discussionPitchText',
+  },
+  {
+    subheader: 'get-started:scorePitchSubheader',
+    icon: ScoreOutlined,
+    text: 'get-started:scorePitchText',
+  },
 ];
 
 export const SETTINGS_ITEMS = {
