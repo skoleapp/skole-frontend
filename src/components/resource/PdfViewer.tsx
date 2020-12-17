@@ -2,27 +2,30 @@ import { Box, makeStyles, Typography } from '@material-ui/core';
 import { usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import React from 'react';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import React, { useEffect, useRef } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { PdfDocumentProxy, PdfViewerProps } from 'types';
-
 import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
 import { MapControls } from './MapControls';
 import { MapInteraction } from './MapInteraction';
 import { PageNumberInput } from './PageNumberInput';
 
-const useStyles = makeStyles(({ palette }) => ({
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+const useStyles = makeStyles(({ palette, breakpoints }) => ({
   root: {
     flexGrow: 1,
     position: 'relative',
-    marginBottom: '3rem',
-    borderBottom: `0.05rem solid ${palette.grey[300]}`,
+    [breakpoints.up('md')]: {
+      marginBottom: '3rem',
+      borderBottom: `0.05rem solid ${palette.grey[300]}`,
+    },
     '& .react-pdf__Document': {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      '& .react-pdf__Page, .react-pdf__Page__canvas': {
+      '& .react-pdf__Page, .react-pdf__Page__canvas, .react-pdf__Page__textContent': {
         margin: '0 auto',
         height: 'auto !important',
         width: '100% !important',
@@ -69,7 +72,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
   const renderAreaSelection = <AreaSelection />;
   const renderLoading = <LoadingBox />;
   const renderMapControls = isTabletOrDesktop && !drawMode && !controlsDisabled && <MapControls />; // TODO: See if we can use only `controlsDisabled` or `drawMode`.
-  const renderPageNumberInput = !controlsDisabled && <PageNumberInput />; // TODO: See if we need to add a check for `drawMode` here.
+  const renderPageNumberInput = isTabletOrDesktop && !controlsDisabled && <PageNumberInput />; // TODO: See if we need to add a check for `drawMode` here.
 
   const renderError = (
     <Box flexGrow="1" display="flex" justifyContent="center" alignItems="center">
