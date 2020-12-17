@@ -95,7 +95,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
   resourceContainer: {
     [breakpoints.up('md')]: {
-      borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0.25rem 0.25rem`, // Disable round border for bottom right corner to better fit with the scroll bar.
+      borderRadius: BORDER_RADIUS,
     },
   },
 }));

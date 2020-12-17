@@ -1,13 +1,15 @@
-import { Box, Fab, makeStyles, Size, Tooltip, Typography } from '@material-ui/core';
+import { Box, Fab, Size, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import {
   AddOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
   RemoveOutlined,
 } from '@material-ui/icons';
+import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { MuiColor } from 'types';
+import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION, PDF_MIN_SCALE, PDF_MAX_SCALE } from 'utils';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
@@ -23,23 +25,46 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-interface Props {
-  handleFullscreenButtonClick: () => void;
-  handleScaleUpButtonClick: () => void;
-  handleScaleDownButtonClick: () => void;
-  fullscreen: boolean;
-  controlsDisabled: boolean;
-}
-
-export const MapControls: React.FC<Props> = ({
-  handleFullscreenButtonClick,
-  handleScaleUpButtonClick,
-  handleScaleDownButtonClick,
-  fullscreen,
-  controlsDisabled,
-}) => {
+export const MapControls: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
+
+  const {
+    fullscreen,
+    setFullscreen,
+    setTranslation,
+    scale,
+    setScale,
+    controlsDisabled,
+    centerHorizontalScroll,
+  } = usePdfViewerContext();
+
+  const handleFullscreenButtonClick = (): void => {
+    let scale;
+
+    if (fullscreen) {
+      scale = PDF_MIN_SCALE;
+    } else {
+      scale = PDF_DEFAULT_SCALE;
+    }
+
+    setFullscreen(!fullscreen);
+    setScale(scale);
+    setTranslation(PDF_DEFAULT_TRANSLATION);
+  };
+
+  const handleScale = async (newScale: number): Promise<void> => {
+    setFullscreen(false);
+    newScale == PDF_DEFAULT_SCALE && setFullscreen(true);
+    await setScale(newScale); // Wait until new scale has been applied and center horizontal scroll only after that to avoid lagginess.
+    centerHorizontalScroll();
+  };
+
+  const handleScaleUpButtonClick = (): Promise<void> =>
+    handleScale(scale < PDF_MAX_SCALE ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
+
+  const handleScaleDownButtonClick = (): Promise<void> =>
+    handleScale(scale > PDF_MIN_SCALE ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit
 
   const commonButtonProps = {
     className: classes.button,

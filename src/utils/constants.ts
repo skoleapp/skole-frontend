@@ -21,12 +21,10 @@ export const LANGUAGES = [
   { label: 'languages:swedish', value: 'sv' },
 ];
 
-export const TOKEN_NAME = 'JWT';
-export const MAX_AGE = 60 * 60 * 24 * 30; // 1 month.
-export const DEFAULT_TRANSLATION = { x: 0, y: 0 };
-export const DEFAULT_SCALE = 1.0;
-export const MIN_SCALE = 0.75;
-export const MAX_SCALE = 1.75;
+export const PDF_DEFAULT_TRANSLATION = { x: 0, y: 0 };
+export const PDF_DEFAULT_SCALE = 1.0;
+export const PDF_MIN_SCALE = 0.75;
+export const PDF_MAX_SCALE = 2;
 export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
 export const ACCEPTED_RESOURCE_FILES = ['image/*', 'text/*', 'application/*'];
 export const ACCEPTED_ATTACHMENT_FILES = ['image/*'];

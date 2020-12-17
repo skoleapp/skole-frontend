@@ -1,5 +1,6 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { usePdfViewerContext } from 'context';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
@@ -7,21 +8,16 @@ import { PdfDocumentProxy, PdfViewerProps } from 'types';
 
 import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
+import { MapControls } from './MapControls';
 import { MapInteraction } from './MapInteraction';
+import { PageNumberInput } from './PageNumberInput';
 
-const useStyles = makeStyles(({ palette, breakpoints }) => ({
+const useStyles = makeStyles(({ palette }) => ({
   root: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
     flexGrow: 1,
-    display: 'flex',
-    overflow: 'hidden',
-    [breakpoints.up('md')]: {
-      borderRadius: '0 0 0.25rem 0.25rem',
-    },
+    position: 'relative',
+    marginBottom: '3rem',
+    borderBottom: `0.05rem solid ${palette.grey[300]}`,
     '& .react-pdf__Document': {
       display: 'flex',
       flexDirection: 'column',
@@ -38,9 +34,6 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         backgroundColor: palette.common.white,
         display: 'flex',
         alignItems: 'center',
-        [breakpoints.up('md')]: {
-          borderRadius: '0 0 0.25rem 0.25rem',
-        },
       },
     },
   },
@@ -49,6 +42,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
 const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { isTabletOrDesktop } = useMediaQueries();
 
   const {
     documentRef,
@@ -57,6 +51,8 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     setNumPages,
     rotate,
     setControlsDisabled,
+    drawMode,
+    controlsDisabled,
   } = usePdfViewerContext();
 
   const handleLoadSuccess = (document: PdfDocumentProxy): void => {
@@ -72,6 +68,8 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
 
   const renderAreaSelection = <AreaSelection />;
   const renderLoading = <LoadingBox />;
+  const renderMapControls = isTabletOrDesktop && !drawMode && !controlsDisabled && <MapControls />; // TODO: See if we can use only `controlsDisabled` or `drawMode`.
+  const renderPageNumberInput = !controlsDisabled && <PageNumberInput />; // TODO: See if we need to add a check for `drawMode` here.
 
   const renderError = (
     <Box flexGrow="1" display="flex" justifyContent="center" alignItems="center">
@@ -81,24 +79,28 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     </Box>
   );
 
+  const renderMapInteraction = (
+    <MapInteraction>
+      <Document
+        file={file}
+        onLoadSuccess={handleLoadSuccess}
+        loading={renderLoading}
+        error={renderError}
+        noData={renderError}
+        rotate={rotate}
+        ref={documentRef}
+      >
+        {renderPages}
+        {renderAreaSelection}
+      </Document>
+    </MapInteraction>
+  );
+
   return (
-    <Box flexGrow="1" position="relative" overflow="hidden">
-      <Box className={classes.root}>
-        <MapInteraction>
-          <Document
-            file={file}
-            onLoadSuccess={handleLoadSuccess}
-            loading={renderLoading}
-            error={renderError}
-            noData={renderError}
-            rotate={rotate}
-            ref={documentRef}
-          >
-            {renderPages}
-            {renderAreaSelection}
-          </Document>
-        </MapInteraction>
-      </Box>
+    <Box className={classes.root}>
+      {renderMapInteraction}
+      {renderMapControls}
+      {renderPageNumberInput}
     </Box>
   );
 };

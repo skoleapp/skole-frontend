@@ -1,6 +1,7 @@
 import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
+import { PdfTranslation } from './pdfJs';
 
 export interface AuthContextType {
   userMe: UserObjectType | null;
@@ -40,6 +41,14 @@ export interface PdfViewerContextType {
   setPageNumber: Dispatch<SetStateAction<number>>;
   controlsDisabled: boolean;
   setControlsDisabled: Dispatch<SetStateAction<boolean>>;
+  fullscreen: boolean;
+  setFullscreen: Dispatch<SetStateAction<boolean>>;
+  getMapContainerNode: () => HTMLDivElement;
+  centerHorizontalScroll: () => void;
+  scale: number;
+  setScale: Dispatch<SetStateAction<number>>;
+  translation: PdfTranslation;
+  setTranslation: Dispatch<SetStateAction<PdfTranslation>>;
 }
 
 export interface DiscussionContextType {
