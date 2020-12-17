@@ -134,7 +134,7 @@ const CourseDetailPage: NextPage = () => {
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
-  } = useInfoDialog();
+  } = useInfoDialog(t('course:infoDialogHeader'));
 
   const {
     actionsDialogOpen,

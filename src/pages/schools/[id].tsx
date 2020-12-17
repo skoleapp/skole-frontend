@@ -109,7 +109,7 @@ const SchoolDetailPage: NextPage = () => {
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
-  } = useInfoDialog();
+  } = useInfoDialog(t('school:infoDialogHeader'));
 
   const addCourseHref = {
     pathname: urls.addCourse,

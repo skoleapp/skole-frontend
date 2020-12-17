@@ -148,7 +148,7 @@ const ResourceDetailPage: NextPage = () => {
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
-  } = useInfoDialog();
+  } = useInfoDialog(t('resource:infoDialogHeader'));
 
   const {
     actionsDialogOpen,
