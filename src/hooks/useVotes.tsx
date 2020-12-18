@@ -3,7 +3,7 @@ import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
 import { useTranslation } from 'lib';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 
 import { MuiColor } from 'types';
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
@@ -53,6 +53,10 @@ export const useVotes = ({
   const { toggleNotification } = useNotificationsContext();
   const ownContentTooltip = t('tooltips:voteOwnContent');
   const context = useLanguageHeaderContext();
+
+  useEffect(() => {
+    setCurrentVote(initialVote);
+  }, [initialVote]);
 
   const upVoteButtonTooltip =
     loginRequiredTooltip ||
