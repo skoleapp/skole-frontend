@@ -36,19 +36,19 @@ import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from '
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { BORDER } from 'theme';
 import { mediaUrl, truncate, urls } from 'utils';
-import { Editor, EditorState, ContentBlock } from 'draft-js';
-import { stateFromMarkdown } from 'draft-js-import-markdown';
 import { ResponsiveDialog, TextLink } from '../shared';
 
-const useStyles = makeStyles(({ spacing, palette }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   root: {
     borderRadius: 0,
     overflow: 'visible',
     boxShadow: 'none',
   },
   topComment: {
-    borderBottom: `0.05rem solid ${palette.grey[300]}`,
+    borderBottom: BORDER,
   },
   cardHeader: {
     padding: 0,
@@ -70,12 +70,6 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   text: {
     overflow: 'hidden',
     wordBreak: 'break-word',
-    '& .RichEditor-blockquote': {
-      borderLeft: `${spacing(2)} solid #eee`,
-      color: '#666',
-      padding: spacing(2),
-      margin: 0,
-    },
   },
   icon: {
     marginRight: spacing(1),
@@ -255,19 +249,9 @@ export const CommentCard: React.FC<Props> = ({
     </Grid>
   );
 
-  const getBlockStyle = (block: ContentBlock): string => {
-    if (block.getType() === 'blockquote') {
-      return 'RichEditor-blockquote';
-    }
-
-    return '';
-  };
-
-  const editorState = EditorState.createWithContent(stateFromMarkdown(comment.text));
-
   const renderText = (
     <Typography className={classes.text} variant="body2">
-      <Editor blockStyleFn={getBlockStyle} editorState={editorState} readOnly onChange={(e) => e} />
+      <ReactMarkdown>{comment.text}</ReactMarkdown>
     </Typography>
   );
 

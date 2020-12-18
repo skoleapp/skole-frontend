@@ -38,10 +38,5 @@
   "name": "Namn (frivillig)",
   "schoolHelpText": "Din föredragna skola som vi använder för att automatiskt visa innehåll baserat på det.",
   "subjectHelpText": "Ditt föredragna ämne som vi använder för att automatiskt visa innehåll baserat på det.",
-  "createComment": "Lägg till kommentar",
-  "sendHelpText": "för att skicka",
-  "newLineHelpText": "för att lägga till en ny rad",
-  "addLink": "Lägg till länk",
-  "url": "URL",
-  "urlPlaceholder": "https://example.com"
+  "createComment": "Lägg till kommentar"
 }

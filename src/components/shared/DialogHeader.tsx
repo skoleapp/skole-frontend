@@ -7,20 +7,22 @@ import { DialogHeaderProps } from 'types';
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   root: {
     padding: `${spacing(2)} ${spacing(2)} ${spacing(1)} ${spacing(2)}`,
+    [breakpoints.up('sm')]: {
+      padding: `${spacing(3)} ${spacing(3)} ${spacing(2)} ${spacing(3)}`,
+    },
     [breakpoints.up('md')]: {
       padding: `${spacing(4)} ${spacing(4)} ${spacing(2)} ${spacing(4)}`,
     },
-  },
-  headerCenter: {
-    padding: `0 ${spacing(2)}`,
   },
 }));
 
 export const DialogHeader: React.FC<DialogHeaderProps> = ({
   text,
   onCancel,
+  cancelLeft,
   headerLeft,
   headerCenter,
+  headerRight,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -39,16 +41,20 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
     </Typography>
   );
 
+  const renderLeft = headerLeft || (cancelLeft && renderCloseButton);
+  const renderCenter = headerCenter || renderHeaderText;
+  const renderRight = headerRight || (!cancelLeft && renderCloseButton);
+
   return (
     <Grid container alignItems="center" className={classes.root}>
-      <Grid item xs={1} container justify="center">
-        {headerLeft}
+      <Grid item xs={2} sm={1} container justify="flex-start">
+        {renderLeft}
       </Grid>
-      <Grid className={classes.headerCenter} item container xs={10} justify="center">
-        {headerCenter || renderHeaderText}
+      <Grid item xs={8} sm={10} container justify="center">
+        {renderCenter}
       </Grid>
-      <Grid item container xs={1} justify="center">
-        {renderCloseButton}
+      <Grid item xs={2} sm={1} container justify="flex-end">
+        {renderRight}
       </Grid>
     </Grid>
   );

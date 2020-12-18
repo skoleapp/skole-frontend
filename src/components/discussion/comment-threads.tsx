@@ -7,7 +7,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
-import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
+import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
 import { NotFoundBox } from '../shared';
@@ -26,16 +26,21 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   messageArea: {
     flexGrow: 1,
     overflowY: 'auto',
+    overflowX: 'hidden',
     flexWrap: 'nowrap',
     height: '100%',
   },
   topLevelMessageArea: {
-    [breakpoints.down('md')]: {
+    [breakpoints.down('sm')]: {
       paddingBottom: spacing(22), // Make room for the create comment button on mobile.
+    },
+    [breakpoints.up('sm')]: {
+      borderTop: BORDER,
+      borderBottom: BORDER,
     },
   },
   threadMessageArea: {
-    [breakpoints.down('md')]: {
+    [breakpoints.down('sm')]: {
       marginBottom: spacing(16), // Make room for the reply button on mobile.
     },
   },

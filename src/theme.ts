@@ -244,7 +244,7 @@ let theme = createMuiTheme({
         textAlign: 'center',
       },
       title: {
-        fontSize: '1.5rem',
+        fontSize: '1.35rem',
       },
       action: {
         marginTop: 0,
@@ -291,8 +291,8 @@ let theme = createMuiTheme({
           userSelect: 'none',
         },
         '.avatar-thumbnail': {
-          height: '1.5rem !important',
-          width: '1.5rem !important',
+          height: '2rem !important',
+          width: '2rem !important',
           padding: spacing(0.25),
           margin: spacing(0.25),
           borderStyle: 'solid',

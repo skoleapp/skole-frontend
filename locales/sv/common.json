@@ -77,5 +77,6 @@
   "postWithAccount": "Lägg upp med ditt konto",
   "postAs": "Lägg upp som {{ användarnamn }}",
   "postAsAnonymous": "Skicka som anonym",
-  "selectAuthor": "Välj auktor"
+  "selectAuthor": "Välj auktor",
+  "send": "Skicka"
 }

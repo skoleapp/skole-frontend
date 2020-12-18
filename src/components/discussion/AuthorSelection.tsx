@@ -25,6 +25,7 @@ const useStyles = makeStyles(({ spacing }) => ({
     borderRadius: '0.25rem',
     padding: spacing(2),
     textTransform: 'none',
+    textAlign: 'left',
   },
 }));
 
@@ -66,7 +67,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   const renderAuthorSelectionText = (
     <Typography variant="body2" color="textSecondary">
       <Grid container alignItems="center">
-        {user ? t('common:postWithAccount') : t('common:postAsAnonymous')} <KeyboardArrowDown />
+        {user ? t('common:postWithAccount') : t('common:postAsAnonymous')}
       </Grid>
     </Typography>
   );
@@ -76,14 +77,13 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
     onCancel: handleCloseAuthorSelection,
   };
 
+  const renderAvatar = (
+    <Avatar className="avatar-thumbnail" src={mediaUrl(R.propOr('', 'avatarThumbnail', user))} />
+  );
+
   const renderAuthenticatedMenuItem = (
     <MenuItem onClick={handleAuthenticatedMenuItemClick}>
-      <ListItemIcon>
-        <Avatar
-          className="avatar-thumbnail"
-          src={mediaUrl(R.propOr('', 'avatarThumbnail', user))}
-        />
-      </ListItemIcon>
+      <ListItemIcon>{renderAvatar}</ListItemIcon>
       <ListItemText>{t('common:postAs', { username })}</ListItemText>
     </MenuItem>
   );
@@ -98,8 +98,13 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   );
 
   const renderAuthorInfo = (
-    <Button className={classes.button}>
-      <Grid onClick={handleOpenAuthorSelection} container direction="column">
+    <Button
+      onClick={handleOpenAuthorSelection}
+      endIcon={<KeyboardArrowDown color="disabled" />}
+      className={classes.button}
+      startIcon={renderAvatar}
+    >
+      <Grid item container direction="column">
         {renderAuthorName}
         {renderAuthorSelectionText}
       </Grid>
@@ -120,9 +125,9 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   );
 
   return (
-    <Grid container>
+    <>
       {renderAuthorInfo}
       {renderAuthorSelectionDialog}
-    </Grid>
+    </>
   );
 };

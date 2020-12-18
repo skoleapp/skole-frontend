@@ -4,6 +4,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
+import { BORDER } from 'theme';
 import { PdfDocumentProxy, PdfViewerProps } from 'types';
 import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION } from 'utils';
 import { LoadingBox } from '../shared';
@@ -20,7 +21,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
     position: 'relative',
     [breakpoints.up('md')]: {
       marginBottom: '3rem',
-      borderBottom: `0.05rem solid ${palette.grey[300]}`,
+      borderBottom: BORDER,
     },
     '& .react-pdf__Document': {
       display: 'flex',

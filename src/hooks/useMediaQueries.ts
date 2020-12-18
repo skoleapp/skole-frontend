@@ -11,5 +11,11 @@ export const useMediaQueries = (): UseMediaQueries => {
   const { breakpoints } = useTheme();
   const isMobile = useMediaQuery(breakpoints.down('sm'));
   const isMobileOrTablet = useMediaQuery(breakpoints.down('md'));
-  return { isMobile, isMobileOrTablet, isTabletOrDesktop: !isMobile, isDesktop: !isMobileOrTablet };
+
+  return {
+    isMobile,
+    isMobileOrTablet,
+    isTabletOrDesktop: !isMobile,
+    isDesktop: !isMobileOrTablet,
+  };
 };
