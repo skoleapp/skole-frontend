@@ -6,5 +6,6 @@
   "noComments": "This resource has no comments. Add a comment below!",
   "drawMode": "Draw Mode",
   "shareTitle": "{{ resourceTitle }} on Skole",
-  "shareText": "See {{ resourceTitle }} from {{ creatorUsername }} on Skole"
+  "shareText": "See {{ resourceTitle }} from {{ creatorUsername }} on Skole",
+  "infoDialogHeader": "Resource Details"
 }

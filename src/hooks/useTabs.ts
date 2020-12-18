@@ -2,27 +2,30 @@ import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';
 import { useRouter } from 'next/router';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { TabPanelProps } from 'types';
 
-interface UseSwipeableTabs {
-  tabValue: number;
-  setTabValue: Dispatch<SetStateAction<number>>;
-  handleTabChange: (_e: ChangeEvent<Record<symbol, unknown>>, val: number) => void;
-  handleIndexChange: (i: number) => void;
+interface CustomTabsProps {
+  value: number;
+  onChange: (_e: ChangeEvent<Record<symbol, unknown>>, val: number) => void;
 }
 
-// Custom hook that provides event handlers for using MUI tabs together with react-swipeable-views.
-// For tabs that contain discussion tab as the right-hand tab (currently course and resource pages),
-// if a comment has been provided as a query parameter, i.e. user navigates to page via link to a comment,
-// we change to the discussion tab and open comment modal automatically.
-export const useSwipeableTabs = (comments?: CommentObjectType[]): UseSwipeableTabs => {
+interface UseTabs {
+  tabValue: number;
+  setTabValue: Dispatch<SetStateAction<number>>;
+  tabsProps: CustomTabsProps;
+  leftTabPanelProps: TabPanelProps;
+  rightTabPanelProps: TabPanelProps;
+}
+
+// Custom helper hook for views that contain tabs.
+// If a comment has been provided as a query parameter, change to the discussion tab and open comment modal automatically.
+export const useTabs = (comments?: CommentObjectType[]): UseTabs => {
   const { query } = useRouter();
   const { setTopComment } = useDiscussionContext();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
     setTabValue(val);
-
-  const handleIndexChange = (i: number): void => setTabValue(i);
 
   useEffect(() => {
     if (!!comments && query.comment) {
@@ -42,5 +45,24 @@ export const useSwipeableTabs = (comments?: CommentObjectType[]): UseSwipeableTa
     }
   }, [comments, query]);
 
-  return { tabValue, setTabValue, handleTabChange, handleIndexChange };
+  const valueProp = {
+    value: tabValue,
+  };
+
+  const tabsProps = {
+    ...valueProp,
+    onChange: handleTabChange,
+  };
+
+  const leftTabPanelProps = {
+    ...valueProp,
+    index: 0,
+  };
+
+  const rightTabPanelProps = {
+    ...valueProp,
+    index: 1,
+  };
+
+  return { tabValue, setTabValue, tabsProps, leftTabPanelProps, rightTabPanelProps };
 };

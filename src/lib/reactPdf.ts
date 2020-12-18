@@ -1,5 +1,5 @@
 import { LTWH, PdfTranslation } from 'types';
-import { MAX_SCALE, MIN_SCALE } from 'utils';
+import { PDF_MAX_SCALE, PDF_MIN_SCALE } from 'utils';
 
 // Return touch point on element.
 export const getTouchPoint = (t: Touch): PdfTranslation => ({
@@ -23,7 +23,7 @@ export const getTouchDistance = (t0: Touch, t1: Touch): number => {
 
 // Get clamped scale if maximum scale has been exceeded.
 export const getClampedScale = (value: number): number =>
-  Math.max(MIN_SCALE, Math.min(value, MAX_SCALE));
+  Math.max(PDF_MIN_SCALE, Math.min(value, PDF_MAX_SCALE));
 
 // Get mid point between translation points.
 export const getMidPoint = (p1: PdfTranslation, p2: PdfTranslation): PdfTranslation => ({

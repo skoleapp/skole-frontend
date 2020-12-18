@@ -4,5 +4,6 @@
   "noCourses": "Den här skolan har inga kurser.",
   "addCourse": "Lägg till en kurs för den här skolan",
   "shareTitle": "{{ schoolName }} på Skole",
-  "shareText": "Visa {{ schoolName }} på Skole"
+  "shareText": "Visa {{ schoolName }} på Skole",
+  "infoDialogHeader": "Skoldetaljer"
 }

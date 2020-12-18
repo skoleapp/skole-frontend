@@ -1,7 +1,6 @@
-import React, { createContext, MutableRefObject, useRef, useState, useContext } from 'react';
+import React, { createContext, useRef, useState, useContext } from 'react';
 
 import { Document } from 'react-pdf';
-import SwipeableViews from 'react-swipeable-views';
 import { PdfViewerContextType } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
@@ -18,8 +17,16 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
   const [rotate, setRotate] = useState(0);
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(0);
-  const [swipingDisabled, setSwipingDisabled] = useState(false);
-  const swipeableViewsRef = (useRef(null!) as unknown) as MutableRefObject<SwipeableViews> & string;
+  const [fullscreen, setFullscreen] = useState(true);
+
+  const getMapContainerNode = (): HTMLDivElement =>
+    document.querySelector('#map-container') as HTMLDivElement;
+
+  // Set X-axis scroll to center when zooming in/out.
+  const centerHorizontalScroll = (): void => {
+    const mapContainerNode = getMapContainerNode();
+    mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2;
+  };
 
   const value = {
     documentRef,
@@ -36,9 +43,10 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
     setNumPages,
     pageNumber,
     setPageNumber,
-    swipingDisabled,
-    setSwipingDisabled,
-    swipeableViewsRef,
+    fullscreen,
+    setFullscreen,
+    getMapContainerNode,
+    centerHorizontalScroll,
   };
 
   return <PdfViewerContext.Provider value={value}>{children}</PdfViewerContext.Provider>;

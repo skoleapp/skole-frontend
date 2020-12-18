@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs } from '@material-ui/core';
+import { Tab, Tabs } from '@material-ui/core';
 import {
   CourseTableBody,
   ErrorTemplate,
@@ -9,22 +9,22 @@ import {
   PaginatedTable,
   ResourceTableBody,
   SettingsTemplate,
+  TabPanel,
 } from 'components';
 import { useAuthContext } from 'context';
 import { useStarredQuery } from 'generated';
 import { withAuth } from 'hocs';
-import { useLanguageHeaderContext, useSwipeableTabs } from 'hooks';
+import { useLanguageHeaderContext, useTabs } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import SwipeableViews from 'react-swipeable-views';
 
 const StarredPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { tabValue, handleTabChange, handleIndexChange } = useSwipeableTabs();
+  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
@@ -81,19 +81,14 @@ const StarredPage: NextPage = () => {
     : renderResourcesNotFound;
 
   const renderTabs = (
-    <Tabs value={tabValue} onChange={handleTabChange}>
-      <Tab label={`${t('common:courses')} (${courseCount})`} />
-      <Tab label={`${t('common:resources')} (${resourceCount})`} />
-    </Tabs>
-  );
-
-  const renderSwipeableViews = (
-    <Box flexGrow="1" position="relative" minHeight="30rem" overflow="hidden">
-      <SwipeableViews index={tabValue} onChangeIndex={handleIndexChange}>
-        {renderStarredCourses}
-        {renderStarredResources}
-      </SwipeableViews>
-    </Box>
+    <>
+      <Tabs {...tabsProps}>
+        <Tab label={`${t('common:courses')} (${courseCount})`} />
+        <Tab label={`${t('common:resources')} (${resourceCount})`} />
+      </Tabs>
+      <TabPanel {...leftTabPanelProps}>{renderStarredCourses}</TabPanel>
+      <TabPanel {...rightTabPanelProps}>{renderStarredResources}</TabPanel>
+    </>
   );
 
   const layoutProps = {
@@ -111,18 +106,15 @@ const StarredPage: NextPage = () => {
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }
 
   if (userMe) {
-    return (
-      <SettingsTemplate {...layoutProps}>
-        {renderTabs}
-        {renderSwipeableViews}
-      </SettingsTemplate>
-    );
+    return <SettingsTemplate {...layoutProps}>{renderTabs}</SettingsTemplate>;
   }
+
   return <NotFoundTemplate />;
 };
 

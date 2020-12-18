@@ -27,12 +27,12 @@ export const InfoDialogContent: React.FC<Props> = ({ creator, created, infoItems
 
   const renderInfoItems = infoItems.map(({ label, value }, i) => (
     <Grid key={i} container>
-      <Grid item xs={5}>
+      <Grid item xs={6}>
         <Typography variant="body2" color="textSecondary">
           {label}
         </Typography>
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={6}>
         <Typography className="truncate-text" variant="body2">
           {value}
         </Typography>

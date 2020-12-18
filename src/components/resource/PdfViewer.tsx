@@ -1,32 +1,32 @@
 import { Box, makeStyles, Typography } from '@material-ui/core';
 import { usePdfViewerContext } from 'context';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import React from 'react';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import React, { useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { PdfDocumentProxy, PdfViewerProps } from 'types';
-
+import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION } from 'utils';
 import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
+import { MapControls } from './MapControls';
 import { MapInteraction } from './MapInteraction';
+import { PageNumberInput } from './PageNumberInput';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const useStyles = makeStyles(({ palette, breakpoints }) => ({
   root: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
     flexGrow: 1,
-    display: 'flex',
-    overflow: 'hidden',
+    position: 'relative',
     [breakpoints.up('md')]: {
-      borderRadius: '0 0 0.25rem 0.25rem',
+      marginBottom: '3rem',
+      borderBottom: `0.05rem solid ${palette.grey[300]}`,
     },
     '& .react-pdf__Document': {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      '& .react-pdf__Page, .react-pdf__Page__canvas': {
+      '& .react-pdf__Page, .react-pdf__Page__canvas, .react-pdf__Page__textContent': {
         margin: '0 auto',
         height: 'auto !important',
         width: '100% !important',
@@ -38,9 +38,6 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         backgroundColor: palette.common.white,
         display: 'flex',
         alignItems: 'center',
-        [breakpoints.up('md')]: {
-          borderRadius: '0 0 0.25rem 0.25rem',
-        },
       },
     },
   },
@@ -49,6 +46,22 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
 const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { isTabletOrDesktop } = useMediaQueries();
+  const [scale, setScale] = useState(PDF_DEFAULT_SCALE);
+  const [translation, setTranslation] = useState(PDF_DEFAULT_TRANSLATION);
+
+  const mapInteractionProps = {
+    scale,
+    setScale,
+    setTranslation,
+    translation,
+  };
+
+  const mapControlsProps = {
+    scale,
+    setScale,
+    setTranslation,
+  };
 
   const {
     documentRef,
@@ -57,6 +70,8 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     setNumPages,
     rotate,
     setControlsDisabled,
+    drawMode,
+    controlsDisabled,
   } = usePdfViewerContext();
 
   const handleLoadSuccess = (document: PdfDocumentProxy): void => {
@@ -67,7 +82,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
   };
 
   const renderPages = Array.from(new Array(numPages), (_, i) => (
-    <Page key={`page_${i + 1}`} pageNumber={i + 1} renderAnnotationLayer={false} />
+    <Page key={`page_${i + 1}`} pageNumber={i + 1} />
   ));
 
   const renderAreaSelection = <AreaSelection />;
@@ -81,24 +96,36 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     </Box>
   );
 
+  const renderMapInteraction = (
+    <MapInteraction {...mapInteractionProps}>
+      <Document
+        file={file}
+        onLoadSuccess={handleLoadSuccess}
+        loading={renderLoading}
+        error={renderError}
+        noData={renderError}
+        rotate={rotate}
+        ref={documentRef}
+      >
+        {renderPages}
+        {renderAreaSelection}
+      </Document>
+    </MapInteraction>
+  );
+
+  // TODO: See if we need to add a check for `drawMode` here.
+  const renderPageNumberInput = isTabletOrDesktop && !controlsDisabled && <PageNumberInput />;
+
+  // TODO: See if we can use only `controlsDisabled` or `drawMode`.
+  const renderMapControls = isTabletOrDesktop && !drawMode && !controlsDisabled && (
+    <MapControls {...mapControlsProps} />
+  );
+
   return (
-    <Box flexGrow="1" position="relative" overflow="hidden">
-      <Box className={classes.root}>
-        <MapInteraction>
-          <Document
-            file={file}
-            onLoadSuccess={handleLoadSuccess}
-            loading={renderLoading}
-            error={renderError}
-            noData={renderError}
-            rotate={rotate}
-            ref={documentRef}
-          >
-            {renderPages}
-            {renderAreaSelection}
-          </Document>
-        </MapInteraction>
-      </Box>
+    <Box className={classes.root}>
+      {renderMapInteraction}
+      {renderMapControls}
+      {renderPageNumberInput}
     </Box>
   );
 };

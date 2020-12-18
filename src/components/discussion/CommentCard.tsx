@@ -88,6 +88,11 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     padding: spacing(2),
     paddingLeft: 0,
   },
+  messageInfo: {
+    // On reply comments without attachments, the message info has not buttons with relative positioning.
+    // In this case we must ensure the element has the sufficient height to have the actions button positioned properly.
+    minHeight: '2.35rem',
+  },
   actionsButton: {
     position: 'absolute',
     left: 0,
@@ -302,7 +307,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderMessageInfo = (
-    <Grid container alignItems="center">
+    <Grid className={classes.messageInfo} container alignItems="center">
       {renderReplyCount}
       {renderAttachmentButton}
       {renderActionsButton}

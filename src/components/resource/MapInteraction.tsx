@@ -3,19 +3,20 @@ import { usePdfViewerContext } from 'context';
 import { useMediaQueries, useStateRef } from 'hooks';
 import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';
 import throttle from 'lodash.throttle';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PdfTranslation } from 'types';
-import { DEFAULT_SCALE, DEFAULT_TRANSLATION, MAX_SCALE, MIN_SCALE } from 'utils';
-
-import { MapControls } from './MapControls';
+import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION } from 'utils';
 
 const useStyles = makeStyles(({ palette }) => ({
   mapContainer: {
-    flexGrow: 1,
-    backgroundColor: palette.grey[600],
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     display: 'flex',
     justifyContent: 'center',
-    overflow: 'hidden',
+    backgroundColor: palette.grey[600],
   },
   bounceBack: {
     transform: 'none',
@@ -29,11 +30,24 @@ interface StartPointersInfo {
   pointers: TouchList;
 }
 
+interface Props {
+  scale: number;
+  setScale: Dispatch<SetStateAction<number>>;
+  translation: PdfTranslation;
+  setTranslation: Dispatch<SetStateAction<PdfTranslation>>;
+}
+
 // This component adds map interaction functionality with mouse and touch events to its children.
 // Inspired by: https://github.com/transcriptic/react-map-interaction
-export const MapInteraction: React.FC = ({ children }) => {
+export const MapInteraction: React.FC<Props> = ({
+  children,
+  scale,
+  setScale,
+  translation,
+  setTranslation,
+}) => {
   const classes = useStyles();
-  const { isMobileOrTablet, isDesktop } = useMediaQueries();
+  const { isMobileOrTablet, isTabletOrDesktop } = useMediaQueries();
 
   const {
     drawMode,
@@ -41,15 +55,13 @@ export const MapInteraction: React.FC = ({ children }) => {
     controlsDisabled,
     setPageNumber,
     pageNumberInputRef,
-    setSwipingDisabled,
-    swipeableViewsRef,
+    setFullscreen,
+    getMapContainerNode,
+    centerHorizontalScroll,
   } = usePdfViewerContext();
 
   const [startPointersInfo, setStartPointersInfo] = useStateRef<StartPointersInfo | null>(null); // We must use a mutable ref object instead of immutable state to keep track with the start pointer state during gestures.
-  const [scale, setScale] = useState(DEFAULT_SCALE);
-  const [translation, setTranslation] = useState(DEFAULT_TRANSLATION);
   const [ctrlKey, setCtrlKey] = useState(false);
-  const [fullscreen, setFullscreen] = useState(true);
   const [transformContainerClasses, setTransformContainerClasses] = useState('');
 
   // Change cursor mode when CTRL key is pressed.
@@ -76,9 +88,6 @@ export const MapInteraction: React.FC = ({ children }) => {
       });
     }
   };
-
-  const getMapContainerNode = (): HTMLDivElement =>
-    document.querySelector('#map-container') as HTMLDivElement;
 
   const getMapContainerBoundingClientRect = (): DOMRect | ClientRect =>
     getMapContainerNode().getBoundingClientRect();
@@ -178,12 +187,6 @@ export const MapInteraction: React.FC = ({ children }) => {
     setTranslation(newTranslation);
   };
 
-  // Set X-axis scroll to center when zooming in/out.
-  const centerHorizontalScroll = (): void => {
-    const mapContainerNode = getMapContainerNode();
-    mapContainerNode.scrollLeft = (mapContainerNode.scrollWidth - mapContainerNode.clientWidth) / 2;
-  };
-
   // Update document scale based on mouse wheel events.
   // TODO: Set Y-axis scroll position based on mouse position to we can zoom in to a point using mouse position.
   const onWheel = (e: WheelEvent): void => {
@@ -224,17 +227,11 @@ export const MapInteraction: React.FC = ({ children }) => {
   const onTouchMove = (e: TouchEvent): void => {
     if (startPointersInfo.current) {
       const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
-      const isSwiping = swipeableViewsRef.current.state.isDragging;
 
-      // Prevent swiping when pinching or panning as zoomed in.
-      if (isPinchAction || translation !== DEFAULT_TRANSLATION) {
-        setSwipingDisabled(true);
-      }
-
-      if (isPinchAction && !isSwiping) {
+      if (isPinchAction) {
         e.preventDefault(); // Prevent scrolling.
         scaleFromMultiTouch(e);
-      } else if (e.touches.length === 1 && scale > DEFAULT_SCALE) {
+      } else if (e.touches.length === 1 && scale > PDF_DEFAULT_SCALE) {
         e.preventDefault(); // Prevent scrolling.
         onDrag(e.touches[0]);
       }
@@ -243,35 +240,13 @@ export const MapInteraction: React.FC = ({ children }) => {
 
   const onTouchEnd = (e: TouchEvent): void => {
     setPointerState(e.touches);
-    setSwipingDisabled(false);
 
     // Reset original scale/translation if pinched out.
-    if (scale < DEFAULT_SCALE) {
-      setScale(DEFAULT_SCALE);
-      setTranslation(DEFAULT_TRANSLATION);
+    if (scale < PDF_DEFAULT_SCALE) {
+      setScale(PDF_DEFAULT_SCALE);
+      setTranslation(PDF_DEFAULT_TRANSLATION);
       setTransformContainerClasses(classes.bounceBack);
     }
-  };
-
-  const handleFullscreenButtonClick = (): void => {
-    let scale;
-
-    if (fullscreen) {
-      scale = MIN_SCALE;
-    } else {
-      scale = DEFAULT_SCALE;
-    }
-
-    setFullscreen(!fullscreen);
-    setScale(scale);
-    setTranslation(DEFAULT_TRANSLATION);
-  };
-
-  const handleScale = async (newScale: number): Promise<void> => {
-    setFullscreen(false);
-    newScale == DEFAULT_SCALE && setFullscreen(true);
-    await setScale(newScale); // Wait until new scale has been applied and center horizontal scroll only after that to avoid lagginess.
-    centerHorizontalScroll();
   };
 
   // Listen fot mouse and touch events to perform required CSS transforms for map interaction functions.
@@ -280,21 +255,20 @@ export const MapInteraction: React.FC = ({ children }) => {
     const mapContainerNode = getMapContainerNode();
 
     if (!drawMode && !controlsDisabled) {
-      mapContainerNode.addEventListener('wheel', onWheel);
-
-      mapContainerNode.addEventListener('touchstart', onTouchStart as EventListener, {
+      mapContainerNode.addEventListener('touchstart', onTouchStart, {
         passive: true,
       });
 
-      mapContainerNode.addEventListener('touchmove', onTouchMove as EventListener);
-      mapContainerNode.addEventListener('touchend', onTouchEnd as EventListener, { passive: true });
+      mapContainerNode.addEventListener('touchmove', onTouchMove);
+      mapContainerNode.addEventListener('touchend', onTouchEnd, { passive: true });
+      mapContainerNode.addEventListener('wheel', onWheel);
     }
 
     return (): void => {
-      mapContainerNode.removeEventListener('wheel', onWheel as EventListener);
-      mapContainerNode.removeEventListener('touchstart', onTouchStart as EventListener);
-      mapContainerNode.removeEventListener('touchmove', onTouchMove as EventListener);
-      mapContainerNode.removeEventListener('touchend', onTouchEnd as EventListener);
+      mapContainerNode.removeEventListener('touchstart', onTouchStart);
+      mapContainerNode.removeEventListener('touchmove', onTouchMove);
+      mapContainerNode.removeEventListener('touchend', onTouchEnd);
+      mapContainerNode.removeEventListener('wheel', onWheel);
     };
   }, [scale, translation, drawMode, controlsDisabled]);
 
@@ -307,16 +281,18 @@ export const MapInteraction: React.FC = ({ children }) => {
       mapContainerNode.addEventListener('scroll', throttle(pageListener, 100), {
         passive: true,
       });
+
       mapContainerNode.addEventListener('resize', throttle(pageListener, 100), {
         passive: true,
       });
+
       document.addEventListener('keydown', onKeyDown, { passive: true });
       document.addEventListener('keyup', onKeyUp, { passive: true });
     }
 
     return (): void => {
-      mapContainerNode.removeEventListener('scroll', pageListener as EventListener);
-      mapContainerNode.removeEventListener('resize', pageListener as EventListener);
+      mapContainerNode.removeEventListener('scroll', pageListener);
+      mapContainerNode.removeEventListener('resize', pageListener);
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
     };
@@ -325,34 +301,20 @@ export const MapInteraction: React.FC = ({ children }) => {
   // When entering draw mode, reset scale/translation.
   useEffect(() => {
     if (drawMode) {
-      setScale(DEFAULT_SCALE);
-      setTranslation(DEFAULT_TRANSLATION);
+      setScale(PDF_DEFAULT_SCALE);
+      setTranslation(PDF_DEFAULT_TRANSLATION);
       setRotate(0);
       setFullscreen(true);
     }
   }, [drawMode]);
 
-  const handleScaleUpButtonClick = (): Promise<void> =>
-    handleScale(scale < MAX_SCALE ? scale + 0.05 : scale); // Scale up by 5% if under maximum limit.
-
-  const handleScaleDownButtonClick = (): Promise<void> =>
-    handleScale(scale > MIN_SCALE ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit.
-
   const cursor = !drawMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
   const overflow = drawMode && isMobileOrTablet ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
   const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
-  const transformOrigin = scale < 1 ? '50% 0' : '0 0'; // When in fullscreen and zooming in from that, we set the transform origin to top left. Otherwise we center the document.
+  const transformOrigin = scale < 1 && isTabletOrDesktop ? '50% 0' : '0 0'; // On mobile and when in fullscreen and zooming in from that, set the transform origin to top left. Otherwise center the document.
   const width = `calc(100% * ${scale})`;
   const mapContainerStyle = { cursor, overflow };
   const transformContainerStyle = { transform, transformOrigin, width };
-
-  const mapControlsProps = {
-    handleFullscreenButtonClick,
-    handleScaleUpButtonClick,
-    handleScaleDownButtonClick,
-    fullscreen,
-    controlsDisabled,
-  };
 
   const renderTransformContainer = (
     <Box className={transformContainerClasses} style={transformContainerStyle}>
@@ -360,12 +322,9 @@ export const MapInteraction: React.FC = ({ children }) => {
     </Box>
   );
 
-  const renderMapControls = isDesktop && !drawMode && <MapControls {...mapControlsProps} />;
-
   return (
     <Box id="map-container" className={classes.mapContainer} style={mapContainerStyle}>
       {renderTransformContainer}
-      {renderMapControls}
     </Box>
   );
 };

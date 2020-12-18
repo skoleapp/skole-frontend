@@ -14,7 +14,7 @@ interface UseInfoDrawer {
   handleCloseInfoDialog: (e: SyntheticEvent) => void;
 }
 
-export const useInfoDialog = (): UseInfoDrawer => {
+export const useInfoDialog = (header: string): UseInfoDrawer => {
   const { t } = useTranslation();
   const dialogButtonProps = useDialogButton();
 
@@ -30,7 +30,7 @@ export const useInfoDialog = (): UseInfoDrawer => {
   };
 
   const infoDialogHeaderProps = {
-    text: t('common:info'),
+    text: header,
     onCancel: handleCloseInfoDialog,
   };
 

@@ -6,5 +6,6 @@
   "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
   "drawMode": "Piirtotila",
   "shareTitle": "{{ resourceTitle }} Skolessa",
-  "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa"
+  "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa",
+  "infoDialogHeader": "Resurssin tiedot"
 }

@@ -4,5 +4,6 @@
   "noCourses": "This school has no courses.",
   "addCourse": "Add a course for this school",
   "shareTitle": "{{ schoolName }} on Skole",
-  "shareText": "View {{ schoolName }} on Skole"
+  "shareText": "View {{ schoolName }} on Skole",
+  "infoDialogHeader": "School Details"
 }

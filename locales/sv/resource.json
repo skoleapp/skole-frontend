@@ -6,5 +6,6 @@
   "noComments": "Den här resursen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
   "drawMode": "Ritningsläge",
   "shareTitle": "{{ resourceTitle }} på Skole",
-  "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole"
+  "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole",
+  "infoDialogHeader": "Resursinformation"
 }
