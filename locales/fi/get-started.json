@@ -3,5 +3,14 @@
   "appStoreCta": "Lataa sovelluskaupoista! (saatavilla pian)",
   "cta": "Aloita!",
   "or": "tai",
-  "skipLogin": "Jatka kirjautumatta"
+  "skipLogin": "Jatka kirjautumatta",
+  "pitchHeader": "Miksi aloittaa Skolen käyttö?",
+  "coursesPitchSubheader": "Pysy ajan tasalla kurssiesi kanssa",
+  "materialsPitchSubheader": "Löydä parhaat opiskelumateriaalit",
+  "discussionPitchSubheader": "Keskustele kurssikavereidesi kanssa",
+  "scorePitchSubheader": "Hanki kerskumisoikeuksia",
+  "coursesPitchText": "Merkitse lempikurssisi tähdellä ja pysy ajan tasalla. Lisää uusia kursseja ja jaa ne kurssikavereidesi kanssa.",
+  "materialsPitchText": "Löydä parhaa opiskelumateriaalit helposti. Lisää uusia materiaaleja kursseille.",
+  "discussionPitchText": "Keskustele kursseista ja opiskelumateriaaleista helposti. Näyttäydy anonyyminä tai tilisi kanssa.",
+  "scorePitchText": "Kasvata pisteitäsi lisäämällä loistavaa sisältöä. Kehuskele profiilillasi kavereillesi."
 }

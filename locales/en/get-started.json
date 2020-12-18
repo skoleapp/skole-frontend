@@ -3,5 +3,14 @@
   "appStoreCta": "Download from app stores! (coming soon)",
   "cta": "Get Started!",
   "or": "or",
-  "skipLogin": "Skip login"
+  "skipLogin": "Skip login",
+  "pitchHeader": "Why start using Skole?",
+  "coursesPitchSubheader": "Keep up with your courses",
+  "materialsPitchSubheader": "Find the top study materials",
+  "discussionPitchSubheader": "Discuss with your classmates",
+  "scorePitchSubheader": "Gain bragging rights",
+  "coursesPitchText": "Star your favorite courses and keep updated. Add new courses to share them with your classmates.",
+  "materialsPitchText": "Find the best study materials easily. Add new materials to courses.",
+  "discussionPitchText": "Discuss courses and materials easily. Appear as anonymous or with your account.",
+  "scorePitchText": "Increase your score by adding great content. Praise your profile to your friends."
 }

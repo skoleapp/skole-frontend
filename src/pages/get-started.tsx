@@ -1,5 +1,6 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import { ButtonLink, LanguageButton, MainBackground, MainTemplate, TextLink } from 'components';
 import { withNoAuth } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -8,7 +9,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { COLORS } from 'theme';
-import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
+import { GET_STARTED_PAGE_VISITED_KEY, PITCH_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   container: {
@@ -43,18 +44,15 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   ctaContainer: {
     position: 'relative',
     textAlign: 'center',
-    padding: `${spacing(4)} ${spacing(2)}`,
+    padding: `${spacing(6)} ${spacing(2)}`,
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  ctaHeader: {
-    fontSize: '1.25rem',
-    [breakpoints.up('sm')]: {
-      fontSize: '1.5rem',
-    },
+  responsiveHeader: {
+    fontSize: '1.5rem',
     [breakpoints.up('md')]: {
       fontSize: '1.75rem',
     },
@@ -64,10 +62,29 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     padding: spacing(3),
     marginTop: spacing(8),
   },
+  pitchContainer: {
+    position: 'relative',
+    paddingTop: spacing(4),
+  },
+  pitchBoxContainer: {
+    padding: spacing(6),
+    textAlign: 'left',
+    backgroundColor: COLORS.backgroundGrey,
+  },
+  pitchHeader: {
+    marginBottom: spacing(6),
+  },
+  pitchSubheader: {
+    fontSize: '1.25rem',
+    marginBottom: spacing(2),
+  },
+  pitchSubheaderIcon: {
+    marginRight: spacing(2),
+  },
   badgeContainer: {
     position: 'relative',
     textAlign: 'center',
-    padding: `${spacing(4)} ${spacing(2)}`,
+    padding: `${spacing(6)} ${spacing(2)}`,
     backgroundColor: COLORS.backgroundGrey,
   },
   badge: {
@@ -132,7 +149,7 @@ const GetStartedPage: NextPage = () => {
 
   const renderCta = (
     <Box className={classes.ctaContainer}>
-      <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary">
+      <Typography className={classes.responsiveHeader} variant="subtitle1" color="secondary">
         {t('marketing:description')}
       </Typography>
       <ButtonLink
@@ -153,6 +170,43 @@ const GetStartedPage: NextPage = () => {
         </TextLink>
       </Typography>
     </Box>
+  );
+
+  const renderPitchItems = PITCH_ITEMS.map(({ icon: Icon, subheader, text }) => (
+    <Grid item xs={12} md={6}>
+      <Typography className={classes.pitchSubheader} variant="subtitle1">
+        <Grid container alignItems="center">
+          <Icon className={classes.pitchSubheaderIcon} color="primary" /> {t(subheader)}
+        </Grid>
+      </Typography>
+      <Typography variant="body2" color="textSecondary">
+        {t(text)}
+      </Typography>
+    </Grid>
+  ));
+
+  const renderPitch = (
+    <Grid container direction="column" alignItems="center" className={classes.pitchContainer}>
+      <Typography
+        className={clsx(classes.responsiveHeader, classes.pitchHeader)}
+        variant="subtitle1"
+        color="secondary"
+      >
+        {t('get-started:pitchHeader')}
+      </Typography>
+      <Grid
+        container
+        item
+        xs={12}
+        md={10}
+        lg={7}
+        xl={5}
+        className={classes.pitchBoxContainer}
+        spacing={4}
+      >
+        {renderPitchItems}
+      </Grid>
+    </Grid>
   );
 
   const renderAppStoreBadges = (
@@ -180,6 +234,7 @@ const GetStartedPage: NextPage = () => {
     topNavbarProps: {
       headerRight: renderLanguageButton,
       disableLogo: true,
+      disableSearch: true,
     },
     containerProps: {
       fullWidth: true,
@@ -193,6 +248,7 @@ const GetStartedPage: NextPage = () => {
         {renderBackground}
         {renderHeaders}
         {renderCta}
+        {renderPitch}
         {renderAppStoreBadges}
       </Box>
     </MainTemplate>
