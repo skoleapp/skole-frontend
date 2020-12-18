@@ -9,7 +9,7 @@ import {
   useVerifyAccountMutation,
   VerifyAccountMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -218,4 +218,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(VerifyAccountPage);
+export default withUserMe(VerifyAccountPage);
