@@ -29,19 +29,21 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     overflowX: 'hidden',
     flexWrap: 'nowrap',
     height: '100%',
+    [breakpoints.up('md')]: {
+      borderTop: BORDER,
+      borderBottom: BORDER,
+    },
   },
   topLevelMessageArea: {
     [breakpoints.down('sm')]: {
       paddingBottom: spacing(22), // Make room for the create comment button on mobile.
     },
-    [breakpoints.up('sm')]: {
-      borderTop: BORDER,
-      borderBottom: BORDER,
-    },
   },
   threadMessageArea: {
+    marginTop: '0.05rem', // Prevent blocking the border.
     [breakpoints.down('sm')]: {
-      marginBottom: spacing(16), // Make room for the reply button on mobile.
+      paddingBottom: spacing(20), // Make room for the reply button on mobile.
+      borderTop: BORDER,
     },
   },
   createCommentButton: {
@@ -55,8 +57,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
   replyButton: {
     position: 'fixed',
-    bottom: 'env(safe-area-inset-bottom)',
-    width: '100%',
+    bottom: `calc(env(safe-area-inset-bottom) + ${spacing(2)})`,
+    left: spacing(2),
+    right: spacing(2),
   },
 }));
 

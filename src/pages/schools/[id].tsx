@@ -51,7 +51,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -66,6 +66,8 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
   cardHeader: {
     position: 'relative',
+    borderBottom: BORDER,
+    padding: spacing(3),
   },
   cardHeaderAction: {
     position: 'absolute',

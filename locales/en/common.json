@@ -78,7 +78,5 @@
   "postAs": "Post as {{ username }}",
   "postAsAnonymous": "Post as anonymous",
   "selectAuthor": "Select Author",
-  "send": "Send",
-  "commentHelperText": "Be nice and check out our",
-  "conduct": "Code of Conduct"
+  "send": "Send"
 }

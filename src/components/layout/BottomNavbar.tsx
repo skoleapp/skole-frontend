@@ -1,4 +1,4 @@
-import { Avatar, BottomNavigation, BottomNavigationAction, makeStyles } from '@material-ui/core';
+import { Avatar, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import {
   CloudUploadOutlined,
   HomeOutlined,
@@ -15,15 +15,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { UrlObject } from 'url';
 import { mediaUrl, urls } from 'utils';
 
-const useStyles = makeStyles({
-  avatar: {
-    width: '1.35rem',
-    height: '1.35rem',
-  },
-});
-
 export const BottomNavbar: React.FC = () => {
-  const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
   const { searchUrl } = useSearch();
@@ -66,7 +58,7 @@ export const BottomNavbar: React.FC = () => {
 
   const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
   const renderProfileLabel = userMe ? t('common:profile') : t('common:login');
-  const renderAvatarThumbnail = <Avatar className={classes.avatar} src={mediaUrl(avatarThumb)} />;
+  const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />;
 
   const handleProfileActionClick = (): Promise<boolean> =>
     Router.push(userMeId ? urls.user(userMeId) : urls.login);

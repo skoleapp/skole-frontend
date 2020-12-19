@@ -206,10 +206,14 @@ let theme = createMuiTheme({
         position: 'absolute',
         height: '100%',
         overflowY: 'auto',
+        [breakpoints.up('md')]: {
+          overflowT: 'hidden',
+        },
       },
     },
     MuiTableBody: {
       root: {
+        flexGrow: 1,
         [breakpoints.up('md')]: {
           overflowY: 'auto',
         },
@@ -230,7 +234,9 @@ let theme = createMuiTheme({
     },
     MuiTableFooter: {
       root: {
-        marginTop: 'auto',
+        [breakpoints.up('md')]: {
+          borderTop: BORDER,
+        },
       },
     },
     MuiTablePagination: {
@@ -291,8 +297,8 @@ let theme = createMuiTheme({
           userSelect: 'none',
         },
         '.avatar-thumbnail': {
-          height: '2rem !important',
-          width: '2rem !important',
+          height: '1.35rem !important',
+          width: '1.35rem !important',
           padding: spacing(0.25),
           margin: spacing(0.25),
           borderStyle: 'solid',

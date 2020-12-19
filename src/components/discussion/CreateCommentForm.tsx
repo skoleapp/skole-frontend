@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   DialogContent,
-  FormHelperText,
   Grid,
   IconButton,
   makeStyles,
@@ -27,7 +26,6 @@ import {
   ACCEPTED_ATTACHMENT_FILES,
   MAX_COMMENT_ATTACHMENT_FILE_SIZE,
   MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
-  urls,
 } from 'utils';
 import * as R from 'ramda';
 import imageCompression from 'browser-image-compression';
@@ -37,14 +35,14 @@ import {
   ClearOutlined,
   SendOutlined,
 } from '@material-ui/icons';
-import { DialogHeader, SkoleDialog, TextLink } from '../shared';
+import { DialogHeader, SkoleDialog } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
 import { TextFormField } from '../form-fields';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   container: {
     [breakpoints.up('md')]: {
-      padding: spacing(3),
+      padding: spacing(2),
     },
   },
   textFieldInputProps: {
@@ -224,29 +222,30 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
     !!userMe && <AuthorSelection {...props} />;
 
+  const renderHiddenAttachmentInput = (
+    <input
+      ref={attachmentInputRef}
+      value=""
+      type="file"
+      accept={ACCEPTED_ATTACHMENT_FILES.toString()}
+      onChange={handleAttachmentChange}
+      disabled={!userMe}
+    />
+  );
+
   // For anonymous users and user without verification that are on mobile, hide the entire button.
   const renderAttachmentButton = ((isMobile && !!userMe && !!verified) || isTabletOrDesktop) && (
-    <>
-      <input
-        ref={attachmentInputRef}
-        value=""
-        type="file"
-        accept={ACCEPTED_ATTACHMENT_FILES.toString()}
-        onChange={handleAttachmentChange}
-        disabled={!userMe}
-      />
-      <Tooltip title={attachmentTooltip}>
-        <Typography component="span">
-          <IconButton
-            onClick={handleUploadAttachment}
-            disabled={verified === false || !userMe}
-            size="small"
-          >
-            {isMobile ? <CameraAltOutlined /> : <AttachFileOutlined />}
-          </IconButton>
-        </Typography>
-      </Tooltip>
-    </>
+    <Tooltip title={attachmentTooltip}>
+      <Typography component="span">
+        <IconButton
+          onClick={handleUploadAttachment}
+          disabled={verified === false || !userMe}
+          size="small"
+        >
+          {isMobile ? <CameraAltOutlined /> : <AttachFileOutlined />}
+        </IconButton>
+      </Typography>
+    </Tooltip>
   );
 
   const renderClearAttachmentButton = !!commentAttachment && (
@@ -271,23 +270,10 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Box>
   );
 
-  const renderConductLink = <TextLink href={urls.conduct}>{t('common:conduct')}</TextLink>;
-
-  const renderHelperText = (
-    <FormHelperText className={classes.helperText}>
-      {t('common:commentHelperText')} {renderConductLink}.
-    </FormHelperText>
-  );
-
   const renderDialogToolbar = (
     <Grid container>
-      <Grid item xs={2} container>
-        {renderAttachmentButton}
-        {renderClearAttachmentButton}
-      </Grid>
-      <Grid item xs={10} container justify="flex-end" alignItems="center">
-        {renderHelperText}
-      </Grid>
+      {renderAttachmentButton}
+      {renderClearAttachmentButton}
     </Grid>
   );
 
@@ -339,17 +325,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Tooltip>
   );
 
-  const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (
-    <Grid container spacing={2}>
-      <Grid item xs={6} container>
-        {renderAuthorSelection(props)}
-      </Grid>
-      <Grid item xs={6} container justify="flex-end" alignItems="center">
-        {renderHelperText}
-      </Grid>
-    </Grid>
-  );
-
   const renderDesktopBottomToolbar = (props: FormikProps<CreateCommentFormValues>) => (
     <Grid container alignItems="center">
       {renderAttachmentButton}
@@ -361,7 +336,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderDesktopInput = (props: FormikProps<CreateCommentFormValues>) =>
     isTabletOrDesktop && (
       <>
-        {renderDesktopTopToolbar(props)}
+        {renderAuthorSelection(props)}
         {renderTextField}
         {renderDesktopBottomToolbar(props)}
       </>
@@ -403,6 +378,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     <Form className={classes.container}>
       {renderDesktopInput(props)}
       {renderCreateCommentModal(props)}
+      {renderHiddenAttachmentInput}
     </Form>
   );
 

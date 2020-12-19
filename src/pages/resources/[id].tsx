@@ -405,13 +405,13 @@ const ResourceDetailPage: NextPage = () => {
 
   const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.desktopContainer}>
-      <Grid item container xs={12} md={6} lg={8}>
+      <Grid item container xs={12} md={6} lg={7} xl={8}>
         <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
           {renderToolbar}
           {renderPdfViewer}
         </Paper>
       </Grid>
-      <Grid item container xs={12} md={6} lg={4}>
+      <Grid item container xs={12} md={6} lg={5} xl={4}>
         <Paper className={clsx(classes.paperContainer)}>
           {renderDiscussionHeader}
           {renderDiscussion}

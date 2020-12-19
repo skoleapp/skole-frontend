@@ -54,6 +54,10 @@ const useStyles = makeStyles(({ spacing }) => ({
     padding: 0,
     textAlign: 'left',
   },
+  avatar: {
+    width: '2rem',
+    height: '2rem',
+  },
   cardTitle: {
     fontSize: '1rem',
   },
@@ -234,7 +238,7 @@ export const CommentCard: React.FC<Props> = ({
         title: classes.cardTitle,
         subheader: classes.cardSubHeader,
       }}
-      avatar={<Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />}
+      avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumb)} />}
       title={renderTitle}
       subheader={created}
     />

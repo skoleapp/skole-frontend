@@ -10,9 +10,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     [breakpoints.up('sm')]: {
       padding: `${spacing(3)} ${spacing(3)} ${spacing(2)} ${spacing(3)}`,
     },
-    [breakpoints.up('md')]: {
-      padding: `${spacing(4)} ${spacing(4)} ${spacing(2)} ${spacing(4)}`,
-    },
   },
 }));
 
