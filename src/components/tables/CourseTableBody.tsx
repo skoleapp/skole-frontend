@@ -88,22 +88,20 @@ export const CourseTableBody: React.FC<Props> = ({ courses }) => {
     <Typography variant="body2">{R.propOr('-', 'score', course)}</Typography>
   );
 
-  return (
-    <TableBody>
-      {courses.map((c, i) => (
-        <Link href={urls.course(c.id)} key={i}>
-          <CardActionArea>
-            <TableRow>
-              <TableCell>
-                {renderCourseName(c)}
-                {renderCourseCode(c)}
-                {renderCourseInfo(c)}
-              </TableCell>
-              <TableCell align="right">{renderCourseScore(c)}</TableCell>
-            </TableRow>
-          </CardActionArea>
-        </Link>
-      ))}
-    </TableBody>
-  );
+  const renderCourses = courses.map((c, i) => (
+    <Link href={urls.course(c.id)} key={i}>
+      <CardActionArea>
+        <TableRow>
+          <TableCell>
+            {renderCourseName(c)}
+            {renderCourseCode(c)}
+            {renderCourseInfo(c)}
+          </TableCell>
+          <TableCell align="right">{renderCourseScore(c)}</TableCell>
+        </TableRow>
+      </CardActionArea>
+    </Link>
+  ));
+
+  return <TableBody>{renderCourses}</TableBody>;
 };
