@@ -71,9 +71,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     textAlign: 'left',
     backgroundColor: COLORS.backgroundGrey,
   },
-  pitchHeader: {
-    marginBottom: spacing(6),
-  },
   pitchSubheader: {
     fontSize: '1.25rem',
     marginBottom: spacing(2),
@@ -187,13 +184,6 @@ const GetStartedPage: NextPage = () => {
 
   const renderPitch = (
     <Grid container direction="column" alignItems="center" className={classes.pitchContainer}>
-      <Typography
-        className={clsx(classes.responsiveHeader, classes.pitchHeader)}
-        variant="subtitle1"
-        color="secondary"
-      >
-        {t('get-started:pitchHeader')}
-      </Typography>
       <Grid
         container
         item
