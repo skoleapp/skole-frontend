@@ -25,9 +25,6 @@ import { urls } from 'utils';
 import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  resource: {
-    paddingLeft: spacing(2),
-  },
   icon: {
     marginLeft: spacing(1.5),
     marginRight: spacing(0.5),
@@ -99,7 +96,7 @@ export const ResourceTableBody: React.FC<Props> = ({ resources }) => {
   const renderResources = resources.map((r, i) => (
     <Link href={urls.resource(r.id)} key={i}>
       <CardActionArea>
-        <TableRow className={classes.resource}>
+        <TableRow>
           <TableCell>
             {renderResourceTitle(r)}
             {renderResourceType(r)}

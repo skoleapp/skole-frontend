@@ -54,7 +54,7 @@ import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
@@ -79,6 +79,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     boxShadow: 'none',
     backgroundColor: palette.common.white,
   },
+  cardHeader: {
+    borderBottom: BORDER,
+  },
   searchContainer: {
     padding: spacing(1),
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
@@ -89,11 +92,17 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   filterNames: {
     display: 'flex',
     flexFlow: 'row wrap',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(2),
+    padding: spacing(2),
   },
   chip: {
-    margin: `0 ${spacing(1)} ${spacing(1)} 0`,
+    margin: spacing(1),
+  },
+  tableContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    [breakpoints.down('md')]: {
+      borderTop: BORDER,
+    },
   },
   dialogContent: {
     padding: spacing(2),
@@ -436,12 +445,14 @@ const SearchPage: NextPage = () => {
   const renderCourses = <CourseTableBody courses={courses} />;
 
   const renderTable = (
-    <PaginatedTable
-      count={count}
-      tableHeadProps={tableHeadProps}
-      renderTableBody={renderCourses}
-      extraFilters={initialValues}
-    />
+    <Box className={classes.tableContainer}>
+      <PaginatedTable
+        count={count}
+        tableHeadProps={tableHeadProps}
+        renderTableBody={renderCourses}
+        extraFilters={initialValues}
+      />
+    </Box>
   );
 
   const renderNotFound = <NotFoundBox text={t('search:noCourses')} linkProps={notFoundLinkProps} />;
@@ -476,8 +487,13 @@ const SearchPage: NextPage = () => {
     </Paper>
   );
 
-  const renderFilterResultsHeader = <CardHeader title={t('common:filters')} />;
-  const renderResultsHeader = <CardHeader title={t('common:searchResults')} />;
+  const renderFilterResultsHeader = (
+    <CardHeader className={classes.cardHeader} title={t('common:filters')} />
+  );
+
+  const renderResultsHeader = (
+    <CardHeader className={classes.cardHeader} title={t('common:searchResults')} />
+  );
 
   const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.rootContainer}>

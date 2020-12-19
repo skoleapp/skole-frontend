@@ -126,13 +126,3 @@ export const SETTINGS_ITEMS = {
     },
   ],
 };
-
-export const RICH_TEXT_EDITOR_STYLES = {
-  bold: 'BOLD',
-  italic: 'ITALIC',
-  strikeThrough: 'STRIKETHROUGH',
-  link: 'link-entity',
-  orderedList: 'ordered-list-item',
-  unorderedList: 'unordered-list-item',
-  blockQuote: 'blockquote',
-};

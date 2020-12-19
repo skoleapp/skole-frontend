@@ -1,6 +1,5 @@
 import {
   BottomNavigation,
-  Box,
   CardHeader,
   Grid,
   List,
@@ -64,7 +63,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -87,8 +86,8 @@ const useStyles = makeStyles(({ breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  discussionHeader: {
-    textAlign: 'left',
+  resourcesHeader: {
+    borderBottom: BORDER,
   },
 }));
 
@@ -337,7 +336,11 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const renderResourcesHeader = (
-    <CardHeader title={courseName} action={renderUploadResourceButton} />
+    <CardHeader
+      className={classes.resourcesHeader}
+      title={courseName}
+      action={renderUploadResourceButton}
+    />
   );
 
   const renderMobileContent = isMobile && (
@@ -353,13 +356,13 @@ const CourseDetailPage: NextPage = () => {
 
   const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.desktopContainer}>
-      <Grid item container xs={12} md={6} lg={8}>
+      <Grid item container xs={12} md={6} lg={7} xl={8}>
         <Paper className={clsx(classes.paperContainer)}>
           {renderResourcesHeader}
           {renderResources}
         </Paper>
       </Grid>
-      <Grid item container xs={12} md={6} lg={4}>
+      <Grid item container xs={12} md={6} lg={5} xl={4}>
         <Paper className={clsx(classes.paperContainer)}>
           {renderDiscussionHeader}
           {renderDiscussion}

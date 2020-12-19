@@ -77,5 +77,6 @@
   "postWithAccount": "Post with your account",
   "postAs": "Post as {{ username }}",
   "postAsAnonymous": "Post as anonymous",
-  "selectAuthor": "Select Author"
+  "selectAuthor": "Select Author",
+  "send": "Send"
 }

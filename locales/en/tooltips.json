@@ -33,13 +33,5 @@
   "print": "Print.",
   "rotate": "Rotate.",
   "activity": "Show activity.",
-  "bold": "Bold ({{ hotkeyBold }}).",
-  "italic": "Italic ({{ hotkeyItalic }}).",
-  "strikeThrough": "Strikethrough ({{ hotkeyStrikethrough }}).",
-  "link": "Link ({{ hotkeyLink }}).",
-  "orderedList": "Ordered list ({{ hotkeyOrderedList }}).",
-  "bulletedList": "Bulleted list ({{ hotkeyBulletedList }}).",
-  "blockQuote": "Block quote ({{ hotkeyBlockQuote }}).",
-  "mention": "Mention user (coming soon).",
   "addCourse": "Add a course for this school."
 }

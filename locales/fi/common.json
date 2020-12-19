@@ -77,5 +77,6 @@
   "postWithAccount": "Lähetä tilisi kanssa",
   "postAs": "Lähetä käyttäjällä {{ username }}",
   "postAsAnonymous": "Lähetä anonyyminä",
-  "selectAuthor": "Valitse käyttäjä"
+  "selectAuthor": "Valitse käyttäjä",
+  "send": "Lähetä"
 }

@@ -20,6 +20,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     [breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
+    [breakpoints.up('sm')]: {
+      padding: spacing(2),
+    },
   },
   spacer: {
     flex: 0,

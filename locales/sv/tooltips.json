@@ -33,13 +33,5 @@
   "print": "Skriva ut.",
   "rotate": "Rotera.",
   "activity": "Visa aktivitet.",
-  "bold": "Fet ({{ hotkeyBold }}).",
-  "italic": "Kursiv ({{ hotkeyItalic }}).",
-  "strikeThrough": "Genomsträckt ({{ hotkeyStrikethrough }}).",
-  "link": "Länk ({{ hotkeyLink }}).",
-  "orderedList": "Beställd lista ({{ hotkeyOrderedList }}).",
-  "bulletedList": "Lista över punkter ({{ hotkeyBulletedList }}).",
-  "blockQuote": "Citatblock ({{ hotkeyBlockQuote }}).",
-  "mention": "Nämn användare (på kommande).",
   "addCourse": "Lägg till en kurs för den här skolan."
 }

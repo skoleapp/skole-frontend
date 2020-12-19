@@ -38,10 +38,5 @@
   "name": "Nimi (valinnainen)",
   "schoolHelpText": "Valitsemasi koulu, jota käytämme näyttäksemme sinulle automaattisesti sisältöä perustuen siihen.",
   "subjectHelpText": "Valitsemasi oppiaine, jota käytämme näyttääksemme sinulle automaattisesti sisältöä perustuen siihen.",
-  "createComment": "Lisää kommentti",
-  "sendHelpText": "lähettääksesi",
-  "newLineHelpText": "lisätäksesi uuden rivin",
-  "addLink": "Lisää linkki",
-  "url": "URL",
-  "urlPlaceholder": "https://example.com"
+  "createComment": "Lisää kommentti"
 }

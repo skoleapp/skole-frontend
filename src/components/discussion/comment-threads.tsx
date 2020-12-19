@@ -7,7 +7,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
-import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
+import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
 import { NotFoundBox } from '../shared';
@@ -26,17 +26,24 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   messageArea: {
     flexGrow: 1,
     overflowY: 'auto',
+    overflowX: 'hidden',
     flexWrap: 'nowrap',
     height: '100%',
+    [breakpoints.up('md')]: {
+      borderTop: BORDER,
+      borderBottom: BORDER,
+    },
   },
   topLevelMessageArea: {
-    [breakpoints.down('md')]: {
+    [breakpoints.down('sm')]: {
       paddingBottom: spacing(22), // Make room for the create comment button on mobile.
     },
   },
   threadMessageArea: {
-    [breakpoints.down('md')]: {
-      marginBottom: spacing(16), // Make room for the reply button on mobile.
+    marginTop: '0.05rem', // Prevent blocking the border.
+    [breakpoints.down('sm')]: {
+      paddingBottom: spacing(20), // Make room for the reply button on mobile.
+      borderTop: BORDER,
     },
   },
   createCommentButton: {
@@ -50,8 +57,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
   replyButton: {
     position: 'fixed',
-    bottom: 'env(safe-area-inset-bottom)',
-    width: '100%',
+    bottom: `calc(env(safe-area-inset-bottom) + ${spacing(2)})`,
+    left: spacing(2),
+    right: spacing(2),
   },
 }));
 
