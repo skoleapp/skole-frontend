@@ -352,10 +352,12 @@ const ResourceDetailPage: NextPage = () => {
   // On mobile, do not render the button at all for non-verified users.
   const renderStarButton = (!!verified || isTabletOrDesktop) && <StarButton {...starButtonProps} />;
 
-  const renderShareButton = <ShareButton {...shareParams} target={target} />;
-  const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
-  const renderRotateButton = <RotateButton />;
+  const renderShareButton = <ShareButton {...shareParams} target={target} />;
+
+  // Hide these buttons from the custom bottom navbar when in discussion tab.
+  const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
+  const renderRotateButton = tabValue === 0 && <RotateButton />;
 
   const renderDefaultBottomNavbarContent = (
     <Grid container>
