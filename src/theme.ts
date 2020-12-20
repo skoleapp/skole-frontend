@@ -244,15 +244,16 @@ let theme = createMuiTheme({
     },
     MuiCardHeader: {
       root: {
-        padding: `${spacing(2)} ${spacing(4)}`,
+        padding: spacing(2),
+        paddingLeft: spacing(4),
         textAlign: 'center',
       },
       title: {
         fontSize: '1.35rem',
       },
       action: {
-        marginTop: 0,
-        alignSelf: 'center',
+        margin: '0 !important',
+        // alignSelf: 'center',
       },
     },
     MuiDialog: {

@@ -1,19 +1,24 @@
-import { Box, Grid, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
+import { Box, Grid, IconButton, makeStyles, Size, Tooltip, Typography } from '@material-ui/core';
 import { CloudDownloadOutlined, PrintOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
+import { BORDER } from 'theme';
 
-// import { DrawModeButton } from './DrawModeButton';
+import { DrawModeButton } from './DrawModeButton';
 import { DrawModeControls } from './DrawModeControls';
 import { RotateButton } from './RotateButton';
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   root: {
-    color: palette.secondary.main,
     width: '100%',
-    backgroundColor: palette.grey[800],
+    borderBottom: BORDER,
+  },
+  drawMode: {
+    // The left-most item is usually text, which looks good on the default padding.
+    // During draw mode however, the left-most item is a button which looks better with a custom padding.
+    paddingLeft: spacing(2),
   },
 }));
 
@@ -31,19 +36,19 @@ export const ResourceToolbar: React.FC<Props> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const { drawMode, controlsDisabled } = usePdfViewerContext();
-  //   const renderDrawModeButton = <DrawModeButton />;
+  const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;
+
+  const toolbarButtonProps = {
+    size: 'small' as Size,
+    disabled: controlsDisabled,
+  };
 
   const renderDownloadButton = (
     <Tooltip title={t('tooltips:downloadPdf')}>
       <Typography component="span">
-        <IconButton
-          onClick={handleDownloadButtonClick}
-          size="small"
-          color="secondary"
-          disabled={controlsDisabled}
-        >
+        <IconButton {...toolbarButtonProps} onClick={handleDownloadButtonClick}>
           <CloudDownloadOutlined />
         </IconButton>
       </Typography>
@@ -53,12 +58,7 @@ export const ResourceToolbar: React.FC<Props> = ({
   const renderPrintButton = (
     <Tooltip title={t('tooltips:printPdf')}>
       <Typography component="span">
-        <IconButton
-          onClick={handlePrintButtonClick}
-          size="small"
-          color="secondary"
-          disabled={controlsDisabled}
-        >
+        <IconButton {...toolbarButtonProps} onClick={handlePrintButtonClick}>
           <PrintOutlined />
         </IconButton>
       </Typography>
@@ -66,7 +66,7 @@ export const ResourceToolbar: React.FC<Props> = ({
   );
 
   const renderResourceTitle = (
-    <Typography className="truncate-text" variant="subtitle1">
+    <Typography className={clsx('MuiCardHeader-title', 'truncate-text')} variant="h5">
       {title}
     </Typography>
   );
@@ -77,7 +77,7 @@ export const ResourceToolbar: React.FC<Props> = ({
         {renderResourceTitle}
       </Grid>
       <Grid item xs={4} lg={3} xl={2} container justify="flex-end" alignItems="center">
-        {/* {renderDrawModeButton} Hidden for now. */}
+        {renderDrawModeButton}
         {renderRotateButton}
         {renderDownloadButton}
         {renderPrintButton}
@@ -86,7 +86,7 @@ export const ResourceToolbar: React.FC<Props> = ({
   );
 
   return (
-    <Box className={clsx('MuiCardHeader-root', classes.root)}>
+    <Box className={clsx('MuiCardHeader-root', classes.root, drawMode && classes.drawMode)}>
       {drawMode ? renderDrawModeControls : renderPreviewToolbarControls}
     </Box>
   );
