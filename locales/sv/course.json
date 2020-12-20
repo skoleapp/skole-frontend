@@ -2,10 +2,14 @@
   "description": "Visa {{ resourceTitle }} på Skole.",
   "noResources": "Denna kurs har inga resurser.",
   "noResourcesLink": "Lägg till en resurs här!",
-  "deleteCourseTitle": "Ta bort kurs",
-  "deleteCourseDescription": "Är du säker på att du vill ta bort den här kursen?",
   "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!",
+  "shareHeader": "Dela kurs",
   "shareTitle": "{{ courseName }} på Skole",
   "shareText": "Se {{ courseName }} av {{ creatorUsername }} på Skole",
-  "infoDialogHeader": "Kursinformation"
+  "infoHeader": "Kursinformation",
+  "actionsHeader": "Kursmeny",
+  "share": "Dela kurs",
+  "delete": "Radera kurs",
+  "confirmDelete": "Är du säker på att du vill radera den här kursen?",
+  "target": "kurs"
 }

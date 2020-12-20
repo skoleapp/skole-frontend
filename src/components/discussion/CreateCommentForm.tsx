@@ -279,7 +279,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         className={classes.attachmentImage}
         src={String(commentAttachment)}
         unoptimized // Must be used for base64 images for now (v10.0.1). TODO: See if this is fixed in future Next.js versions.
-        alt={t('common:commentAttachment')}
+        alt={t('comment:attachmentAlt')}
       />
     </Box>
   );
@@ -351,7 +351,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   );
 
   const renderFormHelperText = (
-    <FormHelperText>Shift + Enter {t('common:commentHelperText')}</FormHelperText>
+    <FormHelperText>Shift + Enter {t('comment:helperText')}</FormHelperText>
   );
 
   const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (

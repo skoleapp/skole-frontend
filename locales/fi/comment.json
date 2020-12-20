@@ -1,0 +1,14 @@
+{
+  "actionsHeader": "Kommentin valikko",
+  "delete": "Poista kommentti",
+  "confirmDelete": "Haluatko varmasti poistaa tämän kommentin?",
+  "shareHeader": "Jaa kommentti",
+  "shareTitle": "Käyttäjän {{ creatorUsername }} kommentti Skolessa",
+  "shareText": "Katso käyttäjän {{ creatorUsername }} kommentti Skolessa: {{ commentPreview }}",
+  "share": "Jaa kommentti",
+  "attachmentAlt": "Kommentin liite.",
+  "target": "kommentti",
+  "voteTooltipTarget": "kommenti",
+  "actionsTooltipTarget": "kommenti",
+  "helperText": "lisätäksesi uuden rivin."
+}

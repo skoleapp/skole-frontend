@@ -17,7 +17,6 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) | Used for resizing uploaded images.                                                            |
 | [clsx](https://www.npmjs.com/package/clsx)                                           | A minimalistic library to connect Material UI classes.                                        |
 | [dayjs](https://www.npmjs.com/package/days)                                          | Immutable date library.                                                                       |
-| [draft-js](https://www.npmjs.com/package/draft-js)                                   | Rich text editor.                                                                             |
 | [formik](https://www.npmjs.com/package/formik)                                       | Provides useful and extensible form logic.                                                    |
 | [graphql](https://www.npmjs.com/package/graphql)                                     | Only used for getting useful GraphQL typings.                                                 |
 | [lodash.throttle](https://www.npmjs.com/package/lodash.thorttle)                     | Single utility function from [Lodash](https://www.npmjs.com/package/lodash).                  |

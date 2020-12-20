@@ -4,6 +4,7 @@ import useTranslation from 'next-translate/useTranslation';
 
 const defaultNamespaces = [
   'common',
+  'comment',
   'marketing',
   '_error',
   '404',

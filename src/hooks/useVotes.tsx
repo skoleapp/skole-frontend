@@ -15,11 +15,16 @@ interface VoteVariables {
   comment?: string;
 }
 
-interface UseVotesProps {
+interface UseVotesParams {
   initialVote: VoteObjectType | null;
   initialScore: string;
   isOwner: boolean;
   variables: VoteVariables;
+  target: string;
+  customRemoveUpvoteTooltip?: string;
+  customUpvoteTooltip?: string;
+  customRemoveDownvoteTooltip?: string;
+  customDownvoteTooltip?: string;
 }
 
 interface VoteButtonProps {
@@ -29,13 +34,13 @@ interface VoteButtonProps {
 }
 
 interface UseVotes {
-  renderUpVoteButton: JSX.Element | false;
-  renderDownVoteButton: JSX.Element | false;
   score: string;
-  upVoteButtonProps: VoteButtonProps;
-  downVoteButtonProps: VoteButtonProps;
-  upVoteButtonTooltip: string;
-  downVoteButtonTooltip: string;
+  renderUpvoteButton: JSX.Element | false;
+  renderDownvoteButton: JSX.Element | false;
+  upvoteButtonProps: VoteButtonProps;
+  downvoteButtonProps: VoteButtonProps;
+  upvoteTooltip: string;
+  downvoteTooltip: string;
 }
 
 // A hook that allows usage of either default vote buttons (used in course/resource details) or using props for custom vote buttons.
@@ -44,33 +49,61 @@ export const useVotes = ({
   initialScore,
   isOwner,
   variables,
-}: UseVotesProps): UseVotes => {
+  target,
+  customRemoveUpvoteTooltip,
+  customUpvoteTooltip,
+  customRemoveDownvoteTooltip,
+  customDownvoteTooltip,
+}: UseVotesParams): UseVotes => {
   const { userMe, verified, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
   const { toggleNotification } = useNotificationsContext();
-  const ownContentTooltip = t('tooltips:voteOwnContent');
+  const ownContentTooltip = t('tooltips:voteOwnContent', { target });
   const context = useLanguageHeaderContext();
+
+  const error =
+    currentVote?.status === 1
+      ? t('notifications:removeVoteError', { target })
+      : t('notifications:voteError', { target });
+
+  const onError = (): void => toggleNotification(error);
 
   useEffect(() => {
     setCurrentVote(initialVote);
   }, [initialVote]);
 
-  const upVoteButtonTooltip =
+  // Show different tooltip for each of these cases:
+  // * User is not logged in.
+  // * User is not verified.
+  // * User is the owner of the object.
+  // * User has upvoted (can be overridden with a custom tooltip).
+  // * User has not upvoted (can be overridden with a custom tooltip).
+  const upvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
-    (isOwner ? ownContentTooltip : t('tooltips:upVote'));
+    (isOwner
+      ? ownContentTooltip
+      : currentVote?.status === 1
+      ? customRemoveUpvoteTooltip || t('tooltips:removeUpvote', { target })
+      : customUpvoteTooltip || t('tooltips:upvote', { target }));
 
-  const downVoteButtonTooltip =
+  // Show different tooltip for each of these cases:
+  // * User is not logged in.
+  // * User is not verified.
+  // * User is the owner of the object.
+  // * User has downvoted (can be overridden with a custom tooltip).
+  // * User has not downvoted (can be overridden with a custom tooltip).
+  const downvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
-    (isOwner ? ownContentTooltip : t('tooltips:downVote'));
-
-  const onError = (): void => {
-    toggleNotification(t('notifications:voteError'));
-  };
+    (isOwner
+      ? ownContentTooltip
+      : currentVote?.status === -1
+      ? customRemoveDownvoteTooltip || t('tooltips:removeDownvote', { target })
+      : customDownvoteTooltip || t('tooltips:downvote', { target }));
 
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote) {
@@ -99,13 +132,13 @@ export const useVotes = ({
     disabled: voteSubmitting || !userMe || isOwner || verified === false,
   };
 
-  const upVoteButtonProps = {
+  const upvoteButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(1),
     color: !!currentVote && currentVote.status === 1 ? 'primary' : ('default' as MuiColor),
   };
 
-  const downVoteButtonProps = {
+  const downvoteButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(-1),
     color: !!currentVote && currentVote.status === -1 ? 'primary' : ('default' as MuiColor),
@@ -113,10 +146,10 @@ export const useVotes = ({
 
   // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.
   // On mobile, do not render the button at all in these cases.
-  const renderUpVoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
-    <Tooltip title={upVoteButtonTooltip}>
+  const renderUpvoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
+    <Tooltip title={upvoteTooltip}>
       <Typography component="span">
-        <IconButton {...upVoteButtonProps}>
+        <IconButton {...upvoteButtonProps}>
           <ThumbUpOutlined />
         </IconButton>
       </Typography>
@@ -125,10 +158,10 @@ export const useVotes = ({
 
   // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.
   // On mobile, do not render the button at all in these cases.
-  const renderDownVoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
-    <Tooltip title={downVoteButtonTooltip}>
+  const renderDownvoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
+    <Tooltip title={downvoteTooltip}>
       <Typography component="span">
-        <IconButton {...downVoteButtonProps}>
+        <IconButton {...downvoteButtonProps}>
           <ThumbDownOutlined />
         </IconButton>
       </Typography>
@@ -136,12 +169,12 @@ export const useVotes = ({
   );
 
   return {
-    renderUpVoteButton,
-    renderDownVoteButton,
-    upVoteButtonProps,
-    downVoteButtonProps,
     score,
-    upVoteButtonTooltip,
-    downVoteButtonTooltip,
+    renderUpvoteButton,
+    renderDownvoteButton,
+    upvoteButtonProps,
+    downvoteButtonProps,
+    upvoteTooltip,
+    downvoteTooltip,
   };
 };

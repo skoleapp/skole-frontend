@@ -1,15 +1,14 @@
 {
-  "voteError": "Virhe äänestyksessä!",
-  "starError": "Virhe merkittäessä tähdellä!",
-  "deleteCommentError": "Virhe poistettaessa kommenttia!",
+  "voteError": "Virhe äänestettäessä {{ target }}a!",
+  "removeVoteError": "Virhe poistettaessa {{ target }}n ääntä!",
+  "starError": "Virhe merkittäessä {{ target }}a tähdellä!",
+  "unstarError": "Virhe poistettaessa {{ target }}n tähteä!",
+  "deleteError": "Virhe poistettaessa {{ target }}a!",
   "messageEmpty": "Viesti ei voi olla tyhjä!",
   "linkCopied": "Linkki kopioitu leikepöydälle!",
-  "deleteResourceError": "Resurssin poistamisessa tapahtui odottamaton virhe!",
-  "deleteCourseError": "Kurssin poistamisessa tapahtui odottamaton virhe!",
-  "downloadResourceError": "Virhe ladattaessa resurssia!",
-  "printResourceError": "Virhe tulostettaessa resurssia!",
+  "downloadPdfError": "Virhe ladattaessa PDF-tiedostoa!",
+  "printPdfError": "Virhe tulostettaessa PDF-tiedostoa!",
   "messageError": "Virhe lähetettäessä viestiä!",
-  "appUpdated": "Sovellus päivitetty!",
   "markSingleActivityReadError": "Tämä toiminta on todennäköisesti poistettu. Lataa sivu uudelleen.",
   "markAllActivitiesReadError": "Virhe merkittäessä toiminnat luetuiksi!"
 }

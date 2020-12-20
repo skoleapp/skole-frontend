@@ -133,7 +133,8 @@ const ResourceDetailPage: NextPage = () => {
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], resource);
   const shareTitle = t('resource:shareTitle', { resourceTitle });
   const shareText = t('resource:shareText', { resourceTitle, creatorUsername });
-  const shareParams = { shareTitle, shareText };
+  const shareParams = { shareHeader: t('resource:shareHeader'), shareTitle, shareText };
+  const target = t('resource:target');
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
   const { commentModalOpen } = useDiscussionContext();
@@ -148,7 +149,10 @@ const ResourceDetailPage: NextPage = () => {
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
-  } = useInfoDialog(t('resource:infoDialogHeader'));
+  } = useInfoDialog({
+    header: t('resource:infoHeader'),
+    target,
+  });
 
   const {
     actionsDialogOpen,
@@ -157,13 +161,19 @@ const ResourceDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
-  } = useActionsDialog(shareParams);
+  } = useActionsDialog({
+    header: t('resource:actionsHeader'),
+    share: t('resource:share'),
+    target,
+    shareParams,
+  });
 
-  const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
+  const { renderUpvoteButton, renderDownvoteButton, score } = useVotes({
     initialVote,
     initialScore,
     isOwner,
     variables: { resource: resourceId },
+    target,
   });
 
   // Update state after data fetching is complete.
@@ -223,8 +233,8 @@ const ResourceDetailPage: NextPage = () => {
 
     try {
       await confirm({
-        title: t('resource:deleteResourceTitle'),
-        description: t('resource:deleteResourceDescription'),
+        title: t('resource:delete'),
+        description: t('resource:confirmDelete'),
       });
 
       await deleteResource({ variables: { id: resourceId } });
@@ -267,7 +277,7 @@ const ResourceDetailPage: NextPage = () => {
       a.click();
       a.remove();
     } catch {
-      toggleNotification(t('notifications:downloadResourceError'));
+      toggleNotification(t('notifications:downloadPdfError'));
     }
   };
 
@@ -289,7 +299,7 @@ const ResourceDetailPage: NextPage = () => {
       // @ts-ignore: TS doesn't detect the `print-js` import.
       printJS(blobUrl); // eslint-disable-line no-undef
     } catch {
-      toggleNotification(t('notifications:printResourceError'));
+      toggleNotification(t('notifications:printPdfError'));
     }
   };
 
@@ -332,16 +342,22 @@ const ResourceDetailPage: NextPage = () => {
     },
   ];
 
+  const starButtonProps = {
+    starred,
+    resource: resourceId,
+    target,
+  };
+
   // On desktop, render a disabled button for non-verified users.
   // On mobile, do not render the button at all for non-verified users.
-  const renderStarButton = (!!verified || isTabletOrDesktop) && (
-    <StarButton starred={starred} resource={resourceId} />
-  );
+  const renderStarButton = (!!verified || isTabletOrDesktop) && <StarButton {...starButtonProps} />;
 
-  const renderShareButton = <ShareButton {...shareParams} />;
-  const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
-  const renderRotateButton = <RotateButton />;
+  const renderShareButton = <ShareButton {...shareParams} target={target} />;
+
+  // Hide these buttons from the custom bottom navbar when in discussion tab.
+  const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
+  const renderRotateButton = tabValue === 0 && <RotateButton />;
 
   const renderDefaultBottomNavbarContent = (
     <Grid container>
@@ -351,8 +367,8 @@ const ResourceDetailPage: NextPage = () => {
       </Grid>
       <Grid item xs={6} container justify="flex-end">
         {renderStarButton}
-        {renderUpVoteButton}
-        {renderDownVoteButton}
+        {renderUpvoteButton}
+        {renderDownvoteButton}
       </Grid>
     </Grid>
   );
@@ -374,8 +390,8 @@ const ResourceDetailPage: NextPage = () => {
   const discussionHeaderProps = {
     commentCount,
     renderStarButton,
-    renderUpVoteButton,
-    renderDownVoteButton,
+    renderUpvoteButton,
+    renderDownvoteButton,
     renderShareButton,
     renderInfoButton,
     renderActionsButton,
@@ -439,7 +455,7 @@ const ResourceDetailPage: NextPage = () => {
       <ListItemIcon>
         <DeleteOutline />
       </ListItemIcon>
-      <ListItemText>{t('common:delete')}</ListItemText>
+      <ListItemText>{t('resource:delete')}</ListItemText>
     </MenuItem>
   );
 
@@ -448,7 +464,7 @@ const ResourceDetailPage: NextPage = () => {
       <ListItemIcon>
         <CloudDownloadOutlined />
       </ListItemIcon>
-      <ListItemText>{t('common:download')}</ListItemText>
+      <ListItemText>{t('resource:downloadPdf')}</ListItemText>
     </MenuItem>
   );
 
@@ -457,7 +473,7 @@ const ResourceDetailPage: NextPage = () => {
       <ListItemIcon>
         <PrintOutlined />
       </ListItemIcon>
-      <ListItemText>{t('common:print')}</ListItemText>
+      <ListItemText>{t('resource:printPdf')}</ListItemText>
     </MenuItem>
   );
 

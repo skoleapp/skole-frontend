@@ -16,8 +16,8 @@ const useStyles = makeStyles(({ spacing }) => ({
 interface Props {
   commentCount: number;
   renderStarButton: JSX.Element | false;
-  renderUpVoteButton: JSX.Element | false;
-  renderDownVoteButton: JSX.Element | false;
+  renderUpvoteButton: JSX.Element | false;
+  renderDownvoteButton: JSX.Element | false;
   renderShareButton: JSX.Element;
   renderInfoButton: JSX.Element;
   renderActionsButton: JSX.Element;
@@ -26,8 +26,8 @@ interface Props {
 export const DiscussionHeader: React.FC<Props> = ({
   commentCount,
   renderStarButton,
-  renderUpVoteButton,
-  renderDownVoteButton,
+  renderUpvoteButton,
+  renderDownvoteButton,
   renderShareButton,
   renderInfoButton,
   renderActionsButton,
@@ -51,8 +51,8 @@ export const DiscussionHeader: React.FC<Props> = ({
   const renderAction = (
     <>
       {renderStarButton}
-      {renderUpVoteButton}
-      {renderDownVoteButton}
+      {renderUpvoteButton}
+      {renderDownvoteButton}
       {renderShareButton}
       {renderInfoButton}
       {renderActionsButton}

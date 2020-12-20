@@ -1,11 +1,17 @@
 {
   "description": "Näytä {{ resourceTitle }} Skolessa.",
-  "deleteResourceTitle": "Poista resurssi",
-  "deleteResourceDescription": "Oletko varma että haluat poistaa tämän resurssin?",
   "error": "Virhe ladattaessa resurssia.",
   "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
   "drawMode": "Piirtotila",
+  "downloadPdf": "Lataa PDF",
+  "printPdf": "Tulosta PDF",
+  "shareHeader": "Jaa resurssi",
   "shareTitle": "{{ resourceTitle }} Skolessa",
   "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa",
-  "infoDialogHeader": "Resurssin tiedot"
+  "infoHeader": "Resurssin tiedot",
+  "actionsHeader": "Resurssin valikko",
+  "share": "Jaa resurssi",
+  "delete": "Poista resurssi",
+  "confirmDelete": "Haluatko varmasti poistaa tämän resurssin?",
+  "target": "resurssi"
 }

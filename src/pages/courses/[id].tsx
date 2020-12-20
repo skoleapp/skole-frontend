@@ -122,7 +122,8 @@ const CourseDetailPage: NextPage = () => {
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
   const shareTitle = t('course:shareTitle', { courseName });
   const shareText = t('course:shareText', { courseName, creatorUsername });
-  const shareParams = { shareTitle, shareText };
+  const shareParams = { shareHeader: t('course:shareHeader'), shareTitle, shareText };
+  const target = t('course:target');
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
@@ -133,7 +134,10 @@ const CourseDetailPage: NextPage = () => {
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
-  } = useInfoDialog(t('course:infoDialogHeader'));
+  } = useInfoDialog({
+    header: t('course:infoHeader'),
+    target,
+  });
 
   const {
     actionsDialogOpen,
@@ -142,16 +146,23 @@ const CourseDetailPage: NextPage = () => {
     renderShareAction,
     renderReportAction,
     renderActionsButton,
-  } = useActionsDialog(shareParams);
+  } = useActionsDialog({
+    header: t('course:actionsHeader'),
+    shareParams,
+    target,
+    share: t('course:share'),
+  });
 
-  const { renderUpVoteButton, renderDownVoteButton, score } = useVotes({
+  const { renderUpvoteButton, renderDownvoteButton, score } = useVotes({
     initialVote,
     initialScore,
     isOwner,
     variables: { course: courseId },
+    target,
   });
 
-  const deleteCourseError = (): void => toggleNotification(t('notifications:deleteCourseError'));
+  const deleteCourseError = (): void =>
+    toggleNotification(t('notifications:deleteError', { target }));
 
   const deleteCourseCompleted = async ({ deleteCourse }: DeleteCourseMutation): Promise<void> => {
     if (deleteCourse) {
@@ -177,8 +188,8 @@ const CourseDetailPage: NextPage = () => {
   const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
     try {
       await confirm({
-        title: t('course:deleteCourseTitle'),
-        description: t('course:deleteCourseDescription'),
+        title: t('course:delete'),
+        description: t('course:confirmDelete'),
       });
 
       await deleteCourse({ variables: { id: courseId } });
@@ -236,19 +247,23 @@ const CourseDetailPage: NextPage = () => {
     },
   ];
 
+  const starButtonProps = {
+    starred,
+    course: courseId,
+    target,
+  };
+
   // On desktop, render a disabled button for non-verified users.
   // On mobile, do not render the button at all for non-verified users.
-  const renderStarButton = (!!verified || isTabletOrDesktop) && (
-    <StarButton starred={starred} course={courseId} />
-  );
+  const renderStarButton = (!!verified || isTabletOrDesktop) && <StarButton {...starButtonProps} />;
 
-  const renderShareButton = <ShareButton {...shareParams} />;
+  const renderShareButton = <ShareButton {...shareParams} target={target} />;
 
   const discussionHeaderProps = {
     commentCount,
     renderStarButton,
-    renderUpVoteButton,
-    renderDownVoteButton,
+    renderUpvoteButton,
+    renderDownvoteButton,
     renderShareButton,
     renderInfoButton,
     renderActionsButton,
@@ -273,8 +288,8 @@ const CourseDetailPage: NextPage = () => {
             {renderStarButton}
           </Grid>
           <Grid item xs={6} container justify="flex-end">
-            {renderUpVoteButton}
-            {renderDownVoteButton}
+            {renderUpvoteButton}
+            {renderDownvoteButton}
           </Grid>
         </Grid>
       </CustomBottomNavbarContainer>
@@ -390,7 +405,7 @@ const CourseDetailPage: NextPage = () => {
       <ListItemIcon>
         <DeleteOutline />
       </ListItemIcon>
-      <ListItemText>{t('common:delete')}</ListItemText>
+      <ListItemText>{t('course:delete')}</ListItemText>
     </MenuItem>
   );
 

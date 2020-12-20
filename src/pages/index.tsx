@@ -175,7 +175,7 @@ const IndexPage: NextPage = () => {
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const shareTitle = `Skole | ${t('marketing:slogan')}`;
   const shareText = t('marketing:description');
-  const shareParams = { shareTitle, shareText };
+  const shareParams = { shareHeader: t('index:shareHeader'), shareTitle, shareText };
   const handleClickShareButton = () => handleOpenShareDialog(shareParams);
 
   const shortcuts = [

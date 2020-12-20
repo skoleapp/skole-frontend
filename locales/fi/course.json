@@ -2,10 +2,14 @@
   "description": "Näytä {{ courseName }} Skolessa.",
   "noResources": "Tällä kurssilla ei ole resursseja.",
   "noResourcesLink": "Lisää resurssi täältä!",
-  "deleteCourseTitle": "Poista kurssi",
-  "deleteCourseDescription": "Oletko varma että haluat poistaa tämän kurssin?",
   "noComments": "Tällä kurssilla ei ole kommentteja. Lisää kommentti alta!",
+  "shareHeader": "Jaa kurssi",
   "shareTitle": "{{ courseName }} Skolessa",
   "shareText": "Katso {{ courseName }} käyttäjältä {{ creatorUsername }} Skolessa",
-  "infoDialogHeader": "Kurssin tiedot"
+  "infoHeader": "Kurssin tiedot",
+  "actionsHeader": "Kurssin valikko",
+  "share": "Jaa kurssi",
+  "delete": "Poista kurssi",
+  "confirmDelete": "Haluatko varmasti poistaa tämän kurssin?",
+  "target": "kurssi"
 }

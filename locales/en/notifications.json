@@ -1,15 +1,14 @@
 {
-  "voteError": "Error while voting!",
-  "starError": "Error while starring!",
-  "deleteCommentError": "Error while deleting comment!",
+  "voteError": "Error while voting {{ target }}!",
+  "removeVoteError": "Error while removing vote for {{ target }}!",
+  "starError": "Error while starring {{ target }}!",
+  "unstarError": "Error while unstarring {{ target }}!",
+  "deleteError": "Error while deleting {{ target }}!",
   "messageEmpty": "Message cannot be empty!",
   "linkCopied": "Link copied to clipboard!",
-  "deleteResourceError": "Unexpected error while deleting resource!",
-  "deleteCourseError": "Unexpected error while deleting course!",
-  "downloadResourceError": "Error while downloading resource!",
-  "printResourceError": "Error while printing resource!",
+  "downloadPdfError": "Error while downloading PDF file!",
+  "printPdfError": "Error while printing PDF file!",
   "messageError": "Error while sending message!",
-  "appUpdated": "App has been updated!",
   "markSingleActivityReadError": "This activity has most likely been removed. Please refresh the page.",
   "markAllActivitiesReadError": "Error while marking activities as read!"
 }
