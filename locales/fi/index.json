@@ -4,6 +4,9 @@
   "findContent": "Löydä sisältöä",
   "uploadMaterial": "Lisää materiaalia",
   "addCourses": "Lisää kursseja",
+  "nextStepsHeader": "Seuraavat vaiheet",
   "inviteHeader": "Merkitse tähdellä lempikurssisi ja -materiaalisi pysyäksesi ajan tasalla. Kutsu kaverisi mukaan!",
-  "inviteFriends": "Kutsu kavereita nyt"
+  "inviteText": "Kutsu kavereita",
+  "contactHeader": "Eikö koulusi tai oppiaineesi ole vielä listattuna. Ota meihin yhteyttä niin lisäämme ne!",
+  "contactText": "Ota yhteyttä"
 }

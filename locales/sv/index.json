@@ -4,6 +4,9 @@
   "findContent": "Hitta innehåll",
   "uploadMaterial": "Ladda upp material",
   "addCourses": "Lägg till kurser",
+  "nextStepsHeader": "Nästa steg",
   "inviteHeader": "Stjärnmärka dina favoritkurser och material för att hålla dig uppdaterad. Bjud in dina vänner att gå med dig!",
-  "inviteFriends": "Bjud in vänner nu"
+  "inviteText": "Bjud in vänner",
+  "contactHeader": "Är din skola eller ditt ämne ännu inte listat? Kontakta oss så lägger vi till dem!",
+  "contactText": "Kontakta oss"
 }

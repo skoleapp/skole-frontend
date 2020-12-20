@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   Grid,
   InputBase,
@@ -19,7 +20,7 @@ import {
   SvgIconComponent,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import { LanguageButton, MainBackground, MainTemplate } from 'components';
+import { ButtonLink, LanguageButton, MainBackground, MainTemplate } from 'components';
 import { useShareContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useSearch } from 'hooks';
@@ -28,6 +29,7 @@ import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER_RADIUS, COLORS } from 'theme';
+import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
@@ -122,20 +124,41 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     height: '3rem',
     width: '3rem',
   },
-  inviteContainer: {
+  nextStepsContainer: {
     position: 'relative',
-    backgroundColor: COLORS.backgroundGrey,
     flexGrow: 1,
-  },
-  inviteContent: {
-    padding: spacing(4),
-    textAlign: 'center',
+    backgroundColor: COLORS.backgroundGrey,
+    paddingTop: spacing(6),
+    paddingBottom: spacing(2),
     [breakpoints.up('md')]: {
-      padding: spacing(12),
+      padding: spacing(4),
     },
   },
-  inviteButton: {
+  nextStepsHeader: {
+    fontSize: '1.75rem',
+  },
+  nextStepsContent: {
     marginTop: spacing(4),
+  },
+  nextStepsCard: {
+    minHeight: '12rem',
+    height: '100%',
+    flexGrow: 1,
+    backgroundColor: palette.grey[200],
+    display: 'flex',
+    flexDirection: 'column',
+    boxShadow: 'none',
+    border: `0.15rem solid ${palette.grey[400]}`,
+    borderRadius: '1rem',
+  },
+  nextStepsCardContent: {
+    flexGrow: 1,
+  },
+  nextStepsCardText: {
+    fontSize: '1.1rem',
+  },
+  nextStepsButton: {
+    borderRadius: '1rem',
   },
 }));
 
@@ -245,33 +268,65 @@ const IndexPage: NextPage = () => {
     </Grid>
   );
 
+  const nextStepsCardTextProps = {
+    className: classes.nextStepsCardText,
+    variant: 'body2' as TextVariant,
+    color: 'textSecondary' as TextColor,
+  };
+
+  const nextStepButtonProps = {
+    className: classes.nextStepsButton,
+    color: 'primary' as MuiColor,
+    variant: 'outlined' as ButtonVariant,
+    fullWidth: true,
+    endIcon: <ArrowForwardOutlined />,
+  };
+
   const renderInfo = (
-    <Grid className={classes.inviteContainer} container justify="center">
+    <Grid
+      className={classes.nextStepsContainer}
+      container
+      direction="column"
+      alignItems="center"
+      justify="center"
+    >
+      <Typography className={classes.nextStepsHeader} variant="h2" color="textSecondary">
+        {t('index:nextStepsHeader')} 🚀
+      </Typography>
       <Grid
-        className={classes.inviteContent}
+        className={classes.nextStepsContent}
         item
+        xs={12}
+        md={8}
+        lg={6}
+        xl={4}
         container
-        direction="column"
-        alignItems="center"
-        justify="center"
+        spacing={4}
       >
-        <Typography
-          className={classes.subheader}
-          variant="subtitle1"
-          color="textSecondary"
-          gutterBottom
-        >
-          {t('index:inviteHeader')}
-        </Typography>
-        <Button
-          className={classes.inviteButton}
-          onClick={handleClickShareButton}
-          color="primary"
-          variant="outlined"
-          endIcon={<ArrowForwardOutlined />}
-        >
-          {t('index:inviteFriends')}
-        </Button>
+        <Grid item xs={12} sm={6} container>
+          <Card className={classes.nextStepsCard}>
+            <CardContent className={classes.nextStepsCardContent}>
+              <Typography {...nextStepsCardTextProps}>{t('index:inviteHeader')}</Typography>
+            </CardContent>
+            <CardActions>
+              <Button {...nextStepButtonProps} onClick={handleClickShareButton}>
+                {t('index:inviteText')}
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Card className={classes.nextStepsCard}>
+            <CardContent className={classes.nextStepsCardContent}>
+              <Typography {...nextStepsCardTextProps}>{t('index:contactHeader')}</Typography>
+            </CardContent>
+            <CardActions>
+              <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+                {t('index:contactText')}
+              </ButtonLink>
+            </CardActions>
+          </Card>
+        </Grid>
       </Grid>
     </Grid>
   );
