@@ -14,10 +14,10 @@ interface ActionsButtonProps {
 }
 
 interface UseActionsDialogParams {
-  header: string;
-  share: string;
-  target: string;
-  shareParams: ShareParams;
+  header?: string;
+  share?: string;
+  target?: string;
+  shareParams?: ShareParams;
 }
 
 interface UseActionsDialog {
@@ -34,8 +34,8 @@ interface UseActionsDialog {
 export const useActionsDialog = ({
   header,
   share,
-  target,
-  shareParams,
+  target = '',
+  shareParams = {},
 }: UseActionsDialogParams): UseActionsDialog => {
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();

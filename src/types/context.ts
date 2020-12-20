@@ -73,9 +73,9 @@ export interface ConfirmContextType {
 }
 
 export interface ShareParams {
-  shareHeader: string;
-  shareTitle: string;
-  shareText: string;
+  shareHeader?: string;
+  shareTitle?: string;
+  shareText?: string;
 }
 
 export interface ShareContextType {
