@@ -65,8 +65,8 @@ export const SettingsTemplate: React.FC<Props> = ({
 
   const formColSpan = {
     xs: 12,
-    sm: 8,
-    md: 6,
+    sm: 10,
+    md: 8,
     lg: 4,
   };
 
