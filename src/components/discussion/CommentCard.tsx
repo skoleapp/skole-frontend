@@ -176,7 +176,7 @@ export const CommentCard: React.FC<Props> = ({
     initialScore,
     isOwner,
     variables: { comment: commentId },
-    target,
+    target: t('comment:voteTooltipTarget'),
   });
 
   const handleClick = (): void => {
@@ -297,7 +297,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderActionsButton = (
-    <Tooltip title={t('tooltips:actions', { target })}>
+    <Tooltip title={t('tooltips:actions', { target: t('comment:actionsTooltipTarget') })}>
       <IconButton
         {...actionsButtonProps}
         className={clsx(classes.iconButton, classes.actionsButton)}

@@ -7,5 +7,7 @@
   "shareText": "Se kommentar av användare {{ creatorUsername }} på Skole: {{ commentPreview }}",
   "share": "Dela kommentar",
   "attachmentAlt": "Kommentarbilaga.",
-  "target": "kommentar"
+  "target": "kommentar",
+  "voteTooltipTarget": "kommentar",
+  "actionsTooltipTarget": "kommentar"
 }

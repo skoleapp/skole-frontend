@@ -1,5 +1,6 @@
 {
   "voteError": "Virhe äänestettäessä {{ target }}a!",
+  "removeVoteError": "Virhe poistettaessa {{ target }}n ääntä!",
   "starError": "Virhe merkittäessä {{ target }}a tähdellä!",
   "unstarError": "Virhe poistettaessa {{ target }}n tähteä!",
   "deleteError": "Virhe poistettaessa {{ target }}a!",

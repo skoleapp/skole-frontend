@@ -7,5 +7,7 @@
   "shareText": "View comment by {{ creatorUsername }} on Skole: {{ commentPreview }}",
   "share": "Share Comment",
   "attachmentAlt": "Comment attachment.",
-  "target": "comment"
+  "target": "comment",
+  "voteTooltipTarget": "comment",
+  "actionsTooltipTarget": "comment"
 }

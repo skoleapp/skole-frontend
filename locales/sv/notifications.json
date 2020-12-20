@@ -1,5 +1,6 @@
 {
   "voteError": "Fel vid omröstning av {{ target }}!",
+  "removeVoteError": "Ett fel vid avlägsnande av rösten för {{ target }}!",
   "starError": "Fel vid favorisering av {{ target }}!",
   "unstarError": "Fel vid avmarkering av {{ target }}!",
   "deleteError": "Fel vid radering av {{ target }}!",

@@ -1,5 +1,6 @@
 {
   "voteError": "Error while voting {{ target }}!",
+  "removeVoteError": "Error while removing vote for {{ target }}!",
   "starError": "Error while starring {{ target }}!",
   "unstarError": "Error while unstarring {{ target }}!",
   "deleteError": "Error while deleting {{ target }}!",

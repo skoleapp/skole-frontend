@@ -7,5 +7,7 @@
   "shareText": "Katso käyttäjän {{ creatorUsername }} kommentti Skolessa: {{ commentPreview }}",
   "share": "Jaa kommentti",
   "attachmentAlt": "Kommentin liite.",
-  "target": "kommentti"
+  "target": "kommentti",
+  "voteTooltipTarget": "kommenti",
+  "actionsTooltipTarget": "kommenti"
 }
