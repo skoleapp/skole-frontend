@@ -13,6 +13,13 @@ interface ActionsButtonProps {
   size: Size;
 }
 
+interface UseActionsDialogParams {
+  header: string;
+  share: string;
+  target: string;
+  shareParams: ShareParams;
+}
+
 interface UseActionsDialog {
   actionsDialogOpen: boolean;
   actionsDialogHeaderProps: DialogHeaderProps;
@@ -24,11 +31,15 @@ interface UseActionsDialog {
 }
 
 // Custom hook for rendering common actions and providing helpers and props for multiple action dialogs.
-export const useActionsDialog = (shareParams?: ShareParams): UseActionsDialog => {
+export const useActionsDialog = ({
+  header,
+  share,
+  target,
+  shareParams,
+}: UseActionsDialogParams): UseActionsDialog => {
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
   const dialogButtonProps = useDialogButton();
-  const tooltip = t('tooltips:actions');
 
   const {
     open: actionsDialogOpen,
@@ -48,11 +59,11 @@ export const useActionsDialog = (shareParams?: ShareParams): UseActionsDialog =>
 
   const handleClickShare = (e: SyntheticEvent): void => {
     handleCloseActionsDialog(e);
-    handleOpenShareDialog(shareParams!); // Make non-null assertion since we can be sure this function call happens only when the `shareParams` object exists.
+    handleOpenShareDialog(shareParams);
   };
 
   const actionsDialogHeaderProps = {
-    text: t('common:actions'),
+    text: header,
     onCancel: handleCloseActionsDialog,
   };
 
@@ -61,12 +72,12 @@ export const useActionsDialog = (shareParams?: ShareParams): UseActionsDialog =>
     onClick: handleOpenActionsDialog,
   };
 
-  const renderShareAction = !!shareParams && (
+  const renderShareAction = (
     <MenuItem onClick={handleClickShare}>
       <ListItemIcon>
         <ShareOutlined />
       </ListItemIcon>
-      <ListItemText>{t('common:share')}</ListItemText>
+      <ListItemText>{share}</ListItemText>
     </MenuItem>
   );
 
@@ -80,7 +91,7 @@ export const useActionsDialog = (shareParams?: ShareParams): UseActionsDialog =>
   );
 
   const renderActionsButton = (
-    <Tooltip title={tooltip}>
+    <Tooltip title={t('tooltips:actions', { target })}>
       <IconButton {...actionsButtonProps}>
         <MoreHorizOutlined />
       </IconButton>

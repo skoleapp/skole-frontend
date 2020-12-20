@@ -3,7 +3,11 @@
   "noSubjects": "Tällä koululla ei ole oppiaineita.",
   "noCourses": "Tällä koululla ei ole kursseja.",
   "addCourse": "Lisää kurssi tälle koululle",
+  "shareHeader": "Jaa koulu",
   "shareTitle": "{{ schoolName }} Skolessa",
   "shareText": "Näytä {{ schoolName }} Skolessa",
-  "infoDialogHeader": "Koulun tiedot"
+  "share": "Jaa koulu",
+  "infoHeader": "Koulun tiedot",
+  "actionsHeader": "Koulun valikko",
+  "target": "koulu"
 }

@@ -36,7 +36,7 @@ export const ResourceToolbar: React.FC<Props> = ({
   const renderRotateButton = <RotateButton />;
 
   const renderDownloadButton = (
-    <Tooltip title={t('tooltips:download')}>
+    <Tooltip title={t('tooltips:downloadPdf')}>
       <Typography component="span">
         <IconButton
           onClick={handleDownloadButtonClick}
@@ -51,7 +51,7 @@ export const ResourceToolbar: React.FC<Props> = ({
   );
 
   const renderPrintButton = (
-    <Tooltip title={t('tooltips:print')}>
+    <Tooltip title={t('tooltips:printPdf')}>
       <Typography component="span">
         <IconButton
           onClick={handlePrintButtonClick}

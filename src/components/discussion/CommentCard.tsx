@@ -134,15 +134,22 @@ export const CommentCard: React.FC<Props> = ({
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
+  const target = t('comment:target');
 
-  const shareTitle = t('common:commentShareTitle', {
+  const shareTitle = t('comment:shareTitle', {
     creatorUsername,
   });
 
-  const shareText = t('common:commentShareText', {
+  const shareText = t('comment:shareText', {
     creatorUsername,
     commentPreview,
   });
+
+  const shareParams = {
+    shareHeader: t('comment:share'),
+    shareTitle,
+    shareText,
+  };
 
   const {
     actionsDialogOpen,
@@ -151,19 +158,25 @@ export const CommentCard: React.FC<Props> = ({
     renderShareAction,
     renderReportAction,
     actionsButtonProps,
-  } = useActionsDialog({ shareTitle, shareText });
+  } = useActionsDialog({
+    header: t('comment:actionsHeader'),
+    share: t('comment:share'),
+    shareParams,
+    target,
+  });
 
   const {
     score,
-    upVoteButtonProps,
-    downVoteButtonProps,
-    upVoteButtonTooltip,
-    downVoteButtonTooltip,
+    upvoteButtonProps,
+    downvoteButtonProps,
+    upvoteTooltip,
+    downvoteTooltip,
   } = useVotes({
     initialVote,
     initialScore,
     isOwner,
     variables: { comment: commentId },
+    target,
   });
 
   const handleClick = (): void => {
@@ -174,7 +187,8 @@ export const CommentCard: React.FC<Props> = ({
     }
   };
 
-  const deleteCommentError = (): void => toggleNotification(t('notifications:deleteCommentError'));
+  const deleteCommentError = (): void =>
+    toggleNotification(t('notifications:deleteError', { target }));
 
   const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
     if (deleteComment) {
@@ -208,8 +222,8 @@ export const CommentCard: React.FC<Props> = ({
 
     try {
       await confirm({
-        title: t('common:deleteCommentTitle'),
-        description: t('common:deleteCommentDescription'),
+        title: t('comment:delete'),
+        description: t('comment:confirmDelete'),
       });
 
       await deleteComment({ variables: { id: comment.id } });
@@ -283,7 +297,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderActionsButton = (
-    <Tooltip title={t('common:actions')}>
+    <Tooltip title={t('tooltips:actions', { target })}>
       <IconButton
         {...actionsButtonProps}
         className={clsx(classes.iconButton, classes.actionsButton)}
@@ -303,9 +317,9 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderUpvoteButton = (
-    <Tooltip title={upVoteButtonTooltip}>
+    <Tooltip title={upvoteTooltip}>
       <Typography component="span">
-        <IconButton className={classes.iconButton} {...upVoteButtonProps}>
+        <IconButton className={classes.iconButton} {...upvoteButtonProps}>
           <KeyboardArrowUpOutlined />
         </IconButton>
       </Typography>
@@ -315,9 +329,9 @@ export const CommentCard: React.FC<Props> = ({
   const renderScore = <Typography variant="body2">{score}</Typography>;
 
   const renderDownvoteButton = (
-    <Tooltip title={downVoteButtonTooltip}>
+    <Tooltip title={downvoteTooltip}>
       <Typography component="span">
-        <IconButton className={classes.iconButton} {...downVoteButtonProps}>
+        <IconButton className={classes.iconButton} {...downvoteButtonProps}>
           <KeyboardArrowDownOutlined />
         </IconButton>
       </Typography>
@@ -337,7 +351,7 @@ export const CommentCard: React.FC<Props> = ({
       <ListItemIcon>
         <DeleteOutline />
       </ListItemIcon>
-      <ListItemText>{t('common:delete')}</ListItemText>
+      <ListItemText>{t('comment:delete')}</ListItemText>
     </MenuItem>
   );
 

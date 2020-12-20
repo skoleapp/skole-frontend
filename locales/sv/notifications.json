@@ -1,15 +1,12 @@
 {
-  "voteError": "Fel vid omröstning!",
-  "starError": "Fel vid favorisering!",
-  "deleteCommentError": "Fel vid radering av kommentar!",
+  "voteError": "Fel vid omröstning av {{ target }}!",
+  "starError": "Fel vid favorisering av {{ target }}!",
+  "deleteError": "Fel vid radering av {{ target }}!",
   "messageEmpty": "Meddelandet kan inte vara tomt!",
   "linkCopied": "Länk kopierad till klippbord!",
-  "deleteResourceError": "Oväntat fel vid radering av resurs!",
-  "deleteCourseError": "Oväntat fel vid radering av kurs!",
-  "downloadResourceError": "Fel vid nedladdning!",
-  "printResourceError": "Fel vid utskrift av resursen!",
+  "downloadPdfError": "Fel vid nedladdning av PDF-fil!",
+  "printPdfError": "Fel vid utskrift av PDF-fil!",
   "messageError": "Fel vid skickande av meddelande!",
-  "appUpdated": "App uppdaterad!",
   "markSingleActivityReadError": "Denna aktivitet har troligen tagits bort. Uppdatera sidan.",
   "markAllActivitiesReadError": "Fel vid markering av aktiviteter som läst!"
 }

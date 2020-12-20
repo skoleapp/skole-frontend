@@ -1,7 +1,5 @@
 import {
-  CardActionArea,
   CardHeader,
-  Grid,
   List,
   ListItemIcon,
   ListItemText,
@@ -9,15 +7,11 @@ import {
   MenuItem,
   Paper,
   Tab,
-  TableBody,
-  TableCell,
-  TableRow,
   Tabs,
   Tooltip,
   Typography,
 } from '@material-ui/core';
-import { AddCircleOutlineOutlined, AssignmentOutlined, SchoolOutlined } from '@material-ui/icons';
-import clsx from 'clsx';
+import { AddCircleOutlineOutlined } from '@material-ui/icons';
 import {
   CourseTableBody,
   ErrorTemplate,
@@ -33,9 +27,10 @@ import {
   ShareButton,
   TextLink,
   TabPanel,
+  SubjectTableBody,
 } from 'components';
 import { useAuthContext } from 'context';
-import { SubjectObjectType, useSchoolQuery } from 'generated';
+import { useSchoolQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import {
   useActionsDialog,
@@ -73,15 +68,6 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     position: 'absolute',
     right: spacing(4),
   },
-  icon: {
-    marginRight: spacing(0.5),
-    marginLeft: spacing(1.5),
-    width: '1rem',
-    height: '1rem',
-  },
-  courseIcon: {
-    marginLeft: 0,
-  },
 }));
 
 const SchoolDetailPage: NextPage = () => {
@@ -109,7 +95,8 @@ const SchoolDetailPage: NextPage = () => {
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const shareTitle = t('school:shareTitle', { schoolName });
   const shareText = t('school:shareText', { schoolName });
-  const shareParams = { shareTitle, shareText };
+  const shareParams = { shareHeader: t('school:shareHeader'), shareTitle, shareText };
+  const target = t('school:target');
   const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
 
@@ -118,7 +105,10 @@ const SchoolDetailPage: NextPage = () => {
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
-  } = useInfoDialog(t('school:infoDialogHeader'));
+  } = useInfoDialog({
+    header: t('school:infoHeader'),
+    target,
+  });
 
   const addCourseHref = {
     pathname: urls.addCourse,
@@ -131,7 +121,12 @@ const SchoolDetailPage: NextPage = () => {
     handleCloseActionsDialog,
     renderActionsButton,
     renderShareAction,
-  } = useActionsDialog(shareParams);
+  } = useActionsDialog({
+    header: t('school:actionsHeader'),
+    share: t('school:share'),
+    target,
+    shareParams,
+  });
 
   const schoolTypeLink = {
     ...searchUrl,
@@ -209,40 +204,8 @@ const SchoolDetailPage: NextPage = () => {
     </Tooltip>
   );
 
-  const renderShareButton = <ShareButton {...shareParams} />;
-  const renderCourseIcon = <SchoolOutlined className={clsx(classes.icon, classes.courseIcon)} />;
-  const renderResourceIcon = <AssignmentOutlined className={classes.icon} />;
-
-  const renderSubjectsTableBody = (
-    <TableBody>
-      {subjects.map((s: SubjectObjectType, i: number) => (
-        <Link
-          href={{
-            ...searchUrl,
-            query: { ...searchUrl.query, subject: s.id },
-          }}
-          key={i}
-        >
-          <CardActionArea>
-            <TableRow>
-              <TableCell>
-                <Typography variant="body2">{R.propOr('-', 'name', s)}</Typography>
-                <Typography variant="body2" color="textSecondary">
-                  <Grid container alignItems="center">
-                    {renderCourseIcon}
-                    {s.courseCount}
-                    {renderResourceIcon}
-                    {s.resourceCount}
-                  </Grid>
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </CardActionArea>
-        </Link>
-      ))}
-    </TableBody>
-  );
-
+  const renderShareButton = <ShareButton {...shareParams} target={target} />;
+  const renderSubjectsTableBody = <SubjectTableBody subjects={subjects} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
   const commonTableHeadProps = {

@@ -6,6 +6,7 @@ const ShareContext = createContext<ShareContextType>({});
 export const useShareContext = (): ShareContextType => useContext(ShareContext);
 
 const initialShareParams = {
+  shareHeader: '',
   shareTitle: '',
   shareText: '',
 };

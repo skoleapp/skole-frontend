@@ -88,7 +88,7 @@ export const AttachmentViewer: React.FC = () => {
       <img
         className={classes.image}
         src={mediaUrl(attachmentViewerValue)}
-        alt={t('common:commentAttachment')}
+        alt={t('comment:attachmentAlt')}
       />
     </Grid>
   );

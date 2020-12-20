@@ -26,12 +26,12 @@ export const ShareDialog: React.FC = () => {
   const {
     shareDialogOpen,
     handleCloseShareDialog,
-    shareParams: { shareTitle: title, shareText: text },
+    shareParams: { shareHeader, shareTitle: title, shareText: text },
   } = useShareContext();
 
   const dialogHeaderProps = {
     onCancel: handleCloseShareDialog,
-    text: t('common:share'),
+    text: shareHeader,
   };
 
   const url = `${process.env.FRONTEND_URL}${asPath}`;

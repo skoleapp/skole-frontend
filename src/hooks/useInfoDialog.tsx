@@ -1,11 +1,16 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
-import { useTranslation } from 'lib';
+import { useTranslation } from 'next-translate';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
 import { useDialogButton } from './useDialogButton';
 
 import { useOpen } from './useOpen';
+
+interface UseInfoDialogParams {
+  header: string;
+  target: string;
+}
 
 interface UseInfoDrawer {
   infoDialogHeaderProps: DialogHeaderProps;
@@ -14,7 +19,7 @@ interface UseInfoDrawer {
   handleCloseInfoDialog: (e: SyntheticEvent) => void;
 }
 
-export const useInfoDialog = (header: string): UseInfoDrawer => {
+export const useInfoDialog = ({ header, target }: UseInfoDialogParams): UseInfoDrawer => {
   const { t } = useTranslation();
   const dialogButtonProps = useDialogButton();
 
@@ -35,7 +40,7 @@ export const useInfoDialog = (header: string): UseInfoDrawer => {
   };
 
   const renderInfoButton = (
-    <Tooltip title={t('tooltips:info')}>
+    <Tooltip title={t('tooltips:info', { target })}>
       <IconButton {...dialogButtonProps} onClick={handleOpenInfoDialog}>
         <InfoOutlined />
       </IconButton>
