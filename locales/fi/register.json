@@ -6,7 +6,5 @@
   "updateUserHeader": "Lähes valmista!",
   "registerCompleteHeader": "Valmista!",
   "registerCompleteEmailSent": "Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi.",
-  "registerCompleteHelpText": "Lisäämällä koulun ja oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen niihin. Voit lisätä nämä myös myöhemmin.",
-  "contactUsText": "Eikö koulusi tai oppiaineesi ole vielä listattu?",
-  "contactUsLink": "Ota meihin yhteyttä niin lisäämme ne!"
+  "registerCompleteHelpText": "Lisäämällä koulun ja oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen niihin. Voit lisätä nämä myös myöhemmin."
 }

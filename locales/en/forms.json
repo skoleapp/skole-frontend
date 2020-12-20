@@ -38,5 +38,7 @@
   "name": "Name (Optional)",
   "schoolHelpText": "Your preferred school. With this information we can automatically show you content based on it. This field is only visible for you.",
   "subjectHelpText": "Your preferred subject. With this information we can automatically show you content based on it. This field is only visible for you.",
-  "createComment": "Add Comment"
+  "createComment": "Add Comment",
+  "schoolSubjectNotFoundText": "Cannot find the school or subject you're looking for?",
+  "schoolSubjectNotFoundLink": "Contact us and we'll add them!"
 }

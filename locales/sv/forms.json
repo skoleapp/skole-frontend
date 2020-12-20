@@ -38,5 +38,7 @@
   "name": "Namn (frivillig)",
   "schoolHelpText": "Din föredragna skola som vi använder för att automatiskt visa innehåll baserat på det.",
   "subjectHelpText": "Ditt föredragna ämne som vi använder för att automatiskt visa innehåll baserat på det.",
-  "createComment": "Lägg till kommentar"
+  "createComment": "Lägg till kommentar",
+  "schoolSubjectNotFoundText": "Hittar du inte skolan eller ämnet du letar efter?",
+  "schoolSubjectNotFoundLink": "Kontakta oss så lägger vi till dem!"
 }

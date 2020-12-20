@@ -5,6 +5,7 @@ import {
   FormSubmitSection,
   OfflineTemplate,
   TextFormField,
+  SchoolSubjectContactLink,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -157,12 +158,15 @@ const AddCoursePage: NextPage = () => {
     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
   );
 
+  const renderContactUsLink = <SchoolSubjectContactLink />;
+
   const renderFormFields = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
     <Form>
       {renderCourseNameField}
       {renderCourseCodeField}
       {renderSchoolField}
       {renderSubjectsField}
+      {renderContactUsLink}
       {renderFormSubmitSection(props)}
     </Form>
   );

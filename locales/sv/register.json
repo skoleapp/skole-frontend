@@ -6,7 +6,5 @@
   "updateUserHeader": "Nästan gjort!",
   "registerCompleteHeader": "Gjort!",
   "registerCompleteEmailSent": "Kontrollera också din e-postadress för en länk som du kan använda för att verifiera ditt konto.",
-  "registerCompleteHelpText": "Genom att ställa in din skola och ämne kan vi automatiskt visa dig innehåll baserat på dem. Du kan också lägga till dessa senare.",
-  "contactUsText": "Är din skola eller ditt ämne ännu inte listat?",
-  "contactUsLink": "Kontakta oss så lägger vi till dem!"
+  "registerCompleteHelpText": "Genom att ställa in din skola och ämne kan vi automatiskt visa dig innehåll baserat på dem. Du kan också lägga till dessa senare."
 }

@@ -4,5 +4,6 @@ export { FileField } from './FileField';
 export { NativeSelectField } from './NativeSelectField';
 export { FormErrorMessage } from './FormErrorMessage';
 export { FormSubmitSection } from './FormSubmitSection';
+export { SchoolSubjectContactLink } from './SchoolSubjectContactLink';
 export { PasswordField } from './PasswordField';
 export { TextFormField } from './TextFormField';
