@@ -7,7 +7,7 @@
   "fileSelected": "{{ fileName }} selected.",
   "uploadFileButtonText": "Upload a file",
   "dropZoneText": "Drag & Drop a file here or click to select a file.",
-  "schoolHelperText": "The school to whose course this resource belongs. Can't find your school?",
+  "schoolHelperText": "The school to whose course this resource belongs. Can't find the school you're looking for?",
   "schoolHelperLink": "Contact us and we'll add it!",
   "courseHelperText": "The course to which this resource belongs. Can't find your course?",
   "courseHelperLink": "Try adding it!",

@@ -7,7 +7,7 @@
   "fileSelected": "{{ fileName }} vald.",
   "uploadFileButtonText": "Ladda upp fil",
   "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",
-  "schoolHelperText": "Skolan till vars kurs detta resurs tillhör. Hittar du inte din skola?",
+  "schoolHelperText": "Skolan till vars kurs detta resurs tillhör. Hittar du inte skolan du letar efter?",
   "schoolHelperLink": "Kontakta oss så lägger vi till det!",
   "courseHelperText": "Kursen som detta resurs tillhör. Hittar du inte din kurs?",
   "courseHelperLink": "Försök att lägga till det!",

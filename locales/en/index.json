@@ -4,6 +4,9 @@
   "findContent": "Find Content",
   "uploadMaterial": "Upload Material",
   "addCourses": "Add Courses",
+  "nextStepsHeader": "Next Steps",
   "inviteHeader": "Star your favorite courses and materials to stay updated. Invite your friends to join you!",
-  "inviteFriends": "Invite Friends Now"
+  "inviteText": "Invite Friends",
+  "contactHeader": "Is your school or subject not yet listed? Contact us and we'll add them!",
+  "contactText": "Contact Us"
 }

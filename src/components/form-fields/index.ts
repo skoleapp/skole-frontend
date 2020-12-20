@@ -1,5 +1,6 @@
 export { AutocompleteField } from './AutocompleteField';
 export { AvatarField } from './AvatarField';
+export { ContactLink } from './ContactLink';
 export { FileField } from './FileField';
 export { NativeSelectField } from './NativeSelectField';
 export { FormErrorMessage } from './FormErrorMessage';

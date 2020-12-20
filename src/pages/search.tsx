@@ -30,6 +30,7 @@ import {
   NotFoundBox,
   OfflineTemplate,
   PaginatedTable,
+  ContactLink,
   SkoleDialog,
   TextFormField,
 } from 'components';
@@ -383,6 +384,8 @@ const SearchPage: NextPage = () => {
     </Field>
   );
 
+  const renderContactUsLink = <ContactLink />;
+
   const renderFormSubmitSection = (props: FormikProps<SearchFormValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
   );
@@ -413,6 +416,7 @@ const SearchPage: NextPage = () => {
       {renderCityField}
       {renderCountryField}
       {renderOrderingField}
+      {renderContactUsLink}
       {renderFormSubmitSection(props)}
       {renderClearButton(props)}
     </Form>

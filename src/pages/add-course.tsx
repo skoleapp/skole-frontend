@@ -5,9 +5,10 @@ import {
   FormSubmitSection,
   OfflineTemplate,
   TextFormField,
+  ContactLink,
 } from 'components';
 import { useNotificationsContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteSchoolsDocument,
   AutocompleteSubjectsDocument,
@@ -88,7 +89,6 @@ const AddCoursePage: NextPage = () => {
 
   const handleSubmit = async (values: CreateCourseFormValues): Promise<void> => {
     const { courseName, courseCode, school: _school, subjects: _subjects } = values;
-
     const school = R.propOr('', 'id', _school);
     const subjects = _subjects.map((s) => s.id);
 
@@ -110,6 +110,66 @@ const AddCoursePage: NextPage = () => {
     general: '',
   };
 
+  const renderCourseNameField = (
+    <Field
+      name="courseName"
+      label={t('forms:courseName')}
+      component={TextFormField}
+      helperText={t('add-course:courseNameHelperText')}
+    />
+  );
+
+  const renderCourseCodeField = (
+    <Field
+      name="courseCode"
+      label={t('forms:courseCodeOptional')}
+      component={TextFormField}
+      helperText={t('add-course:courseCodeHelperText')}
+    />
+  );
+
+  const renderSchoolField = (
+    <Field
+      name="school"
+      label={t('forms:school')}
+      dataKey="autocompleteSchools"
+      searchKey="name"
+      document={AutocompleteSchoolsDocument}
+      component={AutocompleteField}
+      helperText={t('add-course:schoolHelperText')}
+    />
+  );
+
+  const renderSubjectsField = (
+    <Field
+      name="subjects"
+      label={t('forms:subjects')}
+      searchKey="name"
+      dataKey="autocompleteSubjects"
+      document={AutocompleteSubjectsDocument}
+      component={AutocompleteField}
+      helperText={t('add-course:subjectsHelperText')}
+      multiple
+    />
+  );
+
+  const renderFormSubmitSection = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
+    <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+  );
+
+  const renderContactUsLink = <ContactLink />;
+
+  const renderFormFields = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
+    <Form>
+      {renderCourseNameField}
+      {renderCourseCodeField}
+      {renderSchoolField}
+      {renderSubjectsField}
+      {renderContactUsLink}
+      {renderFormSubmitSection(props)}
+    </Form>
+  );
+
   const renderForm = (
     <Formik
       initialValues={initialValues}
@@ -118,42 +178,7 @@ const AddCoursePage: NextPage = () => {
       innerRef={formRef}
       enableReinitialize
     >
-      {(props): JSX.Element => (
-        <Form>
-          <Field
-            name="courseName"
-            label={t('forms:courseName')}
-            component={TextFormField}
-            helperText={t('add-course:courseNameHelperText')}
-          />
-          <Field
-            name="courseCode"
-            label={t('forms:courseCodeOptional')}
-            component={TextFormField}
-            helperText={t('add-course:courseCodeHelperText')}
-          />
-          <Field
-            name="school"
-            label={t('forms:school')}
-            dataKey="autocompleteSchools"
-            searchKey="name"
-            document={AutocompleteSchoolsDocument}
-            component={AutocompleteField}
-            helperText={t('add-course:schoolHelperText')}
-          />
-          <Field
-            name="subjects"
-            label={t('forms:subjects')}
-            searchKey="name"
-            dataKey="autocompleteSubjects"
-            document={AutocompleteSubjectsDocument}
-            component={AutocompleteField}
-            helperText={t('add-course:subjectsHelperText')}
-            multiple
-          />
-          <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </Form>
-      )}
+      {renderFormFields}
     </Formik>
   );
 

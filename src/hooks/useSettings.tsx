@@ -87,7 +87,7 @@ export const useSettings = (modal: boolean): UseSettings => {
       <ListItemIcon>
         <LanguageOutlined />
       </ListItemIcon>
-      <ListItemText>{t('common:language')}</ListItemText>
+      <ListItemText>{t('common:changeLanguage')}</ListItemText>
     </MenuItem>
   );
 
