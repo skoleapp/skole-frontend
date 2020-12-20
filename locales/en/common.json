@@ -69,6 +69,5 @@
   "postAs": "Post as {{ username }}",
   "postAsAnonymous": "Post as anonymous",
   "selectAuthor": "Select Author",
-  "send": "Send",
-  "commentHelperText": "to add a new line."
+  "send": "Send"
 }

@@ -69,6 +69,5 @@
   "postAs": "Lähetä käyttäjällä {{ username }}",
   "postAsAnonymous": "Lähetä anonyyminä",
   "selectAuthor": "Valitse käyttäjä",
-  "send": "Lähetä",
-  "commentHelperText": "lisätäksesi uuden rivin."
+  "send": "Lähetä"
 }

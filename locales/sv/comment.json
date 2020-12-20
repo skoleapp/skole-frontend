@@ -9,5 +9,6 @@
   "attachmentAlt": "Kommentarbilaga.",
   "target": "kommentar",
   "voteTooltipTarget": "kommentar",
-  "actionsTooltipTarget": "kommentar"
+  "actionsTooltipTarget": "kommentar",
+  "helperText": "för att lägga till en ny rad."
 }

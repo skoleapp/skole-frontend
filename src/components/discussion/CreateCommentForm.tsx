@@ -351,7 +351,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   );
 
   const renderFormHelperText = (
-    <FormHelperText>Shift + Enter {t('common:commentHelperText')}</FormHelperText>
+    <FormHelperText>Shift + Enter {t('comment:helperText')}</FormHelperText>
   );
 
   const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (

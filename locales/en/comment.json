@@ -9,5 +9,6 @@
   "attachmentAlt": "Comment attachment.",
   "target": "comment",
   "voteTooltipTarget": "comment",
-  "actionsTooltipTarget": "comment"
+  "actionsTooltipTarget": "comment",
+  "helperText": "to add a new line."
 }

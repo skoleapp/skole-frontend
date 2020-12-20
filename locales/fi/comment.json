@@ -9,5 +9,6 @@
   "attachmentAlt": "Kommentin liite.",
   "target": "kommentti",
   "voteTooltipTarget": "kommenti",
-  "actionsTooltipTarget": "kommenti"
+  "actionsTooltipTarget": "kommenti",
+  "helperText": "lisätäksesi uuden rivin."
 }
