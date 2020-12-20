@@ -19,6 +19,7 @@ import {
   DrawModeControls,
   ErrorTemplate,
   InfoDialogContent,
+  LoadingBox,
   LoadingTemplate,
   MainTemplate,
   NotFoundTemplate,
@@ -28,7 +29,6 @@ import {
   ResponsiveDialog,
   RotateButton,
   ShareButton,
-  StarButton,
   TabPanel,
   TextLink,
   TopLevelCommentThread,
@@ -55,6 +55,7 @@ import {
   useInfoDialog,
   useLanguageHeaderContext,
   useMediaQueries,
+  useStars,
   useTabs,
   useVotes,
 } from 'hooks';
@@ -71,6 +72,7 @@ import { PdfViewerProps } from 'types';
 // Reference: https://github.com/wojtekmaj/react-pdf/issues/136#issuecomment-716643894.
 const PdfViewer = dynamic<PdfViewerProps>(() => import('../../components/resource/PdfViewer'), {
   ssr: false,
+  loading: () => <LoadingBox />,
 });
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -127,6 +129,7 @@ const ResourceDetailPage: NextPage = () => {
   const comments = R.propOr([], 'comments', resource);
   const initialVote = R.propOr(null, 'vote', resource);
   const initialScore = String(R.propOr(0, 'score', resource));
+  const initialStars = String(R.propOr(0, 'starCount', resource));
   const downloads = String(R.propOr(0, 'downloads', resource));
   const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
@@ -140,6 +143,7 @@ const ResourceDetailPage: NextPage = () => {
   const { commentCount } = useDiscussionContext();
   const { commentModalOpen } = useDiscussionContext();
   const { drawMode, setDrawMode } = usePdfViewerContext();
+  const { stars, renderStarButton } = useStars({ starred, initialStars, resource: resourceId });
 
   const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs(
     comments,
@@ -342,16 +346,6 @@ const ResourceDetailPage: NextPage = () => {
     },
   ];
 
-  const starButtonProps = {
-    starred,
-    resource: resourceId,
-    target,
-  };
-
-  // On desktop, render a disabled button for non-verified users.
-  // On mobile, do not render the button at all for non-verified users.
-  const renderStarButton = (!!verified || isTabletOrDesktop) && <StarButton {...starButtonProps} />;
-
   const renderDrawModeControls = <DrawModeControls />;
   const renderShareButton = <ShareButton {...shareParams} target={target} />;
 
@@ -411,6 +405,9 @@ const ResourceDetailPage: NextPage = () => {
       creatorId={creatorId}
       creatorUsername={creatorUsername}
       date={resourceDate}
+      score={score}
+      stars={stars}
+      downloads={downloads}
     />
   );
 

@@ -30,7 +30,6 @@ import {
   ResourceTableBody,
   ResponsiveDialog,
   ShareButton,
-  StarButton,
   TabPanel,
   TextLink,
   TopLevelCommentThread,
@@ -54,6 +53,7 @@ import {
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
+  useStars,
   useTabs,
   useVotes,
 } from 'hooks';
@@ -112,6 +112,7 @@ const CourseDetailPage: NextPage = () => {
   const courseId = R.propOr('', 'id', course);
   const schoolId = R.pathOr('', ['school', 'id'], course);
   const initialScore = String(R.propOr(0, 'score', course));
+  const initialStars = String(R.propOr(0, 'starCount', course));
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
   const comments = R.propOr([], 'comments', course);
   const { commentCount } = useDiscussionContext();
@@ -128,6 +129,7 @@ const CourseDetailPage: NextPage = () => {
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs(comments);
+  const { renderStarButton } = useStars({ starred, initialStars, course: courseId });
 
   const {
     infoDialogOpen,
@@ -245,16 +247,6 @@ const CourseDetailPage: NextPage = () => {
       value: resourceCount,
     },
   ];
-
-  const starButtonProps = {
-    starred,
-    course: courseId,
-    target,
-  };
-
-  // On desktop, render a disabled button for non-verified users.
-  // On mobile, do not render the button at all for non-verified users.
-  const renderStarButton = (!!verified || isTabletOrDesktop) && <StarButton {...starButtonProps} />;
 
   const renderShareButton = <ShareButton {...shareParams} target={target} />;
 

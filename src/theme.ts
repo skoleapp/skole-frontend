@@ -253,7 +253,6 @@ let theme = createMuiTheme({
       },
       action: {
         margin: '0 !important',
-        // alignSelf: 'center',
       },
     },
     MuiDialog: {

@@ -1,46 +1,47 @@
-import { IconButton, IconButtonProps, Tooltip, Typography } from '@material-ui/core';
+import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
-import { useLanguageHeaderContext } from 'hooks';
+import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-interface Props extends IconButtonProps {
+interface UseStarsParams {
   starred: boolean;
+  initialStars: string;
   course?: string;
   resource?: string;
-  target: string;
 }
 
-export const StarButton: React.FC<Props> = ({
+interface UseStars {
+  stars: string;
+  renderStarButton: JSX.Element | false;
+}
+
+export const useStars = ({
   starred: initialStarred,
+  initialStars,
   course,
   resource,
-  target,
-}) => {
+}: UseStarsParams): UseStars => {
   const { t } = useTranslation();
+  const { isTabletOrDesktop } = useMediaQueries();
   const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
+  const [stars, setStars] = useState(initialStars);
   const [starred, setStarred] = useState(initialStarred);
   const color = starred ? 'primary' : 'default';
-  const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
+  const { toggleNotification } = useNotificationsContext();
+  const onError = (): void => toggleNotification(t('notifications:starError'));
 
-  const error = starred
-    ? t('notifications:unstarError', { target })
-    : t('notifications:starError', { target });
+  useEffect(() => {
+    setStars(initialStars);
+  }, [initialStars]);
 
-  const onError = (): void => toggleNotification(error);
-
-  // Show different tooltip for each of these cases:
-  // * User is not logged in.
-  // * User is not verified.
-  // * User has starred the object.
-  // * User has not starred the object.
   const tooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
-    (starred ? t('tooltips:unstar', { target }) : t('tooltips:star', { target }) || '');
+    (starred ? t('tooltips:unstar') : t('tooltips:star') || '');
 
   const onCompleted = ({ star }: StarMutation): void => {
     if (star) {
@@ -48,6 +49,7 @@ export const StarButton: React.FC<Props> = ({
         onError();
       } else {
         setStarred(!!star.starred);
+        setStars(String(Number(stars) + (star.starred ? 1 : -1)));
       }
     }
   };
@@ -62,7 +64,9 @@ export const StarButton: React.FC<Props> = ({
     await star({ variables: { course, resource } });
   };
 
-  return (
+  // On desktop, render a disabled button for non-verified users.
+  // On mobile, do not render the button at all for non-verified users.
+  const renderStarButton = (!!verified || isTabletOrDesktop) && (
     <Tooltip title={tooltip}>
       <Typography component="span">
         <IconButton
@@ -76,4 +80,6 @@ export const StarButton: React.FC<Props> = ({
       </Typography>
     </Tooltip>
   );
+
+  return { renderStarButton, stars };
 };

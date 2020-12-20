@@ -13,6 +13,5 @@ export { ResponsiveDialog } from './ResponsiveDialog';
 export { SettingsButton } from './SettingsButton';
 export { ShareButton } from './ShareButton';
 export { SkoleDialog } from './SkoleDialog';
-export { StarButton } from './StarButton';
 export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';

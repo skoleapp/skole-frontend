@@ -288,6 +288,7 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
     created
     score
     starred
+    starCount
     vote {
       id
       status
@@ -414,6 +415,7 @@ query Resource($id: ID) {
     score
     starred
     downloads
+    starCount
     resourceType {
       id
       name
