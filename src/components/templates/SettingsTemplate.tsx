@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps, TopNavbarProps } from 'types';
 
 import { SettingsButton } from '../shared';
@@ -33,6 +33,9 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
   disablePadding: {
     padding: '0 !important',
+  },
+  cardHeader: {
+    borderBottom: BORDER,
   },
 }));
 
@@ -84,7 +87,9 @@ export const SettingsTemplate: React.FC<Props> = ({
     headerRight: renderHeaderRight,
   };
 
-  const renderSettingsHeader = <CardHeader title={t('common:settings')} />;
+  const renderSettingsHeader = (
+    <CardHeader className={classes.cardHeader} title={t('common:settings')} />
+  );
 
   const renderSettingsCard = isTabletOrDesktop && (
     <Grid item xs={12} md={4} lg={3} className={classes.container}>
@@ -96,7 +101,7 @@ export const SettingsTemplate: React.FC<Props> = ({
   );
 
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader title={header} action={renderHeaderRight} />
+    <CardHeader className={classes.cardHeader} title={header} action={renderHeaderRight} />
   );
 
   const renderContent = (
