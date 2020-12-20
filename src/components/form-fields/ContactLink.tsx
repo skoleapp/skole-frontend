@@ -10,8 +10,8 @@ export const ContactLink: React.FC = () => {
   return (
     <FormControl>
       <FormHelperText>
-        {t('forms:schoolSubjectNotFoundText')}{' '}
-        <TextLink href={urls.contact}>{t('forms:schoolSubjectNotFoundLink')}</TextLink>
+        {t('forms:contactLinkText')}{' '}
+        <TextLink href={urls.contact}>{t('forms:contactLinkLink')}</TextLink>
       </FormHelperText>
     </FormControl>
   );
