@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   DialogContent,
+  FormHelperText,
   Grid,
   IconButton,
   makeStyles,
@@ -87,10 +88,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const classes = useStyles();
   const { t } = useTranslation();
   const { loginRequiredTooltip, verificationRequiredTooltip, userMe, verified } = useAuthContext();
-  const { isTabletOrDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const { screenshot, setScreenshot } = usePdfViewerContext();
   const { toggleNotification } = useNotificationsContext();
-  const { isMobile } = useMediaQueries();
   const context = useLanguageHeaderContext();
   const attachmentInputRef = useRef<HTMLInputElement>(null!);
   const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
@@ -219,6 +219,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     setCommentAttachment(null);
   };
 
+  // On desktop, submit form from enter key and add new line from Shift + Enter.
+  const handleKeydown = (e: KeyboardEvent) => {
+    if (isDesktop && e.code === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      submitForm();
+    }
+  };
+
   const renderAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
     !!userMe && <AuthorSelection {...props} />;
 
@@ -288,6 +296,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
       margin="dense"
       InputProps={{
         className: classes.textFieldInputProps,
+        onKeyDown: handleKeydown,
       }}
     />
   );
@@ -325,6 +334,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Tooltip>
   );
 
+  const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (
+    <Grid container alignItems="center">
+      <Grid item xs={6}>
+        {renderAuthorSelection(props)}
+      </Grid>
+      <Grid item xs={6} container justify="flex-end">
+        <FormHelperText>Shift + Enter {t('common:commentHelperText')}</FormHelperText>
+      </Grid>
+    </Grid>
+  );
+
   const renderDesktopBottomToolbar = (props: FormikProps<CreateCommentFormValues>) => (
     <Grid container alignItems="center">
       {renderAttachmentButton}
@@ -336,7 +356,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderDesktopInput = (props: FormikProps<CreateCommentFormValues>) =>
     isTabletOrDesktop && (
       <>
-        {renderAuthorSelection(props)}
+        {renderDesktopTopToolbar(props)}
         {renderTextField}
         {renderDesktopBottomToolbar(props)}
       </>
