@@ -34,7 +34,7 @@ export const DiscussionHeader: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const title = `${t('common:discussion')} (${commentCount})`;
+  const title = `${t('common:discussion')} (${commentCount} ${t('common:commentCount')})`;
   const renderIcon = <ChatOutlined className={classes.icon} color="disabled" />;
 
   const renderSubheader = (
