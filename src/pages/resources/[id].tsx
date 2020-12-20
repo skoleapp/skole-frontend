@@ -23,7 +23,8 @@ import {
   MainTemplate,
   NotFoundTemplate,
   OfflineTemplate,
-  ResourceToolbar,
+  ResourceBottomToolbar,
+  ResourceTopToolbar,
   ResponsiveDialog,
   RotateButton,
   ShareButton,
@@ -402,8 +403,17 @@ const ResourceDetailPage: NextPage = () => {
     noComments: t('resource:noComments'),
   };
 
-  const renderToolbar = <ResourceToolbar {...toolbarProps} />;
+  const renderTopToolbar = <ResourceTopToolbar {...toolbarProps} />;
   const renderPdfViewer = <PdfViewer file={file} />;
+
+  const renderBottomToolbar = (
+    <ResourceBottomToolbar
+      creatorId={creatorId}
+      creatorUsername={creatorUsername}
+      date={resourceDate}
+    />
+  );
+
   const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
@@ -422,8 +432,9 @@ const ResourceDetailPage: NextPage = () => {
     <Grid container spacing={2} className={classes.desktopContainer}>
       <Grid item container xs={12} md={6} lg={7} xl={8}>
         <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
-          {renderToolbar}
+          {renderTopToolbar}
           {renderPdfViewer}
+          {renderBottomToolbar}
         </Paper>
       </Grid>
       <Grid item container xs={12} md={6} lg={5} xl={4}>

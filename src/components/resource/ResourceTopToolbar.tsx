@@ -28,7 +28,7 @@ interface Props {
   handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
 }
 
-export const ResourceToolbar: React.FC<Props> = ({
+export const ResourceTopToolbar: React.FC<Props> = ({
   title,
   handleDownloadButtonClick,
   handlePrintButtonClick,
