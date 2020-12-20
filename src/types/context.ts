@@ -1,7 +1,6 @@
 import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
-import { PdfTranslation } from './pdfJs';
 
 export interface AuthContextType {
   userMe: UserObjectType | null;

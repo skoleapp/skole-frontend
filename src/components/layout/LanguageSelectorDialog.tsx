@@ -17,7 +17,7 @@ export const LanguageSelectorDialog: React.FC = () => {
   };
 
   const dialogHeaderProps = {
-    text: t('common:language'),
+    text: t('common:changeLanguage'),
     onCancel: handleCloseLanguageMenu,
   };
 
