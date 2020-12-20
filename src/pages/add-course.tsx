@@ -5,7 +5,7 @@ import {
   FormSubmitSection,
   OfflineTemplate,
   TextFormField,
-  SchoolSubjectContactLink,
+  ContactLink,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -89,7 +89,6 @@ const AddCoursePage: NextPage = () => {
 
   const handleSubmit = async (values: CreateCourseFormValues): Promise<void> => {
     const { courseName, courseCode, school: _school, subjects: _subjects } = values;
-
     const school = R.propOr('', 'id', _school);
     const subjects = _subjects.map((s) => s.id);
 
@@ -158,7 +157,7 @@ const AddCoursePage: NextPage = () => {
     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
   );
 
-  const renderContactUsLink = <SchoolSubjectContactLink />;
+  const renderContactUsLink = <ContactLink />;
 
   const renderFormFields = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
     <Form>

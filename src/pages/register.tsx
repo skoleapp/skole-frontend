@@ -9,7 +9,7 @@ import {
   TextFormField,
   TextLink,
   LanguageButton,
-  SchoolSubjectContactLink,
+  ContactLink,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -314,7 +314,7 @@ const RegisterPage: NextPage = () => {
     </FormControl>
   );
 
-  const renderContactUsLink = <SchoolSubjectContactLink />;
+  const renderContactUsLink = <ContactLink />;
 
   const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
     <Form>
