@@ -313,11 +313,21 @@ const RegisterPage: NextPage = () => {
     </FormControl>
   );
 
+  const renderContactUsLink = (
+    <FormControl>
+      <FormHelperText>
+        {t('register:contactUsText')}{' '}
+        <TextLink href={urls.contact}>{t('register:contactUsLink')}</TextLink>
+      </FormHelperText>
+    </FormControl>
+  );
+
   const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
     <Form>
       {renderRegisterCompleteHelpText}
       {renderSchoolField}
       {renderSubjectField}
+      {renderContactUsLink}
       {renderUpdateUserFormSubmitSection(props)}
       {renderSkipButton}
     </Form>

@@ -6,5 +6,7 @@
   "updateUserHeader": "Almost done!",
   "registerCompleteHeader": "Done!",
   "registerCompleteEmailSent": "Also, please check your email for a link that you can use to verify your account.",
-  "registerCompleteHelpText": "By setting your school and subject we will be able to automatically show you content based on them. You can also add these later."
+  "registerCompleteHelpText": "By setting your school and subject we will be able to automatically show you content based on them. You can also add these later.",
+  "contactUsText": "Is your school or subject not yet listed?",
+  "contactUsLink": "Contact us and we'll add them!"
 }
