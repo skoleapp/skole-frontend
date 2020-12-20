@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   DialogContent,
+  Fab,
   FormHelperText,
   Grid,
   IconButton,
@@ -41,18 +42,16 @@ import { AuthorSelection } from './AuthorSelection';
 import { TextFormField } from '../form-fields';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
-  container: {
+  desktopContainer: {
     [breakpoints.up('md')]: {
       padding: spacing(2),
     },
   },
-  textFieldInputProps: {
-    borderRadius: '0.75rem',
+  desktopTextField: {
+    margin: `${spacing(2)} 0`,
   },
-  textField: {
-    [breakpoints.up('sm')]: {
-      marginBottom: spacing(3),
-    },
+  dialogTextField: {
+    margin: 0,
   },
   attachmentContainer: {
     width: '100%',
@@ -70,12 +69,19 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   desktopSendButtonSpan: {
     marginLeft: 'auto',
   },
+  dialogToolbar: {
+    margin: `${spacing(2)} 0`,
+  },
+  dialogSendButton: {
+    marginLeft: spacing(2),
+  },
   attachmentImage: {
     objectFit: 'contain',
   },
   dialogContent: {
     display: 'flex',
     padding: spacing(2),
+    overflow: 'hidden',
   },
 }));
 
@@ -278,27 +284,53 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Box>
   );
 
+  const textFieldProps = {
+    name: 'text',
+    component: TextFormField,
+    placeholder: `${t('forms:createComment')}...`,
+    multiline: true,
+    rowsMax: '10',
+    InputProps: {
+      onKeyDown: handleKeydown,
+    },
+  };
+
+  const renderDesktopTextField = (
+    <Field {...textFieldProps} rows="4" className={classes.desktopTextField} />
+  );
+
+  const renderDialogTextField = <Field {...textFieldProps} className={classes.dialogTextField} />;
+
   const renderDialogToolbar = (
-    <Grid container>
+    <Grid className={classes.dialogToolbar} container>
       {renderAttachmentButton}
       {renderClearAttachmentButton}
     </Grid>
   );
 
-  const renderTextField = (
-    <Field
-      name="text"
-      component={TextFormField}
-      placeholder={`${t('forms:createComment')}...`}
-      rows="4"
-      multiline
-      className={classes.textField}
-      margin="dense"
-      InputProps={{
-        className: classes.textFieldInputProps,
-        onKeyDown: handleKeydown,
-      }}
-    />
+  const renderDialogSendButton = ({
+    values,
+  }: FormikProps<CreateCommentFormValues>): JSX.Element => (
+    <Tooltip title={t('tooltips:sendMessage')}>
+      <Typography component="span">
+        <Fab
+          className={classes.dialogSendButton}
+          size="small"
+          color="primary"
+          disabled={!values.text && !commentAttachment} // Require either text content or an attachment.
+          onClick={submitForm}
+        >
+          <SendOutlined />
+        </Fab>
+      </Typography>
+    </Tooltip>
+  );
+
+  const renderDialogInput = (props: FormikProps<CreateCommentFormValues>) => (
+    <Box display="flex" alignItems="center">
+      {renderDialogTextField}
+      {renderDialogSendButton(props)}
+    </Box>
   );
 
   const renderDesktopSendButton = ({ values }: FormikProps<CreateCommentFormValues>) => (
@@ -318,20 +350,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Tooltip>
   );
 
-  const renderDialogSendButton = ({
-    values,
-  }: FormikProps<CreateCommentFormValues>): JSX.Element => (
-    <Tooltip title={t('tooltips:sendMessage')}>
-      <Typography component="span">
-        <IconButton
-          onClick={submitForm}
-          color="primary"
-          disabled={!values.text && !commentAttachment} // Require either text content or an attachment.
-        >
-          <SendOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
+  const renderFormHelperText = (
+    <FormHelperText>Shift + Enter {t('common:commentHelperText')}</FormHelperText>
   );
 
   const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (
@@ -340,7 +360,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         {renderAuthorSelection(props)}
       </Grid>
       <Grid item xs={6} container justify="flex-end">
-        <FormHelperText>Shift + Enter {t('common:commentHelperText')}</FormHelperText>
+        {renderFormHelperText}
       </Grid>
     </Grid>
   );
@@ -357,45 +377,45 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     isTabletOrDesktop && (
       <>
         {renderDesktopTopToolbar(props)}
-        {renderTextField}
+        {renderDesktopTextField}
         {renderDesktopBottomToolbar(props)}
       </>
     );
 
   const renderHeaderCenter = (props: FormikProps<CreateCommentFormValues>) =>
     !!userMe && (
-      <Grid container justify="flex-start" alignItems="center">
+      <Grid container justify="center">
         {renderAuthorSelection(props)}
       </Grid>
     );
 
+  const renderDialogHeader = (props: FormikProps<CreateCommentFormValues>) => (
+    <DialogHeader
+      headerCenter={renderHeaderCenter(props)} // Rendered for authenticated users.
+      text={t('forms:createComment')} // Rendered for anonymous users.
+      onCancel={handleCloseCreateCommentModal}
+    />
+  );
+
+  const renderDialogContent = (props: FormikProps<CreateCommentFormValues>) => (
+    <DialogContent className={classes.dialogContent}>
+      <Grid container direction="column" justify="flex-end" wrap="nowrap">
+        {renderAttachment}
+        {renderDialogToolbar}
+        {renderDialogInput(props)}
+      </Grid>
+    </DialogContent>
+  );
+
   const renderCreateCommentModal = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
-      <DialogHeader
-        headerCenter={renderHeaderCenter(props)} // Rendered for authenticated users.
-        headerRight={renderDialogSendButton(props)}
-        text={t('forms:createComment')} // Rendered for anonymous users.
-        onCancel={handleCloseCreateCommentModal}
-        cancelLeft
-      />
-      <DialogContent className={classes.dialogContent}>
-        <Grid
-          className={classes.container}
-          container
-          direction="column"
-          justify="flex-end"
-          wrap="nowrap"
-        >
-          {renderAttachment}
-          {renderDialogToolbar}
-          {renderTextField}
-        </Grid>
-      </DialogContent>
+      {renderDialogHeader(props)}
+      {renderDialogContent(props)}
     </SkoleDialog>
   );
 
   const renderFormFields = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
-    <Form className={classes.container}>
+    <Form className={classes.desktopContainer}>
       {renderDesktopInput(props)}
       {renderCreateCommentModal(props)}
       {renderHiddenAttachmentInput}
