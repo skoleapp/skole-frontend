@@ -27,6 +27,10 @@ const useStyles = makeStyles(({ spacing }) => ({
     textTransform: 'none',
     textAlign: 'left',
   },
+  avatar: {
+    width: '2rem',
+    height: '2rem',
+  },
 }));
 
 export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = ({
@@ -36,6 +40,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
+  const avatarSrc = mediaUrl(R.propOr('', 'avatarThumbnail', user));
   const username = R.prop('username', userMe);
 
   const {
@@ -77,13 +82,11 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
     onCancel: handleCloseAuthorSelection,
   };
 
-  const renderAvatar = (
-    <Avatar className="avatar-thumbnail" src={mediaUrl(R.propOr('', 'avatarThumbnail', user))} />
-  );
-
   const renderAuthenticatedMenuItem = (
     <MenuItem onClick={handleAuthenticatedMenuItemClick}>
-      <ListItemIcon>{renderAvatar}</ListItemIcon>
+      <ListItemIcon>
+        <Avatar className="avatar-thumbnail" src={avatarSrc} />
+      </ListItemIcon>
       <ListItemText>{t('common:postAs', { username })}</ListItemText>
     </MenuItem>
   );
@@ -102,7 +105,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
       onClick={handleOpenAuthorSelection}
       endIcon={<KeyboardArrowDown color="disabled" />}
       className={classes.button}
-      startIcon={renderAvatar}
+      startIcon={<Avatar className={classes.avatar} src={avatarSrc} />}
     >
       <Grid item container direction="column">
         {renderAuthorName}
