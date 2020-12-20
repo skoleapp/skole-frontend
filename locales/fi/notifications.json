@@ -1,6 +1,7 @@
 {
   "voteError": "Virhe äänestettäessä {{ target }}a!",
   "starError": "Virhe merkittäessä {{ target }}a tähdellä!",
+  "unstarError": "Virhe poistettaessa {{ target }}n tähteä!",
   "deleteError": "Virhe poistettaessa {{ target }}a!",
   "messageEmpty": "Viesti ei voi olla tyhjä!",
   "linkCopied": "Linkki kopioitu leikepöydälle!",

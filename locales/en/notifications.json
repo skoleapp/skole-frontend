@@ -1,6 +1,7 @@
 {
   "voteError": "Error while voting {{ target }}!",
   "starError": "Error while starring {{ target }}!",
+  "unstarError": "Error while unstarring {{ target }}!",
   "deleteError": "Error while deleting {{ target }}!",
   "messageEmpty": "Message cannot be empty!",
   "linkCopied": "Link copied to clipboard!",

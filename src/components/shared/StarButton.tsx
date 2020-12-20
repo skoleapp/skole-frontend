@@ -25,7 +25,12 @@ export const StarButton: React.FC<Props> = ({
   const color = starred ? 'primary' : 'default';
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
-  const onError = (): void => toggleNotification(t('notifications:starError', { target }));
+
+  const error = starred
+    ? t('notifications:unstarError', { target })
+    : t('notifications:starError', { target });
+
+  const onError = (): void => toggleNotification(error);
 
   // Show different tooltip for each of these cases:
   // * User is not logged in.
