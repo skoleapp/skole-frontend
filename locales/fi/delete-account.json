@@ -2,6 +2,6 @@
   "title": "Poista tili",
   "description": "Poista Skole-tilisi.",
   "header": "Poista tili",
-  "deleteAccountTitle": "Haluatko varmasti poistaa tilisi?",
-  "deleteAccountDescription": "Tätä toimenpidettä ei voida peruuttaa ja tilisi poistetaan pysyvästi."
+  "confirmDeleteHeader": "Oletko varma?",
+  "confirmDeleteText": "Tätä toimenpidettä ei voida peruuttaa ja tilisi poistetaan pysyvästi."
 }

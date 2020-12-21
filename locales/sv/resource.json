@@ -12,6 +12,6 @@
   "actionsHeader": "Resursmeny",
   "share": "Dela resurs",
   "delete": "Radera resurs",
-  "confirmDelete": "Är du säker på att du vill radera den här resursen?",
+  "deleteTarget": "resursen",
   "target": "resurs"
 }

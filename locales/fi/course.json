@@ -10,6 +10,6 @@
   "actionsHeader": "Kurssin valikko",
   "share": "Jaa kurssi",
   "delete": "Poista kurssi",
-  "confirmDelete": "Haluatko varmasti poistaa tämän kurssin?",
+  "deleteTarget": "kurssin",
   "target": "kurssi"
 }

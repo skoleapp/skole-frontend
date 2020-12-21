@@ -69,5 +69,6 @@
   "postAs": "Lähetä käyttäjällä {{ username }}",
   "postAsAnonymous": "Lähetä anonyyminä",
   "selectAuthor": "Valitse käyttäjä",
-  "send": "Lähetä"
+  "send": "Lähetä",
+  "confirmDelete": "Haluatko varmasti poistaa {{ deleteTarget }}?"
 }

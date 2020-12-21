@@ -69,5 +69,6 @@
   "postAs": "Lägg upp som {{ användarnamn }}",
   "postAsAnonymous": "Skicka som anonym",
   "selectAuthor": "Välj auktor",
-  "send": "Skicka"
+  "send": "Skicka",
+  "confirmDelete": "Är du säker på att du vill radera {{ deleteTarget }}?"
 }

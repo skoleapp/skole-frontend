@@ -69,5 +69,6 @@
   "postAs": "Post as {{ username }}",
   "postAsAnonymous": "Post as anonymous",
   "selectAuthor": "Select Author",
-  "send": "Send"
+  "send": "Send",
+  "confirmDelete": "Are you sure you want to delete {{ deleteTarget }}?"
 }

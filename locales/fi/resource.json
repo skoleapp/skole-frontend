@@ -12,6 +12,6 @@
   "actionsHeader": "Resurssin valikko",
   "share": "Jaa resurssi",
   "delete": "Poista resurssi",
-  "confirmDelete": "Haluatko varmasti poistaa tämän resurssin?",
+  "deleteTarget": "resurssin",
   "target": "resurssi"
 }

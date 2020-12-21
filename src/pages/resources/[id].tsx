@@ -234,7 +234,7 @@ const ResourceDetailPage: NextPage = () => {
     try {
       await confirm({
         title: t('resource:delete'),
-        description: t('resource:confirmDelete'),
+        description: t('common:confirmDelete', { deleteTarget: t('resource:deleteTarget') }),
       });
 
       await deleteResource({ variables: { id: resourceId } });
