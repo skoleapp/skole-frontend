@@ -197,17 +197,16 @@ let theme = createMuiTheme({
         backgroundColor: COLORS.white,
         flexGrow: 1,
         position: 'relative',
+        overflow: 'hidden',
       },
     },
     MuiTable: {
       root: {
         display: 'flex',
         flexDirection: 'column',
-        position: 'absolute',
-        height: '100%',
-        overflowY: 'auto',
         [breakpoints.up('md')]: {
-          overflowT: 'hidden',
+          position: 'absolute',
+          height: '100%',
         },
       },
     },
