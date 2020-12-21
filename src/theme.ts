@@ -266,6 +266,7 @@ let theme = createMuiTheme({
         paddingRight: 'env(safe-area-inset-right)',
         paddingLeft: 'env(safe-area-inset-left)',
         paddingBottom: 'env(safe-area-inset-bottom)',
+        margin: spacing(4),
       },
     },
     MuiDialogTitle: {
