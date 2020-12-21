@@ -79,6 +79,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     justifyContent: 'flex-end',
     boxShadow: 'none',
     backgroundColor: palette.common.white,
+    borderBottom: BORDER,
   },
   cardHeader: {
     borderBottom: BORDER,
@@ -101,9 +102,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   tableContainer: {
     flexGrow: 1,
     display: 'flex',
-    [breakpoints.down('md')]: {
-      borderTop: BORDER,
-    },
   },
   dialogContent: {
     padding: spacing(2),
