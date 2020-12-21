@@ -294,7 +294,9 @@ let theme = createMuiTheme({
       '@global': {
         body: {
           backgroundColor: COLORS.secondary,
-          userSelect: 'none',
+          [breakpoints.down('md')]: {
+            userSelect: 'none',
+          },
         },
         '.avatar-thumbnail': {
           height: '1.35rem !important',
