@@ -10,6 +10,6 @@
   "actionsHeader": "Kursmeny",
   "share": "Dela kurs",
   "delete": "Radera kurs",
-  "confirmDelete": "Är du säker på att du vill radera den här kursen?",
+  "deleteTarget": "kursen",
   "target": "kurs"
 }

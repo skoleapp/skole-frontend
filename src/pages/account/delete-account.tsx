@@ -64,8 +64,8 @@ export const DeleteAccountPage: NextPage = () => {
 
     try {
       await confirm({
-        title: t('delete-account:deleteAccountTitle'),
-        description: t('delete-account:deleteAccountDescription'),
+        title: t('delete-account:confirmDeleteHeader'),
+        description: t('delete-account:confirmDeleteText'),
       });
 
       await deleteUser({ variables: { password: values.password } });

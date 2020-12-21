@@ -223,7 +223,7 @@ export const CommentCard: React.FC<Props> = ({
     try {
       await confirm({
         title: t('comment:delete'),
-        description: t('comment:confirmDelete'),
+        description: t('common:confirmDelete', { deleteTarget: t('comment:deleteTarget') }),
       });
 
       await deleteComment({ variables: { id: comment.id } });

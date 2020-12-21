@@ -27,7 +27,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      '& .react-pdf__Page, .react-pdf__Page__canvas, .react-pdf__Page__textContent': {
+      '& .react-pdf__Page, .react-pdf__Page__canvas': {
         margin: '0 auto',
         height: 'auto !important',
         width: '100% !important',
@@ -83,7 +83,12 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
   };
 
   const renderPages = Array.from(new Array(numPages), (_, i) => (
-    <Page key={`page_${i + 1}`} pageNumber={i + 1} />
+    <Page
+      key={`page_${i + 1}`}
+      pageNumber={i + 1}
+      renderTextLayer={false}
+      renderAnnotationLayer={false}
+    />
   ));
 
   const renderAreaSelection = <AreaSelection />;

@@ -12,6 +12,6 @@
   "actionsHeader": "Resource Menu",
   "share": "Share Resource",
   "delete": "Delete Resource",
-  "confirmDelete": "Are you sure you want to delete this resource?",
+  "deleteTarget": "the resource",
   "target": "resource"
 }

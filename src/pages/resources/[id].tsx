@@ -234,7 +234,7 @@ const ResourceDetailPage: NextPage = () => {
     try {
       await confirm({
         title: t('resource:delete'),
-        description: t('resource:confirmDelete'),
+        description: t('common:confirmDelete', { deleteTarget: t('resource:deleteTarget') }),
       });
 
       await deleteResource({ variables: { id: resourceId } });
@@ -450,15 +450,6 @@ const ResourceDetailPage: NextPage = () => {
     </ResponsiveDialog>
   );
 
-  const renderDeleteAction = isOwner && (
-    <MenuItem onClick={handleDeleteResource} disabled={verified === false}>
-      <ListItemIcon>
-        <DeleteOutline />
-      </ListItemIcon>
-      <ListItemText>{t('resource:delete')}</ListItemText>
-    </MenuItem>
-  );
-
   const renderDownloadAction = isMobile && (
     <MenuItem onClick={handleDownloadButtonClick}>
       <ListItemIcon>
@@ -477,12 +468,21 @@ const ResourceDetailPage: NextPage = () => {
     </MenuItem>
   );
 
+  const renderDeleteAction = isOwner && (
+    <MenuItem onClick={handleDeleteResource} disabled={verified === false}>
+      <ListItemIcon>
+        <DeleteOutline />
+      </ListItemIcon>
+      <ListItemText>{t('resource:delete')}</ListItemText>
+    </MenuItem>
+  );
+
   const renderActionsDialogContent = (
     <List>
-      {renderDeleteAction}
+      {renderShareAction}
       {renderDownloadAction}
       {renderPrintAction}
-      {renderShareAction}
+      {renderDeleteAction}
       {renderReportAction}
     </List>
   );

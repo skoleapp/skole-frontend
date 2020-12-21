@@ -16,20 +16,22 @@ import { CreateCommentForm } from './CreateCommentForm';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   root: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
     flexWrap: 'nowrap',
+    [breakpoints.up('md')]: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    },
   },
   messageArea: {
     flexGrow: 1,
-    overflowY: 'auto',
     overflowX: 'hidden',
     flexWrap: 'nowrap',
-    height: '100%',
     [breakpoints.up('md')]: {
+      overflowY: 'auto',
+      height: '100%',
       borderTop: BORDER,
       borderBottom: BORDER,
     },

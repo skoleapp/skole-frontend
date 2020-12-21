@@ -189,7 +189,7 @@ const CourseDetailPage: NextPage = () => {
     try {
       await confirm({
         title: t('course:delete'),
-        description: t('course:confirmDelete'),
+        description: t('common:confirmDelete', { deleteTarget: t('course:deleteTarget') }),
       });
 
       await deleteCourse({ variables: { id: courseId } });

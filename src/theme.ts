@@ -197,17 +197,16 @@ let theme = createMuiTheme({
         backgroundColor: COLORS.white,
         flexGrow: 1,
         position: 'relative',
+        overflow: 'hidden',
       },
     },
     MuiTable: {
       root: {
         display: 'flex',
         flexDirection: 'column',
-        position: 'absolute',
-        height: '100%',
-        overflowY: 'auto',
         [breakpoints.up('md')]: {
-          overflowT: 'hidden',
+          position: 'absolute',
+          height: '100%',
         },
       },
     },
@@ -266,6 +265,7 @@ let theme = createMuiTheme({
         paddingRight: 'env(safe-area-inset-right)',
         paddingLeft: 'env(safe-area-inset-left)',
         paddingBottom: 'env(safe-area-inset-bottom)',
+        margin: spacing(4),
       },
     },
     MuiDialogTitle: {
@@ -294,7 +294,9 @@ let theme = createMuiTheme({
       '@global': {
         body: {
           backgroundColor: COLORS.secondary,
-          userSelect: 'none',
+          [breakpoints.down('md')]: {
+            userSelect: 'none',
+          },
         },
         '.avatar-thumbnail': {
           height: '1.35rem !important',
