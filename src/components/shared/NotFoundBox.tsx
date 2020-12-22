@@ -8,9 +8,10 @@ import { TextLink } from './TextLink';
 const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     flexGrow: 1,
-    padding: spacing(2),
+    padding: spacing(4),
     textAlign: 'center',
     backgroundColor: palette.common.white,
+    minHeight: '15rem',
   },
   icon: {
     width: '3.5rem',
