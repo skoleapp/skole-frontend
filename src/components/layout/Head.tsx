@@ -3,10 +3,7 @@ import Head from 'next/head';
 import React from 'react';
 import { SEOProps } from 'types';
 
-export const HeadComponent: React.FC<SEOProps> = ({
-  title: _title,
-  description,
-}) => {
+export const HeadComponent: React.FC<SEOProps> = ({ title: _title, description }) => {
   const { palette } = useTheme();
   const title = _title ? `Skole | ${_title}` : 'Skole';
 
