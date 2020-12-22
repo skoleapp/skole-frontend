@@ -1,6 +1,6 @@
 const withOffline = require('next-offline');
 const { locales, defaultLocale } = require('./i18n.json');
-const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL } = process.env;
+const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL, BUILD_DATE } = process.env;
 
 const config = {
   target: 'server',
@@ -9,6 +9,7 @@ const config = {
     BACKEND_URL: BACKEND_URL || API_URL, // In prod these are the same, so we only define the first one.
     FRONTEND_URL,
     SA_URL,
+    BUILD_DATE,
   },
   typescript: {
     ignoreDevErrors: true,

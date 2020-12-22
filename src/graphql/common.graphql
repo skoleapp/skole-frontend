@@ -893,3 +893,24 @@ mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
     }
   }
 }
+
+query Sitemap {
+  sitemap {
+    courses {
+      id
+      modified
+    }
+    resources {
+      id
+      modified
+    }
+    schools {
+      id
+      modified
+    }
+    users {
+      id
+      modified
+    }
+  }
+}
