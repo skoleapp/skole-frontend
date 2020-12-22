@@ -9,7 +9,6 @@
   "shareTitle": "{{ resourceTitle }} on Skole",
   "shareText": "See {{ resourceTitle }} from {{ creatorUsername }} on Skole",
   "infoHeader": "Resource Details",
-  "actionsHeader": "Resource Menu",
   "share": "Share Resource",
   "delete": "Delete Resource",
   "deleteTarget": "the resource",

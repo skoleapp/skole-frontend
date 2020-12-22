@@ -7,7 +7,6 @@
   "shareTitle": "{{ courseName }} på Skole",
   "shareText": "Se {{ courseName }} av {{ creatorUsername }} på Skole",
   "infoHeader": "Kursinformation",
-  "actionsHeader": "Kursmeny",
   "share": "Dela kurs",
   "delete": "Radera kurs",
   "deleteTarget": "kursen",

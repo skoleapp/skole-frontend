@@ -147,7 +147,6 @@ const CourseDetailPage: NextPage = () => {
     renderReportAction,
     renderActionsButton,
   } = useActionsDialog({
-    header: t('course:actionsHeader'),
     shareParams,
     target,
     share: t('course:share'),

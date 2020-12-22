@@ -9,7 +9,6 @@
   "shareTitle": "{{ resourceTitle }} Skolessa",
   "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa",
   "infoHeader": "Resurssin tiedot",
-  "actionsHeader": "Resurssin valikko",
   "share": "Jaa resurssi",
   "delete": "Poista resurssi",
   "deleteTarget": "resurssin",

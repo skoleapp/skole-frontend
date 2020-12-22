@@ -159,7 +159,6 @@ export const CommentCard: React.FC<Props> = ({
     renderReportAction,
     actionsButtonProps,
   } = useActionsDialog({
-    header: t('comment:actionsHeader'),
     share: t('comment:share'),
     shareParams,
     target,

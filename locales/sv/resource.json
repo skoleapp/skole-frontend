@@ -9,7 +9,6 @@
   "shareTitle": "{{ resourceTitle }} på Skole",
   "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole",
   "infoHeader": "Resursinformation",
-  "actionsHeader": "Resursmeny",
   "share": "Dela resurs",
   "delete": "Radera resurs",
   "deleteTarget": "resursen",

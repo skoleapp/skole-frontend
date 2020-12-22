@@ -7,7 +7,6 @@
   "shareTitle": "{{ courseName }} on Skole",
   "shareText": "View {{ courseName }} by {{ creatorUsername }} on Skole",
   "infoHeader": "Course Details",
-  "actionsHeader": "Course Menu",
   "share": "Share Course",
   "delete": "Delete Course",
   "deleteTarget": "the course",
