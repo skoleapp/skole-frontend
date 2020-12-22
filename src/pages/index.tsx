@@ -127,7 +127,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   nextStepsContainer: {
     position: 'relative',
     flexGrow: 1,
-    backgroundColor: COLORS.backgroundGrey,
+    backgroundColor: palette.grey[300],
     paddingTop: spacing(6),
     paddingBottom: spacing(2),
     [breakpoints.up('md')]: {

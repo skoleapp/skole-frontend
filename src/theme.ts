@@ -16,7 +16,6 @@ export const COLORS = {
   secondary: '#faf2de',
   white: '#ffffff',
   black: '#000000',
-  backgroundGrey: '#dbdbdb',
 };
 
 const breakpointOptions = {
