@@ -123,7 +123,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
   );
 
   return (
-    <Box flexGrow="1" position="relative">
+    <Box flexGrow="1" position="relative" display="flex">
       <Grid container direction="column" className={classes.root}>
         {renderMessageArea}
         {renderInputArea}
