@@ -80,7 +80,5 @@
   "postAsAnonymous": "Post as anonymous",
   "selectAuthor": "Select Author",
   "send": "Send",
-  "confirmDelete": "Are you sure you want to delete {{ deleteTarget }}?",
-  "commentHelperText": "to add a new line.",
-  "commentCount": "comments"
+  "confirmDelete": "Are you sure you want to delete {{ deleteTarget }}?"
 }

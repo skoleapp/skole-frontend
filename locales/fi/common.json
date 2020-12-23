@@ -80,7 +80,5 @@
   "postAsAnonymous": "Lähetä anonyyminä",
   "selectAuthor": "Valitse käyttäjä",
   "send": "Lähetä",
-  "confirmDelete": "Haluatko varmasti poistaa {{ deleteTarget }}?",
-  "commentHelperText": "lisätäksesi uuden rivin.",
-  "commentCount": "kommenttia"
+  "confirmDelete": "Haluatko varmasti poistaa {{ deleteTarget }}?"
 }

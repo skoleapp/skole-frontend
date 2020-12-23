@@ -37,7 +37,7 @@ import {
   ClearOutlined,
   SendOutlined,
 } from '@material-ui/icons';
-import { DialogHeader, SkoleDialog } from '../shared';
+import { DialogHeader, SkoleDialog, TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
 import { TextFormField } from '../form-fields';
 
@@ -301,10 +301,30 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   const renderDialogTextField = <Field {...textFieldProps} className={classes.dialogTextField} />;
 
+  const renderFormHelperText = isTabletOrDesktop && (
+    <>
+      <FormHelperText>
+        {t('comment:helperTextMarkdown')}{' '}
+        <TextLink href="https://guides.github.com/features/mastering-markdown/" target="_blank">
+          {t('comment:markdown')}
+        </TextLink>
+        .
+      </FormHelperText>
+      <FormHelperText>
+        {t('comment:helperTextCombination', { combination: 'Shift + Enter' })}
+      </FormHelperText>
+    </>
+  );
+
   const renderDialogToolbar = (
-    <Grid className={classes.dialogToolbar} container>
-      {renderAttachmentButton}
-      {renderClearAttachmentButton}
+    <Grid className={classes.dialogToolbar} container alignItems="center">
+      <Grid item xs={2}>
+        {renderAttachmentButton}
+        {renderClearAttachmentButton}
+      </Grid>
+      <Grid item xs={10} container alignItems="flex-end" direction="column">
+        {renderFormHelperText}
+      </Grid>
     </Grid>
   );
 
@@ -348,10 +368,6 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         </Button>
       </Typography>
     </Tooltip>
-  );
-
-  const renderFormHelperText = (
-    <FormHelperText>Shift + Enter {t('comment:helperText')}</FormHelperText>
   );
 
   const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (

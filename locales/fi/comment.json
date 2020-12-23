@@ -9,5 +9,8 @@
   "target": "kommentti",
   "voteTooltipTarget": "kommenti",
   "actionsTooltipTarget": "kommenti",
-  "helperText": "lisätäksesi uuden rivin."
+  "helperTextMarkdown": "Käytä kommenttisi formatointiin",
+  "markdown": "Markdownia",
+  "helperTextCombination": "{{ combination }} lisätäksesi uuden rivin.",
+  "count": "kommenttia"
 }

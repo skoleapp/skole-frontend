@@ -80,7 +80,5 @@
   "postAsAnonymous": "Skicka som anonym",
   "selectAuthor": "Välj auktor",
   "send": "Skicka",
-  "confirmDelete": "Är du säker på att du vill radera {{ deleteTarget }}?",
-  "commentHelperText": "för att lägga till en ny rad.",
-  "commentCount": "kommentarer"
+  "confirmDelete": "Är du säker på att du vill radera {{ deleteTarget }}?"
 }

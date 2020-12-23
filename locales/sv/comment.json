@@ -9,5 +9,8 @@
   "target": "kommentar",
   "voteTooltipTarget": "kommentar",
   "actionsTooltipTarget": "kommentar",
-  "helperText": "för att lägga till en ny rad."
+  "helperTextMarkdown": "Formatera din kommentar med",
+  "markdown": "Markdown",
+  "helperTextCombination": "{{ combination }} för att lägga till en ny rad.",
+  "count": "kommentarer"
 }

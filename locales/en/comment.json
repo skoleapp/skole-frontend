@@ -9,5 +9,8 @@
   "target": "comment",
   "voteTooltipTarget": "comment",
   "actionsTooltipTarget": "comment",
-  "helperText": "to add a new line."
+  "helperTextMarkdown": "Format your comment with",
+  "markdown": "Markdown",
+  "helperTextCombination": "{{ combination }} to add a new line.",
+  "count": "comments"
 }
