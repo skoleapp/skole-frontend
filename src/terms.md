@@ -1,8 +1,8 @@
-Please read these terms and conditions (“terms”) before using the Skole application (“the application”). By using Skole you accept these terms and conditions. These terms govern your use of Skole. Skole is made for students to find and share the top courses, study materials and discussions.
+Please read these terms and conditions ("Terms") before using the Skole application ("The Application"). By using Skole you accept these terms and conditions. These terms govern your use of Skole. Skole is made for students to find and share the top courses, study materials and discussions.
 
 ### 1. Licenses
 
-Subject to these terms, Skole Oy hereby grants you a non-exclusive, non-transferable, non-sublicensable, limited right and license to use the application as provided by Skole Oy, for your personal non-commercial use, in the manner permitted by these terms (“License”). The rights granted herein are subject to your compliance with these terms and with all applicable local, national and international laws and regulations.
+Subject to these terms, Skole Oy hereby grants you a non-exclusive, non-transferable, non-sublicensable, limited right and license to use the application as provided by Skole Oy, for your personal non-commercial use, in the manner permitted by these terms ("License"). The rights granted herein are subject to your compliance with these terms and with all applicable local, national and international laws and regulations.
 
 ### 2. Restrictions on Use
 
@@ -31,9 +31,9 @@ These restrictions survive termination of the License.
 
 ### 3. Intellectual Property Rights
 
-For purposes of these terms, “application IPR” means including but not limited to all intellectual property rights to the idea, design, source code, copyright and trademarks related to the application.
+For purposes of these terms, "Application IPR" means including but not limited to all intellectual property rights to the idea, design, source code, copyright and trademarks related to the application.
 
-For purposes of these terms, “content IPR” means including but not limited to all intellectual property rights to the texts, graphics, images, audio, video, works of authorship of any kind, and information or other materials that are posted, generated, provided or otherwise made available through the application. However, all of the content is free to use for academic purposes or public research.
+For purposes of these terms, "Content IPR" means including but not limited to all intellectual property rights to the texts, graphics, images, audio, video, works of authorship of any kind, and information or other materials that are posted, generated, provided or otherwise made available through the application. However, all of the content is free to use for academic purposes or public research.
 
 All rights relating the application IPR, whether protected or not, (1) are the exclusive property of Skole Oy and its licensors, (2) are protected by the applicable international and national legal provisions, and (3) are under no circumstances transferred in full or in part within the context of the licence to use the application.
 All rights relating to content IPR, whether protected or not, (1) are the exclusive property of You. By using the application, You hereby transfer all user rights to such content IPR to Skole Oy and its users for the purposes of and within the context of the terms to use the application.
@@ -58,11 +58,11 @@ The application contains features that allow you to submit, post and display con
 Information collection and use; Privacy policy
 
 By installing, accessing or using the application, you consent to the information collection and usage.
-Skole Oy shall respect your privacy rights and recognize the importance of protecting any information collected about you. Skole Oy privacy policy is available at www.skoleapp.com/privacy ("privacy policy") and applicable to these terms. Privacy policy defines how, why and to which extent Skole Oy collects and uses personal and non-personal information in relation to the application. By installing and using the application you explicitly agree with the terms of privacy policy.
+Skole Oy shall respect your privacy rights and recognize the importance of protecting any information collected about you. Skole Oy privacy policy is available at www.skoleapp.com/privacy ("Privacy Policy") and applicable to these terms. Privacy policy defines how, why and to which extent Skole Oy collects and uses personal and non-personal information in relation to the application. By installing and using the application you explicitly agree with the terms of privacy policy.
 
 ### 7. Liability
 
-The application is provided “as is” and the use of and reliance upon the application and any third party services related thereto is at your sole risk and discretion. Skole Oy hereby disclaims any and all representations, warranties and guarantees regarding the application and third party services. Furthermore, Skole Oy hereby disclaims any and all liability related to any third-party intellectual property rights that violate Your right to upload content to application.
+The application is provided "as is" and the use of and reliance upon the application and any third party services related thereto is at your sole risk and discretion. Skole Oy hereby disclaims any and all representations, warranties and guarantees regarding the application and third party services. Furthermore, Skole Oy hereby disclaims any and all liability related to any third-party intellectual property rights that violate Your right to upload content to application.
 Under no circumstances will Skole Oy be liable for any consequential, direct, incidental, indirect, punitive or special damage related to the use, the inability to use and/or errors or omissions in the contents and functions of the application.
 Indemnification
 
