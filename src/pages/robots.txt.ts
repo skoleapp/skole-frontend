@@ -1,7 +1,5 @@
 import { NextApiResponse } from 'next';
 
-const { FRONTEND_URL } = process.env;
-
 const RobotsTxt = (): void => {};
 
 interface Props {
@@ -23,7 +21,7 @@ export const getServerSideProps = ({ res }: { res: NextApiResponse }): Props => 
 
   const robots = `User-agent: *
 ${disallowed.join('\n')}
-Sitemap: ${FRONTEND_URL}/sitemap.xml
+Sitemap: ${process.env.FRONTEND_URL}/sitemap.xml
 `;
   res.setHeader('Content-Type', 'text/plain');
   res.write(robots);
