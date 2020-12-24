@@ -1,6 +1,5 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import clsx from 'clsx';
 import { ButtonLink, LanguageButton, MainBackground, MainTemplate, TextLink } from 'components';
 import { withNoAuth } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';

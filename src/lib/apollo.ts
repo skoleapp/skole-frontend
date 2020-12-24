@@ -11,7 +11,7 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
 
   const httpLink = createUploadLink({
-    uri: `${uri}graphql/`,
+    uri: `${uri}/graphql/`,
     credentials: 'include',
   });
 

@@ -7,7 +7,7 @@
   "author": "Skole",
   "scripts": {
     "dev": "next-translate && NODE_OPTIONS='--max-old-space-size=4096' next dev -p 3001",
-    "build": "next-translate && next build",
+    "build": "next-translate && BUILD_DATE=\"$(date '+%Y-%m-%d')\" next build",
     "start": "next start -p 3001",
     "type-check": "tsc",
     "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
