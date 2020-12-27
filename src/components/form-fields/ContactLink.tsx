@@ -1,5 +1,5 @@
 import { FormControl, FormHelperText } from '@material-ui/core';
-import { useTranslation } from 'next-translate';
+import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
 import { TextLink } from '../shared';

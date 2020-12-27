@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import { ShareOutlined } from '@material-ui/icons';
 import { useShareContext } from 'context';
 import { useMediaQueries } from 'hooks';
-import { useTranslation } from 'next-translate';
+import { useTranslation } from 'lib';
 import React from 'react';
 import { ShareParams } from 'types';
 

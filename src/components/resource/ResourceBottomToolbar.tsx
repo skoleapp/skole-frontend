@@ -5,7 +5,7 @@ import * as R from 'ramda';
 import { BORDER } from 'theme';
 import { urls } from 'utils';
 import { useDayjs } from 'hooks';
-import { useTranslation } from 'next-translate';
+import { useTranslation } from 'lib';
 import { CloudDownloadOutlined, StarBorderOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { MuiColor } from 'types';
 import { TextLink } from '../shared';

@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
-import { useTranslation } from 'next-translate';
+import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
 import { useDialogButton } from './useDialogButton';
