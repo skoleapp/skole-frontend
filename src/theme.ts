@@ -86,6 +86,9 @@ let theme = createMuiTheme({
       variant: 'fullWidth',
       indicatorColor: 'primary',
     },
+    MuiList: {
+      disablePadding: true,
+    },
   },
   overrides: {
     MuiButton: {

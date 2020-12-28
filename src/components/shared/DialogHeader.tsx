@@ -2,11 +2,13 @@ import { Grid, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/
 import { CloseOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import React from 'react';
+import { TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { DialogHeaderProps } from 'types';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
     padding: spacing(2),
+    minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
   },
 }));
 

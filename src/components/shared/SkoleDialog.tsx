@@ -20,8 +20,12 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
+interface Props extends DialogProps {
+  paperClasses?: string;
+}
+
 // A simple wrapper around MUI dialog to provide responsive styles consistently for all dialogs.
-export const SkoleDialog: React.FC<DialogProps> = ({ fullScreen, ...props }) => {
+export const SkoleDialog: React.FC<Props> = ({ fullScreen, paperClasses, ...props }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const handleClick = (e: SyntheticEvent): void => e.stopPropagation();
@@ -33,7 +37,11 @@ export const SkoleDialog: React.FC<DialogProps> = ({ fullScreen, ...props }) => 
       fullWidth={isTabletOrDesktop}
       TransitionComponent={Transition}
       PaperProps={{
-        className: clsx(classes.paper, fullScreen === false && classes.alwaysBorderRadius),
+        className: clsx(
+          paperClasses,
+          classes.paper,
+          fullScreen === false && classes.alwaysBorderRadius,
+        ),
       }}
       {...props}
     />
