@@ -79,6 +79,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { userMe, userMeId, avatarThumbnail, authNetworkError } = useAuthContext();
   const dense = !!headerLeft || !!headerRightSecondary;
+  const backButtonTooltip = t('tooltips:goBack');
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
@@ -92,16 +93,20 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   };
 
   const renderDynamicBackButton = dynamicBackUrl && (
-    <IconButton onClick={(): void => Router.back()} color="secondary" size="small">
-      <ArrowBackOutlined />
-    </IconButton>
+    <Tooltip title={backButtonTooltip}>
+      <IconButton onClick={(): void => Router.back()} color="secondary" size="small">
+        <ArrowBackOutlined />
+      </IconButton>
+    </Tooltip>
   );
 
   const renderStaticBackButton = !!staticBackUrl && (
     <Link href={staticBackUrl}>
-      <IconButton color="secondary" size="small">
-        <ArrowBackOutlined />
-      </IconButton>
+      <Tooltip title={backButtonTooltip}>
+        <IconButton color="secondary" size="small">
+          <ArrowBackOutlined />
+        </IconButton>
+      </Tooltip>
     </Link>
   );
 
