@@ -49,7 +49,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
     flexGrow: 1,
     display: 'flex',
@@ -60,14 +60,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     },
   },
   cardHeader: {
-    position: 'relative',
     borderBottom: BORDER,
-    padding: spacing(3),
-  },
-  cardHeaderAction: {
-    position: 'absolute',
-    top: spacing(2),
-    right: spacing(2),
   },
 }));
 
@@ -250,11 +243,7 @@ const SchoolDetailPage: NextPage = () => {
   );
 
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{ root: classes.cardHeader, action: classes.cardHeaderAction }}
-      title={schoolName}
-      action={renderAction}
-    />
+    <CardHeader className={classes.cardHeader} title={schoolName} action={renderAction} />
   );
 
   const renderTabs = (
