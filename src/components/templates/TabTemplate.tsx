@@ -19,9 +19,20 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  cardHeader: {
+  cardHeaderRoot: {
     borderBottom: BORDER,
-    paddingLeft: spacing(2),
+    position: 'relative',
+    padding: spacing(3),
+  },
+  cardHeaderAvatar: {
+    position: 'absolute',
+    top: spacing(2),
+    left: spacing(2),
+  },
+  cardHeaderAction: {
+    position: 'absolute',
+    top: spacing(2),
+    right: spacing(2),
   },
 }));
 
@@ -64,7 +75,11 @@ export const TabTemplate: React.FC<Props> = ({
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
-      className={classes.cardHeader}
+      classes={{
+        root: classes.cardHeaderRoot,
+        avatar: classes.cardHeaderAvatar,
+        action: classes.cardHeaderAction,
+      }}
       title={cardHeader}
       avatar={renderBackButton}
       action={renderAction}
@@ -89,8 +104,13 @@ export const TabTemplate: React.FC<Props> = ({
     </Paper>
   );
 
+  const layoutProps = {
+    topNavbarProps,
+    ...props,
+  };
+
   return (
-    <MainTemplate {...props}>
+    <MainTemplate {...layoutProps}>
       {renderContent}
       {children}
     </MainTemplate>
