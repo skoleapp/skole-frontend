@@ -27,11 +27,10 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import Router from 'next/router';
-import * as R from 'ramda';
 import React, { MouseEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { TopNavbarProps } from 'types';
-import { mediaUrl, urls } from 'utils';
+import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
 import { Logo } from './Logo';
@@ -78,9 +77,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const { userMe, authNetworkError } = useAuthContext();
-  const userMeId = R.propOr('', 'id', userMe);
-  const avatarThumb = R.propOr('', 'avatar', userMe);
+  const { userMe, userMeId, avatarThumbnail, authNetworkError } = useAuthContext();
   const dense = !!headerLeft || !!headerRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
@@ -101,7 +98,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderStaticBackButton = !!staticBackUrl && (
-    <Link href={staticBackUrl.href}>
+    <Link href={staticBackUrl}>
       <IconButton color="secondary" size="small">
         <ArrowBackOutlined />
       </IconButton>
@@ -182,7 +179,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         <Typography component="span">
           <Link href={urls.user(userMeId)}>
             <IconButton color="secondary">
-              <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />
+              <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
             </IconButton>
           </Link>
         </Typography>

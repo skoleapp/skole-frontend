@@ -4,6 +4,7 @@ import * as R from 'ramda';
 import React, { createContext, useState, useContext } from 'react';
 
 import { AuthContextType } from 'types';
+import { mediaUrl } from 'utils';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const AuthContext = createContext<AuthContextType>({});
@@ -39,15 +40,29 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
 
   const userMeId = R.propOr('', 'id', userMe);
-  const userMeUsername = R.propOr('', 'username', userMe);
-  const avatarThumbnail = R.propOr('', 'avatarThumbnail', userMe);
+  const username = R.propOr('', 'username', userMe);
+  const email = R.propOr('', 'email', userMe);
+  const title = R.propOr('', 'title', userMe);
+  const bio = R.propOr('', 'bio', userMe);
+  const _avatarThumbnail = R.propOr('', 'avatarThumbnail', userMe);
+  const avatarThumbnail = mediaUrl(_avatarThumbnail);
+  const _avatar = R.propOr('', 'avatar', userMe);
+  const avatar = mediaUrl(_avatar);
+  const school = R.propOr(null, 'school', userMe);
+  const subject = R.propOr(null, 'subject', userMe);
 
   const value = {
     userMe,
     setUserMe,
     userMeId,
-    userMeUsername,
+    username,
+    email,
+    title,
+    bio,
     avatarThumbnail,
+    avatar,
+    school,
+    subject,
     activities,
     setActivities,
     authNetworkError,

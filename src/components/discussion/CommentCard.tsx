@@ -121,7 +121,7 @@ export const CommentCard: React.FC<Props> = ({
   const { toggleNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const { confirm } = useConfirmContext();
-  const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
+  const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
   const attachmentOnly = comment.text == '' && comment.attachment !== '';
   const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));
@@ -251,7 +251,7 @@ export const CommentCard: React.FC<Props> = ({
         title: classes.cardTitle,
         subheader: classes.cardSubHeader,
       }}
-      avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumb)} />}
+      avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
       title={renderTitle}
       subheader={created}
     />

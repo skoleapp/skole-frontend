@@ -5,7 +5,6 @@ import Router from 'next/router';
 import { UrlObject } from 'url';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { urls } from 'utils';
-import * as R from 'ramda';
 
 interface SearchUrl extends UrlObject {
   query: Record<symbol, unknown>;
@@ -19,8 +18,7 @@ interface UseSearch {
 
 export const useSearch = (): UseSearch => {
   const { t } = useTranslation();
-  const { userMe } = useAuthContext();
-  const school = R.pathOr(null, ['school', 'id'], userMe);
+  const { school } = useAuthContext();
   const [value, setValue] = useState('');
   const placeholder = t('forms:searchCourses');
   const autoComplete = 'off';
@@ -29,7 +27,7 @@ export const useSearch = (): UseSearch => {
 
   const searchUrl = {
     pathname: urls.search,
-    query: school ? { school } : {},
+    query: school ? { school: school.id } : {},
   };
 
   const handleSubmitSearch = async (e: SyntheticEvent): Promise<void> => {

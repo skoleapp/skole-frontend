@@ -127,7 +127,7 @@ const UserPage: NextPage = () => {
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
-  const { userMe, verified } = useAuthContext();
+  const { userMeId, school, subject, verified } = useAuthContext();
   const { query } = useRouter();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -138,10 +138,8 @@ const UserPage: NextPage = () => {
   const avatar = R.propOr('', 'avatar', user);
   const title = R.propOr('', 'title', user);
   const bio = R.propOr('', 'bio', user);
-  const school = R.propOr('', 'school', userMe);
-  const subject = R.propOr('', 'subject', userMe);
   const score = R.propOr('-', 'score')(user);
-  const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
+  const isOwnProfile = R.propOr('', 'id', user) === userMeId;
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);

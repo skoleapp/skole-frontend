@@ -25,7 +25,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
-import { mediaUrl, urls } from 'utils';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 interface UpdateProfileFormValues {
@@ -49,7 +49,21 @@ const EditProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const classes = useStyles();
   const context = useLanguageHeaderContext();
-  const { userMe, setUserMe, verified } = useAuthContext();
+  const { toggleNotification } = useNotificationsContext();
+
+  const {
+    userMe,
+    setUserMe,
+    userMeId: id,
+    verified,
+    username,
+    email,
+    title,
+    bio,
+    avatar,
+    school,
+    subject,
+  } = useAuthContext();
 
   const {
     formRef,
@@ -58,16 +72,6 @@ const EditProfilePage: NextPage = () => {
     setSubmitting,
     unexpectedError,
   } = useForm<UpdateProfileFormValues>();
-
-  const { toggleNotification } = useNotificationsContext();
-  const id = R.propOr('', 'id', userMe);
-  const title = R.propOr('', 'title', userMe);
-  const username = R.propOr('', 'username', userMe);
-  const email = R.propOr('', 'email', userMe);
-  const bio = R.propOr('', 'bio', userMe);
-  const avatar = R.propOr('', 'avatar', userMe);
-  const school = R.propOr(null, 'school', userMe);
-  const subject = R.propOr(null, 'subject', userMe);
 
   const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
     if (updateUser) {
@@ -113,7 +117,7 @@ const EditProfilePage: NextPage = () => {
     username,
     email,
     bio,
-    avatar: mediaUrl(avatar),
+    avatar,
     school,
     subject,
     general: '',
@@ -194,9 +198,7 @@ const EditProfilePage: NextPage = () => {
 
   const renderBackToProfileLink = (
     <FormControl className={classes.link}>
-      <TextLink href={urls.user(R.propOr('', 'id', userMe))}>
-        {t('edit-profile:backToProfile')}
-      </TextLink>
+      <TextLink href={urls.user(id)}>{t('edit-profile:backToProfile')}</TextLink>
     </FormControl>
   );
 
@@ -251,6 +253,7 @@ const EditProfilePage: NextPage = () => {
   if (userMe) {
     return <SettingsTemplate {...layoutProps}>{renderEditProfileForm}</SettingsTemplate>;
   }
+
   return <NotFoundTemplate />;
 };
 
