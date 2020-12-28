@@ -84,7 +84,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
     }
   };
 
-  // For all auto complete fields, fetch the data when opening the input.
+  // For all autocomplete fields, fetch the data when opening the input.
   // When closing the input results, reset the options.
   useEffect(() => {
     if (!open) {
@@ -98,13 +98,9 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
     };
   }, [open]);
 
-  // For fields that perform filtering in the backend with the search variables, perform the data fetching also in the following cases:
-  // 1. Input field contains at least two characters and a new character is typed.
-  // 2. Input field is cleared to default value (empty string).
+  // For fields that perform filtering in the backend with the search variables, refetch the data on every key stroke.
   useEffect(() => {
-    if (!!searchKey && (inputValue === '' || inputValue.length > 2)) {
-      fetchOptions();
-    }
+    !!searchKey && fetchOptions();
   }, [inputValue]);
 
   const handleAutocompleteChange = <T extends Record<symbol, unknown>>(
