@@ -151,6 +151,11 @@ let theme = createMuiTheme({
         borderRadius: BORDER_RADIUS,
       },
     },
+    MuiCardContent: {
+      root: {
+        padding: `${spacing(4)} !important`,
+      },
+    },
     MuiDrawer: {
       paperAnchorBottom: {
         borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0 0`,

@@ -240,11 +240,12 @@ const SchoolDetailPage: NextPage = () => {
     </List>
   );
 
-  const renderActionsDrawer = (
+  const renderActionsDialog = (
     <ResponsiveDialog
       open={actionsDialogOpen}
       onClose={handleCloseActionsDialog}
       dialogHeaderProps={actionsDialogHeaderProps}
+      list
     >
       {renderActionsDialogContent}
     </ResponsiveDialog>
@@ -284,7 +285,7 @@ const SchoolDetailPage: NextPage = () => {
     return (
       <TabTemplate {...layoutProps}>
         {renderInfoDialog}
-        {renderActionsDrawer}
+        {renderActionsDialog}
       </TabTemplate>
     );
   }

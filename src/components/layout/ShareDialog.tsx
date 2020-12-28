@@ -166,6 +166,7 @@ export const ShareDialog: React.FC = () => {
       open={shareDialogOpen}
       onClose={handleCloseShareDialog}
       dialogHeaderProps={dialogHeaderProps}
+      list
     >
       {renderDialogContent}
     </ResponsiveDialog>

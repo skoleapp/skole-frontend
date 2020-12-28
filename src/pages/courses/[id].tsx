@@ -413,6 +413,7 @@ const CourseDetailPage: NextPage = () => {
       open={actionsDialogOpen}
       onClose={handleCloseActionsDialog}
       dialogHeaderProps={actionsDialogHeaderProps}
+      list
     >
       {renderActionsDialogContent}
     </ResponsiveDialog>
