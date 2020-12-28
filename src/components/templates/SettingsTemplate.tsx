@@ -44,7 +44,6 @@ interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
   header: string;
   headerRight?: JSX.Element;
   form?: boolean; // Show tighter content on the right-hand paper for forms.
-  text?: boolean; // Show tighter content on the right-hand paper for text content.
   disablePadding?: boolean; // Disable padding on the right-hand paper's card content.
 }
 
@@ -53,7 +52,6 @@ export const SettingsTemplate: React.FC<Props> = ({
   header,
   headerRight,
   form,
-  text,
   disablePadding,
   children,
   ...props
@@ -70,14 +68,7 @@ export const SettingsTemplate: React.FC<Props> = ({
     lg: 4,
   };
 
-  const textColSpan = {
-    xs: 12,
-    sm: 10,
-    md: 8,
-    lg: 6,
-  };
-
-  const colSpan = form ? formColSpan : text ? textColSpan : {};
+  const colSpan = form ? formColSpan : {};
   const renderMobileSettingsButton = isMobile && <SettingsButton color="secondary" size="small" />;
   const renderHeaderRight = headerRight || renderMobileSettingsButton;
 
