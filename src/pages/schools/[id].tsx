@@ -66,7 +66,8 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
   cardHeaderAction: {
     position: 'absolute',
-    right: spacing(4),
+    top: spacing(2),
+    right: spacing(2),
   },
 }));
 
@@ -248,7 +249,7 @@ const SchoolDetailPage: NextPage = () => {
     </>
   );
 
-  const renderSchoolHeader = isTabletOrDesktop && (
+  const renderHeader = isTabletOrDesktop && (
     <CardHeader
       classes={{ root: classes.cardHeader, action: classes.cardHeaderAction }}
       title={schoolName}
@@ -269,7 +270,7 @@ const SchoolDetailPage: NextPage = () => {
 
   const renderContent = (
     <Paper className={classes.root}>
-      {renderSchoolHeader}
+      {renderHeader}
       {renderTabs}
     </Paper>
   );
