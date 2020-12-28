@@ -2,7 +2,7 @@ import { ContainerProps, GridProps } from '@material-ui/core';
 import { ReactNode } from 'react';
 import { UrlObject } from 'url';
 
-export interface SEOProps {
+export interface SeoProps {
   title?: string;
   description?: string;
 }
@@ -30,7 +30,7 @@ interface CustomContainerProps extends Omit<ContainerProps, 'children'> {
 
 export interface MainTemplateProps extends GridProps {
   children: NonNullable<ReactNode>;
-  seoProps: SEOProps;
+  seoProps: SeoProps;
   topNavbarProps?: TopNavbarProps;
   containerProps?: CustomContainerProps;
   customTopNavbar?: JSX.Element; // Custom element for top navbar.
