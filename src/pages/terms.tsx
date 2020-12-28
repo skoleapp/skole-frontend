@@ -1,13 +1,11 @@
-import { SettingsTemplate } from 'components';
+import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
-// @ts-ignore: TS cannot detect markdown files by default.
-import terms from '../terms.md'; // TODO: See if this can be imported via absolute path.
+import { MarkdownPageProps } from 'types';
 
-const TermsPage: NextPage = () => {
+const TermsPage: NextPage<MarkdownPageProps> = ({ content }) => {
   const { t } = useTranslation();
 
   const layoutProps = {
@@ -16,23 +14,16 @@ const TermsPage: NextPage = () => {
       description: t('terms:description'),
     },
     header: t('terms:header'),
-    text: true,
-    topNavbarProps: {
-      dynamicBackUrl: true,
-    },
   };
 
-  return (
-    <SettingsTemplate {...layoutProps}>
-      <ReactMarkdown source={terms} />
-    </SettingsTemplate>
-  );
+  return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
     _ns: await loadNamespaces(['terms'], locale),
+    content: await loadMarkdown('terms'),
   },
 });
 
-export default withUserMe(TermsPage);
+export default withUserMe(TermsPage as NextPage);

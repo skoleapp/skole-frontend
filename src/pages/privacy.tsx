@@ -1,13 +1,11 @@
-import { SettingsTemplate } from 'components';
+import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
-// @ts-ignore: TS cannot detect markdown files by default.
-import privacy from '../privacy.md'; // TODO: See if this can be imported via absolute path.
+import { MarkdownPageProps } from 'types';
 
-const PrivacyPage: NextPage = () => {
+const PrivacyPage: NextPage<MarkdownPageProps> = ({ content }) => {
   const { t } = useTranslation();
 
   const layoutProps = {
@@ -16,22 +14,16 @@ const PrivacyPage: NextPage = () => {
       description: t('privacy:description'),
     },
     header: t('privacy:header'),
-    text: true,
-    topNavbarProps: {
-      dynamicBackUrl: true,
-    },
   };
 
-  return (
-    <SettingsTemplate {...layoutProps}>
-      <ReactMarkdown source={privacy} />
-    </SettingsTemplate>
-  );
+  return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
 };
+
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
     _ns: await loadNamespaces(['privacy'], locale),
+    content: await loadMarkdown('privacy'),
   },
 });
 
-export default withUserMe(PrivacyPage);
+export default withUserMe(PrivacyPage as NextPage);

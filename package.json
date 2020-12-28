@@ -29,6 +29,7 @@
     "draft-js-import-markdown": "^1.4.0",
     "formik": "^2.2.5",
     "graphql": "^15.3.0",
+    "gray-matter": "^4.0.2",
     "lodash.throttle": "^4.1.1",
     "next": "^10.0.3",
     "next-offline": "^5.0.2",
@@ -40,6 +41,8 @@
     "react-dom": "^17.0.1",
     "react-markdown": "^5.0.3",
     "react-pdf": "^5.0.0",
+    "remark": "^13.0.0",
+    "remark-html": "^13.0.1",
     "typeface-roboto": "^1.1.13",
     "yup": "^0.31.0"
   },
