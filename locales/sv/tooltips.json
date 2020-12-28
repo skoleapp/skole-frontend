@@ -36,5 +36,5 @@
   "removeDownvote": "Ta bort nedrösten från den här {{ target }}.",
   "info": "Visa {{ target }}information.",
   "actions": "Visa {{ target }} meny.",
-  "backToProfile": "Tillbaka till profilen."
+  "goBack": "Gå tillbaka."
 }

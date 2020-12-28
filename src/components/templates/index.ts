@@ -6,3 +6,4 @@ export { MarkdownTemplate } from './MarkdownTemplate';
 export { NotFoundTemplate } from './NotFoundTemplate';
 export { OfflineTemplate } from './OfflineTemplate';
 export { SettingsTemplate } from './SettingsTemplate';
+export { TabTemplate } from './TabTemplate';

@@ -35,11 +35,11 @@ export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps
     },
   };
 
-  const renderCardHeader = isTabletOrDesktop && (
+  const renderHeader = isTabletOrDesktop && (
     <CardHeader className={classes.cardHeader} title={header} />
   );
 
-  const renderCardContent = (
+  const renderForm = (
     <CardContent>
       <Grid container justify="center">
         <Grid item xs={12} sm={8} md={6} lg={4} xl={3}>
@@ -52,8 +52,8 @@ export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps
   return (
     <MainTemplate {...layoutProps}>
       <Paper className={classes.root}>
-        {renderCardHeader}
-        {renderCardContent}
+        {renderHeader}
+        {renderForm}
       </Paper>
     </MainTemplate>
   );

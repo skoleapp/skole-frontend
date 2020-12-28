@@ -1,16 +1,4 @@
-import {
-  CardHeader,
-  List,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Paper,
-  Tab,
-  Tabs,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { List, ListItemIcon, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
 import { AddCircleOutlineOutlined } from '@material-ui/icons';
 import {
   CourseTableBody,
@@ -18,7 +6,6 @@ import {
   IconButtonLink,
   InfoDialogContent,
   LoadingTemplate,
-  MainTemplate,
   NotFoundBox,
   NotFoundTemplate,
   OfflineTemplate,
@@ -26,8 +13,8 @@ import {
   ResponsiveDialog,
   ShareButton,
   TextLink,
-  TabPanel,
   SubjectTableBody,
+  TabTemplate,
 } from 'components';
 import { useAuthContext } from 'context';
 import { useSchoolQuery } from 'generated';
@@ -38,7 +25,6 @@ import {
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
-  useTabs,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
@@ -46,26 +32,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
-  root: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    [breakpoints.up('md')]: {
-      borderRadius: BORDER_RADIUS,
-    },
-  },
-  cardHeader: {
-    borderBottom: BORDER,
-  },
-}));
-
 const SchoolDetailPage: NextPage = () => {
-  const classes = useStyles();
   const { verified, verificationRequiredTooltip } = useAuthContext();
   const { t } = useTranslation();
   const { isTabletOrDesktop, isMobile } = useMediaQueries();
@@ -92,7 +61,6 @@ const SchoolDetailPage: NextPage = () => {
   const shareParams = { shareHeader: t('school:shareHeader'), shareTitle, shareText };
   const target = t('school:target');
   const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
 
   const {
     infoDialogOpen,
@@ -230,8 +198,8 @@ const SchoolDetailPage: NextPage = () => {
 
   const renderSubjectsNotFound = <NotFoundBox text={t('school:noSubjects')} />;
   const renderCoursesNotFound = <NotFoundBox text={t('school:noCourses')} />;
-  const renderSubjects = subjects.length ? renderSubjectsTable : renderSubjectsNotFound;
-  const renderCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
+  const renderLeftTabContent = subjects.length ? renderSubjectsTable : renderSubjectsNotFound;
+  const renderRightTabContent = courses.length ? renderCourseTable : renderCoursesNotFound;
 
   const renderAction = (
     <>
@@ -240,28 +208,6 @@ const SchoolDetailPage: NextPage = () => {
       {renderInfoButton}
       {renderActionsButton}
     </>
-  );
-
-  const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={schoolName} action={renderAction} />
-  );
-
-  const renderTabs = (
-    <>
-      <Tabs {...tabsProps}>
-        <Tab label={`${t('common:subjects')} (${subjectCount})`} />
-        <Tab label={`${t('common:courses')} (${courseCount})`} />
-      </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderSubjects}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderCourses}</TabPanel>
-    </>
-  );
-
-  const renderContent = (
-    <Paper className={classes.root}>
-      {renderHeader}
-      {renderTabs}
-    </Paper>
   );
 
   const renderInfoDialogContent = <InfoDialogContent infoItems={infoItems} />;
@@ -315,6 +261,12 @@ const SchoolDetailPage: NextPage = () => {
       headerRight: renderActionsButton,
       headerRightSecondary: renderInfoButton,
     },
+    cardHeader: schoolName,
+    leftTabLabel: `${t('common:subjects')} (${subjectCount})`,
+    rightTabLabel: `${t('common:courses')} (${courseCount})`,
+    renderLeftTabContent,
+    renderRightTabContent,
+    renderAction,
   };
 
   if (loading) {
@@ -330,11 +282,10 @@ const SchoolDetailPage: NextPage = () => {
 
   if (school) {
     return (
-      <MainTemplate {...layoutProps}>
-        {renderContent}
+      <TabTemplate {...layoutProps}>
         {renderInfoDialog}
         {renderActionsDrawer}
-      </MainTemplate>
+      </TabTemplate>
     );
   }
   return <NotFoundTemplate />;

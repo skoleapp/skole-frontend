@@ -1,52 +1,28 @@
-import { CardHeader, IconButton, makeStyles, Paper, Tab, Tabs, Tooltip } from '@material-ui/core';
-import { ArrowBackOutlined } from '@material-ui/icons';
 import {
   CourseTableBody,
   ErrorTemplate,
   LoadingBox,
-  MainTemplate,
   NotFoundBox,
   NotFoundTemplate,
   OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
-  TabPanel,
+  TabTemplate,
 } from 'components';
 import { useAuthContext } from 'context';
 import { useStarredQuery } from 'generated';
 import { withAuth } from 'hocs';
-import { useLanguageHeaderContext, useMediaQueries, useTabs } from 'hooks';
+import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
 import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
-  root: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    [breakpoints.up('md')]: {
-      borderRadius: BORDER_RADIUS,
-    },
-  },
-  cardHeader: {
-    borderBottom: BORDER,
-    paddingLeft: spacing(2),
-  },
-}));
-
 const StarredPage: NextPage = () => {
-  const classes = useStyles();
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { isTabletOrDesktop } = useMediaQueries();
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
@@ -57,6 +33,7 @@ const StarredPage: NextPage = () => {
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
   const commonTableHeadProps = { titleRight: t('common:score') };
+  const header = t('starred:header');
 
   const courseTableHeadProps = {
     titleLeft: t('common:name'),
@@ -91,42 +68,17 @@ const StarredPage: NextPage = () => {
   const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
   const renderResourcesNotFound = <NotFoundBox text={t('starred:noResources')} />;
 
-  const renderStarredCourses = loading
+  const renderLeftTabContent = loading
     ? renderLoading
     : courses.length
     ? renderCourseTable
     : renderCoursesNotFound;
 
-  const renderStarredResources = loading
+  const renderRightTabContent = loading
     ? renderLoading
     : resources.length
     ? renderResourceTable
     : renderResourcesNotFound;
-
-  const renderAvatar = (
-    <Link href={staticBackUrl}>
-      <Tooltip title={t('tooltips:backToProfile')}>
-        <IconButton size="small">
-          <ArrowBackOutlined />
-        </IconButton>
-      </Tooltip>
-    </Link>
-  );
-
-  const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={t('starred:header')} avatar={renderAvatar} />
-  );
-
-  const renderTabs = (
-    <>
-      <Tabs {...tabsProps}>
-        <Tab label={`${t('common:courses')} (${courseCount})`} />
-        <Tab label={`${t('common:resources')} (${resourceCount})`} />
-      </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderStarredCourses}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderStarredResources}</TabPanel>
-    </>
-  );
 
   const layoutProps = {
     seoProps: {
@@ -135,8 +87,13 @@ const StarredPage: NextPage = () => {
     },
     topNavbarProps: {
       staticBackUrl,
-      header: t('starred:header'),
+      header,
     },
+    cardHeader: header,
+    leftTabLabel: `${t('common:courses')} (${courseCount})`,
+    rightTabLabel: `${t('common:resources')} (${resourceCount})`,
+    renderLeftTabContent,
+    renderRightTabContent,
   };
 
   if (!!error && !!error.networkError) {
@@ -148,14 +105,7 @@ const StarredPage: NextPage = () => {
   }
 
   if (userMe) {
-    return (
-      <MainTemplate {...layoutProps}>
-        <Paper className={classes.root}>
-          {renderHeader}
-          {renderTabs}
-        </Paper>
-      </MainTemplate>
-    );
+    return <TabTemplate {...layoutProps} />;
   }
 
   return <NotFoundTemplate />;
