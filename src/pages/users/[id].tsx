@@ -12,7 +12,6 @@ import {
   Tabs,
   Tooltip,
   Typography,
-  useTheme,
 } from '@material-ui/core';
 import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
@@ -73,7 +72,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     marginBottom: spacing(4),
   },
   statsContainer: {
-    marginTop: spacing(2),
+    marginTop: spacing(4),
     marginBottom: spacing(2),
     textAlign: 'center',
   },
@@ -114,15 +113,17 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   joined: {
     marginTop: spacing(2),
   },
-  actionButton: {
+  button: {
     [breakpoints.down('md')]: {
       marginTop: spacing(2),
+    },
+    [breakpoints.up('md')]: {
+      marginLeft: spacing(2),
     },
   },
 }));
 
 const UserPage: NextPage = () => {
-  const { spacing } = useTheme();
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
@@ -217,7 +218,7 @@ const UserPage: NextPage = () => {
 
   const renderEditProfileButton = (
     <ButtonLink
-      className={classes.actionButton}
+      className={classes.button}
       href={urls.editProfile}
       color="primary"
       variant="outlined"
@@ -230,23 +231,21 @@ const UserPage: NextPage = () => {
 
   const renderStarredButton = (
     <ButtonLink
-      className={classes.actionButton}
+      className={classes.button}
       href={urls.starred}
       color="primary"
       variant="outlined"
       endIcon={<StarBorderOutlined />}
-      fullWidth
+      fullWidth={isMobile}
     >
       {t('profile:viewStarred')}
     </ButtonLink>
   );
 
   const renderSettingsButton = (
-    <Box marginLeft={spacing(2)}>
-      <Tooltip title={t('tooltips:settings')}>
-        <SettingsButton color="primary" />
-      </Tooltip>
-    </Box>
+    <Tooltip title={t('tooltips:settings')}>
+      <SettingsButton className={classes.button} color="primary" />
+    </Tooltip>
   );
 
   const renderScoreTitle = (
@@ -372,8 +371,9 @@ const UserPage: NextPage = () => {
   );
 
   const renderDesktopActions = isTabletOrDesktop && isOwnProfile && (
-    <Grid item xs={12} container alignItems="center">
+    <Grid item xs={12} container alignItems="center" spacing={4}>
       {renderEditProfileButton}
+      {renderStarredButton}
       {renderSettingsButton}
     </Grid>
   );
