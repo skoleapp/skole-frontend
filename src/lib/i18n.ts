@@ -1,4 +1,6 @@
-import { useTranslation, DynamicNamespaces, I18nProvider } from 'next-translate';
+import useTranslation from 'next-translate/useTranslation';
+import DynamicNamespaces from 'next-translate/DynamicNamespaces';
+import I18nProvider from 'next-translate/I18nProvider';
 
 const defaultNamespaces = [
   'common',
