@@ -144,6 +144,7 @@ const ResourceDetailPage: NextPage = () => {
   const { commentModalOpen } = useDiscussionContext();
   const { drawMode, setDrawMode } = usePdfViewerContext();
   const { stars, renderStarButton } = useStars({ starred, initialStars, resource: resourceId });
+  const staticBackUrl = urls.course(courseId);
 
   const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs(
     comments,
@@ -201,13 +202,8 @@ const ResourceDetailPage: NextPage = () => {
     drawMode && tabValue === 1 && setDrawMode(false);
   }, [tabValue]);
 
-  const staticBackUrl = {
-    href: urls.course(courseId),
-  };
-
-  const deleteResourceError = (): void => {
+  const deleteResourceError = (): void =>
     toggleNotification(t('notifications:deleteResourceError'));
-  };
 
   const deleteResourceCompleted = async ({
     deleteResource,
@@ -307,10 +303,10 @@ const ResourceDetailPage: NextPage = () => {
     }
   };
 
-  const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
+  const renderCourseLink = !!courseId && <TextLink href={staticBackUrl}>{courseName}</TextLink>;
 
   const renderSchoolLink = !!schoolId && (
-    <TextLink href={urls.school(schoolId)} as={schoolId} color="primary">
+    <TextLink href={urls.school(schoolId)} color="primary">
       {schoolName}
     </TextLink>
   );

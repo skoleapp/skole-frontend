@@ -35,5 +35,6 @@
   "downvote": "Anna alas-ääni tälle {{ target }}lle.",
   "removeDownvote": "Poista alas-ääni tältä {{ target }}lta.",
   "info": "Näytä {{ target }}n tiedot.",
-  "actions": "Näytä {{ target }}n valikko."
+  "actions": "Näytä {{ target }}n valikko.",
+  "backToProfile": "Takaisin profiiliin."
 }

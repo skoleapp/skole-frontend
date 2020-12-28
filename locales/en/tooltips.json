@@ -35,5 +35,6 @@
   "downvote": "Downvote this {{ target }}.",
   "removeDownvote": "Remove downvote from this {{ target }}.",
   "info": "Show {{ target }} details.",
-  "actions": "Show {{ target }} menu."
+  "actions": "Show {{ target }} menu.",
+  "backToProfile": "Back to profile."
 }

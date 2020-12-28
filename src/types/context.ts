@@ -5,6 +5,9 @@ import { Document } from 'react-pdf';
 export interface AuthContextType {
   userMe: UserObjectType | null;
   setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
+  userMeId: string;
+  userMeUsername: string;
+  avatarThumbnail: string;
   authNetworkError: boolean;
   setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }

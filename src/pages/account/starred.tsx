@@ -1,4 +1,5 @@
-import { CardHeader, makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
+import { CardHeader, IconButton, makeStyles, Paper, Tab, Tabs, Tooltip } from '@material-ui/core';
+import { ArrowBackOutlined } from '@material-ui/icons';
 import {
   CourseTableBody,
   ErrorTemplate,
@@ -17,12 +18,14 @@ import { withAuth } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries, useTabs } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
+import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
     flexGrow: 1,
     display: 'flex',
@@ -34,6 +37,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
   cardHeader: {
     borderBottom: BORDER,
+    paddingLeft: spacing(2),
   },
 }));
 
@@ -46,7 +50,8 @@ const StarredPage: NextPage = () => {
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
-  const { userMe } = useAuthContext();
+  const { userMe, userMeId } = useAuthContext();
+  const staticBackUrl = urls.user(userMeId);
   const courses = R.pathOr([], ['starredCourses', 'objects'], data);
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
@@ -98,8 +103,18 @@ const StarredPage: NextPage = () => {
     ? renderResourceTable
     : renderResourcesNotFound;
 
+  const renderAvatar = (
+    <Link href={staticBackUrl}>
+      <Tooltip title={t('tooltips:backToProfile')}>
+        <IconButton size="small">
+          <ArrowBackOutlined />
+        </IconButton>
+      </Tooltip>
+    </Link>
+  );
+
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={t('starred:header')} />
+    <CardHeader className={classes.cardHeader} title={t('starred:header')} avatar={renderAvatar} />
   );
 
   const renderTabs = (
@@ -119,7 +134,7 @@ const StarredPage: NextPage = () => {
       description: t('starred:description'),
     },
     topNavbarProps: {
-      dynamicBackUrl: true,
+      staticBackUrl,
       header: t('starred:header'),
     },
   };

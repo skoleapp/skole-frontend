@@ -7,14 +7,10 @@ export interface SeoProps {
   description?: string;
 }
 
-interface StaticBackUrl {
-  href: string | UrlObject;
-  as?: string | UrlObject;
-}
 export interface TopNavbarProps {
   header?: string; // Header text shown on mobile.
   dynamicBackUrl?: boolean; // Show a back button on mobile that automatically redirects to the last page.
-  staticBackUrl?: StaticBackUrl; // Show a back button and use this as the href.
+  staticBackUrl?: string | UrlObject; // Show a back button and use this as the href.
   disableSearch?: boolean; // Explicitly disable the search field on desktop.
   disableAuthButtons?: boolean; // Explicitly disable the auth buttons on desktop.
   disableLogo?: boolean; // Explicitly disable the logo.

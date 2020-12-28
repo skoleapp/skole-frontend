@@ -38,9 +38,16 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const [authNetworkError, setAuthNetworkError] = useState(false);
   const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
 
+  const userMeId = R.propOr('', 'id', userMe);
+  const userMeUsername = R.propOr('', 'username', userMe);
+  const avatarThumbnail = R.propOr('', 'avatarThumbnail', userMe);
+
   const value = {
     userMe,
     setUserMe,
+    userMeId,
+    userMeUsername,
+    avatarThumbnail,
     activities,
     setActivities,
     authNetworkError,

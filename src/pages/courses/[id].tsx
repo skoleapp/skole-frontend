@@ -424,7 +424,7 @@ const CourseDetailPage: NextPage = () => {
       description: t('course:description', { courseName }),
     },
     topNavbarProps: {
-      staticBackUrl: { href: searchUrl },
+      staticBackUrl: searchUrl,
       headerRight: renderActionsButton,
       headerRightSecondary: renderInfoButton,
       headerLeft: renderUploadResourceButton,
