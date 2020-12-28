@@ -11,6 +11,5 @@
   "infoHeader": "Resource Details",
   "share": "Share Resource",
   "delete": "Delete Resource",
-  "deleteTarget": "the resource",
-  "target": "resource"
+  "confirmDelete": "Are you sure you want to delete this resource?"
 }

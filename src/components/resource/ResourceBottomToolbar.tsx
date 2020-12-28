@@ -3,12 +3,6 @@ import { usePdfViewerContext } from 'context';
 import React, { ChangeEvent } from 'react';
 import * as R from 'ramda';
 import { BORDER } from 'theme';
-import { urls } from 'utils';
-import { useDayjs } from 'hooks';
-import { useTranslation } from 'lib';
-import { CloudDownloadOutlined, StarBorderOutlined, ThumbUpOutlined } from '@material-ui/icons';
-import { MuiColor } from 'types';
-import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
@@ -22,32 +16,10 @@ const useStyles = makeStyles(({ spacing }) => ({
   pageNumberInputProps: {
     padding: spacing(2),
   },
-  icon: {
-    marginLeft: spacing(3),
-    marginRight: spacing(1),
-  },
 }));
 
-interface Props {
-  creatorId: string;
-  creatorUsername: string;
-  date: string;
-  score: string;
-  stars: string;
-  downloads: string;
-}
-
-export const ResourceBottomToolbar: React.FC<Props> = ({
-  creatorId,
-  creatorUsername,
-  date,
-  score,
-  stars,
-  downloads,
-}) => {
+export const ResourceBottomToolbar: React.FC = () => {
   const classes = useStyles();
-  const { t } = useTranslation();
-  const time = useDayjs(date).startOf('day').fromNow();
 
   const {
     setPageNumber,
@@ -95,39 +67,9 @@ export const ResourceBottomToolbar: React.FC<Props> = ({
     </Typography>
   );
 
-  const renderCreatorLink = <TextLink href={urls.user(creatorId)}>{creatorUsername}</TextLink>;
-
-  const iconProps = {
-    className: classes.icon,
-    color: 'disabled' as MuiColor,
-  };
-
-  const renderScoreIcon = <ThumbUpOutlined {...iconProps} />;
-  const renderStarIcon = <StarBorderOutlined {...iconProps} />;
-  const renderDownloadsIcon = <CloudDownloadOutlined {...iconProps} />;
-
   return (
     <Grid className={classes.root} container justify="center" alignItems="center">
-      <Grid item xs={5}>
-        <Typography variant="body2" color="textSecondary">
-          {t('common:createdBy')} {renderCreatorLink} {time}
-        </Typography>
-      </Grid>
-      <Grid item xs={2} container alignItems="center">
-        {renderPageNumberInput} {renderNumPages}
-      </Grid>
-      <Grid item xs={5} container justify="flex-end">
-        <Typography variant="body2" color="textSecondary">
-          <Grid container alignItems="center">
-            {renderScoreIcon}
-            {score}
-            {renderStarIcon}
-            {stars}
-            {renderDownloadsIcon}
-            {downloads}
-          </Grid>
-        </Typography>
-      </Grid>
+      {renderPageNumberInput} {renderNumPages}
     </Grid>
   );
 };

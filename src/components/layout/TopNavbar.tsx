@@ -79,7 +79,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { userMe, userMeId, avatarThumbnail, authNetworkError } = useAuthContext();
   const dense = !!headerLeft || !!headerRightSecondary;
-  const backButtonTooltip = t('tooltips:goBack');
+  const backButtonTooltip = t('common-tooltips:goBack');
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
@@ -130,7 +130,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderActivityButton = (
-    <Tooltip title={t('tooltips:activity')}>
+    <Tooltip title={t('common-tooltips:activity')}>
       <IconButton onClick={handleActivityButtonClick} color="secondary">
         <NotificationsOutlined />
       </IconButton>
@@ -177,10 +177,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           {renderActivityPopper}
         </Box>
       </ClickAwayListener>
-      <Tooltip title={t('tooltips:starred')}>
+      <Tooltip title={t('common-tooltips:starred')}>
         <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
       </Tooltip>
-      <Tooltip title={t('tooltips:profile')}>
+      <Tooltip title={t('common-tooltips:profile')}>
         <Typography component="span">
           <Link href={urls.user(userMeId)}>
             <IconButton color="secondary">

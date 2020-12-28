@@ -108,7 +108,7 @@ const ResourceDetailPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const { toggleNotification } = useNotificationsContext();
+  const { toggleNotification, unexpectedError } = useNotificationsContext();
   const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -138,13 +138,19 @@ const ResourceDetailPage: NextPage = () => {
   const shareTitle = t('resource:shareTitle', { resourceTitle });
   const shareText = t('resource:shareText', { resourceTitle, creatorUsername });
   const shareParams = { shareHeader: t('resource:shareHeader'), shareTitle, shareText };
-  const target = t('resource:target');
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
   const { commentModalOpen } = useDiscussionContext();
   const { drawMode, setDrawMode } = usePdfViewerContext();
-  const { stars, renderStarButton } = useStars({ starred, initialStars, resource: resourceId });
   const staticBackUrl = urls.course(courseId);
+
+  const { stars, renderStarButton } = useStars({
+    starred,
+    initialStars,
+    resource: resourceId,
+    starTooltip: t('resource-tooltips:star'),
+    unstarTooltip: t('resource-tooltips:unstar'),
+  });
 
   const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs(
     comments,
@@ -157,7 +163,7 @@ const ResourceDetailPage: NextPage = () => {
     handleCloseInfoDialog,
   } = useInfoDialog({
     header: t('resource:infoHeader'),
-    target,
+    infoButtonTooltip: t('resource-tooltips:info'),
   });
 
   const {
@@ -169,7 +175,7 @@ const ResourceDetailPage: NextPage = () => {
     renderActionsButton,
   } = useActionsDialog({
     share: t('resource:share'),
-    target,
+    actionsButtonTooltip: t('resource-tooltips:actions'),
     shareParams,
   });
 
@@ -178,7 +184,11 @@ const ResourceDetailPage: NextPage = () => {
     initialScore,
     isOwner,
     variables: { resource: resourceId },
-    target,
+    upvoteTooltip: t('resource-tooltips:upvote'),
+    removeUpvoteTooltip: t('resource-tooltips:removeUpvote'),
+    downvoteTooltip: t('resource-tooltips:downvote'),
+    removeDownvoteTooltip: t('resource-tooltips:removeDownvote'),
+    ownContentTooltip: t('resource-tooltips:voteOwnContent'),
   });
 
   // Update state after data fetching is complete.
@@ -277,7 +287,7 @@ const ResourceDetailPage: NextPage = () => {
       a.click();
       a.remove();
     } catch {
-      toggleNotification(t('notifications:downloadPdfError'));
+      unexpectedError();
     }
   };
 
@@ -299,7 +309,7 @@ const ResourceDetailPage: NextPage = () => {
       // @ts-ignore: TS doesn't detect the `print-js` import.
       printJS(blobUrl); // eslint-disable-line no-undef
     } catch {
-      toggleNotification(t('notifications:printPdfError'));
+      unexpectedError();
     }
   };
 
@@ -325,6 +335,10 @@ const ResourceDetailPage: NextPage = () => {
       value: resourceType,
     },
     {
+      label: t('common:stars'),
+      value: stars,
+    },
+    {
       label: t('common:score'),
       value: score,
     },
@@ -343,7 +357,7 @@ const ResourceDetailPage: NextPage = () => {
   ];
 
   const renderDrawModeControls = <DrawModeControls />;
-  const renderShareButton = <ShareButton {...shareParams} target={target} />;
+  const renderShareButton = <ShareButton {...shareParams} tooltip={t('resource-tooltips:share')} />;
 
   // Hide these buttons from the custom bottom navbar when in discussion tab.
   const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
@@ -395,18 +409,7 @@ const ResourceDetailPage: NextPage = () => {
 
   const renderTopToolbar = <ResourceTopToolbar {...toolbarProps} />;
   const renderPdfViewer = <PdfViewer file={file} />;
-
-  const renderBottomToolbar = (
-    <ResourceBottomToolbar
-      creatorId={creatorId}
-      creatorUsername={creatorUsername}
-      date={resourceDate}
-      score={score}
-      stars={stars}
-      downloads={downloads}
-    />
-  );
-
+  const renderBottomToolbar = <ResourceBottomToolbar />;
   const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
@@ -522,6 +525,7 @@ const ResourceDetailPage: NextPage = () => {
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }
@@ -539,16 +543,16 @@ const ResourceDetailPage: NextPage = () => {
   return <NotFoundTemplate />;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  };
-};
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: 'blocking',
+});
+
+const namespaces = ['resource', 'resource-tooltips', 'discussion', 'discussion-tooltips'];
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces(['resource'], locale),
+    _ns: await loadNamespaces(namespaces, locale),
   },
 });
 

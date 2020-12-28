@@ -1,0 +1,14 @@
+{
+  "upvote": "Upvote this comment.",
+  "removeUpvote": "Remove upvote from this comment.",
+  "downvote": "Downvote this comment.",
+  "removeDownvote": "Remove downvote from this comment.",
+  "voteOwnContent": "You cannot vote on your own comment.",
+  "share": "Share this comment.",
+  "actions": "Show comment menu.",
+  "attachment": "View comment's attachment.",
+  "attachFile": "Add an attachment.",
+  "clearAttachment": "Clear attachment.",
+  "replies": "{{ replyCount }} replies.",
+  "sendMessage": "Send message."
+}

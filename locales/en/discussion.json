@@ -6,11 +6,8 @@
   "shareText": "View comment by {{ creatorUsername }} on Skole: {{ commentPreview }}",
   "share": "Share Comment",
   "attachmentAlt": "Comment attachment.",
-  "target": "comment",
-  "voteTooltipTarget": "comment",
-  "actionsTooltipTarget": "comment",
   "helperTextMarkdown": "Format your comment with",
   "markdown": "Markdown",
   "helperTextCombination": "{{ combination }} to add a new line.",
-  "count": "comments"
+  "commentCount": "{{ commentCount }} comments"
 }

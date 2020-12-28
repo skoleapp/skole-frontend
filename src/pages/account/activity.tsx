@@ -26,7 +26,7 @@ import React, { SyntheticEvent, useEffect, useState } from 'react';
 
 const ActivityPage: NextPage = () => {
   const { t } = useTranslation();
-  const { toggleNotification } = useNotificationsContext();
+  const { unexpectedError } = useNotificationsContext();
   const { query } = useRouter();
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -41,8 +41,6 @@ const ActivityPage: NextPage = () => {
     setActivities(initialActivities);
   }, [data]);
 
-  const onError = (): void => toggleNotification(t('notifications:markAllActivitiesAsReadError'));
-
   const {
     actionsDialogOpen,
     actionsDialogHeaderProps,
@@ -55,7 +53,7 @@ const ActivityPage: NextPage = () => {
   }: GraphQlMarkAllActivitiesAsReadMutation): void => {
     if (markAllActivitiesAsRead) {
       if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
-        onError();
+        unexpectedError();
       } else if (
         !!markAllActivitiesAsRead.activities &&
         !!markAllActivitiesAsRead.activities.objects
@@ -64,16 +62,16 @@ const ActivityPage: NextPage = () => {
 
         setActivities(newActivities);
       } else {
-        onError();
+        unexpectedError();
       }
     } else {
-      onError();
+      unexpectedError();
     }
   };
 
   const [markAllActivitiesAsRead] = useGraphQlMarkAllActivitiesAsReadMutation({
     onCompleted,
-    onError,
+    onError: unexpectedError,
     context,
   });
 

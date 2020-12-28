@@ -15,7 +15,7 @@ interface ActionsButtonProps {
 
 interface UseActionsDialogParams {
   share?: string;
-  target?: string;
+  actionsButtonTooltip: string;
   shareParams?: ShareParams;
 }
 
@@ -32,7 +32,7 @@ interface UseActionsDialog {
 // Custom hook for rendering common actions and providing helpers and props for multiple action dialogs.
 export const useActionsDialog = ({
   share,
-  target = '',
+  actionsButtonTooltip,
   shareParams = {},
 }: UseActionsDialogParams): UseActionsDialog => {
   const { t } = useTranslation();
@@ -88,7 +88,7 @@ export const useActionsDialog = ({
   );
 
   const renderActionsButton = (
-    <Tooltip title={t('tooltips:actions', { target })}>
+    <Tooltip title={actionsButtonTooltip}>
       <IconButton {...actionsButtonProps}>
         <MoreHorizOutlined />
       </IconButton>

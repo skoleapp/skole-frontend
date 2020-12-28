@@ -1,0 +1,16 @@
+{
+  "starred": "Visa stjärnmärkta.",
+  "profile": "Visa din profil.",
+  "lastPage": "Gå till sista sidan.",
+  "nextPage": "Gå till nästä sidan.",
+  "previousPage": "Gå till föregoende sida.",
+  "firstPage": "Gå till första sidan.",
+  "language": "Ändra språk.",
+  "loginRequired": "Logga in för att aktivera den här funktionen.",
+  "verificationRequired": "Verifiera ditt konto för att aktivera den här funktionen.",
+  "settings": "Visa inställningar.",
+  "rank": "Denna användares rankning är {{ rank }}.",
+  "activity": "Visa aktivitet.",
+  "goBack": "Gå tillbaka.",
+  "closeMenu": "Stäng menyn."
+}

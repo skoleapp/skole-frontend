@@ -1,0 +1,20 @@
+{
+  "star": "Merkitse tämä resurssi tähdellä.",
+  "unstar": "Poista tähti tältä resurssilta.",
+  "upvote": "Anna tälle resurssille ylös-ääni.",
+  "removeUpvote": "Poista tämän resurssin ylös-ääni.",
+  "downvote": "Anna tälle resurssille alas-ääni.",
+  "removeDownvote": "Poista tämän resurssin alas-ääni.",
+  "voteOwnContent": "Et voi äänestää omaa resurssiasi.",
+  "share": "Jaa tämä resurssi.",
+  "info": "Näytä resurssin tiedot.",
+  "actions": "Näytä resurssin valikko.",
+  "enterFullscreen": "Näytä koko ruudulla.",
+  "exitFullscreen": "Poistu koko ruudulta.",
+  "zoomIn": "Suurenna.",
+  "zoomOut": "Pienennä.",
+  "drawMode": "Merkitse alue PDF-tiedostoon.",
+  "downloadPdf": "Lataa PDF-tiedosto.",
+  "printPdf": "Tulosta PDF-tiedosto.",
+  "rotatePdf": "Käännä PDF-tiedostoa."
+}

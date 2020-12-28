@@ -96,13 +96,13 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const { loginRequiredTooltip, verificationRequiredTooltip, userMe, verified } = useAuthContext();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const { screenshot, setScreenshot } = usePdfViewerContext();
-  const { toggleNotification } = useNotificationsContext();
+  const { toggleNotification, unexpectedError } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const attachmentInputRef = useRef<HTMLInputElement>(null!);
   const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
 
   const attachmentTooltip =
-    loginRequiredTooltip || verificationRequiredTooltip || t('tooltips:attachFile');
+    loginRequiredTooltip || verificationRequiredTooltip || t('discussion-tooltips:attachFile');
 
   const {
     formRef,
@@ -135,25 +135,23 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     !!setScreenshot && setScreenshot(null); // Not defined when in course page.
   };
 
-  const onError = (): void => toggleNotification(t('notifications:messageError'));
-
   const onCompleted = ({ createComment }: CreateCommentMutation): void => {
     if (createComment) {
       if (!!createComment.errors && !!createComment.errors.length) {
-        onError();
+        unexpectedError();
       } else if (createComment.comment) {
         appendComments(createComment.comment as CommentObjectType);
       } else {
-        onError();
+        unexpectedError();
       }
     } else {
-      onError();
+      unexpectedError();
     }
   };
 
   const [createCommentMutation] = useCreateCommentMutation({
     onCompleted,
-    onError,
+    onError: unexpectedError,
   });
 
   const handleSubmit = async ({
@@ -263,7 +261,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   );
 
   const renderClearAttachmentButton = !!commentAttachment && (
-    <Tooltip title={t('tooltips:clearAttachment')}>
+    <Tooltip title={t('discussion-tooltips:clearAttachment')}>
       <Typography component="span">
         <IconButton onClick={handleClearAttachment} size="small">
           <ClearOutlined />
@@ -279,7 +277,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         className={classes.attachmentImage}
         src={String(commentAttachment)}
         unoptimized // Must be used for base64 images for now (v10.0.1). TODO: See if this is fixed in future Next.js versions.
-        alt={t('comment:attachmentAlt')}
+        alt={t('discussion:attachmentAlt')}
       />
     </Box>
   );
@@ -304,14 +302,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderFormHelperText = isTabletOrDesktop && (
     <>
       <FormHelperText>
-        {t('comment:helperTextMarkdown')}{' '}
+        {t('discussion:helperTextMarkdown')}{' '}
         <TextLink href="https://guides.github.com/features/mastering-markdown/" target="_blank">
-          {t('comment:markdown')}
+          {t('discussion:markdown')}
         </TextLink>
         .
       </FormHelperText>
       <FormHelperText>
-        {t('comment:helperTextCombination', { combination: 'Shift + Enter' })}
+        {t('discussion:helperTextCombination', { combination: 'Shift + Enter' })}
       </FormHelperText>
     </>
   );
@@ -331,7 +329,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderDialogSendButton = ({
     values,
   }: FormikProps<CreateCommentFormValues>): JSX.Element => (
-    <Tooltip title={t('tooltips:sendMessage')}>
+    <Tooltip title={t('discussion-tooltips:sendMessage')}>
       <Typography component="span">
         <Fab
           className={classes.dialogSendButton}
@@ -354,7 +352,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   );
 
   const renderDesktopSendButton = ({ values }: FormikProps<CreateCommentFormValues>) => (
-    <Tooltip title={t('tooltips:sendMessage')}>
+    <Tooltip title={t('discussion-tooltips:sendMessage')}>
       <Typography className={classes.desktopSendButtonSpan} component="span">
         <Button
           onClick={submitForm}

@@ -11,6 +11,5 @@
   "infoHeader": "Resursinformation",
   "share": "Dela resurs",
   "delete": "Radera resurs",
-  "deleteTarget": "resursen",
-  "target": "resurs"
+  "confirmDelete": "Är du säker på att du vill ta bort den här resursen?"
 }

@@ -122,6 +122,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
       open={authorSelectionOpen}
       onClose={handleCloseAuthorSelection}
       dialogHeaderProps={authorSelectionDialogHeaderProps}
+      list
     >
       {renderListItems}
     </ResponsiveDialog>

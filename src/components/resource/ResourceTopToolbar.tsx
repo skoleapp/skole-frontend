@@ -46,7 +46,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   };
 
   const renderDownloadButton = (
-    <Tooltip title={t('tooltips:downloadPdf')}>
+    <Tooltip title={t('resource-tooltips:downloadPdf')}>
       <Typography component="span">
         <IconButton {...toolbarButtonProps} onClick={handleDownloadButtonClick}>
           <CloudDownloadOutlined />
@@ -56,7 +56,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   );
 
   const renderPrintButton = (
-    <Tooltip title={t('tooltips:printPdf')}>
+    <Tooltip title={t('resource-tooltips:printPdf')}>
       <Typography component="span">
         <IconButton {...toolbarButtonProps} onClick={handlePrintButtonClick}>
           <PrintOutlined />

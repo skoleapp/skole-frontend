@@ -1,0 +1,14 @@
+{
+  "upvote": "Anna tälle kommentille ylös-ääni.",
+  "removeUpvote": "Poista tämän kommentin ylös-ääni.",
+  "downvote": "Anna tälle kommenntille alas-ääni.",
+  "removeDownvote": "Poista tämän kommentin alas-ääni.",
+  "voteOwnContent": "Et voi äänestää omaa kommenttiasi.",
+  "share": "Jaa tämä kommentti.",
+  "actions": "Näytä kommentin valikko.",
+  "attachment": "Näytä kommentin liite.",
+  "attachFile": "Lisää liite.",
+  "clearAttachment": "Poista liite.",
+  "replies": "{{ replyCount }} vastausta.",
+  "sendMessage": "Lähetä viesti."
+}

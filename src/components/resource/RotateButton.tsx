@@ -12,7 +12,7 @@ export const RotateButton: React.FC = () => {
     rotate === 270 ? setRotate(0) : setRotate(rotate + 90);
 
   return (
-    <Tooltip title={t('tooltips:rotate')}>
+    <Tooltip title={t('resource-tooltips:rotatePdf')}>
       <Typography component="span">
         <IconButton size="small" onClick={handleRotateButtonClick} disabled={controlsDisabled}>
           <RotateRightOutlined />

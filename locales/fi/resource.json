@@ -11,6 +11,5 @@
   "infoHeader": "Resurssin tiedot",
   "share": "Jaa resurssi",
   "delete": "Poista resurssi",
-  "deleteTarget": "resurssin",
-  "target": "resurssi"
+  "confirmDelete": "Haluatko varmasti poistaa tämän resurssin?"
 }

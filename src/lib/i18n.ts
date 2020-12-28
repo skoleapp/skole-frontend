@@ -4,7 +4,6 @@ import I18nProvider from 'next-translate/I18nProvider';
 
 const defaultNamespaces = [
   'common',
-  'comment',
   'marketing',
   '_error',
   '404',
@@ -12,7 +11,7 @@ const defaultNamespaces = [
   'forms',
   'validation',
   'notifications',
-  'tooltips',
+  'common-tooltips',
   'activity',
   'offline',
   'sharing',

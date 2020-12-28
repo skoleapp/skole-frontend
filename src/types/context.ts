@@ -27,6 +27,7 @@ export interface LanguageContextType {
 export interface NotificationsContextType {
   notification: string | null;
   toggleNotification: (payload: string | null) => void;
+  unexpectedError: () => void;
 }
 
 export interface SettingsContextType {

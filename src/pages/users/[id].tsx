@@ -243,7 +243,7 @@ const UserPage: NextPage = () => {
   );
 
   const renderSettingsButton = (
-    <Tooltip title={t('tooltips:settings')}>
+    <Tooltip title={t('common-tooltips:settings')}>
       <SettingsButton className={classes.button} color="primary" />
     </Tooltip>
   );
@@ -301,7 +301,7 @@ const UserPage: NextPage = () => {
       <Typography variant="body2" color="textSecondary" gutterBottom>
         {t('profile:rank')}
       </Typography>
-      <Tooltip title={t('tooltips:rank', { rank })}>
+      <Tooltip title={t('common-tooltips:rank', { rank })}>
         <Chip size="small" label={rank} />
       </Tooltip>
     </Box>

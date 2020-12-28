@@ -66,7 +66,7 @@ export const TabTemplate: React.FC<Props> = ({
   const handleBackButtonClick = () => (staticBackUrl ? router.push(staticBackUrl) : router.back());
 
   const renderBackButton = (
-    <Tooltip title={t('tooltips:goBack')}>
+    <Tooltip title={t('common-tooltips:goBack')}>
       <IconButton onClick={handleBackButtonClick} size="small">
         <ArrowBackOutlined />
       </IconButton>

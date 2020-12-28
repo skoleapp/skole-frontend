@@ -1,0 +1,13 @@
+{
+  "delete": "Radera kommentar",
+  "confirmDelete": "Är du säker på att du vill radera den här kommentaren?",
+  "shareHeader": "Dela kommentar",
+  "shareTitle": "Kommentar från användaren {{ creatorUsername }} på Skole",
+  "shareText": "Visa kommentar av {{ creatorUsername }} på Skole: {{ commentPreview }}",
+  "dela": "Dela kommentar",
+  "attachmentAlt": "Kommentarbilaga.",
+  "helperTextMarkdown": "Formatera din kommentar med",
+  "markdown": "Markdown",
+  "helperTextCombination": "{{ combination }} för att lägga till en ny rad.",
+  "commentCount": "{{ commentCount }} kommentarer"
+}

@@ -1,0 +1,16 @@
+{
+  "starred": "View your starred courses and resources.",
+  "profile": "View your profile.",
+  "lastPage": "Go to the last page.",
+  "nextPage": "Go to the next page.",
+  "previousPage": "Go to the previous page.",
+  "firstPage": "Go to the first page.",
+  "language": "Change language.",
+  "loginRequired": "Please log in to enable this feature.",
+  "verificationRequired": "Please verify your account to enable this feature.",
+  "settings": "View settings.",
+  "rank": "This user's rank is {{ rank }}.",
+  "activity": "Show activity.",
+  "goBack": "Go back.",
+  "closeMenu": "Close menu."
+}

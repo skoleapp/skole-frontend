@@ -2,11 +2,11 @@
   "description": "View {{ schoolName }} on Skole.",
   "noSubjects": "This school has no subjects.",
   "noCourses": "This school has no courses.",
-  "addCourse": "Add a Course for this School",
+  "addCourse": "Add a course for this school",
   "shareHeader": "Share School",
   "shareTitle": "{{ schoolName }} on Skole",
   "shareText": "View {{ schoolName }} on Skole",
   "share": "Share School",
   "infoHeader": "School Details",
-  "target": "school"
+  "actionsHeader": "School Menu"
 }

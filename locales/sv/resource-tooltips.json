@@ -1,0 +1,20 @@
+{
+  "star": "Stjärna den här resursen.",
+  "unstar": "Avmarkera den här resursen.",
+  "upvote": "Upprösta den här resursen.",
+  "removeUpvote": "Ta bort upprösten från den här resursen.",
+  "downvote": "Nedrösta den här resursen.",
+  "removeDownvote": "Ta bort nedrösten från den här resursen.",
+  "voteOwnContent": "Du kan inte rösta på din egen resurs.",
+  "share": "Dela den här resursen.",
+  "info": "Visa resursinformation.",
+  "actions": "Visa resursmenyn.",
+  "enterFullscreen": "Ange helskärm.",
+  "exitFullscreen": "Avsluta helskärm.",
+  "zoomIn": "Zooma in.",
+  "zoomOut": "Zooma ut.",
+  "drawMode": "Markera område på PDF-fil.",
+  "downloadPdf": "Ladda ner PDF-fil.",
+  "printPdf": "Skriv ut PDF-fil.",
+  "rotatePdf": "Rotera PDF-fil."
+}

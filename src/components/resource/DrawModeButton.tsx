@@ -10,7 +10,7 @@ export const DrawModeButton: React.FC = () => {
   const handleClick = (): void => setDrawMode(true);
 
   return (
-    <Tooltip title={t('tooltips:markArea')}>
+    <Tooltip title={t('resource-tooltips:drawMode')}>
       <Typography component="span">
         <IconButton onClick={handleClick} disabled={controlsDisabled} size="small">
           <TabUnselectedOutlined />

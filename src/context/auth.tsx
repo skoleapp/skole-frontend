@@ -19,10 +19,10 @@ export const useAuthContext = (): UseAuthContext => {
   const { t } = useTranslation();
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
   const verified: boolean = R.propOr(null, 'verified', userMe);
-  const loginRequiredTooltip: string | false = !userMe && t('tooltips:loginRequired');
+  const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
 
   const verificationRequiredTooltip: string | false =
-    verified === false && t('tooltips:verificationRequired');
+    verified === false && t('common-tooltips:verificationRequired');
 
   return {
     userMe,

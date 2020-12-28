@@ -23,7 +23,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   const classes = useStyles();
 
   const renderCloseButton = (
-    <Tooltip title={t('common:close')}>
+    <Tooltip title={t('common-tooltips:closeMenu')}>
       <IconButton onClick={onCancel} size="small">
         <CloseOutlined />
       </IconButton>

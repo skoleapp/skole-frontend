@@ -59,8 +59,7 @@ const SchoolDetailPage: NextPage = () => {
   const shareTitle = t('school:shareTitle', { schoolName });
   const shareText = t('school:shareText', { schoolName });
   const shareParams = { shareHeader: t('school:shareHeader'), shareTitle, shareText };
-  const target = t('school:target');
-  const addCourseTooltip = verificationRequiredTooltip || t('tooltips:addCourse');
+  const addCourseTooltip = verificationRequiredTooltip || t('school-tooltips:addCourse');
 
   const {
     infoDialogOpen,
@@ -69,7 +68,7 @@ const SchoolDetailPage: NextPage = () => {
     handleCloseInfoDialog,
   } = useInfoDialog({
     header: t('school:infoHeader'),
-    target,
+    infoButtonTooltip: t('school-tooltips:info'),
   });
 
   const addCourseHref = {
@@ -85,8 +84,8 @@ const SchoolDetailPage: NextPage = () => {
     renderShareAction,
   } = useActionsDialog({
     share: t('school:share'),
-    target,
     shareParams,
+    actionsButtonTooltip: t('school-tooltips:actions'),
   });
 
   const schoolTypeLink = {
@@ -165,7 +164,7 @@ const SchoolDetailPage: NextPage = () => {
     </Tooltip>
   );
 
-  const renderShareButton = <ShareButton {...shareParams} target={target} />;
+  const renderShareButton = <ShareButton {...shareParams} tooltip={t('school-tooltips:share')} />;
   const renderSubjectsTableBody = <SubjectTableBody subjects={subjects} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
@@ -277,6 +276,7 @@ const SchoolDetailPage: NextPage = () => {
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }
@@ -301,7 +301,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces(['school'], locale),
+    _ns: await loadNamespaces(['school', 'school-tooltips'], locale),
   },
 });
 

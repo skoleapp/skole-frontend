@@ -96,7 +96,7 @@ const CourseDetailPage: NextPage = () => {
   const { query } = useRouter();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const { toggleNotification } = useNotificationsContext();
+  const { toggleNotification, unexpectedError } = useNotificationsContext();
   const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -124,12 +124,20 @@ const CourseDetailPage: NextPage = () => {
   const shareTitle = t('course:shareTitle', { courseName });
   const shareText = t('course:shareText', { courseName, creatorUsername });
   const shareParams = { shareHeader: t('course:shareHeader'), shareTitle, shareText };
-  const target = t('course:target');
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
-  const uploadResourceButtonTooltip = verificationRequiredTooltip || t('tooltips:uploadResource');
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs(comments);
-  const { renderStarButton } = useStars({ starred, initialStars, course: courseId });
+
+  const uploadResourceButtonTooltip =
+    verificationRequiredTooltip || t('course-tooltips:uploadResource');
+
+  const { stars, renderStarButton } = useStars({
+    starred,
+    initialStars,
+    course: courseId,
+    starTooltip: t('course-tooltips:star'),
+    unstarTooltip: t('course-tooltips:unstar'),
+  });
 
   const {
     infoDialogOpen,
@@ -138,7 +146,7 @@ const CourseDetailPage: NextPage = () => {
     handleCloseInfoDialog,
   } = useInfoDialog({
     header: t('course:infoHeader'),
-    target,
+    infoButtonTooltip: t('course-tooltips:info'),
   });
 
   const {
@@ -150,8 +158,8 @@ const CourseDetailPage: NextPage = () => {
     renderActionsButton,
   } = useActionsDialog({
     shareParams,
-    target,
     share: t('course:share'),
+    actionsButtonTooltip: t('course-tooltips:actions'),
   });
 
   const { renderUpvoteButton, renderDownvoteButton, score } = useVotes({
@@ -159,45 +167,46 @@ const CourseDetailPage: NextPage = () => {
     initialScore,
     isOwner,
     variables: { course: courseId },
-    target,
+    upvoteTooltip: t('course-tooltips:upvote'),
+    removeUpvoteTooltip: t('course-tooltips:removeUpvote'),
+    downvoteTooltip: t('course-tooltips:downvote'),
+    removeDownvoteTooltip: t('course-tooltips:removeDownvote'),
+    ownContentTooltip: t('course-tooltips:voteOwnContent'),
   });
-
-  const deleteCourseError = (): void =>
-    toggleNotification(t('notifications:deleteError', { target }));
 
   const deleteCourseCompleted = async ({ deleteCourse }: DeleteCourseMutation): Promise<void> => {
     if (deleteCourse) {
       if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
-        deleteCourseError();
+        unexpectedError();
       } else if (deleteCourse.successMessage) {
         toggleNotification(deleteCourse.successMessage);
         await Router.push(urls.home);
       } else {
-        deleteCourseError();
+        unexpectedError();
       }
     } else {
-      deleteCourseError();
+      unexpectedError();
     }
   };
 
   const [deleteCourse] = useDeleteCourseMutation({
     onCompleted: deleteCourseCompleted,
-    onError: deleteCourseError,
+    onError: unexpectedError,
     context,
   });
 
   const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
+    handleCloseActionsDialog(e);
+
     try {
       await confirm({
         title: t('course:delete'),
-        description: t('common:confirmDelete', { deleteTarget: t('course:deleteTarget') }),
+        description: t('course:confirmDelete'),
       });
 
       await deleteCourse({ variables: { id: courseId } });
     } catch {
       // User cancelled.
-    } finally {
-      handleCloseActionsDialog(e);
     }
   };
 
@@ -239,6 +248,10 @@ const CourseDetailPage: NextPage = () => {
       value: renderSchoolLink,
     },
     {
+      label: t('common:stars'),
+      value: stars,
+    },
+    {
       label: t('common:score'),
       value: score,
     },
@@ -248,7 +261,7 @@ const CourseDetailPage: NextPage = () => {
     },
   ];
 
-  const renderShareButton = <ShareButton {...shareParams} target={target} />;
+  const renderShareButton = <ShareButton {...shareParams} tooltip={t('course-tooltips:share')} />;
 
   const discussionHeaderProps = {
     commentCount,
@@ -440,6 +453,7 @@ const CourseDetailPage: NextPage = () => {
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }
@@ -457,16 +471,16 @@ const CourseDetailPage: NextPage = () => {
   return <NotFoundTemplate />;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  };
-};
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: 'blocking',
+});
+
+const namespaces = ['course', 'course-tooltips', 'discussion', 'discussion-tooltips'];
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces(['course'], locale),
+    _ns: await loadNamespaces(namespaces, locale),
   },
 });
 

@@ -3,7 +3,6 @@ import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
-import { useTranslation } from 'lib';
 import React, { useEffect, useState } from 'react';
 
 interface UseStarsParams {
@@ -11,6 +10,8 @@ interface UseStarsParams {
   initialStars: string;
   course?: string;
   resource?: string;
+  starTooltip: string;
+  unstarTooltip: string;
 }
 
 interface UseStars {
@@ -23,25 +24,27 @@ export const useStars = ({
   initialStars,
   course,
   resource,
+  unstarTooltip,
+  starTooltip,
 }: UseStarsParams): UseStars => {
-  const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
-  const [stars, setStars] = useState(initialStars);
-  const [starred, setStarred] = useState(initialStarred);
+  const [stars, setStars] = useState('0');
+  const [starred, setStarred] = useState(false);
   const color = starred ? 'primary' : 'default';
   const context = useLanguageHeaderContext();
-  const { toggleNotification } = useNotificationsContext();
-  const onError = (): void => toggleNotification(t('notifications:starError'));
+  const { unexpectedError: onError } = useNotificationsContext();
+
+  useEffect(() => {
+    setStarred(initialStarred);
+  }, [initialStarred]);
 
   useEffect(() => {
     setStars(initialStars);
   }, [initialStars]);
 
   const tooltip =
-    loginRequiredTooltip ||
-    verificationRequiredTooltip ||
-    (starred ? t('tooltips:unstar') : t('tooltips:star') || '');
+    loginRequiredTooltip || verificationRequiredTooltip || (starred ? unstarTooltip : starTooltip);
 
   const onCompleted = ({ star }: StarMutation): void => {
     if (star) {

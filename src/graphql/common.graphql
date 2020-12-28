@@ -414,8 +414,8 @@ query Resource($id: ID) {
     created
     score
     starred
-    downloads
     starCount
+    downloads
     resourceType {
       id
       name

@@ -8,5 +8,5 @@
   "shareText": "Näytä {{ schoolName }} Skolessa",
   "share": "Jaa koulu",
   "infoHeader": "Koulun tiedot",
-  "target": "koulu"
+  "actionsHeader": "Koulun valikko"
 }
