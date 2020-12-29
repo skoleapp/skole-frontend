@@ -1,6 +1,6 @@
 # Skole Frontend 🎓
 
-[![circleci status](https://circleci.com/gh/ruohola/skole-frontend.svg?style=shield&circle-token=e15c5fba3e4d8011364889043a709e2eaafccb2d)](https://circleci.com/gh/ruohola/skole-frontend)
+[![circleci status](https://circleci.com/gh/skoleapp/skole-frontend.svg?style=shield&circle-token=e15c5fba3e4d8011364889043a709e2eaafccb2d)](https://circleci.com/gh/skoleapp/skole-frontend)
 [![typescript](https://badgen.net/badge/icon/typescript?icon=typescript&label&color=007acc)](https://www.typescriptlang.org)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
