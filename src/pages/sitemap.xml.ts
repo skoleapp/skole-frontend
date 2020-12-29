@@ -2,16 +2,13 @@ import { NextApiResponse } from 'next';
 import { SitemapDocument } from 'generated';
 import { initApolloClient } from 'lib';
 
-const { FRONTEND_URL } = process.env;
-const BUILD_DATE = process.env.BUILD_DATE || new Date().toISOString();
-
 const toUrl = (path: string, modified: string): string => {
   // Slice just the date portion from the ISO datetime.
   const lastmod = modified ? `<lastmod>${modified.slice(0, 10)}</lastmod>` : '';
 
   return `
     <url>
-      <loc>${FRONTEND_URL}${path}</loc>
+      <loc>${process.env.FRONTEND_URL}${path}</loc>
       ${lastmod}
     </url>`;
 };
@@ -31,6 +28,7 @@ interface Props {
 }
 
 export const getServerSideProps = async ({ res }: { res: NextApiResponse }): Promise<Props> => {
+  const modified = process.env.BUILD_DATE || new Date().toISOString();
   const staticPaths = [
     '', // Don't want the index page to have a slash.
     '/contact',
@@ -41,7 +39,7 @@ export const getServerSideProps = async ({ res }: { res: NextApiResponse }): Pro
     '/search',
     '/terms',
   ];
-  const paths = staticPaths.map((path) => ({ path, modified: BUILD_DATE }));
+  const paths = staticPaths.map((path) => ({ path, modified }));
 
   const apolloClient = initApolloClient();
   try {
