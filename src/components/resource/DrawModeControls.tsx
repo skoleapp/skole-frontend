@@ -8,9 +8,13 @@ import React from 'react';
 export const DrawModeControls: React.FC = () => {
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const { setDrawMode, screenshot } = usePdfViewerContext();
+  const { setDrawMode, screenshot, setScreenshot } = usePdfViewerContext();
   const { toggleCommentModal } = useDiscussionContext();
-  const handleExitButtonClick = (): void => setDrawMode(false);
+
+  const handleExitButtonClick = (): void => {
+    setDrawMode(false);
+    setScreenshot(null);
+  };
 
   const handleContinueButtonClick = (): void => {
     setDrawMode(false);

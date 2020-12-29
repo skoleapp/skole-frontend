@@ -142,10 +142,10 @@ export const AreaSelection: React.FC = () => {
       locked: false,
     });
 
-    document.body.addEventListener('mouseup', onMouseUp as EventListener);
+    document.body.addEventListener('mouseup', onMouseUp);
 
     return (): void => {
-      document.body.removeEventListener('mouseup', onMouseUp as EventListener);
+      document.body.removeEventListener('mouseup', onMouseUp);
     };
   };
 
