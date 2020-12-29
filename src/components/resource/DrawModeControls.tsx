@@ -19,7 +19,7 @@ export const DrawModeControls: React.FC = () => {
 
   const renderExitButton = (
     <Grid item xs={6} md={2} container justify="flex-start">
-      <Tooltip title={t('common:exit')}>
+      <Tooltip title={t('resource-tooltips:exitDrawMode')}>
         <IconButton onClick={handleExitButtonClick} size="small">
           <ClearOutlined />
         </IconButton>

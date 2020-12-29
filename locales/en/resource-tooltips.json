@@ -14,6 +14,7 @@
   "zoomIn": "Zoom in.",
   "zoomOut": "Zoom out.",
   "drawMode": "Mark area on PDF file.",
+  "exitDrawMode": "Exit draw mode.",
   "downloadPdf": "Download PDF file.",
   "printPdf": "Print PDF file.",
   "rotatePdf": "Rotate PDF file."

@@ -14,6 +14,7 @@
   "zoomIn": "Suurenna.",
   "zoomOut": "Pienennä.",
   "drawMode": "Merkitse alue PDF-tiedostoon.",
+  "exitDrawMode": "Poistu piirtotilasta.",
   "downloadPdf": "Lataa PDF-tiedosto.",
   "printPdf": "Tulosta PDF-tiedosto.",
   "rotatePdf": "Käännä PDF-tiedostoa."
