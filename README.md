@@ -6,7 +6,7 @@
 
 This is the frontend for the Skole app.
 
-Also check out the [README from `skole` repo](https://github.com/ruohola/skole/blob/develop/README.md).
+Also check out the [README from `skole` repo](https://github.com/skoleapp/skole/blob/develop/README.md).
 
 See detailed description for all top-level dependencies in [`dependencies.md`](dependencies.md) file.
 

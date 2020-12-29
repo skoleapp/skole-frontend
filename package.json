@@ -2,7 +2,7 @@
   "name": "skole",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "git@github.com:ruohola/skole-frontend.git",
+  "repository": "git@github.com:skoleapp/skole-frontend.git",
   "license": "UNLICENSED",
   "author": "Skole",
   "scripts": {
