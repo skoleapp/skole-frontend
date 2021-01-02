@@ -31,7 +31,7 @@ import React from 'react';
 import { BORDER_RADIUS } from 'theme';
 import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
-import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
+import { urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   container: {
