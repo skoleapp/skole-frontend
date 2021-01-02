@@ -320,11 +320,11 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   const renderDialogToolbar = (props: FormikProps<CreateCommentFormValues>) => (
     <Grid className={classes.dialogToolbar} container alignItems="center">
-      <Grid item xs={2}>
+      <Grid item xs={4}>
         {renderAttachmentButton}
         {renderClearAttachmentButton(props)}
       </Grid>
-      <Grid item xs={10} container alignItems="flex-end" direction="column">
+      <Grid item xs={8} container alignItems="flex-end" direction="column">
         {renderFormHelperText}
       </Grid>
     </Grid>
