@@ -25,6 +25,9 @@ export const Footer: React.FC = () => {
         <Typography variant="subtitle1" color="secondary" gutterBottom>
           {t('common:company').toUpperCase()}
         </Typography>
+        <TextLink href={urls.getStarted} color="secondary">
+          {t('common:getStarted')}
+        </TextLink>
         <TextLink href={urls.contact} color="secondary">
           {t('common:contact')}
         </TextLink>

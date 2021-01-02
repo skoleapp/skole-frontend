@@ -70,5 +70,6 @@
   "postAsAnonymous": "Lähetä anonyyminä",
   "selectAuthor": "Valitse käyttäjä",
   "send": "Lähetä",
-  "confirmDelete": "Haluatko varmasti poistaa {{ deleteTarget }}?"
+  "confirmDelete": "Haluatko varmasti poistaa {{ deleteTarget }}?",
+  "getStarted": "Aloita"
 }
