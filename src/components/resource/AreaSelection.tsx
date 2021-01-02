@@ -37,43 +37,47 @@ export const AreaSelection: React.FC = () => {
   // Get closest PDF page and take screenshot of selected area.
   // FIXME: Screenshots from this function end up being misaligned.
   // It clearly has something to do with the `window.devicePixelRatio` function since it messes up the dimensions.
-  const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
+  const getScreenshot = (canvas: HTMLCanvasElement, position: LTWH): string | null => {
     const { left, top, width, height } = position;
-    const canvas = target.closest('canvas');
     const newCanvas = document.createElement('canvas');
     const newCanvasContext = newCanvas.getContext('2d');
 
     if (!!canvas && !!newCanvasContext && !!width && !!height) {
       newCanvas.width = width;
       newCanvas.height = height;
-      const dpr = window.devicePixelRatio;
+      const scaleWidth = canvas.width / canvas.clientWidth;
+      const scaleHeight = canvas.height / canvas.clientHeight;
+
       newCanvasContext.drawImage(
         canvas,
-        left * dpr,
-        top * dpr,
-        width * dpr,
-        height * dpr,
+        left * scaleWidth,
+        top * scaleHeight,
+        width * scaleWidth,
+        height * scaleHeight,
         0,
         0,
         width,
         height,
       );
+
       return newCanvas.toDataURL();
     }
+
     return null;
   };
 
   const onSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
     const page = getPageFromElement(startTarget);
+    const canvas = startTarget.closest('canvas');
 
-    if (page) {
+    if (!!page && !!canvas) {
       const pageBoundingRect = {
         ...boundingRect,
         top: boundingRect.top - page.node.offsetTop,
         left: boundingRect.left - page.node.offsetLeft,
       };
 
-      const screenshot = getScreenshot(startTarget, pageBoundingRect);
+      const screenshot = getScreenshot(canvas, pageBoundingRect);
       setScreenshot(screenshot);
     }
   };

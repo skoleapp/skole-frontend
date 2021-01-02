@@ -20,7 +20,7 @@ import {
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
-import { dataURItoFile, useTranslation } from 'lib';
+import { dataUriToFile, useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
@@ -124,7 +124,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   useEffect(() => {
     if (screenshot && !drawMode) {
       setCommentAttachment(screenshot); // Already in data URL form.
-      const screenShotFile = dataURItoFile(screenshot);
+      const screenShotFile = dataUriToFile(screenshot);
       setFieldValue('attachment', screenShotFile);
     }
   }, [screenshot, drawMode]);

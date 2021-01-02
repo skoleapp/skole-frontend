@@ -48,7 +48,7 @@ interface PageFromElement {
   number: number;
 }
 
-// Find closest page canvas from DOM node.
+// Find closest page from DOM node.
 export const getPageFromElement = (target: HTMLElement): PageFromElement | null => {
   const node = target.closest('.react-pdf__Page');
 
@@ -56,15 +56,16 @@ export const getPageFromElement = (target: HTMLElement): PageFromElement | null 
     const number = Number(node.dataset.pageNumber);
     return { node, number };
   }
+
   return null;
 };
 
-// Converts a data URI string into a File object.
-export const dataURItoFile = (dataURI: string): File => {
-  const BASE64_MARKER = ';base64,';
-  const mime = dataURI.split(BASE64_MARKER)[0].split(':')[1];
+// Convert a data URI string into a File object.
+export const dataUriToFile = (dataURI: string): File => {
+  const base64Marker = ';base64,';
+  const mime = dataURI.split(base64Marker)[0].split(':')[1];
   const filename = `${'screenshot' + '.'}${mime.split('/')[1]}`;
-  const bytes = atob(dataURI.split(BASE64_MARKER)[1]);
+  const bytes = atob(dataURI.split(base64Marker)[1]);
   const writer = new Uint8Array(new ArrayBuffer(bytes.length));
 
   for (let i = 0; i < bytes.length; i++) {
