@@ -6,15 +6,14 @@ import React, { useEffect } from 'react';
 import { urls } from 'utils';
 import { withCommonContexts } from './withCommonContexts';
 
-// Disable access for authenticated users.
-// Wrap all pages that require access only for unauthenticated users with this for all pages.
+// Prevent access for authenticated users.
+// Automatically redirect user to logout if he is authenticated.
 export const withNoAuth = (PageComponent: NextPage): NextPage => {
   const WithNoAuth: NextPage = (pageProps) => {
     const { userMe, authLoading, authNetworkError } = useUserMe();
     const shouldRedirect = !(authLoading || authNetworkError || !userMe);
     const { asPath } = useRouter();
 
-    // Automatically redirect user to logout if he is authenticated.
     useEffect(() => {
       shouldRedirect &&
         Router.replace({

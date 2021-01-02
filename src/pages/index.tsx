@@ -21,7 +21,7 @@ import {
 } from '@material-ui/icons';
 import clsx from 'clsx';
 import { ButtonLink, LanguageButton, MainBackground, MainTemplate } from 'components';
-import { useShareContext } from 'context';
+import { useAuthContext, useShareContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useSearch } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -31,7 +31,7 @@ import React from 'react';
 import { BORDER_RADIUS, COLORS } from 'theme';
 import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
-import { urls } from 'utils';
+import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   container: {
@@ -170,6 +170,7 @@ interface Shortcut {
 
 const IndexPage: NextPage = () => {
   const classes = useStyles();
+  const { userMe, verified } = useAuthContext();
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
@@ -282,6 +283,91 @@ const IndexPage: NextPage = () => {
     endIcon: <ArrowForwardOutlined />,
   };
 
+  const renderInviteStep = (
+    <Grid item xs={12} sm={4}>
+      <Card className={classes.nextStepsCard}>
+        <CardContent className={classes.nextStepsCardContent}>
+          <Typography {...nextStepsCardTextProps}>{t('index:inviteHeader')}</Typography>
+        </CardContent>
+        <CardActions>
+          <Button {...nextStepButtonProps} onClick={handleClickShareButton}>
+            {t('index:inviteText')}
+          </Button>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+
+  const renderTakeATourStep = (
+    <Grid item xs={12} sm={4}>
+      <Card className={classes.nextStepsCard}>
+        <CardContent className={classes.nextStepsCardContent}>
+          <Typography {...nextStepsCardTextProps}>{t('index:takeATourHeader')}</Typography>
+        </CardContent>
+        <CardActions>
+          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+            {t('index:takeATourText')}
+          </ButtonLink>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+
+  const renderVerifyStep = (
+    <Grid item xs={12} sm={4}>
+      <Card className={classes.nextStepsCard}>
+        <CardContent className={classes.nextStepsCardContent}>
+          <Typography {...nextStepsCardTextProps}>{t('index:verifyAccountHeader')}</Typography>
+        </CardContent>
+        <CardActions>
+          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+            {t('index:verifyAccountText')}
+          </ButtonLink>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+
+  const renderCompleteProfileStep = (
+    <Grid item xs={12} sm={4}>
+      <Card className={classes.nextStepsCard}>
+        <CardContent className={classes.nextStepsCardContent}>
+          <Typography {...nextStepsCardTextProps}>{t('index:completeProfileHeader')}</Typography>
+        </CardContent>
+        <CardActions>
+          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+            {t('index:completeProfileText')}
+          </ButtonLink>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+
+  // Render different content for these cases:
+  // * User is not authenticated -> link to landing page.
+  // * User is authenticated by not verified -> link to account verification.
+  // * User is authenticated and verified -> link to edit profile page.
+  const renderDynamicStep = !userMe
+    ? renderTakeATourStep
+    : verified === false
+    ? renderVerifyStep
+    : renderCompleteProfileStep;
+
+  const renderContactStep = (
+    <Grid item xs={12} sm={4}>
+      <Card className={classes.nextStepsCard}>
+        <CardContent className={classes.nextStepsCardContent}>
+          <Typography {...nextStepsCardTextProps}>{t('index:contactHeader')}</Typography>
+        </CardContent>
+        <CardActions>
+          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+            {t('index:contactText')}
+          </ButtonLink>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+
   const renderInfo = (
     <Grid
       className={classes.nextStepsContainer}
@@ -303,30 +389,9 @@ const IndexPage: NextPage = () => {
         container
         spacing={4}
       >
-        <Grid item xs={12} sm={6} container>
-          <Card className={classes.nextStepsCard}>
-            <CardContent className={classes.nextStepsCardContent}>
-              <Typography {...nextStepsCardTextProps}>{t('index:inviteHeader')}</Typography>
-            </CardContent>
-            <CardActions>
-              <Button {...nextStepButtonProps} onClick={handleClickShareButton}>
-                {t('index:inviteText')}
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Card className={classes.nextStepsCard}>
-            <CardContent className={classes.nextStepsCardContent}>
-              <Typography {...nextStepsCardTextProps}>{t('index:contactHeader')}</Typography>
-            </CardContent>
-            <CardActions>
-              <ButtonLink {...nextStepButtonProps} href={urls.contact}>
-                {t('index:contactText')}
-              </ButtonLink>
-            </CardActions>
-          </Card>
-        </Grid>
+        {renderInviteStep}
+        {renderDynamicStep}
+        {renderContactStep}
       </Grid>
     </Grid>
   );

@@ -70,5 +70,6 @@
   "postAsAnonymous": "Post as anonymous",
   "selectAuthor": "Select Author",
   "send": "Send",
-  "confirmDelete": "Are you sure you want to delete {{ deleteTarget }}?"
+  "confirmDelete": "Are you sure you want to delete {{ deleteTarget }}?",
+  "getStarted": "Get Started"
 }
