@@ -13,8 +13,8 @@
   "exitFullscreen": "Poistu koko ruudulta.",
   "zoomIn": "Suurenna.",
   "zoomOut": "Pienennä.",
-  "drawMode": "Merkitse alue PDF-tiedostoon.",
-  "exitDrawMode": "Poistu piirtotilasta.",
+  "drawingMode": "Merkitse alue PDF-tiedostoon.",
+  "exitDrawingMode": "Poistu piirtotilasta.",
   "downloadPdf": "Lataa PDF-tiedosto.",
   "printPdf": "Tulosta PDF-tiedosto.",
   "rotatePdf": "Käännä PDF-tiedostoa."

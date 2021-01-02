@@ -6,11 +6,11 @@ import React from 'react';
 
 export const DrawModeButton: React.FC = () => {
   const { t } = useTranslation();
-  const { setDrawMode, controlsDisabled } = usePdfViewerContext();
-  const handleClick = (): void => setDrawMode(true);
+  const { setDrawingMode, controlsDisabled } = usePdfViewerContext();
+  const handleClick = (): void => setDrawingMode(true);
 
   return (
-    <Tooltip title={t('resource-tooltips:drawMode')}>
+    <Tooltip title={t('resource-tooltips:drawingMode')}>
       <Typography component="span">
         <IconButton onClick={handleClick} disabled={controlsDisabled} size="small">
           <TabUnselectedOutlined />

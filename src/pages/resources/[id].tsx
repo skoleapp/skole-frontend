@@ -141,7 +141,7 @@ const ResourceDetailPage: NextPage = () => {
   const created = R.prop('created', resource);
   const { commentCount } = useDiscussionContext();
   const { commentModalOpen } = useDiscussionContext();
-  const { drawMode, setDrawMode } = usePdfViewerContext();
+  const { drawingMode, setDrawingMode } = usePdfViewerContext();
   const staticBackUrl = urls.course(courseId);
 
   const { stars, renderStarButton } = useStars({
@@ -202,14 +202,14 @@ const ResourceDetailPage: NextPage = () => {
     commentModalOpen && tabValue === 0 && setTabValue(1);
   }, [commentModalOpen]);
 
-  // If draw mode is toggled on from discussion tab, change to file preview tab.
+  // If drawing mode is toggled on from discussion tab, change to file preview tab.
   useEffect(() => {
-    drawMode && tabValue === 1 && setTabValue(0);
-  }, [drawMode]);
+    drawingMode && tabValue === 1 && setTabValue(0);
+  }, [drawingMode]);
 
-  // If draw mode is on and user changes to discussion tab, automatically toggle draw mode off.
+  // If drawing mode is on and user changes to discussion tab, automatically toggle drawing mode off.
   useEffect(() => {
-    drawMode && tabValue === 1 && setDrawMode(false);
+    drawingMode && tabValue === 1 && setDrawingMode(false);
   }, [tabValue]);
 
   const deleteResourceError = (): void =>
@@ -380,7 +380,7 @@ const ResourceDetailPage: NextPage = () => {
   const renderCustomBottomNavbar = (
     <BottomNavigation>
       <CustomBottomNavbarContainer>
-        {drawMode ? renderDrawModeControls : renderDefaultBottomNavbarContent}
+        {drawingMode ? renderDrawModeControls : renderDefaultBottomNavbarContent}
       </CustomBottomNavbarContainer>
     </BottomNavigation>
   );

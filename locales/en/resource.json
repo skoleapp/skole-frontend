@@ -2,7 +2,7 @@
   "description": "View {{ resourceTitle }} on Skole.",
   "error": "Error loading resource.",
   "noComments": "This resource has no comments. Add a comment below!",
-  "drawMode": "Draw Mode",
+  "drawingMode": "Drawing Mode",
   "downloadPdf": "Download PDF",
   "printPdf": "Print PDF",
   "shareHeader": "Share Resource",

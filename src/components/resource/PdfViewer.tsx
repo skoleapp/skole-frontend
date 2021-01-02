@@ -65,7 +65,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     setNumPages,
     rotate,
     setControlsDisabled,
-    drawMode,
+    drawingMode,
     controlsDisabled,
   } = usePdfViewerContext();
 
@@ -113,8 +113,8 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     </MapInteraction>
   );
 
-  // TODO: See if we can use only `controlsDisabled` or `drawMode`.
-  const renderMapControls = isTabletOrDesktop && !drawMode && !controlsDisabled && (
+  // TODO: See if we can use only `controlsDisabled` or `drawingMode`.
+  const renderMapControls = isTabletOrDesktop && !drawingMode && !controlsDisabled && (
     <MapControls {...mapControlsProps} />
   );
 

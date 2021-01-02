@@ -38,8 +38,8 @@ export interface SettingsContextType {
 export interface PdfViewerContextType {
   documentRef: MutableRefObject<Document>;
   pageNumberInputRef: MutableRefObject<HTMLInputElement>;
-  drawMode: boolean;
-  setDrawMode: Dispatch<SetStateAction<boolean>>;
+  drawingMode: boolean;
+  setDrawingMode: Dispatch<SetStateAction<boolean>>;
   screenshot: string | null;
   setScreenshot: Dispatch<SetStateAction<string | null>>;
   rotate: number;

@@ -8,16 +8,16 @@ import React from 'react';
 export const DrawModeControls: React.FC = () => {
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const { setDrawMode, screenshot, setScreenshot } = usePdfViewerContext();
+  const { setDrawingMode, screenshot, setScreenshot } = usePdfViewerContext();
   const { toggleCommentModal } = useDiscussionContext();
 
   const handleExitButtonClick = (): void => {
-    setDrawMode(false);
+    setDrawingMode(false);
     setScreenshot(null);
   };
 
   const handleContinueButtonClick = (): void => {
-    setDrawMode(false);
+    setDrawingMode(false);
     toggleCommentModal(true);
   };
 
@@ -34,7 +34,7 @@ export const DrawModeControls: React.FC = () => {
   const renderHeader = isTabletOrDesktop && (
     <Grid item md={8}>
       <Typography className="MuiCardHeader-title" variant="h5">
-        {t('resource:drawMode')}
+        {t('resource:drawingMode')}
       </Typography>
     </Grid>
   );

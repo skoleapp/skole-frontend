@@ -23,10 +23,10 @@ const initialState = { start: null, end: null, locked: false };
 
 // This component allows the user to mark areas with a rectangle and take screenshots from the PDF document based on the marked area.
 // Inspired by: https://github.com/agentcooper/react-pdf-highlighter
-// TODO: Add a listener that cancels the draw mode from ESC key.
+// TODO: Add a listener that cancels the drawing mode from ESC key.
 export const AreaSelection: React.FC = () => {
   const classes = useStyles();
-  const { setScreenshot, drawMode } = usePdfViewerContext();
+  const { setScreenshot, drawingMode } = usePdfViewerContext();
   const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
   const { start, end } = stateRef.current;
 
@@ -218,9 +218,9 @@ export const AreaSelection: React.FC = () => {
   useEffect(() => {
     const documentNode = getDocumentNode();
 
-    // Only apply listeners when in draw mode.
+    // Only apply listeners when in drawing mode.
     // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
-    if (drawMode) {
+    if (drawingMode) {
       documentNode.addEventListener('touchmove', onTouchMove as EventListener);
       documentNode.addEventListener('touchstart', onTouchStart as EventListener);
 
@@ -232,7 +232,7 @@ export const AreaSelection: React.FC = () => {
         passive: true,
       });
     } else {
-      setState(initialState); // Reset area selection when draw mode is toggled off.
+      setState(initialState); // Reset area selection when drawing mode is toggled off.
     }
 
     return (): void => {
@@ -241,9 +241,9 @@ export const AreaSelection: React.FC = () => {
       documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
       documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
     };
-  }, [drawMode]);
+  }, [drawingMode]);
 
-  return drawMode && !!start && !!end ? (
+  return drawingMode && !!start && !!end ? (
     <Box className={clsx('screenshot-border', classes.root)} style={getBoundingRect(start, end)} />
   ) : null;
 };

@@ -13,8 +13,8 @@
   "exitFullscreen": "Avsluta helskärm.",
   "zoomIn": "Zooma in.",
   "zoomOut": "Zooma ut.",
-  "drawMode": "Markera område på PDF-fil.",
-  "exitDrawMode": "Avsluta ritningsläge.",
+  "drawingMode": "Markera område på PDF-fil.",
+  "exitDrawingMode": "Avsluta ritningsläge.",
   "downloadPdf": "Ladda ner PDF-fil.",
   "printPdf": "Skriv ut PDF-fil.",
   "rotatePdf": "Rotera PDF-fil."

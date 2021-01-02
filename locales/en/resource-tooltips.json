@@ -13,8 +13,8 @@
   "exitFullscreen": "Exit fullscreen.",
   "zoomIn": "Zoom in.",
   "zoomOut": "Zoom out.",
-  "drawMode": "Mark area on PDF file.",
-  "exitDrawMode": "Exit draw mode.",
+  "drawingMode": "Mark area on PDF file.",
+  "exitDrawingMode": "Exit drawing mode.",
   "downloadPdf": "Download PDF file.",
   "printPdf": "Print PDF file.",
   "rotatePdf": "Rotate PDF file."

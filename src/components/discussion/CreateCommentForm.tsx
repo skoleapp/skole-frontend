@@ -97,7 +97,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const { screenshot, setScreenshot } = usePdfViewerContext();
   const { toggleNotification, unexpectedError } = useNotificationsContext();
-  const { drawMode } = usePdfViewerContext();
+  const { drawingMode } = usePdfViewerContext();
   const context = useLanguageHeaderContext();
   const attachmentInputRef = useRef<HTMLInputElement>(null!);
   const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
@@ -122,12 +122,12 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   // Use screenshot as attachment if area has been marked.
   useEffect(() => {
-    if (screenshot && !drawMode) {
+    if (screenshot && !drawingMode) {
       setCommentAttachment(screenshot); // Already in data URL form.
       const screenShotFile = dataUriToFile(screenshot);
       setFieldValue('attachment', screenShotFile);
     }
-  }, [screenshot, drawMode]);
+  }, [screenshot, drawingMode]);
 
   const handleCloseCreateCommentModal = (): void => {
     setFieldValue('attachment', null);

@@ -15,9 +15,9 @@ const useStyles = makeStyles(({ spacing }) => ({
     width: '100%',
     borderBottom: BORDER,
   },
-  drawMode: {
+  drawingMode: {
     // The left-most item is usually text, which looks good on the default padding.
-    // During draw mode however, the left-most item is a button which looks better with a custom padding.
+    // During drawing mode however, the left-most item is a button which looks better with a custom padding.
     paddingLeft: spacing(2),
   },
 }));
@@ -35,7 +35,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { drawMode, controlsDisabled } = usePdfViewerContext();
+  const { drawingMode, controlsDisabled } = usePdfViewerContext();
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;
@@ -86,8 +86,8 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   );
 
   return (
-    <Box className={clsx('MuiCardHeader-root', classes.root, drawMode && classes.drawMode)}>
-      {drawMode ? renderDrawModeControls : renderPreviewToolbarControls}
+    <Box className={clsx('MuiCardHeader-root', classes.root, drawingMode && classes.drawingMode)}>
+      {drawingMode ? renderDrawModeControls : renderPreviewToolbarControls}
     </Box>
   );
 };
