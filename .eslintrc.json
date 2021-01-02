@@ -29,7 +29,7 @@
     "react/prop-types": "off", // Allows us to not use prop-types.
     "@typescript-eslint/ban-ts-comment": "off", // Allows us to make TS ignores with ignore comments.
     "@typescript-eslint/no-non-null-assertion": "off", // Allows us to make non-null assertions for e.g. ref objects that are cumbersome to use with TS.
-    "@typescript-eslint/no-unused-vars": "error", // The default is warning which will not fail build on CI pipeline, this one does.
+    "@typescript-eslint/no-unused-vars": "error", // Show error instead of the default warning for unused variables.
     // TODO: Under this comment, remove all rule overrides and make the necessary refactors to fix the linting errors.
     "import/no-mutable-exports": "off",
     "react/jsx-props-no-spreading": "off",
