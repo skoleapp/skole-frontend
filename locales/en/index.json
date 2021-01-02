@@ -5,8 +5,14 @@
   "uploadMaterial": "Upload Material",
   "addCourses": "Add Courses",
   "nextStepsHeader": "Next Steps",
-  "inviteHeader": "Star your favorite courses and materials to stay updated. Invite your friends to join you!",
+  "inviteHeader": "Skole is all about collaboration with your classmates. Invite your friends to join you!",
   "inviteText": "Invite Friends",
   "contactHeader": "Is your school or subject not yet listed? Contact us and we'll add them!",
-  "contactText": "Contact Us"
+  "contactText": "Contact Us",
+  "takeATourHeader": "Learn what Skole is all about. By logging in you get the most out of it!",
+  "takeATourText": "Take a Tour",
+  "verifyAccountHeader": "By verifying your account, you will unlock all features and have the best possible experience using Skole!",
+  "verifyAccountText": "Verify Account",
+  "completeProfileHeader": "By adding your information on your profile you will make your profile look stronger and see more relevant content!",
+  "completeProfileText": "Complete your Profile"
 }
