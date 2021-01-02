@@ -6,7 +6,9 @@ import React, { useEffect } from 'react';
 import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
 import { withCommonContexts } from './withCommonContexts';
 
-// Sync authentication between pages.
+// Prevent access for unauthenticated users.
+// Redirect new users to landing page and existing unauthenticated users to login page.
+// Redirect to logout page if multiple browser windows are open and user logs out.
 // Wrap all pages that require authentication with this.
 export const withAuth = (PageComponent: NextPage): NextPage => {
   const WithAuth: NextPage = (pageProps) => {
@@ -14,22 +16,15 @@ export const withAuth = (PageComponent: NextPage): NextPage => {
     const shouldRedirect = !(authLoading || authNetworkError || !!userMe);
     const { asPath } = useRouter();
 
-    const syncLogout = async (e: StorageEvent): Promise<void> => {
-      if (e.key === 'logout') {
-        await Router.push(urls.logout);
-      }
-    };
+    const syncLogout = (e: StorageEvent): false | Promise<boolean> =>
+      e.key === 'logout' && Router.push(urls.logout);
 
-    // Automatically redirect user to get started/login page if not authenticated.
     useEffect(() => {
       if (shouldRedirect) {
         const query = asPath !== urls.home ? { next: asPath } : {};
         const existingUser = localStorage.getItem('user');
-
         const getStartedPageVisited = !!localStorage.getItem(GET_STARTED_PAGE_VISITED_KEY);
 
-        // Only redirect new users to get started page (users who have already logged in at some point).
-        // Redirect old users and users who have visited get started page to login page.
         if (!!existingUser || getStartedPageVisited) {
           Router.replace({ pathname: urls.confirmLogin, query });
         } else {
@@ -38,7 +33,6 @@ export const withAuth = (PageComponent: NextPage): NextPage => {
       }
     }, [shouldRedirect]);
 
-    // Automatically redirect to login if multiple browser windows are open and user logs out.
     useEffect(() => {
       window.addEventListener('storage', syncLogout);
 
