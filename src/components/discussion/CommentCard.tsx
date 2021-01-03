@@ -148,6 +148,7 @@ export const CommentCard: React.FC<Props> = ({
     shareHeader: t('discussion:share'),
     shareTitle,
     shareText,
+    linkSuffix: `?comment=${commentId}`,
   };
 
   const {
