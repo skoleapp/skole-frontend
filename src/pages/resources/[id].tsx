@@ -139,8 +139,7 @@ const ResourceDetailPage: NextPage = () => {
   const shareText = t('resource:shareText', { resourceTitle, creatorUsername });
   const shareParams = { shareHeader: t('resource:shareHeader'), shareTitle, shareText };
   const created = R.prop('created', resource);
-  const { commentCount } = useDiscussionContext();
-  const { commentModalOpen } = useDiscussionContext();
+  const { commentCount, commentModalOpen } = useDiscussionContext(comments);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
   const staticBackUrl = urls.course(courseId);
 
@@ -402,7 +401,6 @@ const ResourceDetailPage: NextPage = () => {
   };
 
   const commentThreadProps = {
-    comments,
     target: { resource: Number(resourceId) },
     noComments: t('resource:noComments'),
   };

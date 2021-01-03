@@ -115,7 +115,7 @@ const CourseDetailPage: NextPage = () => {
   const initialStars = String(R.propOr(0, 'starCount', course));
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
   const comments = R.propOr([], 'comments', course);
-  const { commentCount } = useDiscussionContext();
+  const { commentCount } = useDiscussionContext(comments);
   const initialVote = R.propOr(null, 'vote', course);
   const starred = !!R.prop('starred', course);
   const isOwner = !!userMe && userMe.id === creatorId;
@@ -274,7 +274,6 @@ const CourseDetailPage: NextPage = () => {
   };
 
   const commentThreadProps = {
-    comments,
     target: { course: Number(courseId) },
     noComments: t('course:noComments'),
   };

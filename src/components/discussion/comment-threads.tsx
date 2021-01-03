@@ -6,7 +6,7 @@ import { CommentObjectType } from 'generated';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'theme';
 import { TopLevelCommentThreadProps } from 'types';
 
@@ -66,7 +66,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 }));
 
 export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
-  comments: initialTopLevelComments,
   target,
   noComments,
 }) => {
@@ -74,10 +73,6 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
   const { isMobile } = useMediaQueries();
   const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext();
   const openCommentModal = (): void => toggleCommentModal(true);
-
-  useEffect(() => {
-    setTopLevelComments(initialTopLevelComments);
-  }, [initialTopLevelComments]);
 
   const appendComments = (comment: CommentObjectType): void =>
     setTopLevelComments([...topLevelComments, comment]);
