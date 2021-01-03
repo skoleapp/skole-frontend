@@ -45,6 +45,9 @@ export const AreaSelection: React.FC = () => {
     if (!!canvas && !!newCanvasContext && !!width && !!height) {
       newCanvas.width = width;
       newCanvas.height = height;
+
+      // The PDF canvas has a custom client width/height different from the HTML attribute.
+      // Because of this, we must calculate a scale based on the actual client width/height to draw the image correctly.
       const scaleWidth = canvas.width / canvas.clientWidth;
       const scaleHeight = canvas.height / canvas.clientHeight;
 

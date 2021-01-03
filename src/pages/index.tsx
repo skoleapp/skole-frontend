@@ -344,9 +344,9 @@ const IndexPage: NextPage = () => {
   );
 
   // Render different content for these cases:
-  // * User is not authenticated -> link to landing page.
-  // * User is authenticated by not verified -> link to account verification.
-  // * User is authenticated and verified -> link to edit profile page.
+  // - User is not authenticated -> link to landing page.
+  // - User is authenticated by not verified -> link to account verification.
+  // - User is authenticated and verified -> link to edit profile page.
   const renderDynamicStep = !userMe
     ? renderTakeATourStep
     : verified === false

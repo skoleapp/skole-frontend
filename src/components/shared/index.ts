@@ -1,6 +1,6 @@
 export { ButtonLink } from './ButtonLink';
 export { ConfirmationDialog } from './ConfirmationDialog';
-export { ConvertedMarkdown } from './ConvertedMarkdown';
+export { MarkdownContent } from './MarkdownContent';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { DialogHeader } from './DialogHeader';
 export { ExternalLink } from './ExternalLink';

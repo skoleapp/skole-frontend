@@ -19,6 +19,7 @@ interface UseStars {
   renderStarButton: JSX.Element | false;
 }
 
+// Keep track of current stars and render the star button for course and resource pages.
 export const useStars = ({
   starred: initialStarred,
   initialStars,

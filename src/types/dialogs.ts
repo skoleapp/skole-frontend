@@ -10,5 +10,5 @@ export interface DialogHeaderProps {
 }
 
 export interface SkoleDialogProps extends DialogProps {
-  list?: boolean; // Tells whether a list is rendered in the dialog for modifying the spacings.
+  list?: boolean; // Specify whether a list is rendered with modified spacings.
 }

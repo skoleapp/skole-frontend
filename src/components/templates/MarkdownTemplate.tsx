@@ -3,7 +3,7 @@ import { useMediaQueries } from 'hooks';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
-import { ConvertedMarkdown } from '../shared';
+import { MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -43,7 +43,7 @@ export const MarkdownTemplate: React.FC<Props> = ({ children, header, ...props }
     <CardContent>
       <Grid container justify="center">
         <Grid item xs={12} sm={8} md={6}>
-          <ConvertedMarkdown>{children}</ConvertedMarkdown>
+          <MarkdownContent>{children}</MarkdownContent>
         </Grid>
       </Grid>
     </CardContent>

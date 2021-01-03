@@ -13,7 +13,7 @@ interface Props {
   children: string;
 }
 
-export const ConvertedMarkdown: React.FC<Props> = ({ children }) => {
+export const MarkdownContent: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
   return <Box className={classes.markdown} dangerouslySetInnerHTML={{ __html: children }} />;
 };

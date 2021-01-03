@@ -199,17 +199,12 @@ const ResourceDetailPage: NextPage = () => {
   // If comment modal is opened in main tab, automatically switch to discussion tab.
   useEffect(() => {
     commentModalOpen && tabValue === 0 && setTabValue(1);
-  }, [commentModalOpen]);
+  }, [commentModalOpen, tabValue]);
 
-  // If drawing mode is toggled on from discussion tab, change to file preview tab.
-  useEffect(() => {
-    drawingMode && tabValue === 1 && setTabValue(0);
-  }, [drawingMode]);
-
-  // If drawing mode is on and user changes to discussion tab, automatically toggle drawing mode off.
+  // If drawing mode is on and user changes to discussion tab, toggle drawing mode off.
   useEffect(() => {
     drawingMode && tabValue === 1 && setDrawingMode(false);
-  }, [tabValue]);
+  }, [drawingMode, tabValue]);
 
   const deleteResourceError = (): void =>
     toggleNotification(t('notifications:deleteResourceError'));
@@ -362,7 +357,7 @@ const ResourceDetailPage: NextPage = () => {
   const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
   const renderRotateButton = tabValue === 0 && <RotateButton />;
 
-  const renderDefaultBottomNavbarContent = (
+  const renderDefaultCustomBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
         {renderRotateButton}
@@ -376,11 +371,15 @@ const ResourceDetailPage: NextPage = () => {
     </Grid>
   );
 
-  const renderCustomBottomNavbar = (
+  const renderCustomBottomNavbarContent = drawingMode
+    ? renderDrawModeControls
+    : renderDefaultCustomBottomNavbarContent;
+
+  // Only render the custom bottom navbar in the resource tab or if the user is verified since all of the non-PDF actions are only available for verified users.
+  // The default bottom navbar will be automatically shown for non-verified users who are not in the resource tab.
+  const renderCustomBottomNavbar = (!!verified || tabValue === 0) && (
     <BottomNavigation>
-      <CustomBottomNavbarContainer>
-        {drawingMode ? renderDrawModeControls : renderDefaultBottomNavbarContent}
-      </CustomBottomNavbarContainer>
+      <CustomBottomNavbarContainer>{renderCustomBottomNavbarContent}</CustomBottomNavbarContainer>
     </BottomNavigation>
   );
 

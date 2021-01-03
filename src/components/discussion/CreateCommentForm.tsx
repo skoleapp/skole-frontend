@@ -120,7 +120,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     setCommentAttachment,
   } = useDiscussionContext();
 
-  // Use screenshot as attachment if area has been marked.
+  // Use screenshot as attachment if area has been marked and drawing mode is toggled off.
   useEffect(() => {
     if (screenshot && !drawingMode) {
       setCommentAttachment(screenshot); // Already in data URL form.

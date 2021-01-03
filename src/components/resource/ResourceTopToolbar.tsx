@@ -16,8 +16,6 @@ const useStyles = makeStyles(({ spacing }) => ({
     borderBottom: BORDER,
   },
   drawingMode: {
-    // The left-most item is usually text, which looks good on the default padding.
-    // During drawing mode however, the left-most item is a button which looks better with a custom padding.
     paddingLeft: spacing(2),
   },
 }));
@@ -85,9 +83,11 @@ export const ResourceTopToolbar: React.FC<Props> = ({
     </Grid>
   );
 
+  const renderControls = drawingMode ? renderDrawModeControls : renderPreviewToolbarControls;
+
   return (
     <Box className={clsx('MuiCardHeader-root', classes.root, drawingMode && classes.drawingMode)}>
-      {drawingMode ? renderDrawModeControls : renderPreviewToolbarControls}
+      {renderControls}
     </Box>
   );
 };
