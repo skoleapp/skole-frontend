@@ -122,7 +122,6 @@ const SchoolDetailPage: NextPage = () => {
     renderActionsButton,
     renderShareAction,
   } = useActionsDialog({
-    header: t('school:actionsHeader'),
     share: t('school:share'),
     target,
     shareParams,

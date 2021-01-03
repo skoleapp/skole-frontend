@@ -14,7 +14,6 @@ interface ActionsButtonProps {
 }
 
 interface UseActionsDialogParams {
-  header?: string;
   share?: string;
   target?: string;
   shareParams?: ShareParams;
@@ -32,7 +31,6 @@ interface UseActionsDialog {
 
 // Custom hook for rendering common actions and providing helpers and props for multiple action dialogs.
 export const useActionsDialog = ({
-  header,
   share,
   target = '',
   shareParams = {},
@@ -63,7 +61,6 @@ export const useActionsDialog = ({
   };
 
   const actionsDialogHeaderProps = {
-    text: header,
     onCancel: handleCloseActionsDialog,
   };
 

@@ -3,10 +3,7 @@ import {
   ContactSupportOutlined,
   EditOutlined,
   LockOutlined,
-  MessageOutlined,
   NotificationsOutlined,
-  SchoolOutlined,
-  ScoreOutlined,
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
   StarBorderOutlined,
@@ -52,23 +49,19 @@ export const IMAGE_TYPES = [
 
 export const PITCH_ITEMS = [
   {
-    subheader: 'get-started:coursesPitchSubheader',
-    icon: SchoolOutlined,
+    header: 'get-started:coursesPitchHeader',
     text: 'get-started:coursesPitchText',
   },
   {
-    subheader: 'get-started:materialsPitchSubheader',
-    icon: AssignmentOutlined,
+    header: 'get-started:materialsPitchHeader',
     text: 'get-started:materialsPitchText',
   },
   {
-    subheader: 'get-started:discussionPitchSubheader',
-    icon: MessageOutlined,
+    header: 'get-started:discussionPitchHeader',
     text: 'get-started:discussionPitchText',
   },
   {
-    subheader: 'get-started:scorePitchSubheader',
-    icon: ScoreOutlined,
+    header: 'get-started:scorePitchHeader',
     text: 'get-started:scorePitchText',
   },
 ];

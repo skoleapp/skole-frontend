@@ -3,10 +3,9 @@ import Head from 'next/head';
 import React from 'react';
 import { SEOProps } from 'types';
 
-export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, description }) => {
+export const HeadComponent: React.FC<SEOProps> = ({ title: _title, description }) => {
   const { palette } = useTheme();
-  const title = customTitle ? `Skole | ${customTitle}` : 'Skole';
-  const keywords = 'study materials, distance learning, university'; // TODO: Optimize and translate these.
+  const title = _title ? `Skole | ${_title}` : 'Skole';
 
   const renderCommonMetaTags = (
     <>
@@ -17,7 +16,6 @@ export const HeadComponent: React.FC<SEOProps> = ({ title: customTitle, descript
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
       />
       <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
       <title>{title}</title>
     </>
   );

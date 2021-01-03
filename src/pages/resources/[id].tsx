@@ -162,7 +162,6 @@ const ResourceDetailPage: NextPage = () => {
     renderReportAction,
     renderActionsButton,
   } = useActionsDialog({
-    header: t('resource:actionsHeader'),
     share: t('resource:share'),
     target,
     shareParams,

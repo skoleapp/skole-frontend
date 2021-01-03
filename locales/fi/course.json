@@ -7,7 +7,6 @@
   "shareTitle": "{{ courseName }} Skolessa",
   "shareText": "Katso {{ courseName }} käyttäjältä {{ creatorUsername }} Skolessa",
   "infoHeader": "Kurssin tiedot",
-  "actionsHeader": "Kurssin valikko",
   "share": "Jaa kurssi",
   "delete": "Poista kurssi",
   "deleteTarget": "kurssin",

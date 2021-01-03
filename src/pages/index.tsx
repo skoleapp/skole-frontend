@@ -28,7 +28,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
-import { BORDER_RADIUS, COLORS } from 'theme';
+import { BORDER_RADIUS } from 'theme';
 import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
 import { GET_STARTED_PAGE_VISITED_KEY, urls } from 'utils';
@@ -127,7 +127,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   nextStepsContainer: {
     position: 'relative',
     flexGrow: 1,
-    backgroundColor: COLORS.backgroundGrey,
+    backgroundColor: palette.grey[300],
     paddingTop: spacing(6),
     paddingBottom: spacing(2),
     [breakpoints.up('md')]: {
