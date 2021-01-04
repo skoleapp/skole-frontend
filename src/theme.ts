@@ -211,10 +211,6 @@ let theme = createMuiTheme({
       root: {
         display: 'flex',
         flexDirection: 'column',
-        [breakpoints.up('md')]: {
-          position: 'absolute',
-          height: '100%',
-        },
       },
     },
     MuiTableBody: {
