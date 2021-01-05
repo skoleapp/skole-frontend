@@ -6,5 +6,6 @@
   "confirmationHelpText": "Bra! Klicka nu på knappen nedan för att avsluta kontokontrollen.",
   "emailSubmittedHeader": "Nästan klar!",
   "emailSubmitted": "Kontrollera din e-post för en länk som du kan använda för att verifiera ditt konto.",
-  "verified": "Ditt konto är verifierat! Du kan fortsätta använda Skole."
+  "verified": "Ditt konto är verifierat! Du kan fortsätta använda Skole.",
+  "loginText": "Leta efter en länk från din e-post som du kan använda för att verifiera ditt konto. Om du inte har en länk kan du logga in och begära en ny länk."
 }

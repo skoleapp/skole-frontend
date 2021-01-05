@@ -6,5 +6,6 @@
   "confirmationHelpText": "Good! Now click the button below to finish you account verification.",
   "emailSubmittedHeader": "Almost done!",
   "emailSubmitted": "Please check your email for a link that you can use to verify your account.",
-  "verified": "Your account is verified! You can continue using Skole."
+  "verified": "Your account is verified! You can continue using Skole.",
+  "loginText": "Please look for a link from your email that you can use to verify your account. If you don't have a link, you may log in and request a new link."
 }
