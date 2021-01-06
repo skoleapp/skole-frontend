@@ -20,7 +20,7 @@ import {
   SvgIconComponent,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import { ButtonLink, LanguageButton, MainBackground, MainTemplate } from 'components';
+import { ButtonLink, LandingPageTemplate } from 'components';
 import { useAuthContext, useShareContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useSearch } from 'hooks';
@@ -34,12 +34,7 @@ import { UrlObject } from 'url';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
-  container: {
-    flexGrow: 1,
-    position: 'relative',
-  },
   searchContainer: {
-    position: 'relative',
     padding: spacing(6),
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(6)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(6)})`,
@@ -82,7 +77,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
   shortcutsContainer: {
-    position: 'relative',
     padding: `${spacing(4)} ${spacing(2)}`,
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
@@ -125,7 +119,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     width: '3rem',
   },
   nextStepsContainer: {
-    position: 'relative',
     flexGrow: 1,
     backgroundColor: palette.grey[300],
     paddingTop: spacing(6),
@@ -170,7 +163,7 @@ interface Shortcut {
 
 const IndexPage: NextPage = () => {
   const classes = useStyles();
-  const { userMe, verified } = useAuthContext();
+  const { userMe, verified, school, subject } = useAuthContext();
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
@@ -196,9 +189,6 @@ const IndexPage: NextPage = () => {
       href: urls.addCourse,
     },
   ];
-
-  const renderBackground = <MainBackground />;
-  const renderLanguageButton = <LanguageButton />;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
@@ -305,7 +295,7 @@ const IndexPage: NextPage = () => {
           <Typography {...nextStepsCardTextProps}>{t('index:takeATourHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+          <ButtonLink {...nextStepButtonProps} href={urls.getStarted}>
             {t('index:takeATourText')}
           </ButtonLink>
         </CardActions>
@@ -320,7 +310,7 @@ const IndexPage: NextPage = () => {
           <Typography {...nextStepsCardTextProps}>{t('index:verifyAccountHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+          <ButtonLink {...nextStepButtonProps} href={urls.verifyAccount}>
             {t('index:verifyAccountText')}
           </ButtonLink>
         </CardActions>
@@ -328,15 +318,32 @@ const IndexPage: NextPage = () => {
     </Grid>
   );
 
-  const renderCompleteProfileStep = (
+  const renderAddSchoolAndSubjectStep = (
     <Grid item xs={12} sm={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
-          <Typography {...nextStepsCardTextProps}>{t('index:completeProfileHeader')}</Typography>
+          <Typography {...nextStepsCardTextProps}>
+            {t('index:addSchoolAndSubjectHeader')}
+          </Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
-            {t('index:completeProfileText')}
+          <ButtonLink {...nextStepButtonProps} href={urls.editProfile}>
+            {t('index:addSchoolAndSubjectText')}
+          </ButtonLink>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+
+  const renderUploadStep = (
+    <Grid item xs={12} sm={4}>
+      <Card className={classes.nextStepsCard}>
+        <CardContent className={classes.nextStepsCardContent}>
+          <Typography {...nextStepsCardTextProps}>{t('index:uploadHeader')}</Typography>
+        </CardContent>
+        <CardActions>
+          <ButtonLink {...nextStepButtonProps} href={urls.uploadResource}>
+            {t('index:uploadText')}
           </ButtonLink>
         </CardActions>
       </Card>
@@ -346,12 +353,15 @@ const IndexPage: NextPage = () => {
   // Render different content for these cases:
   // - User is not authenticated -> link to landing page.
   // - User is authenticated by not verified -> link to account verification.
-  // - User is authenticated and verified -> link to edit profile page.
+  // - User is verified but not filled school or subject -> link to edit profile page.
+  // - User has completed all other steps -> link to upload resource page.
   const renderDynamicStep = !userMe
     ? renderTakeATourStep
     : verified === false
     ? renderVerifyStep
-    : renderCompleteProfileStep;
+    : !school || !subject
+    ? renderAddSchoolAndSubjectStep
+    : renderUploadStep;
 
   const renderContactStep = (
     <Grid item xs={12} sm={4}>
@@ -401,25 +411,15 @@ const IndexPage: NextPage = () => {
       title: t('index:title'),
       description: t('marketing:description'),
     },
-    topNavbarProps: {
-      disableSearch: true,
-      headerRight: renderLanguageButton,
-    },
-    containerProps: {
-      fullWidth: true,
-      dense: true,
-    },
+    disableHeader: true,
   };
 
   return (
-    <MainTemplate {...layoutProps}>
-      <Grid container direction="column" alignItems="center" className={classes.container}>
-        {renderBackground}
-        {renderSearch}
-        {renderShortcuts}
-        {renderInfo}
-      </Grid>
-    </MainTemplate>
+    <LandingPageTemplate {...layoutProps}>
+      {renderSearch}
+      {renderShortcuts}
+      {renderInfo}
+    </LandingPageTemplate>
   );
 };
 

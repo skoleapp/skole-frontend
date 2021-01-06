@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, LanguageButton, MainBackground, MainTemplate, TextLink } from 'components';
+import { ButtonLink, LandingPageTemplate, TextLink } from 'components';
 import { withNoAuth } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -19,42 +19,13 @@ import React, { useEffect } from 'react';
 import { GET_STARTED_PAGE_VISITED_KEY, PITCH_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
-  container: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative',
-  },
-  headerContainer: {
-    position: 'relative',
-    textAlign: 'center',
-    padding: `${spacing(8)} ${spacing(2)}`,
-    [breakpoints.up('md')]: {
-      marginTop: spacing(16),
-    },
-  },
-  logo: {
-    height: '4rem',
-    position: 'relative',
-    [breakpoints.up('sm')]: {
-      height: '5rem',
-    },
-    [breakpoints.up('md')]: {
-      height: '6rem',
-    },
-  },
-  slogan: {
-    fontSize: '1.5rem',
-    marginTop: spacing(4),
-  },
   ctaContainer: {
-    position: 'relative',
     padding: `${spacing(8)} ${spacing(2)}`,
     paddingTop: 0,
     flexGrow: 1,
     fontWeight: 'bold',
   },
-  description: {
+  ctaHeader: {
     marginTop: spacing(8),
     fontSize: '1.25rem',
     [breakpoints.up('md')]: {
@@ -73,7 +44,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     marginTop: spacing(4),
   },
   pitchContainer: {
-    position: 'relative',
     overflow: 'hidden',
   },
   pitchBoxContainer: {
@@ -96,7 +66,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     maxWidth: '10rem',
   },
   badgeContainer: {
-    position: 'relative',
     backgroundColor: palette.grey[300],
     padding: spacing(4),
     [breakpoints.up('md')]: {
@@ -148,35 +117,8 @@ const GetStartedPage: NextPage = () => {
     localStorage.setItem(GET_STARTED_PAGE_VISITED_KEY, new Date().toString());
   }, []);
 
-  const renderBackground = <MainBackground />;
-  const renderLanguageButton = <LanguageButton />;
-
-  const renderLogo = (
-    <Box className={classes.logo}>
-      <Image layout="fill" src="/images/icons/skole-icon-text.svg" />
-    </Box>
-  );
-
-  const renderSlogan = (
-    <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
-      {t('marketing:slogan')}
-    </Typography>
-  );
-
-  const renderHeader = (
-    <Box className={classes.headerContainer}>
-      {renderLogo}
-      {renderSlogan}
-    </Box>
-  );
-
-  const renderDescription = (
-    <Typography
-      className={classes.description}
-      variant="subtitle1"
-      color="secondary"
-      align="center"
-    >
+  const renderCtaHeader = (
+    <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
       {t('marketing:description')}
     </Typography>
   );
@@ -215,7 +157,7 @@ const GetStartedPage: NextPage = () => {
       alignItems="center"
       justify="center"
     >
-      {renderDescription}
+      {renderCtaHeader}
       {renderCtaButton}
       {renderOr}
       {renderAuthLink}
@@ -281,7 +223,7 @@ const GetStartedPage: NextPage = () => {
 
   const renderBadges = (
     <Grid container justify="center" className={classes.badgeContainer}>
-      <Grid item xs={12} md={8} lg={6} xl={4}>
+      <Grid item xs={12} md={6} lg={4} xl={3}>
         <Card className={classes.badgeCard}>
           {renderBadgeCardContent}
           {renderBadgeCardActions}
@@ -297,25 +239,16 @@ const GetStartedPage: NextPage = () => {
     },
     disableBottomNavbar: true,
     topNavbarProps: {
-      headerRight: renderLanguageButton,
-      disableSearch: true,
-    },
-    containerProps: {
-      fullWidth: true,
-      dense: true,
+      disableAuthButtons: true,
     },
   };
 
   return (
-    <MainTemplate {...layoutProps}>
-      <Box className={classes.container}>
-        {renderBackground}
-        {renderHeader}
-        {renderCta}
-        {renderPitch}
-        {renderBadges}
-      </Box>
-    </MainTemplate>
+    <LandingPageTemplate {...layoutProps}>
+      {renderCta}
+      {renderPitch}
+      {renderBadges}
+    </LandingPageTemplate>
   );
 };
 
