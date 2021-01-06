@@ -298,7 +298,6 @@ const GetStartedPage: NextPage = () => {
     disableBottomNavbar: true,
     topNavbarProps: {
       headerRight: renderLanguageButton,
-      disableLogo: true,
       disableSearch: true,
     },
     containerProps: {
