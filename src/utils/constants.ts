@@ -3,10 +3,8 @@ import {
   ContactSupportOutlined,
   EditOutlined,
   LockOutlined,
-  NotificationsOutlined,
   SecurityOutlined,
   SettingsBackupRestoreOutlined,
-  StarBorderOutlined,
   StorageOutlined,
 } from '@material-ui/icons';
 
@@ -88,16 +86,6 @@ export const FOR_EDUCATORS_PITCH_ITEMS = [
 
 export const SETTINGS_ITEMS = {
   account: [
-    {
-      icon: NotificationsOutlined,
-      text: 'common:activity',
-      href: urls.activity,
-    },
-    {
-      icon: StarBorderOutlined,
-      text: 'common:starred',
-      href: urls.starred,
-    },
     {
       icon: EditOutlined,
       text: 'common:editProfile',
