@@ -1,9 +1,11 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
-import { LanguageButton, MainBackground, MainTemplate } from 'components';
 import { useTranslation } from 'lib';
 import React from 'react';
 import Image from 'next/image';
 import { MainTemplateProps } from 'types';
+import { MainTemplate } from './MainTemplate';
+import { LanguageButton } from '../shared';
+import { MainBackground } from '../layout';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   container: {

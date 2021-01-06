@@ -1,5 +1,6 @@
-import { Box, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles(({ palette }) => ({
   markdown: {
@@ -15,5 +16,5 @@ interface Props {
 
 export const MarkdownContent: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
-  return <Box className={classes.markdown} dangerouslySetInnerHTML={{ __html: children }} />;
+  return <ReactMarkdown className={classes.markdown}>{children}</ReactMarkdown>;
 };

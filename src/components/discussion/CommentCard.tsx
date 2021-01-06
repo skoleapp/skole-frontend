@@ -36,10 +36,9 @@ import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from '
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { BORDER } from 'theme';
 import { mediaUrl, truncate, urls } from 'utils';
-import { ResponsiveDialog, TextLink } from '../shared';
+import { MarkdownContent, ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
@@ -269,7 +268,7 @@ export const CommentCard: React.FC<Props> = ({
 
   const renderText = (
     <Typography className={classes.text} variant="body2">
-      <ReactMarkdown>{comment.text}</ReactMarkdown>
+      <MarkdownContent>{comment.text}</MarkdownContent>
     </Typography>
   );
 
