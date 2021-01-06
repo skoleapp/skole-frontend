@@ -49,20 +49,40 @@ export const IMAGE_TYPES = [
 
 export const PITCH_ITEMS = [
   {
-    header: 'get-started:coursesPitchHeader',
-    text: 'get-started:coursesPitchText',
-  },
-  {
     header: 'get-started:materialsPitchHeader',
-    text: 'get-started:materialsPitchText',
+    bullets: [
+      'get-started:materialsBullet1',
+      'get-started:materialsBullet2',
+      'get-started:materialsBullet3',
+    ],
   },
   {
     header: 'get-started:discussionPitchHeader',
-    text: 'get-started:discussionPitchText',
+    bullets: [
+      'get-started:discussionBullet1',
+      'get-started:discussionBullet2',
+      'get-started:discussionBullet3',
+    ],
+  },
+];
+
+export const FOR_EDUCATORS_PITCH_ITEMS = [
+  {
+    header: 'for-educators:studentsPitchHeader',
+    bullets: [
+      'for-educators:studentsBullet1',
+      'for-educators:studentsBullet2',
+      'for-educators:studentsBullet3',
+    ],
   },
   {
-    header: 'get-started:scorePitchHeader',
-    text: 'get-started:scorePitchText',
+    header: 'for-educators:infoPitchHeader',
+    bullets: [
+      'for-educators:infoBullet1',
+      'for-educators:infoBullet2',
+      'for-educators:infoBullet3',
+      'for-educators:infoBullet4',
+    ],
   },
 ];
 

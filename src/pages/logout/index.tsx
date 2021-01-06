@@ -42,6 +42,7 @@ const LogoutPage: NextPage = () => {
     disableBottomNavbar: true,
     topNavbarProps: {
       disableAuthButtons: true,
+      disableForEducatorsButton: true,
       disableSearch: true,
     },
   };

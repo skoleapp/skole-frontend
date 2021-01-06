@@ -31,6 +31,9 @@ export const Footer: React.FC = () => {
         <TextLink href={urls.contact} color="secondary">
           {t('common:contact')}
         </TextLink>
+        <TextLink href={urls.forEducators} color="secondary">
+          {t('common:forEducators')}
+        </TextLink>
         <TextLink href={urls.terms} color="secondary">
           {t('common:terms')}
         </TextLink>

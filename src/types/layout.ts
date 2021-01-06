@@ -13,6 +13,7 @@ export interface TopNavbarProps {
   staticBackUrl?: string | UrlObject; // Show a back button and use this as the href.
   disableSearch?: boolean; // Explicitly disable the search field on desktop.
   disableAuthButtons?: boolean; // Explicitly disable the auth buttons on desktop.
+  disableForEducatorsButton?: boolean; // Explicitly disable the `For Educators` button on desktop.
   disableLogo?: boolean; // Explicitly disable the logo.
   headerRight?: JSX.Element | false; // Custom element for right-most slot on mobile.
   headerRightSecondary?: JSX.Element | false; // Custom element for second slot from the right on mobile.
