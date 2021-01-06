@@ -2,8 +2,9 @@ import { IconButton, Tooltip, Typography } from '@material-ui/core';
 import { StarBorderOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
-import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import React, { useEffect, useState } from 'react';
+import { useLanguageHeaderContext } from './useLanguageHeaderContext';
+import { useMediaQueries } from './useMediaQueries';
 
 interface UseStarsParams {
   starred: boolean;

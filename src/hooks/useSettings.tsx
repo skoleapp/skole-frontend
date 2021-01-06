@@ -75,7 +75,7 @@ export const useSettings = (modal: boolean): UseSettings => {
     ),
   );
 
-  // Only render the privacy, terms and coantact links in the settings list on mobile
+  // Only render the privacy, terms and contact links in the settings list on mobile
   const renderCommonMenuItems =
     isMobile &&
     SETTINGS_ITEMS.common.map(({ icon: Icon, href, text }, i) => (
