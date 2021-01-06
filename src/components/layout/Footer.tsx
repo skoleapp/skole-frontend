@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
         <Typography variant="subtitle1" color="secondary" gutterBottom>
-          {t('common:company').toUpperCase()}
+          SKOLE
         </Typography>
         <TextLink href={urls.getStarted} color="secondary">
           {t('common:getStarted')}
