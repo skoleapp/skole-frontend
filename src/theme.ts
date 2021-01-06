@@ -1,8 +1,8 @@
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints';
 import createPalette from '@material-ui/core/styles/createPalette';
-import createTypography from '@material-ui/core/styles/createTypography';
+import createTypography, { TypographyOptions } from '@material-ui/core/styles/createTypography';
 
 // Global constants, feel free to use these where ever.
 export const BORDER_RADIUS = '1.75rem';
@@ -41,11 +41,8 @@ const paletteOptions = {
   },
 };
 
-const typographyOptions = {
+const typographyOptions: TypographyOptions = {
   fontFamily: ['Roboto', 'sans-serif'].join(','),
-  h1: {
-    fontSize: 50,
-  },
 };
 
 const palette = createPalette(paletteOptions);
@@ -53,7 +50,7 @@ const typography = createTypography(palette, typographyOptions);
 const spacing = (factor: number): string => `${0.25 * factor}rem`;
 const breakpoints = createBreakpoints(breakpointOptions);
 
-let theme = createMuiTheme({
+export const theme = createMuiTheme({
   palette,
   typography,
   spacing,
@@ -249,7 +246,6 @@ let theme = createMuiTheme({
     MuiCardHeader: {
       root: {
         padding: spacing(2),
-        paddingLeft: spacing(4),
         textAlign: 'center',
       },
       title: {
@@ -339,7 +335,3 @@ let theme = createMuiTheme({
     },
   },
 });
-
-theme = responsiveFontSizes(theme);
-
-export { theme };
