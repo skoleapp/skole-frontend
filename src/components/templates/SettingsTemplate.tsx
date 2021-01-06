@@ -1,5 +1,4 @@
 import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
-import clsx from 'clsx';
 import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -12,27 +11,18 @@ import { MainTemplate } from './MainTemplate';
 const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
     flexGrow: 1,
-    display: 'flex',
-    width: '100%',
-    [breakpoints.down('md')]: {
-      margin: 0,
-    },
-  },
-  paperContainer: {
-    overflow: 'hidden',
-    paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)',
-    [breakpoints.up('md')]: {
-      borderRadius: BORDER_RADIUS,
-    },
   },
   container: {
     flexGrow: 1,
     display: 'flex',
-    flexDirection: 'column',
   },
-  disablePadding: {
-    padding: '0 !important',
+  paper: {
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
+    flexGrow: 1,
+    [breakpoints.up('md')]: {
+      borderRadius: BORDER_RADIUS,
+    },
   },
   cardHeader: {
     borderBottom: BORDER,
@@ -42,17 +32,11 @@ const useStyles = makeStyles(({ breakpoints }) => ({
 interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
   topNavbarProps: Omit<TopNavbarProps, 'header' | 'headerRight'>;
   header: string;
-  headerRight?: JSX.Element;
-  form?: boolean; // Show tighter content on the right-hand paper for forms.
-  disablePadding?: boolean; // Disable padding on the right-hand paper's card content.
 }
 
 export const SettingsTemplate: React.FC<Props> = ({
   topNavbarProps,
   header,
-  headerRight,
-  form,
-  disablePadding,
   children,
   ...props
 }) => {
@@ -60,22 +44,12 @@ export const SettingsTemplate: React.FC<Props> = ({
   const { renderSettingsMenuList } = useSettings(false);
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-
-  const formColSpan = {
-    xs: 12,
-    sm: 10,
-    md: 8,
-    lg: 4,
-  };
-
-  const colSpan = form ? formColSpan : {};
   const renderMobileSettingsButton = isMobile && <SettingsButton color="secondary" size="small" />;
-  const renderHeaderRight = headerRight || renderMobileSettingsButton;
 
   const customTopNavbarProps = {
     ...topNavbarProps,
     header,
-    headerRight: renderHeaderRight,
+    headerRight: renderMobileSettingsButton,
   };
 
   const renderSettingsHeader = (
@@ -84,7 +58,7 @@ export const SettingsTemplate: React.FC<Props> = ({
 
   const renderSettingsCard = isTabletOrDesktop && (
     <Grid item xs={12} md={4} lg={3} className={classes.container}>
-      <Paper className={clsx(classes.container, classes.paperContainer)}>
+      <Paper className={classes.paper}>
         {renderSettingsHeader}
         {renderSettingsMenuList}
       </Paper>
@@ -92,13 +66,22 @@ export const SettingsTemplate: React.FC<Props> = ({
   );
 
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={header} action={renderHeaderRight} />
+    <CardHeader className={classes.cardHeader} title={header} />
   );
 
   const renderContent = (
-    <CardContent className={clsx(classes.container, disablePadding && classes.disablePadding)}>
-      <Grid container alignItems="center" className={classes.container}>
-        <Grid item container direction="column" xs={12} className={classes.container} {...colSpan}>
+    <CardContent className={classes.container}>
+      <Grid container justify="center" className={classes.container}>
+        <Grid
+          item
+          container
+          direction="column"
+          xs={12}
+          sm={8}
+          lg={5}
+          xl={4}
+          className={classes.container}
+        >
           {children}
         </Grid>
       </Grid>
@@ -106,15 +89,8 @@ export const SettingsTemplate: React.FC<Props> = ({
   );
 
   const renderContentCard = (
-    <Grid
-      item
-      xs={12}
-      md={8}
-      lg={9}
-      container
-      className={clsx(classes.container, isMobile && classes.disablePadding)}
-    >
-      <Paper className={clsx(classes.container, classes.paperContainer)}>
+    <Grid item xs={12} md={8} lg={9} container className={classes.container}>
+      <Paper className={classes.paper}>
         {renderHeader}
         {renderContent}
       </Paper>
@@ -123,7 +99,7 @@ export const SettingsTemplate: React.FC<Props> = ({
 
   return (
     <MainTemplate {...props} topNavbarProps={customTopNavbarProps}>
-      <Grid container spacing={2} className={classes.root}>
+      <Grid container spacing={isTabletOrDesktop ? 2 : 0} className={classes.root}>
         {renderSettingsCard}
         {renderContentCard}
       </Grid>

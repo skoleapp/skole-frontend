@@ -80,20 +80,27 @@ export const DeleteAccountPage: NextPage = () => {
     password: Yup.string().required(t('validation:required')),
   });
 
+  const renderPasswordField = (
+    <Field name="password" label={t('forms:password')} component={TextFormField} type="password" />
+  );
+
+  const renderFormSubmitSection = (props: FormikProps<DeleteAccountFormValues>): JSX.Element => (
+    <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
+  );
+
+  const renderCancelButton = (
+    <FormControl>
+      <ButtonLink href={urls.editProfile} variant="outlined" color="primary">
+        {t('common:cancel')}
+      </ButtonLink>
+    </FormControl>
+  );
+
   const renderFormFields = (props: FormikProps<DeleteAccountFormValues>): JSX.Element => (
     <Form>
-      <Field
-        name="password"
-        label={t('forms:password')}
-        component={TextFormField}
-        type="password"
-      />
-      <FormSubmitSection submitButtonText={t('common:confirm')} {...props} />
-      <FormControl>
-        <ButtonLink href={urls.editProfile} variant="outlined" color="primary">
-          {t('common:cancel')}
-        </ButtonLink>
-      </FormControl>
+      {renderPasswordField}
+      {renderFormSubmitSection(props)}
+      {renderCancelButton}
     </Form>
   );
 
@@ -114,7 +121,6 @@ export const DeleteAccountPage: NextPage = () => {
       description: t('delete-account:description'),
     },
     header: t('delete-account:header'),
-    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

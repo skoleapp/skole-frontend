@@ -208,9 +208,7 @@ const EditProfilePage: NextPage = () => {
     </FormControl>
   );
 
-  const renderEditProfileformFields = (
-    props: FormikProps<UpdateProfileFormValues>,
-  ): JSX.Element => (
+  const renderFormFields = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
     <Form>
       {renderAvatarField(props)}
       {renderTitleField}
@@ -226,7 +224,7 @@ const EditProfilePage: NextPage = () => {
     </Form>
   );
 
-  const renderEditProfileForm = (
+  const renderForm = (
     <Formik
       initialValues={initialValues}
       onSubmit={handleSubmit}
@@ -234,7 +232,7 @@ const EditProfilePage: NextPage = () => {
       innerRef={formRef}
       enableReinitialize
     >
-      {renderEditProfileformFields}
+      {renderFormFields}
     </Formik>
   );
 
@@ -244,14 +242,13 @@ const EditProfilePage: NextPage = () => {
       description: t('edit-profile:description'),
     },
     header: t('edit-profile:header'),
-    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },
   };
 
   if (userMe) {
-    return <SettingsTemplate {...layoutProps}>{renderEditProfileForm}</SettingsTemplate>;
+    return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
   }
 
   return <NotFoundTemplate />;

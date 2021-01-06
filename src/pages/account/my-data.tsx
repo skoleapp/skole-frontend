@@ -113,7 +113,6 @@ const MyDataPage: NextPage = () => {
       description: t('my-data:description'),
     },
     header: t('my-data:header'),
-    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },

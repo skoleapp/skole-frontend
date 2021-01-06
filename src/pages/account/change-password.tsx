@@ -1,6 +1,6 @@
 import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
 import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -65,10 +65,36 @@ const ChangePasswordPage: NextPage = () => {
     context,
   });
 
-  const handleSubmit = async (values: ChangePasswordFormValues): Promise<void> => {
-    const { oldPassword, newPassword } = values;
+  const handleSubmit = async ({
+    oldPassword,
+    newPassword,
+  }: ChangePasswordFormValues): Promise<void> => {
     await changePassword({ variables: { oldPassword, newPassword } });
   };
+
+  const renderFormFields = (props: FormikProps<ChangePasswordFormValues>): JSX.Element => (
+    <Form>
+      <Field
+        name="oldPassword"
+        component={TextFormField}
+        label={t('forms:oldPassword')}
+        type="password"
+      />
+      <Field
+        name="newPassword"
+        component={TextFormField}
+        label={t('forms:newPassword')}
+        type="password"
+      />
+      <Field
+        name="confirmNewPassword"
+        component={TextFormField}
+        label={t('forms:confirmNewPassword')}
+        type="password"
+      />
+      <FormSubmitSection submitButtonText={t('common:save')} {...props} />
+    </Form>
+  );
 
   const renderForm = (
     <Formik
@@ -77,29 +103,7 @@ const ChangePasswordPage: NextPage = () => {
       validationSchema={validationSchema}
       innerRef={formRef}
     >
-      {(props): JSX.Element => (
-        <Form>
-          <Field
-            name="oldPassword"
-            component={TextFormField}
-            label={t('forms:oldPassword')}
-            type="password"
-          />
-          <Field
-            name="newPassword"
-            component={TextFormField}
-            label={t('forms:newPassword')}
-            type="password"
-          />
-          <Field
-            name="confirmNewPassword"
-            component={TextFormField}
-            label={t('forms:confirmNewPassword')}
-            type="password"
-          />
-          <FormSubmitSection submitButtonText={t('common:save')} {...props} />
-        </Form>
-      )}
+      {renderFormFields}
     </Formik>
   );
 
@@ -109,7 +113,6 @@ const ChangePasswordPage: NextPage = () => {
       description: t('change-password:description'),
     },
     header: t('change-password:header'),
-    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },
