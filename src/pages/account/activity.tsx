@@ -1,14 +1,24 @@
-import { List, ListItemIcon, ListItemText, MenuItem, TableBody } from '@material-ui/core';
+import {
+  CardHeader,
+  List,
+  ListItemIcon,
+  ListItemText,
+  makeStyles,
+  MenuItem,
+  Paper,
+  TableBody,
+} from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
   ActivityListItem,
+  BackButton,
   ErrorTemplate,
   LoadingBox,
+  MainTemplate,
   NotFoundBox,
   OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
-  SettingsTemplate,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import {
@@ -17,17 +27,49 @@ import {
   useGraphQlMarkAllActivitiesAsReadMutation,
 } from 'generated';
 import { withAuth } from 'hocs';
-import { useActionsDialog, useLanguageHeaderContext } from 'hooks';
+import { useActionsDialog, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
+import { BORDER, BORDER_RADIUS } from 'theme';
+
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+  paper: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
+    [breakpoints.up('md')]: {
+      borderRadius: BORDER_RADIUS,
+    },
+  },
+  cardHeaderRoot: {
+    borderBottom: BORDER,
+    position: 'relative',
+    padding: spacing(3),
+  },
+  cardHeaderAvatar: {
+    position: 'absolute',
+    top: spacing(2),
+    left: spacing(2),
+  },
+  cardHeaderAction: {
+    position: 'absolute',
+    top: spacing(2),
+    right: spacing(2),
+  },
+}));
 
 const ActivityPage: NextPage = () => {
+  const classes = useStyles();
   const { t } = useTranslation();
   const { unexpectedError } = useNotificationsContext();
   const { query } = useRouter();
+  const { isTabletOrDesktop } = useMediaQueries();
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
@@ -46,7 +88,9 @@ const ActivityPage: NextPage = () => {
     actionsDialogHeaderProps,
     renderActionsButton,
     handleCloseActionsDialog,
-  } = useActionsDialog({});
+  } = useActionsDialog({
+    actionsButtonTooltip: t('activity-tooltips:actions'),
+  });
 
   const onCompleted = ({
     markAllActivitiesAsRead,
@@ -80,6 +124,36 @@ const ActivityPage: NextPage = () => {
     handleCloseActionsDialog(e);
   };
 
+  const renderBackButton = <BackButton onClick={() => Router.back()} />;
+
+  const renderCardHeader = isTabletOrDesktop && (
+    <CardHeader
+      classes={{
+        root: classes.cardHeaderRoot,
+        avatar: classes.cardHeaderAvatar,
+        action: classes.cardHeaderAction,
+      }}
+      title={t('activity:header')}
+      avatar={renderBackButton}
+      action={renderActionsButton}
+    />
+  );
+
+  const renderLoading = <LoadingBox />;
+  const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
+  const mapActivities = activities.map((a, i) => <ActivityListItem key={i} activity={a} />);
+  const renderActivityTableBody = <TableBody>{mapActivities}</TableBody>;
+
+  const renderTable = (
+    <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
+  );
+
+  const renderActivities = loading
+    ? renderLoading
+    : activities.length
+    ? renderTable
+    : renderNotFound;
+
   // Disable this action if user has no activities.
   const renderMarkAllAsReadAction = (
     <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton} disabled={markAllAsReadDisabled}>
@@ -106,28 +180,6 @@ const ActivityPage: NextPage = () => {
     </List>
   );
 
-  const renderLoading = <LoadingBox />;
-
-  const renderActivityTableBody = (
-    <TableBody>
-      {activities.map((a, i) => (
-        <ActivityListItem key={i} activity={a} />
-      ))}
-    </TableBody>
-  );
-
-  const renderTable = (
-    <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
-  );
-
-  const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
-
-  const renderActivities = loading
-    ? renderLoading
-    : activities.length
-    ? renderTable
-    : renderNotFound;
-
   const renderActionsDialog = (
     <ResponsiveDialog
       open={actionsDialogOpen}
@@ -138,14 +190,18 @@ const ActivityPage: NextPage = () => {
     </ResponsiveDialog>
   );
 
+  const renderContent = (
+    <Paper className={classes.paper}>
+      {renderCardHeader}
+      {renderActivities}
+    </Paper>
+  );
+
   const layoutProps = {
     seoProps: {
       title: t('activity:title'),
       description: t('activity:description'),
     },
-    header: t('activity:header'),
-    headerRight: renderActionsButton,
-    disablePadding: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },
@@ -159,16 +215,16 @@ const ActivityPage: NextPage = () => {
   }
 
   return (
-    <SettingsTemplate {...layoutProps}>
-      {renderActivities}
+    <MainTemplate {...layoutProps}>
+      {renderContent}
       {renderActionsDialog}
-    </SettingsTemplate>
+    </MainTemplate>
   );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces([], locale),
+    _ns: await loadNamespaces(['activity-tooltips'], locale),
   },
 });
 
