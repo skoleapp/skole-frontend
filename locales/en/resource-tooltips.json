@@ -17,5 +17,6 @@
   "exitDrawingMode": "Exit drawing mode.",
   "downloadPdf": "Download PDF file.",
   "printPdf": "Print PDF file.",
-  "rotatePdf": "Rotate PDF file."
+  "rotatePdf": "Rotate PDF file.",
+  "backToCourse": "Go back to {{ courseName }}."
 }

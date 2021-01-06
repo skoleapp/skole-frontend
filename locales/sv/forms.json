@@ -1,7 +1,7 @@
 {
   "username": "Användarnamn",
   "usernameOrEmail": "Användarnamn eller e-post",
-  "usernameHelperText": "Ett användarnamn du väljer som kommer att visas för andra användare.",
+  "usernameHelperText": "Ditt användarnamn visas för andra användare.",
   "email": "E-post",
   "invalidEmail": "Ogiltig e-post.",
   "emailHelperText": "Din e-post är endast synlig för dig. Vi använder din e-post för att identifiera dig och för att ge viktiga meddelanden. Vi kommer inte att skräpposta dig.",

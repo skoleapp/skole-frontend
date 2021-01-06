@@ -5,14 +5,16 @@
   "uploadMaterial": "Ladda upp material",
   "addCourses": "Lägg till kurser",
   "nextStepsHeader": "Nästa steg",
-  "inviteHeader": "Skole handlar om samarbete med dina klasskamrater. Bjud in dina vänner att gå med dig!",
+  "inviteHeader": "Skole handlar om samarbete med dina klasskamrater. Bjud in dina vänner!",
   "inviteText": "Bjud in vänner",
   "contactHeader": "Är din skola eller ditt ämne ännu inte listat? Kontakta oss så lägger vi till dem!",
   "contactText": "Kontakta oss",
   "takeATourHeader": "Lär dig vad Skole handlar om. Genom att logga in får du ut det mesta!",
   "takeATourText": "Ta en rundtur",
-  "verifyAccountHeader": "Genom att verifiera ditt konto låser du upp alla funktioner och får bästa möjliga upplevelse med Skole!",
+  "verifyAccountHeader": "Genom att verifiera ditt konto låser du upp alla funktioner och får bästa möjliga upplevelse!",
   "verifyAccountText": "Verifiera konto",
-  "completeProfileHeader": "Genom att lägga till din information i din profil får du din profil att se starkare ut och se mer relevant innehåll!",
-  "completeProfileText": "Fyll i din profil"
+  "addSchoolAndSubjectHeader": "Lägg till din skola och ämne för att se mer relevant innehåll!",
+  "addSchoolAndSubjectText": "Fyll i din profil",
+  "uploadHeader": "Dela ditt studiematerial med andra användare och öka din poäng!",
+  "uploadText": "Ladda upp material"
 }

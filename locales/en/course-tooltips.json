@@ -9,5 +9,6 @@
   "voteOwnContent": "You cannot vote on your own course.",
   "share": "Share this course.",
   "info": "Show course details.",
-  "actions": "Show course menu."
+  "actions": "Show course menu.",
+  "backToSearch": "Go back to search."
 }
