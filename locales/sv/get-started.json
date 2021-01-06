@@ -1,15 +1,15 @@
 {
   "title": "Komma igång",
-  "appStoreCta": "Skaffa det i appbutiker! (på kommande)",
   "cta": "Komma igång!",
   "or": "eller",
   "skipLogin": "Hoppa över inloggning",
-  "coursesPitchHeader": "Hålla dig uppdaterad med dina kurser",
-  "materialsPitchHeader": "Hitta de bästa studiematerialen",
-  "discussionPitchHeader": "Diskutera med dina klasskamrater",
-  "scorePitchHeader": "Få skryträtt",
-  "coursesPitchText": "Spara dina favoritkurser och håll dig uppdaterad. Lägg till nya kurser för att dela dem med dina klasskamrater.",
-  "materialsPitchText": "Hitta det bästa studiematerialet enkelt. Lägg till nytt material i kurserna.",
-  "discussionPitchText": "Diskutera kurser och material enkelt. Verka som anonym eller med ditt konto.",
-  "scorePitchText": "Öka din poäng genom att lägga till bra innehåll. Beröm din profil till dina vänner."
+  "materialsPitchHeader": "Studiematerial 📚",
+  "discussionPitchHeader": "Diskussioner 💬",
+  "materialsBullet1": "Enkel tillgång tll material från dina kurser..",
+  "materialsBullet2": "Lägg till nytt innehåll och dela det med dina vänner.",
+  "materialsBullet3": "Öka din poäng och tjäna skryta rättigheter. 😁",
+  "discussionBullet1": "Diskutera kurser och studiematerial med lätthet.",
+  "discussionBullet2": "Anonymt eller med ditt eget användarnamn.",
+  "discussionBullet3": "Se diskussioner från tidigare kursinstanser och ligga steget före. 🤓",
+  "appStoreCta": "Snart tillgänglig från appbutiker!"
 }

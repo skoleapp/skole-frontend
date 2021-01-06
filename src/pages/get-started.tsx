@@ -80,11 +80,13 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     backgroundColor: palette.grey[300],
     padding: `${spacing(4)} ${spacing(2)}`,
     textAlign: 'left',
+    [breakpoints.up('md')]: {
+      padding: spacing(6),
+    },
   },
   pitchHeader: {
     fontSize: '1.25rem',
     fontWeight: 'bold',
-    marginBottom: spacing(2),
   },
   pitchHeaderDivider: {
     height: '0.25rem',
@@ -96,10 +98,13 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   badgeContainer: {
     position: 'relative',
     backgroundColor: palette.grey[300],
-    padding: `${spacing(8)} ${spacing(2)}`,
+    padding: spacing(4),
+    [breakpoints.up('md')]: {
+      padding: spacing(8),
+    },
   },
   badgeCard: {
-    height: '100%',
+    flexGrow: 1,
     backgroundColor: palette.grey[200],
     display: 'flex',
     flexDirection: 'column',
@@ -109,7 +114,8 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
   badgeCardContent: {
     flexGrow: 1,
-    padding: spacing(2),
+    padding: '0 !important',
+    paddingTop: `${spacing(4)} !important`,
   },
   badgeCardText: {
     fontSize: '1.1rem',
@@ -216,21 +222,32 @@ const GetStartedPage: NextPage = () => {
     </Grid>
   );
 
-  const renderPitchItems = PITCH_ITEMS.map(({ header, text }) => (
+  const renderPitchItems = PITCH_ITEMS.map(({ header, bullets }) => (
     <Grid item xs={12} md={6}>
       <Typography className={classes.pitchHeader} variant="subtitle1">
-        {t(header)}
+        {t(header).toUpperCase()}
       </Typography>
       <Divider className={classes.pitchHeaderDivider} />
-      <Typography variant="body2" color="textSecondary">
-        {t(text)}
-      </Typography>
+      {bullets.map((b) => (
+        <Typography variant="body2" color="textSecondary">
+          - {t(b)}
+        </Typography>
+      ))}
     </Grid>
   ));
 
   const renderPitch = (
     <Grid container direction="column" alignItems="center" className={classes.pitchContainer}>
-      <Grid container item xs={12} lg={8} xl={6} className={classes.pitchBoxContainer} spacing={4}>
+      <Grid
+        container
+        item
+        xs={12}
+        md={10}
+        lg={8}
+        xl={6}
+        className={classes.pitchBoxContainer}
+        spacing={4}
+      >
         {renderPitchItems}
       </Grid>
     </Grid>
@@ -264,10 +281,12 @@ const GetStartedPage: NextPage = () => {
 
   const renderBadges = (
     <Grid container justify="center" className={classes.badgeContainer}>
-      <Card className={classes.badgeCard}>
-        {renderBadgeCardContent}
-        {renderBadgeCardActions}
-      </Card>
+      <Grid item xs={12} md={8} lg={6} xl={4}>
+        <Card className={classes.badgeCard}>
+          {renderBadgeCardContent}
+          {renderBadgeCardActions}
+        </Card>
+      </Grid>
     </Grid>
   );
 
