@@ -70,6 +70,10 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     width: '5rem',
     height: '5rem',
     marginBottom: spacing(4),
+    [breakpoints.up('md')]: {
+      width: '7rem',
+      height: '7rem',
+    },
   },
   statsContainer: {
     marginTop: spacing(4),
