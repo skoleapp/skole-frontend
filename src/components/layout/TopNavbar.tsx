@@ -17,9 +17,10 @@ import {
 } from '@material-ui/core';
 import {
   AddCircleOutlineOutlined,
-  ArrowBackOutlined,
   HowToRegOutlined,
+  LaunchOutlined,
   NotificationsOutlined,
+  SchoolOutlined,
   StarBorderOutlined,
 } from '@material-ui/icons';
 import { useAuthContext } from 'context';
@@ -34,7 +35,7 @@ import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
 import { Logo } from './Logo';
-import { ButtonLink, IconButtonLink } from '../shared';
+import { BackButton, ButtonLink, IconButtonLink } from '../shared';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -68,6 +69,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   staticBackUrl,
   disableSearch,
   disableAuthButtons,
+  disableForEducatorsButton,
   disableLogo,
   headerRight,
   headerRightSecondary,
@@ -79,7 +81,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { userMe, userMeId, avatarThumbnail, authNetworkError } = useAuthContext();
   const dense = !!headerLeft || !!headerRightSecondary;
-  const backButtonTooltip = t('common-tooltips:goBack');
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
@@ -92,24 +93,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperOpen(!activityPopperOpen);
   };
 
-  const renderDynamicBackButton = dynamicBackUrl && (
-    <Tooltip title={backButtonTooltip}>
-      <IconButton onClick={(): void => Router.back()} color="secondary" size="small">
-        <ArrowBackOutlined />
-      </IconButton>
-    </Tooltip>
-  );
-
-  const renderStaticBackButton = !!staticBackUrl && (
-    <Link href={staticBackUrl}>
-      <Tooltip title={backButtonTooltip}>
-        <IconButton color="secondary" size="small">
-          <ArrowBackOutlined />
-        </IconButton>
-      </Tooltip>
-    </Link>
-  );
-
+  const renderDynamicBackButton = !!dynamicBackUrl && <BackButton onClick={() => Router.back()} />;
+  const renderStaticBackButton = !!staticBackUrl && <BackButton href={staticBackUrl} />;
   const renderHeader = <Typography variant="h5">{header}</Typography>;
   const renderLogo = !disableLogo && <Logo />;
 
@@ -168,6 +153,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Popper>
   );
 
+  const renderForEducatorsButton = !userMe && !disableForEducatorsButton && (
+    <ButtonLink href={urls.forEducators} color="secondary" endIcon={<SchoolOutlined />}>
+      {t('common:forEducators')}
+    </ButtonLink>
+  );
+
   // ClickAway listener requires a single child element.
   const renderAuthenticatedButtons = !!userMe && !disableAuthButtons && (
     <>
@@ -202,11 +193,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
         {t('common:register')}
       </ButtonLink>
+      <ButtonLink href={urls.getStarted} color="secondary" endIcon={<LaunchOutlined />}>
+        {t('common:getStarted')}
+      </ButtonLink>
     </>
   );
 
   const renderSearch = !disableSearch && <TopNavbarSearchWidget />;
-  const renderButtons = userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
+  const renderDynamicButtons = userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
   const renderDesktopContent = isTabletOrDesktop && (
     <Grid container alignItems="center">
@@ -215,7 +209,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       </Grid>
       <Grid item xs={10} container justify="flex-end" alignItems="center">
         {renderSearch}
-        {renderButtons}
+        {renderDynamicButtons}
+        {renderForEducatorsButton}
       </Grid>
     </Grid>
   );
