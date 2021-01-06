@@ -1,5 +1,6 @@
 export { ErrorTemplate } from './ErrorTemplate';
 export { FormTemplate } from './FormTemplate';
+export { LandingPageTemplate } from './LandingPageTemplate';
 export { LoadingTemplate } from './LoadingTemplate';
 export { MainTemplate } from './MainTemplate';
 export { MarkdownTemplate } from './MarkdownTemplate';

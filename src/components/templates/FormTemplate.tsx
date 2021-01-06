@@ -1,20 +1,29 @@
 import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps, TopNavbarProps } from 'types';
+import { BackButton } from '../shared';
 
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
     flexGrow: 1,
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
   },
-  cardHeader: {
+  cardHeaderRoot: {
     borderBottom: BORDER,
+    position: 'relative',
+    padding: spacing(3),
+  },
+  cardHeaderAvatar: {
+    position: 'absolute',
+    top: spacing(2),
+    left: spacing(2),
   },
 }));
 
@@ -25,7 +34,11 @@ interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
 
 export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps, ...props }) => {
   const classes = useStyles();
+  const router = useRouter();
   const { isTabletOrDesktop } = useMediaQueries();
+  const dynamicBackUrl = topNavbarProps?.dynamicBackUrl;
+  const staticBackUrl = topNavbarProps?.staticBackUrl;
+  const handleBackButtonClick = () => (staticBackUrl ? router.push(staticBackUrl) : router.back());
 
   const layoutProps = {
     ...props,
@@ -35,8 +48,19 @@ export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps
     },
   };
 
+  const renderBackButton = (!!dynamicBackUrl || !!staticBackUrl) && (
+    <BackButton onClick={handleBackButtonClick} />
+  );
+
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={header} />
+    <CardHeader
+      classes={{
+        root: classes.cardHeaderRoot,
+        avatar: classes.cardHeaderAvatar,
+      }}
+      title={header}
+      avatar={renderBackButton}
+    />
   );
 
   const renderForm = (

@@ -5,29 +5,32 @@ import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { BORDER } from 'theme';
+import { urls } from 'utils';
+import { BackButton } from '../shared';
 
 import { DrawModeButton } from './DrawModeButton';
 import { DrawModeControls } from './DrawModeControls';
 import { RotateButton } from './RotateButton';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles({
   root: {
     width: '100%',
     borderBottom: BORDER,
   },
-  drawingMode: {
-    paddingLeft: spacing(2),
-  },
-}));
+});
 
 interface Props {
   title: string;
+  courseId: string;
+  courseName: string;
   handleDownloadButtonClick: (e: SyntheticEvent) => Promise<void>;
   handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
 }
 
 export const ResourceTopToolbar: React.FC<Props> = ({
   title,
+  courseId,
+  courseName,
   handleDownloadButtonClick,
   handlePrintButtonClick,
 }) => {
@@ -63,15 +66,24 @@ export const ResourceTopToolbar: React.FC<Props> = ({
     </Tooltip>
   );
 
+  const renderBackButton = (
+    <BackButton
+      href={urls.course(courseId)}
+      tooltip={t('resource-tooltips:backToCourse', { courseName })}
+      className="MuiCardHeader-avatar"
+    />
+  );
+
   const renderResourceTitle = (
     <Typography className={clsx('MuiCardHeader-title', 'truncate-text')} variant="h5">
       {title}
     </Typography>
   );
 
-  const renderPreviewToolbarControls = (
+  const renderDefaultToolbarControls = (
     <Grid container>
       <Grid item xs={8} lg={9} xl={10} container justify="flex-start" alignItems="center">
+        {renderBackButton}
         {renderResourceTitle}
       </Grid>
       <Grid item xs={4} lg={3} xl={2} container justify="flex-end" alignItems="center">
@@ -83,11 +95,6 @@ export const ResourceTopToolbar: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderControls = drawingMode ? renderDrawModeControls : renderPreviewToolbarControls;
-
-  return (
-    <Box className={clsx('MuiCardHeader-root', classes.root, drawingMode && classes.drawingMode)}>
-      {renderControls}
-    </Box>
-  );
+  const renderControls = drawingMode ? renderDrawModeControls : renderDefaultToolbarControls;
+  return <Box className={clsx('MuiCardHeader-root', classes.root)}>{renderControls}</Box>;
 };

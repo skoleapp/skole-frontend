@@ -1,6 +1,6 @@
-import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
+import { FormSubmitSection, FormTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -78,6 +78,22 @@ const ContactPage: NextPage = () => {
     await createContactMessage({ variables });
   };
 
+  const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
+    <Form>
+      <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
+      <Field name="name" component={TextFormField} label={t('forms:name')} />
+      <Field name="email" component={TextFormField} label={t('forms:email')} />
+      <Field
+        name="message"
+        component={TextFormField}
+        label={t('forms:message')}
+        rows="4"
+        multiline
+      />
+      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+    </Form>
+  );
+
   const renderForm = (
     <Formik
       onSubmit={handleSubmit}
@@ -85,21 +101,7 @@ const ContactPage: NextPage = () => {
       validationSchema={validationSchema}
       innerRef={formRef}
     >
-      {(props): JSX.Element => (
-        <Form>
-          <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
-          <Field name="name" component={TextFormField} label={t('forms:name')} />
-          <Field name="email" component={TextFormField} label={t('forms:email')} />
-          <Field
-            name="message"
-            component={TextFormField}
-            label={t('forms:message')}
-            rows="4"
-            multiline
-          />
-          <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-        </Form>
-      )}
+      {renderFormFields}
     </Formik>
   );
 
@@ -109,13 +111,12 @@ const ContactPage: NextPage = () => {
       description: t('contact:description'),
     },
     header: t('contact:header'),
-    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },
   };
 
-  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({

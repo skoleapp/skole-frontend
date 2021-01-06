@@ -6,6 +6,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import clsx from 'clsx';
 import { useNotificationsContext } from 'context';
 import {
   ActivityObjectType,
@@ -105,7 +106,7 @@ export const ActivityListItem: React.FC<Props> = ({
   );
 
   return (
-    <ListItem onClick={handleClick} className={!read ? classes.unread : ''} button>
+    <ListItem onClick={handleClick} className={clsx(!read && classes.unread)} button>
       {renderAvatar}
       {renderListItemText}
     </ListItem>

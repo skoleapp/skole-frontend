@@ -41,6 +41,7 @@ export const LoadingTemplate: React.FC = () => {
     disableFooter: true,
     topNavbarProps: {
       disableAuthButtons: true,
+      disableForEducatorsButton: true,
       disableLogo: true,
       disableSearch: true,
     },

@@ -385,6 +385,8 @@ const ResourceDetailPage: NextPage = () => {
 
   const toolbarProps = {
     title,
+    courseId,
+    courseName,
     handleDownloadButtonClick,
     handlePrintButtonClick,
   };
