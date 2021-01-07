@@ -19,6 +19,7 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [dayjs](https://www.npmjs.com/package/days)                                          | Immutable date library.                                                                       |
 | [formik](https://www.npmjs.com/package/formik)                                       | Provides useful and extensible form logic.                                                    |
 | [graphql](https://www.npmjs.com/package/graphql)                                     | Only used for getting useful GraphQL typings.                                                 |
+| [gray-matter](https://www.npmjs.com/package/gray-matter)                             | Parse content from Markdown files.                                                            |
 | [lodash.throttle](https://www.npmjs.com/package/lodash.thorttle)                     | Single utility function from [Lodash](https://www.npmjs.com/package/lodash).                  |
 | [next](https://www.npmjs.com/package/next)                                           | Rendering framework for [React](https://www.npmjs.com/package/react).                         |
 | [next-offline](https://www.npmjs.com/package/next-offline)                           | Offline support for [Next.js](https://www.npmjs.com/package/next).                            |
@@ -41,4 +42,5 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [eslint](https://www.npmjs.com/package/eslint)                             | Linter.                                                     |
 | [graphql-let](https://www.npmjs.com/package/graphql-let)                   | GraphQL Code Generator wrapper to automate code generation. |
 | [prettier](https://www.npmjs.com/package/prettier)                         | Formatter.                                                  |
+| [raw-loader](https://www.npmjs.com/package/raw-loader)                     | Needed for parsing Markdown files.                          |
 | [typescript](https://www.npmjs.com/package/typescript)                     | Duh.                                                        |
