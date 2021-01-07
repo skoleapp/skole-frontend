@@ -6,11 +6,10 @@ import {
   makeStyles,
   MenuItem,
   Paper,
-  TableBody,
 } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
-  ActivityListItem,
+  ActivityTableBody,
   BackButton,
   ErrorTemplate,
   LoadingBox,
@@ -32,7 +31,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -103,7 +102,6 @@ const ActivityPage: NextPage = () => {
         !!markAllActivitiesAsRead.activities.objects
       ) {
         const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
-
         setActivities(newActivities);
       } else {
         unexpectedError();
@@ -141,8 +139,7 @@ const ActivityPage: NextPage = () => {
 
   const renderLoading = <LoadingBox />;
   const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
-  const mapActivities = activities.map((a, i) => <ActivityListItem key={i} activity={a} />);
-  const renderActivityTableBody = <TableBody>{mapActivities}</TableBody>;
+  const renderActivityTableBody = <ActivityTableBody activities={activities} />;
 
   const renderTable = (
     <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
