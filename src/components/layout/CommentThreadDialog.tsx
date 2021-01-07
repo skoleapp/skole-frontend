@@ -11,7 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const CommentThreadModal: React.FC = () => {
+export const CommentThreadDialog: React.FC = () => {
   const classes = useStyles();
   const { topComment, setTopComment } = useDiscussionContext();
   const handleClose = (): void => setTopComment(null);

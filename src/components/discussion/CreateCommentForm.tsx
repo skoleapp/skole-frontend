@@ -114,8 +114,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   } = useForm<CreateCommentFormValues>();
 
   const {
-    commentModalOpen,
-    toggleCommentModal,
+    commentDialogOpen,
+    toggleCommentDialog,
     commentAttachment,
     setCommentAttachment,
   } = useDiscussionContext();
@@ -129,9 +129,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     }
   }, [screenshot, drawingMode]);
 
-  const handleCloseCreateCommentModal = (): void => {
+  const handleCloseCreateCommentDialog = (): void => {
     setFieldValue('attachment', null);
-    toggleCommentModal(false);
+    toggleCommentDialog(false);
     setCommentAttachment(null);
     !!setScreenshot && setScreenshot(null); // Not defined when in course page.
   };
@@ -172,7 +172,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
       });
 
       resetForm();
-      toggleCommentModal(false);
+      toggleCommentDialog(false);
     }
 
     setSubmitting(false);
@@ -188,7 +188,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   const setAttachment = (file: File | Blob) => {
     setFieldValue('attachment', file);
-    toggleCommentModal(true);
+    toggleCommentDialog(true);
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -413,7 +413,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     <DialogHeader
       headerCenter={renderHeaderCenter(props)} // Rendered for authenticated users.
       text={t('forms:createComment')} // Rendered for anonymous users.
-      onCancel={handleCloseCreateCommentModal}
+      onCancel={handleCloseCreateCommentDialog}
     />
   );
 
@@ -427,8 +427,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </DialogContent>
   );
 
-  const renderCreateCommentModal = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
-    <SkoleDialog open={commentModalOpen} onClose={handleCloseCreateCommentModal}>
+  const renderCreateCommentDialog = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
+    <SkoleDialog open={commentDialogOpen} onClose={handleCloseCreateCommentDialog}>
       {renderDialogHeader(props)}
       {renderDialogContent(props)}
     </SkoleDialog>
@@ -437,7 +437,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderFormFields = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <Form className={classes.desktopContainer}>
       {renderDesktopInput(props)}
-      {renderCreateCommentModal(props)}
+      {renderCreateCommentDialog(props)}
       {renderHiddenAttachmentInput}
     </Form>
   );

@@ -139,7 +139,7 @@ const ResourceDetailPage: NextPage = () => {
   const shareText = t('resource:shareText', { resourceTitle, creatorUsername });
   const shareParams = { shareHeader: t('resource:shareHeader'), shareTitle, shareText };
   const created = R.prop('created', resource);
-  const { commentCount, commentModalOpen } = useDiscussionContext(comments);
+  const { commentCount, commentDialogOpen } = useDiscussionContext(comments);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
   const staticBackUrl = urls.course(courseId);
 
@@ -196,10 +196,10 @@ const ResourceDetailPage: NextPage = () => {
     setResource(initialResource);
   }, [data]);
 
-  // If comment modal is opened in main tab, automatically switch to discussion tab.
+  // If comment dialog is opened in main tab, automatically switch to discussion tab.
   useEffect(() => {
-    commentModalOpen && tabValue === 0 && setTabValue(1);
-  }, [commentModalOpen, tabValue]);
+    commentDialogOpen && tabValue === 0 && setTabValue(1);
+  }, [commentDialogOpen, tabValue]);
 
   // If drawing mode is on and user changes to discussion tab, toggle drawing mode off.
   useEffect(() => {

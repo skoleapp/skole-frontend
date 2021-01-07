@@ -1,13 +1,13 @@
 export { AttachmentViewer } from './AttachmentViewer';
 export { BottomNavbar } from './BottomNavbar';
-export { CommentThreadModal } from './CommentThreadModal';
+export { CommentThreadDialog } from './CommentThreadDialog';
 export { Footer } from './Footer';
 export { HeadComponent as Head } from './Head';
 export { LanguageSelectorDialog } from './LanguageSelectorDialog';
 export { Logo } from './Logo';
 export { MainBackground } from './MainBackground';
 export { Notifications } from './Notifications';
-export { SettingsModal } from './SettingsModal';
+export { SettingsDialog } from './SettingsDialog';
 export { ShareDialog } from './ShareDialog';
 export { TopNavbar } from './TopNavbar';
 export { TopNavbarSearchWidget } from './TopNavbarSearchWidget';

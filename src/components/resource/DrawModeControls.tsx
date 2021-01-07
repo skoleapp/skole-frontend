@@ -9,7 +9,7 @@ export const DrawModeControls: React.FC = () => {
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const { setDrawingMode, screenshot, setScreenshot } = usePdfViewerContext();
-  const { toggleCommentModal } = useDiscussionContext();
+  const { toggleCommentDialog } = useDiscussionContext();
 
   const handleExitButtonClick = (): void => {
     setDrawingMode(false);
@@ -18,7 +18,7 @@ export const DrawModeControls: React.FC = () => {
 
   const handleContinueButtonClick = (): void => {
     setDrawingMode(false);
-    toggleCommentModal(true);
+    toggleCommentDialog(true);
   };
 
   const renderExitButton = (

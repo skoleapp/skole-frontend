@@ -71,8 +71,8 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
 }) => {
   const classes = useStyles();
   const { isMobile } = useMediaQueries();
-  const { topLevelComments, setTopLevelComments, toggleCommentModal } = useDiscussionContext();
-  const openCommentModal = (): void => toggleCommentModal(true);
+  const { topLevelComments, setTopLevelComments, toggleCommentDialog } = useDiscussionContext();
+  const openCommentDialog = (): void => toggleCommentDialog(true);
 
   const appendComments = (comment: CommentObjectType): void =>
     setTopLevelComments([...topLevelComments, comment]);
@@ -112,7 +112,7 @@ export const TopLevelCommentThread: React.FC<TopLevelCommentThreadProps> = ({
   const renderInputArea = <CreateCommentForm {...createCommentFormProps} />;
 
   const renderCreateCommentButton = isMobile && (
-    <Fab className={classes.createCommentButton} color="secondary" onClick={openCommentModal}>
+    <Fab className={classes.createCommentButton} color="secondary" onClick={openCommentDialog}>
       <AddOutlined />
     </Fab>
   );
@@ -137,14 +137,14 @@ export const ReplyCommentThread: React.FC = () => {
   const {
     topComment,
     setTopComment,
-    toggleCommentModal,
+    toggleCommentDialog,
     topLevelComments,
     setTopLevelComments,
   } = useDiscussionContext();
 
   const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', topComment);
   const target = { comment: Number(R.prop('id', topComment)) };
-  const openCommentModal = (): void => toggleCommentModal(true);
+  const openCommentDialog = (): void => toggleCommentDialog(true);
 
   const appendComments = (comment: CommentObjectType): void => {
     if (topComment) {
@@ -172,7 +172,7 @@ export const ReplyCommentThread: React.FC = () => {
   const removeComment = (id: string): void => {
     if (topComment) {
       if (id === topComment.id) {
-        setTopComment(null); // Close modal if top comment gets deleted.
+        setTopComment(null); // Close dialog if top comment gets deleted.
         setTopLevelComments(topLevelComments.filter((c) => c.id !== id)); // Filter deleted comment from top-level comments.
       } else {
         const filteredReplyComments = replyComments.filter((c) => c.id !== id);
@@ -220,7 +220,7 @@ export const ReplyCommentThread: React.FC = () => {
 
   const renderReplyButton = !!topComment && isMobile && (
     <Box className={classes.replyButton} padding={spacing(2)} marginTop="auto">
-      <Button onClick={openCommentModal} color="primary" variant="contained" fullWidth>
+      <Button onClick={openCommentDialog} color="primary" variant="contained" fullWidth>
         {t('common:reply')}
       </Button>
     </Box>

@@ -48,8 +48,8 @@ export interface PdfViewerContextType {
 }
 
 export interface DiscussionContextType {
-  commentModalOpen: boolean;
-  toggleCommentModal: (payload: boolean) => void;
+  commentDialogOpen: boolean;
+  toggleCommentDialog: (payload: boolean) => void;
   topLevelComments: CommentObjectType[];
   setTopLevelComments: (comments: CommentObjectType[]) => void;
   topComment: CommentObjectType | null;

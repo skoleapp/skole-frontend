@@ -2,7 +2,7 @@ import {
   ConfirmationDialog,
   LanguageSelectorDialog,
   Notifications,
-  SettingsModal,
+  SettingsDialog,
   ShareDialog,
 } from 'components';
 import {
@@ -28,7 +28,7 @@ export const withCommonContexts = (PageComponent: NextPage): NextPage => {
                 <PageComponent {...pageProps} />
                 <ConfirmationDialog />
                 <Notifications />
-                <SettingsModal />
+                <SettingsDialog />
                 <LanguageSelectorDialog />
                 <ShareDialog />
               </ShareContextProvider>
