@@ -201,12 +201,14 @@ const ActivityPage: NextPage = () => {
     },
     topNavbarProps: {
       dynamicBackUrl: true,
+      headerRight: renderActionsButton,
     },
   };
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }
