@@ -35,7 +35,7 @@ import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
 import { Logo } from './Logo';
-import { BackButton, ButtonLink, IconButtonLink } from '../shared';
+import { BackButton, ButtonLink, IconButtonLink, LanguageButton } from '../shared';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -159,6 +159,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
+  const renderLanguageButton = <LanguageButton />;
+
   // ClickAway listener requires a single child element.
   const renderAuthenticatedButtons = !!userMe && !disableAuthButtons && (
     <>
@@ -211,6 +213,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {renderSearch}
         {renderDynamicButtons}
         {renderForEducatorsButton}
+        {renderLanguageButton}
       </Grid>
     </Grid>
   );

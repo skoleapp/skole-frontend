@@ -3,7 +3,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
 
-import { LanguageButton, TextLink } from '../shared';
+import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   root: {
@@ -11,7 +11,7 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     padding: spacing(4),
   },
   copyRightSection: {
-    marginTop: spacing(2),
+    marginTop: spacing(4),
   },
 }));
 
@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  const renderCompany = (
+  const renderSkole = (
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
         <Typography variant="subtitle1" color="secondary" gutterBottom>
@@ -28,11 +28,27 @@ export const Footer: React.FC = () => {
         <TextLink href={urls.getStarted} color="secondary">
           {t('common:getStarted')}
         </TextLink>
-        <TextLink href={urls.contact} color="secondary">
-          {t('common:contact')}
-        </TextLink>
         <TextLink href={urls.forEducators} color="secondary">
           {t('common:forEducators')}
+        </TextLink>
+        <TextLink href={urls.guidelines} color="secondary">
+          {t('common:guidelines')}
+        </TextLink>
+        <TextLink href={urls.score} color="secondary">
+          {t('common:score')}
+        </TextLink>
+      </Box>
+    </Grid>
+  );
+
+  const renderCompany = (
+    <Grid item xs={4} container justify="center">
+      <Box display="flex" flexDirection="column">
+        <Typography variant="subtitle1" color="secondary" gutterBottom>
+          {t('common:company').toUpperCase()}
+        </Typography>
+        <TextLink href={urls.contact} color="secondary">
+          {t('common:contact')}
         </TextLink>
         <TextLink href={urls.terms} color="secondary">
           {t('common:terms')}
@@ -40,22 +56,10 @@ export const Footer: React.FC = () => {
         <TextLink href={urls.privacy} color="secondary">
           {t('common:privacy')}
         </TextLink>
+        <TextLink href={urls.score} color="secondary">
+          {t('common:values')}
+        </TextLink>
       </Box>
-    </Grid>
-  );
-
-  const renderLanguageHeader = (
-    <Typography variant="subtitle1" color="secondary" gutterBottom>
-      {t('common:language').toUpperCase()}
-    </Typography>
-  );
-
-  const renderLanguageButton = <LanguageButton />;
-
-  const renderLanguage = (
-    <Grid item xs={4} container direction="column" alignItems="center">
-      {renderLanguageHeader}
-      {renderLanguageButton}
     </Grid>
   );
 
@@ -108,10 +112,10 @@ export const Footer: React.FC = () => {
   );
 
   return (
-    <Grid container className={classes.root}>
-      <Grid item xs={12} container>
+    <Grid container className={classes.root} justify="center">
+      <Grid item xs={12} lg={8} xl={6} container>
+        {renderSkole}
         {renderCompany}
-        {renderLanguage}
         {renderSocial}
       </Grid>
       <Grid item xs={12} container justify="center" className={classes.copyRightSection}>

@@ -15,6 +15,7 @@ export const urls = {
   forEducators: '/for-educators',
   addCourse: '/add-course',
   getStarted: '/get-started',
+  guidelines: '/guidelines',
   home: '/',
   confirmLogin: '/login/confirm',
   login: '/login',
@@ -22,7 +23,9 @@ export const urls = {
   logout: '/logout',
   privacy: '/privacy',
   register: '/register',
+  score: '/score',
   search: '/search',
   terms: '/terms',
   uploadResource: '/upload-resource',
+  values: '/values',
 };
