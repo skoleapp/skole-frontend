@@ -1,6 +1,6 @@
 const withOffline = require('next-offline');
 const withTranslate = require('next-translate');
-import * as R from 'ramda';
+const R = require('ramda');
 const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL } = process.env;
 
 const config = {
