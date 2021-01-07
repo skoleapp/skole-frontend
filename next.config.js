@@ -1,5 +1,6 @@
 const withOffline = require('next-offline');
-const { locales, defaultLocale } = require('./i18n.json');
+const withTranslate = require('next-translate');
+import * as R from 'ramda';
 const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL } = process.env;
 
 const config = {
@@ -34,10 +35,6 @@ const config = {
       destination: '/_next/static/service-worker.js',
     },
   ],
-  i18n: {
-    locales,
-    defaultLocale,
-  },
   webpack: (config, options) => {
     config.module.rules.push({
       test: /\.graphql$/,
@@ -61,4 +58,6 @@ const config = {
   },
 };
 
-module.exports = withOffline(config);
+const withWrappers = R.compose(withOffline, withTranslate);
+
+module.exports = withWrappers(config);
