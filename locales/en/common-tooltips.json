@@ -10,7 +10,7 @@
   "verificationRequired": "Please verify your account to enable this feature.",
   "settings": "View settings.",
   "rank": "This user's rank is {{ rank }}.",
-  "activity": "Show activity.",
+  "activity": "You have {{ unreadActivityCount }} unread activities.",
   "goBack": "Go back.",
   "closeMenu": "Close menu."
 }

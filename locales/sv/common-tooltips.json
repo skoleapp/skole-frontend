@@ -10,7 +10,7 @@
   "verificationRequired": "Verifiera ditt konto för att aktivera den här funktionen.",
   "settings": "Visa inställningar.",
   "rank": "Denna användares rankning är {{ rank }}.",
-  "activity": "Visa aktivitet.",
+  "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
   "goBack": "Gå tillbaka.",
   "closeMenu": "Stäng menyn."
 }

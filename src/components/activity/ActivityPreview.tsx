@@ -20,9 +20,7 @@ export const ActivityPreview: React.FC = () => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivityPreviewQuery({ context });
-
   const activities: ActivityObjectType[] = R.propOr([], 'activityPreview', data);
-
   const renderActivities = activities.map((a, i) => <ActivityListItem activity={a} key={i} />);
 
   if (loading) {

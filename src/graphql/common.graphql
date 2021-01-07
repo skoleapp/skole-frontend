@@ -664,6 +664,7 @@ query UserMe {
     score
     created
     verified
+    unreadActivityCount
     school {
       id
       name

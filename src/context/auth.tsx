@@ -1,4 +1,9 @@
-import { PaginatedActivityObjectType, UserObjectType } from 'generated';
+import {
+  PaginatedActivityObjectType,
+  SchoolObjectType,
+  SubjectObjectType,
+  UserObjectType,
+} from 'generated';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { createContext, useState, useContext } from 'react';
@@ -11,6 +16,16 @@ const AuthContext = createContext<AuthContextType>({});
 
 interface UseAuthContext extends AuthContextType {
   verified: boolean | null;
+  unreadActivityCount: number;
+  userMeId: string;
+  username: string;
+  email: string;
+  title: string;
+  bio: string;
+  avatarThumbnail: string;
+  avatar: string;
+  school: SchoolObjectType | null;
+  subject: SubjectObjectType | null;
   loginRequiredTooltip: string | false;
   verificationRequiredTooltip: string | false;
 }
@@ -18,27 +33,8 @@ interface UseAuthContext extends AuthContextType {
 export const useAuthContext = (): UseAuthContext => {
   const { t } = useTranslation();
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
-  const verified: boolean = R.propOr(null, 'verified', userMe);
-  const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
-
-  const verificationRequiredTooltip: string | false =
-    verified === false && t('common-tooltips:verificationRequired');
-
-  return {
-    userMe,
-    setUserMe,
-    verified,
-    verificationRequiredTooltip,
-    loginRequiredTooltip,
-    ...authContext,
-  };
-};
-
-export const AuthContextProvider: React.FC = ({ children }) => {
-  const [userMe, setUserMe] = useState<UserObjectType | null>(null);
-  const [authNetworkError, setAuthNetworkError] = useState(false);
-  const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
-
+  const verified = R.propOr(null, 'verified', userMe);
+  const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
   const userMeId = R.propOr('', 'id', userMe);
   const username = R.propOr('', 'username', userMe);
   const email = R.propOr('', 'email', userMe);
@@ -50,10 +46,16 @@ export const AuthContextProvider: React.FC = ({ children }) => {
   const avatar = mediaUrl(_avatar);
   const school = R.propOr(null, 'school', userMe);
   const subject = R.propOr(null, 'subject', userMe);
+  const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
 
-  const value = {
+  const verificationRequiredTooltip: string | false =
+    verified === false && t('common-tooltips:verificationRequired');
+
+  return {
     userMe,
     setUserMe,
+    verified,
+    unreadActivityCount,
     userMeId,
     username,
     email,
@@ -63,6 +65,20 @@ export const AuthContextProvider: React.FC = ({ children }) => {
     avatar,
     school,
     subject,
+    verificationRequiredTooltip,
+    loginRequiredTooltip,
+    ...authContext,
+  };
+};
+
+export const AuthContextProvider: React.FC = ({ children }) => {
+  const [userMe, setUserMe] = useState<UserObjectType | null>(null);
+  const [authNetworkError, setAuthNetworkError] = useState(false);
+  const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
+
+  const value = {
+    userMe,
+    setUserMe,
     activities,
     setActivities,
     authNetworkError,

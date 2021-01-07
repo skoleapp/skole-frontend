@@ -1,6 +1,7 @@
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   ClickAwayListener,
   Divider,
@@ -42,7 +43,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     [breakpoints.up('md')]: {
       height: TOP_NAVBAR_HEIGHT_DESKTOP,
       justifyContent: 'center',
@@ -79,10 +80,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const { userMe, userMeId, avatarThumbnail, authNetworkError } = useAuthContext();
   const dense = !!headerLeft || !!headerRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
+
+  const {
+    userMe,
+    userMeId,
+    avatarThumbnail,
+    authNetworkError,
+    unreadActivityCount,
+  } = useAuthContext();
 
   const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(
     null,
@@ -115,9 +123,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderActivityButton = (
-    <Tooltip title={t('common-tooltips:activity')}>
+    <Tooltip title={t('common-tooltips:activity', { unreadActivityCount })}>
       <IconButton onClick={handleActivityButtonClick} color="secondary">
-        <NotificationsOutlined />
+        <Badge badgeContent={unreadActivityCount} color="secondary">
+          <NotificationsOutlined />
+        </Badge>
       </IconButton>
     </Tooltip>
   );
