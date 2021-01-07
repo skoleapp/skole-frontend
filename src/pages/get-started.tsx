@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, LandingPageTemplate, TextLink } from 'components';
-import { withNoAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
@@ -258,4 +258,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withNoAuth(GetStartedPage);
+export default withUserMe(GetStartedPage);
