@@ -31,7 +31,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
