@@ -10,18 +10,15 @@ import { useSearch } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
-import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { UrlObject } from 'url';
-import { mediaUrl, urls } from 'utils';
+import { urls } from 'utils';
 
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
-  const { userMe } = useAuthContext();
+  const { userMe, userMeId, avatarThumbnail } = useAuthContext();
   const { searchUrl } = useSearch();
   const { pathname, query } = useRouter();
-  const userMeId = R.propOr('', 'id', userMe);
-  const avatarThumb = R.propOr('', 'avatar', userMe);
 
   const getNavbarValue = (): void | number | null => {
     switch (pathname) {
@@ -58,7 +55,7 @@ export const BottomNavbar: React.FC = () => {
 
   const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
   const renderProfileLabel = userMe ? t('common:profile') : t('common:login');
-  const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={mediaUrl(avatarThumb)} />;
+  const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={avatarThumbnail} />;
 
   const handleProfileActionClick = (): Promise<boolean> =>
     Router.push(userMeId ? urls.user(userMeId) : urls.login);

@@ -1,36 +1,24 @@
-import { Box, makeStyles, TextField, Typography } from '@material-ui/core';
+import { Grid, makeStyles, TextField, Typography } from '@material-ui/core';
 import { usePdfViewerContext } from 'context';
 import React, { ChangeEvent } from 'react';
 import * as R from 'ramda';
+import { BORDER } from 'theme';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  pageNumbers: {
-    position: 'absolute',
-    bottom: '-2.5rem',
-    left: 0,
-    right: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  pageNumberInputRoot: {
-    width: '2.5rem',
-    margin: `0 ${spacing(1)} 0 0`,
-    borderRadius: '0.25rem',
+  root: {
+    borderTop: BORDER,
+    padding: `${spacing(3)} ${spacing(4)}`,
   },
   pageNumberInput: {
-    height: '2rem',
-    padding: 0,
-    paddingLeft: spacing(1),
+    margin: 0,
+    marginRight: spacing(2),
   },
-  numPages: {
-    paddingLeft: spacing(1),
+  pageNumberInputProps: {
+    padding: spacing(2),
   },
 }));
 
-export const PageNumberInput: React.FC = () => {
+export const ResourceBottomToolbar: React.FC = () => {
   const classes = useStyles();
 
   const {
@@ -58,26 +46,30 @@ export const PageNumberInput: React.FC = () => {
 
   const renderPageNumberInput = (
     <TextField
-      classes={{ root: classes.pageNumberInputRoot }}
+      className={classes.pageNumberInput}
       value={pageNumber}
       onChange={handleChangePage}
       type="number"
-      inputProps={{ min: 1, max: numPages, ref: pageNumberInputRef }}
-      InputProps={{ className: classes.pageNumberInput }}
+      inputProps={{
+        className: classes.pageNumberInputProps,
+        min: 1,
+        max: numPages,
+        ref: pageNumberInputRef,
+      }}
       disabled={controlsDisabled}
-      variant="standard"
+      fullWidth={false}
     />
   );
 
   const renderNumPages = (
-    <Typography className={classes.numPages} variant="subtitle1" color="textSecondary">
+    <Typography variant="subtitle1" color="textSecondary">
       / {numPages}
     </Typography>
   );
 
   return (
-    <Box className={classes.pageNumbers}>
+    <Grid className={classes.root} container justify="center" alignItems="center">
       {renderPageNumberInput} {renderNumPages}
-    </Box>
+    </Grid>
   );
 };

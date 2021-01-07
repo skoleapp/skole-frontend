@@ -1,6 +1,6 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, FormSubmitSection, SettingsTemplate } from 'components';
+import { ButtonLink, FormSubmitSection, FormTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import {
@@ -150,6 +150,12 @@ const VerifyAccountPage: NextPage = () => {
     </Typography>
   );
 
+  const renderLoginText = (
+    <Typography variant="subtitle1" align="center">
+      {t('verify-account:loginText')}
+    </Typography>
+  );
+
   const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
     <Form>
       <Box flexGrow="1" textAlign="center">
@@ -159,7 +165,8 @@ const VerifyAccountPage: NextPage = () => {
     </Form>
   );
 
-  const renderEmailForm = !verified && !token && !emailSubmitted && (
+  // Render for unverified users.
+  const renderEmailForm = verified === false && !token && !emailSubmitted && (
     <Formik
       initialValues={initialEmailFormValues}
       onSubmit={handleSubmitEmail}
@@ -170,10 +177,21 @@ const VerifyAccountPage: NextPage = () => {
     </Formik>
   );
 
+  // Render for unauthenticated users with no token.
+  const renderLoginError = !verified && !token && (
+    <FormControl>
+      {renderLoginText}
+      {renderLineBreak}
+      {renderHomeButton}
+    </FormControl>
+  );
+
+  // Render after email has been submitted.
   const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
     <FormControl>{renderEmailSubmittedText}</FormControl>
   );
 
+  // Render for verified users and after successful verification.
   const renderVerified = verified && !confirmationError && (
     <FormControl>
       {renderVerifiedText}
@@ -182,6 +200,7 @@ const VerifyAccountPage: NextPage = () => {
     </FormControl>
   );
 
+  // Render in case an error occurs during the verification.
   const renderConfirmationError = !!confirmationError && (
     <FormControl>
       {renderConfirmationErrorText}
@@ -196,19 +215,19 @@ const VerifyAccountPage: NextPage = () => {
       description: t('verify-account:description'),
     },
     header,
-    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },
   };
 
   return (
-    <SettingsTemplate {...layoutProps}>
+    <FormTemplate {...layoutProps}>
       {renderEmailForm}
       {renderEmailSubmitted}
       {renderConfirmationError}
+      {renderLoginError}
       {renderVerified}
-    </SettingsTemplate>
+    </FormTemplate>
   );
 };
 

@@ -9,6 +9,5 @@
   "infoHeader": "Kurssin tiedot",
   "share": "Jaa kurssi",
   "delete": "Poista kurssi",
-  "deleteTarget": "kurssin",
-  "target": "kurssi"
+  "confirmDelete": "Haluatko varmasti poistaa tämän kurssin?"
 }

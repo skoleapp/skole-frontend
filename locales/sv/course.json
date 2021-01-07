@@ -9,6 +9,5 @@
   "infoHeader": "Kursinformation",
   "share": "Dela kurs",
   "delete": "Radera kurs",
-  "deleteTarget": "kursen",
-  "target": "kurs"
+  "confirmDelete": "Är du säker på att du vill ta bort den här kursen?"
 }

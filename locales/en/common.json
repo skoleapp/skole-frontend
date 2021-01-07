@@ -50,7 +50,6 @@
   "settings": "Settings",
   "communityUser": "Community User",
   "date": "Date",
-  "close": "Close",
   "verifyAccount": "Verify account",
   "continue": "Continue",
   "activity": "Activity",
@@ -63,13 +62,13 @@
   "profile": "Profile",
   "backToHome": "Back to Home",
   "downloads": "Downloads",
-  "company": "Company",
   "social": "Social",
   "postWithAccount": "Post with your account",
   "postAs": "Post as {{ username }}",
   "postAsAnonymous": "Post as anonymous",
   "selectAuthor": "Select Author",
   "send": "Send",
-  "confirmDelete": "Are you sure you want to delete {{ deleteTarget }}?",
-  "getStarted": "Get Started"
+  "stars": "Stars",
+  "getStarted": "Get Started",
+  "forEducators": "For Educators"
 }

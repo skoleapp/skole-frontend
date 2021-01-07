@@ -12,7 +12,7 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
   const documentRef = useRef<Document>(null!);
   const pageNumberInputRef = useRef<HTMLInputElement>(null!);
   const [controlsDisabled, setControlsDisabled] = useState(true);
-  const [drawMode, setDrawMode] = useState(false);
+  const [drawingMode, setDrawingMode] = useState(false);
   const [screenshot, setScreenshot] = useState<string | null>(null);
   const [rotate, setRotate] = useState(0);
   const [numPages, setNumPages] = useState(0);
@@ -33,8 +33,8 @@ export const PdfViewerContextProvider: React.FC = ({ children }) => {
     pageNumberInputRef,
     controlsDisabled,
     setControlsDisabled,
-    drawMode,
-    setDrawMode,
+    drawingMode,
+    setDrawingMode,
     screenshot,
     setScreenshot,
     rotate,

@@ -23,10 +23,10 @@ const initialState = { start: null, end: null, locked: false };
 
 // This component allows the user to mark areas with a rectangle and take screenshots from the PDF document based on the marked area.
 // Inspired by: https://github.com/agentcooper/react-pdf-highlighter
-// TODO: Add a listener that cancels the draw mode from ESC key.
+// TODO: Add a listener that cancels the drawing mode from ESC key.
 export const AreaSelection: React.FC = () => {
   const classes = useStyles();
-  const { setScreenshot, drawMode } = usePdfViewerContext();
+  const { setScreenshot, drawingMode } = usePdfViewerContext();
   const [stateRef, setState] = useStateRef<State>(initialState); // We must use a mutable ref object instead of immutable state to keep track with the state during gestures and mouse selection.
   const { start, end } = stateRef.current;
 
@@ -37,43 +37,50 @@ export const AreaSelection: React.FC = () => {
   // Get closest PDF page and take screenshot of selected area.
   // FIXME: Screenshots from this function end up being misaligned.
   // It clearly has something to do with the `window.devicePixelRatio` function since it messes up the dimensions.
-  const getScreenshot = (target: HTMLElement, position: LTWH): string | null => {
+  const getScreenshot = (canvas: HTMLCanvasElement, position: LTWH): string | null => {
     const { left, top, width, height } = position;
-    const canvas = target.closest('canvas');
     const newCanvas = document.createElement('canvas');
     const newCanvasContext = newCanvas.getContext('2d');
 
     if (!!canvas && !!newCanvasContext && !!width && !!height) {
       newCanvas.width = width;
       newCanvas.height = height;
-      const dpr = window.devicePixelRatio;
+
+      // The PDF canvas has a custom client width/height different from the HTML attribute.
+      // Because of this, we must calculate a scale based on the actual client width/height to draw the image correctly.
+      const scaleWidth = canvas.width / canvas.clientWidth;
+      const scaleHeight = canvas.height / canvas.clientHeight;
+
       newCanvasContext.drawImage(
         canvas,
-        left * dpr,
-        top * dpr,
-        width * dpr,
-        height * dpr,
+        left * scaleWidth,
+        top * scaleHeight,
+        width * scaleWidth,
+        height * scaleHeight,
         0,
         0,
         width,
         height,
       );
+
       return newCanvas.toDataURL();
     }
+
     return null;
   };
 
   const onSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
     const page = getPageFromElement(startTarget);
+    const canvas = startTarget.closest('canvas');
 
-    if (page) {
+    if (!!page && !!canvas) {
       const pageBoundingRect = {
         ...boundingRect,
         top: boundingRect.top - page.node.offsetTop,
         left: boundingRect.left - page.node.offsetLeft,
       };
 
-      const screenshot = getScreenshot(startTarget, pageBoundingRect);
+      const screenshot = getScreenshot(canvas, pageBoundingRect);
       setScreenshot(screenshot);
     }
   };
@@ -142,10 +149,10 @@ export const AreaSelection: React.FC = () => {
       locked: false,
     });
 
-    document.body.addEventListener('mouseup', onMouseUp as EventListener);
+    document.body.addEventListener('mouseup', onMouseUp);
 
     return (): void => {
-      document.body.removeEventListener('mouseup', onMouseUp as EventListener);
+      document.body.removeEventListener('mouseup', onMouseUp);
     };
   };
 
@@ -214,9 +221,9 @@ export const AreaSelection: React.FC = () => {
   useEffect(() => {
     const documentNode = getDocumentNode();
 
-    // Only apply listeners when in draw mode.
+    // Only apply listeners when in drawing mode.
     // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
-    if (drawMode) {
+    if (drawingMode) {
       documentNode.addEventListener('touchmove', onTouchMove as EventListener);
       documentNode.addEventListener('touchstart', onTouchStart as EventListener);
 
@@ -228,7 +235,7 @@ export const AreaSelection: React.FC = () => {
         passive: true,
       });
     } else {
-      setState(initialState); // Reset area selection when draw mode is toggled off.
+      setState(initialState); // Reset area selection when drawing mode is toggled off.
     }
 
     return (): void => {
@@ -237,9 +244,9 @@ export const AreaSelection: React.FC = () => {
       documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
       documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
     };
-  }, [drawMode]);
+  }, [drawingMode]);
 
-  return drawMode && !!start && !!end ? (
+  return drawingMode && !!start && !!end ? (
     <Box className={clsx('screenshot-border', classes.root)} style={getBoundingRect(start, end)} />
   ) : null;
 };

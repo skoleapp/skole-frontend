@@ -2,7 +2,7 @@
   "description": "Visa {{ resourceTitle }} på Skole.",
   "error": "Fel vid inläsning av resurs.",
   "noComments": "Den här resursen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
-  "drawMode": "Ritningsläge",
+  "drawingMode": "Ritningsläge",
   "downloadPdf": "Ladda ner PDF",
   "printPdf": "Skriva ut PDF",
   "shareHeader": "Dela resurs",
@@ -11,6 +11,5 @@
   "infoHeader": "Resursinformation",
   "share": "Dela resurs",
   "delete": "Radera resurs",
-  "deleteTarget": "resursen",
-  "target": "resurs"
+  "confirmDelete": "Är du säker på att du vill ta bort den här resursen?"
 }

@@ -2,7 +2,6 @@ import { IconButton, Size, Tooltip, Typography } from '@material-ui/core';
 import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
-import { useTranslation } from 'lib';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 
 import { MuiColor } from 'types';
@@ -20,11 +19,11 @@ interface UseVotesParams {
   initialScore: string;
   isOwner: boolean;
   variables: VoteVariables;
-  target: string;
-  customRemoveUpvoteTooltip?: string;
-  customUpvoteTooltip?: string;
-  customRemoveDownvoteTooltip?: string;
-  customDownvoteTooltip?: string;
+  upvoteTooltip: string;
+  removeUpvoteTooltip: string;
+  downvoteTooltip: string;
+  removeDownvoteTooltip: string;
+  ownContentTooltip: string;
 }
 
 interface VoteButtonProps {
@@ -49,61 +48,52 @@ export const useVotes = ({
   initialScore,
   isOwner,
   variables,
-  target,
-  customRemoveUpvoteTooltip,
-  customUpvoteTooltip,
-  customRemoveDownvoteTooltip,
-  customDownvoteTooltip,
+  removeUpvoteTooltip,
+  upvoteTooltip: _upvoteTooltip,
+  removeDownvoteTooltip,
+  downvoteTooltip: _downvoteTooltip,
+  ownContentTooltip,
 }: UseVotesParams): UseVotes => {
   const { userMe, verified, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
-  const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
-  const { toggleNotification } = useNotificationsContext();
-  const ownContentTooltip = t('tooltips:voteOwnContent', { target });
+  const { unexpectedError: onError } = useNotificationsContext();
   const context = useLanguageHeaderContext();
-
-  const error =
-    currentVote?.status === 1
-      ? t('notifications:removeVoteError', { target })
-      : t('notifications:voteError', { target });
-
-  const onError = (): void => toggleNotification(error);
 
   useEffect(() => {
     setCurrentVote(initialVote);
   }, [initialVote]);
 
   // Show different tooltip for each of these cases:
-  // * User is not logged in.
-  // * User is not verified.
-  // * User is the owner of the object.
-  // * User has upvoted (can be overridden with a custom tooltip).
-  // * User has not upvoted (can be overridden with a custom tooltip).
+  // - User is not logged in.
+  // - User is not verified.
+  // - User is the owner of the object.
+  // - User has upvoted.
+  // - User has not upvoted.
   const upvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
     (isOwner
       ? ownContentTooltip
       : currentVote?.status === 1
-      ? customRemoveUpvoteTooltip || t('tooltips:removeUpvote', { target })
-      : customUpvoteTooltip || t('tooltips:upvote', { target }));
+      ? removeUpvoteTooltip
+      : _upvoteTooltip);
 
   // Show different tooltip for each of these cases:
-  // * User is not logged in.
-  // * User is not verified.
-  // * User is the owner of the object.
-  // * User has downvoted (can be overridden with a custom tooltip).
-  // * User has not downvoted (can be overridden with a custom tooltip).
+  // - User is not logged in.
+  // - User is not verified.
+  // - User is the owner of the object.
+  // - User has downvoted.
+  // - User has not downvoted.
   const downvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
     (isOwner
       ? ownContentTooltip
       : currentVote?.status === -1
-      ? customRemoveDownvoteTooltip || t('tooltips:removeDownvote', { target })
-      : customDownvoteTooltip || t('tooltips:downvote', { target }));
+      ? removeDownvoteTooltip
+      : _downvoteTooltip);
 
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote) {

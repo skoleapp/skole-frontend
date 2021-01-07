@@ -1,5 +1,5 @@
 import { FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
+import { FormSubmitSection, FormTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -131,33 +131,33 @@ const ResetPasswordPage: NextPage = () => {
     await resetPassword({ variables: { newPassword, token } });
   };
 
-  const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
-    <Form>
-      <Field
-        name="email"
-        component={TextFormField}
-        label={t('forms:email')}
-        helperText={t('reset-password:helpText')}
-      />
-      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-    </Form>
+  const renderNewPasswordField = (
+    <Field
+      name="newPassword"
+      component={TextFormField}
+      label={t('forms:newPassword')}
+      type="password"
+    />
   );
+
+  const renderConfirmNewPasswordField = (
+    <Field
+      name="confirmNewPassword"
+      component={TextFormField}
+      label={t('forms:confirmNewPassword')}
+      type="password"
+    />
+  );
+
+  const renderFormSubmitSection = <T extends PasswordFormValues | EmailFormValues>(
+    props: FormikProps<T>,
+  ) => <FormSubmitSection submitButtonText={t('common:submit')} {...props} />;
 
   const renderPasswordFormFields = (props: FormikProps<PasswordFormValues>): JSX.Element => (
     <Form>
-      <Field
-        name="newPassword"
-        component={TextFormField}
-        label={t('forms:newPassword')}
-        type="password"
-      />
-      <Field
-        name="confirmNewPassword"
-        component={TextFormField}
-        label={t('forms:confirmNewPassword')}
-        type="password"
-      />
-      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+      {renderNewPasswordField}
+      {renderConfirmNewPasswordField}
+      {renderFormSubmitSection<PasswordFormValues>(props)}
     </Form>
   );
 
@@ -170,6 +170,22 @@ const ResetPasswordPage: NextPage = () => {
     >
       {renderPasswordFormFields}
     </Formik>
+  );
+
+  const renderEmailField = (
+    <Field
+      name="email"
+      component={TextFormField}
+      label={t('forms:email')}
+      helperText={t('reset-password:helpText')}
+    />
+  );
+
+  const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
+    <Form>
+      {renderEmailField}
+      {renderFormSubmitSection<EmailFormValues>(props)}
+    </Form>
   );
 
   const renderEmailForm = !token && !emailSubmitted && (
@@ -197,18 +213,17 @@ const ResetPasswordPage: NextPage = () => {
       description: t('reset-password:description'),
     },
     header,
-    form: true,
     topNavbarProps: {
       dynamicBackUrl: true,
     },
   };
 
   return (
-    <SettingsTemplate {...layoutProps}>
+    <FormTemplate {...layoutProps}>
       {renderPasswordForm}
       {renderEmailForm}
       {renderEmailSubmitted}
-    </SettingsTemplate>
+    </FormTemplate>
   );
 };
 

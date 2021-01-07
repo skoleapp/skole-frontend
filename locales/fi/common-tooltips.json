@@ -1,0 +1,16 @@
+{
+  "starred": "Näytä tähdellä merkityt.",
+  "profile": "Näytä profiili.",
+  "lastPage": "Mene viimeiselle sivulle.",
+  "nextPage": "Mene seuraavalle sivulle.",
+  "previousPage": "Mene edelliselle sivulle.",
+  "firstPage": "Mene ensimmäiselle sivulle.",
+  "language": "Vaihda kieltä.",
+  "loginRequired": "Kirjaudu sisään käyttääksesi tätä ominaisuutta.",
+  "verificationRequired": "Vahvista tilisi käyttääksesi tätä ominaisuutta.",
+  "settings": "Näytä asetukset.",
+  "rank": "Tämän käyttäjän arvo on {{ rank }}.",
+  "activity": "Näytä toiminta.",
+  "goBack": "Mene takaisin.",
+  "closeMenu": "Sulje valikko."
+}

@@ -16,8 +16,6 @@ import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { CreateCommentFormValues } from 'types';
-import { mediaUrl } from 'utils';
-import * as R from 'ramda';
 import { ResponsiveDialog } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -39,9 +37,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { userMe } = useAuthContext();
-  const avatarSrc = mediaUrl(R.propOr('', 'avatarThumbnail', user));
-  const username = R.prop('username', userMe);
+  const { userMe, username, avatarThumbnail } = useAuthContext();
 
   const {
     open: authorSelectionOpen,
@@ -85,7 +81,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   const renderAuthenticatedMenuItem = (
     <MenuItem onClick={handleAuthenticatedMenuItemClick}>
       <ListItemIcon>
-        <Avatar className="avatar-thumbnail" src={avatarSrc} />
+        <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
       </ListItemIcon>
       <ListItemText>{t('common:postAs', { username })}</ListItemText>
     </MenuItem>
@@ -105,7 +101,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
       onClick={handleOpenAuthorSelection}
       endIcon={<KeyboardArrowDown color="disabled" />}
       className={classes.button}
-      startIcon={<Avatar className={classes.avatar} src={avatarSrc} />}
+      startIcon={<Avatar className={classes.avatar} src={avatarThumbnail} />}
     >
       <Grid item container direction="column">
         {renderAuthorName}
@@ -114,16 +110,21 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
     </Button>
   );
 
+  const renderListItems = (
+    <List>
+      {renderAuthenticatedMenuItem}
+      {renderAnonymousMenuItem}
+    </List>
+  );
+
   const renderAuthorSelectionDialog = (
     <ResponsiveDialog
       open={authorSelectionOpen}
       onClose={handleCloseAuthorSelection}
       dialogHeaderProps={authorSelectionDialogHeaderProps}
+      list
     >
-      <List>
-        {renderAuthenticatedMenuItem}
-        {renderAnonymousMenuItem}
-      </List>
+      {renderListItems}
     </ResponsiveDialog>
   );
 

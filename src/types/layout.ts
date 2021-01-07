@@ -2,21 +2,18 @@ import { ContainerProps, GridProps } from '@material-ui/core';
 import { ReactNode } from 'react';
 import { UrlObject } from 'url';
 
-export interface SEOProps {
+export interface SeoProps {
   title?: string;
   description?: string;
 }
 
-interface StaticBackUrl {
-  href: string | UrlObject;
-  as?: string | UrlObject;
-}
 export interface TopNavbarProps {
   header?: string; // Header text shown on mobile.
   dynamicBackUrl?: boolean; // Show a back button on mobile that automatically redirects to the last page.
-  staticBackUrl?: StaticBackUrl; // Show a back button and use this as the href.
+  staticBackUrl?: string | UrlObject; // Show a back button and use this as the href.
   disableSearch?: boolean; // Explicitly disable the search field on desktop.
   disableAuthButtons?: boolean; // Explicitly disable the auth buttons on desktop.
+  disableForEducatorsButton?: boolean; // Explicitly disable the `For Educators` button on desktop.
   disableLogo?: boolean; // Explicitly disable the logo.
   headerRight?: JSX.Element | false; // Custom element for right-most slot on mobile.
   headerRightSecondary?: JSX.Element | false; // Custom element for second slot from the right on mobile.
@@ -30,7 +27,7 @@ interface CustomContainerProps extends Omit<ContainerProps, 'children'> {
 
 export interface MainTemplateProps extends GridProps {
   children: NonNullable<ReactNode>;
-  seoProps: SEOProps;
+  seoProps: SeoProps;
   topNavbarProps?: TopNavbarProps;
   containerProps?: CustomContainerProps;
   customTopNavbar?: JSX.Element; // Custom element for top navbar.

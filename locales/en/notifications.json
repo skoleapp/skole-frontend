@@ -1,14 +1,5 @@
 {
-  "voteError": "Error while voting {{ target }}!",
-  "removeVoteError": "Error while removing vote for {{ target }}!",
-  "starError": "Error while starring {{ target }}!",
-  "unstarError": "Error while unstarring {{ target }}!",
-  "deleteError": "Error while deleting {{ target }}!",
+  "unexpectedError": "Unexpected error!",
   "messageEmpty": "Message cannot be empty!",
-  "linkCopied": "Link copied to clipboard!",
-  "downloadPdfError": "Error while downloading PDF file!",
-  "printPdfError": "Error while printing PDF file!",
-  "messageError": "Error while sending message!",
-  "markSingleActivityReadError": "This activity has most likely been removed. Please refresh the page.",
-  "markAllActivitiesReadError": "Error while marking activities as read!"
+  "linkCopied": "Link copied to clipboard!"
 }

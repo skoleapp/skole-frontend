@@ -50,7 +50,6 @@
   "settings": "Inställningar",
   "communityUser": "Gemenskapsanvändare",
   "date": "Datum",
-  "close": "Stänga",
   "verifyAccount": "Verifiera konto",
   "continue": "Fortsätta",
   "activity": "Aktivitet",
@@ -63,13 +62,12 @@
   "profile": "Profil",
   "backToHome": "Tillbaka till hem",
   "downloads": "Nedladdningar",
-  "company": "Företag",
   "social": "Social",
   "postWithAccount": "Lägg upp med ditt konto",
   "postAs": "Lägg upp som {{ användarnamn }}",
   "postAsAnonymous": "Skicka som anonym",
   "selectAuthor": "Välj auktor",
   "send": "Skicka",
-  "confirmDelete": "Är du säker på att du vill radera {{ deleteTarget }}?",
+  "stars": "Stjärnor",
   "getStarted": "Komma igång"
 }

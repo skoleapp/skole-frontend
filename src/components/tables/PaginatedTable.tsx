@@ -44,7 +44,7 @@ export const PaginatedTable: React.FC<Props> = ({
     handleReloadPage({ ...query, pageSize });
   };
 
-  const renderTableHead = <CustomTableHead {...tableHeadProps} />;
+  const renderTableHead = !!tableHeadProps && <CustomTableHead {...tableHeadProps} />;
 
   const renderTableFooter = (
     <CustomTableFooter

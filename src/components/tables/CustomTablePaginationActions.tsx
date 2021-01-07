@@ -43,7 +43,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
   };
 
   const renderFirstPageButton = (
-    <Tooltip title={t('tooltips:firstPage')}>
+    <Tooltip title={t('common-tooltips:firstPage')}>
       <Typography component="span">
         <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
           <FirstPageOutlined />
@@ -53,7 +53,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
   );
 
   const renderPreviousPageButton = (
-    <Tooltip title={t('tooltips:previousPage')}>
+    <Tooltip title={t('common-tooltips:previousPage')}>
       <Typography component="span">
         <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
           <KeyboardArrowLeftOutlined />
@@ -63,7 +63,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
   );
 
   const renderNextPageButton = (
-    <Tooltip title={t('tooltips:nextPage')}>
+    <Tooltip title={t('common-tooltips:nextPage')}>
       <Typography component="span">
         <IconButton
           onClick={handleNextButtonClick}
@@ -77,7 +77,7 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
   );
 
   const renderLastPageButton = (
-    <Tooltip title={t('tooltips:lastPage')}>
+    <Tooltip title={t('common-tooltips:lastPage')}>
       <Typography component="span">
         <IconButton
           onClick={handleLastPageButtonClick}

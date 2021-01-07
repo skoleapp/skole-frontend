@@ -10,4 +10,5 @@ export * from './useForm';
 export * from './useSearch';
 export * from './useTabs';
 export * from './useSettings';
+export * from './useStars';
 export * from './useUserMe';

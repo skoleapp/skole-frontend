@@ -11,6 +11,7 @@ import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { SettingsContextType } from 'types';
 import { SETTINGS_ITEMS, urls } from 'utils';
+import { useMediaQueries } from './useMediaQueries';
 
 interface UseSettings extends SettingsContextType {
   renderSettingsMenuList: JSX.Element;
@@ -19,6 +20,7 @@ interface UseSettings extends SettingsContextType {
 // A hook for rendering the common settings menu components.
 // The modal prop indicates whether this hook is used with the modal or with the settings layout.
 export const useSettings = (modal: boolean): UseSettings => {
+  const { isMobile } = useMediaQueries();
   const { userMe, verified } = useAuthContext();
   const { settingsOpen, toggleSettings } = useSettingsContext();
   const { t } = useTranslation();
@@ -73,14 +75,17 @@ export const useSettings = (modal: boolean): UseSettings => {
     ),
   );
 
-  const renderCommonMenuItems = SETTINGS_ITEMS.common.map(({ icon: Icon, href, text }, i) => (
-    <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
-      <ListItemIcon>
-        <Icon />
-      </ListItemIcon>
-      <ListItemText>{t(text)}</ListItemText>
-    </MenuItem>
-  ));
+  // Only render the privacy, terms and contact links in the settings list on mobile
+  const renderCommonMenuItems =
+    isMobile &&
+    SETTINGS_ITEMS.common.map(({ icon: Icon, href, text }, i) => (
+      <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
+        <ListItemIcon>
+          <Icon />
+        </ListItemIcon>
+        <ListItemText>{t(text)}</ListItemText>
+      </MenuItem>
+    ));
 
   const renderLanguageMenuItem = (
     <MenuItem onClick={handleLanguageClick}>

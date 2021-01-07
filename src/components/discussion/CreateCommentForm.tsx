@@ -20,7 +20,7 @@ import {
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
-import { dataURItoFile, useTranslation } from 'lib';
+import { dataUriToFile, useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
@@ -37,7 +37,7 @@ import {
   ClearOutlined,
   SendOutlined,
 } from '@material-ui/icons';
-import { DialogHeader, SkoleDialog } from '../shared';
+import { DialogHeader, SkoleDialog, TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
 import { TextFormField } from '../form-fields';
 
@@ -96,13 +96,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const { loginRequiredTooltip, verificationRequiredTooltip, userMe, verified } = useAuthContext();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const { screenshot, setScreenshot } = usePdfViewerContext();
-  const { toggleNotification } = useNotificationsContext();
+  const { toggleNotification, unexpectedError } = useNotificationsContext();
+  const { drawingMode } = usePdfViewerContext();
   const context = useLanguageHeaderContext();
   const attachmentInputRef = useRef<HTMLInputElement>(null!);
   const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
 
   const attachmentTooltip =
-    loginRequiredTooltip || verificationRequiredTooltip || t('tooltips:attachFile');
+    loginRequiredTooltip || verificationRequiredTooltip || t('discussion-tooltips:attachFile');
 
   const {
     formRef,
@@ -119,14 +120,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     setCommentAttachment,
   } = useDiscussionContext();
 
-  // Use screenshot as attachment if area has been marked.
+  // Use screenshot as attachment if area has been marked and drawing mode is toggled off.
   useEffect(() => {
-    if (screenshot) {
+    if (screenshot && !drawingMode) {
       setCommentAttachment(screenshot); // Already in data URL form.
-      const screenShotFile = dataURItoFile(screenshot);
+      const screenShotFile = dataUriToFile(screenshot);
       setFieldValue('attachment', screenShotFile);
     }
-  }, [screenshot]);
+  }, [screenshot, drawingMode]);
 
   const handleCloseCreateCommentModal = (): void => {
     setFieldValue('attachment', null);
@@ -135,25 +136,23 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     !!setScreenshot && setScreenshot(null); // Not defined when in course page.
   };
 
-  const onError = (): void => toggleNotification(t('notifications:messageError'));
-
   const onCompleted = ({ createComment }: CreateCommentMutation): void => {
     if (createComment) {
       if (!!createComment.errors && !!createComment.errors.length) {
-        onError();
+        unexpectedError();
       } else if (createComment.comment) {
         appendComments(createComment.comment as CommentObjectType);
       } else {
-        onError();
+        unexpectedError();
       }
     } else {
-      onError();
+      unexpectedError();
     }
   };
 
   const [createCommentMutation] = useCreateCommentMutation({
     onCompleted,
-    onError,
+    onError: unexpectedError,
   });
 
   const handleSubmit = async ({
@@ -262,24 +261,27 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Tooltip>
   );
 
-  const renderClearAttachmentButton = !!commentAttachment && (
-    <Tooltip title={t('tooltips:clearAttachment')}>
-      <Typography component="span">
-        <IconButton onClick={handleClearAttachment} size="small">
-          <ClearOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
-  );
+  const renderClearAttachmentButton = ({
+    values: { attachment },
+  }: FormikProps<CreateCommentFormValues>) =>
+    !!attachment && (
+      <Tooltip title={t('discussion-tooltips:clearAttachment')}>
+        <Typography component="span">
+          <IconButton onClick={handleClearAttachment} size="small">
+            <ClearOutlined />
+          </IconButton>
+        </Typography>
+      </Tooltip>
+    );
 
-  const renderAttachment = !!commentAttachment && (
+  const renderAttachmentPreview = !!commentAttachment && (
     <Box className={clsx(classes.attachmentContainer, !!screenshot && 'screenshot-border')}>
       <Image
         layout="fill"
         className={classes.attachmentImage}
         src={String(commentAttachment)}
         unoptimized // Must be used for base64 images for now (v10.0.1). TODO: See if this is fixed in future Next.js versions.
-        alt={t('comment:attachmentAlt')}
+        alt={t('discussion:attachmentAlt')}
       />
     </Box>
   );
@@ -301,23 +303,43 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   const renderDialogTextField = <Field {...textFieldProps} className={classes.dialogTextField} />;
 
-  const renderDialogToolbar = (
-    <Grid className={classes.dialogToolbar} container>
-      {renderAttachmentButton}
-      {renderClearAttachmentButton}
+  const renderFormHelperText = isTabletOrDesktop && (
+    <>
+      <FormHelperText>
+        {t('discussion:helperTextMarkdown')}{' '}
+        <TextLink href="https://guides.github.com/features/mastering-markdown/" target="_blank">
+          {t('discussion:markdown')}
+        </TextLink>
+        .
+      </FormHelperText>
+      <FormHelperText>
+        {t('discussion:helperTextCombination', { combination: 'Shift + Enter' })}
+      </FormHelperText>
+    </>
+  );
+
+  const renderDialogToolbar = (props: FormikProps<CreateCommentFormValues>) => (
+    <Grid className={classes.dialogToolbar} container alignItems="center">
+      <Grid item xs={4}>
+        {renderAttachmentButton}
+        {renderClearAttachmentButton(props)}
+      </Grid>
+      <Grid item xs={8} container alignItems="flex-end" direction="column">
+        {renderFormHelperText}
+      </Grid>
     </Grid>
   );
 
   const renderDialogSendButton = ({
-    values,
+    values: { text, attachment },
   }: FormikProps<CreateCommentFormValues>): JSX.Element => (
-    <Tooltip title={t('tooltips:sendMessage')}>
+    <Tooltip title={t('discussion-tooltips:sendMessage')}>
       <Typography component="span">
         <Fab
           className={classes.dialogSendButton}
           size="small"
           color="primary"
-          disabled={!values.text && !commentAttachment} // Require either text content or an attachment.
+          disabled={!text && !attachment} // Require either text content or an attachment.
           onClick={submitForm}
         >
           <SendOutlined />
@@ -333,25 +355,23 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     </Box>
   );
 
-  const renderDesktopSendButton = ({ values }: FormikProps<CreateCommentFormValues>) => (
-    <Tooltip title={t('tooltips:sendMessage')}>
+  const renderDesktopSendButton = ({
+    values: { text, attachment },
+  }: FormikProps<CreateCommentFormValues>) => (
+    <Tooltip title={t('discussion-tooltips:sendMessage')}>
       <Typography className={classes.desktopSendButtonSpan} component="span">
         <Button
           onClick={submitForm}
           variant="contained"
           color="primary"
           className={classes.desktopSendButton}
-          disabled={!values.text && !commentAttachment} // Require either text content or an attachment.
+          disabled={!text && !attachment} // Require either text content or an attachment.
           endIcon={<SendOutlined />}
         >
           {t('common:send')}
         </Button>
       </Typography>
     </Tooltip>
-  );
-
-  const renderFormHelperText = (
-    <FormHelperText>Shift + Enter {t('comment:helperText')}</FormHelperText>
   );
 
   const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (
@@ -400,8 +420,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderDialogContent = (props: FormikProps<CreateCommentFormValues>) => (
     <DialogContent className={classes.dialogContent}>
       <Grid container direction="column" justify="flex-end" wrap="nowrap">
-        {renderAttachment}
-        {renderDialogToolbar}
+        {renderAttachmentPreview}
+        {renderDialogToolbar(props)}
         {renderDialogInput(props)}
       </Grid>
     </DialogContent>

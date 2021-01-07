@@ -1,14 +1,5 @@
 {
-  "voteError": "Virhe äänestettäessä {{ target }}a!",
-  "removeVoteError": "Virhe poistettaessa {{ target }}n ääntä!",
-  "starError": "Virhe merkittäessä {{ target }}a tähdellä!",
-  "unstarError": "Virhe poistettaessa {{ target }}n tähteä!",
-  "deleteError": "Virhe poistettaessa {{ target }}a!",
+  "unexpectedError": "Odottamaton virhe!",
   "messageEmpty": "Viesti ei voi olla tyhjä!",
-  "linkCopied": "Linkki kopioitu leikepöydälle!",
-  "downloadPdfError": "Virhe ladattaessa PDF-tiedostoa!",
-  "printPdfError": "Virhe tulostettaessa PDF-tiedostoa!",
-  "messageError": "Virhe lähetettäessä viestiä!",
-  "markSingleActivityReadError": "Tämä toiminta on todennäköisesti poistettu. Lataa sivu uudelleen.",
-  "markAllActivitiesReadError": "Virhe merkittäessä toiminnat luetuiksi!"
+  "linkCopied": "Linkki kopioitu leikepöydälle!"
 }

@@ -1,18 +1,22 @@
 import { DialogContent, Drawer, makeStyles } from '@material-ui/core';
+import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import React, { SyntheticEvent } from 'react';
-import { DialogHeaderProps } from 'types';
+import { DialogHeaderProps, SkoleDialogProps } from 'types';
 
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
 
-interface Props {
+interface Props extends SkoleDialogProps {
   open: boolean;
   onClose: (e: SyntheticEvent) => void;
   dialogHeaderProps: DialogHeaderProps;
 }
 
 const useStyles = makeStyles(({ spacing }) => ({
+  listDialogContent: {
+    padding: 0,
+  },
   dialogContent: {
     padding: spacing(2),
   },
@@ -28,8 +32,13 @@ export const ResponsiveDialog: React.FC<Props> = ({
   const classes = useStyles();
   const renderDialogHeader = <DialogHeader {...dialogHeaderProps} />;
 
+  // Disable padding for dialog content of lists.
   const renderDialogContent = (
-    <DialogContent className={classes.dialogContent}>{children}</DialogContent>
+    <DialogContent
+      className={clsx(dialogProps.list ? classes.listDialogContent : classes.dialogContent)}
+    >
+      {children}
+    </DialogContent>
   );
 
   const renderDrawer = (

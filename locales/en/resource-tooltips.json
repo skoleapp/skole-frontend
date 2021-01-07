@@ -1,0 +1,22 @@
+{
+  "star": "Star this resource.",
+  "unstar": "Unstar this resource.",
+  "upvote": "Upvote this resource.",
+  "removeUpvote": "Remove upvote from this resource.",
+  "downvote": "Downvote this resource.",
+  "removeDownvote": "Remove downvote from this resource.",
+  "voteOwnContent": "You cannot vote on your own resource.",
+  "share": "Share this resource.",
+  "info": "Show resource details.",
+  "actions": "Show resource menu.",
+  "enterFullscreen": "Enter fullscreen.",
+  "exitFullscreen": "Exit fullscreen.",
+  "zoomIn": "Zoom in.",
+  "zoomOut": "Zoom out.",
+  "drawingMode": "Mark area on PDF file.",
+  "exitDrawingMode": "Exit drawing mode.",
+  "downloadPdf": "Download PDF file.",
+  "printPdf": "Print PDF file.",
+  "rotatePdf": "Rotate PDF file.",
+  "backToCourse": "Go back to {{ courseName }}."
+}

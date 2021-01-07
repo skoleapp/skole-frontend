@@ -2,7 +2,7 @@
   "description": "Näytä {{ resourceTitle }} Skolessa.",
   "error": "Virhe ladattaessa resurssia.",
   "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
-  "drawMode": "Piirtotila",
+  "drawingMode": "Piirtotila",
   "downloadPdf": "Lataa PDF",
   "printPdf": "Tulosta PDF",
   "shareHeader": "Jaa resurssi",
@@ -11,6 +11,5 @@
   "infoHeader": "Resurssin tiedot",
   "share": "Jaa resurssi",
   "delete": "Poista resurssi",
-  "deleteTarget": "resurssin",
-  "target": "resurssi"
+  "confirmDelete": "Haluatko varmasti poistaa tämän resurssin?"
 }

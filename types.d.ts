@@ -1,7 +1,6 @@
 declare module 'print-js';
 declare module 'lodash.throttle';
 declare module 'ramda';
-declare module 'next-translate/*';
 declare module 'markdown/*';
 
 declare namespace window {

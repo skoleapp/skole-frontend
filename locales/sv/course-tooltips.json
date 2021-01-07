@@ -1,0 +1,13 @@
+{
+  "uploadResource": "Ladda upp en resurs till den här kursen.",
+  "star": "Stjärna den här kursen.",
+  "unstar": "Avmarkera den här kursen.",
+  "upvote": "Upprösta den här kursen.",
+  "removeUpvote": "Ta bort upprösten från den här kursen.",
+  "downvote": "Nedrösta den här kursen.",
+  "removeDownvote": "Ta bort nedrösten från den här kursen.",
+  "voteOwnContent": "Du kan inte rösta på din egen kurs.",
+  "share": "Dela den här kursen.",
+  "info": "Visa kursinformation.",
+  "actions": "Visa kursmenyn."
+}

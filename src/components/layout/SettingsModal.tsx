@@ -10,7 +10,7 @@ export const SettingsModal: React.FC = () => {
   const renderDialogHeader = <DialogHeader onCancel={handleClose} text={t('common:settings')} />;
 
   return (
-    <SkoleDialog open={settingsOpen} onClose={handleClose}>
+    <SkoleDialog open={settingsOpen} onClose={handleClose} list>
       {renderDialogHeader}
       {renderSettingsMenuList}
     </SkoleDialog>

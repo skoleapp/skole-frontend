@@ -19,15 +19,16 @@ import {
   DrawModeControls,
   ErrorTemplate,
   InfoDialogContent,
+  LoadingBox,
   LoadingTemplate,
   MainTemplate,
   NotFoundTemplate,
   OfflineTemplate,
-  ResourceToolbar,
+  ResourceBottomToolbar,
+  ResourceTopToolbar,
   ResponsiveDialog,
   RotateButton,
   ShareButton,
-  StarButton,
   TabPanel,
   TextLink,
   TopLevelCommentThread,
@@ -54,6 +55,7 @@ import {
   useInfoDialog,
   useLanguageHeaderContext,
   useMediaQueries,
+  useStars,
   useTabs,
   useVotes,
 } from 'hooks';
@@ -70,6 +72,7 @@ import { PdfViewerProps } from 'types';
 // Reference: https://github.com/wojtekmaj/react-pdf/issues/136#issuecomment-716643894.
 const PdfViewer = dynamic<PdfViewerProps>(() => import('../../components/resource/PdfViewer'), {
   ssr: false,
+  loading: () => <LoadingBox />,
 });
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -105,7 +108,7 @@ const ResourceDetailPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const { toggleNotification } = useNotificationsContext();
+  const { toggleNotification, unexpectedError } = useNotificationsContext();
   const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -126,6 +129,7 @@ const ResourceDetailPage: NextPage = () => {
   const comments = R.propOr([], 'comments', resource);
   const initialVote = R.propOr(null, 'vote', resource);
   const initialScore = String(R.propOr(0, 'score', resource));
+  const initialStars = String(R.propOr(0, 'starCount', resource));
   const downloads = String(R.propOr(0, 'downloads', resource));
   const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
@@ -134,11 +138,18 @@ const ResourceDetailPage: NextPage = () => {
   const shareTitle = t('resource:shareTitle', { resourceTitle });
   const shareText = t('resource:shareText', { resourceTitle, creatorUsername });
   const shareParams = { shareHeader: t('resource:shareHeader'), shareTitle, shareText };
-  const target = t('resource:target');
   const created = R.prop('created', resource);
-  const { commentCount } = useDiscussionContext();
-  const { commentModalOpen } = useDiscussionContext();
-  const { drawMode, setDrawMode } = usePdfViewerContext();
+  const { commentCount, commentModalOpen } = useDiscussionContext(comments);
+  const { drawingMode, setDrawingMode } = usePdfViewerContext();
+  const staticBackUrl = urls.course(courseId);
+
+  const { stars, renderStarButton } = useStars({
+    starred,
+    initialStars,
+    resource: resourceId,
+    starTooltip: t('resource-tooltips:star'),
+    unstarTooltip: t('resource-tooltips:unstar'),
+  });
 
   const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs(
     comments,
@@ -151,7 +162,7 @@ const ResourceDetailPage: NextPage = () => {
     handleCloseInfoDialog,
   } = useInfoDialog({
     header: t('resource:infoHeader'),
-    target,
+    infoButtonTooltip: t('resource-tooltips:info'),
   });
 
   const {
@@ -163,7 +174,7 @@ const ResourceDetailPage: NextPage = () => {
     renderActionsButton,
   } = useActionsDialog({
     share: t('resource:share'),
-    target,
+    actionsButtonTooltip: t('resource-tooltips:actions'),
     shareParams,
   });
 
@@ -172,7 +183,11 @@ const ResourceDetailPage: NextPage = () => {
     initialScore,
     isOwner,
     variables: { resource: resourceId },
-    target,
+    upvoteTooltip: t('resource-tooltips:upvote'),
+    removeUpvoteTooltip: t('resource-tooltips:removeUpvote'),
+    downvoteTooltip: t('resource-tooltips:downvote'),
+    removeDownvoteTooltip: t('resource-tooltips:removeDownvote'),
+    ownContentTooltip: t('resource-tooltips:voteOwnContent'),
   });
 
   // Update state after data fetching is complete.
@@ -184,25 +199,15 @@ const ResourceDetailPage: NextPage = () => {
   // If comment modal is opened in main tab, automatically switch to discussion tab.
   useEffect(() => {
     commentModalOpen && tabValue === 0 && setTabValue(1);
-  }, [commentModalOpen]);
+  }, [commentModalOpen, tabValue]);
 
-  // If draw mode is toggled on from discussion tab, change to file preview tab.
+  // If drawing mode is on and user changes to discussion tab, toggle drawing mode off.
   useEffect(() => {
-    drawMode && tabValue === 1 && setTabValue(0);
-  }, [drawMode]);
+    drawingMode && tabValue === 1 && setDrawingMode(false);
+  }, [drawingMode, tabValue]);
 
-  // If draw mode is on and user changes to discussion tab, automatically toggle draw mode off.
-  useEffect(() => {
-    drawMode && tabValue === 1 && setDrawMode(false);
-  }, [tabValue]);
-
-  const staticBackUrl = {
-    href: urls.course(courseId),
-  };
-
-  const deleteResourceError = (): void => {
+  const deleteResourceError = (): void =>
     toggleNotification(t('notifications:deleteResourceError'));
-  };
 
   const deleteResourceCompleted = async ({
     deleteResource,
@@ -276,7 +281,7 @@ const ResourceDetailPage: NextPage = () => {
       a.click();
       a.remove();
     } catch {
-      toggleNotification(t('notifications:downloadPdfError'));
+      unexpectedError();
     }
   };
 
@@ -298,14 +303,14 @@ const ResourceDetailPage: NextPage = () => {
       // @ts-ignore: TS doesn't detect the `print-js` import.
       printJS(blobUrl); // eslint-disable-line no-undef
     } catch {
-      toggleNotification(t('notifications:printPdfError'));
+      unexpectedError();
     }
   };
 
-  const renderCourseLink = !!courseId && <TextLink {...staticBackUrl}>{courseName}</TextLink>;
+  const renderCourseLink = !!courseId && <TextLink href={staticBackUrl}>{courseName}</TextLink>;
 
   const renderSchoolLink = !!schoolId && (
-    <TextLink href={urls.school(schoolId)} as={schoolId} color="primary">
+    <TextLink href={urls.school(schoolId)} color="primary">
       {schoolName}
     </TextLink>
   );
@@ -322,6 +327,10 @@ const ResourceDetailPage: NextPage = () => {
     {
       label: t('common:resourceType'),
       value: resourceType,
+    },
+    {
+      label: t('common:stars'),
+      value: stars,
     },
     {
       label: t('common:score'),
@@ -341,24 +350,14 @@ const ResourceDetailPage: NextPage = () => {
     },
   ];
 
-  const starButtonProps = {
-    starred,
-    resource: resourceId,
-    target,
-  };
-
-  // On desktop, render a disabled button for non-verified users.
-  // On mobile, do not render the button at all for non-verified users.
-  const renderStarButton = (!!verified || isTabletOrDesktop) && <StarButton {...starButtonProps} />;
-
   const renderDrawModeControls = <DrawModeControls />;
-  const renderShareButton = <ShareButton {...shareParams} target={target} />;
+  const renderShareButton = <ShareButton {...shareParams} tooltip={t('resource-tooltips:share')} />;
 
   // Hide these buttons from the custom bottom navbar when in discussion tab.
   const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
   const renderRotateButton = tabValue === 0 && <RotateButton />;
 
-  const renderDefaultBottomNavbarContent = (
+  const renderDefaultCustomBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
         {renderRotateButton}
@@ -372,16 +371,22 @@ const ResourceDetailPage: NextPage = () => {
     </Grid>
   );
 
-  const renderCustomBottomNavbar = (
+  const renderCustomBottomNavbarContent = drawingMode
+    ? renderDrawModeControls
+    : renderDefaultCustomBottomNavbarContent;
+
+  // Only render the custom bottom navbar in the resource tab or if the user is verified since all of the non-PDF actions are only available for verified users.
+  // The default bottom navbar will be automatically shown for non-verified users who are not in the resource tab.
+  const renderCustomBottomNavbar = (!!verified || tabValue === 0) && (
     <BottomNavigation>
-      <CustomBottomNavbarContainer>
-        {drawMode ? renderDrawModeControls : renderDefaultBottomNavbarContent}
-      </CustomBottomNavbarContainer>
+      <CustomBottomNavbarContainer>{renderCustomBottomNavbarContent}</CustomBottomNavbarContainer>
     </BottomNavigation>
   );
 
   const toolbarProps = {
     title,
+    courseId,
+    courseName,
     handleDownloadButtonClick,
     handlePrintButtonClick,
   };
@@ -397,13 +402,13 @@ const ResourceDetailPage: NextPage = () => {
   };
 
   const commentThreadProps = {
-    comments,
     target: { resource: Number(resourceId) },
     noComments: t('resource:noComments'),
   };
 
-  const renderToolbar = <ResourceToolbar {...toolbarProps} />;
+  const renderTopToolbar = <ResourceTopToolbar {...toolbarProps} />;
   const renderPdfViewer = <PdfViewer file={file} />;
+  const renderBottomToolbar = <ResourceBottomToolbar />;
   const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
@@ -422,8 +427,9 @@ const ResourceDetailPage: NextPage = () => {
     <Grid container spacing={2} className={classes.desktopContainer}>
       <Grid item container xs={12} md={6} lg={7} xl={8}>
         <Paper className={clsx(classes.paperContainer, classes.resourceContainer)}>
-          {renderToolbar}
+          {renderTopToolbar}
           {renderPdfViewer}
+          {renderBottomToolbar}
         </Paper>
       </Grid>
       <Grid item container xs={12} md={6} lg={5} xl={4}>
@@ -491,6 +497,7 @@ const ResourceDetailPage: NextPage = () => {
       open={actionsDialogOpen}
       onClose={handleCloseActionsDialog}
       dialogHeaderProps={actionsDialogHeaderProps}
+      list
     >
       {renderActionsDialogContent}
     </ResponsiveDialog>
@@ -517,6 +524,7 @@ const ResourceDetailPage: NextPage = () => {
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }
@@ -534,16 +542,16 @@ const ResourceDetailPage: NextPage = () => {
   return <NotFoundTemplate />;
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: 'blocking',
-  };
-};
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: 'blocking',
+});
+
+const namespaces = ['resource', 'resource-tooltips', 'discussion', 'discussion-tooltips'];
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces(['resource'], locale),
+    _ns: await loadNamespaces(namespaces, locale),
   },
 });
 

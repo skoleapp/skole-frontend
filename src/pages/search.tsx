@@ -33,6 +33,7 @@ import {
   ContactLink,
   SkoleDialog,
   TextFormField,
+  BackButton,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -81,8 +82,16 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     backgroundColor: palette.common.white,
     borderBottom: BORDER,
   },
-  cardHeader: {
+  cardHeaderRoot: {
     borderBottom: BORDER,
+    padding: spacing(3),
+    position: 'relative',
+    height: '3.5rem',
+  },
+  cardHeaderAvatar: {
+    position: 'absolute',
+    top: spacing(2),
+    left: spacing(2),
   },
   searchContainer: {
     padding: spacing(1),
@@ -489,12 +498,18 @@ const SearchPage: NextPage = () => {
     </Paper>
   );
 
+  const renderBackButton = <BackButton onClick={() => Router.back()} />;
+
   const renderFilterResultsHeader = (
-    <CardHeader className={classes.cardHeader} title={t('common:filters')} />
+    <CardHeader
+      classes={{ root: classes.cardHeaderRoot, avatar: classes.cardHeaderAvatar }}
+      title={t('common:filters')}
+      avatar={renderBackButton}
+    />
   );
 
   const renderResultsHeader = (
-    <CardHeader className={classes.cardHeader} title={t('common:searchResults')} />
+    <CardHeader className={classes.cardHeaderRoot} title={t('common:searchResults')} />
   );
 
   const renderDesktopContent = isTabletOrDesktop && (

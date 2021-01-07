@@ -24,11 +24,12 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "array-callback-return": "off", // Allows us not to return anything from arrow functions.
-    "consistent-return": "off", // Allows us not to return anything from arrow functions.
+    "consistent-return": "off", // Same as above.
     "import/prefer-default-export": "off", // Allows us to use named exports.
     "react/prop-types": "off", // Allows us to not use prop-types.
     "@typescript-eslint/ban-ts-comment": "off", // Allows us to make TS ignores with ignore comments.
     "@typescript-eslint/no-non-null-assertion": "off", // Allows us to make non-null assertions for e.g. ref objects that are cumbersome to use with TS.
+    "@typescript-eslint/no-unused-vars": "error", // Show error instead of the default warning for unused variables.
     // TODO: Under this comment, remove all rule overrides and make the necessary refactors to fix the linting errors.
     "import/no-mutable-exports": "off",
     "react/jsx-props-no-spreading": "off",

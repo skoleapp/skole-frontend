@@ -6,8 +6,8 @@
   "shareText": "Katso käyttäjän {{ creatorUsername }} kommentti Skolessa: {{ commentPreview }}",
   "share": "Jaa kommentti",
   "attachmentAlt": "Kommentin liite.",
-  "target": "kommentti",
-  "voteTooltipTarget": "kommenti",
-  "actionsTooltipTarget": "kommenti",
-  "helperText": "lisätäksesi uuden rivin."
+  "helperTextMarkdown": "Käytä kommenttisi formatointiin",
+  "markdown": "Markdownia",
+  "helperTextCombination": "{{ combination }} lisätäksesi uuden rivin.",
+  "commentCount": "{{ commentCount }} kommenttia"
 }

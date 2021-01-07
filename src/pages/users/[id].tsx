@@ -12,7 +12,6 @@ import {
   Tabs,
   Tooltip,
   Typography,
-  useTheme,
 } from '@material-ui/core';
 import { EditOutlined, StarBorderOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
@@ -71,9 +70,13 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     width: '5rem',
     height: '5rem',
     marginBottom: spacing(4),
+    [breakpoints.up('md')]: {
+      width: '7rem',
+      height: '7rem',
+    },
   },
   statsContainer: {
-    marginTop: spacing(2),
+    marginTop: spacing(4),
     marginBottom: spacing(2),
     textAlign: 'center',
   },
@@ -114,20 +117,22 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   joined: {
     marginTop: spacing(2),
   },
-  actionButton: {
+  button: {
     [breakpoints.down('md')]: {
       marginTop: spacing(2),
+    },
+    [breakpoints.up('md')]: {
+      marginLeft: spacing(2),
     },
   },
 }));
 
 const UserPage: NextPage = () => {
-  const { spacing } = useTheme();
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
-  const { userMe, verified } = useAuthContext();
+  const { userMeId, school, subject, verified } = useAuthContext();
   const { query } = useRouter();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -138,10 +143,8 @@ const UserPage: NextPage = () => {
   const avatar = R.propOr('', 'avatar', user);
   const title = R.propOr('', 'title', user);
   const bio = R.propOr('', 'bio', user);
-  const school = R.propOr('', 'school', userMe);
-  const subject = R.propOr('', 'subject', userMe);
   const score = R.propOr('-', 'score')(user);
-  const isOwnProfile = R.propOr('', 'id', user) === R.propOr('', 'id', userMe);
+  const isOwnProfile = R.propOr('', 'id', user) === userMeId;
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
@@ -219,7 +222,7 @@ const UserPage: NextPage = () => {
 
   const renderEditProfileButton = (
     <ButtonLink
-      className={classes.actionButton}
+      className={classes.button}
       href={urls.editProfile}
       color="primary"
       variant="outlined"
@@ -232,23 +235,21 @@ const UserPage: NextPage = () => {
 
   const renderStarredButton = (
     <ButtonLink
-      className={classes.actionButton}
+      className={classes.button}
       href={urls.starred}
       color="primary"
       variant="outlined"
       endIcon={<StarBorderOutlined />}
-      fullWidth
+      fullWidth={isMobile}
     >
       {t('profile:viewStarred')}
     </ButtonLink>
   );
 
   const renderSettingsButton = (
-    <Box marginLeft={spacing(2)}>
-      <Tooltip title={t('tooltips:settings')}>
-        <SettingsButton color="primary" />
-      </Tooltip>
-    </Box>
+    <Tooltip title={t('common-tooltips:settings')}>
+      <SettingsButton className={classes.button} color="primary" />
+    </Tooltip>
   );
 
   const renderScoreTitle = (
@@ -304,7 +305,7 @@ const UserPage: NextPage = () => {
       <Typography variant="body2" color="textSecondary" gutterBottom>
         {t('profile:rank')}
       </Typography>
-      <Tooltip title={t('tooltips:rank', { rank })}>
+      <Tooltip title={t('common-tooltips:rank', { rank })}>
         <Chip size="small" label={rank} />
       </Tooltip>
     </Box>
@@ -374,8 +375,9 @@ const UserPage: NextPage = () => {
   );
 
   const renderDesktopActions = isTabletOrDesktop && isOwnProfile && (
-    <Grid item xs={12} container alignItems="center">
+    <Grid item xs={12} container alignItems="center" spacing={4}>
       {renderEditProfileButton}
+      {renderStarredButton}
       {renderSettingsButton}
     </Grid>
   );

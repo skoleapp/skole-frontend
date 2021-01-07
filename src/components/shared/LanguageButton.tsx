@@ -9,7 +9,7 @@ export const LanguageButton: React.FC = () => {
   const { handleOpenLanguageMenu } = useLanguageContext();
 
   return (
-    <Tooltip title={t('tooltips:language')}>
+    <Tooltip title={t('common-tooltips:language')}>
       <Button onClick={handleOpenLanguageMenu}>
         <LanguageFlag lang={lang} />
       </Button>

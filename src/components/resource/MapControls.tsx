@@ -42,6 +42,10 @@ export const MapControls: React.FC<Props> = ({ setTranslation, scale, setScale }
     centerHorizontalScroll,
   } = usePdfViewerContext();
 
+  const fullscreenButtonTooltip = fullscreen
+    ? t('resource-tooltips:exitFullscreen')
+    : t('resource-tooltips:enterFullscreen');
+
   const handleFullscreenButtonClick = (): void => {
     let scale;
 
@@ -76,18 +80,24 @@ export const MapControls: React.FC<Props> = ({ setTranslation, scale, setScale }
     disabled: controlsDisabled,
   };
 
+  const renderFullscreenButtonIcon = fullscreen ? (
+    <FullscreenExitOutlined />
+  ) : (
+    <FullscreenOutlined />
+  );
+
   const renderFullscreenButton = (
-    <Tooltip title={fullscreen ? t('tooltips:exitFullscreen') : t('tooltips:enterFullscreen')}>
+    <Tooltip title={fullscreenButtonTooltip}>
       <Typography component="span">
         <Fab {...commonButtonProps} onClick={handleFullscreenButtonClick}>
-          {fullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
+          {renderFullscreenButtonIcon}
         </Fab>
       </Typography>
     </Tooltip>
   );
 
   const renderDownscaleButton = (
-    <Tooltip title={t('tooltips:zoomIn')}>
+    <Tooltip title={t('resource-tooltips:zoomIn')}>
       <Typography component="span">
         <Fab {...commonButtonProps} onClick={handleScaleUpButtonClick}>
           <AddOutlined />
@@ -97,7 +107,7 @@ export const MapControls: React.FC<Props> = ({ setTranslation, scale, setScale }
   );
 
   const renderUpscaleButton = (
-    <Tooltip title={t('tooltips:zoomOut')}>
+    <Tooltip title={t('resource-tooltips:zoomOut')}>
       <Typography component="span">
         <Fab {...commonButtonProps} onClick={handleScaleDownButtonClick}>
           <RemoveOutlined />

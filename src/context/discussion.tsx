@@ -1,5 +1,5 @@
 import { CommentObjectType } from 'generated';
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 import { DiscussionContextType } from 'types';
 
@@ -10,7 +10,7 @@ interface UseDiscussionContext extends DiscussionContextType {
   commentCount: number;
 }
 
-export const useDiscussionContext = (): UseDiscussionContext => {
+export const useDiscussionContext = (comments?: CommentObjectType[]): UseDiscussionContext => {
   const { topLevelComments, setTopLevelComments, ...discussionContext } = useContext(
     DiscussionContext,
   );
@@ -19,6 +19,10 @@ export const useDiscussionContext = (): UseDiscussionContext => {
     !!topLevelComments &&
     topLevelComments.length +
       topLevelComments.reduce((acc, cur) => acc + cur.replyComments.length, 0);
+
+  useEffect(() => {
+    !!comments && setTopLevelComments(comments);
+  }, [comments]);
 
   return {
     topLevelComments,

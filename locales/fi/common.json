@@ -50,7 +50,6 @@
   "settings": "Asetukset",
   "communityUser": "Yhteisökäyttäjä",
   "date": "Päivämäärä",
-  "close": "Sulje",
   "verifyAccount": "Vahvista tili",
   "continue": "Jatka",
   "activity": "Toiminta",
@@ -63,13 +62,12 @@
   "profile": "Profiili",
   "backToHome": "Takaisin kotiin",
   "downloads": "Lataukset",
-  "company": "Yritys",
   "social": "Sosiaalinen",
   "postWithAccount": "Lähetä tilisi kanssa",
   "postAs": "Lähetä käyttäjällä {{ username }}",
   "postAsAnonymous": "Lähetä anonyyminä",
   "selectAuthor": "Valitse käyttäjä",
   "send": "Lähetä",
-  "confirmDelete": "Haluatko varmasti poistaa {{ deleteTarget }}?",
+  "stars": "Tähdet",
   "getStarted": "Aloita"
 }

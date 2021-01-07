@@ -1,10 +1,9 @@
+import useTranslation from 'next-translate/useTranslation';
 import DynamicNamespaces from 'next-translate/DynamicNamespaces';
 import I18nProvider from 'next-translate/I18nProvider';
-import useTranslation from 'next-translate/useTranslation';
 
 const defaultNamespaces = [
   'common',
-  'comment',
   'marketing',
   '_error',
   '404',
@@ -12,7 +11,7 @@ const defaultNamespaces = [
   'forms',
   'validation',
   'notifications',
-  'tooltips',
+  'common-tooltips',
   'activity',
   'offline',
   'sharing',
@@ -24,7 +23,7 @@ export const loadNamespaces = async (namespaces: string[], lang?: string): Promi
   const totalNamespaces: Namespaces = {};
 
   for (const ns of [...defaultNamespaces, ...namespaces]) {
-    totalNamespaces[ns] = await import(`../../locales/${lang}/${ns}.json`).then((m) => m.default);
+    totalNamespaces[ns] = await import(`locales/${lang}/${ns}.json`).then((m) => m.default);
   }
 
   return totalNamespaces;

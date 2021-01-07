@@ -4,25 +4,19 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { BORDER } from 'theme';
 import { PdfDocumentProxy, PdfViewerProps } from 'types';
 import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION } from 'utils';
 import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
 import { MapControls } from './MapControls';
 import { MapInteraction } from './MapInteraction';
-import { PageNumberInput } from './PageNumberInput';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const useStyles = makeStyles(({ palette, breakpoints }) => ({
+const useStyles = makeStyles(({ palette }) => ({
   root: {
     flexGrow: 1,
     position: 'relative',
-    [breakpoints.up('md')]: {
-      marginBottom: '3rem',
-      borderBottom: BORDER,
-    },
     '& .react-pdf__Document': {
       display: 'flex',
       flexDirection: 'column',
@@ -71,7 +65,7 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     setNumPages,
     rotate,
     setControlsDisabled,
-    drawMode,
+    drawingMode,
     controlsDisabled,
   } = usePdfViewerContext();
 
@@ -119,11 +113,8 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     </MapInteraction>
   );
 
-  // TODO: See if we need to add a check for `drawMode` here.
-  const renderPageNumberInput = isTabletOrDesktop && !controlsDisabled && <PageNumberInput />;
-
-  // TODO: See if we can use only `controlsDisabled` or `drawMode`.
-  const renderMapControls = isTabletOrDesktop && !drawMode && !controlsDisabled && (
+  // TODO: See if we can use only `controlsDisabled` or `drawingMode`.
+  const renderMapControls = isTabletOrDesktop && !drawingMode && !controlsDisabled && (
     <MapControls {...mapControlsProps} />
   );
 
@@ -131,7 +122,6 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
     <Box className={classes.root}>
       {renderMapInteraction}
       {renderMapControls}
-      {renderPageNumberInput}
     </Box>
   );
 };

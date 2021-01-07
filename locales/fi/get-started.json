@@ -1,15 +1,15 @@
 {
   "title": "Aloita",
-  "appStoreCta": "Lataa sovelluskaupoista! (saatavilla pian)",
   "cta": "Aloita!",
   "or": "tai",
   "skipLogin": "Jatka kirjautumatta",
-  "coursesPitchHeader": "Pysy ajan tasalla kursseistasi",
-  "materialsPitchHeader": "Löydä parhaat opiskelumateriaalit",
-  "discussionPitchHeader": "Keskustele kurssikavereidesi kanssa",
-  "scorePitchHeader": "Hanki kerskumisoikeuksia",
-  "coursesPitchText": "Merkitse lempikurssisi tähdellä ja pysy ajan tasalla. Lisää uusia kursseja ja jaa ne kurssikavereidesi kanssa.",
-  "materialsPitchText": "Löydä parhaat opiskelumateriaalit helposti. Lisää uusia materiaaleja kursseille.",
-  "discussionPitchText": "Keskustele kursseista ja opiskelumateriaaleista helposti. Näyttäydy anonyyminä tai tilisi kanssa.",
-  "scorePitchText": "Kasvata pisteitäsi lisäämällä loistavaa sisältöä. Kehuskele profiilillasi kavereillesi."
+  "materialsPitchHeader": "Opiskelumateriaalit 📚",
+  "discussionPitchHeader": "Keskustelut 💬",
+  "materialsBullet1": "Kurssiesi materiaalit helposti saatavilla.",
+  "materialsBullet2": "Lisää uusia materiaaleja ja jaa ne kurssikavereidesi kanssa.",
+  "materialsBullet3": "Kerää pisteitä ja ansaitse kerskumisoikeuksia. 😁",
+  "discussionBullet1": "Keskustele kursseista ja opiskelumateriaaleista helposti.",
+  "discussionBullet2": "Näyttäydy anonyyminä tai käyttäjätunnuksesi kanssa.",
+  "discussionBullet3": "Näe kurssien aikaisempien vuosien keskustelut ja ole askeleen edellä. 🤓",
+  "appStoreCta": "Pian saatavilla sovelluskaupoista!"
 }

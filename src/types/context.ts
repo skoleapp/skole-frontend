@@ -1,10 +1,19 @@
-import { CommentObjectType, UserObjectType } from 'generated';
+import { CommentObjectType, SchoolObjectType, SubjectObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 
 export interface AuthContextType {
   userMe: UserObjectType | null;
   setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
+  userMeId: string;
+  username: string;
+  email: string;
+  title: string;
+  bio: string;
+  avatarThumbnail: string;
+  avatar: string;
+  school: SchoolObjectType | null;
+  subject: SubjectObjectType | null;
   authNetworkError: boolean;
   setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }
@@ -18,6 +27,7 @@ export interface LanguageContextType {
 export interface NotificationsContextType {
   notification: string | null;
   toggleNotification: (payload: string | null) => void;
+  unexpectedError: () => void;
 }
 
 export interface SettingsContextType {
@@ -28,8 +38,8 @@ export interface SettingsContextType {
 export interface PdfViewerContextType {
   documentRef: MutableRefObject<Document>;
   pageNumberInputRef: MutableRefObject<HTMLInputElement>;
-  drawMode: boolean;
-  setDrawMode: Dispatch<SetStateAction<boolean>>;
+  drawingMode: boolean;
+  setDrawingMode: Dispatch<SetStateAction<boolean>>;
   screenshot: string | null;
   setScreenshot: Dispatch<SetStateAction<string | null>>;
   rotate: number;
@@ -76,6 +86,7 @@ export interface ShareParams {
   shareHeader?: string;
   shareTitle?: string;
   shareText?: string;
+  linkSuffix?: string;
 }
 
 export interface ShareContextType {

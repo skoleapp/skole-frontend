@@ -50,7 +50,7 @@ export const MapInteraction: React.FC<Props> = ({
   const { isMobileOrTablet, isTabletOrDesktop } = useMediaQueries();
 
   const {
-    drawMode,
+    drawingMode,
     setRotate,
     controlsDisabled,
     setPageNumber,
@@ -254,7 +254,7 @@ export const MapInteraction: React.FC<Props> = ({
   useEffect(() => {
     const mapContainerNode = getMapContainerNode();
 
-    if (!drawMode && !controlsDisabled) {
+    if (!drawingMode && !controlsDisabled) {
       mapContainerNode.addEventListener('touchstart', onTouchStart, {
         passive: true,
       });
@@ -270,14 +270,14 @@ export const MapInteraction: React.FC<Props> = ({
       mapContainerNode.removeEventListener('touchend', onTouchEnd);
       mapContainerNode.removeEventListener('wheel', onWheel);
     };
-  }, [scale, translation, drawMode, controlsDisabled]);
+  }, [scale, translation, drawingMode, controlsDisabled]);
 
   // Listen for key presses in order to show different cursor when CTRL key is pressed.
   // Also listen for scroll and resize events to update the page number automatically.
   useEffect(() => {
     const mapContainerNode = getMapContainerNode();
 
-    if (!drawMode && !controlsDisabled) {
+    if (!drawingMode && !controlsDisabled) {
       mapContainerNode.addEventListener('scroll', throttle(pageListener, 100), {
         passive: true,
       });
@@ -296,20 +296,20 @@ export const MapInteraction: React.FC<Props> = ({
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
     };
-  }, [drawMode, controlsDisabled]);
+  }, [drawingMode, controlsDisabled]);
 
-  // When entering draw mode, reset scale/translation.
+  // When entering drawing mode, reset scale/translation.
   useEffect(() => {
-    if (drawMode) {
+    if (drawingMode) {
       setScale(PDF_DEFAULT_SCALE);
       setTranslation(PDF_DEFAULT_TRANSLATION);
       setRotate(0);
       setFullscreen(true);
     }
-  }, [drawMode]);
+  }, [drawingMode]);
 
-  const cursor = !drawMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
-  const overflow = drawMode && isMobileOrTablet ? 'hidden' : 'auto'; // Disable scrolling when draw mode is on on mobile.
+  const cursor = !drawingMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
+  const overflow = drawingMode && isMobileOrTablet ? 'hidden' : 'auto'; // Disable scrolling when drawing mode is on on mobile.
   const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`; // Translate first and then scale. Otherwise, the scale would affect the translation.
   const transformOrigin = scale < 1 && isTabletOrDesktop ? '50% 0' : '0 0'; // On mobile and when in fullscreen and zooming in from that, set the transform origin to top left. Otherwise center the document.
   const width = `calc(100% * ${scale})`;

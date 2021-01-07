@@ -6,6 +6,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import clsx from 'clsx';
 import { useNotificationsContext } from 'context';
 import {
   ActivityObjectType,
@@ -39,30 +40,28 @@ export const ActivityListItem: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const [read, setRead] = useState(initialRead);
-  const { toggleNotification } = useNotificationsContext();
+  const { unexpectedError } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
-
-  const onError = (): void => toggleNotification(t('notifications:markSingleActivityReadError'));
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead) {
       if (!!markActivityAsRead.errors && !!markActivityAsRead.errors.length) {
-        onError();
+        unexpectedError();
       } else if (!!markActivityAsRead.activity && markActivityAsRead.activity.read != null) {
         // We use the abstract equality operator here on purpose to compare against both `null` and `undefined` values.
         setRead(markActivityAsRead.activity.read);
       } else {
-        onError();
+        unexpectedError();
       }
     } else {
-      onError();
+      unexpectedError();
     }
   };
 
   const [markSingleActivityRead] = useMarkActivityAsReadMutation({
     onCompleted,
-    onError,
+    onError: unexpectedError,
     context,
   });
 
@@ -107,7 +106,7 @@ export const ActivityListItem: React.FC<Props> = ({
   );
 
   return (
-    <ListItem onClick={handleClick} className={!read ? classes.unread : ''} button>
+    <ListItem onClick={handleClick} className={clsx(!read && classes.unread)} button>
       {renderAvatar}
       {renderListItemText}
     </ListItem>

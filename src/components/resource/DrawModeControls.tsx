@@ -1,56 +1,52 @@
-import { Button, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Button, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined, ClearOutlined } from '@material-ui/icons';
 import { useDiscussionContext, usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-const useStyles = makeStyles(({ spacing }) => ({
-  button: {
-    padding: spacing(1),
-  },
-}));
-
 export const DrawModeControls: React.FC = () => {
-  const classes = useStyles();
   const { t } = useTranslation();
-  const { isMobileOrTablet } = useMediaQueries();
-  const colWidth = isMobileOrTablet ? 6 : 5;
-  const { setDrawMode, screenshot } = usePdfViewerContext();
+  const { isTabletOrDesktop } = useMediaQueries();
+  const { setDrawingMode, screenshot, setScreenshot } = usePdfViewerContext();
   const { toggleCommentModal } = useDiscussionContext();
-  const handleExitButtonClick = (): void => setDrawMode(false);
+
+  const handleExitButtonClick = (): void => {
+    setDrawingMode(false);
+    setScreenshot(null);
+  };
 
   const handleContinueButtonClick = (): void => {
-    setDrawMode(false);
+    setDrawingMode(false);
     toggleCommentModal(true);
   };
 
   const renderExitButton = (
-    <Grid item xs={colWidth} container justify="flex-start">
-      <IconButton
-        onClick={handleExitButtonClick}
-        size="small"
-        color={isMobileOrTablet ? 'default' : 'secondary'}
-      >
-        <ClearOutlined />
-      </IconButton>
+    <Grid item xs={6} md={2} container justify="flex-start">
+      <Tooltip title={t('resource-tooltips:exitDrawMode')}>
+        <IconButton onClick={handleExitButtonClick} size="small">
+          <ClearOutlined />
+        </IconButton>
+      </Tooltip>
     </Grid>
   );
 
-  const renderHeader = !isMobileOrTablet && (
-    <Grid item xs={2}>
-      <Typography variant="subtitle1">{t('resource:drawMode')}</Typography>
+  const renderHeader = isTabletOrDesktop && (
+    <Grid item md={8}>
+      <Typography className="MuiCardHeader-title" variant="h5">
+        {t('resource:drawingMode')}
+      </Typography>
     </Grid>
   );
 
   const renderContinueButton = (
-    <Grid item xs={colWidth} container justify="flex-end">
+    <Grid item xs={6} md={2} container justify="flex-end">
       <Button
-        className={classes.button}
         onClick={handleContinueButtonClick}
         endIcon={<ArrowForwardOutlined />}
         disabled={!screenshot}
-        color={isMobileOrTablet ? 'primary' : 'secondary'}
+        color="primary"
+        size="small"
       >
         {t('common:continue')}
       </Button>

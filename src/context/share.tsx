@@ -9,6 +9,7 @@ const initialShareParams = {
   shareHeader: '',
   shareTitle: '',
   shareText: '',
+  linkSuffix: '',
 };
 
 export const ShareContextProvider: React.FC = ({ children }) => {

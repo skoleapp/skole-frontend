@@ -36,10 +36,9 @@ import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from '
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { BORDER } from 'theme';
 import { mediaUrl, truncate, urls } from 'utils';
-import { ResponsiveDialog, TextLink } from '../shared';
+import { MarkdownContent, ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
@@ -118,10 +117,10 @@ export const CommentCard: React.FC<Props> = ({
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
-  const { toggleNotification } = useNotificationsContext();
+  const { toggleNotification, unexpectedError } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const { confirm } = useConfirmContext();
-  const avatarThumb = R.propOr('', 'avatarThumbnail', comment.user);
+  const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
   const attachmentOnly = comment.text == '' && comment.attachment !== '';
   const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));
@@ -134,21 +133,21 @@ export const CommentCard: React.FC<Props> = ({
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
-  const target = t('comment:target');
 
-  const shareTitle = t('comment:shareTitle', {
+  const shareTitle = t('discussion:shareTitle', {
     creatorUsername,
   });
 
-  const shareText = t('comment:shareText', {
+  const shareText = t('discussion:shareText', {
     creatorUsername,
     commentPreview,
   });
 
   const shareParams = {
-    shareHeader: t('comment:share'),
+    shareHeader: t('discussion:share'),
     shareTitle,
     shareText,
+    linkSuffix: `?comment=${commentId}`,
   };
 
   const {
@@ -159,9 +158,9 @@ export const CommentCard: React.FC<Props> = ({
     renderReportAction,
     actionsButtonProps,
   } = useActionsDialog({
-    share: t('comment:share'),
+    share: t('discussion:share'),
     shareParams,
-    target,
+    actionsButtonTooltip: t('discussion-tooltips:actions'),
   });
 
   const {
@@ -175,7 +174,11 @@ export const CommentCard: React.FC<Props> = ({
     initialScore,
     isOwner,
     variables: { comment: commentId },
-    target: t('comment:voteTooltipTarget'),
+    upvoteTooltip: t('discussion-tooltips:upvote'),
+    removeUpvoteTooltip: t('discussion-tooltips:removeUpvote'),
+    downvoteTooltip: t('discussion-tooltips:downvote'),
+    removeDownvoteTooltip: t('discussion-tooltips:removeDownvote'),
+    ownContentTooltip: t('discussion-tooltips:voteOwnContent'),
   });
 
   const handleClick = (): void => {
@@ -186,27 +189,24 @@ export const CommentCard: React.FC<Props> = ({
     }
   };
 
-  const deleteCommentError = (): void =>
-    toggleNotification(t('notifications:deleteError', { target }));
-
   const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
     if (deleteComment) {
       if (!!deleteComment.errors && !!deleteComment.errors.length) {
-        deleteCommentError();
+        unexpectedError();
       } else if (deleteComment.successMessage) {
         removeComment(comment.id);
         toggleNotification(deleteComment.successMessage);
       } else {
-        deleteCommentError();
+        unexpectedError();
       }
     } else {
-      deleteCommentError();
+      unexpectedError();
     }
   };
 
   const [deleteComment] = useDeleteCommentMutation({
     onCompleted: deleteCommentCompleted,
-    onError: deleteCommentError,
+    onError: unexpectedError,
     context,
   });
 
@@ -221,8 +221,8 @@ export const CommentCard: React.FC<Props> = ({
 
     try {
       await confirm({
-        title: t('comment:delete'),
-        description: t('common:confirmDelete', { deleteTarget: t('comment:deleteTarget') }),
+        title: t('discussion:delete'),
+        description: t('discussion:confirmDelete'),
       });
 
       await deleteComment({ variables: { id: comment.id } });
@@ -251,7 +251,7 @@ export const CommentCard: React.FC<Props> = ({
         title: classes.cardTitle,
         subheader: classes.cardSubHeader,
       }}
-      avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumb)} />}
+      avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
       title={renderTitle}
       subheader={created}
     />
@@ -268,7 +268,7 @@ export const CommentCard: React.FC<Props> = ({
 
   const renderText = (
     <Typography className={classes.text} variant="body2">
-      <ReactMarkdown>{comment.text}</ReactMarkdown>
+      <MarkdownContent>{comment.text}</MarkdownContent>
     </Typography>
   );
 
@@ -277,18 +277,18 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderReplyCount = (!isThread || isTopComment) && (
-    <Box display="flex" className={classes.replyCount}>
-      <Tooltip title={t('tooltips:commentReplies', { replyCount })}>
+    <Tooltip title={t('discussion-tooltips:replies', { replyCount })}>
+      <Box display="flex" className={classes.replyCount}>
         <CommentOutlined className={classes.icon} color="disabled" />
-      </Tooltip>
-      <Typography variant="body2" color="textSecondary">
-        {replyCount}
-      </Typography>
-    </Box>
+        <Typography variant="body2" color="textSecondary">
+          {replyCount}
+        </Typography>
+      </Box>
+    </Tooltip>
   );
 
   const renderAttachmentButton = !!comment.attachment && !attachmentOnly && (
-    <Tooltip title={t('tooltips:attachment')}>
+    <Tooltip title={t('discussion-tooltips:attachment')}>
       <IconButton className={classes.iconButton} size="small" onClick={handleAttachmentClick}>
         <AttachFileOutlined />
       </IconButton>
@@ -296,7 +296,7 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderActionsButton = (
-    <Tooltip title={t('tooltips:actions', { target: t('comment:actionsTooltipTarget') })}>
+    <Tooltip title={t('discussion-tooltips:actions')}>
       <IconButton
         {...actionsButtonProps}
         className={clsx(classes.iconButton, classes.actionsButton)}
@@ -350,7 +350,7 @@ export const CommentCard: React.FC<Props> = ({
       <ListItemIcon>
         <DeleteOutline />
       </ListItemIcon>
-      <ListItemText>{t('comment:delete')}</ListItemText>
+      <ListItemText>{t('discussion:delete')}</ListItemText>
     </MenuItem>
   );
 
@@ -367,6 +367,7 @@ export const CommentCard: React.FC<Props> = ({
       open={actionsDialogOpen}
       onClose={handleCloseActionsDialog}
       dialogHeaderProps={actionsDialogHeaderProps}
+      list
     >
       {renderActionsDialogContent}
     </ResponsiveDialog>

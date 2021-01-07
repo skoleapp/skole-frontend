@@ -1,8 +1,8 @@
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints';
 import createPalette from '@material-ui/core/styles/createPalette';
-import createTypography from '@material-ui/core/styles/createTypography';
+import createTypography, { TypographyOptions } from '@material-ui/core/styles/createTypography';
 
 // Global constants, feel free to use these where ever.
 export const BORDER_RADIUS = '1.75rem';
@@ -41,11 +41,8 @@ const paletteOptions = {
   },
 };
 
-const typographyOptions = {
+const typographyOptions: TypographyOptions = {
   fontFamily: ['Roboto', 'sans-serif'].join(','),
-  h1: {
-    fontSize: 50,
-  },
 };
 
 const palette = createPalette(paletteOptions);
@@ -53,7 +50,7 @@ const typography = createTypography(palette, typographyOptions);
 const spacing = (factor: number): string => `${0.25 * factor}rem`;
 const breakpoints = createBreakpoints(breakpointOptions);
 
-let theme = createMuiTheme({
+export const theme = createMuiTheme({
   palette,
   typography,
   spacing,
@@ -85,6 +82,9 @@ let theme = createMuiTheme({
       textColor: 'primary',
       variant: 'fullWidth',
       indicatorColor: 'primary',
+    },
+    MuiList: {
+      disablePadding: true,
     },
   },
   overrides: {
@@ -148,6 +148,11 @@ let theme = createMuiTheme({
         borderRadius: BORDER_RADIUS,
       },
     },
+    MuiCardContent: {
+      root: {
+        padding: `${spacing(4)} !important`,
+      },
+    },
     MuiDrawer: {
       paperAnchorBottom: {
         borderRadius: `${BORDER_RADIUS} ${BORDER_RADIUS} 0 0`,
@@ -203,10 +208,6 @@ let theme = createMuiTheme({
       root: {
         display: 'flex',
         flexDirection: 'column',
-        [breakpoints.up('md')]: {
-          position: 'absolute',
-          height: '100%',
-        },
       },
     },
     MuiTableBody: {
@@ -244,15 +245,14 @@ let theme = createMuiTheme({
     },
     MuiCardHeader: {
       root: {
-        padding: `${spacing(2)} ${spacing(4)}`,
+        padding: spacing(2),
         textAlign: 'center',
       },
       title: {
         fontSize: '1.35rem',
       },
       action: {
-        marginTop: 0,
-        alignSelf: 'center',
+        margin: '0 !important',
       },
     },
     MuiDialog: {
@@ -335,7 +335,3 @@ let theme = createMuiTheme({
     },
   },
 });
-
-theme = responsiveFontSizes(theme);
-
-export { theme };
