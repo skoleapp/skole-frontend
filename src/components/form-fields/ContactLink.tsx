@@ -1,7 +1,9 @@
-import { FormControl, FormHelperText } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
+
 import { TextLink } from '../shared';
 
 export const ContactLink: React.FC = () => {

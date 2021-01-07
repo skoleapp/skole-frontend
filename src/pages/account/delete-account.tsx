@@ -1,4 +1,4 @@
-import { FormControl } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
 import {
   ButtonLink,
   FormSubmitSection,
@@ -6,7 +6,7 @@ import {
   SettingsTemplate,
   TextFormField,
 } from 'components';
-import { useNotificationsContext, useConfirmContext, useAuthContext } from 'context';
+import { useAuthContext, useConfirmContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
 import { withUserMe } from 'hocs';

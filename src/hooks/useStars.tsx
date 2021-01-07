@@ -1,8 +1,11 @@
-import { IconButton, Tooltip, Typography } from '@material-ui/core';
-import { StarBorderOutlined } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
 import React, { useEffect, useState } from 'react';
+
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 import { useMediaQueries } from './useMediaQueries';
 

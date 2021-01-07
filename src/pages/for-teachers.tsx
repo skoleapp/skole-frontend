@@ -1,5 +1,8 @@
-import { Divider, Grid, makeStyles, Typography } from '@material-ui/core';
-import { ArrowForwardOutlined } from '@material-ui/icons';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { BackButton, ButtonLink, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';

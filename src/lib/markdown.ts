@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
-import { join } from 'path';
 import matter from 'gray-matter';
 import { defaultLocale } from 'i18n.json';
+import { join } from 'path';
 
 // Load markdown content from files in `markdown` folder for statically generated pages.
 export const loadMarkdownContent = async (

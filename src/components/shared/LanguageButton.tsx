@@ -1,8 +1,10 @@
-import { IconButton, Tooltip } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import { useLanguageContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
+
 import { LanguageFlag } from './LanguageFlag';
 
 export const LanguageButton: React.FC = () => {

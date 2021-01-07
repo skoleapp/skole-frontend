@@ -1,4 +1,5 @@
-import { ContainerProps, GridProps } from '@material-ui/core';
+import { ContainerProps } from '@material-ui/core/Container';
+import { GridProps } from '@material-ui/core/Grid';
 import { ReactNode } from 'react';
 
 export interface SeoProps {

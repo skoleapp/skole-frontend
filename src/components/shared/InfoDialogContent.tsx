@@ -1,9 +1,12 @@
-import { Box, CardContent, Grid, Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { UserObjectType } from 'generated';
 import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
-import { UserObjectType } from 'generated';
 import { urls } from 'utils';
 
 import { TextLink } from './TextLink';

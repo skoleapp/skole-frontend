@@ -4,6 +4,7 @@ import { NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { LS_LOGOUT_KEY, urls } from 'utils';
+
 import { withCommonContexts } from './withCommonContexts';
 
 // Fetch user from API and set context with the value.

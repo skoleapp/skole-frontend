@@ -1,4 +1,6 @@
-import { Container, Grid, makeStyles } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import * as R from 'ramda';

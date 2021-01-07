@@ -1,14 +1,15 @@
-import { FormControl, FormHelperText } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
-  ErrorTemplate,
-  FormTemplate,
-  FormSubmitSection,
-  TextFormField,
-  ContactLink,
-  LoginRequiredTemplate,
-  GuidelinesLink,
   BackButton,
+  ContactLink,
+  ErrorTemplate,
+  FormSubmitSection,
+  FormTemplate,
+  GuidelinesLink,
+  LoginRequiredTemplate,
+  TextFormField,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';

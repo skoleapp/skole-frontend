@@ -1,5 +1,5 @@
-import { IconButton, IconButtonProps } from '@material-ui/core';
-import { SettingsOutlined } from '@material-ui/icons';
+import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
+import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import { useSettingsContext } from 'context';
 import React, { forwardRef } from 'react';
 

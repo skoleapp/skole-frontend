@@ -1,6 +1,7 @@
-import { TableBody } from '@material-ui/core';
+import TableBody from '@material-ui/core/TableBody';
 import { ActivityObjectType } from 'generated';
 import React from 'react';
+
 import { ActivityListItem } from '../activity';
 
 interface Props {

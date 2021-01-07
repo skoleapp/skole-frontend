@@ -1,6 +1,12 @@
-import { List, ListItemIcon, ListItemText, MenuItem, Tooltip, Typography } from '@material-ui/core';
-import { AddCircleOutlineOutlined } from '@material-ui/icons';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import {
+  BackButton,
   CourseTableBody,
   ErrorTemplate,
   IconButtonLink,
@@ -10,10 +16,9 @@ import {
   PaginatedTable,
   ResponsiveDialog,
   ShareButton,
-  TextLink,
   SubjectTableBody,
   TabTemplate,
-  BackButton,
+  TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
 import { useSchoolQuery } from 'generated';

@@ -1,21 +1,21 @@
-import {
-  Avatar,
-  Button,
-  Grid,
-  List,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Typography,
-} from '@material-ui/core';
-import { DeviceUnknownOutlined, KeyboardArrowDown } from '@material-ui/icons';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import DeviceUnknownOutlined from '@material-ui/icons/DeviceUnknownOutlined';
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import { useAuthContext } from 'context';
 import { FormikProps } from 'formik';
 import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { CreateCommentFormValues } from 'types';
+
 import { ResponsiveDialog } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({

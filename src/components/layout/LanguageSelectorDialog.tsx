@@ -1,9 +1,13 @@
-import { List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import { useLanguageContext } from 'context';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { LANGUAGES } from 'utils';
+
 import { LanguageFlag, ResponsiveDialog } from '../shared';
 
 export const LanguageSelectorDialog: React.FC = () => {

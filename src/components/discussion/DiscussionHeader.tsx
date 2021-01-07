@@ -1,5 +1,7 @@
-import { CardHeader, makeStyles, Typography } from '@material-ui/core';
-import { ChatOutlined } from '@material-ui/icons';
+import CardHeader from '@material-ui/core/CardHeader';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import { useTranslation } from 'lib';
 import React from 'react';
 

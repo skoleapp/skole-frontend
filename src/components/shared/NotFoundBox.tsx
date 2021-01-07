@@ -1,7 +1,9 @@
-import { Grid, makeStyles, Typography } from '@material-ui/core';
-import { MoodBadOutlined } from '@material-ui/icons';
-import { UrlObject } from 'url';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import MoodBadOutlined from '@material-ui/icons/MoodBadOutlined';
 import React from 'react';
+import { UrlObject } from 'url';
 
 import { TextLink } from './TextLink';
 

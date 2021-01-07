@@ -1,19 +1,14 @@
-import {
-  CardActionArea,
-  Grid,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-
-import {
-  AccountCircleOutlined,
-  AssignmentOutlined,
-  ChatOutlined,
-  StarBorderOutlined,
-} from '@material-ui/icons';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
+import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import ChatOutlined from '@material-ui/icons/ChatOutlined';
+import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
 import { CourseObjectType } from 'generated';
 import { useTranslation } from 'lib';

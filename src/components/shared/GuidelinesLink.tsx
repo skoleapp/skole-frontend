@@ -1,6 +1,7 @@
 import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
+
 import { TextLink } from './TextLink';
 
 export const GuidelinesLink: React.FC = () => {

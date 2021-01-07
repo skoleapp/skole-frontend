@@ -12,8 +12,8 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import * as Yup from 'yup';
 import { PASSWORD_MIN_LENGTH } from 'utils';
+import * as Yup from 'yup';
 
 const initialValues = {
   oldPassword: '',

@@ -1,4 +1,6 @@
-import { Box, makeStyles, Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import { usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
@@ -6,6 +8,7 @@ import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { PdfDocumentProxy, PdfViewerProps } from 'types';
 import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION } from 'utils';
+
 import { LoadingBox } from '../shared';
 import { AreaSelection } from './AreaSelection';
 import { MapControls } from './MapControls';

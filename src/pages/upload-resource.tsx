@@ -1,15 +1,17 @@
-import { Collapse, FormControl, FormHelperText } from '@material-ui/core';
+import Collapse from '@material-ui/core/Collapse';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
+  BackButton,
+  DatePickerFormField,
   ErrorTemplate,
   FileField,
-  FormTemplate,
   FormSubmitSection,
+  FormTemplate,
+  LoginRequiredTemplate,
   TextFormField,
   TextLink,
-  DatePickerFormField,
-  LoginRequiredTemplate,
-  BackButton,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import dayjs from 'dayjs';

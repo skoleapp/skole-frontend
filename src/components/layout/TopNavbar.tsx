@@ -1,29 +1,24 @@
-import {
-  AppBar,
-  Avatar,
-  Badge,
-  Box,
-  ClickAwayListener,
-  Divider,
-  Fade,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  Popper,
-  Toolbar,
-  Tooltip,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
-import {
-  AddCircleOutlineOutlined,
-  HowToRegOutlined,
-  LaunchOutlined,
-  NotificationsOutlined,
-  SchoolOutlined,
-  StarBorderOutlined,
-} from '@material-ui/icons';
+import AppBar from '@material-ui/core/AppBar';
+import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
+import Box from '@material-ui/core/Box';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Divider from '@material-ui/core/Divider';
+import Fade from '@material-ui/core/Fade';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
+import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
+import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
+import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
+import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
+import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
@@ -34,8 +29,8 @@ import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
-import { Logo } from './Logo';
 import { ButtonLink, IconButtonLink, LanguageButton } from '../shared';
+import { Logo } from './Logo';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({

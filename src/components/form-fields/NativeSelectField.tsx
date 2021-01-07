@@ -1,13 +1,11 @@
-import {
-  FormControl,
-  InputLabel,
-  makeStyles,
-  Select,
-  SelectProps as MuiSelectProps,
-} from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select, { SelectProps } from '@material-ui/core/Select';
+import { makeStyles } from '@material-ui/core/styles';
 import { ErrorMessage, FieldAttributes, FormikProps, FormikValues } from 'formik';
-import React from 'react';
 import * as R from 'ramda';
+import React from 'react';
+
 import { FormErrorMessage } from './FormErrorMessage';
 
 // The form control wrapper has different margins for this select field than for all other fields.
@@ -20,7 +18,7 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-  field: FieldAttributes<MuiSelectProps>;
+  field: FieldAttributes<SelectProps>;
   form: FormikProps<FormikValues>;
   label: string;
 }

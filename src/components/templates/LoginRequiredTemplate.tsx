@@ -1,10 +1,13 @@
-import { Button, FormControl, Typography } from '@material-ui/core';
-import { ArrowForwardOutlined } from '@material-ui/icons';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
+
 import { ButtonLink } from '../shared';
 import { FormTemplate } from './FormTemplate';
 

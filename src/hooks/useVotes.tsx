@@ -1,10 +1,14 @@
-import { IconButton, Size, Tooltip, Typography } from '@material-ui/core';
-import { ThumbDownOutlined, ThumbUpOutlined } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import { Size } from '@material-ui/core/TableCell';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
+import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-
 import { MuiColor } from 'types';
+
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 import { useMediaQueries } from './useMediaQueries';
 

@@ -1,7 +1,10 @@
-import { Grid, makeStyles, TextField, Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import { usePdfViewerContext } from 'context';
-import React, { ChangeEvent } from 'react';
 import * as R from 'ramda';
+import React, { ChangeEvent } from 'react';
 import { BORDER } from 'theme';
 
 const useStyles = makeStyles(({ spacing }) => ({

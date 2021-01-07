@@ -1,10 +1,7 @@
-import {
-  LabelDisplayedRowsArgs,
-  makeStyles,
-  TableFooter,
-  TablePagination,
-  TableRow,
-} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination, { LabelDisplayedRowsArgs } from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { CustomTablePaginationProps } from 'types';

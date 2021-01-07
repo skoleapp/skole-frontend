@@ -1,13 +1,12 @@
-import {
-  CardHeader,
-  List,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Paper,
-} from '@material-ui/core';
-import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
+import CardHeader from '@material-ui/core/CardHeader';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import DoneOutlineOutlined from '@material-ui/icons/DoneOutlineOutlined';
+import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import {
   ActivityTableBody,
   BackButton,

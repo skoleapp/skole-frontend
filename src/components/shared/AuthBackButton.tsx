@@ -1,7 +1,8 @@
-import useTranslation from 'next-translate/useTranslation';
 import { useRouter } from 'next/router';
+import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
 import { urls } from 'utils';
+
 import { BackButton } from './BackButton';
 
 // A custom back button used in login/register pages.

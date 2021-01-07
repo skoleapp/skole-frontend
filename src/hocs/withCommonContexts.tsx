@@ -7,10 +7,10 @@ import {
 } from 'components';
 import {
   AuthContextProvider,
+  ConfirmContextProvider,
   LanguageContextProvider,
   NotificationsContextProvider,
   SettingsContextProvider,
-  ConfirmContextProvider,
   ShareContextProvider,
 } from 'context';
 import { NextPage } from 'next';

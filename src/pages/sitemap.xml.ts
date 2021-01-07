@@ -1,6 +1,6 @@
-import { GetServerSideProps } from 'next';
 import { SitemapDocument } from 'generated';
 import { initApolloClient } from 'lib';
+import { GetServerSideProps } from 'next';
 import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
 
 export default (): void => {};

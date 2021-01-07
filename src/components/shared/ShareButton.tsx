@@ -1,5 +1,6 @@
-import { IconButton, Tooltip } from '@material-ui/core';
-import { ShareOutlined } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import ShareOutlinedIcon from '@material-ui/icons/ShareOutlined';
 import { useShareContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
@@ -18,7 +19,7 @@ export const ShareButton: React.FC<Props> = ({ tooltip, ...props }) => {
   return (
     <Tooltip title={tooltip}>
       <IconButton onClick={handleClick} size="small" color={color}>
-        <ShareOutlined />
+        <ShareOutlinedIcon />
       </IconButton>
     </Tooltip>
   );

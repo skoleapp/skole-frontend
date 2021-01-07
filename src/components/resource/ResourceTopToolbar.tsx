@@ -1,13 +1,20 @@
-import { Box, Grid, IconButton, makeStyles, Size, Tooltip, Typography } from '@material-ui/core';
-import { CloudDownloadOutlined, PrintOutlined } from '@material-ui/icons';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import { Size } from '@material-ui/core/TableCell';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
+import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { BORDER } from 'theme';
 import { urls } from 'utils';
-import { BackButton } from '../shared';
 
+import { BackButton } from '../shared';
 import { DrawModeButton } from './DrawModeButton';
 import { DrawModeControls } from './DrawModeControls';
 import { RotateButton } from './RotateButton';

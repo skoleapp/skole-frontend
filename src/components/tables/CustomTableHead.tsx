@@ -1,4 +1,7 @@
-import { TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
 import { CustomTableHeadProps, TextColor, TextVariant } from 'types';

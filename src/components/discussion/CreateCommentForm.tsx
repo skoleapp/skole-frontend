@@ -1,15 +1,18 @@
-import {
-  Box,
-  Button,
-  DialogContent,
-  Fab,
-  FormHelperText,
-  Grid,
-  IconButton,
-  makeStyles,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import DialogContent from '@material-ui/core/DialogContent';
+import Fab from '@material-ui/core/Fab';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import AttachFileOutlined from '@material-ui/icons/AttachFileOutlined';
+import CameraAltOutlined from '@material-ui/icons/CameraAltOutlined';
+import ClearOutlined from '@material-ui/icons/ClearOutlined';
+import SendOutlined from '@material-ui/icons/SendOutlined';
+import imageCompression from 'browser-image-compression';
 import clsx from 'clsx';
 import {
   useAuthContext,
@@ -22,6 +25,7 @@ import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } fr
 import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataUriToFile, useTranslation } from 'lib';
 import Image from 'next/image';
+import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useRef } from 'react';
 import { CommentTarget, CreateCommentFormValues } from 'types';
 import {
@@ -29,17 +33,10 @@ import {
   MAX_COMMENT_ATTACHMENT_FILE_SIZE,
   MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
 } from 'utils';
-import * as R from 'ramda';
-import imageCompression from 'browser-image-compression';
-import {
-  AttachFileOutlined,
-  CameraAltOutlined,
-  ClearOutlined,
-  SendOutlined,
-} from '@material-ui/icons';
+
+import { TextFormField } from '../form-fields';
 import { DialogHeader, SkoleDialog, TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
-import { TextFormField } from '../form-fields';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   desktopContainer: {

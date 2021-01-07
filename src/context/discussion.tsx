@@ -1,6 +1,5 @@
 import { CommentObjectType } from 'generated';
-import React, { createContext, useState, useContext, useEffect } from 'react';
-
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { DiscussionContextType } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.

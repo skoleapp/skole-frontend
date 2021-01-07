@@ -1,4 +1,5 @@
-import { Box, makeStyles } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
 import { usePdfViewerContext } from 'context';
 import { useMediaQueries, useStateRef } from 'hooks';
 import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';

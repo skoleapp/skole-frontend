@@ -1,16 +1,13 @@
-import {
-  FormControl,
-  FormHelperText,
-  IconButtonProps,
-  makeStyles,
-  TextFieldProps,
-} from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import { IconButtonProps } from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import { TextFieldProps } from '@material-ui/core/TextField';
+import { KeyboardDatePicker } from '@material-ui/pickers/DatePicker';
+import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'; // eslint-disable-line no-restricted-imports
 import { FieldAttributes, FormikProps, FormikValues } from 'formik';
-import { KeyboardDatePicker } from '@material-ui/pickers';
-import React from 'react';
-
 import { useTranslation } from 'lib';
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import React from 'react';
 import { DATE_PICKER_FORMAT } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({

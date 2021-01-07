@@ -1,8 +1,8 @@
-import { createMuiTheme } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
-import createBreakpoints from '@material-ui/core/styles/createBreakpoints';
-import createPalette from '@material-ui/core/styles/createPalette';
-import createTypography, { TypographyOptions } from '@material-ui/core/styles/createTypography';
+import { createMuiTheme } from '@material-ui/core/styles';
+import createBreakpoints from '@material-ui/core/styles/createBreakpoints'; // eslint-disable-line no-restricted-imports
+import createPalette from '@material-ui/core/styles/createPalette'; // eslint-disable-line no-restricted-imports
+import createTypography, { TypographyOptions } from '@material-ui/core/styles/createTypography'; // eslint-disable-line no-restricted-imports
 
 // Global constants, feel free to use these where ever.
 export const BORDER_RADIUS = '1.75rem';

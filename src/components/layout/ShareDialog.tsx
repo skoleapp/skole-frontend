@@ -1,20 +1,22 @@
-import { useTranslation } from 'lib';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import EmailOutlined from '@material-ui/icons/EmailOutlined';
+import Facebook from '@material-ui/icons/Facebook';
+import LinkOutlined from '@material-ui/icons/LinkOutlined';
+import Reddit from '@material-ui/icons/Reddit';
+import Telegram from '@material-ui/icons/Telegram';
+import Twitter from '@material-ui/icons/Twitter';
+import WhatsApp from '@material-ui/icons/WhatsApp';
 import { useNotificationsContext, useShareContext } from 'context';
-import React from 'react';
-import { List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
-import {
-  ArrowForwardOutlined,
-  EmailOutlined,
-  Facebook,
-  LinkOutlined,
-  Reddit,
-  Telegram,
-  Twitter,
-  WhatsApp,
-} from '@material-ui/icons';
+import { useMediaQueries } from 'hooks';
+import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMediaQueries } from 'hooks';
+import React from 'react';
+
 import { ExternalLink, ResponsiveDialog } from '../shared';
 
 export const ShareDialog: React.FC = () => {

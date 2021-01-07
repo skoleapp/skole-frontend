@@ -1,5 +1,9 @@
-import { Box, Button, Fab, Grid, makeStyles, useTheme } from '@material-ui/core';
-import { AddOutlined } from '@material-ui/icons';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import AddOutlined from '@material-ui/icons/AddOutlined';
 import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import { CommentObjectType } from 'generated';

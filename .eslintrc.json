@@ -30,6 +30,22 @@
     "@typescript-eslint/ban-ts-comment": "off", // Allows us to make TS ignores with ignore comments.
     "@typescript-eslint/no-non-null-assertion": "off", // Allows us to make non-null assertions for e.g. ref objects that are cumbersome to use with TS.
     "@typescript-eslint/no-unused-vars": "error", // Show error instead of the default warning for unused variables.
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          "@material-ui/core",
+          "@material-ui/icons",
+          "@material-ui/lab",
+          "@material-ui/pickers"
+        ],
+        "patterns": [
+          // https://material-ui.com/guides/minimizing-bundle-size/#option-1
+          "@material-ui/*/*/*",
+          "!@material-ui/core/test-utils/*"
+        ]
+      }
+    ],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     // TODO: Under this comment, remove all rule overrides and make the necessary refactors to fix the linting errors.

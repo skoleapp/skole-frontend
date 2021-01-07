@@ -1,5 +1,6 @@
-import { Size } from '@material-ui/core';
+import { Size } from '@material-ui/core/TableCell';
 import { MuiColor } from 'types';
+
 import { useMediaQueries } from './useMediaQueries';
 
 interface UseDialogButton {

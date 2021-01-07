@@ -1,5 +1,7 @@
-import { InputAdornment, InputBase, makeStyles } from '@material-ui/core';
-import { SearchOutlined } from '@material-ui/icons';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputBase from '@material-ui/core/InputBase';
+import { makeStyles } from '@material-ui/core/styles';
+import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import { useSearch } from 'hooks';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';

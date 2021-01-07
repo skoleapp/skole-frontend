@@ -1,9 +1,9 @@
-import { InputProps } from '@material-ui/core';
+import { InputProps } from '@material-ui/core/Input';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
 import Router from 'next/router';
-import { UrlObject } from 'url';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { UrlObject } from 'url';
 import { urls } from 'utils';
 
 interface SearchUrl extends UrlObject {
