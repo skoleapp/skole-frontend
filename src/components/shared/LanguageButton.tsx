@@ -1,4 +1,4 @@
-import { Button, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import { useLanguageContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -10,9 +10,9 @@ export const LanguageButton: React.FC = () => {
 
   return (
     <Tooltip title={t('common-tooltips:language')}>
-      <Button onClick={handleOpenLanguageMenu}>
+      <IconButton onClick={handleOpenLanguageMenu}>
         <LanguageFlag lang={lang} />
-      </Button>
+      </IconButton>
     </Tooltip>
   );
 };

@@ -54,7 +54,6 @@ export const LandingPageTemplate: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-
   const renderBackground = <MainBackground />;
   const renderLanguageButton = <LanguageButton />;
 
@@ -84,7 +83,6 @@ export const LandingPageTemplate: React.FC<Props> = ({
   );
 
   const layoutProps = {
-    ...props,
     topNavbarProps: {
       ...topNavbarProps,
       headerRight: renderLanguageButton,
@@ -95,6 +93,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
       fullWidth: true,
       dense: true,
     },
+    ...props,
   };
 
   return (

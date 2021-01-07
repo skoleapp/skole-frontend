@@ -10,7 +10,7 @@
   "verificationRequired": "Vahvista tilisi käyttääksesi tätä ominaisuutta.",
   "settings": "Näytä asetukset.",
   "rank": "Tämän käyttäjän arvo on {{ rank }}.",
-  "activity": "Näytä toiminta.",
+  "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
   "goBack": "Mene takaisin.",
   "closeMenu": "Sulje valikko."
 }

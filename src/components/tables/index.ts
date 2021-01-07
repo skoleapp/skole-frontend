@@ -1,3 +1,4 @@
+export { ActivityTableBody } from './ActivityTableBody';
 export { CourseTableBody } from './CourseTableBody';
 export { CustomTableFooter } from './CustomTableFooter';
 export { CustomTableHead } from './CustomTableHead';

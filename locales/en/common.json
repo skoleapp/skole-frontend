@@ -15,7 +15,6 @@
   "contact": "Contact",
   "terms": "Terms",
   "privacy": "Privacy",
-  "language": "Language",
   "changeLanguage": "Change Language",
   "courses": "Courses",
   "subjects": "Subjects",
@@ -70,5 +69,8 @@
   "send": "Send",
   "stars": "Stars",
   "getStarted": "Get Started",
-  "forEducators": "For Educators"
+  "forEducators": "For Educators",
+  "company": "Company",
+  "guidelines": "Guidelines",
+  "values": "Values"
 }

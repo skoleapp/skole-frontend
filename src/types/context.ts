@@ -1,19 +1,10 @@
-import { CommentObjectType, SchoolObjectType, SubjectObjectType, UserObjectType } from 'generated';
+import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 
 export interface AuthContextType {
   userMe: UserObjectType | null;
   setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
-  userMeId: string;
-  username: string;
-  email: string;
-  title: string;
-  bio: string;
-  avatarThumbnail: string;
-  avatar: string;
-  school: SchoolObjectType | null;
-  subject: SubjectObjectType | null;
   authNetworkError: boolean;
   setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }

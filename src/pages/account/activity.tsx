@@ -6,11 +6,10 @@ import {
   makeStyles,
   MenuItem,
   Paper,
-  TableBody,
 } from '@material-ui/core';
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
-  ActivityListItem,
+  ActivityTableBody,
   BackButton,
   ErrorTemplate,
   LoadingBox,
@@ -103,7 +102,6 @@ const ActivityPage: NextPage = () => {
         !!markAllActivitiesAsRead.activities.objects
       ) {
         const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
-
         setActivities(newActivities);
       } else {
         unexpectedError();
@@ -141,8 +139,7 @@ const ActivityPage: NextPage = () => {
 
   const renderLoading = <LoadingBox />;
   const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
-  const mapActivities = activities.map((a, i) => <ActivityListItem key={i} activity={a} />);
-  const renderActivityTableBody = <TableBody>{mapActivities}</TableBody>;
+  const renderActivityTableBody = <ActivityTableBody activities={activities} />;
 
   const renderTable = (
     <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
@@ -204,12 +201,14 @@ const ActivityPage: NextPage = () => {
     },
     topNavbarProps: {
       dynamicBackUrl: true,
+      headerRight: renderActionsButton,
     },
   };
 
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
   }

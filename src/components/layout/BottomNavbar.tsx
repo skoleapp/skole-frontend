@@ -1,4 +1,4 @@
-import { Avatar, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import { Avatar, Badge, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import {
   CloudUploadOutlined,
   HomeOutlined,
@@ -16,7 +16,7 @@ import { urls } from 'utils';
 
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
-  const { userMe, userMeId, avatarThumbnail } = useAuthContext();
+  const { userMe, userMeId, avatarThumbnail, unreadActivityCount } = useAuthContext();
   const { searchUrl } = useSearch();
   const { pathname, query } = useRouter();
 
@@ -96,13 +96,19 @@ export const BottomNavbar: React.FC = () => {
     />
   );
 
+  const renderActivityIcon = (
+    <Badge badgeContent={unreadActivityCount} color="primary" variant="dot">
+      <NotificationsOutlined />
+    </Badge>
+  );
+
   const renderActivityAction = (
     <BottomNavigationAction
       value={4}
       label={t('common:activity')}
       showLabel
       onClick={handleRedirect(urls.activity)}
-      icon={<NotificationsOutlined />}
+      icon={renderActivityIcon}
     />
   );
 

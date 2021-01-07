@@ -7,8 +7,8 @@ import createTypography, { TypographyOptions } from '@material-ui/core/styles/cr
 // Global constants, feel free to use these where ever.
 export const BORDER_RADIUS = '1.75rem';
 export const BORDER = `0.05rem solid ${grey[300]}`;
-export const BOTTOM_NAVBAR_HEIGHT = '3rem';
-export const TOP_NAVBAR_HEIGHT_MOBILE = '3rem';
+export const BOTTOM_NAVBAR_HEIGHT = '3.25rem';
+export const TOP_NAVBAR_HEIGHT_MOBILE = '3.25rem';
 export const TOP_NAVBAR_HEIGHT_DESKTOP = '4rem';
 
 export const COLORS = {
