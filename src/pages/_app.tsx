@@ -1,6 +1,5 @@
 import 'nprogress/nprogress.css';
 import 'typeface-roboto';
-import 'draft-js/dist/Draft.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
