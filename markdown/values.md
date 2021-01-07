@@ -1,4 +1,4 @@
-Our company values are built around privacy, transparency, openness and copy rights. We take every measure to enforce these principles in our software.
+Our company values are built around privacy, transparency, openness and copyrights. We take every measure to enforce these principles in our software.
 
 ### Privacy
 
@@ -12,6 +12,6 @@ We want to be transparent on everything we do. This means communicating clearly 
 
 We enforce openness by making every feature and piece of content in Skole freely available for anyone. Anyone is free to join the community. We also hope our users to keep this mind.
 
-### Copy Rights
+### Copyrights
 
-We respect copy rights of every piece of content on the platform. We take active measures to moderate the content in order to protect copy rights. We also proactively teach our users on what kind of content they are allowed to share.
+We respect copyrights of every piece of content on the platform. We take active measures to moderate the content in order to protect copyrights. We also proactively teach our users on what kind of content they are allowed to share.
