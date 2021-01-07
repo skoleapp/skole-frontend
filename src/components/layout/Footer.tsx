@@ -11,7 +11,7 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     padding: spacing(4),
   },
   copyRightSection: {
-    marginTop: spacing(4),
+    marginTop: spacing(8),
   },
 }));
 
