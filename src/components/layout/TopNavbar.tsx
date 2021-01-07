@@ -71,6 +71,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   disableSearch,
   disableAuthButtons,
   disableForEducatorsButton,
+  disableLanguageButton,
   disableLogo,
   headerRight,
   headerRightSecondary,
@@ -169,7 +170,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
-  const renderLanguageButton = <LanguageButton />;
+  const renderLanguageButton = !disableLanguageButton && <LanguageButton />;
 
   // ClickAway listener requires a single child element.
   const renderAuthenticatedButtons = !!userMe && !disableAuthButtons && (

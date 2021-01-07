@@ -40,10 +40,11 @@ export const LoadingTemplate: React.FC = () => {
     disableBottomNavbar: true,
     disableFooter: true,
     topNavbarProps: {
-      disableAuthButtons: true,
-      disableForEducatorsButton: true,
       disableLogo: true,
       disableSearch: true,
+      disableAuthButtons: true,
+      disableForEducatorsButton: true,
+      disableLanguageButton: true,
     },
     containerProps: {
       fullWidth: true,

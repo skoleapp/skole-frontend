@@ -41,9 +41,10 @@ const LogoutPage: NextPage = () => {
     header: t('logout:header'),
     disableBottomNavbar: true,
     topNavbarProps: {
+      disableSearch: true,
       disableAuthButtons: true,
       disableForEducatorsButton: true,
-      disableSearch: true,
+      disableLanguageButton: true,
     },
   };
 

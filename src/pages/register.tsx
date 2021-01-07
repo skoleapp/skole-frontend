@@ -364,10 +364,10 @@ const RegisterPage: NextPage = () => {
     header: getHeader(),
     disableBottomNavbar: true,
     topNavbarProps: {
-      dynamicBackUrl: true,
       headerRight: renderLanguageButton,
-      disableAuthButtons: true,
+      dynamicBackUrl: true,
       disableSearch: true,
+      disableAuthButtons: true,
     },
   };
 

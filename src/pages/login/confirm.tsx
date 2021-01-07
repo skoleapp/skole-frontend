@@ -23,9 +23,10 @@ const ConfirmLoginPage: NextPage = () => {
     disableBottomNavbar: true,
     topNavbarProps: {
       headerRight: renderLanguageButton,
+      disableSearch: true,
       disableAuthButtons: true,
       disableForEducatorsButton: true,
-      disableSearch: true,
+      disableLanguageButton: true,
     },
   };
 
