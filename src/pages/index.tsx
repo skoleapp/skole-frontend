@@ -411,7 +411,7 @@ const IndexPage: NextPage = () => {
       title: t('index:title'),
       description: t('marketing:description'),
     },
-    disableBottomNavbar: false,
+    hideBottomNavbar: false,
     disableHeader: true,
   };
 

@@ -68,11 +68,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
   dynamicBackUrl,
   staticBackUrl,
-  disableSearch,
-  disableAuthButtons,
-  disableForEducatorsButton,
-  disableLanguageButton,
-  disableLogo,
+  hideSearch,
+  hideAuthButtons,
+  hideForEducatorsButton,
+  hideLanguageButton,
+  hideLogo,
   headerRight,
   headerRightSecondary,
   headerLeft,
@@ -105,7 +105,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderDynamicBackButton = !!dynamicBackUrl && <BackButton onClick={() => Router.back()} />;
   const renderStaticBackButton = !!staticBackUrl && <BackButton href={staticBackUrl} />;
   const renderHeader = <Typography variant="h5">{header}</Typography>;
-  const renderLogo = !disableLogo && <Logo />;
+  const renderLogo = !hideLogo && <Logo />;
 
   const renderMobileContent = isMobile && (
     <Grid container alignItems="center">
@@ -164,16 +164,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Popper>
   );
 
-  const renderForEducatorsButton = !userMe && !disableForEducatorsButton && (
+  const renderForEducatorsButton = !userMe && !hideForEducatorsButton && (
     <ButtonLink href={urls.forEducators} color="secondary" endIcon={<SchoolOutlined />}>
       {t('common:forEducators')}
     </ButtonLink>
   );
 
-  const renderLanguageButton = !disableLanguageButton && <LanguageButton />;
+  const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
   // ClickAway listener requires a single child element.
-  const renderAuthenticatedButtons = !!userMe && !disableAuthButtons && (
+  const renderAuthenticatedButtons = !!userMe && !hideAuthButtons && (
     <>
       <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
         <Box>
@@ -198,7 +198,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   // Allow disabling auth buttons manually.
   // Also disable them automatically in case of a network error when authenticating/fetching user.
-  const renderUnAuthenticatedButtons = !disableAuthButtons && !authNetworkError && (
+  const renderUnAuthenticatedButtons = !hideAuthButtons && !authNetworkError && (
     <>
       <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
         {t('common:login')}
@@ -212,7 +212,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 
-  const renderSearch = !disableSearch && <TopNavbarSearchWidget />;
+  const renderSearch = !hideSearch && <TopNavbarSearchWidget />;
   const renderDynamicButtons = userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
   const renderDesktopContent = isTabletOrDesktop && (

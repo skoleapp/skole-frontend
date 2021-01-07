@@ -571,7 +571,7 @@ const SearchPage: NextPage = () => {
     },
     customTopNavbar,
     topNavbarProps: {
-      disableSearch: true,
+      hideSearch: true,
     },
   };
 

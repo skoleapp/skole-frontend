@@ -237,9 +237,9 @@ const GetStartedPage: NextPage = () => {
       title: t('get-started:title'),
       description: t('marketing:description'),
     },
-    disableBottomNavbar: true,
+    hideBottomNavbar: true,
     topNavbarProps: {
-      disableAuthButtons: true,
+      hideAuthButtons: true,
     },
   };
 

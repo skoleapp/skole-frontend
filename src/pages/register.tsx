@@ -362,12 +362,12 @@ const RegisterPage: NextPage = () => {
       description: t('register:description'),
     },
     header: getHeader(),
-    disableBottomNavbar: true,
+    hideBottomNavbar: true,
     topNavbarProps: {
       headerRight: renderLanguageButton,
       dynamicBackUrl: true,
-      disableSearch: true,
-      disableAuthButtons: true,
+      hideSearch: true,
+      hideAuthButtons: true,
     },
   };
 

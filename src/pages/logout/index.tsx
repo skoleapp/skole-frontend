@@ -39,12 +39,12 @@ const LogoutPage: NextPage = () => {
       description: t('logout:description'),
     },
     header: t('logout:header'),
-    disableBottomNavbar: true,
+    hideBottomNavbar: true,
     topNavbarProps: {
-      disableSearch: true,
-      disableAuthButtons: true,
-      disableForEducatorsButton: true,
-      disableLanguageButton: true,
+      hideSearch: true,
+      hideAuthButtons: true,
+      hideForEducatorsButton: true,
+      hideLanguageButton: true,
     },
   };
 

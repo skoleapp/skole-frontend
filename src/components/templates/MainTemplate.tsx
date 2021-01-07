@@ -52,8 +52,8 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   containerProps,
   customTopNavbar,
   customBottomNavbar,
-  disableBottomNavbar,
-  disableFooter,
+  hideBottomNavbar,
+  hideFooter,
   children,
   ...props
 }) => {
@@ -66,7 +66,7 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
 
   const containerClasses = clsx(
     classes.container,
-    (disableBottomNavbar || isTabletOrDesktop) && classes.disableMarginBottom,
+    (hideBottomNavbar || isTabletOrDesktop) && classes.disableMarginBottom,
     containerFullWidth && classes.containerFullWidth,
     containerDense && classes.containerDense,
   );
@@ -78,9 +78,9 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   );
 
   const renderBottomNavbar =
-    isMobile && !disableBottomNavbar && (customBottomNavbar || <BottomNavbar />);
+    isMobile && !hideBottomNavbar && (customBottomNavbar || <BottomNavbar />);
 
-  const renderFooter = isTabletOrDesktop && !disableFooter && <Footer />;
+  const renderFooter = isTabletOrDesktop && !hideFooter && <Footer />;
 
   return (
     <Grid container direction="column" className={classes.root} {...props}>

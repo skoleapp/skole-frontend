@@ -11,11 +11,11 @@ export interface TopNavbarProps {
   header?: string; // Header text shown on mobile.
   dynamicBackUrl?: boolean; // Show a back button on mobile that automatically redirects to the last page.
   staticBackUrl?: string | UrlObject; // Show a back button and use this as the href.
-  disableSearch?: boolean; // Hide search field on desktop.
-  disableAuthButtons?: boolean; // Hide auth buttons on desktop.
-  disableForEducatorsButton?: boolean; // Hide the `For Educators` button on desktop.
-  disableLanguageButton?: boolean; // Hide the language button on desktop.
-  disableLogo?: boolean; // Hide the logo.
+  hideLogo?: boolean; // Hide the logo.
+  hideSearch?: boolean; // Hide search field on desktop.
+  hideAuthButtons?: boolean; // Hide auth buttons on desktop.
+  hideForEducatorsButton?: boolean; // Hide the `For Educators` button on desktop.
+  hideLanguageButton?: boolean; // Hide the language button on desktop.
   headerRight?: JSX.Element | false; // Custom element for right-most slot on mobile.
   headerRightSecondary?: JSX.Element | false; // Custom element for second slot from the right on mobile.
   headerLeft?: JSX.Element | false; // Custom element for either left-most slot or for second slot from the left, depending on whether the back button is rendered.
@@ -33,6 +33,6 @@ export interface MainTemplateProps extends GridProps {
   containerProps?: CustomContainerProps;
   customTopNavbar?: JSX.Element; // Custom element for top navbar.
   customBottomNavbar?: JSX.Element | false; // Custom element for bottom navbar.
-  disableBottomNavbar?: boolean; // Hide bottom navbar.
-  disableFooter?: boolean; // Hide footer.
+  hideBottomNavbar?: boolean; // Hide bottom navbar.
+  hideFooter?: boolean; // Hide footer.
 }

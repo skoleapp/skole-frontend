@@ -20,10 +20,10 @@ const ConfirmLogoutPage: NextPage = () => {
     },
     header: t('confirm-logout:header'),
     topNavbarProps: {
-      disableSearch: true,
-      disableAuthButtons: true,
-      disableForEducatorsButton: true,
-      disableLanguageButton: true,
+      hideSearch: true,
+      hideAuthButtons: true,
+      hideForEducatorsButton: true,
+      hideLanguageButton: true,
     },
   };
 
