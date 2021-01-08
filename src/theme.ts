@@ -288,6 +288,9 @@ export const theme = createMuiTheme({
       root: {
         height: TOP_NAVBAR_HEIGHT_MOBILE,
       },
+      flexContainer: {
+        height: '100%',
+      },
     },
     MuiCssBaseline: {
       '@global': {

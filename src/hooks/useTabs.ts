@@ -18,7 +18,7 @@ interface UseTabs {
 }
 
 // Custom helper hook for views that contain tabs.
-// If a comment has been provided as a query parameter, change to the discussion tab and open comment modal automatically.
+// If a comment has been provided as a query parameter, change to the discussion tab and open comment dialog automatically.
 export const useTabs = (comments?: CommentObjectType[]): UseTabs => {
   const { query } = useRouter();
   const { setTopComment } = useDiscussionContext();

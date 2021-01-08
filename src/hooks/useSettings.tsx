@@ -18,8 +18,8 @@ interface UseSettings extends SettingsContextType {
 }
 
 // A hook for rendering the common settings menu components.
-// The modal prop indicates whether this hook is used with the modal or with the settings layout.
-export const useSettings = (modal: boolean): UseSettings => {
+// The `dialog` prop indicates whether this hook is used with the settings dialog or with the settings layout.
+export const useSettings = (dialog: boolean): UseSettings => {
   const { isMobile } = useMediaQueries();
   const { userMe, verified } = useAuthContext();
   const { settingsOpen, toggleSettings } = useSettingsContext();
@@ -32,11 +32,11 @@ export const useSettings = (modal: boolean): UseSettings => {
   };
 
   const handleMenuItemClick = (href: string) => async (): Promise<void> => {
-    modal && handleClose();
+    !!dialog && handleClose();
     await Router.push(href);
   };
 
-  const getSelected = (href: string): boolean => !modal && href === pathname;
+  const getSelected = (href: string): boolean => !dialog && href === pathname;
 
   const handleLanguageClick = (): void => {
     handleClose();

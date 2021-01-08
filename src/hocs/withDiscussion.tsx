@@ -1,4 +1,4 @@
-import { AttachmentViewer, CommentThreadModal } from 'components';
+import { AttachmentViewer, CommentThreadDialog } from 'components';
 import { DiscussionContextProvider } from 'context';
 import { NextPage } from 'next';
 import React from 'react';
@@ -9,7 +9,7 @@ export const withDiscussion = (PageComponent: NextPage): NextPage => {
     <DiscussionContextProvider>
       <PageComponent {...pageProps} />
       <AttachmentViewer />
-      <CommentThreadModal />
+      <CommentThreadDialog />
     </DiscussionContextProvider>
   );
 

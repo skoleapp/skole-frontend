@@ -20,12 +20,13 @@ const ConfirmLoginPage: NextPage = () => {
       description: t('confirm-login:description'),
     },
     header: t('confirm-login:header'),
-    disableBottomNavbar: true,
+    hideBottomNavbar: true,
     topNavbarProps: {
       headerRight: renderLanguageButton,
-      disableAuthButtons: true,
-      disableForEducatorsButton: true,
-      disableSearch: true,
+      hideSearch: true,
+      hideAuthButtons: true,
+      hideForEducatorsButton: true,
+      hideLanguageButton: true,
     },
   };
 

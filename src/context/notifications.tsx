@@ -1,4 +1,4 @@
-import { useTranslation } from 'next-translate';
+import { useTranslation } from 'lib';
 import React, { createContext, useContext, useState } from 'react';
 import { NotificationsContextType } from 'types';
 

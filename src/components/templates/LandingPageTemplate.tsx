@@ -86,9 +86,9 @@ export const LandingPageTemplate: React.FC<Props> = ({
     topNavbarProps: {
       ...topNavbarProps,
       headerRight: renderLanguageButton,
-      disableSearch: true,
+      hideSearch: true,
     },
-    disableBottomNavbar: true,
+    hideBottomNavbar: true,
     containerProps: {
       fullWidth: true,
       dense: true,

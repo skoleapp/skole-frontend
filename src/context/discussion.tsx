@@ -33,16 +33,16 @@ export const useDiscussionContext = (comments?: CommentObjectType[]): UseDiscuss
 };
 
 export const DiscussionContextProvider: React.FC = ({ children }) => {
-  const [commentModalOpen, setCommentModalOpen] = useState(false);
-  const toggleCommentModal = (payload: boolean): void => setCommentModalOpen(payload);
+  const [commentDialogOpen, setcommentDialogOpen] = useState(false);
+  const toggleCommentDialog = (payload: boolean): void => setcommentDialogOpen(payload);
   const [topLevelComments, setTopLevelComments] = useState<CommentObjectType[]>([]); // List of top-level comments on a course/resource.
   const [topComment, setTopComment] = useState<CommentObjectType | null>(null); // Top comment that starts a thread of reply comments.
   const [attachmentViewerValue, setAttachmentViewerValue] = useState<string | null>(null); // Attachment of an existing comment.
   const [commentAttachment, setCommentAttachment] = useState<string | ArrayBuffer | null>(null); // Attachment for comment creation form.
 
   const value = {
-    commentModalOpen,
-    toggleCommentModal,
+    commentDialogOpen,
+    toggleCommentDialog,
     topLevelComments,
     setTopLevelComments,
     topComment,

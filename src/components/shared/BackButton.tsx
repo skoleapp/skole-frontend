@@ -1,7 +1,7 @@
 import { ButtonProps, IconButton, Tooltip } from '@material-ui/core';
 import { ArrowBackOutlined } from '@material-ui/icons';
 import { useMediaQueries } from 'hooks';
-import { useTranslation } from 'next-translate';
+import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
 import { UrlObject } from 'url';

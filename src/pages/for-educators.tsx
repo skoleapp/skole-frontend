@@ -121,7 +121,7 @@ const ForEducatorsPage: NextPage = () => {
       description: t('for-educators:description'),
     },
     topNavbarProps: {
-      disableForEducatorsButton: true,
+      hideForEducatorsButton: true,
     },
   };
 

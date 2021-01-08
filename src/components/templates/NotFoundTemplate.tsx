@@ -32,9 +32,10 @@ export const NotFoundTemplate: React.FC = () => {
     },
     topNavbarProps: {
       dynamicBackUrl: true,
-      disableAuthButtons: true,
-      disableForEducatorsButton: true,
-      disableSearch: true,
+      hideSearch: true,
+      hideAuthButtons: true,
+      hideForEducatorsButton: true,
+      hideLanguageButton: true,
     },
   };
 

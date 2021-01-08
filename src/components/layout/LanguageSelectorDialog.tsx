@@ -14,6 +14,9 @@ export const LanguageSelectorDialog: React.FC = () => {
   const handleLanguageChange = (val: string) => async (): Promise<void> => {
     handleCloseLanguageMenu();
     await Router.push(asPath, asPath, { locale: val });
+
+    // Save selection to a cookie: https://github.com/vinissimus/next-translate/blob/1.0.0/README.md#10-how-to-save-the-user-defined-language
+    document.cookie = `NEXT_LOCALE=${val}`;
   };
 
   const dialogHeaderProps = {

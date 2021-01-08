@@ -210,12 +210,12 @@ const LoginPage: NextPage = () => {
       description: t('login:description'),
     },
     header: t('login:header'),
-    disableBottomNavbar: true,
+    hideBottomNavbar: true,
     topNavbarProps: {
       dynamicBackUrl: true,
       headerRight: renderLanguageButton,
-      disableAuthButtons: true,
-      disableSearch: true,
+      hideAuthButtons: true,
+      hideSearch: true,
     },
   };
 

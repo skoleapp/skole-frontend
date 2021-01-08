@@ -3,7 +3,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { DialogHeader, SkoleDialog } from '../shared';
 
-export const SettingsModal: React.FC = () => {
+export const SettingsDialog: React.FC = () => {
   const { t } = useTranslation();
   const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(true);
   const handleClose = (): void => toggleSettings(false);
