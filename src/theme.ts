@@ -282,6 +282,7 @@ export const theme = createMuiTheme({
       root: {
         paddingLeft: 'env(safe-area-inset-left)',
         paddingRight: 'env(safe-area-inset-right)',
+        paddingTop: 'env(safe-area-inset-top)',
       },
     },
     MuiTabs: {
