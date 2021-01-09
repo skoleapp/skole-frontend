@@ -4,7 +4,7 @@
   "header": "Ladda Upp Resurs",
   "fileUploadingText": "Laddar upp fil...",
   "fileHelpText": "Du kan välja vilket vanligt filformat som helst så konverterar vi det automatiskt till ett PDF-format åt dig. Högsta filstorlek för icke-bilder är {{ maxFileSize }} MB. Se till att materialet överensstämmer med vårt",
-  "fileSelected": "{{ fileName }} vald.",
+  "fileSelected": "{{ fileName }} vald",
   "uploadFileButtonText": "Ladda upp fil",
   "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",
   "schoolHelperText": "Skolan till vars kurs detta resurs tillhör. Hittar du inte skolan du letar efter?",
@@ -16,6 +16,5 @@
   "contactText": "Har du mycket material? Om du inte vill gå igenom besväret kan du",
   "contactLink": "låt oss ladda upp ditt material åt dig!",
   "contactDialogHeader": "Skicka dem till oss!",
-  "contactDialogText": "Du kan skicka ditt material till oss på contact@skoleapp.com från den e-postadress som är kopplad till ditt konto. Uppladdningarna krediteras dig alltid. Se till att allt ditt material överensstämmer med vårt",
-  "guidelinesLink": "riktlinjer"
+  "contactDialogText": "Du kan skicka ditt material till oss på contact@skoleapp.com från den e-postadress som är kopplad till ditt konto. Uppladdningarna krediteras dig alltid. Se till att allt ditt material överensstämmer med vårt"
 }

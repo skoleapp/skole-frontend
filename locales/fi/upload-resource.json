@@ -4,7 +4,7 @@
   "header": "Lisää resurssi",
   "fileUploadingText": "Lähetetään tiedostoa...",
   "fileHelpText": "Voit valita minkä tahansa yleisen tiedostomuodon, ja me muunnamme sen automaattisesti PDF-muotoon puolestasi. Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Varmista, että tiedosto noudattaa",
-  "fileSelected": "{{ fileName }} valittu.",
+  "fileSelected": "{{ fileName }} valittu",
   "uploadFileButtonText": "Lisää tiedosto",
   "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",
   "schoolHelperText": "Koulu jonka kurssille tämä materiaali kuuluu. Etkö löydä etsimääsi koulua?",
@@ -16,6 +16,5 @@
   "contactText": "Onko sinulla paljon materiaalia? Jos et halua nähdä vaivaa itse, voit",
   "contactLink": "antaa meidän lisätä materiaalit puolestasi!",
   "contactDialogHeader": "Lähetä ne meille!",
-  "contactDialogText": "Voit lähettää materiaalisi meille osoitteeseen contact@skoleapp.com samasta sähköpostiosoitteesta, joka on yhdistetty tiliisi. Materiaalit kreditoidaan aina sinulle. Varmista, että kaikki materiaalisi noudattavat",
-  "guidelinesLink": "ohjeitamme"
+  "contactDialogText": "Voit lähettää materiaalisi meille osoitteeseen contact@skoleapp.com samasta sähköpostiosoitteesta, joka on yhdistetty tiliisi. Materiaalit kreditoidaan aina sinulle. Varmista, että kaikki materiaalisi noudattavat"
 }

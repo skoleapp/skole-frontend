@@ -4,7 +4,7 @@
   "header": "Upload Resource",
   "fileUploadingText": "Uploading file...",
   "fileHelpText": "You can pick any common file format and we'll automatically convert it into a PDF format for you. Maximum file size for non-images is {{ maxFileSize }} MB. Please make sure that the material is in compliance with our",
-  "fileSelected": "{{ fileName }} selected.",
+  "fileSelected": "{{ fileName }} selected",
   "uploadFileButtonText": "Upload a file",
   "dropZoneText": "Drag & Drop a file here or click to select a file.",
   "schoolHelperText": "The school to whose course this resource belongs. Can't find the school you're looking for?",
@@ -16,6 +16,5 @@
   "contactText": "Do you have a lot of material? If you don't want to go through the trouble, you can",
   "contactLink": "let us upload your material for you!",
   "contactDialogHeader": "Send 'em to us!",
-  "contactDialogText": "You can send your materials to us at contact@skoleapp.com from the email address associated with your account. The uploads are always credited to you. Please make sure that all of your materials are in compliance with our",
-  "guidelinesLink": "guidelines"
+  "contactDialogText": "You can send your materials to us at contact@skoleapp.com from the email address associated with your account. The uploads are always credited to you. Please make sure that all of your materials are in compliance with our"
 }

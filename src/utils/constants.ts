@@ -21,7 +21,6 @@ export const PDF_DEFAULT_SCALE = 1.0;
 export const PDF_MIN_SCALE = 0.75;
 export const PDF_MAX_SCALE = 5;
 export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
-export const ACCEPTED_RESOURCE_FILES = ['image/*', 'text/*', 'application/*'];
 export const ACCEPTED_ATTACHMENT_FILES = ['image/*'];
 export const ACCEPTED_AVATAR_FILES = ['image/*'];
 export const MAX_RESOURCE_FILE_SIZE = 10000000; // 10 MB.

@@ -7,7 +7,6 @@ import * as R from 'ramda';
 import React, { ChangeEvent, DragEvent, useRef } from 'react';
 import { BORDER_RADIUS } from 'theme';
 import {
-  ACCEPTED_RESOURCE_FILES,
   IMAGE_TYPES,
   MAX_RESOURCE_FILE_SIZE,
   MAX_RESOURCE_IMAGE_WIDTH_HEIGHT,
@@ -88,24 +87,22 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   };
 
   const renderFileInput = (
-    <input
-      ref={fileInputRef}
-      value=""
-      type="file"
-      accept={ACCEPTED_RESOURCE_FILES.toString()}
-      onChange={handleFileInputChange}
-    />
+    <input ref={fileInputRef} value="" type="file" onChange={handleFileInputChange} />
   );
+
+  const renderFileSelectedText = t('upload-resource:fileSelected', { fileName });
+
+  const renderMobileFileUploadButtonText = fileName
+    ? renderFileSelectedText
+    : t('upload-resource:uploadFileButtonText');
 
   const renderMobileUploadFileButton = isMobile && (
     <Button onClick={handleFileInputClick} color="primary" variant="outlined" fullWidth>
-      {t('upload-resource:uploadFileButtonText')}
+      {renderMobileFileUploadButtonText}
     </Button>
   );
 
-  const renderDropZoneText = fileName
-    ? t('upload-resource:fileSelected', { fileName })
-    : t('upload-resource:dropZoneText');
+  const renderDropZoneText = fileName ? renderFileSelectedText : t('upload-resource:dropZoneText');
 
   const renderDropZone = isTabletOrDesktop && (
     <Box
@@ -124,7 +121,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     <FormHelperText>
       {t('upload-resource:fileHelpText', { maxFileSize })}{' '}
       <TextLink href={urls.guidelines} target="_blank">
-        {t('upload-resource:guidelinesLink')}
+        {t('common:guidelines')}
       </TextLink>
       .
     </FormHelperText>

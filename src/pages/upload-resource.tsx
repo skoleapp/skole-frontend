@@ -256,7 +256,7 @@ const UploadResourcePage: NextPage = () => {
         <DialogContentText>
           {t('upload-resource:contactDialogText')}{' '}
           <TextLink href={urls.guidelines} target="_blank">
-            {t('upload-resource:guidelinesLink')}.
+            {t('common:guidelines')}.
           </TextLink>
         </DialogContentText>
       </DialogContent>
