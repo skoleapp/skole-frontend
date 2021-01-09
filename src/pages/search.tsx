@@ -76,10 +76,10 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   topNavbar: {
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
+    paddingTop: 0,
     display: 'flex',
     justifyContent: 'flex-end',
     boxShadow: 'none',
-    backgroundColor: palette.common.white,
     borderBottom: BORDER,
   },
   cardHeaderRoot: {
@@ -96,6 +96,12 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
     padding: spacing(1),
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
+    backgroundColor: palette.common.white,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  searchForm: {
+    flexGrow: 1,
   },
   searchInputBaseInput: {
     paddingLeft: spacing(2),
@@ -549,7 +555,7 @@ const SearchPage: NextPage = () => {
   const customTopNavbar = (
     <AppBar className={classes.topNavbar}>
       <Box className={classes.searchContainer}>
-        <form onSubmit={handleSubmitSearchInput}>
+        <form className={classes.searchForm} onSubmit={handleSubmitSearchInput}>
           <InputBase
             classes={{ input: classes.searchInputBaseInput }}
             placeholder={t('forms:searchCourses')}
