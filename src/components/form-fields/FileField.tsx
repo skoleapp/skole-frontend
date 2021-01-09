@@ -45,7 +45,6 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   const fileInputRef = useRef<HTMLInputElement>(null!);
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
   const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void => e.preventDefault();
-  const fileSelectedText = t('upload-resource:fileSelected', { fileName });
 
   const validateAndSetFile = (file: File | Blob) => {
     if (file.size > MAX_RESOURCE_FILE_SIZE) {
@@ -102,6 +101,10 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     </Button>
   );
 
+  const renderDropZoneText = fileName
+    ? t('upload-resource:fileSelected', { fileName })
+    : t('upload-resource:dropZoneText');
+
   const renderDropZone = isTabletOrDesktop && (
     <Box
       className={classes.dropZone}
@@ -111,15 +114,14 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       onDrop={handleFileDrop}
       onClick={handleFileInputClick}
     >
-      <FormHelperText>{t('upload-resource:dropZoneText')}</FormHelperText>
+      <FormHelperText>{renderDropZoneText}</FormHelperText>
     </Box>
   );
 
-  const renderFormHelperText = !fileName && (
+  const renderFormHelperText = (
     <FormHelperText>{t('upload-resource:fileHelpText', { maxFileSize })}</FormHelperText>
   );
 
-  const renderFileSelectedText = !!fileName && <FormHelperText>{fileSelectedText}</FormHelperText>;
   const renderErrorMessage = <ErrorMessage name={field.name} component={FormErrorMessage} />;
 
   return (
@@ -128,7 +130,6 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       {renderMobileUploadFileButton}
       {renderDropZone}
       {renderFormHelperText}
-      {renderFileSelectedText}
       {renderErrorMessage}
     </FormControl>
   );
