@@ -3,7 +3,7 @@
   "description": "Lataa uusi resurssi Skoleen.",
   "header": "Lisää resurssi",
   "fileUploadingText": "Lähetetään tiedostoa...",
-  "fileHelpText": "Voit valita minkä tahansa yleisen tiedostomuodon, ja me muunnamme sen automaattisesti PDF-muotoon puolestasi. Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Tekijänoikeudella suojattujen tiedostojen lataamiseen tarvitaan tekijän lupa.",
+  "fileHelpText": "Voit valita minkä tahansa yleisen tiedostomuodon, ja me muunnamme sen automaattisesti PDF-muotoon puolestasi. Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Varmista, että tiedosto noudattaa",
   "fileSelected": "{{ fileName }} valittu.",
   "uploadFileButtonText": "Lisää tiedosto",
   "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",
@@ -12,5 +12,10 @@
   "courseHelperText": "Etkö loydä kurssiasi?",
   "courseHelperLink": "Yritä lisätä se!",
   "resourceTitleHelperText": "Kuvaava nimi resurssille.",
-  "resourceTypeHelperText": "Resurssin tyyppi, esim. tentti."
+  "resourceTypeHelperText": "Resurssin tyyppi, esim. tentti.",
+  "contactText": "Onko sinulla paljon materiaalia? Jos et halua nähdä vaivaa itse, voit",
+  "contactLink": "antaa meidän lisätä materiaalit puolestasi!",
+  "contactDialogHeader": "Lähetä ne meille!",
+  "contactDialogText": "Voit lähettää materiaalisi meille osoitteeseen contact@skoleapp.com samasta sähköpostiosoitteesta, joka on yhdistetty tiliisi. Materiaalit kreditoidaan aina sinulle. Varmista, että kaikki materiaalisi noudattavat",
+  "guidelinesLink": "ohjeitamme"
 }

@@ -12,9 +12,11 @@ import {
   MAX_RESOURCE_FILE_SIZE,
   MAX_RESOURCE_IMAGE_WIDTH_HEIGHT,
   truncate,
+  urls,
 } from 'utils';
 import imageCompression from 'browser-image-compression';
 import { FormErrorMessage } from './FormErrorMessage';
+import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   dropZone: {
@@ -119,7 +121,13 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   );
 
   const renderFormHelperText = (
-    <FormHelperText>{t('upload-resource:fileHelpText', { maxFileSize })}</FormHelperText>
+    <FormHelperText>
+      {t('upload-resource:fileHelpText', { maxFileSize })}{' '}
+      <TextLink href={urls.guidelines} target="_blank">
+        {t('upload-resource:guidelinesLink')}
+      </TextLink>
+      .
+    </FormHelperText>
   );
 
   const renderErrorMessage = <ErrorMessage name={field.name} component={FormErrorMessage} />;

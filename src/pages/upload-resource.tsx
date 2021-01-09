@@ -1,4 +1,12 @@
-import { Collapse } from '@material-ui/core';
+import {
+  Button,
+  Collapse,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  FormControl,
+  FormHelperText,
+} from '@material-ui/core';
 import {
   AutocompleteField,
   ErrorTemplate,
@@ -8,6 +16,8 @@ import {
   OfflineTemplate,
   TextFormField,
   TextLink,
+  SkoleDialog,
+  DialogHeader,
 } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -22,7 +32,7 @@ import {
   useCreateResourceMutation,
 } from 'generated';
 import { withAuth } from 'hocs';
-import { useForm, useLanguageHeaderContext } from 'hooks';
+import { useForm, useLanguageHeaderContext, useOpen } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -53,6 +63,12 @@ const UploadResourcePage: NextPage = () => {
 
   const school = R.propOr(null, 'school', data);
   const course = R.propOr(null, 'course', data);
+
+  const {
+    open: contactDialogOpen,
+    handleClose: handleCloseContactDialog,
+    handleOpen: handleOpenContactDialog,
+  } = useOpen();
 
   const {
     formRef,
@@ -194,6 +210,18 @@ const UploadResourcePage: NextPage = () => {
     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
   );
 
+  const renderContactLink = (
+    <FormControl>
+      <FormHelperText>
+        {t('upload-resource:contactText')}{' '}
+        <TextLink onClick={handleOpenContactDialog} href="#">
+          {t('upload-resource:contactLink')}
+        </TextLink>{' '}
+        💪
+      </FormHelperText>
+    </FormControl>
+  );
+
   const renderFormFields = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
     <Form>
       {renderResourceTitleField}
@@ -202,6 +230,7 @@ const UploadResourcePage: NextPage = () => {
       {renderCourseField(props)}
       {renderFileField}
       {renderFormSubmitSection(props)}
+      {renderContactLink}
     </Form>
   );
 
@@ -215,6 +244,28 @@ const UploadResourcePage: NextPage = () => {
     >
       {renderFormFields}
     </Formik>
+  );
+
+  const renderContactDialog = (
+    <SkoleDialog open={contactDialogOpen} fullScreen={false}>
+      <DialogHeader
+        onCancel={handleCloseContactDialog}
+        text={t('upload-resource:contactDialogHeader')}
+      />
+      <DialogContent>
+        <DialogContentText>
+          {t('upload-resource:contactDialogText')}{' '}
+          <TextLink href={urls.guidelines} target="_blank">
+            {t('upload-resource:guidelinesLink')}.
+          </TextLink>
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button color="primary" onClick={handleCloseContactDialog} fullWidth>
+          {t('common:gotIt')}
+        </Button>
+      </DialogActions>
+    </SkoleDialog>
   );
 
   const layoutProps = {
@@ -236,7 +287,12 @@ const UploadResourcePage: NextPage = () => {
     return <ErrorTemplate />;
   }
 
-  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
+  return (
+    <FormTemplate {...layoutProps}>
+      {renderForm}
+      {renderContactDialog}
+    </FormTemplate>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
