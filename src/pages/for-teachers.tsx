@@ -55,7 +55,7 @@ const ForTeachersPage: NextPage = () => {
 
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
-      {t('for-teachers:ctaHeader')}
+      {t('for-teachers:ctaHeader')} 💥
     </Typography>
   );
 
@@ -79,13 +79,15 @@ const ForTeachersPage: NextPage = () => {
       alignItems="center"
       justify="center"
     >
-      {renderCtaHeader}
-      {renderCtaButton}
+      <Grid item xs={12} md={10} lg={8} xl={6} container direction="column" alignItems="center">
+        {renderCtaHeader}
+        {renderCtaButton}
+      </Grid>
     </Grid>
   );
 
   const renderPitchItems = FOR_TEACHERS_PITCH_ITEMS.map(({ header, bullets }) => (
-    <Grid item xs={12} md={6}>
+    <Grid item xs={12} md={4}>
       <Typography className={classes.pitchHeader} variant="subtitle1">
         {t(header).toUpperCase()}
       </Typography>

@@ -67,11 +67,11 @@ export const PITCH_ITEMS = [
 export const FOR_TEACHERS_PITCH_ITEMS = [
   {
     header: 'for-teachers:studentsPitchHeader',
-    bullets: [
-      'for-teachers:studentsBullet1',
-      'for-teachers:studentsBullet2',
-      'for-teachers:studentsBullet3',
-    ],
+    bullets: ['for-teachers:studentsBullet1', 'for-teachers:studentsBullet2'],
+  },
+  {
+    header: 'for-teachers:teachersPitchHeader',
+    bullets: ['for-teachers:teachersBullet1', 'for-teachers:teachersBullet2'],
   },
   {
     header: 'for-teachers:infoPitchHeader',
