@@ -34,7 +34,7 @@ export const NotFoundTemplate: React.FC = () => {
       dynamicBackUrl: true,
       hideSearch: true,
       hideAuthButtons: true,
-      hideForEducatorsButton: true,
+      hideForTeachersButton: true,
       hideLanguageButton: true,
     },
   };

@@ -64,22 +64,22 @@ export const PITCH_ITEMS = [
   },
 ];
 
-export const FOR_EDUCATORS_PITCH_ITEMS = [
+export const FOR_TEACHERS_PITCH_ITEMS = [
   {
-    header: 'for-educators:studentsPitchHeader',
+    header: 'for-teachers:studentsPitchHeader',
     bullets: [
-      'for-educators:studentsBullet1',
-      'for-educators:studentsBullet2',
-      'for-educators:studentsBullet3',
+      'for-teachers:studentsBullet1',
+      'for-teachers:studentsBullet2',
+      'for-teachers:studentsBullet3',
     ],
   },
   {
-    header: 'for-educators:infoPitchHeader',
+    header: 'for-teachers:infoPitchHeader',
     bullets: [
-      'for-educators:infoBullet1',
-      'for-educators:infoBullet2',
-      'for-educators:infoBullet3',
-      'for-educators:infoBullet4',
+      'for-teachers:infoBullet1',
+      'for-teachers:infoBullet2',
+      'for-teachers:infoBullet3',
+      'for-teachers:infoBullet4',
     ],
   },
 ];

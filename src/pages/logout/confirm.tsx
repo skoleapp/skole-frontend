@@ -22,7 +22,7 @@ const ConfirmLogoutPage: NextPage = () => {
     topNavbarProps: {
       hideSearch: true,
       hideAuthButtons: true,
-      hideForEducatorsButton: true,
+      hideForTeachersButton: true,
       hideLanguageButton: true,
     },
   };

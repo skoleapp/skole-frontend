@@ -25,7 +25,7 @@ const ConfirmLoginPage: NextPage = () => {
       headerRight: renderLanguageButton,
       hideSearch: true,
       hideAuthButtons: true,
-      hideForEducatorsButton: true,
+      hideForTeachersButton: true,
       hideLanguageButton: true,
     },
   };

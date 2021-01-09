@@ -70,7 +70,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   staticBackUrl,
   hideSearch,
   hideAuthButtons,
-  hideForEducatorsButton,
+  hideForTeachersButton,
   hideLanguageButton,
   hideLogo,
   headerRight,
@@ -164,9 +164,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Popper>
   );
 
-  const renderForEducatorsButton = !userMe && !hideForEducatorsButton && (
-    <ButtonLink href={urls.forEducators} color="secondary" endIcon={<SchoolOutlined />}>
-      {t('common:forEducators')}
+  const renderForTeachersButton = !userMe && !hideForTeachersButton && (
+    <ButtonLink href={urls.forTeachers} color="secondary" endIcon={<SchoolOutlined />}>
+      {t('common:forTeachers')}
     </ButtonLink>
   );
 
@@ -223,7 +223,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <Grid item xs={10} container justify="flex-end" alignItems="center">
         {renderSearch}
         {renderDynamicButtons}
-        {renderForEducatorsButton}
+        {renderForTeachersButton}
         {renderLanguageButton}
       </Grid>
     </Grid>
