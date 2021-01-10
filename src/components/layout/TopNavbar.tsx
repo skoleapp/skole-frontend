@@ -213,8 +213,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
-  // Allow disabling auth buttons manually.
-  // Also disable them automatically in case of a network error when authenticating/fetching user.
+  // Allow hiding auth buttons manually.
+  // Also hide them automatically in case of a network error when authenticating/fetching user.
   const renderUnAuthenticatedButtons = !hideAuthButtons && !authNetworkError && (
     <>
       {renderLoginButton}
