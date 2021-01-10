@@ -96,22 +96,15 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const { loginRequiredTooltip, verificationRequiredTooltip, userMe, verified } = useAuthContext();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const { screenshot, setScreenshot } = usePdfViewerContext();
-  const { toggleNotification, unexpectedError } = useNotificationsContext();
+  const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { drawingMode } = usePdfViewerContext();
   const context = useLanguageHeaderContext();
   const attachmentInputRef = useRef<HTMLInputElement>(null!);
   const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
+  const { formRef } = useForm<CreateCommentFormValues>();
 
   const attachmentTooltip =
     loginRequiredTooltip || verificationRequiredTooltip || t('discussion-tooltips:attachFile');
-
-  const {
-    formRef,
-    setSubmitting,
-    resetForm,
-    setFieldValue,
-    submitForm,
-  } = useForm<CreateCommentFormValues>();
 
   const {
     commentDialogOpen,
@@ -125,12 +118,12 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     if (screenshot && !drawingMode) {
       setCommentAttachment(screenshot); // Already in data URL form.
       const screenShotFile = dataUriToFile(screenshot);
-      setFieldValue('attachment', screenShotFile);
+      formRef.current?.setFieldValue('attachment', screenShotFile);
     }
   }, [screenshot, drawingMode]);
 
   const handleCloseCreateCommentDialog = (): void => {
-    setFieldValue('attachment', null);
+    formRef.current?.setFieldValue('attachment', null);
     toggleCommentDialog(false);
     setCommentAttachment(null);
     !!setScreenshot && setScreenshot(null); // Not defined when in course page.
@@ -139,20 +132,20 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const onCompleted = ({ createComment }: CreateCommentMutation): void => {
     if (createComment) {
       if (!!createComment.errors && !!createComment.errors.length) {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       } else if (createComment.comment) {
         appendComments(createComment.comment as CommentObjectType);
       } else {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       }
     } else {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 
   const [createCommentMutation] = useCreateCommentMutation({
     onCompleted,
-    onError: unexpectedError,
+    onError: toggleUnexpectedErrorNotification,
   });
 
   const handleSubmit = async ({
@@ -171,11 +164,11 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
         context,
       });
 
-      resetForm();
+      formRef.current?.resetForm();
       toggleCommentDialog(false);
     }
 
-    setSubmitting(false);
+    formRef.current?.setSubmitting(false);
     setCommentAttachment(null);
   };
 
@@ -187,7 +180,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   };
 
   const setAttachment = (file: File | Blob) => {
-    setFieldValue('attachment', file);
+    formRef.current?.setFieldValue('attachment', file);
     toggleCommentDialog(true);
 
     const reader = new FileReader();
@@ -220,7 +213,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   };
 
   const handleClearAttachment = (): void => {
-    setFieldValue('attachment', null);
+    formRef.current?.setFieldValue('attachment', null);
     setCommentAttachment(null);
   };
 
@@ -228,9 +221,11 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const handleKeydown = (e: KeyboardEvent) => {
     if (isDesktop && e.code === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      submitForm();
+      formRef.current?.submitForm();
     }
   };
+
+  const submitForm = () => formRef.current?.submitForm();
 
   const renderAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
     !!userMe && <AuthorSelection {...props} />;

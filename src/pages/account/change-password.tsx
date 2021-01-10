@@ -26,10 +26,9 @@ interface ChangePasswordFormValues {
 const ChangePasswordPage: NextPage = () => {
   const {
     formRef,
-    resetForm,
     handleMutationErrors,
     onError,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<ChangePasswordFormValues>();
 
   const { toggleNotification } = useNotificationsContext();
@@ -51,10 +50,10 @@ const ChangePasswordPage: NextPage = () => {
       if (!!changePassword.errors && !!changePassword.errors.length) {
         handleMutationErrors(changePassword.errors);
       } else if (changePassword.successMessage) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(changePassword.successMessage);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     }
   };

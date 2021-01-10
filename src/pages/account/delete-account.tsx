@@ -24,11 +24,9 @@ export interface DeleteAccountFormValues {
 export const DeleteAccountPage: NextPage = () => {
   const {
     formRef,
-    setSubmitting,
-    resetForm,
     handleMutationErrors,
     onError,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<DeleteAccountFormValues>();
 
   const { t } = useTranslation();
@@ -41,15 +39,15 @@ export const DeleteAccountPage: NextPage = () => {
       if (!!deleteUser.errors && !!deleteUser.errors.length) {
         handleMutationErrors(deleteUser.errors);
       } else if (deleteUser.successMessage) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(deleteUser.successMessage);
         localStorage.removeItem('user');
         await Router.push(urls.logout);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -60,6 +58,7 @@ export const DeleteAccountPage: NextPage = () => {
   });
 
   const handleSubmit = async (values: DeleteAccountFormValues): Promise<void> => {
+    const { setSubmitting } = formRef.current!;
     setSubmitting(false);
 
     try {
@@ -72,7 +71,7 @@ export const DeleteAccountPage: NextPage = () => {
     } catch {
       // User cancelled.
     } finally {
-      setSubmitting(true);
+      setSubmitting(false);
     }
   };
 

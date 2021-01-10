@@ -35,12 +35,12 @@ interface Props {
   field: FieldAttributes<FormikValues>;
 }
 
-export const FileField: React.FC<Props> = ({ form, field }) => {
+export const FileField: React.FC<Props> = ({ form: { setFieldValue }, field: { name, value } }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-  const _fileName = R.propOr('', 'name', field.value);
+  const _fileName = R.propOr('', 'name', value);
   const fileName = truncate(_fileName, 20);
   const maxFileSize = MAX_RESOURCE_FILE_SIZE / 1000000; // Convert to megabytes.
   const fileInputRef = useRef<HTMLInputElement>(null!);
@@ -51,7 +51,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     if (file.size > MAX_RESOURCE_FILE_SIZE) {
       toggleNotification(t('validation:fileSizeError'));
     } else {
-      form.setFieldValue(field.name, file);
+      setFieldValue(name, file);
     }
   };
 
@@ -127,7 +127,7 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
     </FormHelperText>
   );
 
-  const renderErrorMessage = <ErrorMessage name={field.name} component={FormErrorMessage} />;
+  const renderErrorMessage = <ErrorMessage name={name} component={FormErrorMessage} />;
 
   return (
     <FormControl>

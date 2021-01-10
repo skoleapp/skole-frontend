@@ -42,16 +42,14 @@ const ResetPasswordPage: NextPage = () => {
     formRef: emailFormRef,
     handleMutationErrors: handleEmailFormMutationErrors,
     onError: onEmailFormError,
-    resetForm: resetEmailForm,
-    unexpectedError: emailFormUnexpectedError,
+    setUnexpectedFormError: emailFormUnexpectedError,
   } = useForm<EmailFormValues>();
 
   const {
     formRef: passwordFormRef,
     handleMutationErrors: handlePasswordFormMutationErrors,
     onError: onPasswordFormError,
-    resetForm: resetPasswordForm,
-    unexpectedError: passwordFormUnexpectedError,
+    setUnexpectedFormError: passwordFormUnexpectedError,
   } = useForm<PasswordFormValues>();
 
   const { t } = useTranslation();
@@ -59,9 +57,11 @@ const ResetPasswordPage: NextPage = () => {
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
+
   const header = !emailSubmitted
     ? t('reset-password:header')
     : t('reset-password:emailSubmittedHeader');
+
   const context = useLanguageHeaderContext();
 
   const emailValidationSchema = Yup.object().shape({
@@ -84,7 +84,7 @@ const ResetPasswordPage: NextPage = () => {
       if (sendPasswordResetEmail.errors && !!sendPasswordResetEmail.errors.length) {
         handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
       } else if (sendPasswordResetEmail.successMessage) {
-        resetEmailForm();
+        emailFormRef.current?.resetForm();
         toggleNotification(sendPasswordResetEmail.successMessage);
         setEmailSubmitted(true);
       } else {
@@ -100,7 +100,7 @@ const ResetPasswordPage: NextPage = () => {
       if (!!resetPassword.errors && !!resetPassword.errors.length) {
         handlePasswordFormMutationErrors(resetPassword.errors);
       } else if (resetPassword.successMessage) {
-        resetPasswordForm();
+        passwordFormRef.current?.resetForm();
         toggleNotification(resetPassword.successMessage);
         await Router.push(urls.logout);
       } else {

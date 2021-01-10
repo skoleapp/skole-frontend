@@ -59,10 +59,9 @@ const LoginPage: NextPage = () => {
 
   const {
     formRef,
-    resetForm,
     handleMutationErrors,
     onError,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<LoginFormValues>();
 
   const existingUserGreeting = t('login:existingUserGreeting', {
@@ -96,18 +95,18 @@ const LoginPage: NextPage = () => {
         handleMutationErrors(login.errors);
       } else if (login.successMessage) {
         try {
-          resetForm();
+          formRef.current?.resetForm();
           toggleNotification(login.successMessage);
           const nextUrl = query.next ? String(query.next) : urls.home;
           await Router.push(nextUrl);
         } catch {
-          unexpectedError();
+          setUnexpectedFormError();
         }
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 

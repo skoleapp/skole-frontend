@@ -39,7 +39,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -59,6 +59,13 @@ const UploadResourcePage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school', 'course'], query);
 
+  const {
+    formRef,
+    onError,
+    handleMutationErrors,
+    setUnexpectedFormError,
+  } = useForm<UploadResourceFormValues>();
+
   const { data, error } = useCreateResourceAutocompleteDataQuery({
     variables,
     context,
@@ -67,20 +74,16 @@ const UploadResourcePage: NextPage = () => {
   const school = R.propOr(null, 'school', data);
   const course = R.propOr(null, 'course', data);
 
+  useEffect(() => {
+    formRef.current?.setFieldValue('school', school);
+    formRef.current?.setFieldValue('course', course);
+  }, [school, course]);
+
   const {
     open: contactDialogOpen,
     handleClose: handleCloseContactDialog,
     handleOpen: handleOpenContactDialog,
   } = useOpen();
-
-  const {
-    formRef,
-    onError,
-    resetForm,
-    handleMutationErrors,
-    setFieldValue,
-    unexpectedError,
-  } = useForm<UploadResourceFormValues>();
 
   const validationSchema = Yup.object().shape({
     resourceTitle: Yup.string().required(t('validation:required')),
@@ -100,14 +103,14 @@ const UploadResourcePage: NextPage = () => {
         !!createResource.resource.id &&
         !!createResource.successMessage
       ) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(createResource.successMessage);
         await Router.push(urls.resource(createResource.resource.id));
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -136,7 +139,7 @@ const UploadResourcePage: NextPage = () => {
       file,
     };
 
-    setFieldValue('general', t('upload-resource:fileUploadingText'));
+    formRef.current?.setFieldValue('general', t('upload-resource:fileUploadingText'));
 
     // @ts-ignore: A string value is expected for the file field, which is incorrect.
     await createResource({ variables });
@@ -262,7 +265,6 @@ const UploadResourcePage: NextPage = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={formRef}
-      enableReinitialize
     >
       {renderFormFields}
     </Formik>

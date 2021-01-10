@@ -69,8 +69,7 @@ const EditProfilePage: NextPage = () => {
     formRef,
     handleMutationErrors,
     onError,
-    setSubmitting,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<UpdateProfileFormValues>();
 
   const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -78,14 +77,14 @@ const EditProfilePage: NextPage = () => {
       if (!!updateUser.errors && !!updateUser.errors.length) {
         handleMutationErrors(updateUser.errors);
       } else if (updateUser.successMessage) {
-        setSubmitting(false);
+        formRef.current?.setSubmitting(false);
         toggleNotification(updateUser.successMessage);
         setUserMe(updateUser.user as UserObjectType);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -126,7 +125,7 @@ const EditProfilePage: NextPage = () => {
   const validationSchema = Yup.object().shape({
     title: Yup.string(),
     username: Yup.string().required(t('validation:required')),
-    email: Yup.string().email(t('validation:invalidEmail')),
+    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     bio: Yup.string(),
     school: Yup.object().nullable(),
     subject: Yup.object().nullable(),
@@ -230,7 +229,6 @@ const EditProfilePage: NextPage = () => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       innerRef={formRef}
-      enableReinitialize
     >
       {renderFormFields}
     </Formik>

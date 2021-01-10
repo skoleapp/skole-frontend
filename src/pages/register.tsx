@@ -72,18 +72,16 @@ const RegisterPage: NextPage = () => {
 
   const {
     formRef: registerFormRef,
-    resetForm: resetRegisterForm,
     handleMutationErrors: handleRegisterMutationErrors,
     onError: onRegisterError,
-    unexpectedError: unexpectedRegisterError,
+    setUnexpectedFormError: unexpectedRegisterError,
   } = useForm<RegisterFormValues>();
 
   const {
     formRef: updateUserFormRef,
-    resetForm: resetUpdateUserForm,
     handleMutationErrors: handleUpdateUserMutationErrors,
     onError: onUpdateUserError,
-    unexpectedError: updateUserUnexpectedError,
+    setUnexpectedFormError: updateUserUnexpectedError,
   } = useForm<UpdateUserFormValues>();
 
   const getHeader = (): string => {
@@ -138,7 +136,7 @@ const RegisterPage: NextPage = () => {
     } else if (!!login && !!login.errors && !!login.errors.length) {
       handleRegisterMutationErrors(login.errors);
     } else if (!!login && !!login.user) {
-      resetRegisterForm();
+      registerFormRef.current?.resetForm();
       setRegisteredUser(login.user);
       setPhase(RegisterPhases.UPDATE_USER);
     } else {
@@ -169,7 +167,7 @@ const RegisterPage: NextPage = () => {
       if (!!updateUser.errors && !!updateUser.errors.length) {
         handleUpdateUserMutationErrors(updateUser.errors);
       } else {
-        resetUpdateUserForm();
+        updateUserFormRef.current?.resetForm();
         setPhase(RegisterPhases.REGISTER_COMPLETE);
       }
     } else {

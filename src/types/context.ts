@@ -18,7 +18,7 @@ export interface LanguageContextType {
 export interface NotificationsContextType {
   notification: string | null;
   toggleNotification: (payload: string | null) => void;
-  unexpectedError: () => void;
+  toggleUnexpectedErrorNotification: () => void;
 }
 
 export interface SettingsContextType {

@@ -16,14 +16,7 @@ interface FormValues {
 }
 
 const MyDataPage: NextPage = () => {
-  const {
-    formRef,
-    handleMutationErrors,
-    onError,
-    resetForm,
-    unexpectedError,
-  } = useForm<FormValues>();
-
+  const { formRef, handleMutationErrors, onError, setUnexpectedFormError } = useForm<FormValues>();
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
@@ -34,14 +27,14 @@ const MyDataPage: NextPage = () => {
       if (!!myData.errors && !!myData.errors.length) {
         handleMutationErrors(myData.errors);
       } else if (myData.successMessage) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(myData.successMessage);
         setSubmitted(true);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -89,12 +82,7 @@ const MyDataPage: NextPage = () => {
   );
 
   const renderForm = !submitted && (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
-      innerRef={formRef}
-      enableReinitialize
-    >
+    <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formRef}>
       {renderFormFields}
     </Formik>
   );

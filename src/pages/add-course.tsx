@@ -24,7 +24,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -48,15 +48,18 @@ const AddCoursePage: NextPage = () => {
     context,
   });
 
-  const school = R.propOr(null, 'school', data);
-
   const {
     formRef,
-    resetForm,
     handleMutationErrors,
     onError,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<CreateCourseFormValues>();
+
+  const school = R.propOr(null, 'school', data);
+
+  useEffect(() => {
+    formRef.current?.setFieldValue('school', school);
+  }, [school]);
 
   const validationSchema = Yup.object().shape({
     courseName: Yup.string().required(t('validation:required')),
@@ -70,14 +73,14 @@ const AddCoursePage: NextPage = () => {
       if (!!createCourse.errors && !!createCourse.errors.length) {
         handleMutationErrors(createCourse.errors);
       } else if (!!createCourse.course && !!createCourse.successMessage) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(createCourse.successMessage);
         await Router.push(urls.course(createCourse.course.id));
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -176,7 +179,6 @@ const AddCoursePage: NextPage = () => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       innerRef={formRef}
-      enableReinitialize
     >
       {renderFormFields}
     </Formik>

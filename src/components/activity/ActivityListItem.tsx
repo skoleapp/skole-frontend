@@ -40,28 +40,28 @@ export const ActivityListItem: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const [read, setRead] = useState(initialRead);
-  const { unexpectedError } = useNotificationsContext();
+  const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead) {
       if (!!markActivityAsRead.errors && !!markActivityAsRead.errors.length) {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       } else if (!!markActivityAsRead.activity && markActivityAsRead.activity.read != null) {
         // We use the abstract equality operator here on purpose to compare against both `null` and `undefined` values.
         setRead(markActivityAsRead.activity.read);
       } else {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       }
     } else {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 
   const [markSingleActivityRead] = useMarkActivityAsReadMutation({
     onCompleted,
-    onError: unexpectedError,
+    onError: toggleUnexpectedErrorNotification,
     context,
   });
 

@@ -66,7 +66,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 const ActivityPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { unexpectedError } = useNotificationsContext();
+  const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { query } = useRouter();
   const { isTabletOrDesktop } = useMediaQueries();
   const variables = R.pick(['page', 'pageSize'], query);
@@ -96,7 +96,7 @@ const ActivityPage: NextPage = () => {
   }: GraphQlMarkAllActivitiesAsReadMutation): void => {
     if (markAllActivitiesAsRead) {
       if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       } else if (
         !!markAllActivitiesAsRead.activities &&
         !!markAllActivitiesAsRead.activities.objects
@@ -104,16 +104,16 @@ const ActivityPage: NextPage = () => {
         const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
         setActivities(newActivities);
       } else {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       }
     } else {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 
   const [markAllActivitiesAsRead] = useGraphQlMarkAllActivitiesAsReadMutation({
     onCompleted,
-    onError: unexpectedError,
+    onError: toggleUnexpectedErrorNotification,
     context,
   });
 
