@@ -1,4 +1,5 @@
 import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
+import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { urls } from 'utils';
@@ -18,89 +19,150 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
 export const Footer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { userMe } = useAuthContext();
+
+  const renderSkoleHeader = (
+    <Typography variant="subtitle1" color="secondary" gutterBottom>
+      SKOLE
+    </Typography>
+  );
+
+  const renderGetStartedLink = !userMe && (
+    <TextLink href={urls.index} color="secondary">
+      {t('common:getStarted')}
+    </TextLink>
+  );
+
+  const renderForTeachersLink = (
+    <TextLink href={urls.forTeachers} color="secondary">
+      {t('common:forTeachers')}
+    </TextLink>
+  );
+
+  const renderGuidelinesLink = (
+    <TextLink href={urls.guidelines} color="secondary">
+      {t('common:guidelines')}
+    </TextLink>
+  );
+
+  const renderScoreLink = (
+    <TextLink href={urls.score} color="secondary">
+      {t('common:score')}
+    </TextLink>
+  );
 
   const renderSkole = (
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
-        <Typography variant="subtitle1" color="secondary" gutterBottom>
-          SKOLE
-        </Typography>
-        <TextLink href={urls.index} color="secondary">
-          {t('common:getStarted')}
-        </TextLink>
-        <TextLink href={urls.forTeachers} color="secondary">
-          {t('common:forTeachers')}
-        </TextLink>
-        <TextLink href={urls.guidelines} color="secondary">
-          {t('common:guidelines')}
-        </TextLink>
-        <TextLink href={urls.score} color="secondary">
-          {t('common:score')}
-        </TextLink>
+        {renderSkoleHeader}
+        {renderGetStartedLink}
+        {renderForTeachersLink}
+        {renderGuidelinesLink}
+        {renderScoreLink}
       </Box>
     </Grid>
+  );
+
+  const renderCompanyHeader = (
+    <Typography variant="subtitle1" color="secondary" gutterBottom>
+      {t('common:company').toUpperCase()}
+    </Typography>
+  );
+
+  const renderContactLink = (
+    <TextLink href={urls.contact} color="secondary">
+      {t('common:contact')}
+    </TextLink>
+  );
+
+  const renderTermsLink = (
+    <TextLink href={urls.terms} color="secondary">
+      {t('common:terms')}
+    </TextLink>
+  );
+
+  const renderPrivacyLink = (
+    <TextLink href={urls.privacy} color="secondary">
+      {t('common:privacy')}
+    </TextLink>
+  );
+
+  const renderValuesLink = (
+    <TextLink href={urls.score} color="secondary">
+      {t('common:values')}
+    </TextLink>
   );
 
   const renderCompany = (
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
-        <Typography variant="subtitle1" color="secondary" gutterBottom>
-          {t('common:company').toUpperCase()}
-        </Typography>
-        <TextLink href={urls.contact} color="secondary">
-          {t('common:contact')}
-        </TextLink>
-        <TextLink href={urls.terms} color="secondary">
-          {t('common:terms')}
-        </TextLink>
-        <TextLink href={urls.privacy} color="secondary">
-          {t('common:privacy')}
-        </TextLink>
-        <TextLink href={urls.score} color="secondary">
-          {t('common:values')}
-        </TextLink>
+        {renderCompanyHeader}
+        {renderContactLink}
+        {renderTermsLink}
+        {renderPrivacyLink}
+        {renderValuesLink}
       </Box>
     </Grid>
+  );
+
+  const renderSocialHeader = (
+    <Typography variant="subtitle1" color="secondary" gutterBottom>
+      {t('common:social').toUpperCase()}
+    </Typography>
+  );
+
+  const renderFacebookLink = (
+    <TextLink
+      href="https://www.facebook.com/skoleofficial"
+      color="secondary"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Facebook
+    </TextLink>
+  );
+
+  const renderInstagramLink = (
+    <TextLink
+      href="https://www.instagram.com/skoleofficial/"
+      color="secondary"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Instagram
+    </TextLink>
+  );
+
+  const renderTwitterLink = (
+    <TextLink
+      href="https://twitter.com/skoleofficial"
+      color="secondary"
+      target="_blank"
+      rel="noreferrer"
+    >
+      Twitter
+    </TextLink>
+  );
+
+  const renderLinkedInLink = (
+    <TextLink
+      href="https://www.linkedin.com/company/skole-inc"
+      color="secondary"
+      target="_blank"
+      rel="noreferrer"
+    >
+      LinkedIn
+    </TextLink>
   );
 
   const renderSocial = (
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
-        <Typography variant="subtitle1" color="secondary" gutterBottom>
-          {t('common:social').toUpperCase()}
-        </Typography>
-        <TextLink
-          href="https://www.facebook.com/skoleofficial"
-          color="secondary"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Facebook
-        </TextLink>
-        <TextLink
-          href="https://www.instagram.com/skoleofficial/"
-          color="secondary"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Instagram
-        </TextLink>
-        <TextLink
-          href="https://twitter.com/skoleofficial"
-          color="secondary"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Twitter
-        </TextLink>
-        <TextLink
-          href="https://www.linkedin.com/company/skole-inc"
-          color="secondary"
-          target="_blank"
-          rel="noreferrer"
-        >
-          LinkedIn
-        </TextLink>
+        {renderSocialHeader}
+        {renderFacebookLink}
+        {renderInstagramLink}
+        {renderTwitterLink}
+        {renderLinkedInLink}
       </Box>
     </Grid>
   );
