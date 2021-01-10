@@ -208,16 +208,16 @@ const AddCoursePage: NextPage = () => {
     },
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} text={t('add-course:loginRequiredText')} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
 
   if (error) {
     return <ErrorTemplate />;
-  }
-
-  if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} text={t('add-course:loginRequiredText')} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;

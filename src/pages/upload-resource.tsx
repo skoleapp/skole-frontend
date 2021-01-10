@@ -342,14 +342,6 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
     },
   };
 
-  if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
-  }
-
-  if (error) {
-    return <ErrorTemplate />;
-  }
-
   if (!userMe) {
     return (
       <LoginRequiredTemplate
@@ -360,6 +352,14 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
         {renderLoginRequiredContactDialog}
       </LoginRequiredTemplate>
     );
+  }
+
+  if (!!error && !!error.networkError) {
+    return <OfflineTemplate />;
+  }
+
+  if (error) {
+    return <ErrorTemplate />;
   }
 
   return (

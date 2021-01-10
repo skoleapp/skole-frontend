@@ -9,6 +9,7 @@ import {
 import { useNotificationsContext, useConfirmContext, useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';

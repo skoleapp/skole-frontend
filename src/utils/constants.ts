@@ -37,6 +37,21 @@ export const DISALLOWED_PATHS = ['/404', '/logout', '/account/'];
 export const DYNAMIC_PATHS = ['courses', 'resources', 'schools', 'users'];
 export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
+export const DEFAULT_NAMESPACES = [
+  'common',
+  'marketing',
+  '_error',
+  '404',
+  'languages',
+  'forms',
+  'validation',
+  'notifications',
+  'common-tooltips',
+  'activity',
+  'offline',
+  'sharing',
+];
+
 export const IMAGE_TYPES = [
   'image/apng',
   'image/bmp',

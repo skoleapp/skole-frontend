@@ -96,16 +96,16 @@ const StarredPage: NextPage = () => {
     renderRightTabContent,
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
 
   if (error) {
     return <ErrorTemplate />;
-  }
-
-  if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
   }
 
   return <TabTemplate {...layoutProps} />;
