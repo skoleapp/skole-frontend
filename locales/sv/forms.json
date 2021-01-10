@@ -29,6 +29,7 @@
   "sendMessage": "Skicka meddelande",
   "resourceTitle": "Resursens titel",
   "resourceType": "Resurstyp",
+  "dateOptional": "Datum (optional)",
   "course": "Kurs",
   "ordering": "Ordning",
   "nameOrdering": "Namn (A-Ö)",

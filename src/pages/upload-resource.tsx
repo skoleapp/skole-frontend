@@ -17,9 +17,11 @@ import {
   TextFormField,
   TextLink,
   SkoleDialog,
+  DatePickerFormField,
   DialogHeader,
 } from 'components';
 import { useNotificationsContext } from 'context';
+import dayjs from 'dayjs';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteCoursesDocument,
@@ -44,6 +46,7 @@ import * as Yup from 'yup';
 interface UploadResourceFormValues {
   resourceTitle: string;
   resourceType: string | null;
+  date: Date | null;
   school: SchoolObjectType | null;
   course: CourseObjectType | null;
   file: File | null;
@@ -82,6 +85,7 @@ const UploadResourcePage: NextPage = () => {
   const validationSchema = Yup.object().shape({
     resourceTitle: Yup.string().required(t('validation:required')),
     resourceType: Yup.object().nullable().required(t('validation:required')),
+    date: Yup.date().nullable(),
     school: Yup.object().nullable().required(t('validation:required')),
     course: Yup.object().nullable().required(t('validation:required')),
     file: Yup.mixed().required(t('validation:required')),
@@ -116,15 +120,18 @@ const UploadResourcePage: NextPage = () => {
   const handleUpload = async ({
     resourceTitle,
     resourceType: _resourceType,
+    date: _date,
     course: _course,
     file,
   }: UploadResourceFormValues): Promise<void> => {
     const resourceType = R.propOr('', 'id', _resourceType);
+    const date = _date ? dayjs(_date).format('YYYY-MM-DD') : null; // Only eligible format for GraphQL `Date` scalar.
     const course = R.propOr('', 'id', _course);
 
     const variables = {
       resourceTitle,
       resourceType,
+      date,
       course,
       file,
     };
@@ -138,6 +145,7 @@ const UploadResourcePage: NextPage = () => {
   const initialValues = {
     resourceTitle: '',
     resourceType: null,
+    date: new Date(),
     school,
     course,
     file: null,
@@ -164,6 +172,22 @@ const UploadResourcePage: NextPage = () => {
     />
   );
 
+  const renderDateField = (
+    <Field
+      name="date"
+      label={t('forms:dateOptional')}
+      component={DatePickerFormField}
+      helperText={t('upload-resource:dateHelperText')}
+    />
+  );
+
+  const renderSchoolHelperText = (
+    <>
+      {t('upload-resource:schoolHelperText')}{' '}
+      <TextLink href={urls.contact}>{t('upload-resource:schoolHelperLink')}</TextLink>
+    </>
+  );
+
   const renderSchoolField = (
     <Field
       name="school"
@@ -172,13 +196,15 @@ const UploadResourcePage: NextPage = () => {
       searchKey="name"
       document={AutocompleteSchoolsDocument}
       component={AutocompleteField}
-      helperText={
-        <>
-          {t('upload-resource:schoolHelperText')}{' '}
-          <TextLink href={urls.contact}>{t('upload-resource:schoolHelperLink')}</TextLink>
-        </>
-      }
+      helperText={renderSchoolHelperText}
     />
+  );
+
+  const renderCourseHelperText = (
+    <>
+      {t('upload-resource:courseHelperText')}{' '}
+      <TextLink href={urls.addCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
+    </>
   );
 
   // Only collapse this field in once the school has been selected.
@@ -194,12 +220,7 @@ const UploadResourcePage: NextPage = () => {
         variables={{
           school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
         }}
-        helperText={
-          <>
-            {t('upload-resource:courseHelperText')}{' '}
-            <TextLink href={urls.addCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
-          </>
-        }
+        helperText={renderCourseHelperText}
       />
     </Collapse>
   );
@@ -226,6 +247,7 @@ const UploadResourcePage: NextPage = () => {
     <Form>
       {renderResourceTitleField}
       {renderResourceTypeField}
+      {renderDateField}
       {renderSchoolField}
       {renderCourseField(props)}
       {renderFileField}

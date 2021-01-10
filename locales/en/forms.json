@@ -29,6 +29,7 @@
   "sendMessage": "Send Message",
   "resourceTitle": "Resource Title",
   "resourceType": "Resource Type",
+  "dateOptional": "Date (optional)",
   "course": "Course",
   "ordering": "Ordering",
   "nameOrdering": "Name (A-Z)",

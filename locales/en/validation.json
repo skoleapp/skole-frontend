@@ -5,5 +5,8 @@
   "required": "This field is required.",
   "unexpectedError": "Unexpected error.",
   "networkError": "Network error.",
-  "fileSizeError": "File is too large!"
+  "fileSizeError": "File is too large!",
+  "invalidDate": "Invalid date!",
+  "minDate": "Date is too early!",
+  "maxDate": "Date is too late!"
 }

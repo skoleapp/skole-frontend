@@ -9,6 +9,8 @@ import Router, { useRouter } from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
 import { theme } from 'theme';
+import DayJsUtils from '@date-io/dayjs';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 NProgress.configure({ showSpinner: false });
 Router.events.on('routeChangeStart', () => NProgress.start());
@@ -31,8 +33,10 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     <I18nProvider lang={locale || ''} namespaces={pageProps._ns}>
       <ApolloProvider client={apolloClient}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
+          <MuiPickersUtilsProvider utils={DayJsUtils}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </MuiPickersUtilsProvider>
         </ThemeProvider>
       </ApolloProvider>
     </I18nProvider>

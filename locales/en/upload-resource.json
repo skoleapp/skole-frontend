@@ -13,6 +13,7 @@
   "courseHelperLink": "Try adding it!",
   "resourceTitleHelperText": "A descriptive name for the resource.",
   "resourceTypeHelperText": "The type of resource, e.g. an exam.",
+  "dateHelperText": "The date on which this material was created.",
   "contactText": "Do you have a lot of material? If you don't want to go through the trouble, you can",
   "contactLink": "let us upload your material for you!",
   "contactDialogHeader": "Send 'em to us!",

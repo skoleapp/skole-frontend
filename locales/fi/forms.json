@@ -29,6 +29,7 @@
   "sendMessage": "Lähetä Viesti",
   "resourceTitle": "Resurssin Otsikko",
   "resourceType": "Resurssityyppi",
+  "dateOptional": "Päivämäärä (valinnainen)",
   "course": "Kurssi",
   "ordering": "Järjestys",
   "nameOrdering": "Nimi (A-Ö)",
