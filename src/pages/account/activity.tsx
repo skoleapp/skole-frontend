@@ -74,7 +74,6 @@ const ActivityPage: NextPage = () => {
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
-  console.log('error', error);
   const [activities, setActivities] = useState([]);
   const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
