@@ -9,13 +9,14 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, LandingPageTemplate, TextLink } from 'components';
+import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
+import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import React from 'react';
+import Router, { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { PITCH_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -102,6 +103,12 @@ const LandingPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { query } = useRouter();
+  const { userMe } = useAuthContext();
+
+  // Redirect authenticated users to home page.
+  useEffect(() => {
+    !!userMe && Router.push(urls.home);
+  }, [userMe]);
 
   const ctaUrl = {
     pathname: urls.register,
@@ -238,6 +245,11 @@ const LandingPage: NextPage = () => {
       hideAuthButtons: true,
     },
   };
+
+  // Show loading screen when redirecting to home page.
+  if (userMe) {
+    return <LoadingTemplate />;
+  }
 
   return (
     <LandingPageTemplate {...layoutProps}>
