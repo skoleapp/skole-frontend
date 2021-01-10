@@ -1,6 +1,9 @@
-import { NextApiResponse } from 'next';
+import { GetServerSideProps } from 'next';
 import { SitemapDocument } from 'generated';
 import { initApolloClient } from 'lib';
+import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
+
+export default (): void => {};
 
 const toUrl = (path: string, modified: string): string => {
   // Slice just the date portion from the ISO datetime.
@@ -13,41 +16,44 @@ const toUrl = (path: string, modified: string): string => {
     </url>`;
 };
 
-const createSitemap = (routes: { path: string; modified: string }[]): string => {
+const createSitemap = (routes: { path: string; modified: string }[]): string =>
   // This xmlns URL has to use http.
-  return `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    >
       ${routes.map((route) => toUrl(route.path, route.modified)).join('')}
     </urlset>`;
-};
 
-const SitemapXml = (): void => {};
-
-interface Props {
-  props: Record<string, never>;
-}
-
-export const getServerSideProps = async ({ res }: { res: NextApiResponse }): Promise<Props> => {
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const modified = process.env.BUILD_DATE || new Date().toISOString();
+
   const staticPaths = [
     '', // Don't want the index page to have a slash.
-    '/contact',
-    '/get-started',
-    '/login',
-    '/privacy',
-    '/register',
-    '/search',
-    '/terms',
+    urls.addCourse,
+    urls.contact,
+    urls.forTeachers,
+    urls.guidelines,
+    urls.home,
+    urls.login,
+    urls.privacy,
+    urls.register,
+    urls.score,
+    urls.search,
+    urls.terms,
+    urls.uploadResource,
+    urls.values,
   ];
-  const paths = staticPaths.map((path) => ({ path, modified }));
 
+  const paths = staticPaths.map((path) => ({ path, modified }));
   const apolloClient = initApolloClient();
+
   try {
     const { data } = await apolloClient.query({
       query: SitemapDocument,
     });
 
-    for (const page of ['courses', 'resources', 'schools', 'users']) {
+    for (const page of DYNAMIC_PATHS) {
       for (const entry of data.sitemap[page]) {
         paths.push({
           path: `/${page}/${entry.id}`,
@@ -57,7 +63,8 @@ export const getServerSideProps = async ({ res }: { res: NextApiResponse }): Pro
     }
 
     const translatedPaths = [];
-    for (const lang of ['', '/fi', '/sv']) {
+
+    for (const lang of LOCALE_PATHS) {
       for (const path of paths) {
         translatedPaths.push({
           ...path,
@@ -72,11 +79,10 @@ export const getServerSideProps = async ({ res }: { res: NextApiResponse }): Pro
   } catch {
     res.statusCode = 500;
   }
+
   res.end();
 
   return {
     props: {},
   };
 };
-
-export default SitemapXml;

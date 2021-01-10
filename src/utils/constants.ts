@@ -32,6 +32,11 @@ export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
 export const DATE_PICKER_FORMAT = 'DD/MM/YYYY';
 
+// The trailing slash in /account/ means to disallow all subpages.
+export const DISALLOWED_PATHS = ['/404', '/logout', '/account/'];
+export const DYNAMIC_PATHS = ['courses', 'resources', 'schools', 'users'];
+export const LOCALE_PATHS = ['', '/fi', '/sv'];
+
 export const IMAGE_TYPES = [
   'image/apng',
   'image/bmp',
