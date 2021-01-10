@@ -46,20 +46,12 @@ export const IMAGE_TYPES = [
 
 export const PITCH_ITEMS = [
   {
-    header: 'get-started:materialsPitchHeader',
-    bullets: [
-      'get-started:materialsBullet1',
-      'get-started:materialsBullet2',
-      'get-started:materialsBullet3',
-    ],
+    header: 'index:materialsPitchHeader',
+    bullets: ['index:materialsBullet1', 'index:materialsBullet2', 'index:materialsBullet3'],
   },
   {
-    header: 'get-started:discussionPitchHeader',
-    bullets: [
-      'get-started:discussionBullet1',
-      'get-started:discussionBullet2',
-      'get-started:discussionBullet3',
-    ],
+    header: 'index:discussionPitchHeader',
+    bullets: ['index:discussionBullet1', 'index:discussionBullet2', 'index:discussionBullet3'],
   },
 ];
 

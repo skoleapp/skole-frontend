@@ -208,7 +208,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderGetStartedButton = (
-    <ButtonLink href={urls.getStarted} color="secondary" endIcon={<LaunchOutlined />}>
+    <ButtonLink href={urls.index} color="secondary" endIcon={<LaunchOutlined />}>
       {t('common:getStarted')}
     </ButtonLink>
   );
