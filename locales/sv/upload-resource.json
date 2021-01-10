@@ -5,7 +5,7 @@
   "loginRequiredText": "Du måste logga in för att ladda upp material.",
   "loginRequiredTextSecondary": "PS. Om du har mycket material eller vill ladda upp dem utan att logga in kan du",
   "fileUploadingText": "Laddar upp fil...",
-  "fileHelpText": "Du kan välja vilket vanligt filformat som helst så konverterar vi det automatiskt till ett PDF-format åt dig. Högsta filstorlek för icke-bilder är {{ maxFileSize }} MB. Se till att materialet överensstämmer med vårt",
+  "fileHelpText": "Du kan välja vilket vanligt filformat som helst så konverterar vi det automatiskt till ett PDF-format åt dig. Högsta filstorlek för icke-bilder är {{ maxFileSize }} MB.",
   "fileSelected": "{{ fileName }} vald",
   "uploadFileButtonText": "Ladda upp fil",
   "dropZoneText": "Dra och släpp en fil här eller klicka för att välja en fil.",

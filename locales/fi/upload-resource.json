@@ -5,7 +5,7 @@
   "loginRequiredText": "Sinun pitää kirjautua sisään lisätäksesi materiaalia.",
   "loginRequiredTextSecondary": "PS. Jos sinulla on paljon materiaaleja, tai haluat lisätä ne kirjautumatta sisään, voit",
   "fileUploadingText": "Lähetetään tiedostoa...",
-  "fileHelpText": "Voit valita minkä tahansa yleisen tiedostomuodon, ja me muunnamme sen automaattisesti PDF-muotoon puolestasi. Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Varmista, että tiedosto noudattaa",
+  "fileHelpText": "Voit valita minkä tahansa yleisen tiedostomuodon, ja me muunnamme sen automaattisesti PDF-muotoon puolestasi. Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt.",
   "fileSelected": "{{ fileName }} valittu",
   "uploadFileButtonText": "Lisää tiedosto",
   "dropZoneText": "Raahaa tiedosto tähän, tai klikkaa valitaksesi tiedosto.",
