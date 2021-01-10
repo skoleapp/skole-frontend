@@ -3,7 +3,7 @@ import {
   AutocompleteField,
   AvatarField,
   FormSubmitSection,
-  NotFoundTemplate,
+  LoginRequiredTemplate,
   SettingsTemplate,
   TextFormField,
   TextLink,
@@ -19,7 +19,7 @@ import {
   UserObjectType,
   useUpdateUserMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -245,11 +245,11 @@ const EditProfilePage: NextPage = () => {
     },
   };
 
-  if (userMe) {
-    return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
   }
 
-  return <NotFoundTemplate />;
+  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
@@ -258,4 +258,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(EditProfilePage);
+export default withUserMe(EditProfilePage);

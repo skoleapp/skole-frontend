@@ -36,3 +36,8 @@ export interface MainTemplateProps extends GridProps {
   hideBottomNavbar?: boolean; // Hide bottom navbar.
   hideFooter?: boolean; // Hide footer.
 }
+
+export interface FormTemplateProps extends Omit<MainTemplateProps, 'topNavbarProps'> {
+  topNavbarProps: Omit<TopNavbarProps, 'header'>;
+  header: string;
+}

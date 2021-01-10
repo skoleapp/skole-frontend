@@ -1,3 +1,4 @@
+import { FormControl, FormHelperText } from '@material-ui/core';
 import {
   AutocompleteField,
   ErrorTemplate,
@@ -6,8 +7,10 @@ import {
   OfflineTemplate,
   TextFormField,
   ContactLink,
+  LoginRequiredTemplate,
+  GuidelinesLink,
 } from 'components';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteSchoolsDocument,
@@ -18,7 +21,7 @@ import {
   useCreateCourseAutocompleteDataQuery,
   useCreateCourseMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -39,6 +42,7 @@ interface CreateCourseFormValues {
 const AddCoursePage: NextPage = () => {
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
+  const { userMe } = useAuthContext();
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school'], query);
@@ -156,6 +160,14 @@ const AddCoursePage: NextPage = () => {
     />
   );
 
+  const renderGuidelinesLink = (
+    <FormControl>
+      <FormHelperText>
+        {t('add-course:guidelinesInfo')} <GuidelinesLink />.
+      </FormHelperText>
+    </FormControl>
+  );
+
   const renderFormSubmitSection = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
   );
@@ -168,8 +180,9 @@ const AddCoursePage: NextPage = () => {
       {renderCourseCodeField}
       {renderSchoolField}
       {renderSubjectsField}
-      {renderContactUsLink}
+      {renderGuidelinesLink}
       {renderFormSubmitSection(props)}
+      {renderContactUsLink}
     </Form>
   );
 
@@ -198,8 +211,13 @@ const AddCoursePage: NextPage = () => {
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
+
   if (error) {
     return <ErrorTemplate />;
+  }
+
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} text={t('add-course:loginRequiredText')} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
@@ -211,4 +229,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(AddCoursePage);
+export default withUserMe(AddCoursePage);

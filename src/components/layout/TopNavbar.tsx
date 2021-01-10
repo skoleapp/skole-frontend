@@ -80,7 +80,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const dense = !!headerLeft || !!headerRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
@@ -106,6 +106,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderStaticBackButton = !!staticBackUrl && <BackButton href={staticBackUrl} />;
   const renderHeader = <Typography variant="h5">{header}</Typography>;
   const renderLogo = !hideLogo && <Logo />;
+  const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
   const renderMobileContent = isMobile && (
     <Grid container alignItems="center">
@@ -117,7 +118,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {header ? renderHeader : renderLogo}
       </Grid>
       <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
-        {headerRight}
+        {headerRight || renderLanguageButton}
         {headerRightSecondary}
       </Grid>
     </Grid>
@@ -170,8 +171,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
-  const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
-
   // ClickAway listener requires a single child element.
   const renderAuthenticatedButtons = !!userMe && !hideAuthButtons && (
     <>
@@ -196,19 +195,31 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 
+  const renderLoginButton = isDesktop && (
+    <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
+      {t('common:login')}
+    </ButtonLink>
+  );
+
+  const renderRegisterButton = isDesktop && (
+    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
+      {t('common:register')}
+    </ButtonLink>
+  );
+
+  const renderGetStartedButton = (
+    <ButtonLink href={urls.getStarted} color="secondary" endIcon={<LaunchOutlined />}>
+      {t('common:getStarted')}
+    </ButtonLink>
+  );
+
   // Allow disabling auth buttons manually.
   // Also disable them automatically in case of a network error when authenticating/fetching user.
   const renderUnAuthenticatedButtons = !hideAuthButtons && !authNetworkError && (
     <>
-      <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
-        {t('common:login')}
-      </ButtonLink>
-      <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
-        {t('common:register')}
-      </ButtonLink>
-      <ButtonLink href={urls.getStarted} color="secondary" endIcon={<LaunchOutlined />}>
-        {t('common:getStarted')}
-      </ButtonLink>
+      {renderLoginButton}
+      {renderRegisterButton}
+      {renderGetStartedButton}
     </>
   );
 

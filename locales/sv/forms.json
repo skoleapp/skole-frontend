@@ -39,6 +39,6 @@
   "schoolHelpText": "Din föredragna skola som vi använder för att automatiskt visa innehåll baserat på det.",
   "subjectHelpText": "Ditt föredragna ämne som vi använder för att automatiskt visa innehåll baserat på det.",
   "createComment": "Lägg till kommentar",
-  "contactLinkText": "Hittar du inte skolan eller ämnet du letar efter?",
-  "contactLinkLink": "Kontakta oss så lägger vi till dem!"
+  "contactLinkText": "PS. Om du inte hittar skolan eller ämnet du letar efter, du kan",
+  "contactLinkLink": "kontakta oss så lägger vi till dem för dig!"
 }

@@ -1,7 +1,9 @@
 {
-  "title": "Lisää resurssi",
-  "description": "Lataa uusi resurssi Skoleen.",
-  "header": "Lisää resurssi",
+  "title": "Lisää materiaalia",
+  "description": "Lisää uutta materiaalia Skoleen.",
+  "header": "Lisää materiaalia",
+  "loginRequiredText": "Sinun pitää kirjautua sisään lisätäksesi materiaalia.",
+  "loginRequiredTextSecondary": "PS. Jos sinulla on paljon materiaaleja, tai haluat lisätä ne kirjautumatta sisään, voit",
   "fileUploadingText": "Lähetetään tiedostoa...",
   "fileHelpText": "Voit valita minkä tahansa yleisen tiedostomuodon, ja me muunnamme sen automaattisesti PDF-muotoon puolestasi. Muiden kuin kuvien tiedostokoko on enintään {{ maxFileSize }} Mt. Varmista, että tiedosto noudattaa",
   "fileSelected": "{{ fileName }} valittu",
@@ -14,8 +16,16 @@
   "resourceTitleHelperText": "Kuvaava nimi resurssille.",
   "resourceTypeHelperText": "Resurssin tyyppi, esim. tentti.",
   "dateHelperText": "Päivämäärä, jolloin materiaali on luotu.",
-  "contactText": "Onko sinulla paljon materiaalia? Jos et halua nähdä vaivaa itse, voit",
+  "contactText": "PS. Onko sinulla paljon materiaalia? Jos et halua nähdä vaivaa itse, voit",
   "contactLink": "antaa meidän lisätä materiaalit puolestasi!",
   "contactDialogHeader": "Lähetä ne meille!",
-  "contactDialogText": "Voit lähettää materiaalisi meille osoitteeseen contact@skoleapp.com samasta sähköpostiosoitteesta, joka on yhdistetty tiliisi. Materiaalit kreditoidaan aina sinulle. Varmista, että kaikki materiaalisi noudattavat"
+  "contactDialogEmailText": "Voit lähettää materiaalisi meille osoitteeseen",
+  "contactDialogCreditText": "Jos haluat, että materiaalit kreditoidaan sinulle,",
+  "loginRequiredContactDialogCreditText": "Mikäli sinulla on tili ja haluat, että materiaalit kreditoidaan sinulle,",
+  "contactDialogAccountText": "anna meille käyttäjätunnus ja sähköpostiosoite, jotka ovat yhdistetty tiliisi.",
+  "contactDialogFormatText": "Voit lähettää materiaalit liitteenä tai latauslinkkinä.",
+  "guidelinesInfo": "Varmistathan, että materiaalisi noudattavat",
+  "materialEmailSubject": "Skole materiaalit",
+  "materialEmailInfo": "Kreditoimme kaikki materiaalit alla olevalle tilillesi.",
+  "loginRequiredMaterialEmailInfo": "Mikäli sinulla on tili ja haluat, että materiaalit kreditoidaan sinulle, lisää tilisi käyttäjätunnus ja sähköpostiosoite alle."
 }

@@ -1,9 +1,14 @@
 import { FormControl } from '@material-ui/core';
-import { ButtonLink, FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
-import { useNotificationsContext, useConfirmContext } from 'context';
+import {
+  ButtonLink,
+  FormSubmitSection,
+  LoginRequiredTemplate,
+  SettingsTemplate,
+  TextFormField,
+} from 'components';
+import { useNotificationsContext, useConfirmContext, useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
-import { withAuth } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -31,6 +36,7 @@ export const DeleteAccountPage: NextPage = () => {
 
   const { t } = useTranslation();
   const { confirm } = useConfirmContext();
+  const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 
@@ -125,6 +131,10 @@ export const DeleteAccountPage: NextPage = () => {
     },
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
@@ -134,4 +144,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(DeleteAccountPage);
+export default withUserMe(DeleteAccountPage);

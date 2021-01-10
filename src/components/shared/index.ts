@@ -5,6 +5,7 @@ export { MarkdownContent } from './MarkdownContent';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { DialogHeader } from './DialogHeader';
 export { ExternalLink } from './ExternalLink';
+export { GuidelinesLink } from './GuidelinesLink';
 export { IconButtonLink } from './IconButtonLink';
 export { InfoDialogContent } from './InfoDialogContent';
 export { LanguageButton } from './LanguageButton';

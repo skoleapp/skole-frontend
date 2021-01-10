@@ -1,12 +1,4 @@
-import {
-  Button,
-  Collapse,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  FormControl,
-  FormHelperText,
-} from '@material-ui/core';
+import { Collapse, FormControl, FormHelperText } from '@material-ui/core';
 import {
   AutocompleteField,
   ErrorTemplate,
@@ -16,11 +8,10 @@ import {
   OfflineTemplate,
   TextFormField,
   TextLink,
-  SkoleDialog,
   DatePickerFormField,
-  DialogHeader,
+  LoginRequiredTemplate,
 } from 'components';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
 import dayjs from 'dayjs';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -33,13 +24,15 @@ import {
   useCreateResourceAutocompleteDataQuery,
   useCreateResourceMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext, useOpen } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
+import { ContactDialog } from 'src/components/shared/ContactDialog';
+import { GuidelinesLink } from 'src/components/shared/GuidelinesLink';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -58,6 +51,12 @@ const UploadResourcePage: NextPage = () => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school', 'course'], query);
+  const { userMe, username, email } = useAuthContext();
+
+  const contactDialogProps = useOpen();
+  const contactDialogEmailText = t('upload-resource:contactDialogEmailText');
+  const contactDialogFormatText = t('upload-resource:contactDialogFormatText');
+  const guidelinesInfo = t('upload-resource:guidelinesInfo');
 
   const {
     formRef,
@@ -78,12 +77,6 @@ const UploadResourcePage: NextPage = () => {
     formRef.current?.setFieldValue('school', school);
     formRef.current?.setFieldValue('course', course);
   }, [school, course]);
-
-  const {
-    open: contactDialogOpen,
-    handleClose: handleCloseContactDialog,
-    handleOpen: handleOpenContactDialog,
-  } = useOpen();
 
   const validationSchema = Yup.object().shape({
     resourceTitle: Yup.string().required(t('validation:required')),
@@ -235,13 +228,15 @@ const UploadResourcePage: NextPage = () => {
   );
 
   const renderContactLink = (
+    <TextLink onClick={contactDialogProps.handleOpen} href="#">
+      {t('upload-resource:contactLink')}
+    </TextLink>
+  );
+
+  const renderContactHelperText = (
     <FormControl>
       <FormHelperText>
-        {t('upload-resource:contactText')}{' '}
-        <TextLink onClick={handleOpenContactDialog} href="#">
-          {t('upload-resource:contactLink')}
-        </TextLink>{' '}
-        💪
+        {t('upload-resource:contactText')} {renderContactLink} 🤝
       </FormHelperText>
     </FormControl>
   );
@@ -255,7 +250,7 @@ const UploadResourcePage: NextPage = () => {
       {renderCourseField(props)}
       {renderFileField}
       {renderFormSubmitSection(props)}
-      {renderContactLink}
+      {renderContactHelperText}
     </Form>
   );
 
@@ -270,26 +265,70 @@ const UploadResourcePage: NextPage = () => {
     </Formik>
   );
 
+  const { EMAIL_ADDRESS } = process.env;
+
+  const authenticatedEmailBody = `
+${t('upload-resource:materialEmailInfo')}
+${t('common:username')}: ${username}
+${t('common:email')}: ${email}`;
+
+  const anonymousEmailBody = `
+${t('upload-resource:loginRequiredMaterialEmailInfo')}
+${t('common:username')}: ${t('common:usernamePlaceholder')}
+${t('common:email')}: ${t('common:emailPlaceholder')}`;
+
+  const emailBody = userMe ? authenticatedEmailBody : anonymousEmailBody;
+
+  const emailHref = `mailto:${EMAIL_ADDRESS}?subject=${t(
+    'upload-resource:materialEmailSubject',
+  )}&body=${encodeURIComponent(emailBody)}`;
+
+  const renderEmailLink = <TextLink href={emailHref}>{EMAIL_ADDRESS}</TextLink>;
+  const renderGuidelinesLink = <GuidelinesLink />;
+
+  const renderCommonDialogEmailText = (
+    <>
+      {contactDialogEmailText} {renderEmailLink}.
+    </>
+  );
+
+  const renderCommonMiscDialogText = (
+    <>
+      {contactDialogFormatText} {guidelinesInfo} {renderGuidelinesLink}.
+    </>
+  );
+
+  const renderContactDialogText = (
+    <>
+      {renderCommonDialogEmailText} {t('upload-resource:contactDialogCreditText')}{' '}
+      {t('upload-resource:contactDialogAccountText')} {renderCommonMiscDialogText}
+    </>
+  );
+
+  const renderLoginRequiredContactDialogText = (
+    <>
+      {renderCommonDialogEmailText} {t('upload-resource:loginRequiredContactDialogCreditText')}{' '}
+      {t('upload-resource:contactDialogAccountText')} {renderCommonMiscDialogText}
+    </>
+  );
+
+  const commonContactDialogProps = {
+    ...contactDialogProps,
+    header: `${t('upload-resource:contactDialogHeader')} 💪`,
+  };
+
   const renderContactDialog = (
-    <SkoleDialog open={contactDialogOpen} fullScreen={false}>
-      <DialogHeader
-        onCancel={handleCloseContactDialog}
-        text={t('upload-resource:contactDialogHeader')}
-      />
-      <DialogContent>
-        <DialogContentText>
-          {t('upload-resource:contactDialogText')}{' '}
-          <TextLink href={urls.guidelines} target="_blank">
-            {t('common:guidelines')}.
-          </TextLink>
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button color="primary" onClick={handleCloseContactDialog} fullWidth>
-          {t('common:gotIt')}
-        </Button>
-      </DialogActions>
-    </SkoleDialog>
+    <ContactDialog {...commonContactDialogProps} text={renderContactDialogText} />
+  );
+
+  const renderLoginRequiredContactDialog = (
+    <ContactDialog {...commonContactDialogProps} text={renderLoginRequiredContactDialogText} />
+  );
+
+  const renderLoginRequiredSecondaryText = (
+    <>
+      {t('upload-resource:loginRequiredTextSecondary')} {renderContactLink} 🤝
+    </>
   );
 
   const layoutProps = {
@@ -311,6 +350,18 @@ const UploadResourcePage: NextPage = () => {
     return <ErrorTemplate />;
   }
 
+  if (!userMe) {
+    return (
+      <LoginRequiredTemplate
+        {...layoutProps}
+        text={t('upload-resource:loginRequiredText')}
+        textSecondary={renderLoginRequiredSecondaryText}
+      >
+        {renderLoginRequiredContactDialog}
+      </LoginRequiredTemplate>
+    );
+  }
+
   return (
     <FormTemplate {...layoutProps}>
       {renderForm}
@@ -325,4 +376,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(UploadResourcePage);
+export default withUserMe(UploadResourcePage);

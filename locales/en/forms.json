@@ -39,6 +39,6 @@
   "schoolHelpText": "Your preferred school. With this information we can automatically show you content based on it. This field is only visible for you.",
   "subjectHelpText": "Your preferred subject. With this information we can automatically show you content based on it. This field is only visible for you.",
   "createComment": "Add Comment",
-  "contactLinkText": "Cannot find the school or subject you're looking for?",
-  "contactLinkLink": "Contact us and we'll add them!"
+  "contactLinkText": "PS. If you can't find the school or subject you're looking for, you can",
+  "contactLinkLink": "contact us and we'll add them for you!"
 }

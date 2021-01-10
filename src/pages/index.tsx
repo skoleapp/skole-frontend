@@ -7,6 +7,7 @@ import {
   CardActions,
   CardContent,
   Grid,
+  IconButton,
   InputBase,
   makeStyles,
   Typography,
@@ -189,6 +190,9 @@ const IndexPage: NextPage = () => {
       href: urls.addCourse,
     },
   ];
+
+  // eslint-disable-next-line jsx-a11y/accessible-emoji
+  const renderLaunchIcon = !userMe && <IconButton size="small">🚀</IconButton>;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
@@ -410,6 +414,9 @@ const IndexPage: NextPage = () => {
     seoProps: {
       title: t('index:title'),
       description: t('marketing:description'),
+    },
+    topNavbarProps: {
+      headerLeft: renderLaunchIcon,
     },
     hideBottomNavbar: false,
     disableHeader: true,

@@ -13,19 +13,20 @@ import {
   BackButton,
   ErrorTemplate,
   LoadingBox,
+  LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
   OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
 } from 'components';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
 import {
   GraphQlMarkAllActivitiesAsReadMutation,
   useActivitiesQuery,
   useGraphQlMarkAllActivitiesAsReadMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useActionsDialog, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -67,6 +68,7 @@ const ActivityPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
+  const { userMe } = useAuthContext();
   const { query } = useRouter();
   const { isTabletOrDesktop } = useMediaQueries();
   const variables = R.pick(['page', 'pageSize'], query);
@@ -213,6 +215,10 @@ const ActivityPage: NextPage = () => {
     return <ErrorTemplate />;
   }
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   return (
     <MainTemplate {...layoutProps}>
       {renderContent}
@@ -227,4 +233,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(ActivityPage);
+export default withUserMe(ActivityPage);

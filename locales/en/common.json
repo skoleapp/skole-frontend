@@ -53,7 +53,7 @@
   "continue": "Continue",
   "activity": "Activity",
   "seeAll": "View All",
-  "skip": "Skip",
+  "setupLater": "Set Up Later",
   "loading": "Loading...",
   "home": "Home",
   "search": "Search",
@@ -73,5 +73,12 @@
   "company": "Company",
   "guidelines": "Guidelines",
   "values": "Values",
-  "gotIt": "Got it!"
+  "gotIt": "Got it!",
+  "usernamePlaceholder": "<your_username>",
+  "emailPlaceholder": "<your_email>",
+  "guidelinesLink": "Guidelines",
+  "loginRequiredHeader": "Login Required",
+  "loginRequiredText": "You need to log in to continue.",
+  "logoutRequiredHeader": "Logout Required",
+  "logoutRequiredText": "You need to log out to continue."
 }

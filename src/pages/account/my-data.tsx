@@ -1,10 +1,10 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, FormSubmitSection, SettingsTemplate } from 'components';
-import { useNotificationsContext } from 'context';
+import { ButtonLink, FormSubmitSection, LoginRequiredTemplate, SettingsTemplate } from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { useGraphQlMyDataMutation, GraphQlMyDataMutation } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -20,6 +20,7 @@ const MyDataPage: NextPage = () => {
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
+  const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
 
   const onCompleted = async ({ myData }: GraphQlMyDataMutation): Promise<void> => {
@@ -106,6 +107,10 @@ const MyDataPage: NextPage = () => {
     },
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   return (
     <SettingsTemplate {...layoutProps}>
       {renderForm}
@@ -120,4 +125,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(MyDataPage);
+export default withUserMe(MyDataPage);

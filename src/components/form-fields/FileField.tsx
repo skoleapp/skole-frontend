@@ -119,9 +119,9 @@ export const FileField: React.FC<Props> = ({ form: { setFieldValue }, field: { n
 
   const renderFormHelperText = (
     <FormHelperText>
-      {t('upload-resource:fileHelpText', { maxFileSize })}{' '}
+      {t('upload-resource:fileHelpText', { maxFileSize })} {t('upload-resource:guidelinesInfo')}{' '}
       <TextLink href={urls.guidelines} target="_blank">
-        {t('common:guidelines')}
+        {t('common:guidelinesLink')}
       </TextLink>
       .
     </FormHelperText>

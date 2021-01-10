@@ -1,7 +1,9 @@
 {
-  "title": "Ladda Upp Resurs",
-  "description": "Ladda upp ny resurs på Skole.",
-  "header": "Ladda Upp Resurs",
+  "title": "Ladda upp material",
+  "description": "Ladda upp ny material på Skole.",
+  "header": "Ladda upp material",
+  "loginRequiredText": "Du måste logga in för att ladda upp material.",
+  "loginRequiredTextSecondary": "PS. Om du har mycket material eller vill ladda upp dem utan att logga in kan du",
   "fileUploadingText": "Laddar upp fil...",
   "fileHelpText": "Du kan välja vilket vanligt filformat som helst så konverterar vi det automatiskt till ett PDF-format åt dig. Högsta filstorlek för icke-bilder är {{ maxFileSize }} MB. Se till att materialet överensstämmer med vårt",
   "fileSelected": "{{ fileName }} vald",
@@ -14,8 +16,16 @@
   "resourceTitleHelperText": "Ett beskrivande namn för resursen.",
   "resourceTypeHelperText": "Typen av resurs, t.ex. en tenta.",
   "dateHelperText": "Datumet då detta material skapades.",
-  "contactText": "Har du mycket material? Om du inte vill gå igenom besväret kan du",
+  "contactText": "PS. Har du mycket material? Om du inte vill gå igenom besväret kan du",
   "contactLink": "låt oss ladda upp ditt material åt dig!",
   "contactDialogHeader": "Skicka dem till oss!",
-  "contactDialogText": "Du kan skicka ditt material till oss på contact@skoleapp.com från den e-postadress som är kopplad till ditt konto. Uppladdningarna krediteras dig alltid. Se till att allt ditt material överensstämmer med vårt"
+  "contactDialogEmailText": "Du kan skicka ditt material till oss på",
+  "contactDialogCreditText": "Om du vill få kredit för ditt material,",
+  "loginRequiredContactDialogCreditText": "Om du har ett konto och vill bli krediterad för ditt material,",
+  "contactDialogAccountText": "ge oss ditt användarnamn och e-postmeddelande som är kopplat till ditt konto.",
+  "contactDialogFormatText": "Du kan skicka materialet som en bilaga eller som en nedladdningslänk.",
+  "guidelinesInfo": "Se till att allt ditt material överensstämmer med vårt",
+  "materialEmailSubject": "Skole materialer",
+  "materialEmailInfo": "Vi krediterar allt material till ditt konto nedan.",
+  "loginRequiredMaterialEmailInfo": "Om du har ett konto och vill få kredit för ditt material, fyll i ditt användarnamn och e-postmeddelande som är kopplat till ditt konto nedan."
 }

@@ -15,8 +15,8 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { GET_STARTED_PAGE_VISITED_KEY, PITCH_ITEMS, urls } from 'utils';
+import React from 'react';
+import { PITCH_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -112,10 +112,6 @@ const GetStartedPage: NextPage = () => {
     pathname: query.next ? String(query.next) : urls.home,
     query,
   };
-
-  useEffect(() => {
-    localStorage.setItem(GET_STARTED_PAGE_VISITED_KEY, new Date().toString());
-  }, []);
 
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">

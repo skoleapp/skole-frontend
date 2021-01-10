@@ -12,12 +12,13 @@ import {
   PasswordField,
   TextFormField,
   TextLink,
-  LanguageButton,
+  ButtonLink,
+  LogoutRequiredTemplate,
 } from 'components';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
 import { LoginMutation, useLoginMutation } from 'generated';
-import { withNoAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -50,6 +51,7 @@ interface LoginFormValues {
 
 const LoginPage: NextPage = () => {
   const classes = useStyles();
+  const { userMe } = useAuthContext();
   const { t } = useTranslation();
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
@@ -125,10 +127,8 @@ const LoginPage: NextPage = () => {
   const handleLoginWithDifferentCredentials = (): void => {
     localStorage.removeItem('user');
     setExistingUser(null);
-    resetForm();
+    formRef.current?.resetForm();
   };
-
-  const renderLanguageButton = <LanguageButton />;
 
   const renderExistingUserGreeting = (
     <Grid container alignItems="center" direction="column">
@@ -151,9 +151,11 @@ const LoginPage: NextPage = () => {
     <FormSubmitSection submitButtonText={t('common:login')} {...props} />
   );
 
-  const renderRegisterLink = (
+  const renderRegisterButton = (
     <FormControl className={classes.link}>
-      <TextLink href={urls.register}>{t('common:register')}</TextLink>
+      <ButtonLink href={urls.register} variant="outlined" color="primary">
+        {t('common:register')}
+      </ButtonLink>
     </FormControl>
   );
 
@@ -187,7 +189,7 @@ const LoginPage: NextPage = () => {
       {renderUsernameOrEmailField}
       {renderPasswordField(props)}
       {renderFormSubmitSection(props)}
-      {renderRegisterLink}
+      {renderRegisterButton}
       {renderForgotPasswordLink}
     </Form>
   );
@@ -212,11 +214,14 @@ const LoginPage: NextPage = () => {
     hideBottomNavbar: true,
     topNavbarProps: {
       dynamicBackUrl: true,
-      headerRight: renderLanguageButton,
       hideAuthButtons: true,
       hideSearch: true,
     },
   };
+
+  if (userMe) {
+    return <LogoutRequiredTemplate {...layoutProps} />;
+  }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
@@ -227,4 +232,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withNoAuth(LoginPage);
+export default withUserMe(LoginPage);
