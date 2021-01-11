@@ -335,6 +335,20 @@ export const theme = createMuiTheme({
             transform: 'none',
           },
         },
+        '.MuiPickersModal-dialogRoot': {
+          borderRadius: BORDER_RADIUS,
+        },
+        '.MuiPickersToolbarButton-toolbarBtn': {
+          borderRadius: 0,
+        },
+        '.MuiPickersCalendarHeader-switchHeader': {
+          margin: 0,
+          padding: spacing(4),
+        },
+        '.MuiPickersToolbar-toolbar': {
+          padding: `${spacing(4)} !important`,
+          position: 'static !important' as 'static',
+        },
       },
     },
   },

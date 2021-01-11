@@ -10,13 +10,12 @@ import {
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
   ActivityTableBody,
-  BackButton,
+  DynamicBackButton,
   ErrorTemplate,
   LoadingBox,
   LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
-  OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
 } from 'components';
@@ -30,7 +29,7 @@ import { withUserMe } from 'hocs';
 import { useActionsDialog, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
@@ -77,6 +76,7 @@ const ActivityPage: NextPage = () => {
   const [activities, setActivities] = useState([]);
   const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
+  const header = t('activity:header');
 
   // Update state after data fetching is complete.
   useEffect(() => {
@@ -124,7 +124,7 @@ const ActivityPage: NextPage = () => {
     handleCloseActionsDialog(e);
   };
 
-  const renderBackButton = <BackButton onClick={() => Router.back()} />;
+  const renderBackButton = <DynamicBackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -133,7 +133,7 @@ const ActivityPage: NextPage = () => {
         avatar: classes.cardHeaderAvatar,
         action: classes.cardHeaderAction,
       }}
-      title={t('activity:header')}
+      title={header}
       avatar={renderBackButton}
       action={renderActionsButton}
     />
@@ -199,9 +199,9 @@ const ActivityPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('activity:title'),
-      description: t('activity:description'),
     },
     topNavbarProps: {
+      header,
       dynamicBackUrl: true,
       headerRight: renderActionsButton,
     },
@@ -212,11 +212,11 @@ const ActivityPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (

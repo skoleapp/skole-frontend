@@ -7,6 +7,6 @@
   "networkError": "Yhteysvirhe.",
   "fileSizeError": "Tiedosto on liian suuri!",
   "invalidDate": "Virheellinen päivämäärä!",
-  "minDate": "Päivämäärä on liian myöhään!",
-  "maxDate": "Päivämäärä on liian aikaisin!"
+  "minDate": "Päivämäärä on liian aikaisin!",
+  "maxDate": "Päivämäärä on liian myöhään!"
 }

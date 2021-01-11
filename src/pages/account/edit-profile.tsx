@@ -237,7 +237,6 @@ const EditProfilePage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('edit-profile:title'),
-      description: t('edit-profile:description'),
     },
     header: t('edit-profile:header'),
     topNavbarProps: {

@@ -5,7 +5,6 @@ import {
   FileField,
   FormTemplate,
   FormSubmitSection,
-  OfflineTemplate,
   TextFormField,
   TextLink,
   DatePickerFormField,
@@ -51,7 +50,7 @@ const UploadResourcePage: NextPage = () => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school', 'course'], query);
-  const { userMe, username, email } = useAuthContext();
+  const { userMe, username, email, school: _school } = useAuthContext();
 
   const contactDialogProps = useOpen();
   const contactDialogEmailText = t('upload-resource:contactDialogEmailText');
@@ -70,7 +69,8 @@ const UploadResourcePage: NextPage = () => {
     context,
   });
 
-  const school = R.propOr(null, 'school', data);
+  // Prefill user's own school, if one exists and no other school is provided as a query parameter.
+  const school = R.propOr(_school, 'school', data);
   const course = R.propOr(null, 'course', data);
 
   useEffect(() => {
@@ -355,11 +355,11 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (

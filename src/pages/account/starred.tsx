@@ -4,7 +4,6 @@ import {
   LoadingBox,
   LoginRequiredTemplate,
   NotFoundBox,
-  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
   TabTemplate,
@@ -18,7 +17,6 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { urls } from 'utils';
 
 const StarredPage: NextPage = () => {
   const { t } = useTranslation();
@@ -26,8 +24,7 @@ const StarredPage: NextPage = () => {
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
-  const { userMe, userMeId } = useAuthContext();
-  const staticBackUrl = urls.user(userMeId);
+  const { userMe } = useAuthContext();
   const courses = R.pathOr([], ['starredCourses', 'objects'], data);
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
@@ -83,10 +80,9 @@ const StarredPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('starred:title'),
-      description: t('starred:description'),
     },
     topNavbarProps: {
-      staticBackUrl,
+      dynamicBackUrl: true,
       header,
     },
     cardHeader: header,
@@ -101,11 +97,11 @@ const StarredPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return <TabTemplate {...layoutProps} />;

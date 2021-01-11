@@ -1,10 +1,9 @@
 import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { FormTemplateProps } from 'types';
-import { BackButton } from '../shared';
+import { DynamicBackButton } from '../shared';
 
 import { MainTemplate } from './MainTemplate';
 
@@ -34,11 +33,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const router = useRouter();
   const { isTabletOrDesktop } = useMediaQueries();
-  const dynamicBackUrl = topNavbarProps?.dynamicBackUrl;
-  const staticBackUrl = topNavbarProps?.staticBackUrl;
-  const handleBackButtonClick = () => (staticBackUrl ? router.push(staticBackUrl) : router.back());
 
   const layoutProps = {
     ...props,
@@ -48,9 +43,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
     },
   };
 
-  const renderBackButton = (!!dynamicBackUrl || !!staticBackUrl) && (
-    <BackButton onClick={handleBackButtonClick} />
-  );
+  const renderDynamicBackButton = !!topNavbarProps?.dynamicBackUrl && <DynamicBackButton />;
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
@@ -59,7 +52,7 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
         avatar: classes.cardHeaderAvatar,
       }}
       title={header}
-      avatar={renderBackButton}
+      avatar={renderDynamicBackButton}
     />
   );
 

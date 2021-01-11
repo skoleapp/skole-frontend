@@ -115,7 +115,6 @@ const ChangePasswordPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('change-password:title'),
-      description: t('change-password:description'),
     },
     header: t('change-password:header'),
     topNavbarProps: {

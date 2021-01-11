@@ -28,12 +28,11 @@ import {
   MainTemplate,
   NativeSelectField,
   NotFoundBox,
-  OfflineTemplate,
   PaginatedTable,
   ContactLink,
   SkoleDialog,
   TextFormField,
-  BackButton,
+  DynamicBackButton,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -507,7 +506,7 @@ const SearchPage: NextPage = () => {
     </Paper>
   );
 
-  const renderBackButton = <BackButton onClick={() => Router.back()} />;
+  const renderBackButton = <DynamicBackButton />;
 
   const renderFilterResultsHeader = (
     <CardHeader
@@ -585,11 +584,11 @@ const SearchPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (

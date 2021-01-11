@@ -4,7 +4,7 @@ export const urls = {
   deleteAccount: '/account/delete-account',
   myData: '/account/my-data',
   editProfile: '/account/edit-profile',
-  resetPassword: '/account/reset-password',
+  resetPassword: '/reset-password',
   starred: '/account/starred',
   verifyAccount: '/account/verify-account',
   course: (id: string): string => `/courses/${id}`,

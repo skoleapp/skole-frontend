@@ -4,7 +4,6 @@ import {
   ErrorTemplate,
   FormTemplate,
   FormSubmitSection,
-  OfflineTemplate,
   TextFormField,
   ContactLink,
   LoginRequiredTemplate,
@@ -42,7 +41,7 @@ interface CreateCourseFormValues {
 const AddCoursePage: NextPage = () => {
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
-  const { userMe } = useAuthContext();
+  const { userMe, school: _school } = useAuthContext();
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school'], query);
@@ -59,7 +58,8 @@ const AddCoursePage: NextPage = () => {
     setUnexpectedFormError,
   } = useForm<CreateCourseFormValues>();
 
-  const school = R.propOr(null, 'school', data);
+  // Prefill user's own school, if one exists and no other school is provided as a query parameter.
+  const school = R.propOr(_school, 'school', data);
 
   useEffect(() => {
     formRef.current?.setFieldValue('school', school);
@@ -213,11 +213,11 @@ const AddCoursePage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;

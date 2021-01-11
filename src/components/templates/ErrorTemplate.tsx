@@ -1,12 +1,13 @@
 import { CardHeader, makeStyles, Paper } from '@material-ui/core';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'theme';
 
-import { NotFoundBox } from '../shared';
+import { DynamicBackButton, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
     flexGrow: 1,
     display: 'flex',
@@ -16,18 +17,50 @@ const useStyles = makeStyles(({ breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
+  cardHeaderRoot: {
+    borderBottom: BORDER,
+    position: 'relative',
+    padding: spacing(3),
+  },
+  cardHeaderAvatar: {
+    position: 'absolute',
+    top: spacing(2),
+    left: spacing(2),
+  },
 }));
 
-export const ErrorTemplate: React.FC = () => {
+interface Props {
+  variant: 'error' | 'offline' | 'not-found';
+}
+
+export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { isTabletOrDesktop } = useMediaQueries();
+  const title = t(`${variant}:title`);
+  const header = t(`${variant}:header`);
+  const text = t(`${variant}:text`);
+
+  const renderBackButton = <DynamicBackButton />;
+  const renderContent = <NotFoundBox text={text} />;
+
+  const renderCardHeader = isTabletOrDesktop && (
+    <CardHeader
+      classes={{
+        root: classes.cardHeaderRoot,
+        avatar: classes.cardHeaderAvatar,
+      }}
+      title={header}
+      avatar={renderBackButton}
+    />
+  );
 
   const layoutProps = {
     seoProps: {
-      title: t('_error:title'),
-      description: t('_error:description'),
+      title,
     },
     topNavbarProps: {
+      header,
       dynamicBackUrl: true,
       hideSearch: true,
       hideAuthButtons: true,
@@ -39,8 +72,8 @@ export const ErrorTemplate: React.FC = () => {
   return (
     <MainTemplate {...layoutProps}>
       <Paper className={classes.root}>
-        <CardHeader title={t('_error:header')} />
-        <NotFoundBox text={t('_error:text')} />
+        {renderCardHeader}
+        {renderContent}
       </Paper>
     </MainTemplate>
   );

@@ -99,7 +99,6 @@ const MyDataPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('my-data:title'),
-      description: t('my-data:description'),
     },
     header: t('my-data:header'),
     topNavbarProps: {

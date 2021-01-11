@@ -6,7 +6,7 @@ import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { BORDER } from 'theme';
 import { urls } from 'utils';
-import { BackButton } from '../shared';
+import { StaticBackButton } from '../shared';
 
 import { DrawModeButton } from './DrawModeButton';
 import { DrawModeControls } from './DrawModeControls';
@@ -67,7 +67,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   );
 
   const renderBackButton = (
-    <BackButton
+    <StaticBackButton
       href={urls.course(courseId)}
       tooltip={t('resource-tooltips:backToCourse', { courseName })}
       className="MuiCardHeader-avatar"

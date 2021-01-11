@@ -7,8 +7,6 @@ import {
   InfoDialogContent,
   LoadingTemplate,
   NotFoundBox,
-  NotFoundTemplate,
-  OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
   ShareButton,
@@ -274,11 +272,11 @@ const SchoolDetailPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   if (school) {
@@ -289,7 +287,8 @@ const SchoolDetailPage: NextPage = () => {
       </TabTemplate>
     );
   }
-  return <NotFoundTemplate />;
+
+  return <ErrorTemplate variant="not-found" />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {

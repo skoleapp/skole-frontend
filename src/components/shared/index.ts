@@ -1,9 +1,9 @@
-export { BackButton } from './BackButton';
 export { ButtonLink } from './ButtonLink';
 export { ConfirmationDialog } from './ConfirmationDialog';
 export { MarkdownContent } from './MarkdownContent';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { DialogHeader } from './DialogHeader';
+export { DynamicBackButton } from './DynamicBackButton';
 export { ExternalLink } from './ExternalLink';
 export { GuidelinesLink } from './GuidelinesLink';
 export { IconButtonLink } from './IconButtonLink';
@@ -16,5 +16,6 @@ export { ResponsiveDialog } from './ResponsiveDialog';
 export { SettingsButton } from './SettingsButton';
 export { ShareButton } from './ShareButton';
 export { SkoleDialog } from './SkoleDialog';
+export { StaticBackButton } from './StaticBackButton';
 export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';

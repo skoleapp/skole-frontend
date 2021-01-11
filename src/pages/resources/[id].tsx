@@ -22,8 +22,6 @@ import {
   LoadingBox,
   LoadingTemplate,
   MainTemplate,
-  NotFoundTemplate,
-  OfflineTemplate,
   ResourceBottomToolbar,
   ResourceTopToolbar,
   ResponsiveDialog,
@@ -522,11 +520,11 @@ const ResourceDetailPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   if (resource) {
@@ -539,7 +537,8 @@ const ResourceDetailPage: NextPage = () => {
       </MainTemplate>
     );
   }
-  return <NotFoundTemplate />;
+
+  return <ErrorTemplate variant="not-found" />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => ({

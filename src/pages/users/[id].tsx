@@ -22,8 +22,6 @@ import {
   LoadingTemplate,
   MainTemplate,
   NotFoundBox,
-  NotFoundTemplate,
-  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
   SettingsButton,
@@ -527,11 +525,11 @@ const UserPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   if (user) {
@@ -543,7 +541,8 @@ const UserPage: NextPage = () => {
       </MainTemplate>
     );
   }
-  return <NotFoundTemplate />;
+
+  return <ErrorTemplate variant="not-found" />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
