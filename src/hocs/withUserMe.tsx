@@ -3,7 +3,7 @@ import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { urls } from 'utils';
+import { LS_LOGOUT_KEY, urls } from 'utils';
 import { withCommonContexts } from './withCommonContexts';
 
 // Fetch user from API and set context with the value.
@@ -12,14 +12,14 @@ export const withUserMe = (PageComponent: NextPage): NextPage => {
     const { authLoading, authNetworkError } = useUserMe();
 
     const syncLogout = (e: StorageEvent): false | Promise<boolean> =>
-      e.key === 'logout' && Router.push(urls.logout);
+      e.key === LS_LOGOUT_KEY && Router.push(urls.logout);
 
     useEffect(() => {
       window.addEventListener('storage', syncLogout);
 
       return (): void => {
         window.removeEventListener('storage', syncLogout);
-        localStorage.removeItem('logout');
+        localStorage.removeItem(LS_LOGOUT_KEY);
       };
     }, []);
 
