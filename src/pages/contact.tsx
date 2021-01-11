@@ -32,9 +32,8 @@ const ContactPage: NextPage = () => {
   const {
     formRef,
     onError,
-    resetForm,
     handleMutationErrors,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<ContactFormValues>();
 
   const validationSchema = Yup.object().shape({
@@ -49,13 +48,13 @@ const ContactPage: NextPage = () => {
       if (!!createContactMessage.errors && !!createContactMessage.errors.length) {
         handleMutationErrors(createContactMessage.errors);
       } else if (createContactMessage.successMessage) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(createContactMessage.successMessage);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -81,7 +80,7 @@ const ContactPage: NextPage = () => {
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form>
       <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
-      <Field name="name" component={TextFormField} label={t('forms:name')} />
+      <Field name="name" component={TextFormField} label={t('forms:nameOptional')} />
       <Field name="email" component={TextFormField} label={t('forms:email')} />
       <Field
         name="message"

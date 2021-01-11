@@ -4,7 +4,6 @@ import React from 'react';
 import Image from 'next/image';
 import { MainTemplateProps } from 'types';
 import { MainTemplate } from './MainTemplate';
-import { LanguageButton } from '../shared';
 import { MainBackground } from '../layout';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -55,7 +54,6 @@ export const LandingPageTemplate: React.FC<Props> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const renderBackground = <MainBackground />;
-  const renderLanguageButton = <LanguageButton />;
 
   const renderLogo = (
     <Box className={classes.logo}>
@@ -85,7 +83,6 @@ export const LandingPageTemplate: React.FC<Props> = ({
   const layoutProps = {
     topNavbarProps: {
       ...topNavbarProps,
-      headerRight: renderLanguageButton,
       hideSearch: true,
     },
     hideBottomNavbar: true,

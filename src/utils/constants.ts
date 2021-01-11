@@ -20,8 +20,6 @@ export const PDF_DEFAULT_TRANSLATION = { x: 0, y: 0 };
 export const PDF_DEFAULT_SCALE = 1.0;
 export const PDF_MIN_SCALE = 0.75;
 export const PDF_MAX_SCALE = 5;
-export const GET_STARTED_PAGE_VISITED_KEY = 'get-started-page-visited';
-export const ACCEPTED_RESOURCE_FILES = ['image/*', 'text/*', 'application/*'];
 export const ACCEPTED_ATTACHMENT_FILES = ['image/*'];
 export const ACCEPTED_AVATAR_FILES = ['image/*'];
 export const MAX_RESOURCE_FILE_SIZE = 10000000; // 10 MB.
@@ -32,6 +30,27 @@ export const MAX_COMMENT_ATTACHMENT_FILE_SIZE = 3500000; // 3.5 MB.
 export const MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT = 1200; // Pixels.
 export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
+export const DATE_PICKER_FORMAT = 'DD/MM/YYYY';
+
+// The trailing slash in /account/ means to disallow all subpages.
+export const DISALLOWED_PATHS = ['/404', '/logout', '/account/'];
+export const DYNAMIC_PATHS = ['courses', 'resources', 'schools', 'users'];
+export const LOCALE_PATHS = ['', '/fi', '/sv'];
+
+export const DEFAULT_NAMESPACES = [
+  'common',
+  'marketing',
+  '_error',
+  '404',
+  'languages',
+  'forms',
+  'validation',
+  'notifications',
+  'common-tooltips',
+  'activity',
+  'offline',
+  'sharing',
+];
 
 export const IMAGE_TYPES = [
   'image/apng',
@@ -47,39 +66,31 @@ export const IMAGE_TYPES = [
 
 export const PITCH_ITEMS = [
   {
-    header: 'get-started:materialsPitchHeader',
-    bullets: [
-      'get-started:materialsBullet1',
-      'get-started:materialsBullet2',
-      'get-started:materialsBullet3',
-    ],
+    header: 'index:materialsPitchHeader',
+    bullets: ['index:materialsBullet1', 'index:materialsBullet2', 'index:materialsBullet3'],
   },
   {
-    header: 'get-started:discussionPitchHeader',
-    bullets: [
-      'get-started:discussionBullet1',
-      'get-started:discussionBullet2',
-      'get-started:discussionBullet3',
-    ],
+    header: 'index:discussionPitchHeader',
+    bullets: ['index:discussionBullet1', 'index:discussionBullet2', 'index:discussionBullet3'],
   },
 ];
 
-export const FOR_EDUCATORS_PITCH_ITEMS = [
+export const FOR_TEACHERS_PITCH_ITEMS = [
   {
-    header: 'for-educators:studentsPitchHeader',
-    bullets: [
-      'for-educators:studentsBullet1',
-      'for-educators:studentsBullet2',
-      'for-educators:studentsBullet3',
-    ],
+    header: 'for-teachers:studentsPitchHeader',
+    bullets: ['for-teachers:studentsBullet1', 'for-teachers:studentsBullet2'],
   },
   {
-    header: 'for-educators:infoPitchHeader',
+    header: 'for-teachers:teachersPitchHeader',
+    bullets: ['for-teachers:teachersBullet1', 'for-teachers:teachersBullet2'],
+  },
+  {
+    header: 'for-teachers:infoPitchHeader',
     bullets: [
-      'for-educators:infoBullet1',
-      'for-educators:infoBullet2',
-      'for-educators:infoBullet3',
-      'for-educators:infoBullet4',
+      'for-teachers:infoBullet1',
+      'for-teachers:infoBullet2',
+      'for-teachers:infoBullet3',
+      'for-teachers:infoBullet4',
     ],
   },
 ];

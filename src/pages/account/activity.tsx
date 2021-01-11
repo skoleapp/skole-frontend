@@ -13,19 +13,20 @@ import {
   BackButton,
   ErrorTemplate,
   LoadingBox,
+  LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
   OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
 } from 'components';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
 import {
   GraphQlMarkAllActivitiesAsReadMutation,
   useActivitiesQuery,
   useGraphQlMarkAllActivitiesAsReadMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useActionsDialog, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -66,7 +67,8 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 const ActivityPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { unexpectedError } = useNotificationsContext();
+  const { toggleUnexpectedErrorNotification } = useNotificationsContext();
+  const { userMe } = useAuthContext();
   const { query } = useRouter();
   const { isTabletOrDesktop } = useMediaQueries();
   const variables = R.pick(['page', 'pageSize'], query);
@@ -96,7 +98,7 @@ const ActivityPage: NextPage = () => {
   }: GraphQlMarkAllActivitiesAsReadMutation): void => {
     if (markAllActivitiesAsRead) {
       if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       } else if (
         !!markAllActivitiesAsRead.activities &&
         !!markAllActivitiesAsRead.activities.objects
@@ -104,16 +106,16 @@ const ActivityPage: NextPage = () => {
         const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
         setActivities(newActivities);
       } else {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       }
     } else {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 
   const [markAllActivitiesAsRead] = useGraphQlMarkAllActivitiesAsReadMutation({
     onCompleted,
-    onError: unexpectedError,
+    onError: toggleUnexpectedErrorNotification,
     context,
   });
 
@@ -205,6 +207,10 @@ const ActivityPage: NextPage = () => {
     },
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
@@ -227,4 +233,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(ActivityPage);
+export default withUserMe(ActivityPage);

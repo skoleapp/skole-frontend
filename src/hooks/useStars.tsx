@@ -35,7 +35,7 @@ export const useStars = ({
   const [starred, setStarred] = useState(false);
   const color = starred ? 'primary' : 'default';
   const context = useLanguageHeaderContext();
-  const { unexpectedError: onError } = useNotificationsContext();
+  const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
 
   useEffect(() => {
     setStarred(initialStarred);

@@ -1,27 +1,13 @@
 import useTranslation from 'next-translate/useTranslation';
 import I18nProvider from 'next-translate/I18nProvider';
-
-const defaultNamespaces = [
-  'common',
-  'marketing',
-  '_error',
-  '404',
-  'languages',
-  'forms',
-  'validation',
-  'notifications',
-  'common-tooltips',
-  'activity',
-  'offline',
-  'sharing',
-];
+import { DEFAULT_NAMESPACES } from 'utils';
 
 type Namespaces = Record<string, string>;
 
 export const loadNamespaces = async (namespaces: string[], lang?: string): Promise<Namespaces> => {
   const totalNamespaces: Namespaces = {};
 
-  for (const ns of [...defaultNamespaces, ...namespaces]) {
+  for (const ns of [...DEFAULT_NAMESPACES, ...namespaces]) {
     totalNamespaces[ns] = await import(`locales/${lang}/${ns}.json`).then((m) => m.default);
   }
 

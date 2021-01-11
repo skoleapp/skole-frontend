@@ -1,4 +1,4 @@
-import { Collapse } from '@material-ui/core';
+import { Collapse, FormControl, FormHelperText } from '@material-ui/core';
 import {
   AutocompleteField,
   ErrorTemplate,
@@ -8,8 +8,11 @@ import {
   OfflineTemplate,
   TextFormField,
   TextLink,
+  DatePickerFormField,
+  LoginRequiredTemplate,
 } from 'components';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
+import dayjs from 'dayjs';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteCoursesDocument,
@@ -21,19 +24,22 @@ import {
   useCreateResourceAutocompleteDataQuery,
   useCreateResourceMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
-import { useForm, useLanguageHeaderContext } from 'hooks';
+import { withUserMe } from 'hocs';
+import { useForm, useLanguageHeaderContext, useOpen } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ContactDialog } from 'src/components/shared/ContactDialog';
+import { GuidelinesLink } from 'src/components/shared/GuidelinesLink';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
   resourceTitle: string;
   resourceType: string | null;
+  date: Date | null;
   school: SchoolObjectType | null;
   course: CourseObjectType | null;
   file: File | null;
@@ -45,6 +51,19 @@ const UploadResourcePage: NextPage = () => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school', 'course'], query);
+  const { userMe, username, email } = useAuthContext();
+
+  const contactDialogProps = useOpen();
+  const contactDialogEmailText = t('upload-resource:contactDialogEmailText');
+  const contactDialogFormatText = t('upload-resource:contactDialogFormatText');
+  const guidelinesInfo = t('upload-resource:guidelinesInfo');
+
+  const {
+    formRef,
+    onError,
+    handleMutationErrors,
+    setUnexpectedFormError,
+  } = useForm<UploadResourceFormValues>();
 
   const { data, error } = useCreateResourceAutocompleteDataQuery({
     variables,
@@ -54,18 +73,15 @@ const UploadResourcePage: NextPage = () => {
   const school = R.propOr(null, 'school', data);
   const course = R.propOr(null, 'course', data);
 
-  const {
-    formRef,
-    onError,
-    resetForm,
-    handleMutationErrors,
-    setFieldValue,
-    unexpectedError,
-  } = useForm<UploadResourceFormValues>();
+  useEffect(() => {
+    formRef.current?.setFieldValue('school', school);
+    formRef.current?.setFieldValue('course', course);
+  }, [school, course]);
 
   const validationSchema = Yup.object().shape({
     resourceTitle: Yup.string().required(t('validation:required')),
     resourceType: Yup.object().nullable().required(t('validation:required')),
+    date: Yup.date().nullable(),
     school: Yup.object().nullable().required(t('validation:required')),
     course: Yup.object().nullable().required(t('validation:required')),
     file: Yup.mixed().required(t('validation:required')),
@@ -80,14 +96,14 @@ const UploadResourcePage: NextPage = () => {
         !!createResource.resource.id &&
         !!createResource.successMessage
       ) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(createResource.successMessage);
         await Router.push(urls.resource(createResource.resource.id));
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -100,20 +116,23 @@ const UploadResourcePage: NextPage = () => {
   const handleUpload = async ({
     resourceTitle,
     resourceType: _resourceType,
+    date: _date,
     course: _course,
     file,
   }: UploadResourceFormValues): Promise<void> => {
     const resourceType = R.propOr('', 'id', _resourceType);
+    const date = _date ? dayjs(_date).format('YYYY-MM-DD') : null; // Only eligible format for GraphQL `Date` scalar.
     const course = R.propOr('', 'id', _course);
 
     const variables = {
       resourceTitle,
       resourceType,
+      date,
       course,
       file,
     };
 
-    setFieldValue('general', t('upload-resource:fileUploadingText'));
+    formRef.current?.setFieldValue('general', t('upload-resource:fileUploadingText'));
 
     // @ts-ignore: A string value is expected for the file field, which is incorrect.
     await createResource({ variables });
@@ -122,6 +141,7 @@ const UploadResourcePage: NextPage = () => {
   const initialValues = {
     resourceTitle: '',
     resourceType: null,
+    date: new Date(),
     school,
     course,
     file: null,
@@ -148,6 +168,22 @@ const UploadResourcePage: NextPage = () => {
     />
   );
 
+  const renderDateField = (
+    <Field
+      name="date"
+      label={t('forms:dateOptional')}
+      component={DatePickerFormField}
+      helperText={t('upload-resource:dateHelperText')}
+    />
+  );
+
+  const renderSchoolHelperText = (
+    <>
+      {t('upload-resource:schoolHelperText')}{' '}
+      <TextLink href={urls.contact}>{t('upload-resource:schoolHelperLink')}</TextLink>
+    </>
+  );
+
   const renderSchoolField = (
     <Field
       name="school"
@@ -156,13 +192,15 @@ const UploadResourcePage: NextPage = () => {
       searchKey="name"
       document={AutocompleteSchoolsDocument}
       component={AutocompleteField}
-      helperText={
-        <>
-          {t('upload-resource:schoolHelperText')}{' '}
-          <TextLink href={urls.contact}>{t('upload-resource:schoolHelperLink')}</TextLink>
-        </>
-      }
+      helperText={renderSchoolHelperText}
     />
+  );
+
+  const renderCourseHelperText = (
+    <>
+      {t('upload-resource:courseHelperText')}{' '}
+      <TextLink href={urls.addCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
+    </>
   );
 
   // Only collapse this field in once the school has been selected.
@@ -178,12 +216,7 @@ const UploadResourcePage: NextPage = () => {
         variables={{
           school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
         }}
-        helperText={
-          <>
-            {t('upload-resource:courseHelperText')}{' '}
-            <TextLink href={urls.addCourse}>{t('upload-resource:courseHelperLink')}</TextLink>
-          </>
-        }
+        helperText={renderCourseHelperText}
       />
     </Collapse>
   );
@@ -194,14 +227,30 @@ const UploadResourcePage: NextPage = () => {
     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
   );
 
+  const renderContactLink = (
+    <TextLink onClick={contactDialogProps.handleOpen} href="#">
+      {t('upload-resource:contactLink')}
+    </TextLink>
+  );
+
+  const renderContactHelperText = (
+    <FormControl>
+      <FormHelperText>
+        {t('upload-resource:contactText')} {renderContactLink} 🤝
+      </FormHelperText>
+    </FormControl>
+  );
+
   const renderFormFields = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
     <Form>
       {renderResourceTitleField}
       {renderResourceTypeField}
+      {renderDateField}
       {renderSchoolField}
       {renderCourseField(props)}
       {renderFileField}
       {renderFormSubmitSection(props)}
+      {renderContactHelperText}
     </Form>
   );
 
@@ -211,10 +260,75 @@ const UploadResourcePage: NextPage = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={formRef}
-      enableReinitialize
     >
       {renderFormFields}
     </Formik>
+  );
+
+  const { EMAIL_ADDRESS } = process.env;
+
+  const authenticatedEmailBody = `
+${t('upload-resource:materialEmailInfo')}
+${t('common:username')}: ${username}
+${t('common:email')}: ${email}`;
+
+  const anonymousEmailBody = `
+${t('upload-resource:loginRequiredMaterialEmailInfo')}
+${t('common:username')}: ${t('common:usernamePlaceholder')}
+${t('common:email')}: ${t('common:emailPlaceholder')}`;
+
+  const emailBody = userMe ? authenticatedEmailBody : anonymousEmailBody;
+
+  const emailHref = `mailto:${EMAIL_ADDRESS}?subject=${t(
+    'upload-resource:materialEmailSubject',
+  )}&body=${encodeURIComponent(emailBody)}`;
+
+  const renderEmailLink = <TextLink href={emailHref}>{EMAIL_ADDRESS}</TextLink>;
+  const renderGuidelinesLink = <GuidelinesLink />;
+
+  const renderCommonDialogEmailText = (
+    <>
+      {contactDialogEmailText} {renderEmailLink}.
+    </>
+  );
+
+  const renderCommonMiscDialogText = (
+    <>
+      {contactDialogFormatText} {guidelinesInfo} {renderGuidelinesLink}.
+    </>
+  );
+
+  const renderContactDialogText = (
+    <>
+      {renderCommonDialogEmailText} {t('upload-resource:contactDialogCreditText')}{' '}
+      {t('upload-resource:contactDialogAccountText')} {renderCommonMiscDialogText}
+    </>
+  );
+
+  const renderLoginRequiredContactDialogText = (
+    <>
+      {renderCommonDialogEmailText} {t('upload-resource:loginRequiredContactDialogCreditText')}{' '}
+      {t('upload-resource:contactDialogAccountText')} {renderCommonMiscDialogText}
+    </>
+  );
+
+  const commonContactDialogProps = {
+    ...contactDialogProps,
+    header: `${t('upload-resource:contactDialogHeader')} 💪`,
+  };
+
+  const renderContactDialog = (
+    <ContactDialog {...commonContactDialogProps} text={renderContactDialogText} />
+  );
+
+  const renderLoginRequiredContactDialog = (
+    <ContactDialog {...commonContactDialogProps} text={renderLoginRequiredContactDialogText} />
+  );
+
+  const renderLoginRequiredSecondaryText = (
+    <>
+      {t('upload-resource:loginRequiredTextSecondary')} {renderContactLink} 🤝
+    </>
   );
 
   const layoutProps = {
@@ -228,6 +342,18 @@ const UploadResourcePage: NextPage = () => {
     },
   };
 
+  if (!userMe) {
+    return (
+      <LoginRequiredTemplate
+        {...layoutProps}
+        text={t('upload-resource:loginRequiredText')}
+        textSecondary={renderLoginRequiredSecondaryText}
+      >
+        {renderLoginRequiredContactDialog}
+      </LoginRequiredTemplate>
+    );
+  }
+
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
@@ -236,7 +362,12 @@ const UploadResourcePage: NextPage = () => {
     return <ErrorTemplate />;
   }
 
-  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
+  return (
+    <FormTemplate {...layoutProps}>
+      {renderForm}
+      {renderContactDialog}
+    </FormTemplate>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
@@ -245,4 +376,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(UploadResourcePage);
+export default withUserMe(UploadResourcePage);

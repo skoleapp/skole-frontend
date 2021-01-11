@@ -117,7 +117,7 @@ export const CommentCard: React.FC<Props> = ({
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
-  const { toggleNotification, unexpectedError } = useNotificationsContext();
+  const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const { confirm } = useConfirmContext();
   const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
@@ -192,21 +192,21 @@ export const CommentCard: React.FC<Props> = ({
   const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
     if (deleteComment) {
       if (!!deleteComment.errors && !!deleteComment.errors.length) {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       } else if (deleteComment.successMessage) {
         removeComment(comment.id);
         toggleNotification(deleteComment.successMessage);
       } else {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       }
     } else {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 
   const [deleteComment] = useDeleteCommentMutation({
     onCompleted: deleteCommentCompleted,
-    onError: unexpectedError,
+    onError: toggleUnexpectedErrorNotification,
     context,
   });
 

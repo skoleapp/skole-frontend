@@ -70,7 +70,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   staticBackUrl,
   hideSearch,
   hideAuthButtons,
-  hideForEducatorsButton,
+  hideForTeachersButton,
   hideLanguageButton,
   hideLogo,
   headerRight,
@@ -80,7 +80,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const dense = !!headerLeft || !!headerRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
@@ -106,6 +106,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderStaticBackButton = !!staticBackUrl && <BackButton href={staticBackUrl} />;
   const renderHeader = <Typography variant="h5">{header}</Typography>;
   const renderLogo = !hideLogo && <Logo />;
+  const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
   const renderMobileContent = isMobile && (
     <Grid container alignItems="center">
@@ -117,7 +118,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {header ? renderHeader : renderLogo}
       </Grid>
       <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
-        {headerRight}
+        {headerRight || renderLanguageButton}
         {headerRightSecondary}
       </Grid>
     </Grid>
@@ -164,13 +165,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Popper>
   );
 
-  const renderForEducatorsButton = !userMe && !hideForEducatorsButton && (
-    <ButtonLink href={urls.forEducators} color="secondary" endIcon={<SchoolOutlined />}>
-      {t('common:forEducators')}
+  const renderForTeachersButton = !userMe && !hideForTeachersButton && (
+    <ButtonLink href={urls.forTeachers} color="secondary" endIcon={<SchoolOutlined />}>
+      {t('common:forTeachers')}
     </ButtonLink>
   );
-
-  const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
   // ClickAway listener requires a single child element.
   const renderAuthenticatedButtons = !!userMe && !hideAuthButtons && (
@@ -196,19 +195,31 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 
-  // Allow disabling auth buttons manually.
-  // Also disable them automatically in case of a network error when authenticating/fetching user.
+  const renderLoginButton = isDesktop && (
+    <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
+      {t('common:login')}
+    </ButtonLink>
+  );
+
+  const renderRegisterButton = isDesktop && (
+    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
+      {t('common:register')}
+    </ButtonLink>
+  );
+
+  const renderGetStartedButton = (
+    <ButtonLink href={urls.index} color="secondary" endIcon={<LaunchOutlined />}>
+      {t('common:getStarted')}
+    </ButtonLink>
+  );
+
+  // Allow hiding auth buttons manually.
+  // Also hide them automatically in case of a network error when authenticating/fetching user.
   const renderUnAuthenticatedButtons = !hideAuthButtons && !authNetworkError && (
     <>
-      <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
-        {t('common:login')}
-      </ButtonLink>
-      <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
-        {t('common:register')}
-      </ButtonLink>
-      <ButtonLink href={urls.getStarted} color="secondary" endIcon={<LaunchOutlined />}>
-        {t('common:getStarted')}
-      </ButtonLink>
+      {renderLoginButton}
+      {renderRegisterButton}
+      {renderGetStartedButton}
     </>
   );
 
@@ -223,7 +234,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <Grid item xs={10} container justify="flex-end" alignItems="center">
         {renderSearch}
         {renderDynamicButtons}
-        {renderForEducatorsButton}
+        {renderForTeachersButton}
         {renderLanguageButton}
       </Grid>
     </Grid>

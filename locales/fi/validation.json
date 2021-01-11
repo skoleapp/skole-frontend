@@ -5,5 +5,8 @@
   "required": "Tämä kenttä on vaadittu.",
   "unexpectedError": "Odottamaton virhe.",
   "networkError": "Yhteysvirhe.",
-  "fileSizeError": "Tiedosto on liian suuri!"
+  "fileSizeError": "Tiedosto on liian suuri!",
+  "invalidDate": "Virheellinen päivämäärä!",
+  "minDate": "Päivämäärä on liian myöhään!",
+  "maxDate": "Päivämäärä on liian aikaisin!"
 }

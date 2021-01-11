@@ -2,8 +2,10 @@
   "title": "Lägg till en kurs",
   "description": "Lägg till en ny kurs på Skole.",
   "header": "Lägg till en kurs",
+  "loginRequiredText": "Du måste logga in för att lägga till en ny kurs.",
   "courseNameHelperText": "Kursens namn. Inkludera inte kurskoden i det här fältet.",
   "courseCodeHelperText": "Kurskoden. Andra användare kan använda den här koden för att hitta din kurs.",
   "schoolHelperText": "Skolan som den här kursen tillhör.",
-  "subjectsHelperText": "De ämnen som denna kurs tillhör. Du kan välja flera alternativ."
+  "subjectsHelperText": "De ämnen som denna kurs tillhör. Du kan välja flera alternativ.",
+  "guidelinesInfo": "Se till att kursen följer våra"
 }

@@ -108,7 +108,7 @@ const ResourceDetailPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const { toggleNotification, unexpectedError } = useNotificationsContext();
+  const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -281,7 +281,7 @@ const ResourceDetailPage: NextPage = () => {
       a.click();
       a.remove();
     } catch {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 
@@ -303,7 +303,7 @@ const ResourceDetailPage: NextPage = () => {
       // @ts-ignore: TS doesn't detect the `print-js` import.
       printJS(blobUrl); // eslint-disable-line no-undef
     } catch {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 

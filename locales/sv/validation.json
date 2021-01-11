@@ -5,5 +5,8 @@
   "required": "This fält krävs.",
   "unexpectedError": "Oväntat fel.",
   "networkError": "Nätverksfel.",
-  "fileSizeError": "Filen är för stor!"
+  "fileSizeError": "Filen är för stor!",
+  "invalidDate": "Ogiltigt datum!",
+  "minDate": "Datumet är för tidigt!",
+  "maxDate": "Datumet är för sent!"
 }

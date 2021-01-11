@@ -31,7 +31,7 @@ export const ErrorTemplate: React.FC = () => {
       dynamicBackUrl: true,
       hideSearch: true,
       hideAuthButtons: true,
-      hideForEducatorsButton: true,
+      hideForTeachersButton: true,
       hideLanguageButton: true,
     },
   };

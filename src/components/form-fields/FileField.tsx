@@ -7,14 +7,15 @@ import * as R from 'ramda';
 import React, { ChangeEvent, DragEvent, useRef } from 'react';
 import { BORDER_RADIUS } from 'theme';
 import {
-  ACCEPTED_RESOURCE_FILES,
   IMAGE_TYPES,
   MAX_RESOURCE_FILE_SIZE,
   MAX_RESOURCE_IMAGE_WIDTH_HEIGHT,
   truncate,
+  urls,
 } from 'utils';
 import imageCompression from 'browser-image-compression';
 import { FormErrorMessage } from './FormErrorMessage';
+import { TextLink } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   dropZone: {
@@ -34,24 +35,23 @@ interface Props {
   field: FieldAttributes<FormikValues>;
 }
 
-export const FileField: React.FC<Props> = ({ form, field }) => {
+export const FileField: React.FC<Props> = ({ form: { setFieldValue }, field: { name, value } }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-  const _fileName = R.propOr('', 'name', field.value);
+  const _fileName = R.propOr('', 'name', value);
   const fileName = truncate(_fileName, 20);
   const maxFileSize = MAX_RESOURCE_FILE_SIZE / 1000000; // Convert to megabytes.
   const fileInputRef = useRef<HTMLInputElement>(null!);
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
   const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void => e.preventDefault();
-  const fileSelectedText = t('upload-resource:fileSelected', { fileName });
 
   const validateAndSetFile = (file: File | Blob) => {
     if (file.size > MAX_RESOURCE_FILE_SIZE) {
       toggleNotification(t('validation:fileSizeError'));
     } else {
-      form.setFieldValue(field.name, file);
+      setFieldValue(name, file);
     }
   };
 
@@ -87,20 +87,22 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
   };
 
   const renderFileInput = (
-    <input
-      ref={fileInputRef}
-      value=""
-      type="file"
-      accept={ACCEPTED_RESOURCE_FILES.toString()}
-      onChange={handleFileInputChange}
-    />
+    <input ref={fileInputRef} value="" type="file" onChange={handleFileInputChange} />
   );
+
+  const renderFileSelectedText = t('upload-resource:fileSelected', { fileName });
+
+  const renderMobileFileUploadButtonText = fileName
+    ? renderFileSelectedText
+    : t('upload-resource:uploadFileButtonText');
 
   const renderMobileUploadFileButton = isMobile && (
     <Button onClick={handleFileInputClick} color="primary" variant="outlined" fullWidth>
-      {t('upload-resource:uploadFileButtonText')}
+      {renderMobileFileUploadButtonText}
     </Button>
   );
+
+  const renderDropZoneText = fileName ? renderFileSelectedText : t('upload-resource:dropZoneText');
 
   const renderDropZone = isTabletOrDesktop && (
     <Box
@@ -111,16 +113,21 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       onDrop={handleFileDrop}
       onClick={handleFileInputClick}
     >
-      <FormHelperText>{t('upload-resource:dropZoneText')}</FormHelperText>
+      <FormHelperText>{renderDropZoneText}</FormHelperText>
     </Box>
   );
 
-  const renderFormHelperText = !fileName && (
-    <FormHelperText>{t('upload-resource:fileHelpText', { maxFileSize })}</FormHelperText>
+  const renderFormHelperText = (
+    <FormHelperText>
+      {t('upload-resource:fileHelpText', { maxFileSize })} {t('upload-resource:guidelinesInfo')}{' '}
+      <TextLink href={urls.guidelines} target="_blank">
+        {t('common:guidelinesLink')}
+      </TextLink>
+      .
+    </FormHelperText>
   );
 
-  const renderFileSelectedText = !!fileName && <FormHelperText>{fileSelectedText}</FormHelperText>;
-  const renderErrorMessage = <ErrorMessage name={field.name} component={FormErrorMessage} />;
+  const renderErrorMessage = <ErrorMessage name={name} component={FormErrorMessage} />;
 
   return (
     <FormControl>
@@ -128,7 +135,6 @@ export const FileField: React.FC<Props> = ({ form, field }) => {
       {renderMobileUploadFileButton}
       {renderDropZone}
       {renderFormHelperText}
-      {renderFileSelectedText}
       {renderErrorMessage}
     </FormControl>
   );

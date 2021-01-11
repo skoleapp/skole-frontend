@@ -1,8 +1,13 @@
-import { FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
-import { useNotificationsContext } from 'context';
+import {
+  FormSubmitSection,
+  LoginRequiredTemplate,
+  SettingsTemplate,
+  TextFormField,
+} from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -26,13 +31,13 @@ interface ChangePasswordFormValues {
 const ChangePasswordPage: NextPage = () => {
   const {
     formRef,
-    resetForm,
     handleMutationErrors,
     onError,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<ChangePasswordFormValues>();
 
   const { toggleNotification } = useNotificationsContext();
+  const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
 
@@ -51,10 +56,10 @@ const ChangePasswordPage: NextPage = () => {
       if (!!changePassword.errors && !!changePassword.errors.length) {
         handleMutationErrors(changePassword.errors);
       } else if (changePassword.successMessage) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(changePassword.successMessage);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     }
   };
@@ -118,6 +123,10 @@ const ChangePasswordPage: NextPage = () => {
     },
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
@@ -127,4 +136,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(ChangePasswordPage);
+export default withUserMe(ChangePasswordPage);

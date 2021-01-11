@@ -43,7 +43,7 @@ export const LoadingTemplate: React.FC = () => {
       hideLogo: true,
       hideSearch: true,
       hideAuthButtons: true,
-      hideForEducatorsButton: true,
+      hideForTeachersButton: true,
       hideLanguageButton: true,
     },
     containerProps: {

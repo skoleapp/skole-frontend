@@ -491,9 +491,21 @@ query AutocompleteResourceTypes {
   }
 }
 
-mutation CreateResource($resourceTitle: String!, $resourceType: ID!, $course: ID!, $file: String!) {
+mutation CreateResource(
+  $resourceTitle: String!
+  $resourceType: ID!
+  $date: Date
+  $course: ID!
+  $file: String!
+) {
   createResource(
-    input: { title: $resourceTitle, resourceType: $resourceType, course: $course, file: $file }
+    input: {
+      title: $resourceTitle
+      resourceType: $resourceType
+      date: $date
+      course: $course
+      file: $file
+    }
   ) {
     successMessage
     resource {

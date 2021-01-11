@@ -1,7 +1,7 @@
 const withOffline = require('next-offline');
 const withTranslate = require('next-translate');
 const R = require('ramda');
-const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL } = process.env;
+const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL, EMAIL_ADDRESS } = process.env;
 
 const config = {
   target: 'server',
@@ -10,6 +10,7 @@ const config = {
     BACKEND_URL: BACKEND_URL || API_URL, // In prod these are the same, so we only define the first one.
     FRONTEND_URL,
     SA_URL,
+    EMAIL_ADDRESS,
   },
   typescript: {
     ignoreDevErrors: true,

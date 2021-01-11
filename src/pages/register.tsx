@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText, makeStyles, Typography } from '@material-ui/core';
+import { Button, FormControl, FormHelperText, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import {
   AutocompleteField,
@@ -8,9 +8,10 @@ import {
   PasswordField,
   TextFormField,
   TextLink,
-  LanguageButton,
   ContactLink,
+  LogoutRequiredTemplate,
 } from 'components';
+import { useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteSchoolsDocument,
@@ -23,7 +24,7 @@ import {
   UserObjectType,
   useUpdateUserMutation,
 } from 'generated';
-import { withNoAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -31,13 +32,6 @@ import * as R from 'ramda';
 import React, { useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
-
-const useStyles = makeStyles(({ spacing }) => ({
-  link: {
-    textAlign: 'center',
-    marginTop: spacing(4),
-  },
-}));
 
 interface RegisterFormValues {
   username: string;
@@ -58,10 +52,10 @@ enum RegisterPhases {
 }
 
 const RegisterPage: NextPage = () => {
-  const classes = useStyles();
   const { t } = useTranslation();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
+  const { userMe } = useAuthContext();
 
   const [registeredUser, setRegisteredUser] = useState<Pick<
     UserObjectType,
@@ -72,18 +66,16 @@ const RegisterPage: NextPage = () => {
 
   const {
     formRef: registerFormRef,
-    resetForm: resetRegisterForm,
     handleMutationErrors: handleRegisterMutationErrors,
     onError: onRegisterError,
-    unexpectedError: unexpectedRegisterError,
+    setUnexpectedFormError: unexpectedRegisterError,
   } = useForm<RegisterFormValues>();
 
   const {
     formRef: updateUserFormRef,
-    resetForm: resetUpdateUserForm,
     handleMutationErrors: handleUpdateUserMutationErrors,
     onError: onUpdateUserError,
-    unexpectedError: updateUserUnexpectedError,
+    setUnexpectedFormError: updateUserUnexpectedError,
   } = useForm<UpdateUserFormValues>();
 
   const getHeader = (): string => {
@@ -138,7 +130,7 @@ const RegisterPage: NextPage = () => {
     } else if (!!login && !!login.errors && !!login.errors.length) {
       handleRegisterMutationErrors(login.errors);
     } else if (!!login && !!login.user) {
-      resetRegisterForm();
+      registerFormRef.current?.resetForm();
       setRegisteredUser(login.user);
       setPhase(RegisterPhases.UPDATE_USER);
     } else {
@@ -169,7 +161,7 @@ const RegisterPage: NextPage = () => {
       if (!!updateUser.errors && !!updateUser.errors.length) {
         handleUpdateUserMutationErrors(updateUser.errors);
       } else {
-        resetUpdateUserForm();
+        updateUserFormRef.current?.resetForm();
         setPhase(RegisterPhases.REGISTER_COMPLETE);
       }
     } else {
@@ -199,8 +191,6 @@ const RegisterPage: NextPage = () => {
       },
     });
   };
-
-  const renderLanguageButton = <LanguageButton />;
 
   const renderUsernameField = (
     <Field
@@ -244,9 +234,11 @@ const RegisterPage: NextPage = () => {
     <FormSubmitSection submitButtonText={t('common:register')} {...props} />
   );
 
-  const renderLoginLink = (
-    <FormControl className={classes.link}>
-      <TextLink href={urls.login}>{t('common:login')}</TextLink>
+  const renderLoginButton = (
+    <FormControl>
+      <ButtonLink href={urls.login} variant="outlined" color="primary">
+        {t('common:login')}
+      </ButtonLink>
     </FormControl>
   );
 
@@ -259,7 +251,7 @@ const RegisterPage: NextPage = () => {
       {renderConfirmPasswordField}
       {renderTermsLink}
       {renderRegisterFormSubmitSection(props)}
-      {renderLoginLink}
+      {renderLoginButton}
     </Form>
   );
 
@@ -307,10 +299,10 @@ const RegisterPage: NextPage = () => {
   ): JSX.Element => <FormSubmitSection submitButtonText={t('common:save')} {...props} />;
 
   const renderSkipButton = (
-    <FormControl className={classes.link}>
-      <TextLink href="#" onClick={handleSkipUpdateProfile}>
-        {t('common:skip')}
-      </TextLink>
+    <FormControl>
+      <Button variant="outlined" color="primary" onClick={handleSkipUpdateProfile}>
+        {t('common:setupLater')}
+      </Button>
     </FormControl>
   );
 
@@ -321,9 +313,9 @@ const RegisterPage: NextPage = () => {
       {renderRegisterCompleteHelpText}
       {renderSchoolField}
       {renderSubjectField}
-      {renderContactUsLink}
       {renderUpdateUserFormSubmitSection(props)}
       {renderSkipButton}
+      {renderContactUsLink}
     </Form>
   );
 
@@ -364,12 +356,15 @@ const RegisterPage: NextPage = () => {
     header: getHeader(),
     hideBottomNavbar: true,
     topNavbarProps: {
-      headerRight: renderLanguageButton,
       dynamicBackUrl: true,
       hideSearch: true,
       hideAuthButtons: true,
     },
   };
+
+  if (userMe) {
+    return <LogoutRequiredTemplate {...layoutProps} />;
+  }
 
   return (
     <FormTemplate {...layoutProps}>
@@ -386,4 +381,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withNoAuth(RegisterPage);
+export default withUserMe(RegisterPage);

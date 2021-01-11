@@ -2,8 +2,8 @@ import {
   CourseTableBody,
   ErrorTemplate,
   LoadingBox,
+  LoginRequiredTemplate,
   NotFoundBox,
-  NotFoundTemplate,
   OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
@@ -11,7 +11,7 @@ import {
 } from 'components';
 import { useAuthContext } from 'context';
 import { useStarredQuery } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -96,6 +96,10 @@ const StarredPage: NextPage = () => {
     renderRightTabContent,
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <OfflineTemplate />;
   }
@@ -104,11 +108,7 @@ const StarredPage: NextPage = () => {
     return <ErrorTemplate />;
   }
 
-  if (userMe) {
-    return <TabTemplate {...layoutProps} />;
-  }
-
-  return <NotFoundTemplate />;
+  return <TabTemplate {...layoutProps} />;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
@@ -117,4 +117,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(StarredPage);
+export default withUserMe(StarredPage);

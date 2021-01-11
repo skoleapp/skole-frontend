@@ -3,7 +3,7 @@ import {
   AutocompleteField,
   AvatarField,
   FormSubmitSection,
-  NotFoundTemplate,
+  LoginRequiredTemplate,
   SettingsTemplate,
   TextFormField,
   TextLink,
@@ -19,7 +19,7 @@ import {
   UserObjectType,
   useUpdateUserMutation,
 } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -69,8 +69,7 @@ const EditProfilePage: NextPage = () => {
     formRef,
     handleMutationErrors,
     onError,
-    setSubmitting,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<UpdateProfileFormValues>();
 
   const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
@@ -78,14 +77,14 @@ const EditProfilePage: NextPage = () => {
       if (!!updateUser.errors && !!updateUser.errors.length) {
         handleMutationErrors(updateUser.errors);
       } else if (updateUser.successMessage) {
-        setSubmitting(false);
+        formRef.current?.setSubmitting(false);
         toggleNotification(updateUser.successMessage);
         setUserMe(updateUser.user as UserObjectType);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -126,7 +125,7 @@ const EditProfilePage: NextPage = () => {
   const validationSchema = Yup.object().shape({
     title: Yup.string(),
     username: Yup.string().required(t('validation:required')),
-    email: Yup.string().email(t('validation:invalidEmail')),
+    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     bio: Yup.string(),
     school: Yup.object().nullable(),
     subject: Yup.object().nullable(),
@@ -230,7 +229,6 @@ const EditProfilePage: NextPage = () => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       innerRef={formRef}
-      enableReinitialize
     >
       {renderFormFields}
     </Formik>
@@ -247,11 +245,11 @@ const EditProfilePage: NextPage = () => {
     },
   };
 
-  if (userMe) {
-    return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
   }
 
-  return <NotFoundTemplate />;
+  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
@@ -260,4 +258,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(EditProfilePage);
+export default withUserMe(EditProfilePage);

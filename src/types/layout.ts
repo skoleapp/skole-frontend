@@ -14,7 +14,7 @@ export interface TopNavbarProps {
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.
   hideAuthButtons?: boolean; // Hide auth buttons on desktop.
-  hideForEducatorsButton?: boolean; // Hide the `For Educators` button on desktop.
+  hideForTeachersButton?: boolean; // Hide the `For Teachers` button on desktop.
   hideLanguageButton?: boolean; // Hide the language button on desktop.
   headerRight?: JSX.Element | false; // Custom element for right-most slot on mobile.
   headerRightSecondary?: JSX.Element | false; // Custom element for second slot from the right on mobile.
@@ -35,4 +35,9 @@ export interface MainTemplateProps extends GridProps {
   customBottomNavbar?: JSX.Element | false; // Custom element for bottom navbar.
   hideBottomNavbar?: boolean; // Hide bottom navbar.
   hideFooter?: boolean; // Hide footer.
+}
+
+export interface FormTemplateProps extends Omit<MainTemplateProps, 'topNavbarProps'> {
+  topNavbarProps: Omit<TopNavbarProps, 'header'>;
+  header: string;
 }

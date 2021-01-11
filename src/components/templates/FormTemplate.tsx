@@ -3,7 +3,7 @@ import { useMediaQueries } from 'hooks';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { MainTemplateProps, TopNavbarProps } from 'types';
+import { FormTemplateProps } from 'types';
 import { BackButton } from '../shared';
 
 import { MainTemplate } from './MainTemplate';
@@ -27,12 +27,12 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
 }));
 
-interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
-  topNavbarProps: Omit<TopNavbarProps, 'header'>;
-  header: string;
-}
-
-export const FormTemplate: React.FC<Props> = ({ children, header, topNavbarProps, ...props }) => {
+export const FormTemplate: React.FC<FormTemplateProps> = ({
+  children,
+  header,
+  topNavbarProps,
+  ...props
+}) => {
   const classes = useStyles();
   const router = useRouter();
   const { isTabletOrDesktop } = useMediaQueries();

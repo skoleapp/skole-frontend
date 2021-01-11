@@ -12,12 +12,13 @@ export const NotificationsContextProvider: React.FC = ({ children }) => {
   const { t } = useTranslation();
   const [notification, setNotification] = useState<string | null>(null);
   const toggleNotification = (payload: string | null): void => setNotification(payload);
-  const unexpectedError = (): void => toggleNotification(t('notifications:unexpectedError'));
+  const toggleUnexpectedErrorNotification = (): void =>
+    toggleNotification(t('notifications:toggleUnexpectedErrorNotification'));
 
   const value = {
     notification,
     toggleNotification,
-    unexpectedError,
+    toggleUnexpectedErrorNotification,
   };
 
   return <NotificationsContext.Provider value={value}>{children}</NotificationsContext.Provider>;

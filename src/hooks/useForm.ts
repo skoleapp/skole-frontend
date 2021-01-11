@@ -1,45 +1,40 @@
 import { ApolloError } from '@apollo/client';
 import { FormikProps, FormikValues } from 'formik';
+import { ErrorType } from 'generated';
 import { useTranslation } from 'lib';
 import { useRef } from 'react';
-import { MutationErrors, MutationFormError, UseForm } from 'types';
-import { formatFormError } from 'utils';
+import { GeneralFormValues, MutationErrors, UseForm } from 'types';
 
-const snakeCaseToCamelCase = (str: string): string => {
-  return str.replace(/([-_][a-z])/g, (group) =>
-    group.toUpperCase().replace('-', '').replace('_', ''),
-  );
-};
+const snakeCaseToCamelCase = (str: string): string =>
+  str.replace(/([-_][a-z])/g, (group) => group.toUpperCase().replace('-', '').replace('_', ''));
 
 // A custom hook that provides useful helpers for integrating Formik with GraphQL mutations.
 export const useForm = <T extends FormikValues>(): UseForm<T> => {
   const { t } = useTranslation();
   const formRef = useRef<FormikProps<T>>(null!);
 
-  const setFormErrors = (formErrors: FormikValues): void =>
-    Object.keys(formErrors).forEach((key) => formRef.current.setFieldError(key, formErrors[key]));
+  const initialFormErrors: GeneralFormValues = {
+    general: '',
+  };
 
-  const unexpectedError = (): void => setFormErrors({ general: t('validation:unexpectedError') });
-  const setSubmitting = (val: boolean): void | null => formRef.current.setSubmitting(val);
-  const resetForm = (): void | null => formRef.current.resetForm();
-  const submitForm = (): Promise<void> | null => formRef.current.submitForm();
+  const unexpectedError: GeneralFormValues = {
+    general: t('validation:unexpectedError'),
+  };
 
-  const setFieldValue = (fieldName: string, val: unknown): void =>
-    formRef.current.setFieldValue(fieldName, val);
-
-  const setFieldError = (fieldName: string, val: string): void =>
-    formRef.current.setFieldError(fieldName, val);
+  const setUnexpectedFormError = (): void => formRef.current.setErrors(unexpectedError);
+  const formatFormError = (error: ErrorType): string => error.messages.join('\n');
 
   // Set form errors either for specific fields or as general errors.
-  const handleMutationErrors = (err: MutationErrors): void => {
-    const formErrors: FormikValues = { general: '' };
+  const handleMutationErrors = (errors: MutationErrors): void => {
+    const formErrors = initialFormErrors;
 
-    if (err.length) {
-      (err as MutationFormError[]).map((e: MutationFormError) => {
-        const msg = formatFormError(e);
-        if (e.field === '__all__') {
+    if (errors.length) {
+      errors.map((e) => {
+        const msg = formatFormError(e!);
+
+        if (e?.field === '__all__') {
           formErrors.general = msg;
-        } else if (e.field) {
+        } else if (e?.field) {
           formErrors[snakeCaseToCamelCase(e.field)] = msg;
         } else {
           formErrors.general = msg;
@@ -49,13 +44,13 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
       formErrors.general = t('validation:unexpectedError');
     }
 
-    setSubmitting(false);
-    setFormErrors(formErrors);
+    formRef.current.setSubmitting(false);
+    formRef.current.setErrors(formErrors);
   };
 
   // Set general form error due to network error or any unexpected error.
   const onError = (err: ApolloError): void => {
-    const formErrors = { general: '' };
+    const formErrors = initialFormErrors;
 
     if (err.networkError) {
       formErrors.general = t('validation:networkError');
@@ -63,19 +58,15 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
       formErrors.general = t('validation:unexpectedError');
     }
 
-    setSubmitting(false);
-    setFormErrors(formErrors);
+    formRef.current.setSubmitting(false);
+    formRef.current.setErrors(formErrors);
   };
 
   return {
     formRef,
+    setUnexpectedFormError,
+    formatFormError,
     handleMutationErrors,
     onError,
-    setSubmitting,
-    resetForm,
-    submitForm,
-    setFieldValue,
-    setFieldError,
-    unexpectedError,
   };
 };

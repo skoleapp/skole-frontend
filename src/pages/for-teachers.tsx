@@ -5,7 +5,7 @@ import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { FOR_EDUCATORS_PITCH_ITEMS, urls } from 'utils';
+import { FOR_TEACHERS_PITCH_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaHeader: {
@@ -49,13 +49,13 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-const ForEducatorsPage: NextPage = () => {
+const ForTeachersPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
 
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
-      {t('for-educators:ctaHeader')}
+      {t('for-teachers:ctaHeader')} 💥
     </Typography>
   );
 
@@ -67,7 +67,7 @@ const ForEducatorsPage: NextPage = () => {
       variant="contained"
       endIcon={<ArrowForwardOutlined />}
     >
-      {t('for-educators:cta')}
+      {t('for-teachers:cta')}
     </ButtonLink>
   );
 
@@ -79,13 +79,15 @@ const ForEducatorsPage: NextPage = () => {
       alignItems="center"
       justify="center"
     >
-      {renderCtaHeader}
-      {renderCtaButton}
+      <Grid item xs={12} md={10} lg={8} xl={6} container direction="column" alignItems="center">
+        {renderCtaHeader}
+        {renderCtaButton}
+      </Grid>
     </Grid>
   );
 
-  const renderPitchItems = FOR_EDUCATORS_PITCH_ITEMS.map(({ header, bullets }) => (
-    <Grid item xs={12} md={6}>
+  const renderPitchItems = FOR_TEACHERS_PITCH_ITEMS.map(({ header, bullets }) => (
+    <Grid item xs={12} md={4}>
       <Typography className={classes.pitchHeader} variant="subtitle1">
         {t(header).toUpperCase()}
       </Typography>
@@ -117,11 +119,11 @@ const ForEducatorsPage: NextPage = () => {
 
   const layoutProps = {
     seoProps: {
-      title: t('for-educators:title'),
-      description: t('for-educators:description'),
+      title: t('for-teachers:title'),
+      description: t('for-teachers:description'),
     },
     topNavbarProps: {
-      hideForEducatorsButton: true,
+      hideForTeachersButton: true,
     },
   };
 
@@ -135,8 +137,8 @@ const ForEducatorsPage: NextPage = () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces(['for-educators'], locale),
+    _ns: await loadNamespaces(['for-teachers'], locale),
   },
 });
 
-export default withUserMe(ForEducatorsPage);
+export default withUserMe(ForTeachersPage);

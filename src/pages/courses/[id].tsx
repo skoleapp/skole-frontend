@@ -97,7 +97,7 @@ const CourseDetailPage: NextPage = () => {
   const { query } = useRouter();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const { toggleNotification, unexpectedError } = useNotificationsContext();
+  const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
@@ -178,21 +178,21 @@ const CourseDetailPage: NextPage = () => {
   const deleteCourseCompleted = async ({ deleteCourse }: DeleteCourseMutation): Promise<void> => {
     if (deleteCourse) {
       if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       } else if (deleteCourse.successMessage) {
         toggleNotification(deleteCourse.successMessage);
         await Router.push(urls.home);
       } else {
-        unexpectedError();
+        toggleUnexpectedErrorNotification();
       }
     } else {
-      unexpectedError();
+      toggleUnexpectedErrorNotification();
     }
   };
 
   const [deleteCourse] = useDeleteCourseMutation({
     onCompleted: deleteCourseCompleted,
-    onError: unexpectedError,
+    onError: toggleUnexpectedErrorNotification,
     context,
   });
 

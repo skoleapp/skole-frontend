@@ -15,7 +15,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { formatFormError, urls } from 'utils';
+import { urls } from 'utils';
 
 interface EmailFormValues {
   general: string;
@@ -23,11 +23,11 @@ interface EmailFormValues {
 
 const VerifyAccountPage: NextPage = () => {
   const {
-    formRef: emailFormRef,
-    handleMutationErrors: handleEmailFormMutationErrors,
-    onError: onEmailFormError,
-    resetForm: resetEmailForm,
-    unexpectedError: emailFormUnexpectedError,
+    formRef,
+    handleMutationErrors,
+    onError,
+    setUnexpectedFormError,
+    formatFormError,
   } = useForm<EmailFormValues>();
 
   const { t } = useTranslation();
@@ -46,7 +46,7 @@ const VerifyAccountPage: NextPage = () => {
   }, [initialVerified]);
 
   const handleUnexpectedConfirmationError = (): void =>
-    setConfirmationError(t('validation:unexpectedError'));
+    setConfirmationError(t('validation:setUnexpectedFormError'));
 
   const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
     if (verifyAccount) {
@@ -77,6 +77,7 @@ const VerifyAccountPage: NextPage = () => {
     const handleVerifyAccount = async (): Promise<void> => {
       await verifyAccount({ variables: { token } });
     };
+
     if (!!token && !verified && !initialVerified) {
       handleVerifyAccount();
     }
@@ -86,27 +87,27 @@ const VerifyAccountPage: NextPage = () => {
     ? t('verify-account:header')
     : t('verify-account:emailSubmittedHeader');
 
-  const onEmailFormCompleted = ({
+  const onCompleted = ({
     resendVerificationEmail,
   }: GraphQlResendVerificationEmailMutation): void => {
     if (resendVerificationEmail) {
       if (!!resendVerificationEmail.errors && !!resendVerificationEmail.errors.length) {
-        handleEmailFormMutationErrors(resendVerificationEmail.errors);
+        handleMutationErrors(resendVerificationEmail.errors);
       } else if (resendVerificationEmail.successMessage) {
-        resetEmailForm();
+        formRef.current?.resetForm();
         toggleNotification(resendVerificationEmail.successMessage);
         setEmailSubmitted(true);
       } else {
-        emailFormUnexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      emailFormUnexpectedError();
+      setUnexpectedFormError();
     }
   };
 
   const [resendVerificationEmail] = useGraphQlResendVerificationEmailMutation({
-    onCompleted: onEmailFormCompleted,
-    onError: onEmailFormError,
+    onCompleted,
+    onError,
     context,
   });
 
@@ -114,7 +115,7 @@ const VerifyAccountPage: NextPage = () => {
     await resendVerificationEmail();
   };
 
-  const initialEmailFormValues = {
+  const initialValues = {
     general: '',
   };
 
@@ -167,12 +168,7 @@ const VerifyAccountPage: NextPage = () => {
 
   // Render for unverified users.
   const renderEmailForm = verified === false && !token && !emailSubmitted && (
-    <Formik
-      initialValues={initialEmailFormValues}
-      onSubmit={handleSubmitEmail}
-      innerRef={emailFormRef}
-      enableReinitialize
-    >
+    <Formik initialValues={initialValues} onSubmit={handleSubmitEmail} innerRef={formRef}>
       {renderEmailFormFields}
     </Formik>
   );

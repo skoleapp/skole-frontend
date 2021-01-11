@@ -1,141 +1,79 @@
 import {
-  Avatar,
   Box,
-  Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
+  Divider,
   Grid,
-  InputBase,
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import {
-  ArrowForwardOutlined,
-  AssignmentOutlined,
-  CloudUploadOutlined,
-  SchoolOutlined,
-  SearchOutlined,
-  SvgIconComponent,
-} from '@material-ui/icons';
-import clsx from 'clsx';
-import { ButtonLink, LandingPageTemplate } from 'components';
-import { useAuthContext, useShareContext } from 'context';
+import { ArrowForwardOutlined } from '@material-ui/icons';
+import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
+import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
-import { useSearch } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import Link from 'next/link';
-import React from 'react';
-import { BORDER_RADIUS } from 'theme';
-import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
-import { UrlObject } from 'url';
-import { urls } from 'utils';
+import Image from 'next/image';
+import Router, { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import { PITCH_ITEMS, urls } from 'utils';
 
-const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
-  searchContainer: {
-    padding: spacing(6),
-    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(6)})`,
-    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(6)})`,
-    marginTop: spacing(4),
-    textAlign: 'center',
-    [breakpoints.up('sm')]: {
-      marginTop: spacing(10),
-    },
-    [breakpoints.up('md')]: {
-      marginTop: spacing(16),
-    },
+const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
+  ctaContainer: {
+    padding: `${spacing(8)} ${spacing(2)}`,
+    paddingTop: 0,
+    flexGrow: 1,
+    fontWeight: 'bold',
   },
-  header: {
-    fontSize: '2rem',
-    [breakpoints.up('md')]: {
-      fontSize: '2.5rem',
-    },
-  },
-  subheader: {
+  ctaHeader: {
+    marginTop: spacing(8),
     fontSize: '1.25rem',
+    [breakpoints.up('md')]: {
+      fontSize: '1.5rem',
+    },
   },
-  searchForm: {
-    marginTop: spacing(4),
-    display: 'flex',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  searchField: {
-    display: 'flex',
-    flexGrow: 1,
-    backgroundColor: palette.common.white,
-    border: `0.05rem solid ${palette.primary.main}`,
-    borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
+  ctaButton: {
+    minWidth: '10rem',
     padding: spacing(3),
-    [breakpoints.up('md')]: {
-      maxWidth: '20rem',
-    },
+    marginTop: spacing(8),
   },
-  searchButton: {
-    borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
-  },
-  shortcutsContainer: {
-    padding: `${spacing(4)} ${spacing(2)}`,
-    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
-    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
-    flexGrow: 1,
-  },
-  card: {
-    width: '100%',
-    minHeight: '14rem',
-    position: 'relative',
-    margin: spacing(2),
-    [breakpoints.up('md')]: {
-      width: '16rem',
-      height: '16rem',
-    },
-  },
-  cardActionArea: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    borderRadius: BORDER_RADIUS,
-  },
-  cardContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  shortcutText: {
-    fontSize: '1.5rem',
-  },
-  avatar: {
-    height: '5rem',
-    width: '5rem',
-    margin: spacing(2),
-    marginBottom: spacing(4),
-    backgroundColor: palette.primary.light,
-  },
-  avatarIcon: {
-    height: '3rem',
-    width: '3rem',
-  },
-  nextStepsContainer: {
-    flexGrow: 1,
-    backgroundColor: palette.grey[300],
-    paddingTop: spacing(6),
-    paddingBottom: spacing(2),
-    [breakpoints.up('md')]: {
-      padding: spacing(4),
-    },
-  },
-  nextStepsHeader: {
-    fontSize: '1.75rem',
-  },
-  nextStepsContent: {
+  or: {
     marginTop: spacing(4),
   },
-  nextStepsCard: {
-    minHeight: '12rem',
-    height: '100%',
+  authLink: {
+    marginTop: spacing(4),
+  },
+  pitchContainer: {
+    overflow: 'hidden',
+  },
+  pitchBoxContainer: {
+    backgroundColor: palette.grey[300],
+    padding: `${spacing(4)} ${spacing(2)}`,
+    textAlign: 'left',
+    [breakpoints.up('md')]: {
+      padding: spacing(6),
+    },
+  },
+  pitchHeader: {
+    fontSize: '1.25rem',
+    fontWeight: 'bold',
+  },
+  pitchHeaderDivider: {
+    height: '0.25rem',
+    backgroundColor: palette.primary.main,
+    marginBottom: spacing(2),
+    borderRadius: '0.5rem',
+    maxWidth: '10rem',
+  },
+  badgeContainer: {
+    backgroundColor: palette.grey[300],
+    padding: spacing(4),
+    [breakpoints.up('md')]: {
+      padding: spacing(8),
+    },
+  },
+  badgeCard: {
     flexGrow: 1,
     backgroundColor: palette.grey[200],
     display: 'flex',
@@ -144,264 +82,155 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     border: `0.15rem solid ${palette.grey[400]}`,
     borderRadius: '1rem',
   },
-  nextStepsCardContent: {
+  badgeCardContent: {
     flexGrow: 1,
+    padding: '0 !important',
+    paddingTop: `${spacing(4)} !important`,
   },
-  nextStepsCardText: {
+  badgeCardText: {
     fontSize: '1.1rem',
   },
-  nextStepsButton: {
-    borderRadius: '1rem',
+  badge: {
+    width: '10rem',
+    height: '4rem',
+    margin: spacing(2),
+    position: 'relative',
+    opacity: 0.5, // TODO: Remove this when the actual links are available.
   },
 }));
 
-interface Shortcut {
-  text: string;
-  icon: SvgIconComponent;
-  href: string | UrlObject;
-}
-
-const IndexPage: NextPage = () => {
+const LandingPage: NextPage = () => {
   const classes = useStyles();
-  const { userMe, verified, school, subject } = useAuthContext();
   const { t } = useTranslation();
-  const { handleOpenShareDialog } = useShareContext();
-  const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
-  const shareTitle = `Skole | ${t('marketing:slogan')}`;
-  const shareText = t('marketing:description');
-  const shareParams = { shareHeader: t('index:inviteText'), shareTitle, shareText };
-  const handleClickShareButton = () => handleOpenShareDialog(shareParams);
+  const { query } = useRouter();
+  const { userMe } = useAuthContext();
 
-  const shortcuts = [
-    {
-      text: 'index:findContent',
-      icon: AssignmentOutlined,
-      href: searchUrl,
-    },
-    {
-      text: 'index:uploadMaterial',
-      icon: CloudUploadOutlined,
-      href: urls.uploadResource,
-    },
-    {
-      text: 'index:addCourses',
-      icon: SchoolOutlined,
-      href: urls.addCourse,
-    },
-  ];
+  // Redirect authenticated users to home page.
+  useEffect(() => {
+    !!userMe && Router.push(urls.home);
+  }, [userMe]);
 
-  const renderHeader = (
-    <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
+  const ctaUrl = {
+    pathname: urls.register,
+    query,
+  };
+
+  const skipLoginUrl = {
+    pathname: query.next ? String(query.next) : urls.home,
+    query,
+  };
+
+  const renderCtaHeader = (
+    <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
       {t('marketing:description')}
     </Typography>
   );
 
-  const renderSubHeader = (
-    <Typography className={classes.subheader} variant="subtitle1" color="secondary">
-      {t('index:subheader')}
+  const renderCtaButton = (
+    <ButtonLink
+      className={classes.ctaButton}
+      href={ctaUrl}
+      color="primary"
+      variant="contained"
+      endIcon={<ArrowForwardOutlined />}
+    >
+      {t('index:cta')}
+    </ButtonLink>
+  );
+
+  const renderOr = (
+    <Typography className={classes.or} variant="body2" color="secondary">
+      {t('index:or').toUpperCase()}
     </Typography>
   );
 
-  const renderSearchField = (
-    <form className={classes.searchForm} onSubmit={handleSubmitSearch}>
-      <Box className={classes.searchField}>
-        <InputBase {...searchInputProps} />
-      </Box>
-      <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
-        <SearchOutlined />
-      </Button>
-    </form>
+  const renderAuthLink = (
+    <Typography className={classes.authLink}>
+      <TextLink href={skipLoginUrl} color="secondary">
+        {t('index:skipLogin')}
+      </TextLink>
+    </Typography>
   );
 
-  const renderSearch = (
-    <Grid className={classes.searchContainer} item container direction="column" alignItems="center">
-      {renderHeader}
-      {renderSubHeader}
-      {renderSearchField}
-    </Grid>
-  );
-
-  const renderHomepageShortcuts = shortcuts.map(
-    ({ href, text, icon: Icon }: Shortcut, i: number) => (
-      <Link href={href} key={i}>
-        <Card className={clsx(classes.card)}>
-          <CardActionArea className={classes.cardActionArea}>
-            <CardContent className={classes.cardContent}>
-              <Avatar className={clsx(classes.avatar)}>
-                <Icon className={classes.avatarIcon} />
-              </Avatar>
-              <Typography
-                className={classes.shortcutText}
-                variant="subtitle1"
-                color="textSecondary"
-                align="center"
-              >
-                {t(text)}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </Link>
-    ),
-  );
-
-  const renderShortcuts = (
+  const renderCta = (
     <Grid
-      item
-      container
-      justify="center"
-      alignItems="center"
-      className={classes.shortcutsContainer}
-    >
-      <Grid item container spacing={4} justify="center">
-        {renderHomepageShortcuts}
-      </Grid>
-    </Grid>
-  );
-
-  const nextStepsCardTextProps = {
-    className: classes.nextStepsCardText,
-    variant: 'body2' as TextVariant,
-    color: 'textSecondary' as TextColor,
-  };
-
-  const nextStepButtonProps = {
-    className: classes.nextStepsButton,
-    color: 'primary' as MuiColor,
-    variant: 'outlined' as ButtonVariant,
-    fullWidth: true,
-    endIcon: <ArrowForwardOutlined />,
-  };
-
-  const renderInviteStep = (
-    <Grid item xs={12} sm={4}>
-      <Card className={classes.nextStepsCard}>
-        <CardContent className={classes.nextStepsCardContent}>
-          <Typography {...nextStepsCardTextProps}>{t('index:inviteHeader')}</Typography>
-        </CardContent>
-        <CardActions>
-          <Button {...nextStepButtonProps} onClick={handleClickShareButton}>
-            {t('index:inviteText')}
-          </Button>
-        </CardActions>
-      </Card>
-    </Grid>
-  );
-
-  const renderTakeATourStep = (
-    <Grid item xs={12} sm={4}>
-      <Card className={classes.nextStepsCard}>
-        <CardContent className={classes.nextStepsCardContent}>
-          <Typography {...nextStepsCardTextProps}>{t('index:takeATourHeader')}</Typography>
-        </CardContent>
-        <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.getStarted}>
-            {t('index:takeATourText')}
-          </ButtonLink>
-        </CardActions>
-      </Card>
-    </Grid>
-  );
-
-  const renderVerifyStep = (
-    <Grid item xs={12} sm={4}>
-      <Card className={classes.nextStepsCard}>
-        <CardContent className={classes.nextStepsCardContent}>
-          <Typography {...nextStepsCardTextProps}>{t('index:verifyAccountHeader')}</Typography>
-        </CardContent>
-        <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.verifyAccount}>
-            {t('index:verifyAccountText')}
-          </ButtonLink>
-        </CardActions>
-      </Card>
-    </Grid>
-  );
-
-  const renderAddSchoolAndSubjectStep = (
-    <Grid item xs={12} sm={4}>
-      <Card className={classes.nextStepsCard}>
-        <CardContent className={classes.nextStepsCardContent}>
-          <Typography {...nextStepsCardTextProps}>
-            {t('index:addSchoolAndSubjectHeader')}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.editProfile}>
-            {t('index:addSchoolAndSubjectText')}
-          </ButtonLink>
-        </CardActions>
-      </Card>
-    </Grid>
-  );
-
-  const renderUploadStep = (
-    <Grid item xs={12} sm={4}>
-      <Card className={classes.nextStepsCard}>
-        <CardContent className={classes.nextStepsCardContent}>
-          <Typography {...nextStepsCardTextProps}>{t('index:uploadHeader')}</Typography>
-        </CardContent>
-        <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.uploadResource}>
-            {t('index:uploadText')}
-          </ButtonLink>
-        </CardActions>
-      </Card>
-    </Grid>
-  );
-
-  // Render different content for these cases:
-  // - User is not authenticated -> link to landing page.
-  // - User is authenticated by not verified -> link to account verification.
-  // - User is verified but not filled school or subject -> link to edit profile page.
-  // - User has completed all other steps -> link to upload resource page.
-  const renderDynamicStep = !userMe
-    ? renderTakeATourStep
-    : verified === false
-    ? renderVerifyStep
-    : !school || !subject
-    ? renderAddSchoolAndSubjectStep
-    : renderUploadStep;
-
-  const renderContactStep = (
-    <Grid item xs={12} sm={4}>
-      <Card className={classes.nextStepsCard}>
-        <CardContent className={classes.nextStepsCardContent}>
-          <Typography {...nextStepsCardTextProps}>{t('index:contactHeader')}</Typography>
-        </CardContent>
-        <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
-            {t('index:contactText')}
-          </ButtonLink>
-        </CardActions>
-      </Card>
-    </Grid>
-  );
-
-  const renderInfo = (
-    <Grid
-      className={classes.nextStepsContainer}
+      className={classes.ctaContainer}
       container
       direction="column"
       alignItems="center"
       justify="center"
     >
-      <Typography className={classes.nextStepsHeader} variant="h2" color="textSecondary">
-        {t('index:nextStepsHeader')} 🚀
+      {renderCtaHeader}
+      {renderCtaButton}
+      {renderOr}
+      {renderAuthLink}
+    </Grid>
+  );
+
+  const renderPitchItems = PITCH_ITEMS.map(({ header, bullets }) => (
+    <Grid item xs={12} md={6}>
+      <Typography className={classes.pitchHeader} variant="subtitle1">
+        {t(header).toUpperCase()}
       </Typography>
+      <Divider className={classes.pitchHeaderDivider} />
+      {bullets.map((b) => (
+        <Typography variant="body2" color="textSecondary">
+          - {t(b)}
+        </Typography>
+      ))}
+    </Grid>
+  ));
+
+  const renderPitch = (
+    <Grid container direction="column" alignItems="center" className={classes.pitchContainer}>
       <Grid
-        className={classes.nextStepsContent}
+        container
         item
         xs={12}
-        md={8}
-        lg={6}
-        xl={4}
-        container
+        md={10}
+        lg={8}
+        xl={6}
+        className={classes.pitchBoxContainer}
         spacing={4}
       >
-        {renderInviteStep}
-        {renderDynamicStep}
-        {renderContactStep}
+        {renderPitchItems}
+      </Grid>
+    </Grid>
+  );
+
+  const renderBadgeCardContent = (
+    <CardContent className={classes.badgeCardContent}>
+      <Typography
+        className={classes.badgeCardText}
+        variant="subtitle1"
+        color="textSecondary"
+        align="center"
+      >
+        {t('index:appStoreCta')}
+      </Typography>
+    </CardContent>
+  );
+
+  const renderBadgeCardActions = (
+    <CardActions>
+      <Grid container justify="center">
+        <Box className={classes.badge}>
+          <Image layout="fill" src="/images/app-store-badges/apple-app-store-badge.svg" />
+        </Box>
+        <Box className={classes.badge}>
+          <Image layout="fill" src="/images/app-store-badges/google-play-badge.svg" />
+        </Box>
+      </Grid>
+    </CardActions>
+  );
+
+  const renderBadges = (
+    <Grid container justify="center" className={classes.badgeContainer}>
+      <Grid item xs={12} md={6} lg={4} xl={3}>
+        <Card className={classes.badgeCard}>
+          {renderBadgeCardContent}
+          {renderBadgeCardActions}
+        </Card>
       </Grid>
     </Grid>
   );
@@ -411,15 +240,22 @@ const IndexPage: NextPage = () => {
       title: t('index:title'),
       description: t('marketing:description'),
     },
-    hideBottomNavbar: false,
-    disableHeader: true,
+    hideBottomNavbar: true,
+    topNavbarProps: {
+      hideAuthButtons: true,
+    },
   };
+
+  // Show loading screen when redirecting to home page.
+  if (userMe) {
+    return <LoadingTemplate />;
+  }
 
   return (
     <LandingPageTemplate {...layoutProps}>
-      {renderSearch}
-      {renderShortcuts}
-      {renderInfo}
+      {renderCta}
+      {renderPitch}
+      {renderBadges}
     </LandingPageTemplate>
   );
 };
@@ -430,4 +266,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withUserMe(IndexPage);
+export default withUserMe(LandingPage);

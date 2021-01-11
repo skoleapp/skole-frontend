@@ -1,9 +1,15 @@
 import { FormControl } from '@material-ui/core';
-import { ButtonLink, FormSubmitSection, SettingsTemplate, TextFormField } from 'components';
-import { useNotificationsContext, useConfirmContext } from 'context';
+import {
+  ButtonLink,
+  FormSubmitSection,
+  LoginRequiredTemplate,
+  SettingsTemplate,
+  TextFormField,
+} from 'components';
+import { useNotificationsContext, useConfirmContext, useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
-import { withAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -24,15 +30,14 @@ export interface DeleteAccountFormValues {
 export const DeleteAccountPage: NextPage = () => {
   const {
     formRef,
-    setSubmitting,
-    resetForm,
     handleMutationErrors,
     onError,
-    unexpectedError,
+    setUnexpectedFormError,
   } = useForm<DeleteAccountFormValues>();
 
   const { t } = useTranslation();
   const { confirm } = useConfirmContext();
+  const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 
@@ -41,15 +46,15 @@ export const DeleteAccountPage: NextPage = () => {
       if (!!deleteUser.errors && !!deleteUser.errors.length) {
         handleMutationErrors(deleteUser.errors);
       } else if (deleteUser.successMessage) {
-        resetForm();
+        formRef.current?.resetForm();
         toggleNotification(deleteUser.successMessage);
         localStorage.removeItem('user');
         await Router.push(urls.logout);
       } else {
-        unexpectedError();
+        setUnexpectedFormError();
       }
     } else {
-      unexpectedError();
+      setUnexpectedFormError();
     }
   };
 
@@ -60,6 +65,7 @@ export const DeleteAccountPage: NextPage = () => {
   });
 
   const handleSubmit = async (values: DeleteAccountFormValues): Promise<void> => {
+    const { setSubmitting } = formRef.current!;
     setSubmitting(false);
 
     try {
@@ -72,7 +78,7 @@ export const DeleteAccountPage: NextPage = () => {
     } catch {
       // User cancelled.
     } finally {
-      setSubmitting(true);
+      setSubmitting(false);
     }
   };
 
@@ -126,6 +132,10 @@ export const DeleteAccountPage: NextPage = () => {
     },
   };
 
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps} />;
+  }
+
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
@@ -135,4 +145,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuth(DeleteAccountPage);
+export default withUserMe(DeleteAccountPage);

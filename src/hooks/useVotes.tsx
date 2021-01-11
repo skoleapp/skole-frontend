@@ -58,7 +58,7 @@ export const useVotes = ({
   const { isTabletOrDesktop } = useMediaQueries();
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
-  const { unexpectedError: onError } = useNotificationsContext();
+  const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 
   useEffect(() => {

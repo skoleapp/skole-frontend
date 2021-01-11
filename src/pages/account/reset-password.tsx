@@ -1,6 +1,6 @@
 import { FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, FormTemplate, TextFormField } from 'components';
-import { useNotificationsContext } from 'context';
+import { FormSubmitSection, FormTemplate, LogoutRequiredTemplate, TextFormField } from 'components';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   ResetPasswordMutation,
@@ -8,7 +8,7 @@ import {
   useResetPasswordMutation,
   useSendPasswordResetEmailMutation,
 } from 'generated';
-import { withNoAuth } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -42,27 +42,27 @@ const ResetPasswordPage: NextPage = () => {
     formRef: emailFormRef,
     handleMutationErrors: handleEmailFormMutationErrors,
     onError: onEmailFormError,
-    resetForm: resetEmailForm,
-    unexpectedError: emailFormUnexpectedError,
+    setUnexpectedFormError: emailFormUnexpectedError,
   } = useForm<EmailFormValues>();
 
   const {
     formRef: passwordFormRef,
     handleMutationErrors: handlePasswordFormMutationErrors,
     onError: onPasswordFormError,
-    resetForm: resetPasswordForm,
-    unexpectedError: passwordFormUnexpectedError,
+    setUnexpectedFormError: passwordFormUnexpectedError,
   } = useForm<PasswordFormValues>();
 
   const { t } = useTranslation();
   const { query } = useRouter();
+  const { userMe } = useAuthContext();
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
+  const context = useLanguageHeaderContext();
+
   const header = !emailSubmitted
     ? t('reset-password:header')
     : t('reset-password:emailSubmittedHeader');
-  const context = useLanguageHeaderContext();
 
   const emailValidationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
@@ -84,7 +84,7 @@ const ResetPasswordPage: NextPage = () => {
       if (sendPasswordResetEmail.errors && !!sendPasswordResetEmail.errors.length) {
         handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
       } else if (sendPasswordResetEmail.successMessage) {
-        resetEmailForm();
+        emailFormRef.current?.resetForm();
         toggleNotification(sendPasswordResetEmail.successMessage);
         setEmailSubmitted(true);
       } else {
@@ -100,7 +100,7 @@ const ResetPasswordPage: NextPage = () => {
       if (!!resetPassword.errors && !!resetPassword.errors.length) {
         handlePasswordFormMutationErrors(resetPassword.errors);
       } else if (resetPassword.successMessage) {
-        resetPasswordForm();
+        passwordFormRef.current?.resetForm();
         toggleNotification(resetPassword.successMessage);
         await Router.push(urls.logout);
       } else {
@@ -218,6 +218,10 @@ const ResetPasswordPage: NextPage = () => {
     },
   };
 
+  if (userMe) {
+    return <LogoutRequiredTemplate {...layoutProps} />;
+  }
+
   return (
     <FormTemplate {...layoutProps}>
       {renderPasswordForm}
@@ -233,4 +237,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withNoAuth(ResetPasswordPage);
+export default withUserMe(ResetPasswordPage);

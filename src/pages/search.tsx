@@ -55,7 +55,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
 
@@ -76,10 +76,10 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   topNavbar: {
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
+    paddingTop: 0,
     display: 'flex',
     justifyContent: 'flex-end',
     boxShadow: 'none',
-    backgroundColor: palette.common.white,
     borderBottom: BORDER,
   },
   cardHeaderRoot: {
@@ -96,6 +96,12 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
     padding: spacing(1),
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
+    backgroundColor: palette.common.white,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  searchForm: {
+    flexGrow: 1,
   },
   searchInputBaseInput: {
     paddingLeft: spacing(2),
@@ -157,7 +163,7 @@ const SearchPage: NextPage = () => {
 
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useCoursesQuery({ variables, context });
-  const { formRef, resetForm } = useForm<SearchFormValues>();
+  const { formRef } = useForm<SearchFormValues>();
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const school = R.propOr(null, 'school', data);
   const subject = R.propOr(null, 'subject', data);
@@ -174,6 +180,14 @@ const SearchPage: NextPage = () => {
   const schoolTypeName = R.prop('name', schoolType);
   const countryName = R.prop('name', country);
   const cityName = R.prop('name', city);
+
+  useEffect(() => {
+    formRef.current?.setFieldValue('school', school);
+    formRef.current?.setFieldValue('subject', subject);
+    formRef.current?.setFieldValue('schoolType', schoolType);
+    formRef.current?.setFieldValue('country', country);
+    formRef.current?.setFieldValue('city', city);
+  }, [school, subject, schoolType, country, city]);
 
   const {
     open: filtersOpen,
@@ -206,7 +220,7 @@ const SearchPage: NextPage = () => {
   // Pick non-empty values and reload the page with new query params.
   const handleSubmitFilters = async (filteredValues: Record<symbol, unknown>): Promise<void> => {
     const validQuery = R.pickBy((val: string): boolean => !!val, filteredValues);
-    resetForm();
+    formRef.current?.resetForm();
     handleCloseFilters();
     await Router.push({ pathname, query: validQuery });
   };
@@ -214,7 +228,7 @@ const SearchPage: NextPage = () => {
   // Clear the query params and reset form.
   const handleClearFilters = async (): Promise<void> => {
     const paginationQuery = getPaginationQuery(query);
-    resetForm();
+    formRef.current?.resetForm();
     setSearchValue('');
     handleCloseFilters();
     await Router.push({ pathname, query: paginationQuery });
@@ -431,12 +445,7 @@ const SearchPage: NextPage = () => {
 
   const renderFilterResultsForm = (
     <DialogContent className={classes.dialogContent}>
-      <Formik
-        onSubmit={handlePreSubmit}
-        initialValues={initialValues}
-        innerRef={formRef}
-        enableReinitialize
-      >
+      <Formik onSubmit={handlePreSubmit} initialValues={initialValues} innerRef={formRef}>
         {renderSearchFormFields}
       </Formik>
     </DialogContent>
@@ -549,7 +558,7 @@ const SearchPage: NextPage = () => {
   const customTopNavbar = (
     <AppBar className={classes.topNavbar}>
       <Box className={classes.searchContainer}>
-        <form onSubmit={handleSubmitSearchInput}>
+        <form className={classes.searchForm} onSubmit={handleSubmitSearchInput}>
           <InputBase
             classes={{ input: classes.searchInputBaseInput }}
             placeholder={t('forms:searchCourses')}

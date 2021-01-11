@@ -53,7 +53,7 @@
   "continue": "Fortsätta",
   "activity": "Aktivitet",
   "seeAll": "Visa allt",
-  "skip": "Hoppa",
+  "setupLater": "Ställa in senare",
   "loading": "Laddar...",
   "home": "Hem",
   "search": "Sök",
@@ -69,8 +69,16 @@
   "send": "Skicka",
   "stars": "Stjärnor",
   "getStarted": "Komma igång",
-  "forEducators": "För lärare",
+  "forTeachers": "För lärare",
   "company": "Företag",
   "guidelines": "Riktlinje",
-  "values": "Värden"
+  "values": "Värden",
+  "gotIt": "Jag förstår!",
+  "usernamePlaceholder": "<ditt_användarnamn>",
+  "emailPlaceholder": "<din_e-post>",
+  "guidelinesLink": "Riktlinjer",
+  "loginRequiredHeader": "Inloggning krävs",
+  "loginRequiredText": "Du måste logga in för att fortsätta.",
+  "logoutRequiredHeader": "Logout krävs",
+  "logoutRequiredText": "Du måste logga ut för att fortsätta."
 }
