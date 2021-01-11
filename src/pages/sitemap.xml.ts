@@ -38,6 +38,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     urls.login,
     urls.privacy,
     urls.register,
+    urls.resetPassword,
     urls.score,
     urls.search,
     urls.terms,
