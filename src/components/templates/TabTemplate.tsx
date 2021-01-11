@@ -3,7 +3,7 @@ import { useMediaQueries, useTabs } from 'hooks';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
-import { DynamicBackButton, StaticBackButton, TabPanel } from '../shared';
+import { DynamicBackButton, TabPanel } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
