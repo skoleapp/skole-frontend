@@ -1,4 +1,4 @@
-import { LoadingTemplate, OfflineTemplate } from 'components';
+import { LoadingTemplate } from 'components';
 import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import Router from 'next/router';
@@ -24,7 +24,7 @@ export const withUserMe = (PageComponent: NextPage): NextPage => {
     }, []);
 
     if (authNetworkError) {
-      return <OfflineTemplate />;
+      return <ErrorTemplate variant="offline" />;
     }
 
     if (!authLoading && !authNetworkError) {

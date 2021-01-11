@@ -4,7 +4,6 @@ import {
   ErrorTemplate,
   FormTemplate,
   FormSubmitSection,
-  OfflineTemplate,
   TextFormField,
   ContactLink,
   LoginRequiredTemplate,
@@ -214,11 +213,11 @@ const AddCoursePage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;

@@ -1,6 +1,6 @@
 {
   "title": "Offline",
   "description": "Could not connect to the server.",
-  "header": "Could not connect to the server",
+  "header": "Offline",
   "text": "Please make sure you have an Internet connection and try again in a moment."
 }

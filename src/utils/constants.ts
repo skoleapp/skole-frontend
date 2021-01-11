@@ -41,8 +41,8 @@ export const LOCALE_PATHS = ['', '/fi', '/sv'];
 export const DEFAULT_NAMESPACES = [
   'common',
   'marketing',
-  '_error',
-  '404',
+  'error',
+  'not-found',
   'languages',
   'forms',
   'validation',

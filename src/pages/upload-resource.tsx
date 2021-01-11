@@ -5,7 +5,6 @@ import {
   FileField,
   FormTemplate,
   FormSubmitSection,
-  OfflineTemplate,
   TextFormField,
   TextLink,
   DatePickerFormField,
@@ -356,11 +355,11 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (

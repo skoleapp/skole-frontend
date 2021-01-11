@@ -25,8 +25,6 @@ import {
   LoadingTemplate,
   MainTemplate,
   NotFoundBox,
-  NotFoundTemplate,
-  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
   ResponsiveDialog,
@@ -458,11 +456,11 @@ const CourseDetailPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   if (course) {
@@ -475,7 +473,8 @@ const CourseDetailPage: NextPage = () => {
       </MainTemplate>
     );
   }
-  return <NotFoundTemplate />;
+
+  return <ErrorTemplate variant="not-found" />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => ({

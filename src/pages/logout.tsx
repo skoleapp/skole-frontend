@@ -1,13 +1,7 @@
 import { useApolloClient } from '@apollo/client';
 import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import {
-  ButtonLink,
-  ErrorTemplate,
-  FormTemplate,
-  LoadingTemplate,
-  OfflineTemplate,
-} from 'components';
+import { ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
 import { useGraphQlLogoutMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -54,11 +48,11 @@ const LogoutPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (

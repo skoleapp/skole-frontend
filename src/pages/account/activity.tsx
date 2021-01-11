@@ -16,7 +16,6 @@ import {
   LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
-  OfflineTemplate,
   PaginatedTable,
   ResponsiveDialog,
 } from 'components';
@@ -212,11 +211,11 @@ const ActivityPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (

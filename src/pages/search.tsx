@@ -28,7 +28,6 @@ import {
   MainTemplate,
   NativeSelectField,
   NotFoundBox,
-  OfflineTemplate,
   PaginatedTable,
   ContactLink,
   SkoleDialog,
@@ -585,11 +584,11 @@ const SearchPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (

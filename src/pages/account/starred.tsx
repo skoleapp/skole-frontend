@@ -4,7 +4,6 @@ import {
   LoadingBox,
   LoginRequiredTemplate,
   NotFoundBox,
-  OfflineTemplate,
   PaginatedTable,
   ResourceTableBody,
   TabTemplate,
@@ -101,11 +100,11 @@ const StarredPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <OfflineTemplate />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return <TabTemplate {...layoutProps} />;
