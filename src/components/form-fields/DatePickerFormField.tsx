@@ -61,6 +61,7 @@ export const DatePickerFormField: React.FC<Props> = ({
         okLabel={t('common:confirm')}
         cancelLabel={renderBlackLabel(t('common:cancel'))}
         clearLabel={renderBlackLabel(t('common:clear'))}
+        disableFuture
         clearable
         {...props}
       />
