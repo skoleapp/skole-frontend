@@ -1,5 +1,5 @@
 import { Button, DialogActions, DialogContent, DialogContentText } from '@material-ui/core';
-import useTranslation from 'next-translate/useTranslation';
+import { useTranslation } from 'lib';
 import React from 'react';
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';

@@ -1,6 +1,5 @@
 const withOffline = require('next-offline');
 const withTranslate = require('next-translate');
-const R = require('ramda');
 const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL, EMAIL_ADDRESS } = process.env;
 
 const config = {
@@ -59,6 +58,4 @@ const config = {
   },
 };
 
-const withWrappers = R.compose(withOffline, withTranslate);
-
-module.exports = withWrappers(config);
+module.exports = withOffline(withTranslate(config));
