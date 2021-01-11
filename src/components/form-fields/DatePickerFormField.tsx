@@ -11,7 +11,6 @@ import React from 'react';
 
 import { useTranslation } from 'lib';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import { BORDER_RADIUS } from 'theme';
 import { DATE_PICKER_FORMAT } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
@@ -20,11 +19,6 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
   blackLabel: {
     color: palette.common.black,
-  },
-  dialog: {
-    '& .MuiDialog-paper': {
-      borderRadius: BORDER_RADIUS,
-    },
   },
 }));
 
@@ -48,14 +42,9 @@ export const DatePickerFormField: React.FC<Props> = ({
 
   const arrowButtonProps: Partial<IconButtonProps> = {
     size: 'small',
-    classes: {
-      root: classes.arrowButton,
-    },
   };
 
-  const handleChange = (_date: MaterialUiPickersDate | null, value?: string | null) =>
-    setFieldValue(name, value);
-
+  const handleChange = (value: MaterialUiPickersDate | null) => setFieldValue(name, value);
   const renderBlackLabel = (label: string) => <span className={classes.blackLabel}>{label}</span>;
 
   return (
@@ -66,15 +55,12 @@ export const DatePickerFormField: React.FC<Props> = ({
         format={DATE_PICKER_FORMAT}
         leftArrowButtonProps={arrowButtonProps}
         rightArrowButtonProps={arrowButtonProps}
-        DialogProps={{ className: classes.dialog }}
         invalidDateMessage={t('validation:invalidDate')}
         minDateMessage={t('validation:minDate')}
         maxDateMessage={t('validation:maxDate')}
         okLabel={t('common:confirm')}
         cancelLabel={renderBlackLabel(t('common:cancel'))}
         clearLabel={renderBlackLabel(t('common:clear'))}
-        disableToolbar
-        disableFuture
         clearable
         {...props}
       />
