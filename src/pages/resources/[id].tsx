@@ -537,6 +537,7 @@ const ResourceDetailPage: NextPage = () => {
       </MainTemplate>
     );
   }
+
   return <ErrorTemplate variant="not-found" />;
 };
 

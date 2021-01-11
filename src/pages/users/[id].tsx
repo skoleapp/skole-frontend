@@ -541,6 +541,7 @@ const UserPage: NextPage = () => {
       </MainTemplate>
     );
   }
+
   return <ErrorTemplate variant="not-found" />;
 };
 

@@ -57,11 +57,7 @@ export const TabTemplate: React.FC<Props> = ({
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
-  const dynamicBackUrl = topNavbarProps?.dynamicBackUrl;
-  const staticBackUrl = topNavbarProps?.staticBackUrl;
-
-  const renderDynamicBackButton = !!dynamicBackUrl && <DynamicBackButton />;
-  const renderStaticBackButton = !!staticBackUrl && <StaticBackButton href={staticBackUrl} />;
+  const renderDynamicBackButton = !!topNavbarProps?.dynamicBackUrl && <DynamicBackButton />;
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
@@ -71,7 +67,7 @@ export const TabTemplate: React.FC<Props> = ({
         action: classes.cardHeaderAction,
       }}
       title={cardHeader}
-      avatar={renderDynamicBackButton || renderStaticBackButton}
+      avatar={renderDynamicBackButton}
       action={renderAction}
     />
   );

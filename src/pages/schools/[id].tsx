@@ -287,6 +287,7 @@ const SchoolDetailPage: NextPage = () => {
       </TabTemplate>
     );
   }
+
   return <ErrorTemplate variant="not-found" />;
 };
 
