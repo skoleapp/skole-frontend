@@ -28,7 +28,6 @@ import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
-import Router from 'next/router';
 import React, { MouseEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { TopNavbarProps } from 'types';
@@ -36,8 +35,10 @@ import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
 import { Logo } from './Logo';
-import { BackButton, ButtonLink, IconButtonLink, LanguageButton } from '../shared';
+import { ButtonLink, IconButtonLink, LanguageButton } from '../shared';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
+import { DynamicBackButton } from '../shared/DynamicBackButton';
+import { StaticBackButton } from '../shared/StaticBackButton';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
@@ -102,8 +103,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperOpen(!activityPopperOpen);
   };
 
-  const renderDynamicBackButton = !!dynamicBackUrl && <BackButton onClick={() => Router.back()} />;
-  const renderStaticBackButton = !!staticBackUrl && <BackButton href={staticBackUrl} />;
+  const renderDynamicBackButton = !!dynamicBackUrl && <DynamicBackButton />;
+  const renderStaticBackButton = !!staticBackUrl && <StaticBackButton href={staticBackUrl} />;
   const renderHeader = <Typography variant="h5">{header}</Typography>;
   const renderLogo = !hideLogo && <Logo />;
   const renderLanguageButton = !hideLanguageButton && <LanguageButton />;

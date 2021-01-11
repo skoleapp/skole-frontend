@@ -17,7 +17,6 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { urls } from 'utils';
 
 const StarredPage: NextPage = () => {
   const { t } = useTranslation();
@@ -25,8 +24,7 @@ const StarredPage: NextPage = () => {
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
-  const { userMe, userMeId } = useAuthContext();
-  const staticBackUrl = urls.user(userMeId);
+  const { userMe } = useAuthContext();
   const courses = R.pathOr([], ['starredCourses', 'objects'], data);
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
@@ -84,7 +82,7 @@ const StarredPage: NextPage = () => {
       title: t('starred:title'),
     },
     topNavbarProps: {
-      staticBackUrl,
+      dynamicBackUrl: true,
       header,
     },
     cardHeader: header,

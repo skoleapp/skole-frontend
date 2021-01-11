@@ -8,19 +8,18 @@ import { UrlObject } from 'url';
 
 interface Props extends Omit<ButtonProps, 'href'> {
   tooltip?: string;
-  href?: string | UrlObject;
-  onClick?: () => void;
+  href: string | UrlObject;
 }
 
-export const BackButton: React.FC<Props> = ({ tooltip, href, onClick, ...props }) => {
-  const { t } = useTranslation();
+export const StaticBackButton: React.FC<Props> = ({ tooltip, href, ...props }) => {
   const { isMobile } = useMediaQueries();
+  const { t } = useTranslation();
   const color = isMobile ? 'secondary' : 'default';
 
   return (
-    <Link href={href || '#'}>
+    <Link href={href}>
       <Tooltip title={tooltip || t('common-tooltips:goBack')}>
-        <IconButton {...props} onClick={onClick} size="small" color={color}>
+        <IconButton {...props} size="small" color={color}>
           <ArrowBackOutlined />
         </IconButton>
       </Tooltip>

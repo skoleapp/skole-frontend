@@ -16,7 +16,7 @@ import {
 import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import clsx from 'clsx';
 import {
-  BackButton,
+  StaticBackButton,
   CustomBottomNavbarContainer,
   DiscussionHeader,
   ErrorTemplate,
@@ -355,7 +355,7 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const renderBackButton = (
-    <BackButton href={searchUrl} tooltip={t('course-tooltips:backToSearch')} />
+    <StaticBackButton href={searchUrl} tooltip={t('course-tooltips:backToSearch')} />
   );
 
   const renderResourcesHeader = (

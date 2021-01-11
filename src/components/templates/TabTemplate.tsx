@@ -1,10 +1,9 @@
 import { CardHeader, makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
 import { useMediaQueries, useTabs } from 'hooks';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
-import { BackButton, TabPanel } from '../shared';
+import { DynamicBackButton, StaticBackButton, TabPanel } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -56,16 +55,13 @@ export const TabTemplate: React.FC<Props> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const router = useRouter();
   const { isTabletOrDesktop } = useMediaQueries();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
   const dynamicBackUrl = topNavbarProps?.dynamicBackUrl;
   const staticBackUrl = topNavbarProps?.staticBackUrl;
-  const handleBackButtonClick = () => (staticBackUrl ? router.push(staticBackUrl) : router.back());
 
-  const renderBackButton = (!!dynamicBackUrl || !!staticBackUrl) && (
-    <BackButton onClick={handleBackButtonClick} />
-  );
+  const renderDynamicBackButton = !!dynamicBackUrl && <DynamicBackButton />;
+  const renderStaticBackButton = !!staticBackUrl && <StaticBackButton href={staticBackUrl} />;
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
@@ -75,7 +71,7 @@ export const TabTemplate: React.FC<Props> = ({
         action: classes.cardHeaderAction,
       }}
       title={cardHeader}
-      avatar={renderBackButton}
+      avatar={renderDynamicBackButton || renderStaticBackButton}
       action={renderAction}
     />
   );

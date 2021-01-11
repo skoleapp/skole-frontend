@@ -1,11 +1,10 @@
 import { CardHeader, makeStyles, Paper } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import Router from 'next/router';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 
-import { BackButton, NotFoundBox } from '../shared';
+import { DynamicBackButton, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -38,12 +37,12 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-
   const title = t(`${variant}:title`);
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);
 
-  const renderBackButton = <BackButton onClick={() => Router.back()} />;
+  const renderBackButton = <DynamicBackButton />;
+  const renderContent = <NotFoundBox text={text} />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -55,8 +54,6 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
       avatar={renderBackButton}
     />
   );
-
-  const renderContent = <NotFoundBox text={text} />;
 
   const layoutProps = {
     seoProps: {

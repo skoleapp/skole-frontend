@@ -1,10 +1,9 @@
 import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
-import Router from 'next/router';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
-import { BackButton, MarkdownContent } from '../shared';
+import { DynamicBackButton, MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -43,7 +42,7 @@ export const MarkdownTemplate: React.FC<Props> = ({ children, header, ...props }
     },
   };
 
-  const renderBackButton = <BackButton onClick={() => Router.back()} />;
+  const renderBackButton = <DynamicBackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader

@@ -38,6 +38,6 @@ export interface MainTemplateProps extends GridProps {
 }
 
 export interface FormTemplateProps extends Omit<MainTemplateProps, 'topNavbarProps'> {
-  topNavbarProps: Omit<TopNavbarProps, 'header'>;
+  topNavbarProps: Omit<TopNavbarProps, 'header' | 'staticBackUrl'>;
   header: string;
 }
