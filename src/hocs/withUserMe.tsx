@@ -1,4 +1,4 @@
-import { LoadingTemplate } from 'components';
+import { ErrorTemplate, LoadingTemplate } from 'components';
 import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import Router from 'next/router';
