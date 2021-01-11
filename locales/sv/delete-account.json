@@ -1,6 +1,5 @@
 {
   "title": "Radera konto",
-  "description": "Radera ditt Skole-konto.",
   "header": "Radera konto",
   "confirmDeleteHeader": "Är du säker?",
   "confirmDeleteText": "Den här åtgärden kan inte återställas och ditt konto kommer att raderas permanent."

@@ -82,7 +82,6 @@ const StarredPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('starred:title'),
-      description: t('starred:description'),
     },
     topNavbarProps: {
       staticBackUrl,

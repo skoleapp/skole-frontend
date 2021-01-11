@@ -124,7 +124,6 @@ export const DeleteAccountPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('delete-account:title'),
-      description: t('delete-account:description'),
     },
     header: t('delete-account:header'),
     topNavbarProps: {

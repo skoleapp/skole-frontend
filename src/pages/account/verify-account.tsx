@@ -208,7 +208,6 @@ const VerifyAccountPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('verify-account:title'),
-      description: t('verify-account:description'),
     },
     header,
     topNavbarProps: {

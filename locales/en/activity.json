@@ -1,6 +1,5 @@
 {
   "title": "Activity",
-  "description": "View your activity on Skole.",
   "header": "Activity",
   "noActivity": "You have no activity.",
   "markAllAsRead": "Mark all as Read",

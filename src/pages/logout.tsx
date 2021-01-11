@@ -30,7 +30,6 @@ const LogoutPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('logout:title'),
-      description: t('logout:description'),
     },
     header: t('logout:header'),
     hideBottomNavbar: true,

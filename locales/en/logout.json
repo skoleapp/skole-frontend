@@ -1,6 +1,5 @@
 {
   "title": "Logged Out",
-  "description": "Logged out from Skole.",
   "header": "Logged Out",
   "loggedOut": "You have been logged out!",
   "logInAgain": "Log in again"

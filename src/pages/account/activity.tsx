@@ -198,7 +198,6 @@ const ActivityPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('activity:title'),
-      description: t('activity:description'),
     },
     topNavbarProps: {
       dynamicBackUrl: true,

@@ -1,6 +1,5 @@
 {
   "title": "Verifiera konto",
-  "description": "Verifiera ditt konto på Skole.",
   "header": "Verifiera konto",
   "emailHelpText": "Klicka på knappen nedan så skickar vi dig en länk via e-post som du kan använda för att verifiera ditt konto.",
   "confirmationHelpText": "Bra! Klicka nu på knappen nedan för att avsluta kontokontrollen.",
