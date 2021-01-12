@@ -100,9 +100,8 @@ const MyDataPage: NextPage = () => {
     seoProps: {
       title: t('my-data:title'),
     },
-    header: t('my-data:header'),
     topNavbarProps: {
-      dynamicBackUrl: true,
+      header: t('my-data:header'),
     },
   };
 

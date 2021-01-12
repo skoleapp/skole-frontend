@@ -18,5 +18,5 @@
   "downloadPdf": "Download PDF file.",
   "printPdf": "Print PDF file.",
   "rotatePdf": "Rotate PDF file.",
-  "backToCourse": "Go back to {{ courseName }}."
+  "backToCourse": "Back to {{ courseName }}."
 }

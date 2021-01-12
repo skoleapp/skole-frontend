@@ -17,5 +17,6 @@
   "exitDrawingMode": "Poistu piirtotilasta.",
   "downloadPdf": "Lataa PDF-tiedosto.",
   "printPdf": "Tulosta PDF-tiedosto.",
-  "rotatePdf": "Käännä PDF-tiedostoa."
+  "rotatePdf": "Käännä PDF-tiedostoa.",
+  "backToCourse": "Takaisin kurssille {{ courseName }}."
 }

@@ -77,8 +77,6 @@
   "usernamePlaceholder": "<your_username>",
   "emailPlaceholder": "<your_email>",
   "guidelinesLink": "Guidelines",
-  "loginRequiredHeader": "Login Required",
-  "loginRequiredText": "You need to log in to continue.",
-  "logoutRequiredHeader": "Logout Required",
-  "logoutRequiredText": "You need to log out to continue."
+  "loginRequired": "You need to log in to continue.",
+  "logoutRequired": "You need to log out to continue."
 }

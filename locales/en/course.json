@@ -6,7 +6,6 @@
   "shareHeader": "Share Course",
   "shareTitle": "{{ courseName }} on Skole",
   "shareText": "View {{ courseName }} by {{ creatorUsername }} on Skole",
-  "infoHeader": "Course Details",
   "share": "Share Course",
   "delete": "Delete Course",
   "confirmDelete": "Are you sure you want to delete this course?"

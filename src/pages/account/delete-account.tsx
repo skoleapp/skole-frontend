@@ -125,9 +125,8 @@ export const DeleteAccountPage: NextPage = () => {
     seoProps: {
       title: t('delete-account:title'),
     },
-    header: t('delete-account:header'),
     topNavbarProps: {
-      dynamicBackUrl: true,
+      header: t('delete-account:header'),
     },
   };
 

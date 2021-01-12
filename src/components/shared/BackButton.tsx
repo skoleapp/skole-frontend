@@ -5,20 +5,21 @@ import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
 import { UrlObject } from 'url';
+import { urls } from 'utils';
 
 interface Props extends Omit<ButtonProps, 'href'> {
+  href?: string | UrlObject;
   tooltip?: string;
-  href: string | UrlObject;
 }
 
-export const StaticBackButton: React.FC<Props> = ({ tooltip, href, ...props }) => {
+export const BackButton: React.FC<Props> = ({ href, tooltip, ...props }) => {
   const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
   const color = isMobile ? 'secondary' : 'default';
 
   return (
-    <Link href={href}>
-      <Tooltip title={tooltip || t('common-tooltips:goBack')}>
+    <Link href={href || urls.home}>
+      <Tooltip title={tooltip || t('common-tooltips:backToHome')}>
         <IconButton {...props} size="small" color={color}>
           <ArrowBackOutlined />
         </IconButton>

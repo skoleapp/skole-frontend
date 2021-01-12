@@ -37,8 +37,6 @@ import { ActivityPreview } from '../activity';
 import { Logo } from './Logo';
 import { ButtonLink, IconButtonLink, LanguageButton } from '../shared';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
-import { DynamicBackButton } from '../shared/DynamicBackButton';
-import { StaticBackButton } from '../shared/StaticBackButton';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
@@ -67,22 +65,24 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
-  dynamicBackUrl,
-  staticBackUrl,
+  renderBackButton,
   hideSearch,
-  hideAuthButtons,
+  hideDynamicButtons,
+  hideLoginButton,
+  hideRegisterButton,
+  hideGetStartedButton,
   hideForTeachersButton,
   hideLanguageButton,
   hideLogo,
-  headerRight,
-  headerRightSecondary,
-  headerLeft,
+  renderHeaderRight,
+  renderHeaderRightSecondary,
+  renderHeaderLeft,
 }) => {
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
-  const dense = !!headerLeft || !!headerRightSecondary;
+  const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
@@ -103,24 +103,22 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperOpen(!activityPopperOpen);
   };
 
-  const renderDynamicBackButton = !!dynamicBackUrl && <DynamicBackButton />;
-  const renderStaticBackButton = !!staticBackUrl && <StaticBackButton href={staticBackUrl} />;
-  const renderHeader = <Typography variant="h5">{header}</Typography>;
+  const renderHeader = !!header && <Typography variant="h5">{header}</Typography>;
   const renderLogo = !hideLogo && <Logo />;
   const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
   const renderMobileContent = isMobile && (
     <Grid container alignItems="center">
       <Grid item xs={dense ? 4 : 2} container justify="flex-start" alignItems="center">
-        {renderStaticBackButton || renderDynamicBackButton}
-        {headerLeft}
+        {renderBackButton}
+        {renderHeaderLeft}
       </Grid>
       <Grid item xs={dense ? 4 : 8} container justify="center" alignItems="center">
-        {header ? renderHeader : renderLogo}
+        {renderHeader || renderLogo}
       </Grid>
       <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
-        {headerRight || renderLanguageButton}
-        {headerRightSecondary}
+        {renderHeaderRight || renderLanguageButton}
+        {renderHeaderRightSecondary}
       </Grid>
     </Grid>
   );
@@ -166,17 +164,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Popper>
   );
 
-  const renderForTeachersButton = !userMe && !hideForTeachersButton && (
-    <ButtonLink href={urls.forTeachers} color="secondary" endIcon={<SchoolOutlined />}>
-      {t('common:forTeachers')}
-    </ButtonLink>
-  );
-
-  // ClickAway listener requires a single child element.
-  const renderAuthenticatedButtons = !!userMe && !hideAuthButtons && (
+  const renderAuthenticatedButtons = !!userMe && !hideDynamicButtons && (
     <>
       <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
-        <Box>
+        <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
+        >
           {renderActivityButton}
           {renderActivityPopper}
         </Box>
@@ -196,31 +188,36 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 
-  const renderLoginButton = isDesktop && (
+  const renderLoginButton = isDesktop && !hideLoginButton && (
     <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
       {t('common:login')}
     </ButtonLink>
   );
 
-  const renderRegisterButton = isDesktop && (
+  const renderRegisterButton = isDesktop && !hideRegisterButton && (
     <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
       {t('common:register')}
     </ButtonLink>
   );
 
-  const renderGetStartedButton = (
+  const renderGetStartedButton = !hideGetStartedButton && (
     <ButtonLink href={urls.index} color="secondary" endIcon={<LaunchOutlined />}>
       {t('common:getStarted')}
     </ButtonLink>
   );
 
-  // Allow hiding auth buttons manually.
-  // Also hide them automatically in case of a network error when authenticating/fetching user.
-  const renderUnAuthenticatedButtons = !hideAuthButtons && !authNetworkError && (
+  const renderForTeachersButton = !hideForTeachersButton && (
+    <ButtonLink href={urls.forTeachers} color="secondary" endIcon={<SchoolOutlined />}>
+      {t('common:forTeachers')}
+    </ButtonLink>
+  );
+
+  const renderUnAuthenticatedButtons = !hideDynamicButtons && !authNetworkError && (
     <>
       {renderLoginButton}
       {renderRegisterButton}
       {renderGetStartedButton}
+      {renderForTeachersButton}
     </>
   );
 
@@ -235,7 +232,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <Grid item xs={10} container justify="flex-end" alignItems="center">
         {renderSearch}
         {renderDynamicButtons}
-        {renderForTeachersButton}
         {renderLanguageButton}
       </Grid>
     </Grid>

@@ -2,9 +2,7 @@ import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/c
 import { useMediaQueries } from 'hooks';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { FormTemplateProps } from 'types';
-import { DynamicBackButton } from '../shared';
-
+import { MainTemplateProps } from 'types';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -26,24 +24,13 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
 }));
 
-export const FormTemplate: React.FC<FormTemplateProps> = ({
+export const FormTemplate: React.FC<MainTemplateProps> = ({
   children,
-  header,
   topNavbarProps,
   ...props
 }) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
-
-  const layoutProps = {
-    ...props,
-    topNavbarProps: {
-      ...topNavbarProps,
-      header,
-    },
-  };
-
-  const renderDynamicBackButton = !!topNavbarProps?.dynamicBackUrl && <DynamicBackButton />;
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
@@ -51,8 +38,8 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
         root: classes.cardHeaderRoot,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={header}
-      avatar={renderDynamicBackButton}
+      title={topNavbarProps?.header}
+      avatar={topNavbarProps?.renderBackButton}
     />
   );
 
@@ -65,6 +52,11 @@ export const FormTemplate: React.FC<FormTemplateProps> = ({
       </Grid>
     </CardContent>
   );
+
+  const layoutProps = {
+    topNavbarProps,
+    ...props,
+  };
 
   return (
     <MainTemplate {...layoutProps}>

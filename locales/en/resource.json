@@ -8,7 +8,6 @@
   "shareHeader": "Share Resource",
   "shareTitle": "{{ resourceTitle }} on Skole",
   "shareText": "See {{ resourceTitle }} from {{ creatorUsername }} on Skole",
-  "infoHeader": "Resource Details",
   "share": "Share Resource",
   "delete": "Delete Resource",
   "confirmDelete": "Are you sure you want to delete this resource?"

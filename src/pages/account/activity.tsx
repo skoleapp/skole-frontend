@@ -10,7 +10,7 @@ import {
 import { DoneOutlineOutlined, SettingsOutlined } from '@material-ui/icons';
 import {
   ActivityTableBody,
-  DynamicBackButton,
+  BackButton,
   ErrorTemplate,
   LoadingBox,
   LoginRequiredTemplate,
@@ -124,7 +124,7 @@ const ActivityPage: NextPage = () => {
     handleCloseActionsDialog(e);
   };
 
-  const renderBackButton = <DynamicBackButton />;
+  const renderBackButton = <BackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -202,8 +202,8 @@ const ActivityPage: NextPage = () => {
     },
     topNavbarProps: {
       header,
-      dynamicBackUrl: true,
-      headerRight: renderActionsButton,
+      renderBackButton,
+      renderHeaderRight: renderActionsButton,
     },
   };
 

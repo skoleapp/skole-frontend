@@ -1,4 +1,5 @@
 import {
+  BackButton,
   CourseTableBody,
   ErrorTemplate,
   LoadingBox,
@@ -24,7 +25,7 @@ const StarredPage: NextPage = () => {
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
-  const { userMe } = useAuthContext();
+  const { userMe, profileUrl } = useAuthContext();
   const courses = R.pathOr([], ['starredCourses', 'objects'], data);
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
@@ -41,6 +42,10 @@ const StarredPage: NextPage = () => {
     titleLeft: t('common:title'),
     ...commonTableHeadProps,
   };
+
+  const renderBackButton = (
+    <BackButton href={profileUrl} tooltip={t('common-tooltips:backToProfile')} />
+  );
 
   const renderLoading = <LoadingBox />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
@@ -82,14 +87,15 @@ const StarredPage: NextPage = () => {
       title: t('starred:title'),
     },
     topNavbarProps: {
-      dynamicBackUrl: true,
+      renderBackButton,
       header,
     },
-    cardHeader: header,
-    leftTabLabel: `${t('common:courses')} (${courseCount})`,
-    rightTabLabel: `${t('common:resources')} (${resourceCount})`,
-    renderLeftTabContent,
-    renderRightTabContent,
+    tabTemplateProps: {
+      leftTabLabel: `${t('common:courses')} (${courseCount})`,
+      rightTabLabel: `${t('common:resources')} (${resourceCount})`,
+      renderLeftTabContent,
+      renderRightTabContent,
+    },
   };
 
   if (!userMe) {

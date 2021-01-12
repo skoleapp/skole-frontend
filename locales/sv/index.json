@@ -5,11 +5,13 @@
   "skipLogin": "Hoppa över inloggning",
   "materialsPitchHeader": "Studiematerial 📚",
   "discussionPitchHeader": "Diskussioner 💬",
-  "materialsBullet1": "Enkel tillgång tll material från dina kurser..",
+  "materialsBullet1": "Få åtkomst till material från dina kurser enkelt.",
   "materialsBullet2": "Lägg till nytt innehåll och dela det med dina vänner.",
-  "materialsBullet3": "Öka din poäng och tjäna skryta rättigheter. 😁",
+  "materialsBullet3": "Se material från tidigare kursinstanser.",
+  "materialsBullet4": "Öka din poäng och tjäna skryta. 😁",
   "discussionBullet1": "Diskutera kurser och studiematerial med lätthet.",
-  "discussionBullet2": "Anonymt eller med ditt eget användarnamn.",
-  "discussionBullet3": "Se diskussioner från tidigare kursinstanser och ligga steget före. 🤓",
+  "discussionBullet2": "Visas anonymt eller med ditt användarnamn.",
+  "discussionBullet3": "Se diskussioner från tidigare kursinstanser.",
+  "discussionBullet4": "Be om hjälp från andra studenter och vara ett steg före. 🤓",
   "appStoreCta": "Snart tillgänglig från appbutiker!"
 }

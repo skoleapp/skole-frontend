@@ -27,6 +27,7 @@ import {
   SettingsButton,
   TextLink,
   TabPanel,
+  BackButton,
 } from 'components';
 import { useAuthContext } from 'context';
 import { BadgeObjectType, useUserQuery } from 'generated';
@@ -205,7 +206,7 @@ const UserPage: NextPage = () => {
     }
   };
 
-  const renderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
+  const renderrenderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
   const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
   const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
@@ -514,9 +515,9 @@ const UserPage: NextPage = () => {
       description: t('profile:description', { username }),
     },
     topNavbarProps: {
+      renderBackButton: <BackButton />,
       header: username,
-      dynamicBackUrl: true,
-      headerRight: renderHeaderRight,
+      renderHeaderRight: renderrenderHeaderRight,
     },
   };
 

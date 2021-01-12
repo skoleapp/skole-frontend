@@ -10,6 +10,7 @@ import {
   TextLink,
   ContactLink,
   LogoutRequiredTemplate,
+  BackButton,
 } from 'components';
 import { useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -78,21 +79,12 @@ const RegisterPage: NextPage = () => {
     setUnexpectedFormError: updateUserUnexpectedError,
   } = useForm<UpdateUserFormValues>();
 
-  const getHeader = (): string => {
-    switch (phase) {
-      case RegisterPhases.REGISTER: {
-        return t('register:header');
-      }
-
-      case RegisterPhases.UPDATE_USER: {
-        return t('register:updateUserHeader');
-      }
-
-      case RegisterPhases.REGISTER_COMPLETE: {
-        return t('register:registerCompleteHeader');
-      }
-    }
-  };
+  const header =
+    phase === RegisterPhases.REGISTER
+      ? t('register:header')
+      : phase === RegisterPhases.UPDATE_USER
+      ? t('register:updateUserHeader')
+      : RegisterPhases.REGISTER_COMPLETE && t('register:registerCompleteHeader');
 
   const registerInitialValues = {
     username: '',
@@ -353,12 +345,13 @@ const RegisterPage: NextPage = () => {
       title: t('register:title'),
       description: t('register:description'),
     },
-    header: getHeader(),
     hideBottomNavbar: true,
     topNavbarProps: {
-      dynamicBackUrl: true,
+      renderBackButton: <BackButton />,
+      header,
       hideSearch: true,
-      hideAuthButtons: true,
+      hideRegisterButton: true,
+      hideGetStartedButton: true,
     },
   };
 

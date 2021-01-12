@@ -1,5 +1,11 @@
 import { FormControl, Typography } from '@material-ui/core';
-import { FormSubmitSection, FormTemplate, LogoutRequiredTemplate, TextFormField } from 'components';
+import {
+  BackButton,
+  FormSubmitSection,
+  FormTemplate,
+  LogoutRequiredTemplate,
+  TextFormField,
+} from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -212,9 +218,9 @@ const ResetPasswordPage: NextPage = () => {
       title: t('reset-password:title'),
       description: t('reset-password:description'),
     },
-    header,
     topNavbarProps: {
-      dynamicBackUrl: true,
+      header,
+      renderBackButton: <BackButton />,
     },
   };
 

@@ -1,6 +1,6 @@
 import { Divider, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, LandingPageTemplate } from 'components';
+import { BackButton, ButtonLink, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -45,7 +45,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     backgroundColor: palette.primary.main,
     marginBottom: spacing(2),
     borderRadius: '0.5rem',
-    maxWidth: '10rem',
   },
 }));
 
@@ -102,16 +101,7 @@ const ForTeachersPage: NextPage = () => {
 
   const renderPitch = (
     <Grid className={classes.pitchContainer} container direction="column" alignItems="center">
-      <Grid
-        container
-        item
-        xs={12}
-        md={10}
-        lg={8}
-        xl={6}
-        className={classes.pitchBoxContainer}
-        spacing={4}
-      >
+      <Grid container item xs={12} lg={8} xl={6} className={classes.pitchBoxContainer} spacing={8}>
         {renderPitchItems}
       </Grid>
     </Grid>
@@ -123,6 +113,8 @@ const ForTeachersPage: NextPage = () => {
       description: t('for-teachers:description'),
     },
     topNavbarProps: {
+      renderBackButton: <BackButton />,
+      header: t('for-teachers:header'),
       hideForTeachersButton: true,
     },
   };

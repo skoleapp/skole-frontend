@@ -16,7 +16,7 @@ import { urls } from 'utils';
 
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
-  const { userMe, userMeId, avatarThumbnail, unreadActivityCount } = useAuthContext();
+  const { userMe, avatarThumbnail, unreadActivityCount, profileUrl } = useAuthContext();
   const { searchUrl } = useSearch();
   const { pathname, query } = useRouter();
 
@@ -54,16 +54,14 @@ export const BottomNavbar: React.FC = () => {
     setValue(newValue);
 
   const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
-  const renderProfileLabel = userMe ? t('common:profile') : t('common:login');
-  const renderAvatarThumbnail = <Avatar className="avatar-thumbnail" src={avatarThumbnail} />;
+  const profileLabel = userMe ? t('common:profile') : t('common:login');
+  const authUrl = userMe ? profileUrl : urls.login;
+  const handleProfileActionClick = (): Promise<boolean> => Router.push(authUrl);
 
-  const handleProfileActionClick = (): Promise<boolean> =>
-    Router.push(userMeId ? urls.user(userMeId) : urls.login);
-
-  const renderAvatar = userMe ? (
-    <Link href={urls.user(userMeId)}>{renderAvatarThumbnail}</Link>
-  ) : (
-    <Link href={urls.login}>{renderAvatarThumbnail}</Link>
+  const renderAvatar = (
+    <Link href={authUrl}>
+      <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
+    </Link>
   );
 
   const renderHomeAction = (
@@ -115,7 +113,7 @@ export const BottomNavbar: React.FC = () => {
   const renderProfileAction = (
     <BottomNavigationAction
       value={5}
-      label={renderProfileLabel}
+      label={profileLabel}
       showLabel
       onClick={handleProfileActionClick}
       icon={renderAvatar}

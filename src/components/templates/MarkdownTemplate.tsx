@@ -3,7 +3,7 @@ import { useMediaQueries } from 'hooks';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
-import { DynamicBackButton, MarkdownContent } from '../shared';
+import { MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -25,24 +25,13 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
 }));
 
-interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
-  header: string;
+interface Props extends MainTemplateProps {
   children: string;
 }
 
-export const MarkdownTemplate: React.FC<Props> = ({ children, header, ...props }) => {
+export const MarkdownTemplate: React.FC<Props> = ({ children, topNavbarProps, ...props }) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
-
-  const layoutProps = {
-    ...props,
-    topNavbarProps: {
-      dynamicBackUrl: true,
-      header,
-    },
-  };
-
-  const renderBackButton = <DynamicBackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -50,8 +39,8 @@ export const MarkdownTemplate: React.FC<Props> = ({ children, header, ...props }
         root: classes.cardHeaderRoot,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={header}
-      avatar={renderBackButton}
+      title={topNavbarProps?.header}
+      avatar={topNavbarProps?.renderBackButton}
     />
   );
 
@@ -64,6 +53,11 @@ export const MarkdownTemplate: React.FC<Props> = ({ children, header, ...props }
       </Grid>
     </CardContent>
   );
+
+  const layoutProps = {
+    topNavbarProps,
+    ...props,
+  };
 
   return (
     <MainTemplate {...layoutProps}>

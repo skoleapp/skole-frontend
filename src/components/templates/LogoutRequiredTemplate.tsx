@@ -3,21 +3,19 @@ import { ArrowForwardOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
-import { FormTemplateProps } from 'types';
+import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 import { ButtonLink } from '../shared';
 import { FormTemplate } from './FormTemplate';
 
-export const LogoutRequiredTemplate: React.FC<Omit<FormTemplateProps, 'header' | 'children'>> = ({
-  ...props
-}) => {
+export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
   const handleClickCancelButton = (): void => Router.back();
 
   const renderText = (
     <Typography variant="subtitle1" align="center">
-      {t('common:logoutRequiredText')} 🙃
+      {t('common:logoutRequired')} 🙃
     </Typography>
   );
 
@@ -44,11 +42,12 @@ export const LogoutRequiredTemplate: React.FC<Omit<FormTemplateProps, 'header' |
   );
 
   return (
-    <FormTemplate {...props} header={t('common:logoutRequiredHeader')}>
+    <FormTemplate {...props}>
       {renderText}
       {renderLineBreak}
       {renderLogoutButton}
       {renderCancelButton}
+      {children}
     </FormTemplate>
   );
 };

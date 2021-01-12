@@ -6,6 +6,5 @@
   "shareHeader": "Share School",
   "shareTitle": "{{ schoolName }} on Skole",
   "shareText": "View {{ schoolName }} on Skole",
-  "share": "Share School",
-  "infoHeader": "School Details"
+  "share": "Share School"
 }

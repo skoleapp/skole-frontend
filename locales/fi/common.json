@@ -77,8 +77,6 @@
   "usernamePlaceholder": "<käyttäjätunnuksesi>",
   "emailPlaceholder": "<sähköpostiosoitteesi>",
   "guidelinesLink": "Ohjeitamme",
-  "loginRequiredHeader": "Kirjautuminen vaadittu",
-  "loginRequiredText": "Sinun pitää kirjatua sisään jatkaaksesi.",
-  "logoutRequiredHeader": "Uloskirjautuminen vaadittu",
-  "logoutRequiredText": "Sinun pitää kirjautua ulos jatkaaksesi."
+  "loginRequired": "Sinun pitää kirjatua sisään jatkaaksesi.",
+  "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi."
 }

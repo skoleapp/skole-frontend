@@ -1,7 +1,8 @@
 import { useApolloClient } from '@apollo/client';
 import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
+import { BackButton, ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
+import { useAuthContext } from 'context';
 import { useGraphQlLogoutMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -9,35 +10,37 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { urls } from 'utils';
+import { LS_LOGOUT_KEY, urls } from 'utils';
 
 const LogoutPage: NextPage = () => {
   const apolloClient = useApolloClient();
   const { t } = useTranslation();
   const { query } = useRouter();
+  const { setUserMe } = useAuthContext();
   const context = useLanguageHeaderContext();
-  const [logout, { loading, error }] = useGraphQlLogoutMutation({ context });
+
+  const onCompleted = async (): Promise<void> => {
+    await apolloClient.clearStore();
+    setUserMe(null);
+    localStorage.setItem(LS_LOGOUT_KEY, String(Date.now()));
+    !!query.next && (await Router.push(String(query.next))); // Automatically redirect to the next page if one has been provided as a query parameter.
+  };
+
+  const [logout, { loading, error }] = useGraphQlLogoutMutation({ context, onCompleted });
 
   useEffect(() => {
-    (async (): Promise<void> => {
-      await logout();
-      await apolloClient.clearStore();
-      localStorage.setItem('logout', String(Date.now()));
-      !!query.next && (await Router.push(String(query.next))); // Automatically redirect to the next page if one has been provided as a query parameter.
-    })();
+    logout();
   }, []);
 
   const layoutProps = {
     seoProps: {
       title: t('logout:title'),
     },
-    header: t('logout:header'),
     hideBottomNavbar: true,
     topNavbarProps: {
+      renderBackButton: <BackButton />,
+      header: t('logout:header'),
       hideSearch: true,
-      hideAuthButtons: true,
-      hideForTeachersButton: true,
-      hideLanguageButton: true,
     },
   };
 
