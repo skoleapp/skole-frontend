@@ -12,6 +12,6 @@
   "rank": "This user's rank is {{ rank }}.",
   "activity": "You have {{ unreadActivityCount }} unread activities.",
   "closeMenu": "Close menu.",
-  "backToHome": "Back to Home.",
-  "backToProfile": "Back to Profile."
+  "backToHome": "Back to home.",
+  "backToProfile": "Back to profile."
 }
