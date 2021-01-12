@@ -17,8 +17,8 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { useTranslation } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { urls } from 'utils';
@@ -246,11 +246,5 @@ const VerifyAccountPage: NextPage = () => {
 
   return <FormTemplate {...layoutProps}>{renderContent}</FormTemplate>;
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['verify-account'], locale),
-  },
-});
 
 export default withUserMe(VerifyAccountPage);
