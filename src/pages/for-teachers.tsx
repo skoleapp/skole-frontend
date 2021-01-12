@@ -2,8 +2,8 @@ import { Divider, Grid, makeStyles, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { BackButton, ButtonLink, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { useTranslation } from 'lib';
+import { NextPage } from 'next';
 import React from 'react';
 import { FOR_TEACHERS_PITCH_ITEMS, urls } from 'utils';
 
@@ -126,11 +126,5 @@ const ForTeachersPage: NextPage = () => {
     </LandingPageTemplate>
   );
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['for-teachers'], locale),
-  },
-});
 
 export default withUserMe(ForTeachersPage);

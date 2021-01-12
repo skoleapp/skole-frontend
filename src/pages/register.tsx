@@ -27,8 +27,8 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { useTranslation } from 'lib';
+import { NextPage } from 'next';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
@@ -367,11 +367,5 @@ const RegisterPage: NextPage = () => {
     </FormTemplate>
   );
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['register'], locale),
-  },
-});
 
 export default withUserMe(RegisterPage);

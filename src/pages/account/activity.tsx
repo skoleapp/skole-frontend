@@ -27,8 +27,8 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useActionsDialog, useLanguageHeaderContext, useMediaQueries } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { useTranslation } from 'lib';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
@@ -226,11 +226,5 @@ const ActivityPage: NextPage = () => {
     </MainTemplate>
   );
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['activity-tooltips'], locale),
-  },
-});
 
 export default withUserMe(ActivityPage);

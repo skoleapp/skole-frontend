@@ -21,8 +21,8 @@ import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
 import { LoginMutation, useLoginMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { useTranslation } from 'lib';
+import { NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
@@ -227,11 +227,5 @@ const LoginPage: NextPage = () => {
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['login'], locale),
-  },
-});
 
 export default withUserMe(LoginPage);

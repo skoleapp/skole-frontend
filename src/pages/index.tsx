@@ -13,8 +13,8 @@ import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'comp
 import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { useTranslation } from 'lib';
+import { NextPage } from 'next';
 import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -252,11 +252,5 @@ const LandingPage: NextPage = () => {
     </LandingPageTemplate>
   );
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['index'], locale),
-  },
-});
 
 export default withUserMe(LandingPage);
