@@ -1,47 +1,4 @@
 {
   "locales": ["en", "fi", "sv"],
-  "defaultLocale": "en",
-  "pages": {
-    "*": [
-      "common",
-      "marketing",
-      "error",
-      "not-found",
-      "languages",
-      "forms",
-      "validation",
-      "notifications",
-      "common-tooltips",
-      "activity",
-      "offline",
-      "sharing"
-    ],
-    "/account/activity": ["activity-tooltips"],
-    "/account/change-password": ["change-password"],
-    "/account/delete-account": ["delete-account"],
-    "/account/edit-profile": ["edit-profile"],
-    "/account/my-data": ["my-data"],
-    "/account/starred": ["starred"],
-    "/account/verify-account": ["verify-account"],
-    "/courses/[id]": ["course", "course-tooltips", "discussion", "discussion-tooltips"],
-    "/resources/[id]": ["resource", "resource-tooltips", "discussion", "discussion-tooltips"],
-    "/schools/[id]": ["school", "school-tooltips"],
-    "/users/[id]": ["profile", "profile-strength"],
-    "/add-course": ["add-course"],
-    "/contact": ["contact"],
-    "/for-teachers": ["for-teachers"],
-    "/guidelines": ["guidelines"],
-    "/home": ["home"],
-    "/index": ["index"],
-    "/login": ["login"],
-    "/logout": ["logout"],
-    "/privacy": ["privacy"],
-    "/register": ["register"],
-    "/reset-password": ["reset-password"],
-    "/score": ["score"],
-    "/search": ["search"],
-    "/terms": ["terms"],
-    "/upload-resource": ["upload-resource"],
-    "/values": ["values"]
-  }
+  "defaultLocale": "en"
 }

@@ -21,8 +21,8 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { urls } from 'utils';
@@ -250,5 +250,11 @@ const EditProfilePage: NextPage = () => {
 
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['edit-profile'], locale),
+  },
+});
 
 export default withUserMe(EditProfilePage);

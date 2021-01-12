@@ -26,8 +26,8 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext, useOpen } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
@@ -369,5 +369,11 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
     </FormTemplate>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['upload-resource'], locale),
+  },
+});
 
 export default withUserMe(UploadResourcePage);

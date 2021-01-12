@@ -33,8 +33,8 @@ import { useAuthContext } from 'context';
 import { BadgeObjectType, useUserQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useDayjs, useLanguageHeaderContext, useMediaQueries, useTabs } from 'hooks';
-import { useTranslation } from 'lib';
-import { GetStaticPaths, NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -552,5 +552,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: 'blocking',
   };
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['profile', 'profile-strength'], locale),
+  },
+});
 
 export default withUserMe(UserPage);

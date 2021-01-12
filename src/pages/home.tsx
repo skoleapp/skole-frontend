@@ -26,8 +26,8 @@ import { ButtonLink, LandingPageTemplate } from 'components';
 import { useAuthContext, useShareContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useSearch } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
@@ -438,5 +438,11 @@ const IndexPage: NextPage = () => {
     </LandingPageTemplate>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['home'], locale),
+  },
+});
 
 export default withUserMe(IndexPage);

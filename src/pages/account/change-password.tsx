@@ -9,8 +9,8 @@ import { Field, Form, Formik, FormikProps } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 import { PASSWORD_MIN_LENGTH } from 'utils';
@@ -127,5 +127,11 @@ const ChangePasswordPage: NextPage = () => {
 
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['change-password'], locale),
+  },
+});
 
 export default withUserMe(ChangePasswordPage);

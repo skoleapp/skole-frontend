@@ -16,8 +16,8 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
@@ -236,5 +236,11 @@ const ResetPasswordPage: NextPage = () => {
     </FormTemplate>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['reset-password'], locale),
+  },
+});
 
 export default withUserMe(ResetPasswordPage);
