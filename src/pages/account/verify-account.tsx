@@ -1,6 +1,12 @@
-import { Box, FormControl, Typography } from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { BackButton, ButtonLink, FormSubmitSection, FormTemplate } from 'components';
+import {
+  BackButton,
+  ButtonLink,
+  FormSubmitSection,
+  FormTemplate,
+  LoadingTemplate,
+} from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import {
@@ -32,7 +38,7 @@ const VerifyAccountPage: NextPage = () => {
 
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { verified: initialVerified } = useAuthContext();
+  const { userMe, verified: initialVerified } = useAuthContext();
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
@@ -67,7 +73,7 @@ const VerifyAccountPage: NextPage = () => {
     }
   };
 
-  const [verifyAccount] = useVerifyAccountMutation({
+  const [verifyAccount, { loading }] = useVerifyAccountMutation({
     onCompleted: onConfirmationFormCompleted,
     onError: handleUnexpectedConfirmationError,
     context,
@@ -131,6 +137,18 @@ const VerifyAccountPage: NextPage = () => {
     </ButtonLink>
   );
 
+  const renderLoginButton = (
+    <ButtonLink
+      href={{ pathname: urls.login, query: { next: urls.verifyAccount } }}
+      endIcon={<ArrowForwardOutlined />}
+      color="primary"
+      variant="contained"
+      fullWidth
+    >
+      {t('common:login')}
+    </ButtonLink>
+  );
+
   const renderLineBreak = <Typography component="br" />;
 
   const renderEmailSubmittedText = (
@@ -159,36 +177,36 @@ const VerifyAccountPage: NextPage = () => {
 
   const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
     <Form>
-      <Box flexGrow="1" textAlign="center">
-        <Typography variant="body2">{t('verify-account:emailHelpText')}</Typography>
-      </Box>
+      <Typography variant="subtitle1" align="center">
+        {t('verify-account:emailHelpText')}
+      </Typography>
       <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
     </Form>
   );
 
-  // Render for unverified users.
+  // Render for unauthenticated users with no token.
+  const renderLoginError = !userMe && !token && (
+    <FormControl>
+      {renderLoginText}
+      {renderLineBreak}
+      {renderLoginButton}
+    </FormControl>
+  );
+
+  // Render for unverified, authenticated users with no token.
   const renderEmailForm = verified === false && !token && !emailSubmitted && (
     <Formik initialValues={initialValues} onSubmit={handleSubmitEmail} innerRef={formRef}>
       {renderEmailFormFields}
     </Formik>
   );
 
-  // Render for unauthenticated users with no token.
-  const renderLoginError = !verified && !token && (
-    <FormControl>
-      {renderLoginText}
-      {renderLineBreak}
-      {renderHomeButton}
-    </FormControl>
-  );
-
-  // Render after email has been submitted.
+  // Render after email form has been submitted.
   const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
     <FormControl>{renderEmailSubmittedText}</FormControl>
   );
 
-  // Render for verified users and after successful verification.
-  const renderVerified = verified && !confirmationError && (
+  // Render for authenticated, verified users.
+  const renderVerified = !!verified && !confirmationError && (
     <FormControl>
       {renderVerifiedText}
       {renderLineBreak}
@@ -205,6 +223,13 @@ const VerifyAccountPage: NextPage = () => {
     </FormControl>
   );
 
+  const renderContent =
+    renderLoginError ||
+    renderEmailForm ||
+    renderEmailSubmitted ||
+    renderVerified ||
+    renderConfirmationError;
+
   const layoutProps = {
     seoProps: {
       title: t('verify-account:title'),
@@ -215,15 +240,11 @@ const VerifyAccountPage: NextPage = () => {
     },
   };
 
-  return (
-    <FormTemplate {...layoutProps}>
-      {renderEmailForm}
-      {renderEmailSubmitted}
-      {renderConfirmationError}
-      {renderLoginError}
-      {renderVerified}
-    </FormTemplate>
-  );
+  if (loading) {
+    return <LoadingTemplate />;
+  }
+
+  return <FormTemplate {...layoutProps}>{renderContent}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
