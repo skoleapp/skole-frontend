@@ -56,9 +56,9 @@ import {
   useTabs,
   useVotes,
 } from 'hooks';
-import { useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 
-import { GetStaticPaths, NextPage } from 'next';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
@@ -476,6 +476,14 @@ const CourseDetailPage: NextPage = () => {
 export const getStaticPaths: GetStaticPaths = async () => ({
   paths: [],
   fallback: 'blocking',
+});
+
+const namespaces = ['course', 'course-tooltips', 'discussion', 'discussion-tooltips'];
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(namespaces, locale),
+  },
 });
 
 const withWrappers = R.compose(withUserMe, withDiscussion);

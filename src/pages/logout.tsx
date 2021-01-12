@@ -6,8 +6,8 @@ import { useAuthContext } from 'context';
 import { useGraphQlLogoutMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { LS_LOGOUT_KEY, urls } from 'utils';
@@ -80,5 +80,11 @@ const LogoutPage: NextPage = () => {
     </FormTemplate>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['logout'], locale),
+  },
+});
 
 export default withUserMe(LogoutPage);

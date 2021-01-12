@@ -13,8 +13,8 @@ import { useAuthContext } from 'context';
 import { useStarredQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -112,5 +112,11 @@ const StarredPage: NextPage = () => {
 
   return <TabTemplate {...layoutProps} />;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['starred'], locale),
+  },
+});
 
 export default withUserMe(StarredPage);

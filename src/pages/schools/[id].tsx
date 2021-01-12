@@ -25,8 +25,8 @@ import {
   useMediaQueries,
   useSearch,
 } from 'hooks';
-import { useTranslation } from 'lib';
-import { GetStaticPaths, NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
@@ -297,5 +297,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: 'blocking',
   };
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['school', 'school-tooltips'], locale),
+  },
+});
 
 export default withUserMe(SchoolDetailPage);

@@ -4,8 +4,8 @@ import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import * as Yup from 'yup';
 
@@ -117,5 +117,11 @@ const ContactPage: NextPage = () => {
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['contact'], locale),
+  },
+});
 
 export default withUserMe(ContactPage);

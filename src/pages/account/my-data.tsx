@@ -6,8 +6,8 @@ import { Form, Formik, FormikProps } from 'formik';
 import { useGraphQlMyDataMutation, GraphQlMyDataMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { useTranslation } from 'lib';
-import { NextPage } from 'next';
+import { loadNamespaces, useTranslation } from 'lib';
+import { GetStaticProps, NextPage } from 'next';
 import React, { useState } from 'react';
 import { urls } from 'utils';
 
@@ -116,5 +116,11 @@ const MyDataPage: NextPage = () => {
     </SettingsTemplate>
   );
 };
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['my-data'], locale),
+  },
+});
 
 export default withUserMe(MyDataPage);
