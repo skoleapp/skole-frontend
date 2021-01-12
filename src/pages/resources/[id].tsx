@@ -159,7 +159,7 @@ const ResourceDetailPage: NextPage = () => {
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: t('resource:infoHeader'),
+    header: resourceTitle,
     infoButtonTooltip: t('resource-tooltips:info'),
   });
 
@@ -314,10 +314,6 @@ const ResourceDetailPage: NextPage = () => {
   );
 
   const infoItems = [
-    {
-      label: t('common:title'),
-      value: resourceTitle,
-    },
     {
       label: t('common:date'),
       value: resourceDate,
@@ -509,9 +505,9 @@ const ResourceDetailPage: NextPage = () => {
     customBottomNavbar: renderCustomBottomNavbar,
     topNavbarProps: {
       staticBackUrl,
-      headerLeft: renderShareButton,
-      headerRight: renderActionsButton,
-      headerRightSecondary: renderInfoButton,
+      renderHeaderLeft: renderShareButton,
+      renderHeaderRight: renderActionsButton,
+      renderHeaderRightSecondary: renderInfoButton,
     },
   };
 

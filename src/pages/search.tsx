@@ -32,7 +32,7 @@ import {
   ContactLink,
   SkoleDialog,
   TextFormField,
-  DynamicBackButton,
+  BackButton,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -487,7 +487,7 @@ const SearchPage: NextPage = () => {
     <DialogHeader
       onCancel={handleCloseFilters}
       text={t('common:filters')}
-      headerLeft={renderClearFiltersButton}
+      renderHeaderLeft={renderClearFiltersButton}
     />
   );
 
@@ -506,7 +506,7 @@ const SearchPage: NextPage = () => {
     </Paper>
   );
 
-  const renderBackButton = <DynamicBackButton />;
+  const renderBackButton = <BackButton />;
 
   const renderFilterResultsHeader = (
     <CardHeader

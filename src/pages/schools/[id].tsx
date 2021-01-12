@@ -13,6 +13,7 @@ import {
   TextLink,
   SubjectTableBody,
   TabTemplate,
+  BackButton,
 } from 'components';
 import { useAuthContext } from 'context';
 import { useSchoolQuery } from 'generated';
@@ -58,6 +59,7 @@ const SchoolDetailPage: NextPage = () => {
   const shareText = t('school:shareText', { schoolName });
   const shareParams = { shareHeader: t('school:shareHeader'), shareTitle, shareText };
   const addCourseTooltip = verificationRequiredTooltip || t('school-tooltips:addCourse');
+  const header = isTabletOrDesktop && schoolName; // School names are too long to be used as the header on mobile.
 
   const {
     infoDialogOpen,
@@ -65,7 +67,7 @@ const SchoolDetailPage: NextPage = () => {
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: t('school:infoHeader'),
+    header: schoolName,
     infoButtonTooltip: t('school-tooltips:info'),
   });
 
@@ -120,10 +122,6 @@ const SchoolDetailPage: NextPage = () => {
   );
 
   const infoItems = [
-    {
-      label: t('common:name'),
-      value: schoolName,
-    },
     {
       label: t('common:courses'),
       value: courseCount,
@@ -254,17 +252,19 @@ const SchoolDetailPage: NextPage = () => {
       description: t('school:description', { schoolName }),
     },
     topNavbarProps: {
-      dynamicBackUrl: true,
-      headerLeft: renderAddCourseButton,
-      headerRight: renderActionsButton,
-      headerRightSecondary: renderInfoButton,
+      renderBackButton: <BackButton />,
+      header,
+      renderHeaderLeft: renderAddCourseButton,
+      renderHeaderRight: renderActionsButton,
+      renderHeaderRightSecondary: renderInfoButton,
     },
-    cardHeader: schoolName,
-    leftTabLabel: `${t('common:subjects')} (${subjectCount})`,
-    rightTabLabel: `${t('common:courses')} (${courseCount})`,
-    renderLeftTabContent,
-    renderRightTabContent,
-    renderAction,
+    tabTemplateProps: {
+      leftTabLabel: `${t('common:subjects')} (${subjectCount})`,
+      rightTabLabel: `${t('common:courses')} (${courseCount})`,
+      renderLeftTabContent,
+      renderRightTabContent,
+      renderAction,
+    },
   };
 
   if (loading) {

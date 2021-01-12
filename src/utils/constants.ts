@@ -65,25 +65,45 @@ export const IMAGE_TYPES = [
   'image/webp	',
 ];
 
-export const PITCH_ITEMS = [
+export const LANDING_PAGE_PITCH_ITEMS = [
   {
     header: 'index:materialsPitchHeader',
-    bullets: ['index:materialsBullet1', 'index:materialsBullet2', 'index:materialsBullet3'],
+    bullets: [
+      'index:materialsBullet1',
+      'index:materialsBullet2',
+      'index:materialsBullet3',
+      'index:materialsBullet4',
+    ],
   },
   {
     header: 'index:discussionPitchHeader',
-    bullets: ['index:discussionBullet1', 'index:discussionBullet2', 'index:discussionBullet3'],
+    bullets: [
+      'index:discussionBullet1',
+      'index:discussionBullet2',
+      'index:discussionBullet3',
+      'index:discussionBullet4',
+    ],
   },
 ];
 
 export const FOR_TEACHERS_PITCH_ITEMS = [
   {
     header: 'for-teachers:studentsPitchHeader',
-    bullets: ['for-teachers:studentsBullet1', 'for-teachers:studentsBullet2'],
+    bullets: [
+      'for-teachers:studentsBullet1',
+      'for-teachers:studentsBullet2',
+      'for-teachers:studentsBullet3',
+      'for-teachers:studentsBullet4',
+    ],
   },
   {
     header: 'for-teachers:teachersPitchHeader',
-    bullets: ['for-teachers:teachersBullet1', 'for-teachers:teachersBullet2'],
+    bullets: [
+      'for-teachers:teachersBullet1',
+      'for-teachers:teachersBullet2',
+      'for-teachers:teachersBullet3',
+      'for-teachers:teachersBullet4',
+    ],
   },
   {
     header: 'for-teachers:infoPitchHeader',

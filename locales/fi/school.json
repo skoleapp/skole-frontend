@@ -6,6 +6,5 @@
   "shareHeader": "Jaa koulu",
   "shareTitle": "{{ schoolName }} Skolessa",
   "shareText": "Näytä {{ schoolName }} Skolessa",
-  "share": "Jaa koulu",
-  "infoHeader": "Koulun tiedot"
+  "share": "Jaa koulu"
 }

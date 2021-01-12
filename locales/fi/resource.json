@@ -8,7 +8,6 @@
   "shareHeader": "Jaa resurssi",
   "shareTitle": "{{ resourceTitle }} Skolessa",
   "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa",
-  "infoHeader": "Resurssin tiedot",
   "share": "Jaa resurssi",
   "delete": "Poista resurssi",
   "confirmDelete": "Haluatko varmasti poistaa tämän resurssin?"

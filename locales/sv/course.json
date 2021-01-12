@@ -6,7 +6,6 @@
   "shareHeader": "Dela kurs",
   "shareTitle": "{{ courseName }} på Skole",
   "shareText": "Se {{ courseName }} av {{ creatorUsername }} på Skole",
-  "infoHeader": "Kursinformation",
   "share": "Dela kurs",
   "delete": "Radera kurs",
   "confirmDelete": "Är du säker på att du vill ta bort den här kursen?"

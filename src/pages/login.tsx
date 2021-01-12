@@ -14,6 +14,7 @@ import {
   TextLink,
   ButtonLink,
   LogoutRequiredTemplate,
+  BackButton,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
@@ -210,11 +211,12 @@ const LoginPage: NextPage = () => {
       title: t('login:title'),
       description: t('login:description'),
     },
-    header: t('login:header'),
     hideBottomNavbar: true,
     topNavbarProps: {
-      dynamicBackUrl: true,
-      hideAuthButtons: true,
+      renderBackButton: <BackButton />,
+      header: t('login:header'),
+      hideLoginButton: true,
+      hideGetStartedButton: true,
       hideSearch: true,
     },
   };

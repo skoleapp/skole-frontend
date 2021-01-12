@@ -42,13 +42,14 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 }));
 
 interface Props extends MainTemplateProps {
-  disableHeader?: boolean;
+  hideHeader?: boolean;
 }
 
 export const LandingPageTemplate: React.FC<Props> = ({
   children,
   topNavbarProps,
-  disableHeader,
+  containerProps,
+  hideHeader,
   ...props
 }) => {
   const classes = useStyles();
@@ -67,7 +68,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
     </Typography>
   );
 
-  const renderHeader = !disableHeader && (
+  const renderHeader = !hideHeader && (
     <Box className={classes.headerContainer}>
       {renderLogo}
       {renderSlogan}
@@ -81,12 +82,13 @@ export const LandingPageTemplate: React.FC<Props> = ({
   );
 
   const layoutProps = {
+    hideBottomNavbar: true,
     topNavbarProps: {
       ...topNavbarProps,
       hideSearch: true,
     },
-    hideBottomNavbar: true,
     containerProps: {
+      ...containerProps,
       fullWidth: true,
       dense: true,
     },

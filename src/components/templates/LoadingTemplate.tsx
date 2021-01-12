@@ -42,8 +42,7 @@ export const LoadingTemplate: React.FC = () => {
     topNavbarProps: {
       hideLogo: true,
       hideSearch: true,
-      hideAuthButtons: true,
-      hideForTeachersButton: true,
+      hideDynamicButtons: true,
       hideLanguageButton: true,
     },
     containerProps: {

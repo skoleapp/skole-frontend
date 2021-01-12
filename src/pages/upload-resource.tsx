@@ -9,6 +9,7 @@ import {
   TextLink,
   DatePickerFormField,
   LoginRequiredTemplate,
+  BackButton,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import dayjs from 'dayjs';
@@ -325,10 +326,12 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
     <ContactDialog {...commonContactDialogProps} text={renderLoginRequiredContactDialogText} />
   );
 
-  const renderLoginRequiredSecondaryText = (
-    <>
-      {t('upload-resource:loginRequiredTextSecondary')} {renderContactLink} 🤝
-    </>
+  const renderLoginRequiredText = (
+    <FormControl>
+      <FormHelperText>
+        {t('upload-resource:loginRequiredText')} {renderContactLink} 🤝
+      </FormHelperText>
+    </FormControl>
   );
 
   const layoutProps = {
@@ -336,19 +339,16 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
       title: t('upload-resource:title'),
       description: t('upload-resource:description'),
     },
-    header: t('upload-resource:header'),
     topNavbarProps: {
-      dynamicBackUrl: true,
+      renderBackButton: <BackButton />,
+      header: t('upload-resource:header'),
     },
   };
 
   if (!userMe) {
     return (
-      <LoginRequiredTemplate
-        {...layoutProps}
-        text={t('upload-resource:loginRequiredText')}
-        textSecondary={renderLoginRequiredSecondaryText}
-      >
+      <LoginRequiredTemplate {...layoutProps}>
+        {renderLoginRequiredText}
         {renderLoginRequiredContactDialog}
       </LoginRequiredTemplate>
     );

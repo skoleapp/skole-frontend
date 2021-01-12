@@ -1,11 +1,12 @@
 import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
+import { useAuthContext } from 'context';
 import { useMediaQueries, useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { MainTemplateProps, TopNavbarProps } from 'types';
+import { MainTemplateProps } from 'types';
 
-import { SettingsButton } from '../shared';
+import { BackButton, SettingsButton } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -29,28 +30,22 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-interface Props extends Omit<MainTemplateProps, 'topNavbarProps'> {
-  topNavbarProps: Omit<TopNavbarProps, 'header' | 'headerRight'>;
-  header: string;
-}
-
-export const SettingsTemplate: React.FC<Props> = ({
-  topNavbarProps,
-  header,
+export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   children,
+  topNavbarProps,
   ...props
 }) => {
   const classes = useStyles();
   const { renderSettingsMenuList } = useSettings(false);
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const renderMobileSettingsButton = isMobile && <SettingsButton color="secondary" size="small" />;
+  const { profileUrl } = useAuthContext();
 
-  const customTopNavbarProps = {
-    ...topNavbarProps,
-    header,
-    headerRight: renderMobileSettingsButton,
-  };
+  const renderBackButton = (
+    <BackButton href={profileUrl} tooltip={t('common-tooltips:backToProfile')} />
+  );
+
+  const renderHeaderRight = isMobile && <SettingsButton color="secondary" size="small" />;
 
   const renderSettingsHeader = (
     <CardHeader className={classes.cardHeader} title={t('common:settings')} />
@@ -66,7 +61,7 @@ export const SettingsTemplate: React.FC<Props> = ({
   );
 
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={header} />
+    <CardHeader className={classes.cardHeader} title={topNavbarProps?.header} />
   );
 
   const renderContent = (
@@ -97,8 +92,17 @@ export const SettingsTemplate: React.FC<Props> = ({
     </Grid>
   );
 
+  const layoutProps = {
+    ...props,
+    topNavbarProps: {
+      ...topNavbarProps,
+      renderBackButton,
+      renderHeaderRight,
+    },
+  };
+
   return (
-    <MainTemplate {...props} topNavbarProps={customTopNavbarProps}>
+    <MainTemplate {...layoutProps}>
       <Grid container spacing={isTabletOrDesktop ? 2 : 0} className={classes.root}>
         {renderSettingsCard}
         {renderContentCard}

@@ -4,7 +4,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 
-import { DynamicBackButton, NotFoundBox } from '../shared';
+import { BackButton, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -41,7 +41,7 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);
 
-  const renderBackButton = <DynamicBackButton />;
+  const renderBackButton = <BackButton />;
   const renderContent = <NotFoundBox text={text} />;
 
   const renderCardHeader = isTabletOrDesktop && (
@@ -60,11 +60,10 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
       title,
     },
     topNavbarProps: {
+      renderBackButton,
       header,
-      dynamicBackUrl: true,
       hideSearch: true,
-      hideAuthButtons: true,
-      hideForTeachersButton: true,
+      hideDynamicButtons: true,
       hideLanguageButton: true,
     },
   };

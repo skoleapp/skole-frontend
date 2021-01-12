@@ -8,6 +8,7 @@ import {
   ContactLink,
   LoginRequiredTemplate,
   GuidelinesLink,
+  BackButton,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -202,14 +203,14 @@ const AddCoursePage: NextPage = () => {
       title: t('add-course:title'),
       description: t('add-course:description'),
     },
-    header: t('add-course:header'),
     topNavbarProps: {
-      dynamicBackUrl: true,
+      header: t('add-course:header'),
+      renderBackButton: <BackButton />,
     },
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} text={t('add-course:loginRequiredText')} />;
+    return <LoginRequiredTemplate {...layoutProps} />;
   }
 
   if (!!error && !!error.networkError) {

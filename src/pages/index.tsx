@@ -12,12 +12,13 @@ import { ArrowForwardOutlined } from '@material-ui/icons';
 import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
 import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
+import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { PITCH_ITEMS, urls } from 'utils';
+import { LANDING_PAGE_PITCH_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -64,7 +65,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     backgroundColor: palette.primary.main,
     marginBottom: spacing(2),
     borderRadius: '0.5rem',
-    maxWidth: '10rem',
   },
   badgeContainer: {
     backgroundColor: palette.grey[300],
@@ -104,6 +104,7 @@ const LandingPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { userMe } = useAuthContext();
+  const { isMobile } = useMediaQueries();
 
   // Redirect authenticated users to home page.
   useEffect(() => {
@@ -167,7 +168,7 @@ const LandingPage: NextPage = () => {
     </Grid>
   );
 
-  const renderPitchItems = PITCH_ITEMS.map(({ header, bullets }) => (
+  const renderPitchItems = LANDING_PAGE_PITCH_ITEMS.map(({ header, bullets }) => (
     <Grid item xs={12} md={6}>
       <Typography className={classes.pitchHeader} variant="subtitle1">
         {t(header).toUpperCase()}
@@ -183,16 +184,7 @@ const LandingPage: NextPage = () => {
 
   const renderPitch = (
     <Grid container direction="column" alignItems="center" className={classes.pitchContainer}>
-      <Grid
-        container
-        item
-        xs={12}
-        md={10}
-        lg={8}
-        xl={6}
-        className={classes.pitchBoxContainer}
-        spacing={4}
-      >
+      <Grid container item xs={12} lg={8} xl={6} className={classes.pitchBoxContainer} spacing={8}>
         {renderPitchItems}
       </Grid>
     </Grid>
@@ -206,7 +198,7 @@ const LandingPage: NextPage = () => {
         color="textSecondary"
         align="center"
       >
-        {t('index:appStoreCta')}
+        {t('index:appStoreCta')} 📱
       </Typography>
     </CardContent>
   );
@@ -242,6 +234,7 @@ const LandingPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
+      hideLogo: isMobile,
       hideAuthButtons: true,
     },
   };

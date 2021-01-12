@@ -116,9 +116,8 @@ const ChangePasswordPage: NextPage = () => {
     seoProps: {
       title: t('change-password:title'),
     },
-    header: t('change-password:header'),
     topNavbarProps: {
-      dynamicBackUrl: true,
+      header: t('change-password:header'),
     },
   };
 

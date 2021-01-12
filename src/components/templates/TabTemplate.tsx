@@ -3,7 +3,7 @@ import { useMediaQueries, useTabs } from 'hooks';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
-import { DynamicBackButton, TabPanel } from '../shared';
+import { TabPanel } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -34,30 +34,30 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 }));
 
 interface Props extends Omit<MainTemplateProps, 'children'> {
-  cardHeader: string;
-  leftTabLabel: string;
-  rightTabLabel: string;
-  renderLeftTabContent: JSX.Element;
-  renderRightTabContent: JSX.Element;
-  renderAction?: JSX.Element;
-  children?: JSX.Element[];
+  tabTemplateProps: {
+    leftTabLabel: string;
+    rightTabLabel: string;
+    renderLeftTabContent: JSX.Element;
+    renderRightTabContent: JSX.Element;
+    renderAction?: JSX.Element;
+  };
 }
 
 export const TabTemplate: React.FC<Props> = ({
-  cardHeader,
-  leftTabLabel,
-  rightTabLabel,
-  renderLeftTabContent,
-  renderRightTabContent,
-  renderAction,
   topNavbarProps,
+  tabTemplateProps: {
+    leftTabLabel,
+    rightTabLabel,
+    renderLeftTabContent,
+    renderRightTabContent,
+    renderAction,
+  },
   children,
   ...props
 }) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
-  const renderDynamicBackButton = !!topNavbarProps?.dynamicBackUrl && <DynamicBackButton />;
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
@@ -66,8 +66,8 @@ export const TabTemplate: React.FC<Props> = ({
         avatar: classes.cardHeaderAvatar,
         action: classes.cardHeaderAction,
       }}
-      title={cardHeader}
-      avatar={renderDynamicBackButton}
+      title={topNavbarProps?.header}
+      avatar={topNavbarProps?.renderBackButton}
       action={renderAction}
     />
   );

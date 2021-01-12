@@ -1,4 +1,4 @@
-import { MarkdownTemplate } from 'components';
+import { BackButton, MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -13,7 +13,10 @@ const TermsPage: NextPage<MarkdownPageProps> = ({ content }) => {
       title: t('terms:title'),
       description: t('terms:description'),
     },
-    header: t('terms:header'),
+    topNavbarProps: {
+      renderBackButton: <BackButton />,
+      header: t('terms:header'),
+    },
   };
 
   return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;

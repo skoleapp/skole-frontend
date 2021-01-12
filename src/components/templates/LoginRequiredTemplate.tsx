@@ -1,32 +1,21 @@
-import { Button, FormControl, Typography, FormHelperText } from '@material-ui/core';
+import { Button, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
-import React, { ReactNode } from 'react';
-import { FormTemplateProps } from 'types';
+import React from 'react';
+import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 import { ButtonLink } from '../shared';
 import { FormTemplate } from './FormTemplate';
 
-interface Props extends Omit<FormTemplateProps, 'header' | 'children'> {
-  text?: JSX.Element | string;
-  textSecondary?: JSX.Element | string;
-  children?: NonNullable<ReactNode>;
-}
-
-export const LoginRequiredTemplate: React.FC<Props> = ({
-  text,
-  textSecondary,
-  children,
-  ...props
-}) => {
+export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
   const handleClickCancelButton = (): void => Router.back();
 
   const renderText = (
     <Typography variant="subtitle1" align="center">
-      {text || t('common:loginRequiredText')} 🙃
+      {t('common:loginRequired')} 🙃
     </Typography>
   );
 
@@ -52,19 +41,12 @@ export const LoginRequiredTemplate: React.FC<Props> = ({
     </FormControl>
   );
 
-  const renderSecondaryText = !!textSecondary && (
-    <FormControl>
-      <FormHelperText>{textSecondary}</FormHelperText>
-    </FormControl>
-  );
-
   return (
-    <FormTemplate {...props} header={t('common:loginRequiredHeader')}>
+    <FormTemplate {...props}>
       {renderText}
       {renderLineBreak}
       {renderLoginButton}
       {renderCancelButton}
-      {renderSecondaryText}
       {children}
     </FormTemplate>
   );

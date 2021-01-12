@@ -9,7 +9,7 @@ import * as R from 'ramda';
 import React, { createContext, useState, useContext } from 'react';
 
 import { AuthContextType } from 'types';
-import { mediaUrl } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const AuthContext = createContext<AuthContextType>({});
@@ -28,6 +28,7 @@ interface UseAuthContext extends AuthContextType {
   subject: SubjectObjectType | null;
   loginRequiredTooltip: string | false;
   verificationRequiredTooltip: string | false;
+  profileUrl: string;
 }
 
 export const useAuthContext = (): UseAuthContext => {
@@ -47,6 +48,7 @@ export const useAuthContext = (): UseAuthContext => {
   const school = R.propOr(null, 'school', userMe);
   const subject = R.propOr(null, 'subject', userMe);
   const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
+  const profileUrl = urls.user(userMeId);
 
   const verificationRequiredTooltip: string | false =
     verified === false && t('common-tooltips:verificationRequired');
@@ -67,6 +69,7 @@ export const useAuthContext = (): UseAuthContext => {
     subject,
     verificationRequiredTooltip,
     loginRequiredTooltip,
+    profileUrl,
     ...authContext,
   };
 };

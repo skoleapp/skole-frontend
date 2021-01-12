@@ -1,16 +1,17 @@
 {
   "starred": "Näytä tähdellä merkityt.",
   "profile": "Näytä profiili.",
-  "lastPage": "Mene viimeiselle sivulle.",
-  "nextPage": "Mene seuraavalle sivulle.",
-  "previousPage": "Mene edelliselle sivulle.",
-  "firstPage": "Mene ensimmäiselle sivulle.",
+  "lastPage": "Siirry viimeiselle sivulle.",
+  "nextPage": "Siirry seuraavalle sivulle.",
+  "previousPage": "Siirry edelliselle sivulle.",
+  "firstPage": "Siirry ensimmäiselle sivulle.",
   "language": "Vaihda kieltä.",
   "loginRequired": "Kirjaudu sisään käyttääksesi tätä ominaisuutta.",
   "verificationRequired": "Vahvista tilisi käyttääksesi tätä ominaisuutta.",
   "settings": "Näytä asetukset.",
   "rank": "Tämän käyttäjän arvo on {{ rank }}.",
   "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
-  "goBack": "Mene takaisin.",
-  "closeMenu": "Sulje valikko."
+  "closeMenu": "Sulje valikko.",
+  "backToHome": "Takaisin kotiin.",
+  "backToProfile": "Takaisin profiiliin."
 }

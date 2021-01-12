@@ -1,6 +1,6 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
-import { ButtonLink, FormSubmitSection, FormTemplate } from 'components';
+import { BackButton, ButtonLink, FormSubmitSection, FormTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import {
@@ -209,9 +209,9 @@ const VerifyAccountPage: NextPage = () => {
     seoProps: {
       title: t('verify-account:title'),
     },
-    header,
     topNavbarProps: {
-      dynamicBackUrl: true,
+      renderBackButton: <BackButton />,
+      header,
     },
   };
 

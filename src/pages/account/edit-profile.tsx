@@ -63,6 +63,7 @@ const EditProfilePage: NextPage = () => {
     avatar,
     school,
     subject,
+    profileUrl,
   } = useAuthContext();
 
   const {
@@ -197,7 +198,7 @@ const EditProfilePage: NextPage = () => {
 
   const renderBackToProfileLink = (
     <FormControl className={classes.link}>
-      <TextLink href={urls.user(id)}>{t('edit-profile:backToProfile')}</TextLink>
+      <TextLink href={profileUrl}>{t('edit-profile:backToProfile')}</TextLink>
     </FormControl>
   );
 
@@ -238,9 +239,8 @@ const EditProfilePage: NextPage = () => {
     seoProps: {
       title: t('edit-profile:title'),
     },
-    header: t('edit-profile:header'),
     topNavbarProps: {
-      dynamicBackUrl: true,
+      header: t('edit-profile:header'),
     },
   };
 

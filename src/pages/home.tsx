@@ -10,6 +10,7 @@ import {
   IconButton,
   InputBase,
   makeStyles,
+  Tooltip,
   Typography,
 } from '@material-ui/core';
 import {
@@ -191,8 +192,17 @@ const IndexPage: NextPage = () => {
     },
   ];
 
-  // eslint-disable-next-line jsx-a11y/accessible-emoji
-  const renderLaunchIcon = !userMe && <IconButton size="small">🚀</IconButton>;
+  const renderLaunchIconButton = !userMe && (
+    <Link href={urls.index}>
+      <Tooltip title="Vrooom!">
+        <IconButton // eslint-disable-line jsx-a11y/accessible-emoji
+          size="small"
+        >
+          🚀
+        </IconButton>
+      </Tooltip>
+    </Link>
+  );
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
@@ -414,10 +424,10 @@ const IndexPage: NextPage = () => {
       description: t('marketing:description'),
     },
     topNavbarProps: {
-      headerLeft: renderLaunchIcon,
+      renderHeaderLeft: renderLaunchIconButton,
     },
     hideBottomNavbar: false,
-    disableHeader: true,
+    hideHeader: true,
   };
 
   return (

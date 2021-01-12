@@ -1,5 +1,6 @@
 import { Grid, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import { CloseOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
@@ -15,9 +16,9 @@ const useStyles = makeStyles(({ spacing }) => ({
 export const DialogHeader: React.FC<DialogHeaderProps> = ({
   text,
   onCancel,
-  headerLeft,
+  renderHeaderLeft,
   headerCenter,
-  headerRight,
+  renderHeaderRight,
 }) => {
   const { t } = useTranslation();
   const classes = useStyles();
@@ -31,7 +32,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   );
 
   const renderHeaderText = (
-    <Typography className="MuiCardHeader-title" variant="h5">
+    <Typography className={clsx('MuiCardHeader-title', 'truncate-text')} variant="h5">
       {text}
     </Typography>
   );
@@ -39,13 +40,13 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   return (
     <Grid container className={classes.root}>
       <Grid item xs={2} sm={1} container justify="flex-start" alignItems="flex-start">
-        {headerLeft}
+        {renderHeaderLeft}
       </Grid>
       <Grid item xs={8} sm={10} container justify="center" alignItems="center">
         {headerCenter || renderHeaderText}
       </Grid>
       <Grid item xs={2} sm={1} container justify="flex-end" alignItems="flex-start">
-        {headerRight || renderCloseButton}
+        {renderHeaderRight || renderCloseButton}
       </Grid>
     </Grid>
   );

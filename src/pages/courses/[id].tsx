@@ -16,7 +16,7 @@ import {
 import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
 import clsx from 'clsx';
 import {
-  StaticBackButton,
+  BackButton,
   CustomBottomNavbarContainer,
   DiscussionHeader,
   ErrorTemplate,
@@ -144,7 +144,7 @@ const CourseDetailPage: NextPage = () => {
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: t('course:infoHeader'),
+    header: courseName,
     infoButtonTooltip: t('course-tooltips:info'),
   });
 
@@ -230,10 +230,6 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const infoItems = [
-    {
-      label: t('common:name'),
-      value: courseName,
-    },
     {
       label: t('common:courseCode'),
       value: courseCode,
@@ -355,7 +351,7 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const renderBackButton = (
-    <StaticBackButton href={searchUrl} tooltip={t('course-tooltips:backToSearch')} />
+    <BackButton href={searchUrl} tooltip={t('course-tooltips:backToSearch')} />
   );
 
   const renderResourcesHeader = (
@@ -444,9 +440,9 @@ const CourseDetailPage: NextPage = () => {
     },
     topNavbarProps: {
       staticBackUrl: searchUrl,
-      headerRight: renderActionsButton,
-      headerRightSecondary: renderInfoButton,
-      headerLeft: renderUploadResourceButton,
+      renderHeaderRight: renderActionsButton,
+      renderHeaderRightSecondary: renderInfoButton,
+      renderHeaderLeft: renderUploadResourceButton,
     },
     customBottomNavbar: renderCustomBottomNavbar,
   };

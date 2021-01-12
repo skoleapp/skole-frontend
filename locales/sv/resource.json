@@ -8,7 +8,6 @@
   "shareHeader": "Dela resurs",
   "shareTitle": "{{ resourceTitle }} på Skole",
   "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole",
-  "infoHeader": "Resursinformation",
   "share": "Dela resurs",
   "delete": "Radera resurs",
   "confirmDelete": "Är du säker på att du vill ta bort den här resursen?"

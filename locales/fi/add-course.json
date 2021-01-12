@@ -2,7 +2,6 @@
   "title": "Lisää kurssi",
   "description": "Lisää uusi kurssi Skolessa.",
   "header": "Lisää kurssi",
-  "loginRequiredText": "Sinun pitää kirjautua sisään lisätäksesi uuden kurssin.",
   "courseNameHelperText": "Kurssin nimi. Älä sisällytä kurssikoodia tähän kenttään.",
   "courseCodeHelperText": "Kurssikoodi. Muut käyttäjät voivat käyttää tätä koodia kurssin löytämiseen.",
   "schoolHelperText": "Koulu, johon tämä kurssi kuuluu.",

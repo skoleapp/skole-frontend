@@ -77,8 +77,6 @@
   "usernamePlaceholder": "<ditt_användarnamn>",
   "emailPlaceholder": "<din_e-post>",
   "guidelinesLink": "Riktlinjer",
-  "loginRequiredHeader": "Inloggning krävs",
-  "loginRequiredText": "Du måste logga in för att fortsätta.",
-  "logoutRequiredHeader": "Logout krävs",
-  "logoutRequiredText": "Du måste logga ut för att fortsätta."
+  "loginRequired": "Du måste logga in för att fortsätta.",
+  "logoutRequired": "Du måste logga ut för att fortsätta."
 }
