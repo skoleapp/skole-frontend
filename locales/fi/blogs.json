@@ -1,0 +1,6 @@
+{
+  "title": "Blogit",
+  "description": "Katso blogimme Skolessa.",
+  "header": "Blogit",
+  "readTime": "{{ minutesToRead }} minuutin lukuaika"
+}

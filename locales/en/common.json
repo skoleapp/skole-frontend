@@ -78,5 +78,6 @@
   "emailPlaceholder": "<your_email>",
   "guidelinesLink": "Guidelines",
   "loginRequired": "You need to log in to continue.",
-  "logoutRequired": "You need to log out to continue."
+  "logoutRequired": "You need to log out to continue.",
+  "blog": "Blog"
 }

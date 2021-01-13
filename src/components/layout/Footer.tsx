@@ -54,6 +54,12 @@ export const Footer: React.FC = () => {
     </TextLink>
   );
 
+  const renderContactLink = (
+    <TextLink href={urls.contact} color="secondary">
+      {t('common:contact')}
+    </TextLink>
+  );
+
   const renderSkole = (
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
@@ -62,6 +68,7 @@ export const Footer: React.FC = () => {
         {renderForTeachersLink}
         {renderGuidelinesLink}
         {renderScoreLink}
+        {renderContactLink}
       </Box>
     </Grid>
   );
@@ -72,9 +79,9 @@ export const Footer: React.FC = () => {
     </Typography>
   );
 
-  const renderContactLink = (
-    <TextLink href={urls.contact} color="secondary">
-      {t('common:contact')}
+  const renderBlogLink = (
+    <TextLink href={urls.blogs} color="secondary">
+      {t('common:blog')}
     </TextLink>
   );
 
@@ -100,7 +107,7 @@ export const Footer: React.FC = () => {
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
         {renderCompanyHeader}
-        {renderContactLink}
+        {renderBlogLink}
         {renderValuesLink}
         {renderTermsLink}
         {renderPrivacyLink}

@@ -17,9 +17,10 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ content }) => {
       renderBackButton: <BackButton />,
       header: t('score:header'),
     },
+    content,
   };
 
-  return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
+  return <MarkdownTemplate {...layoutProps} />;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
