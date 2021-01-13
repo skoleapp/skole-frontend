@@ -1,6 +1,6 @@
 import { BackButton, MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdownContent, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
@@ -25,7 +25,7 @@ const ValuesPage: NextPage<MarkdownPageProps> = ({ content }) => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
     _ns: await loadNamespaces(['values'], locale),
-    content: await loadMarkdown('values'),
+    content: await loadMarkdownContent('values', locale),
   },
 });
 

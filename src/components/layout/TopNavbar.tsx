@@ -117,8 +117,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         {renderHeader || renderLogo}
       </Grid>
       <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
-        {renderHeaderRight || renderLanguageButton}
         {renderHeaderRightSecondary}
+        {renderHeaderRight || renderLanguageButton}
       </Grid>
     </Grid>
   );
