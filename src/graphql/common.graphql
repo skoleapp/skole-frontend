@@ -673,6 +673,7 @@ query UserMe {
     title
     bio
     avatar
+    avatarThumbnail
     score
     created
     verified
