@@ -34,7 +34,7 @@ export const ShareDialog: React.FC = () => {
     text: shareHeader,
   };
 
-  const url = `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`;
+  const url = `${process.env.FRONTEND_URL}${asPath}${linkSuffix || ''}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`; // Does not work from localhost.
   const whatsAppUrl = `https://api.whatsapp.com/send?text=${title}: ${url}`;
   const telegramUrl = `https://t.me/share/url?url=${url}&text=${text}`; // TODO: Ensure this works on QA, this is from: https://core.telegram.org/widgets/share#custom-buttons
