@@ -5,7 +5,7 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const PrivacyPage: NextPage<MarkdownPageProps> = ({ data: { header }, content }) => {
+const PrivacyPage: NextPage<MarkdownPageProps> = ({ data: { title }, content }) => {
   const { t } = useTranslation();
 
   const layoutProps = {
@@ -15,11 +15,12 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({ data: { header }, content })
     },
     topNavbarProps: {
       renderBackButton: <BackButton />,
-      header,
+      header: title,
     },
+    content,
   };
 
-  return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
+  return <MarkdownTemplate {...layoutProps} />;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

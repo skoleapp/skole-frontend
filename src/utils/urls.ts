@@ -4,6 +4,8 @@ export const urls = {
   deleteAccount: '/account/delete-account',
   myData: '/account/my-data',
   editProfile: '/account/edit-profile',
+  blogs: '/blogs',
+  blog: (slug: string): string => `/blogs/${slug}`,
   resetPassword: '/reset-password',
   starred: '/account/starred',
   verifyAccount: '/account/verify-account',

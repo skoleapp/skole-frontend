@@ -1,5 +1,5 @@
 ---
-header: Privacy Policy
+title: Privacy Policy
 ---
 
 This is a registry and privacy policy in accordance with the EU General Data Protection Regulation (GDPR). Last updated on 2020-12-12.

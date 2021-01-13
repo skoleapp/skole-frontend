@@ -78,5 +78,6 @@
   "emailPlaceholder": "<sähköpostiosoitteesi>",
   "guidelinesLink": "Ohjeitamme",
   "loginRequired": "Sinun pitää kirjatua sisään jatkaaksesi.",
-  "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi."
+  "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi.",
+  "blog": "Blogi"
 }

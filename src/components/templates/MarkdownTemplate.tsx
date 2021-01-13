@@ -26,10 +26,15 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 }));
 
 interface Props extends MainTemplateProps {
-  children: string;
+  content: string;
 }
 
-export const MarkdownTemplate: React.FC<Props> = ({ children, topNavbarProps, ...props }) => {
+export const MarkdownTemplate: React.FC<Props> = ({
+  content,
+  topNavbarProps,
+  children,
+  ...props
+}) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
 
@@ -44,11 +49,14 @@ export const MarkdownTemplate: React.FC<Props> = ({ children, topNavbarProps, ..
     />
   );
 
+  const renderMarkdownContent = <ReactMarkdown>{content}</ReactMarkdown>;
+
   const renderCardContent = (
     <CardContent>
       <Grid container justify="center">
         <Grid item xs={12} sm={8} md={6} lg={5} xl={4}>
-          <ReactMarkdown>{children}</ReactMarkdown>
+          {children}
+          {renderMarkdownContent}
         </Grid>
       </Grid>
     </CardContent>
