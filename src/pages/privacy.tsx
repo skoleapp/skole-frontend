@@ -1,11 +1,11 @@
 import { BackButton, MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadMarkdownContent, loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const PrivacyPage: NextPage<MarkdownPageProps> = ({ content }) => {
+const PrivacyPage: NextPage<MarkdownPageProps> = ({ data: { header }, content }) => {
   const { t } = useTranslation();
 
   const layoutProps = {
@@ -15,18 +15,24 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({ content }) => {
     },
     topNavbarProps: {
       renderBackButton: <BackButton />,
-      header: 'Privacy Policy',
+      header,
     },
   };
 
   return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['privacy'], locale),
-    content: await loadMarkdownContent('privacy'),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const _ns = await loadNamespaces(['privacy'], locale);
+  const { data, content } = await loadMarkdown('privacy');
 
-export default withUserMe(PrivacyPage as NextPage);
+  return {
+    props: {
+      _ns,
+      data,
+      content,
+    },
+  };
+};
+
+export default withUserMe(PrivacyPage);

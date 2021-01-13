@@ -1,6 +1,6 @@
 import { BackButton, MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadMarkdownContent, loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
@@ -22,11 +22,16 @@ const GuidelinesPage: NextPage<MarkdownPageProps> = ({ content }) => {
   return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['guidelines'], locale),
-    content: await loadMarkdownContent('guidelines', locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const _ns = await loadNamespaces(['guidelines'], locale);
+  const { content } = await loadMarkdown('guidelines', locale);
 
-export default withUserMe(GuidelinesPage as NextPage);
+  return {
+    props: {
+      _ns,
+      content,
+    },
+  };
+};
+
+export default withUserMe(GuidelinesPage);

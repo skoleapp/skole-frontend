@@ -1,41 +1,45 @@
-import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles } from '@material-ui/core/styles';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import AttachFileOutlined from '@material-ui/icons/AttachFileOutlined';
-import CameraAltOutlined from '@material-ui/icons/CameraAltOutlined';
-import CommentOutlined from '@material-ui/icons/CommentOutlined';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import KeyboardArrowDownOutlined from '@material-ui/icons/KeyboardArrowDownOutlined';
-import KeyboardArrowUpOutlined from '@material-ui/icons/KeyboardArrowUpOutlined';
-import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
+import {
+  Avatar,
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardHeader,
+  Grid,
+  IconButton,
+  List,
+  ListItemIcon,
+  ListItemText,
+  makeStyles,
+  MenuItem,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
+import {
+  AttachFileOutlined,
+  CameraAltOutlined,
+  CommentOutlined,
+  DeleteOutline,
+  KeyboardArrowDownOutlined,
+  KeyboardArrowUpOutlined,
+  MoreHorizOutlined,
+} from '@material-ui/icons';
 import clsx from 'clsx';
 import {
   useAuthContext,
-  useConfirmContext,
   useDiscussionContext,
   useNotificationsContext,
+  useConfirmContext,
 } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation } from 'generated';
 import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { BORDER } from 'theme';
 import { mediaUrl, truncate, urls } from 'utils';
-
-import { MarkdownContent, ResponsiveDialog, TextLink } from '../shared';
+import { ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
@@ -265,7 +269,7 @@ export const CommentCard: React.FC<Props> = ({
 
   const renderText = (
     <Typography className={classes.text} variant="body2">
-      <MarkdownContent>{comment.text}</MarkdownContent>
+      <ReactMarkdown>{comment.text}</ReactMarkdown>
     </Typography>
   );
 

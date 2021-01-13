@@ -1,3 +1,7 @@
+---
+header: Terms
+---
+
 Please read these Terms and conditions ("Terms") before using the Skole application (the "Application"). By using Skole you accept these Terms and conditions. These Terms govern your use of Skole. Skole is made for students to find and share the top courses, study materials and discussions.
 
 ### 1. Licenses

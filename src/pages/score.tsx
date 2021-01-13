@@ -1,6 +1,6 @@
 import { BackButton, MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadMarkdownContent, loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
@@ -22,11 +22,16 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ content }) => {
   return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['score'], locale),
-    content: await loadMarkdownContent('score', locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const _ns = await loadNamespaces(['score'], locale);
+  const { content } = await loadMarkdown('score', locale);
 
-export default withUserMe(ScorePage as NextPage);
+  return {
+    props: {
+      _ns,
+      content,
+    },
+  };
+};
+
+export default withUserMe(ScorePage);
