@@ -75,6 +75,12 @@ export const Footer: React.FC = () => {
     </TextLink>
   );
 
+  const renderValuesLink = (
+    <TextLink href={urls.values} color="secondary">
+      {t('common:values')}
+    </TextLink>
+  );
+
   const renderTermsLink = (
     <TextLink href={urls.terms} color="secondary">
       {t('common:terms')}
@@ -87,20 +93,14 @@ export const Footer: React.FC = () => {
     </TextLink>
   );
 
-  const renderValuesLink = (
-    <TextLink href={urls.score} color="secondary">
-      {t('common:values')}
-    </TextLink>
-  );
-
   const renderCompany = (
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
         {renderCompanyHeader}
         {renderContactLink}
+        {renderValuesLink}
         {renderTermsLink}
         {renderPrivacyLink}
-        {renderValuesLink}
       </Box>
     </Grid>
   );
