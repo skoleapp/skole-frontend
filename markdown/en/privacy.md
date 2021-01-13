@@ -99,4 +99,4 @@ We may make updates to this privacy policy as our operations or privacy policies
 ### 13. Who can I contact about data protection issues?
 
 Skole Oy (3165553-6) \
-contact@skoleapp.com
+[contact@skoleapp.com](mailto:contact@skoleapp.com)
