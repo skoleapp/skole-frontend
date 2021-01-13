@@ -346,6 +346,9 @@ export const theme = createMuiTheme({
           padding: `${spacing(4)} !important`,
           position: 'static !important' as 'static',
         },
+        a: {
+          color: palette.primary.main,
+        },
       },
     },
   },

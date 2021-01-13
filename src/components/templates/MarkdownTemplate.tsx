@@ -1,14 +1,9 @@
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
+import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
-
-import { MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -53,7 +48,7 @@ export const MarkdownTemplate: React.FC<Props> = ({ children, topNavbarProps, ..
     <CardContent>
       <Grid container justify="center">
         <Grid item xs={12} sm={8} md={6} lg={5} xl={4}>
-          <MarkdownContent>{children}</MarkdownContent>
+          <ReactMarkdown>{children}</ReactMarkdown>
         </Grid>
       </Grid>
     </CardContent>
