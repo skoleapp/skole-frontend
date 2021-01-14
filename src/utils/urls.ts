@@ -25,6 +25,7 @@ export const urls = {
   score: '/score',
   search: '/search',
   starred: '/starred',
+  suggestions: '/suggestions',
   terms: '/terms',
   uploadResource: '/upload-resource',
   values: '/values',

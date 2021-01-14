@@ -946,3 +946,19 @@ query Suggestions {
     }
   }
 }
+
+query SuggestionsPreview {
+  suggestedCoursesPreview {
+    id
+    name
+    code
+    score
+    starCount
+    resourceCount
+    commentCount
+    user {
+      id
+      username
+    }
+  }
+}

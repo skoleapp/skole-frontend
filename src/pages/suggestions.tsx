@@ -1,20 +1,12 @@
-import {
-  CardHeader,
-  makeStyles,
-  Paper,
-  Table,
-  TableContainer,
-  TableFooter,
-} from '@material-ui/core';
+import { CardHeader, makeStyles, Paper, TableFooter } from '@material-ui/core';
 import {
   BackButton,
-  CourseTableBody,
-  CustomTableHead,
   ErrorTemplate,
   LoadingBox,
   LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
+  SuggestionsTable,
 } from 'components';
 import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
@@ -79,22 +71,8 @@ const SuggestionsPage: NextPage = () => {
 
   const renderLoading = <LoadingBox />;
   const renderNotFound = <NotFoundBox text={t('suggestions:noSuggestions')} />;
-
-  const tableHeadProps = {
-    titleLeft: t('common:name'),
-    titleRight: t('common:score'),
-  };
-
-  const renderTable = (
-    <TableContainer>
-      <Table>
-        <CustomTableHead {...tableHeadProps} />
-        <CourseTableBody courses={courses} />
-        <TableFooter className={classes.tableFooter} />
-      </Table>
-    </TableContainer>
-  );
-
+  const renderTableFooter = <TableFooter className={classes.tableFooter} />;
+  const renderTable = <SuggestionsTable courses={courses} renderTableFooter={renderTableFooter} />;
   const renderSuggestions = loading ? renderLoading : courses.length ? renderTable : renderNotFound;
 
   const layoutProps = {

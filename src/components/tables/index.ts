@@ -6,3 +6,4 @@ export { CustomTablePaginationActions } from './CustomTablePaginationActions';
 export { PaginatedTable } from './PaginatedTable';
 export { ResourceTableBody } from './ResourceTableBody';
 export { SubjectTableBody } from './SubjectTableBody';
+export { SuggestionsTable } from './SuggestionsTable';

@@ -18,18 +18,29 @@ import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import clsx from 'clsx';
-import { ButtonLink, LandingPageTemplate } from 'components';
+import {
+  ButtonLink,
+  ErrorTemplate,
+  LandingPageTemplate,
+  LoadingTemplate,
+  SuggestionsTable,
+} from 'components';
 import { useAuthContext, useShareContext } from 'context';
 import { withUserMe } from 'hocs';
-import { useSearch } from 'hooks';
+import { useLanguageHeaderContext, useSearch } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
-import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import React, { useEffect } from 'react';
+import { BORDER, BORDER_RADIUS } from 'theme';
 import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
+import * as R from 'ramda';
+import { useSuggestionsPreviewLazyQuery } from '__generated__/src/graphql/common.graphql';
+import TableFooter from '@material-ui/core/TableFooter';
+import Paper from '@material-ui/core/Paper';
+import CardHeader from '@material-ui/core/CardHeader';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
@@ -75,10 +86,13 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
   shortcutsContainer: {
+    flexGrow: 1,
     padding: `${spacing(4)} ${spacing(2)}`,
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
-    flexGrow: 1,
+  },
+  cardContainer: {
+    padding: 0,
   },
   card: {
     width: '100%',
@@ -86,7 +100,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     position: 'relative',
     margin: spacing(2),
     [breakpoints.up('md')]: {
-      width: '16rem',
       height: '16rem',
     },
   },
@@ -116,14 +129,34 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     height: '3rem',
     width: '3rem',
   },
+  suggestionsContainer: {
+    padding: spacing(4),
+    marginTop: spacing(-6),
+  },
+  suggestionsPaper: {
+    borderRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+    backgroundColor: palette.grey[200],
+  },
+  suggestionsCardHeader: {
+    borderBottom: BORDER,
+    color: palette.text.secondary,
+  },
+  suggestionsTable: {
+    backgroundColor: palette.grey[200],
+  },
+  suggestionsTableFooter: {
+    padding: spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
+  },
   nextStepsContainer: {
     flexGrow: 1,
     backgroundColor: palette.grey[300],
     paddingTop: spacing(6),
-    paddingBottom: spacing(2),
-    [breakpoints.up('md')]: {
-      padding: spacing(4),
-    },
+    paddingLeft: spacing(2),
+    paddingRight: spacing(2),
+    paddingBottom: spacing(4),
   },
   nextStepsHeader: {
     fontSize: '1.75rem',
@@ -167,6 +200,17 @@ const IndexPage: NextPage = () => {
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
+  const context = useLanguageHeaderContext();
+
+  const [suggestionsPreviewQuery, { data, loading, error }] = useSuggestionsPreviewLazyQuery({
+    context,
+  });
+
+  useEffect(() => {
+    !!userMe && suggestionsPreviewQuery();
+  }, [userMe]);
+
+  const courses = R.propOr([], 'suggestedCoursesPreview', data);
   const shareTitle = `Skole | ${t('marketing:slogan')}`;
   const shareText = t('marketing:description');
   const shareParams = { shareHeader: t('home:inviteText'), shareTitle, shareText };
@@ -226,47 +270,76 @@ const IndexPage: NextPage = () => {
   );
 
   const renderSearch = (
-    <Grid className={classes.searchContainer} item container direction="column" alignItems="center">
-      {renderHeader}
-      {renderSubHeader}
-      {renderSearchField}
+    <Grid className={classes.searchContainer} container justify="center">
+      <Grid item xs={12} lg={8} xl={6}>
+        {renderHeader}
+        {renderSubHeader}
+        {renderSearchField}
+      </Grid>
     </Grid>
   );
 
   const renderHomepageShortcuts = shortcuts.map(
     ({ href, text, icon: Icon }: Shortcut, i: number) => (
-      <Link href={href} key={i}>
-        <Card className={clsx(classes.card)}>
-          <CardActionArea className={classes.cardActionArea}>
-            <CardContent className={classes.cardContent}>
-              <Avatar className={clsx(classes.avatar)}>
-                <Icon className={classes.avatarIcon} />
-              </Avatar>
-              <Typography
-                className={classes.shortcutText}
-                variant="subtitle1"
-                color="textSecondary"
-                align="center"
-              >
-                {t(text)}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </Link>
+      <Grid className={classes.cardContainer} item xs={12} md={4} key={i} container>
+        <Link href={href}>
+          <Card className={clsx(classes.card)}>
+            <CardActionArea className={classes.cardActionArea}>
+              <CardContent className={classes.cardContent}>
+                <Avatar className={clsx(classes.avatar)}>
+                  <Icon className={classes.avatarIcon} />
+                </Avatar>
+                <Typography
+                  className={classes.shortcutText}
+                  variant="subtitle1"
+                  color="textSecondary"
+                  align="center"
+                >
+                  {t(text)}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Link>
+      </Grid>
     ),
   );
 
   const renderShortcuts = (
-    <Grid
-      item
-      container
-      justify="center"
-      alignItems="center"
-      className={classes.shortcutsContainer}
-    >
-      <Grid item container spacing={4} justify="center">
+    <Grid className={classes.shortcutsContainer} container justify="center" alignItems="center">
+      <Grid item xs={12} lg={8} xl={6} container>
         {renderHomepageShortcuts}
+      </Grid>
+    </Grid>
+  );
+
+  const renderSuggestionsTableFooter = (
+    <TableFooter className={classes.suggestionsTableFooter}>
+      <ButtonLink
+        href={urls.suggestions}
+        color="primary"
+        endIcon={<ArrowForwardOutlined />}
+        fullWidth
+      >
+        {t('common:seeAll')}
+      </ButtonLink>
+    </TableFooter>
+  );
+
+  const renderSuggestions = !!userMe && (
+    <Grid container justify="center">
+      <Grid className={classes.suggestionsContainer} item xs={12} lg={8} xl={6}>
+        <Paper className={classes.suggestionsPaper}>
+          <CardHeader
+            className={classes.suggestionsCardHeader}
+            title={`${t('home:suggestionsHeader')} 🎩`}
+          />
+          <SuggestionsTable
+            courses={courses}
+            renderTableFooter={renderSuggestionsTableFooter}
+            tableProps={{ className: classes.suggestionsTable }}
+          />
+        </Paper>
       </Grid>
     </Grid>
   );
@@ -399,16 +472,7 @@ const IndexPage: NextPage = () => {
       <Typography className={classes.nextStepsHeader} variant="h2" color="textSecondary">
         {t('home:nextStepsHeader')} 🚀
       </Typography>
-      <Grid
-        className={classes.nextStepsContent}
-        item
-        xs={12}
-        md={8}
-        lg={6}
-        xl={4}
-        container
-        spacing={4}
-      >
+      <Grid className={classes.nextStepsContent} item xs={12} lg={8} xl={6} container spacing={4}>
         {renderInviteStep}
         {renderDynamicStep}
         {renderContactStep}
@@ -428,10 +492,23 @@ const IndexPage: NextPage = () => {
     hideHeader: true,
   };
 
+  if (loading) {
+    return <LoadingTemplate />;
+  }
+
+  if (!!error && !!error.networkError) {
+    return <ErrorTemplate variant="offline" />;
+  }
+
+  if (error) {
+    return <ErrorTemplate variant="error" />;
+  }
+
   return (
     <LandingPageTemplate {...layoutProps}>
       {renderSearch}
       {renderShortcuts}
+      {renderSuggestions}
       {renderInfo}
     </LandingPageTemplate>
   );
