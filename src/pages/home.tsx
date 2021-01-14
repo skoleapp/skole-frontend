@@ -157,7 +157,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     marginTop: spacing(4),
   },
   nextStepsCard: {
-    minHeight: '12rem',
     height: '100%',
     flexGrow: 1,
     backgroundColor: palette.grey[200],
