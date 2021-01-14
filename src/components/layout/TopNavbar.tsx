@@ -23,6 +23,7 @@ import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { MouseEvent, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { TopNavbarProps } from 'types';
@@ -76,6 +77,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
+  const { asPath } = useRouter();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
@@ -98,7 +100,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperOpen(!activityPopperOpen);
   };
 
-  const renderHeader = !!header && <Typography className="truncate-text" variant="h6">{header}</Typography>;
+  const renderHeader = !!header && (
+    <Typography variant="h6" className="truncate-text">
+      {header}
+    </Typography>
+  );
+
   const renderLogo = !hideLogo && <Logo />;
   const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
