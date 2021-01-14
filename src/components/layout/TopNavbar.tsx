@@ -184,7 +184,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderLoginButton = isDesktop && !hideLoginButton && (
-    <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
+    <ButtonLink
+      href={{ pathname: urls.login, query: { next: asPath } }}
+      color="secondary"
+      endIcon={<HowToRegOutlined />}
+    >
       {t('common:login')}
     </ButtonLink>
   );
