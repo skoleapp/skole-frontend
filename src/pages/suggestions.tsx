@@ -55,7 +55,7 @@ const SuggestionsPage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useSuggestionsQuery({ context });
   const courses = R.propOr([], 'suggestedCourses', data);
-  const header = t('suggestions:header');
+  const header = `${t('suggestions:header')} 🔥`;
   const renderBackButton = <BackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (

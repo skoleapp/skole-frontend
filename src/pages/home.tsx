@@ -44,9 +44,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
-    padding: spacing(6),
-    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(6)})`,
-    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(6)})`,
+    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(4)})`,
+    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(4)})`,
     marginTop: spacing(4),
     textAlign: 'center',
     [breakpoints.up('sm')]: {
@@ -78,35 +77,26 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     border: `0.05rem solid ${palette.primary.main}`,
     borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
     padding: spacing(3),
-    [breakpoints.up('md')]: {
-      maxWidth: '20rem',
-    },
   },
   searchButton: {
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
-  shortcutsContainer: {
+  midSectionContainer: {
     flexGrow: 1,
-    padding: `${spacing(4)} ${spacing(2)}`,
+    paddingTop: spacing(4),
+    paddingBottom: spacing(4),
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
   },
-  cardContainer: {
-    padding: 0,
+  shortcut: {
+    padding: spacing(2),
   },
   card: {
-    width: '100%',
-    minHeight: '14rem',
-    position: 'relative',
-    margin: spacing(2),
-    [breakpoints.up('md')]: {
-      height: '16rem',
-    },
+    flexGrow: 1,
+    display: 'flex',
   },
   cardActionArea: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
+    flexGrow: 1,
     borderRadius: BORDER_RADIUS,
   },
   cardContent: {
@@ -116,34 +106,36 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     alignItems: 'center',
   },
   shortcutText: {
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
+    marginLeft: spacing(2),
+  },
+  shortcutArrow: {
+    marginLeft: spacing(2),
   },
   avatar: {
-    height: '5rem',
-    width: '5rem',
+    height: '2.5rem',
+    width: '2.5rem',
     margin: spacing(2),
-    marginBottom: spacing(4),
     backgroundColor: palette.primary.light,
   },
   avatarIcon: {
-    height: '3rem',
-    width: '3rem',
-  },
-  suggestionsContainer: {
-    padding: spacing(4),
-    marginTop: spacing(-6),
+    height: '1.5rem',
+    width: '1.5rem',
   },
   suggestionsPaper: {
     borderRadius: BORDER_RADIUS,
     overflow: 'hidden',
-    backgroundColor: palette.grey[200],
+    margin: spacing(2),
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  suggestionsTableContainer: {
+    flexGrow: 1,
   },
   suggestionsCardHeader: {
     borderBottom: BORDER,
     color: palette.text.secondary,
-  },
-  suggestionsTable: {
-    backgroundColor: palette.grey[200],
   },
   suggestionsTableFooter: {
     padding: spacing(2),
@@ -279,37 +271,39 @@ const IndexPage: NextPage = () => {
     </Grid>
   );
 
-  const renderHomepageShortcuts = shortcuts.map(
-    ({ href, text, icon: Icon }: Shortcut, i: number) => (
-      <Grid className={classes.cardContainer} item xs={12} md={4} key={i} container>
-        <Link href={href}>
-          <Card className={clsx(classes.card)}>
-            <CardActionArea className={classes.cardActionArea}>
-              <CardContent className={classes.cardContent}>
+  const renderArrow = <ArrowForwardOutlined className={classes.shortcutArrow} color="primary" />;
+
+  const mapShortcuts = shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+    <Grid className={classes.shortcut} item xs={12} key={i} container>
+      <Link href={href}>
+        <Card className={clsx(classes.card)}>
+          <CardActionArea className={classes.cardActionArea}>
+            <CardContent className={classes.cardContent}>
+              <Grid container alignItems="center">
                 <Avatar className={clsx(classes.avatar)}>
                   <Icon className={classes.avatarIcon} />
                 </Avatar>
                 <Typography
                   className={classes.shortcutText}
                   variant="subtitle1"
-                  color="textSecondary"
+                  color="primary"
                   align="center"
                 >
-                  {t(text)}
+                  <Grid container alignItems="center">
+                    {t(text)} {renderArrow}
+                  </Grid>
                 </Typography>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Link>
-      </Grid>
-    ),
-  );
+              </Grid>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Link>
+    </Grid>
+  ));
 
   const renderShortcuts = (
-    <Grid className={classes.shortcutsContainer} container justify="center" alignItems="center">
-      <Grid item xs={12} lg={8} xl={6} container>
-        {renderHomepageShortcuts}
-      </Grid>
+    <Grid item xs={12} md={4} container>
+      {mapShortcuts}
     </Grid>
   );
 
@@ -326,20 +320,27 @@ const IndexPage: NextPage = () => {
     </TableFooter>
   );
 
-  const renderSuggestions = !!userMe && (
-    <Grid container justify="center">
-      <Grid className={classes.suggestionsContainer} item xs={12} lg={8} xl={6}>
-        <Paper className={classes.suggestionsPaper}>
-          <CardHeader
-            className={classes.suggestionsCardHeader}
-            title={`${t('home:suggestionsHeader')} 🎩`}
-          />
-          <SuggestionsTable
-            courses={courses}
-            renderTableFooter={renderSuggestionsTableFooter}
-            tableProps={{ className: classes.suggestionsTable }}
-          />
-        </Paper>
+  const renderSuggestionsPreview = (
+    <Grid item xs={12} md={8} container>
+      <Paper className={classes.suggestionsPaper}>
+        <CardHeader
+          className={classes.suggestionsCardHeader}
+          title={`${t('home:suggestionsHeader')} 🔥`}
+        />
+        <SuggestionsTable
+          courses={courses}
+          renderTableFooter={renderSuggestionsTableFooter}
+          tableContainerProps={{ className: classes.suggestionsTableContainer }}
+        />
+      </Paper>
+    </Grid>
+  );
+
+  const renderMidSection = (
+    <Grid className={classes.midSectionContainer} container justify="center">
+      <Grid item xs={12} lg={8} xl={6} container justify="center">
+        {renderShortcuts}
+        {renderSuggestionsPreview}
       </Grid>
     </Grid>
   );
@@ -507,8 +508,7 @@ const IndexPage: NextPage = () => {
   return (
     <LandingPageTemplate {...layoutProps}>
       {renderSearch}
-      {renderShortcuts}
-      {renderSuggestions}
+      {renderMidSection}
       {renderInfo}
     </LandingPageTemplate>
   );

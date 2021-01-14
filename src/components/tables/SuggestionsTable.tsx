@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableProps } from '@material-ui/core';
+import { Table, TableContainer, TableContainerProps } from '@material-ui/core';
 import { CourseObjectType } from 'generated';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
@@ -8,10 +8,14 @@ import { CustomTableHead } from './CustomTableHead';
 interface Props {
   courses: CourseObjectType[];
   renderTableFooter: JSX.Element;
-  tableProps?: TableProps;
+  tableContainerProps?: TableContainerProps;
 }
 
-export const SuggestionsTable: React.FC<Props> = ({ courses, renderTableFooter, tableProps }) => {
+export const SuggestionsTable: React.FC<Props> = ({
+  courses,
+  renderTableFooter,
+  tableContainerProps,
+}) => {
   const { t } = useTranslation();
 
   const tableHeadProps = {
@@ -23,8 +27,8 @@ export const SuggestionsTable: React.FC<Props> = ({ courses, renderTableFooter, 
   const renderTableBody = <CourseTableBody courses={courses} />;
 
   return (
-    <TableContainer>
-      <Table {...tableProps}>
+    <TableContainer {...tableContainerProps}>
+      <Table>
         {renderTableHead}
         {renderTableBody}
         {renderTableFooter}
