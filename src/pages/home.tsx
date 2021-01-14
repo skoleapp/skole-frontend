@@ -359,7 +359,7 @@ const IndexPage: NextPage = () => {
   };
 
   const renderInviteStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:inviteHeader')}</Typography>
@@ -374,7 +374,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderTakeATourStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:takeATourHeader')}</Typography>
@@ -389,7 +389,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderVerifyStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:verifyAccountHeader')}</Typography>
@@ -404,7 +404,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderAddSchoolAndSubjectStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:addSchoolAndSubjectHeader')}</Typography>
@@ -419,7 +419,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderUploadStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:uploadHeader')}</Typography>
@@ -447,7 +447,7 @@ const IndexPage: NextPage = () => {
     : renderUploadStep;
 
   const renderContactStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:contactHeader')}</Typography>
