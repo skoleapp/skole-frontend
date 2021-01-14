@@ -296,7 +296,6 @@ const CourseDetailPage: NextPage = () => {
 
   const resourceTableHeadProps = {
     titleLeft: t('common:title'),
-    titleLeftDesktop: t('common:resources'),
     titleRight: t('common:score'),
   };
 

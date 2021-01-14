@@ -930,3 +930,19 @@ query Sitemap {
     }
   }
 }
+
+query Suggestions {
+  suggestedCourses {
+    id
+    name
+    code
+    score
+    starCount
+    resourceCount
+    commentCount
+    user {
+      id
+      username
+    }
+  }
+}

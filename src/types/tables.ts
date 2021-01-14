@@ -7,6 +7,5 @@ export type CustomTablePaginationProps = Pick<
 
 export interface CustomTableHeadProps {
   titleLeft?: string;
-  titleLeftDesktop?: string;
   titleRight?: string;
 }
