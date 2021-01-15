@@ -1,4 +1,6 @@
-import { DialogContent, Drawer, makeStyles } from '@material-ui/core';
+import DialogContent from '@material-ui/core/DialogContent';
+import Drawer from '@material-ui/core/Drawer';
+import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import React, { SyntheticEvent } from 'react';

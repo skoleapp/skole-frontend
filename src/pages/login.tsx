@@ -1,20 +1,18 @@
+import Avatar from '@material-ui/core/Avatar';
+import FormControl from '@material-ui/core/FormControl';
+import Grid from '@material-ui/core/Grid';
+import MaterialLink from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import {
-  Avatar,
-  FormControl,
-  Grid,
-  Link as MuiLink,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
-import {
-  FormTemplate,
+  AuthBackButton,
+  ButtonLink,
   FormSubmitSection,
+  FormTemplate,
+  LogoutRequiredTemplate,
   PasswordField,
   TextFormField,
   TextLink,
-  ButtonLink,
-  LogoutRequiredTemplate,
-  AuthBackButton,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
@@ -172,9 +170,9 @@ const LoginPage: NextPage = () => {
 
   const renderLoginWithDifferentCredentialsLink = (
     <FormControl className={classes.link}>
-      <MuiLink onClick={handleLoginWithDifferentCredentials}>
+      <MaterialLink onClick={handleLoginWithDifferentCredentials}>
         {t('login:loginWithDifferentCredentials')}
-      </MuiLink>
+      </MaterialLink>
     </FormControl>
   );
 

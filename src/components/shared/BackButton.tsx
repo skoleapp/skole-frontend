@@ -1,5 +1,7 @@
-import { ButtonProps, IconButton, Tooltip } from '@material-ui/core';
-import { ArrowBackOutlined } from '@material-ui/icons';
+import { ButtonProps } from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import ArrowBackOutlined from '@material-ui/icons/ArrowBackOutlined';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';

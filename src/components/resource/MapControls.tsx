@@ -1,15 +1,18 @@
-import { Box, Fab, Size, makeStyles, Tooltip, Typography } from '@material-ui/core';
-import {
-  AddOutlined,
-  FullscreenExitOutlined,
-  FullscreenOutlined,
-  RemoveOutlined,
-} from '@material-ui/icons';
+import Box from '@material-ui/core/Box';
+import Fab from '@material-ui/core/Fab';
+import { makeStyles } from '@material-ui/core/styles';
+import { Size } from '@material-ui/core/TableCell';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import AddOutlined from '@material-ui/icons/AddOutlined';
+import FullscreenExitOutlined from '@material-ui/icons/FullscreenExitOutlined';
+import FullscreenOutlined from '@material-ui/icons/FullscreenOutlined';
+import RemoveOutlined from '@material-ui/icons/RemoveOutlined';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { Dispatch, SetStateAction } from 'react';
 import { MuiColor, PdfTranslation } from 'types';
-import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION, PDF_MIN_SCALE, PDF_MAX_SCALE } from 'utils';
+import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION, PDF_MAX_SCALE, PDF_MIN_SCALE } from 'utils';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {

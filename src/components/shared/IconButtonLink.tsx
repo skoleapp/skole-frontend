@@ -1,8 +1,9 @@
-import { IconButton } from '@material-ui/core';
-import { IconButtonProps } from '@material-ui/core/IconButton';
-import { SvgIconComponent } from '@material-ui/icons';
+import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import Link, { LinkProps } from 'next/link';
 import React, { forwardRef } from 'react';
+
+type SvgIconComponent = typeof SvgIcon;
 
 interface Props extends IconButtonProps, LinkProps {
   icon: SvgIconComponent;

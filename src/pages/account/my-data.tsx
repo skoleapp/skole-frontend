@@ -1,9 +1,11 @@
-import { Box, FormControl, Typography } from '@material-ui/core';
-import { ArrowForwardOutlined } from '@material-ui/icons';
+import Box from '@material-ui/core/Box';
+import FormControl from '@material-ui/core/FormControl';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { ButtonLink, FormSubmitSection, LoginRequiredTemplate, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
-import { useGraphQlMyDataMutation, GraphQlMyDataMutation } from 'generated';
+import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';

@@ -1,4 +1,5 @@
-import { Box, useTheme } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import { useTheme } from '@material-ui/core/styles';
 import React from 'react';
 
 export const CustomBottomNavbarContainer: React.FC = ({ children }) => {

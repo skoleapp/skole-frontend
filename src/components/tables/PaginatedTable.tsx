@@ -1,4 +1,5 @@
-import { Table, TableContainer } from '@material-ui/core';
+import Table from '@material-ui/core/Table';
+import TableContainer from '@material-ui/core/TableContainer';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';

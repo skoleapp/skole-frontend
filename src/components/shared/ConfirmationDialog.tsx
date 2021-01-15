@@ -1,13 +1,12 @@
+import Button from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import { makeStyles } from '@material-ui/core/styles';
+import { useConfirmContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
-import {
-  Button,
-  DialogActions,
-  DialogContentText,
-  DialogContent,
-  makeStyles,
-} from '@material-ui/core';
-import { useConfirmContext } from 'context';
+
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
 

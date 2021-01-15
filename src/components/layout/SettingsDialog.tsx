@@ -1,6 +1,7 @@
 import { useSettings } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
+
 import { DialogHeader, SkoleDialog } from '../shared';
 
 export const SettingsDialog: React.FC = () => {

@@ -1,9 +1,10 @@
-import { IconButton, Tooltip } from '@material-ui/core';
-import { InfoOutlined } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoOutlined from '@material-ui/icons/InfoOutlined';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
-import { useDialogButton } from './useDialogButton';
 
+import { useDialogButton } from './useDialogButton';
 import { useOpen } from './useOpen';
 
 interface UseInfoDialogParams {

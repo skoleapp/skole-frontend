@@ -1,4 +1,4 @@
-import { TablePaginationProps } from '@material-ui/core';
+import { TablePaginationProps } from '@material-ui/core/TablePagination';
 
 export type CustomTablePaginationProps = Pick<
   TablePaginationProps,

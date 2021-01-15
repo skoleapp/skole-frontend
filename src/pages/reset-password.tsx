@@ -1,4 +1,5 @@
-import { FormControl, Typography } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import Typography from '@material-ui/core/Typography';
 import {
   BackButton,
   FormSubmitSection,

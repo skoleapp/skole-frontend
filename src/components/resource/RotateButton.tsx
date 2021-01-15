@@ -1,5 +1,7 @@
-import { IconButton, Tooltip, Typography } from '@material-ui/core';
-import { RotateRightOutlined } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import RotateRightOutlined from '@material-ui/icons/RotateRightOutlined';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';

@@ -1,10 +1,11 @@
-import { Avatar, Badge, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
-import {
-  CloudUploadOutlined,
-  HomeOutlined,
-  NotificationsOutlined,
-  SearchOutlined,
-} from '@material-ui/icons';
+import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import HomeOutlined from '@material-ui/icons/HomeOutlined';
+import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
+import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import { useAuthContext } from 'context';
 import { useSearch } from 'hooks';
 import { useTranslation } from 'lib';

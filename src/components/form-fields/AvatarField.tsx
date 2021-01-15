@@ -1,23 +1,24 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  FormControl,
-  List,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-} from '@material-ui/core';
-import { AddCircleOutlineOutlined, ClearOutlined, EditOutlined } from '@material-ui/icons';
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
+import ClearOutlined from '@material-ui/icons/ClearOutlined';
+import EditOutlined from '@material-ui/icons/EditOutlined';
+import imageCompression from 'browser-image-compression';
+import { useNotificationsContext } from 'context';
 import { ErrorMessage, FormikProps, FormikValues } from 'formik';
 import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { ACCEPTED_AVATAR_FILES, MAX_AVATAR_FILE_SIZE, MAX_AVATAR_WIDTH_HEIGHT } from 'utils';
-import imageCompression from 'browser-image-compression';
-import { useNotificationsContext } from 'context';
+
 import { ResponsiveDialog } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 

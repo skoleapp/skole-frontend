@@ -1,5 +1,7 @@
-import { IconButton, Tooltip, Typography } from '@material-ui/core';
-import { TabUnselectedOutlined } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import TabUnselectedOutlined from '@material-ui/icons/TabUnselectedOutlined';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';

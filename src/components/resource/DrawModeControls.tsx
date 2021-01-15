@@ -1,5 +1,10 @@
-import { Button, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
-import { ArrowForwardOutlined, ClearOutlined } from '@material-ui/icons';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import ClearOutlined from '@material-ui/icons/ClearOutlined';
 import { useDiscussionContext, usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';

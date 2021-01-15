@@ -1,5 +1,8 @@
-import { IconButton, makeStyles, Snackbar, SnackbarOrigin, Typography } from '@material-ui/core';
-import { Close } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar, { SnackbarOrigin } from '@material-ui/core/Snackbar';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Close from '@material-ui/icons/Close';
 import { useNotificationsContext } from 'context';
 import Router from 'next/router';
 import React, { SyntheticEvent } from 'react';

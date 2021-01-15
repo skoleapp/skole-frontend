@@ -1,16 +1,19 @@
-import { Box, List, ListItemIcon, ListItemText, MenuItem } from '@material-ui/core';
-import {
-  ExitToAppOutlined,
-  HowToRegOutlined,
-  LanguageOutlined,
-  VerifiedUserOutlined,
-} from '@material-ui/icons';
+import Box from '@material-ui/core/Box';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
+import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
+import LanguageOutlined from '@material-ui/icons/LanguageOutlined';
+import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
 import { useAuthContext, useLanguageContext, useSettingsContext } from 'context';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { SettingsContextType } from 'types';
 import { SETTINGS_ITEMS, urls } from 'utils';
+
 import { useMediaQueries } from './useMediaQueries';
 
 interface UseSettings extends SettingsContextType {

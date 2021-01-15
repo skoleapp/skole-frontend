@@ -1,4 +1,6 @@
-import { Dialog, makeStyles, Slide } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import Slide from '@material-ui/core/Slide';
+import { makeStyles } from '@material-ui/core/styles';
 import { TransitionProps } from '@material-ui/core/transitions';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';

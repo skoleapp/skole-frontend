@@ -1,19 +1,18 @@
-import {
-  BottomNavigation,
-  CardHeader,
-  Grid,
-  List,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Paper,
-  Tab,
-  Tabs,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
-import { CloudUploadOutlined, DeleteOutline } from '@material-ui/icons';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import clsx from 'clsx';
 import {
   BackButton,
@@ -35,15 +34,15 @@ import {
 } from 'components';
 import {
   useAuthContext,
+  useConfirmContext,
   useDiscussionContext,
   useNotificationsContext,
-  useConfirmContext,
 } from 'context';
 import {
   DeleteCourseMutation,
+  SubjectObjectType,
   useCourseQuery,
   useDeleteCourseMutation,
-  SubjectObjectType,
 } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import {
@@ -57,7 +56,6 @@ import {
   useVotes,
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
-
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';

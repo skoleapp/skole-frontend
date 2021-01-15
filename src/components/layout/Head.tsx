@@ -1,4 +1,4 @@
-import { useTheme } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import Head from 'next/head';
 import React from 'react';
 import { SeoProps } from 'types';

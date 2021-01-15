@@ -10,7 +10,7 @@
     "build": "BUILD_DATE=\"$(date '+%Y-%m-%d')\" next build",
     "start": "next start -p 3001",
     "type-check": "tsc",
-    "format": "yarn prettier --write '**/*.{ts,tsx,js,json}'",
+    "format": "yarn prettier --write '**/*.{ts,tsx,js,json}' && eslint . --ext .ts,.tsx,.js --fix",
     "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && eslint . --ext .ts,.tsx,.js && dpdm --tree=false --exit-code=circular:1 $(find src/)",
     "update-deps:patch": "yarn upgrade",
     "update-deps:latest": "yarn upgrade --latest"
@@ -67,6 +67,7 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "4.2.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "graphql-let": "^0.16.2",
     "prettier": "^2.2.1",
     "raw-loader": "^4.0.2",

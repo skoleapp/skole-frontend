@@ -1,14 +1,12 @@
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Grid,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
-import { ArrowForwardOutlined } from '@material-ui/icons';
+import Box from '@material-ui/core/Box';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
 import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
 import { useAuthContext } from 'context';

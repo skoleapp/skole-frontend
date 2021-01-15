@@ -1,4 +1,9 @@
-import { Box, Button, FormControl, FormHelperText, makeStyles } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import { makeStyles } from '@material-ui/core/styles';
+import imageCompression from 'browser-image-compression';
 import { useNotificationsContext } from 'context';
 import { ErrorMessage, FieldAttributes, FormikProps, FormikValues } from 'formik';
 import { useMediaQueries } from 'hooks';
@@ -13,9 +18,9 @@ import {
   truncate,
   urls,
 } from 'utils';
-import imageCompression from 'browser-image-compression';
-import { FormErrorMessage } from './FormErrorMessage';
+
 import { TextLink } from '../shared';
+import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   dropZone: {

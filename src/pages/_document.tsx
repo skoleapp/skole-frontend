@@ -1,10 +1,10 @@
-import { ServerStyleSheets } from '@material-ui/core';
+import { ServerStyleSheets } from '@material-ui/core/styles';
 import { RenderPageResult } from 'next/dist/next-server/lib/utils';
 import Document, {
   DocumentContext,
   DocumentInitialProps,
-  Html,
   Head,
+  Html,
   Main,
   NextScript,
 } from 'next/document';

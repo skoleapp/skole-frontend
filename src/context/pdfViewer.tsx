@@ -1,5 +1,4 @@
-import React, { createContext, useRef, useState, useContext } from 'react';
-
+import React, { createContext, useContext, useRef, useState } from 'react';
 import { Document } from 'react-pdf';
 import { PdfViewerContextType } from 'types';
 

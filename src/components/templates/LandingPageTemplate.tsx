@@ -1,10 +1,14 @@
-import { Box, Grid, makeStyles, Typography } from '@material-ui/core';
+import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'lib';
-import React from 'react';
 import Image from 'next/image';
+import React from 'react';
 import { MainTemplateProps } from 'types';
-import { MainTemplate } from './MainTemplate';
+
 import { MainBackground } from '../layout';
+import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   container: {

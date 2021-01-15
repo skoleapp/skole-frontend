@@ -1,12 +1,10 @@
-import {
-  AssignmentOutlined,
-  ContactSupportOutlined,
-  EditOutlined,
-  LockOutlined,
-  SecurityOutlined,
-  SettingsBackupRestoreOutlined,
-  StorageOutlined,
-} from '@material-ui/icons';
+import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
+import EditOutlined from '@material-ui/icons/EditOutlined';
+import LockOutlined from '@material-ui/icons/LockOutlined';
+import SecurityOutlined from '@material-ui/icons/SecurityOutlined';
+import SettingsBackupRestoreOutlined from '@material-ui/icons/SettingsBackupRestoreOutlined';
+import StorageOutlined from '@material-ui/icons/StorageOutlined';
 
 import { urls } from './urls';
 

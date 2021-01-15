@@ -1,25 +1,23 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  CardHeader,
-  Chip,
-  DialogContent,
-  FormControl,
-  Grid,
-  IconButton,
-  InputBase,
-  makeStyles,
-  Paper,
-} from '@material-ui/core';
-import {
-  ArrowBackOutlined,
-  ClearAllOutlined,
-  FilterListOutlined,
-  SearchOutlined,
-} from '@material-ui/icons';
+import AppBar from '@material-ui/core/AppBar';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import CardHeader from '@material-ui/core/CardHeader';
+import Chip from '@material-ui/core/Chip';
+import DialogContent from '@material-ui/core/DialogContent';
+import FormControl from '@material-ui/core/FormControl';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import ArrowBackOutlined from '@material-ui/icons/ArrowBackOutlined';
+import ClearAllOutlined from '@material-ui/icons/ClearAllOutlined';
+import FilterListOutlined from '@material-ui/icons/FilterListOutlined';
+import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import {
   AutocompleteField,
+  BackButton,
+  ContactLink,
   CourseTableBody,
   DialogHeader,
   ErrorTemplate,
@@ -29,10 +27,8 @@ import {
   NativeSelectField,
   NotFoundBox,
   PaginatedTable,
-  ContactLink,
   SkoleDialog,
   TextFormField,
-  BackButton,
 } from 'components';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {

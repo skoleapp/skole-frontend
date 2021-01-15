@@ -1,19 +1,18 @@
-import { AssignmentOutlined, SchoolOutlined } from '@material-ui/icons';
-import Link from 'next/link';
-import React from 'react';
-import { SubjectObjectType } from 'generated';
-import {
-  CardActionArea,
-  Grid,
-  makeStyles,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from '@material-ui/core';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import clsx from 'clsx';
+import { SubjectObjectType } from 'generated';
 import { useSearch } from 'hooks';
+import Link from 'next/link';
 import * as R from 'ramda';
+import React from 'react';
 
 interface Props {
   subjects: SubjectObjectType[];

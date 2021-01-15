@@ -1,10 +1,12 @@
-import { Grid, IconButton, makeStyles, Tooltip, Typography } from '@material-ui/core';
-import {
-  FirstPageOutlined,
-  KeyboardArrowLeftOutlined,
-  KeyboardArrowRightOutlined,
-  LastPageOutlined,
-} from '@material-ui/icons';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import FirstPageOutlined from '@material-ui/icons/FirstPageOutlined';
+import KeyboardArrowLeftOutlined from '@material-ui/icons/KeyboardArrowLeftOutlined';
+import KeyboardArrowRightOutlined from '@material-ui/icons/KeyboardArrowRightOutlined';
+import LastPageOutlined from '@material-ui/icons/LastPageOutlined';
 import { useTranslation } from 'lib';
 import React, { MouseEvent } from 'react';
 

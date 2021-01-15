@@ -1,16 +1,16 @@
-import {
-  BottomNavigation,
-  Grid,
-  List,
-  ListItemIcon,
-  ListItemText,
-  makeStyles,
-  MenuItem,
-  Paper,
-  Tab,
-  Tabs,
-} from '@material-ui/core';
-import { CloudDownloadOutlined, DeleteOutline, PrintOutlined } from '@material-ui/icons';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import {
   BackButton,
@@ -32,13 +32,12 @@ import {
   TextLink,
   TopLevelCommentThread,
 } from 'components';
-import dynamic from 'next/dynamic';
 import {
   useAuthContext,
+  useConfirmContext,
   useDiscussionContext,
   useNotificationsContext,
   usePdfViewerContext,
-  useConfirmContext,
 } from 'context';
 import {
   DeleteResourceMutation,
@@ -60,12 +59,13 @@ import {
 } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { mediaUrl, urls } from 'utils';
 import { PdfViewerProps } from 'types';
+import { mediaUrl, urls } from 'utils';
 
 // Here we make an exception for exclusive usage of named exports and use a default import to make sure this is never imported server-side.
 // Reference: https://github.com/wojtekmaj/react-pdf/issues/136#issuecomment-716643894.

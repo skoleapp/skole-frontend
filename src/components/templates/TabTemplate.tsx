@@ -1,8 +1,13 @@
-import { CardHeader, makeStyles, Paper, Tab, Tabs } from '@material-ui/core';
+import CardHeader from '@material-ui/core/CardHeader';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import { useMediaQueries, useTabs } from 'hooks';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
+
 import { TabPanel } from '../shared';
 import { MainTemplate } from './MainTemplate';
 

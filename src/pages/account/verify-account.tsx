@@ -1,5 +1,6 @@
-import { FormControl, Typography } from '@material-ui/core';
-import { ArrowForwardOutlined } from '@material-ui/icons';
+import FormControl from '@material-ui/core/FormControl';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import {
   BackButton,
   ButtonLink,

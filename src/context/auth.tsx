@@ -6,8 +6,7 @@ import {
 } from 'generated';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { createContext, useState, useContext } from 'react';
-
+import React, { createContext, useContext, useState } from 'react';
 import { AuthContextType } from 'types';
 import { mediaUrl, urls } from 'utils';
 

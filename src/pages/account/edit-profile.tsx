@@ -1,4 +1,5 @@
-import { FormControl, makeStyles } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   AutocompleteField,
   AvatarField,

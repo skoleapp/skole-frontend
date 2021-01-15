@@ -2,15 +2,16 @@ import 'nprogress/nprogress.css';
 import 'typeface-roboto';
 
 import { ApolloProvider } from '@apollo/client';
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import DayJsUtils from '@date-io/dayjs';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+import MuiPickersUtilsProvider from '@material-ui/pickers/MuiPickersUtilsProvider';
 import { I18nProvider, useApollo } from 'lib';
 import { AppProps } from 'next/app';
 import Router, { useRouter } from 'next/router';
 import NProgress from 'nprogress';
 import React, { useEffect } from 'react';
 import { theme } from 'theme';
-import DayJsUtils from '@date-io/dayjs';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 NProgress.configure({ showSpinner: false });
 Router.events.on('routeChangeStart', () => NProgress.start());

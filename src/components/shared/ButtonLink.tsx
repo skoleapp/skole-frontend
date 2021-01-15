@@ -1,5 +1,4 @@
-import { Button } from '@material-ui/core';
-import { ButtonProps } from '@material-ui/core/Button';
+import Button, { ButtonProps } from '@material-ui/core/Button';
 import Link, { LinkProps } from 'next/link';
 import React from 'react';
 

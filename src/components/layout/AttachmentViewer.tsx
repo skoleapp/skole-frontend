@@ -1,5 +1,9 @@
-import { Backdrop, Grid, IconButton, makeStyles, Typography } from '@material-ui/core';
-import { CloseOutlined } from '@material-ui/icons';
+import Backdrop from '@material-ui/core/Backdrop';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import CloseOutlined from '@material-ui/icons/CloseOutlined';
 import { useDiscussionContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
