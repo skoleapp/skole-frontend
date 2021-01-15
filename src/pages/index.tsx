@@ -16,7 +16,7 @@ import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { LANDING_PAGE_PITCH_ITEMS, urls } from 'utils';
 
@@ -102,7 +102,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
 const LandingPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { query } = useRouter();
   const { userMe } = useAuthContext();
   const { isMobile } = useMediaQueries();
 
@@ -113,12 +112,9 @@ const LandingPage: NextPage = () => {
 
   const ctaUrl = {
     pathname: urls.register,
-    query,
-  };
-
-  const skipLoginUrl = {
-    pathname: query.next ? String(query.next) : urls.home,
-    query,
+    query: {
+      ref: 'get-started',
+    },
   };
 
   const renderCtaHeader = (
@@ -147,7 +143,7 @@ const LandingPage: NextPage = () => {
 
   const renderAuthLink = (
     <Typography className={classes.authLink}>
-      <TextLink href={skipLoginUrl} color="secondary">
+      <TextLink href={urls.home} color="secondary">
         {t('index:skipLogin')}
       </TextLink>
     </Typography>

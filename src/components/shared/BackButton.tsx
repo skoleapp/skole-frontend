@@ -9,7 +9,7 @@ import { urls } from 'utils';
 
 interface Props extends Omit<ButtonProps, 'href'> {
   href?: string | UrlObject;
-  tooltip?: string;
+  tooltip?: string | false;
 }
 
 export const BackButton: React.FC<Props> = ({ href, tooltip, ...props }) => {

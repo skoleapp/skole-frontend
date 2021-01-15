@@ -14,7 +14,7 @@ import {
   TextLink,
   ButtonLink,
   LogoutRequiredTemplate,
-  BackButton,
+  AuthBackButton,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
@@ -154,7 +154,11 @@ const LoginPage: NextPage = () => {
 
   const renderRegisterButton = (
     <FormControl className={classes.link}>
-      <ButtonLink href={urls.register} variant="outlined" color="primary">
+      <ButtonLink
+        href={{ pathname: urls.register, query }} // Keep the query for the `Get Started` ref.
+        variant="outlined"
+        color="primary"
+      >
         {t('common:register')}
       </ButtonLink>
     </FormControl>
@@ -213,7 +217,7 @@ const LoginPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
-      renderBackButton: <BackButton />,
+      renderBackButton: <AuthBackButton />,
       header: t('login:header'),
       hideLoginButton: true,
       hideGetStartedButton: true,

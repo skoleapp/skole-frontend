@@ -13,5 +13,6 @@
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
   "closeMenu": "Stäng menyn.",
   "backToHome": "Tillbaka till hem.",
-  "backToProfile": "Tillbaka till profilen."
+  "backToProfile": "Tillbaka till profilen.",
+  "backToGetStarted": "Tillbaka till startsidan."
 }

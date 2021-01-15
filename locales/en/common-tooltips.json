@@ -13,5 +13,6 @@
   "activity": "You have {{ unreadActivityCount }} unread activities.",
   "closeMenu": "Close menu.",
   "backToHome": "Back to home.",
-  "backToProfile": "Back to profile."
+  "backToProfile": "Back to profile.",
+  "backToGetStarted": "Back to Get Started."
 }
