@@ -13,6 +13,7 @@ import {
 import { CloudDownloadOutlined, DeleteOutline, PrintOutlined } from '@material-ui/icons';
 import clsx from 'clsx';
 import {
+  BackButton,
   CustomBottomNavbarContainer,
   DiscussionHeader,
   DrawModeButton,
@@ -139,7 +140,6 @@ const ResourceDetailPage: NextPage = () => {
   const created = R.prop('created', resource);
   const { commentCount, commentDialogOpen } = useDiscussionContext(comments);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
-  const staticBackUrl = urls.course(courseId);
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -305,7 +305,16 @@ const ResourceDetailPage: NextPage = () => {
     }
   };
 
-  const renderCourseLink = !!courseId && <TextLink href={staticBackUrl}>{courseName}</TextLink>;
+  const renderBackButton = (
+    <BackButton
+      href={urls.course(courseId)}
+      tooltip={t('resource-tooltips:backToCourse', { courseName })}
+    />
+  );
+
+  const renderCourseLink = !!courseId && (
+    <TextLink href={urls.course(courseId)}>{courseName}</TextLink>
+  );
 
   const renderSchoolLink = !!schoolId && (
     <TextLink href={urls.school(schoolId)} color="primary">
@@ -504,7 +513,7 @@ const ResourceDetailPage: NextPage = () => {
     },
     customBottomNavbar: renderCustomBottomNavbar,
     topNavbarProps: {
-      staticBackUrl,
+      renderBackButton,
       renderHeaderLeft: renderShareButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,

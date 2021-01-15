@@ -10,7 +10,7 @@ import {
   TextLink,
   ContactLink,
   LogoutRequiredTemplate,
-  BackButton,
+  AuthBackButton,
 } from 'components';
 import { useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
@@ -29,6 +29,7 @@ import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
@@ -54,6 +55,7 @@ enum RegisterPhases {
 
 const RegisterPage: NextPage = () => {
   const { t } = useTranslation();
+  const { query } = useRouter();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
@@ -228,7 +230,11 @@ const RegisterPage: NextPage = () => {
 
   const renderLoginButton = (
     <FormControl>
-      <ButtonLink href={urls.login} variant="outlined" color="primary">
+      <ButtonLink
+        href={{ pathname: urls.login, query }} // Keep the query for the `Get Started` ref.
+        variant="outlined"
+        color="primary"
+      >
         {t('common:login')}
       </ButtonLink>
     </FormControl>
@@ -347,7 +353,7 @@ const RegisterPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
-      renderBackButton: <BackButton />,
+      renderBackButton: <AuthBackButton />,
       header,
       hideSearch: true,
       hideRegisterButton: true,

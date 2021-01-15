@@ -13,5 +13,6 @@
   "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
   "closeMenu": "Sulje valikko.",
   "backToHome": "Takaisin kotiin.",
-  "backToProfile": "Takaisin profiiliin."
+  "backToProfile": "Takaisin profiiliin.",
+  "backToGetStarted": "Takaisin aloitussivulle."
 }

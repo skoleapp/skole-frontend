@@ -1,3 +1,4 @@
+export { AuthBackButton } from './AuthBackButton';
 export { ButtonLink } from './ButtonLink';
 export { ConfirmationDialog } from './ConfirmationDialog';
 export { MarkdownContent } from './MarkdownContent';
