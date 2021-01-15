@@ -7,8 +7,10 @@ import { LS_LOGOUT_KEY, urls } from 'utils';
 import { withCommonContexts } from './withCommonContexts';
 
 // Fetch user from API and set context with the value.
-export const withUserMe = (PageComponent: NextPage): NextPage => {
-  const WithUserMe: NextPage = (pageProps) => {
+export const withUserMe = <T extends Record<string, unknown>>(
+  PageComponent: NextPage<T>,
+): NextPage<T> => {
+  const WithUserMe: NextPage<T> = (pageProps: T) => {
     const { authLoading, authNetworkError } = useUserMe();
 
     const syncLogout = (e: StorageEvent): false | Promise<boolean> =>

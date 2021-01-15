@@ -9,16 +9,17 @@ import {
   Typography,
 } from '@material-ui/core';
 import { ArrowForwardOutlined } from '@material-ui/icons';
+import clsx from 'clsx';
 import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
 import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Image from 'next/image';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { LANDING_PAGE_PITCH_ITEMS, urls } from 'utils';
+import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -56,6 +57,12 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
       padding: spacing(6),
     },
   },
+  nativeAppPitchBoxContainer: {
+    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
+    [breakpoints.up('md')]: {
+      paddingBottom: `calc(${spacing(6)} + env(safe-area-inset-bottom))`,
+    },
+  },
   pitchHeader: {
     fontSize: '1.25rem',
     fontWeight: 'bold',
@@ -69,8 +76,10 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   badgeContainer: {
     backgroundColor: palette.grey[300],
     padding: spacing(4),
+    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
     [breakpoints.up('md')]: {
       padding: spacing(8),
+      paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,
     },
   },
   badgeCard: {
@@ -99,7 +108,11 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-const LandingPage: NextPage = () => {
+interface Props extends Record<string, unknown> {
+  nativeApp: boolean;
+}
+
+const LandingPage: NextPage<Props> = ({ nativeApp }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
@@ -180,7 +193,15 @@ const LandingPage: NextPage = () => {
 
   const renderPitch = (
     <Grid container direction="column" alignItems="center" className={classes.pitchContainer}>
-      <Grid container item xs={12} lg={8} xl={6} className={classes.pitchBoxContainer} spacing={8}>
+      <Grid
+        container
+        item
+        xs={12}
+        lg={8}
+        xl={6}
+        className={clsx(classes.pitchBoxContainer, nativeApp && classes.nativeAppPitchBoxContainer)}
+        spacing={8}
+      >
         {renderPitchItems}
       </Grid>
     </Grid>
@@ -212,7 +233,7 @@ const LandingPage: NextPage = () => {
     </CardActions>
   );
 
-  const renderBadges = (
+  const renderBadges = !nativeApp && (
     <Grid container justify="center" className={classes.badgeContainer}>
       <Grid item xs={12} md={6} lg={4} xl={3}>
         <Card className={classes.badgeCard}>
@@ -249,9 +270,10 @@ const LandingPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => ({
   props: {
     _ns: await loadNamespaces(['index'], locale),
+    nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
   },
 });
 

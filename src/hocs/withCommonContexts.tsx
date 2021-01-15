@@ -17,8 +17,10 @@ import { NextPage } from 'next';
 import React from 'react';
 
 // Provide common contexts for all pages. Used automatically in all pages through the auth HOC's.
-export const withCommonContexts = (PageComponent: NextPage): NextPage => {
-  const WithCommonContexts: NextPage = (pageProps) => (
+export const withCommonContexts = <T extends Record<string, unknown>>(
+  PageComponent: NextPage<T>,
+): NextPage<T> => {
+  const WithCommonContexts: NextPage<T> = (pageProps: T) => (
     <AuthContextProvider>
       <LanguageContextProvider>
         <NotificationsContextProvider>
