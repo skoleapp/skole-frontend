@@ -41,6 +41,14 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;
 
+  const renderBackButton = (
+    <BackButton
+      href={urls.course(courseId)}
+      tooltip={t('resource-tooltips:backToCourse', { courseName })}
+      className="MuiCardHeader-avatar"
+    />
+  );
+
   const toolbarButtonProps = {
     size: 'small' as Size,
     disabled: controlsDisabled,
@@ -64,14 +72,6 @@ export const ResourceTopToolbar: React.FC<Props> = ({
         </IconButton>
       </Typography>
     </Tooltip>
-  );
-
-  const renderBackButton = (
-    <BackButton
-      href={urls.course(courseId)}
-      tooltip={t('resource-tooltips:backToCourse', { courseName })}
-      className="MuiCardHeader-avatar"
-    />
   );
 
   const renderResourceTitle = (

@@ -439,7 +439,7 @@ const CourseDetailPage: NextPage = () => {
       description: t('course:description', { courseName }),
     },
     topNavbarProps: {
-      staticBackUrl: searchUrl,
+      renderBackButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
       renderHeaderLeft: renderUploadResourceButton,
