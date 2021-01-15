@@ -96,12 +96,14 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
     </MenuItem>
   );
 
+  const renderAvatar = <Avatar className={classes.avatar} src={user ? avatarThumbnail : ''} />;
+
   const renderAuthorInfo = (
     <Button
       onClick={handleOpenAuthorSelection}
       endIcon={<KeyboardArrowDown color="disabled" />}
       className={classes.button}
-      startIcon={<Avatar className={classes.avatar} src={avatarThumbnail} />}
+      startIcon={renderAvatar}
     >
       <Grid item container direction="column">
         {renderAuthorName}

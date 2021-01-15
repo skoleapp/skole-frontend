@@ -20,7 +20,8 @@ import { ExternalLink, ResponsiveDialog } from '../shared';
 export const ShareDialog: React.FC = () => {
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-  const { asPath } = useRouter();
+  const { asPath: _asPath } = useRouter();
+  const asPath = _asPath.split('?')[0];
   const { isMobile } = useMediaQueries();
 
   const {
