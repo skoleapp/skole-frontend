@@ -32,8 +32,10 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   pitchBoxContainer: {
     backgroundColor: palette.grey[300],
     padding: `${spacing(4)} ${spacing(2)}`,
+    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
     [breakpoints.up('md')]: {
       padding: spacing(6),
+      paddingBottom: `calc(${spacing(6)} + env(safe-area-inset-bottom))`,
     },
   },
   pitchHeader: {
