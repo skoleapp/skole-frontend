@@ -289,6 +289,9 @@ export const theme = createMuiTheme({
     },
     MuiCssBaseline: {
       '@global': {
+        html: {
+          webkitTextSizeAdjust: '100%', // https://github.com/mui-org/material-ui/issues/22423#issuecomment-683391113.
+        },
         body: {
           backgroundColor: COLORS.secondary,
           [breakpoints.down('md')]: {
