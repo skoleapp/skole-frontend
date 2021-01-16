@@ -36,7 +36,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   );
 
   const renderHeaderText = (
-    <Typography className={clsx('MuiCardHeader-title', 'truncate-text')} variant="h5">
+    <Typography className={clsx('MuiCardHeader-title', 'truncate-text')} variant="h6">
       {text}
     </Typography>
   );

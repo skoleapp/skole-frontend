@@ -272,12 +272,6 @@ export const theme = createMuiTheme({
         padding: spacing(2),
       },
     },
-    MuiBackdrop: {
-      root: {
-        marginTop: 'env(safe-area-inset-top)',
-        marginBottom: 'env(safe-area-inset-bottom)',
-      },
-    },
     MuiAppBar: {
       root: {
         paddingLeft: 'env(safe-area-inset-left)',
@@ -295,6 +289,9 @@ export const theme = createMuiTheme({
     },
     MuiCssBaseline: {
       '@global': {
+        html: {
+          webkitTextSizeAdjust: '100%', // https://github.com/mui-org/material-ui/issues/22423#issuecomment-683391113.
+        },
         body: {
           backgroundColor: COLORS.secondary,
           [breakpoints.down('md')]: {
