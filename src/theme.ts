@@ -272,12 +272,6 @@ export const theme = createMuiTheme({
         padding: spacing(2),
       },
     },
-    MuiBackdrop: {
-      root: {
-        marginTop: 'env(safe-area-inset-top)',
-        marginBottom: 'env(safe-area-inset-bottom)',
-      },
-    },
     MuiAppBar: {
       root: {
         paddingLeft: 'env(safe-area-inset-left)',
