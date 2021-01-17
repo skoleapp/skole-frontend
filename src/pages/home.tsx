@@ -511,6 +511,7 @@ const IndexPage: NextPage = () => {
     },
     hideBottomNavbar: false,
     hideHeader: true,
+    hideAppStoreBadges: true,
   };
 
   if (loading) {

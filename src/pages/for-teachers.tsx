@@ -11,18 +11,24 @@ import React from 'react';
 import { FOR_TEACHERS_PITCH_ITEMS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
-  ctaHeader: {
-    marginTop: spacing(8),
-    fontSize: '1.25rem',
-    [breakpoints.up('md')]: {
-      fontSize: '1.5rem',
-    },
-  },
   ctaContainer: {
+    flexGrow: 1,
     padding: `${spacing(8)} ${spacing(2)}`,
     paddingTop: 0,
-    flexGrow: 1,
     fontWeight: 'bold',
+  },
+  ctaHeader: {
+    marginTop: spacing(8),
+    fontSize: '1rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1.25rem',
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: '1.5rem',
+    },
+    [breakpoints.up('md')]: {
+      fontSize: '2rem',
+    },
   },
   ctaButton: {
     minWidth: '10rem',
@@ -59,7 +65,13 @@ const ForTeachersPage: NextPage = () => {
 
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
-      {t('for-teachers:ctaHeader')} 💥
+      {t('for-teachers:ctaHeader')}
+    </Typography>
+  );
+
+  const renderCtaSubheader = (
+    <Typography variant="body2" color="secondary" align="center">
+      {t('for-teachers:ctaSubheader')}
     </Typography>
   );
 
@@ -85,6 +97,7 @@ const ForTeachersPage: NextPage = () => {
     >
       <Grid item xs={12} md={10} lg={8} xl={6} container direction="column" alignItems="center">
         {renderCtaHeader}
+        {renderCtaSubheader}
         {renderCtaButton}
       </Grid>
     </Grid>

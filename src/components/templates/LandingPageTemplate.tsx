@@ -10,7 +10,7 @@ import { MainTemplateProps } from 'types';
 import { MainBackground } from '../layout';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   container: {
     flexGrow: 1,
     display: 'flex',
@@ -22,7 +22,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     textAlign: 'center',
     padding: `${spacing(8)} ${spacing(2)}`,
     [breakpoints.up('md')]: {
-      marginTop: spacing(16),
+      marginTop: spacing(8),
     },
   },
   logo: {
@@ -43,10 +43,22 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     position: 'relative',
     flexGrow: 1,
   },
+  appStoreBadgeContainer: {
+    flexGrow: 1,
+    position: 'relative',
+    backgroundColor: palette.grey[300],
+    padding: spacing(4),
+    paddingTop: spacing(8),
+    paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,
+  },
+  appStoreBadgeImageContainer: {
+    maxWidth: '20rem',
+  },
 }));
 
 interface Props extends MainTemplateProps {
   hideHeader?: boolean;
+  hideAppStoreBadges?: boolean;
 }
 
 export const LandingPageTemplate: React.FC<Props> = ({
@@ -54,6 +66,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
   topNavbarProps,
   containerProps,
   hideHeader,
+  hideAppStoreBadges,
   ...props
 }) => {
   const classes = useStyles();
@@ -85,6 +98,41 @@ export const LandingPageTemplate: React.FC<Props> = ({
     </Grid>
   );
 
+  const renderAppStoreBadges = !hideAppStoreBadges && (
+    <Grid className={classes.appStoreBadgeContainer} container justify="center" alignItems="center">
+      <Grid className={classes.appStoreBadgeImageContainer} container justify="center" spacing={4}>
+        <Grid item xs={6}>
+          <Typography
+            component="a"
+            href="https://apps.apple.com/app/skole-for-students/id1547995609"
+            target="_blank"
+          >
+            <Image
+              layout="responsive"
+              height={60}
+              width={180}
+              src="/images/app-store-badges/apple-app-store-badge.svg"
+            />
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography
+            component="a"
+            href="https://play.google.com/store/apps/details?id=com.skole"
+            target="_blank"
+          >
+            <Image
+              layout="responsive"
+              height={60}
+              width={180}
+              src="/images/app-store-badges/google-play-badge.svg"
+            />
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+
   const layoutProps = {
     hideBottomNavbar: true,
     topNavbarProps: {
@@ -105,6 +153,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
         {renderBackground}
         {renderHeader}
         {renderChildren}
+        {renderAppStoreBadges}
       </Box>
     </MainTemplate>
   );

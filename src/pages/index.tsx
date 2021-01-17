@@ -1,7 +1,3 @@
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,16 +10,15 @@ import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
-import Image from 'next/image';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
+    flexGrow: 1,
     padding: `${spacing(8)} ${spacing(2)}`,
     paddingTop: 0,
-    flexGrow: 1,
     fontWeight: 'bold',
   },
   ctaHeader: {
@@ -61,12 +56,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
       padding: spacing(6),
     },
   },
-  nativeAppPitchBoxContainer: {
-    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
-    [breakpoints.up('md')]: {
-      paddingBottom: `calc(${spacing(6)} + env(safe-area-inset-bottom))`,
-    },
-  },
   pitchHeader: {
     fontSize: '1.25rem',
     fontWeight: 'bold',
@@ -76,39 +65,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     backgroundColor: palette.primary.main,
     marginBottom: spacing(2),
     borderRadius: '0.5rem',
-  },
-  badgeContainer: {
-    backgroundColor: palette.grey[300],
-    padding: spacing(4),
-    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
-    [breakpoints.up('md')]: {
-      padding: spacing(8),
-      paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,
-    },
-  },
-  badgeCard: {
-    flexGrow: 1,
-    backgroundColor: palette.grey[200],
-    display: 'flex',
-    flexDirection: 'column',
-    boxShadow: 'none',
-    border: `0.15rem solid ${palette.grey[400]}`,
-    borderRadius: '1rem',
-  },
-  badgeCardContent: {
-    flexGrow: 1,
-    padding: '0 !important',
-    paddingTop: `${spacing(4)} !important`,
-  },
-  badgeCardText: {
-    fontSize: '1.1rem',
-  },
-  badge: {
-    width: '10rem',
-    height: '4rem',
-    margin: spacing(2),
-    position: 'relative',
-    opacity: 0.5, // TODO: Remove this when the actual links are available.
   },
 }));
 
@@ -188,8 +144,11 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
       </Typography>
       <Divider className={classes.pitchHeaderDivider} />
       {bullets.map((b) => (
-        <Typography variant="body2" color="textSecondary">
-          - {t(b)}
+        <Typography // eslint-disable-line jsx-a11y/accessible-emoji
+          variant="body2"
+          color="textSecondary"
+        >
+          ❇️ {t(b)}
         </Typography>
       ))}
     </Grid>
@@ -211,43 +170,6 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
     </Grid>
   );
 
-  const renderBadgeCardContent = (
-    <CardContent className={classes.badgeCardContent}>
-      <Typography
-        className={classes.badgeCardText}
-        variant="subtitle1"
-        color="textSecondary"
-        align="center"
-      >
-        {t('index:appStoreCta')} 📱
-      </Typography>
-    </CardContent>
-  );
-
-  const renderBadgeCardActions = (
-    <CardActions>
-      <Grid container justify="center">
-        <Box className={classes.badge}>
-          <Image layout="fill" src="/images/app-store-badges/apple-app-store-badge.svg" />
-        </Box>
-        <Box className={classes.badge}>
-          <Image layout="fill" src="/images/app-store-badges/google-play-badge.svg" />
-        </Box>
-      </Grid>
-    </CardActions>
-  );
-
-  const renderBadges = !nativeApp && (
-    <Grid container justify="center" className={classes.badgeContainer}>
-      <Grid item xs={12} md={6} lg={4} xl={3}>
-        <Card className={classes.badgeCard}>
-          {renderBadgeCardContent}
-          {renderBadgeCardActions}
-        </Card>
-      </Grid>
-    </Grid>
-  );
-
   const layoutProps = {
     seoProps: {
       title: t('index:title'),
@@ -256,7 +178,7 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
     hideBottomNavbar: true,
     topNavbarProps: {
       hideLogo: isMobile,
-      hideAuthButtons: true,
+      hideDynamicButtons: true,
     },
   };
 
@@ -269,7 +191,6 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
     <LandingPageTemplate {...layoutProps}>
       {renderCta}
       {renderPitch}
-      {renderBadges}
     </LandingPageTemplate>
   );
 };
