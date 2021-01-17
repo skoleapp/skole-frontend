@@ -1,4 +1,7 @@
-import { CardHeader, makeStyles, Paper, TableFooter } from '@material-ui/core';
+import CardHeader from '@material-ui/core/CardHeader';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import TableFooter from '@material-ui/core/TableFooter';
 import {
   BackButton,
   ErrorTemplate,
@@ -7,14 +10,14 @@ import {
   NotFoundBox,
   SuggestionsTable,
 } from 'components';
+import { useSuggestionsQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { useSuggestionsQuery } from 'generated';
-import * as R from 'ramda';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   paper: {

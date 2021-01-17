@@ -1,6 +1,7 @@
-import { TableBody } from '@material-ui/core';
+import TableBody from '@material-ui/core/TableBody';
 import { ResourceObjectType } from 'generated';
 import React from 'react';
+
 import { ResourceTableRow } from './ResourceTableRow';
 
 interface Props {

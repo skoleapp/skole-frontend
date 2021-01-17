@@ -1,18 +1,22 @@
-import { CardActionArea, Chip, Grid, TableCell, TableRow, Typography } from '@material-ui/core';
-import {
-  AccountCircleOutlined,
-  AssignmentOutlined,
-  ChatOutlined,
-  SchoolOutlined,
-  StarBorderOutlined,
-  ThumbsUpDownOutlined,
-} from '@material-ui/icons';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
+import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import ChatOutlined from '@material-ui/icons/ChatOutlined';
+import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
+import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
+import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 import clsx from 'clsx';
 import { CourseObjectType } from 'generated';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
 import { urls } from 'utils';
+
 import { TextLink } from '../shared';
 
 interface Props {

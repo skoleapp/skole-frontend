@@ -1,6 +1,9 @@
-import { Table, TableBody, TableContainer, TableContainerProps } from '@material-ui/core';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableContainer, { TableContainerProps } from '@material-ui/core/TableContainer';
 import { SuggestionsUnion } from 'generated';
 import React from 'react';
+
 import { CommentTableRow } from './CommentTableRow';
 import { CourseTableRow } from './CourseTableRow';
 import { ResourceTableRow } from './ResourceTableRow';

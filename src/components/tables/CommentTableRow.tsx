@@ -1,22 +1,21 @@
-import React from 'react';
-import {
-  CardActionArea,
-  Grid,
-  TableCell,
-  TableRow,
-  Typography,
-  makeStyles,
-  Chip,
-} from '@material-ui/core';
-
-import { AccountCircleOutlined, ChatOutlined, ThumbsUpDownOutlined } from '@material-ui/icons';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
+import ChatOutlined from '@material-ui/icons/ChatOutlined';
+import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
+import clsx from 'clsx';
+import { CommentObjectType } from 'generated';
+import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
+import React from 'react';
 import { truncate, urls } from 'utils';
 
-import { useDayjs } from 'hooks';
-import { CommentObjectType } from 'generated';
-import clsx from 'clsx';
 import { MarkdownContent, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({

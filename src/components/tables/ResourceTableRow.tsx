@@ -1,6 +1,4 @@
-import React from 'react';
-import { CardActionArea, Grid, TableCell, TableRow, Typography, Chip } from '@material-ui/core';
-
+import { CardActionArea, Chip, Grid, TableCell, TableRow, Typography } from '@material-ui/core';
 import {
   AccountCircleOutlined,
   AssignmentOutlined,
@@ -10,12 +8,13 @@ import {
   ThumbsUpDownOutlined,
 } from '@material-ui/icons';
 import clsx from 'clsx';
-import { useTranslation } from 'lib';
-import Link from 'next/link';
-import { urls } from 'utils';
-
 import { ResourceObjectType } from 'generated';
 import { useDayjs } from 'hooks';
+import { useTranslation } from 'lib';
+import Link from 'next/link';
+import React from 'react';
+import { urls } from 'utils';
+
 import { TextLink } from '../shared';
 
 interface Props {

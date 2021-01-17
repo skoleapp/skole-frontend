@@ -1,29 +1,25 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Grid,
-  IconButton,
-  InputBase,
-  makeStyles,
-  Paper,
-  TableFooter,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
-import {
-  ArrowForwardOutlined,
-  AssignmentOutlined,
-  CloudUploadOutlined,
-  SchoolOutlined,
-  SearchOutlined,
-  SvgIconComponent,
-} from '@material-ui/icons';
+import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import InputBase from '@material-ui/core/InputBase';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import TableFooter from '@material-ui/core/TableFooter';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
+import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import clsx from 'clsx';
 import {
   ButtonLink,
@@ -33,18 +29,18 @@ import {
   SuggestionsTable,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
+import { useSuggestionsPreviewQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
+import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
-import * as R from 'ramda';
-import { useSuggestionsPreviewQuery } from 'generated';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
@@ -195,7 +191,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
 
 interface Shortcut {
   text: string;
-  icon: SvgIconComponent;
+  icon: typeof SvgIcon;
   href: string | UrlObject;
 }
 

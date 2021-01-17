@@ -6,7 +6,6 @@ import React, { ChangeEvent, MouseEvent } from 'react';
 import { getQueryWithPagination, RESULTS_PER_PAGE_OPTIONS } from 'utils';
 
 import { CustomTableFooter } from './CustomTableFooter';
-import { CustomTableHead } from './CustomTableHead';
 
 interface Props {
   count: number;
