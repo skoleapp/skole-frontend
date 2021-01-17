@@ -98,7 +98,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperOpen(!activityPopperOpen);
   };
 
-  const renderHeader = !!header && <Typography variant="h6">{header}</Typography>;
+  const renderHeader = !!header && <Typography className="truncate-text" variant="h6">{header}</Typography>;
   const renderLogo = !hideLogo && <Logo />;
   const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
