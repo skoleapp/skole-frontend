@@ -118,7 +118,7 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
 
   // Redirect authenticated users to home page.
   useEffect(() => {
-    !!userMe && Router.push(urls.home);
+    !!userMe && Router.replace(urls.home);
   }, [userMe]);
 
   const ctaUrl = {
