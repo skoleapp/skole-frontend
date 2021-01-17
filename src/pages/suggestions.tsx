@@ -3,12 +3,10 @@ import {
   BackButton,
   ErrorTemplate,
   LoadingBox,
-  LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
   SuggestionsTable,
 } from 'components';
-import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -50,11 +48,10 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 const SuggestionsPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { userMe } = useAuthContext();
   const { isTabletOrDesktop } = useMediaQueries();
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useSuggestionsQuery({ context });
-  const courses = R.propOr([], 'suggestedCourses', data);
+  const suggestions = R.propOr([], 'suggestions', data);
   const header = `${t('suggestions:header')} 🔥`;
   const renderBackButton = <BackButton />;
 
@@ -72,8 +69,16 @@ const SuggestionsPage: NextPage = () => {
   const renderLoading = <LoadingBox />;
   const renderNotFound = <NotFoundBox text={t('suggestions:noSuggestions')} />;
   const renderTableFooter = <TableFooter className={classes.tableFooter} />;
-  const renderTable = <SuggestionsTable courses={courses} renderTableFooter={renderTableFooter} />;
-  const renderSuggestions = loading ? renderLoading : courses.length ? renderTable : renderNotFound;
+
+  const renderTable = (
+    <SuggestionsTable suggestions={suggestions} renderTableFooter={renderTableFooter} />
+  );
+
+  const renderSuggestions = loading
+    ? renderLoading
+    : suggestions.length
+    ? renderTable
+    : renderNotFound;
 
   const layoutProps = {
     seoProps: {
@@ -84,10 +89,6 @@ const SuggestionsPage: NextPage = () => {
       renderBackButton,
     },
   };
-
-  if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
-  }
 
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" />;

@@ -1,35 +1,42 @@
-import { Table, TableContainer, TableContainerProps } from '@material-ui/core';
-import { CourseObjectType } from 'generated';
-import useTranslation from 'next-translate/useTranslation';
+import { Table, TableBody, TableContainer, TableContainerProps } from '@material-ui/core';
+import { SuggestionsUnion } from 'generated';
 import React from 'react';
-import { CourseTableBody } from './CourseTableBody';
-import { CustomTableHead } from './CustomTableHead';
+import { CommentTableRow } from './CommentTableRow';
+import { CourseTableRow } from './CourseTableRow';
+import { ResourceTableRow } from './ResourceTableRow';
 
 interface Props {
-  courses: CourseObjectType[];
+  suggestions: SuggestionsUnion[];
   renderTableFooter: JSX.Element;
   tableContainerProps?: TableContainerProps;
 }
 
 export const SuggestionsTable: React.FC<Props> = ({
-  courses,
+  suggestions,
   renderTableFooter,
   tableContainerProps,
 }) => {
-  const { t } = useTranslation();
+  const renderSuggestion = (suggestion: SuggestionsUnion, i: number) => {
+    switch (suggestion.__typename) {
+      case 'CourseObjectType': {
+        return <CourseTableRow course={suggestion} key={i} />;
+      }
 
-  const tableHeadProps = {
-    titleLeft: t('common:name'),
-    titleRight: t('common:score'),
+      case 'ResourceObjectType': {
+        return <ResourceTableRow resource={suggestion} hideDateChip key={i} />;
+      }
+
+      case 'CommentObjectType': {
+        return <CommentTableRow comment={suggestion} key={i} />;
+      }
+    }
   };
 
-  const renderTableHead = <CustomTableHead {...tableHeadProps} />;
-  const renderTableBody = <CourseTableBody courses={courses} />;
+  const renderTableBody = <TableBody>{suggestions.map(renderSuggestion)}</TableBody>;
 
   return (
     <TableContainer {...tableContainerProps}>
       <Table>
-        {renderTableHead}
         {renderTableBody}
         {renderTableFooter}
       </Table>

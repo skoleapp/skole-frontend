@@ -4,7 +4,6 @@
   "logout": "Log Out",
   "username": "Username",
   "email": "Email",
-  "title": "Title",
   "joined": "Joined",
   "createdBy": "Added by",
   "modified": "Modified",
@@ -39,7 +38,6 @@
   "deleteAccount": "Delete Account",
   "myData": "My Data",
   "course": "Course",
-  "name": "Name",
   "discussion": "Discussion",
   "reportAbuse": "Report Abuse (coming soon)",
   "comments": "Comments",
@@ -79,5 +77,5 @@
   "guidelinesLink": "Guidelines",
   "loginRequired": "You need to log in to continue.",
   "logoutRequired": "You need to log out to continue.",
-  "blog": "Blog"
+  "comment": "Comment"
 }

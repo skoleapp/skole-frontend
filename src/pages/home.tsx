@@ -1,22 +1,29 @@
-import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
-import { makeStyles } from '@material-ui/core/styles';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
-import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
-import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
-import SearchOutlined from '@material-ui/icons/SearchOutlined';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  IconButton,
+  InputBase,
+  makeStyles,
+  Paper,
+  TableFooter,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
+import {
+  ArrowForwardOutlined,
+  AssignmentOutlined,
+  CloudUploadOutlined,
+  SchoolOutlined,
+  SearchOutlined,
+  SvgIconComponent,
+} from '@material-ui/icons';
 import clsx from 'clsx';
 import {
   ButtonLink,
@@ -27,20 +34,17 @@ import {
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
 import { withUserMe } from 'hocs';
-import { useLanguageHeaderContext, useSearch } from 'hooks';
+import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 import * as R from 'ramda';
-import { useSuggestionsPreviewLazyQuery } from '__generated__/src/graphql/common.graphql';
-import TableFooter from '@material-ui/core/TableFooter';
-import Paper from '@material-ui/core/Paper';
-import CardHeader from '@material-ui/core/CardHeader';
+import { useSuggestionsPreviewQuery } from 'generated';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
@@ -82,7 +86,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
   midSectionContainer: {
-    flexGrow: 1,
     paddingTop: spacing(4),
     paddingBottom: spacing(4),
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
@@ -107,7 +110,13 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   shortcutText: {
     fontSize: '1.25rem',
-    marginLeft: spacing(2),
+    [breakpoints.down('md')]: {
+      marginLeft: spacing(4),
+    },
+    [breakpoints.up('md')]: {
+      marginTop: spacing(2),
+      fontSize: '1.5rem',
+    },
   },
   shortcutArrow: {
     marginLeft: spacing(2),
@@ -115,12 +124,19 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   avatar: {
     height: '2.5rem',
     width: '2.5rem',
-    margin: spacing(2),
     backgroundColor: palette.primary.light,
+    [breakpoints.up('md')]: {
+      height: '3.5rem',
+      width: '3.5rem',
+    },
   },
   avatarIcon: {
     height: '1.5rem',
     width: '1.5rem',
+    [breakpoints.up('md')]: {
+      height: '2rem',
+      width: '2rem',
+    },
   },
   suggestionsPaper: {
     borderRadius: BORDER_RADIUS,
@@ -177,8 +193,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
 }));
 
-type SvgIconComponent = typeof SvgIcon;
-
 interface Shortcut {
   text: string;
   icon: SvgIconComponent;
@@ -188,24 +202,21 @@ interface Shortcut {
 const IndexPage: NextPage = () => {
   const classes = useStyles();
   const { userMe, verified, school, subject } = useAuthContext();
+  const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
-
-  const [suggestionsPreviewQuery, { data, loading, error }] = useSuggestionsPreviewLazyQuery({
-    context,
-  });
-
-  useEffect(() => {
-    !!userMe && suggestionsPreviewQuery();
-  }, [userMe]);
-
-  const courses = R.propOr([], 'suggestedCoursesPreview', data);
   const shareTitle = `Skole | ${t('marketing:slogan')}`;
   const shareText = t('marketing:description');
   const shareParams = { shareHeader: t('home:inviteText'), shareTitle, shareText };
   const handleClickShareButton = () => handleOpenShareDialog(shareParams);
+
+  const { data, loading, error } = useSuggestionsPreviewQuery({
+    context,
+  });
+
+  const suggestions = R.propOr([], 'suggestionsPreview', data);
 
   const shortcuts = [
     {
@@ -228,10 +239,10 @@ const IndexPage: NextPage = () => {
   const renderLaunchIconButton = !userMe && (
     <Link href={urls.index}>
       <Tooltip title="Vrooom!">
-        <IconButton // eslint-disable-line jsx-a11y/accessible-emoji
-          size="small"
-        >
-          🚀
+        <IconButton size="small">
+          <span role="img" aria-label="Vrooom!">
+            🚀
+          </span>
         </IconButton>
       </Tooltip>
     </Link>
@@ -270,7 +281,9 @@ const IndexPage: NextPage = () => {
     </Grid>
   );
 
-  const renderArrow = <ArrowForwardOutlined className={classes.shortcutArrow} color="primary" />;
+  const renderArrow = isMobile && (
+    <ArrowForwardOutlined className={classes.shortcutArrow} color="primary" />
+  );
 
   const mapShortcuts = shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
     <Grid className={classes.shortcut} item xs={12} key={i} container>
@@ -278,7 +291,7 @@ const IndexPage: NextPage = () => {
         <Card className={clsx(classes.card)}>
           <CardActionArea className={classes.cardActionArea}>
             <CardContent className={classes.cardContent}>
-              <Grid container alignItems="center">
+              <Grid container direction={isMobile ? 'row' : 'column'} alignItems="center">
                 <Avatar className={clsx(classes.avatar)}>
                   <Icon className={classes.avatarIcon} />
                 </Avatar>
@@ -327,7 +340,7 @@ const IndexPage: NextPage = () => {
           title={`${t('home:suggestionsHeader')} 🔥`}
         />
         <SuggestionsTable
-          courses={courses}
+          suggestions={suggestions}
           renderTableFooter={renderSuggestionsTableFooter}
           tableContainerProps={{ className: classes.suggestionsTableContainer }}
         />

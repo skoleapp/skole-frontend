@@ -314,7 +314,6 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
       }
       text
       attachment
-      modified
       created
       replyComments {
         id
@@ -932,33 +931,109 @@ query Sitemap {
 }
 
 query Suggestions {
-  suggestedCourses {
-    id
-    name
-    code
-    score
-    starCount
-    resourceCount
-    commentCount
-    user {
+  suggestions {
+    ... on CourseObjectType {
       id
-      username
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
+        id
+        username
+      }
+    }
+    ... on ResourceObjectType {
+      id
+      title
+      score
+      date
+      starCount
+      commentCount
+      downloads
+      resourceType {
+        name
+      }
+      user {
+        id
+        username
+      }
+    }
+    ... on CommentObjectType {
+      id
+      text
+      attachment
+      created
+      score
+      replyCount
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+        name
+      }
+      resource {
+        id
+        title
+      }
     }
   }
 }
 
 query SuggestionsPreview {
-  suggestedCoursesPreview {
-    id
-    name
-    code
-    score
-    starCount
-    resourceCount
-    commentCount
-    user {
+  suggestionsPreview {
+    ... on CourseObjectType {
       id
-      username
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
+        id
+        username
+      }
+    }
+    ... on ResourceObjectType {
+      id
+      title
+      score
+      starCount
+      commentCount
+      downloads
+      resourceType {
+        name
+      }
+      user {
+        id
+        username
+      }
+    }
+    ... on CommentObjectType {
+      id
+      text
+      attachment
+      created
+      score
+      replyCount
+      user {
+        id
+        username
+      }
+      course {
+        id
+        name
+      }
+      resource {
+        id
+        title
+      }
     }
   }
 }
