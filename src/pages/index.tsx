@@ -28,9 +28,15 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
   ctaHeader: {
     marginTop: spacing(8),
-    fontSize: '1.25rem',
-    [breakpoints.up('md')]: {
+    fontSize: '1rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1.25rem',
+    },
+    [breakpoints.up('sm')]: {
       fontSize: '1.5rem',
+    },
+    [breakpoints.up('md')]: {
+      fontSize: '2rem',
     },
   },
   ctaButton: {

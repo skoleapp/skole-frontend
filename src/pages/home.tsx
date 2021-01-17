@@ -56,13 +56,25 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     },
   },
   header: {
-    fontSize: '2rem',
+    fontSize: '1rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1.25rem',
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: '1.5rem',
+    },
     [breakpoints.up('md')]: {
-      fontSize: '2.5rem',
+      fontSize: '2rem',
     },
   },
   subheader: {
-    fontSize: '1.25rem',
+    fontSize: '0.75rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1rem',
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: '1.25rem',
+    },
   },
   searchForm: {
     marginTop: spacing(4),
