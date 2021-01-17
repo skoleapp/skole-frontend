@@ -4,8 +4,3 @@ export type CustomTablePaginationProps = Pick<
   TablePaginationProps,
   'page' | 'count' | 'rowsPerPage' | 'onChangePage' | 'onChangeRowsPerPage'
 >;
-
-export interface CustomTableHeadProps {
-  titleLeft?: string;
-  titleRight?: string;
-}

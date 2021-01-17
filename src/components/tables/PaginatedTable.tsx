@@ -3,25 +3,18 @@ import TableContainer from '@material-ui/core/TableContainer';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, MouseEvent } from 'react';
-import { CustomTableHeadProps } from 'types';
 import { getQueryWithPagination, RESULTS_PER_PAGE_OPTIONS } from 'utils';
 
 import { CustomTableFooter } from './CustomTableFooter';
 import { CustomTableHead } from './CustomTableHead';
 
 interface Props {
-  tableHeadProps?: CustomTableHeadProps;
   count: number;
   extraFilters?: Record<symbol, unknown>; // Additional query parameters to the pagination params.
   renderTableBody: JSX.Element;
 }
 
-export const PaginatedTable: React.FC<Props> = ({
-  count,
-  tableHeadProps,
-  extraFilters = {},
-  renderTableBody,
-}) => {
+export const PaginatedTable: React.FC<Props> = ({ count, extraFilters = {}, renderTableBody }) => {
   const { query, pathname } = useRouter();
   const page = Number(R.propOr(1, 'page', query));
   const rowsPerPage = Number(R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query));
@@ -45,8 +38,6 @@ export const PaginatedTable: React.FC<Props> = ({
     handleReloadPage({ ...query, pageSize });
   };
 
-  const renderTableHead = !!tableHeadProps && <CustomTableHead {...tableHeadProps} />;
-
   const renderTableFooter = (
     <CustomTableFooter
       count={count}
@@ -60,7 +51,6 @@ export const PaginatedTable: React.FC<Props> = ({
   return (
     <TableContainer>
       <Table>
-        {renderTableHead}
         {renderTableBody}
         {renderTableFooter}
       </Table>

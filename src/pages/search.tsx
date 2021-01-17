@@ -446,11 +446,6 @@ const SearchPage: NextPage = () => {
     </DialogContent>
   );
 
-  const tableHeadProps = {
-    titleLeft: t('common:course'),
-    titleRight: t('common:score'),
-  };
-
   const notFoundLinkProps = {
     href: urls.addCourse,
     text: t('search:noCoursesLink'),
@@ -461,12 +456,7 @@ const SearchPage: NextPage = () => {
 
   const renderTable = (
     <Box className={classes.tableContainer}>
-      <PaginatedTable
-        count={count}
-        tableHeadProps={tableHeadProps}
-        renderTableBody={renderCourses}
-        extraFilters={initialValues}
-      />
+      <PaginatedTable count={count} renderTableBody={renderCourses} extraFilters={initialValues} />
     </Box>
   );
 
