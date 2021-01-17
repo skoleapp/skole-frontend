@@ -1,12 +1,15 @@
-import { CardActionArea, Chip, Grid, TableCell, TableRow, Typography } from '@material-ui/core';
-import {
-  AccountCircleOutlined,
-  AssignmentOutlined,
-  ChatOutlined,
-  CloudDownloadOutlined,
-  StarBorderOutlined,
-  ThumbsUpDownOutlined,
-} from '@material-ui/icons';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
+import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import ChatOutlined from '@material-ui/icons/ChatOutlined';
+import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
+import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
+import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 import clsx from 'clsx';
 import { ResourceObjectType } from 'generated';
 import { useDayjs } from 'hooks';
