@@ -88,10 +88,6 @@ export const AboutPage: NextPage = () => {
     },
   };
 
-  if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
-  }
-
   return (
     <MainTemplate {...layoutProps}>
       <Paper className={classes.paper}>
