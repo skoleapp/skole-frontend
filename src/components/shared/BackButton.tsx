@@ -10,7 +10,7 @@ import { UrlObject } from 'url';
 import { urls } from 'utils';
 
 interface Props extends Omit<ButtonProps, 'href'> {
-  href?: string | UrlObject;
+  href?: string | UrlObject | false;
   tooltip?: string | false;
 }
 

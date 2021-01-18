@@ -1,7 +1,3 @@
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,23 +10,29 @@ import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
-import Image from 'next/image';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
+import { NativeAppProps } from 'types';
 import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
+    flexGrow: 1,
     padding: `${spacing(8)} ${spacing(2)}`,
     paddingTop: 0,
-    flexGrow: 1,
     fontWeight: 'bold',
   },
   ctaHeader: {
     marginTop: spacing(8),
-    fontSize: '1.25rem',
-    [breakpoints.up('md')]: {
+    fontSize: '1rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1.25rem',
+    },
+    [breakpoints.up('sm')]: {
       fontSize: '1.5rem',
+    },
+    [breakpoints.up('md')]: {
+      fontSize: '2rem',
     },
   },
   ctaButton: {
@@ -50,7 +52,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   pitchBoxContainer: {
     backgroundColor: palette.grey[300],
     padding: `${spacing(4)} ${spacing(2)}`,
-    textAlign: 'left',
     [breakpoints.up('md')]: {
       padding: spacing(6),
     },
@@ -71,46 +72,9 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     marginBottom: spacing(2),
     borderRadius: '0.5rem',
   },
-  badgeContainer: {
-    backgroundColor: palette.grey[300],
-    padding: spacing(4),
-    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
-    [breakpoints.up('md')]: {
-      padding: spacing(8),
-      paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,
-    },
-  },
-  badgeCard: {
-    flexGrow: 1,
-    backgroundColor: palette.grey[200],
-    display: 'flex',
-    flexDirection: 'column',
-    boxShadow: 'none',
-    border: `0.15rem solid ${palette.grey[400]}`,
-    borderRadius: '1rem',
-  },
-  badgeCardContent: {
-    flexGrow: 1,
-    padding: '0 !important',
-    paddingTop: `${spacing(4)} !important`,
-  },
-  badgeCardText: {
-    fontSize: '1.1rem',
-  },
-  badge: {
-    width: '10rem',
-    height: '4rem',
-    margin: spacing(2),
-    position: 'relative',
-    opacity: 0.5, // TODO: Remove this when the actual links are available.
-  },
 }));
 
-interface Props extends Record<string, unknown> {
-  nativeApp: boolean;
-}
-
-const LandingPage: NextPage<Props> = ({ nativeApp }) => {
+const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
@@ -118,7 +82,7 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
 
   // Redirect authenticated users to home page.
   useEffect(() => {
-    !!userMe && Router.push(urls.home);
+    !!userMe && Router.replace(urls.home);
   }, [userMe]);
 
   const ctaUrl = {
@@ -182,8 +146,11 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
       </Typography>
       <Divider className={classes.pitchHeaderDivider} />
       {bullets.map((b) => (
-        <Typography variant="body2" color="textSecondary">
-          - {t(b)}
+        <Typography // eslint-disable-line jsx-a11y/accessible-emoji
+          variant="body2"
+          color="textSecondary"
+        >
+          ❇️ {t(b)}
         </Typography>
       ))}
     </Grid>
@@ -205,53 +172,16 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
     </Grid>
   );
 
-  const renderBadgeCardContent = (
-    <CardContent className={classes.badgeCardContent}>
-      <Typography
-        className={classes.badgeCardText}
-        variant="subtitle1"
-        color="textSecondary"
-        align="center"
-      >
-        {t('index:appStoreCta')} 📱
-      </Typography>
-    </CardContent>
-  );
-
-  const renderBadgeCardActions = (
-    <CardActions>
-      <Grid container justify="center">
-        <Box className={classes.badge}>
-          <Image layout="fill" src="/images/app-store-badges/apple-app-store-badge.svg" />
-        </Box>
-        <Box className={classes.badge}>
-          <Image layout="fill" src="/images/app-store-badges/google-play-badge.svg" />
-        </Box>
-      </Grid>
-    </CardActions>
-  );
-
-  const renderBadges = !nativeApp && (
-    <Grid container justify="center" className={classes.badgeContainer}>
-      <Grid item xs={12} md={6} lg={4} xl={3}>
-        <Card className={classes.badgeCard}>
-          {renderBadgeCardContent}
-          {renderBadgeCardActions}
-        </Card>
-      </Grid>
-    </Grid>
-  );
-
   const layoutProps = {
     seoProps: {
       title: t('index:title'),
       description: t('marketing:description'),
     },
-    hideBottomNavbar: true,
     topNavbarProps: {
       hideLogo: isMobile,
-      hideAuthButtons: true,
+      hideGetStartedButton: true,
     },
+    hideAppStoreBadges: nativeApp,
   };
 
   // Show loading screen when redirecting to home page.
@@ -263,7 +193,6 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
     <LandingPageTemplate {...layoutProps}>
       {renderCta}
       {renderPitch}
-      {renderBadges}
     </LandingPageTemplate>
   );
 };

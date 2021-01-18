@@ -466,17 +466,11 @@ const UserPage: NextPage = () => {
     </Paper>
   );
 
-  const commonTableHeadProps = {
-    titleLeft: t('common:title'),
-    titleRight: t('common:score'),
-  };
-
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
 
   const renderCourseTable = (
     <PaginatedTable
-      tableHeadProps={commonTableHeadProps}
       renderTableBody={renderCourseTableBody}
       count={courseCount}
       extraFilters={variables}
@@ -485,7 +479,6 @@ const UserPage: NextPage = () => {
 
   const renderResourceTable = (
     <PaginatedTable
-      tableHeadProps={commonTableHeadProps}
       renderTableBody={renderResourceTableBody}
       count={resourceCount}
       extraFilters={variables}

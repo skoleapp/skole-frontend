@@ -4,7 +4,6 @@
   "logout": "Log Out",
   "username": "Username",
   "email": "Email",
-  "title": "Title",
   "joined": "Joined",
   "createdBy": "Added by",
   "modified": "Modified",
@@ -39,7 +38,6 @@
   "deleteAccount": "Delete Account",
   "myData": "My Data",
   "course": "Course",
-  "name": "Name",
   "discussion": "Discussion",
   "reportAbuse": "Report Abuse (coming soon)",
   "comments": "Comments",
@@ -52,7 +50,7 @@
   "verifyAccount": "Verify account",
   "continue": "Continue",
   "activity": "Activity",
-  "seeAll": "View All",
+  "seeAll": "See All",
   "setupLater": "Set Up Later",
   "loading": "Loading...",
   "home": "Home",
@@ -78,5 +76,8 @@
   "emailPlaceholder": "<your_email>",
   "guidelinesLink": "Guidelines",
   "loginRequired": "You need to log in to continue.",
-  "logoutRequired": "You need to log out to continue."
+  "logoutRequired": "You need to log out to continue.",
+  "comment": "Comment",
+  "about": "About",
+  "blog": "Blog"
 }

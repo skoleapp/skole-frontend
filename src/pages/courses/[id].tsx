@@ -294,12 +294,6 @@ const CourseDetailPage: NextPage = () => {
     </BottomNavigation>
   );
 
-  const resourceTableHeadProps = {
-    titleLeft: t('common:title'),
-    titleLeftDesktop: t('common:resources'),
-    titleRight: t('common:score'),
-  };
-
   const notFoundLinkProps = {
     href: {
       pathname: urls.uploadResource,
@@ -315,7 +309,6 @@ const CourseDetailPage: NextPage = () => {
 
   const renderResourceTable = (
     <PaginatedTable
-      tableHeadProps={resourceTableHeadProps}
       renderTableBody={renderResourceTableBody}
       count={resourceCount}
       extraFilters={variables}

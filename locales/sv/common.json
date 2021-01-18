@@ -4,7 +4,6 @@
   "logout": "Logga ut",
   "username": "Användarnamn",
   "email": "E-post",
-  "title": "Titel",
   "joined": "Blev medlem",
   "createdBy": "Tillagd av",
   "modified": "Ändrad",
@@ -39,7 +38,6 @@
   "deleteAccount": "Radera konto",
   "myData": "Min data",
   "course": "Kurs",
-  "name": "Namn",
   "discussion": "Diskussion",
   "reportAbuse": "Rapportera missbruk (på kommande)",
   "comments": "Kommentarer",
@@ -52,7 +50,7 @@
   "verifyAccount": "Verifiera konto",
   "continue": "Fortsätta",
   "activity": "Aktivitet",
-  "seeAll": "Visa allt",
+  "seeAll": "Se alla",
   "setupLater": "Ställa in senare",
   "loading": "Laddar...",
   "home": "Hem",
@@ -78,5 +76,8 @@
   "emailPlaceholder": "<din_e-post>",
   "guidelinesLink": "Riktlinjer",
   "loginRequired": "Du måste logga in för att fortsätta.",
-  "logoutRequired": "Du måste logga ut för att fortsätta."
+  "logoutRequired": "Du måste logga ut för att fortsätta.",
+  "comment": "Kommentar",
+  "about": "Om oss",
+  "blog": "Blogg"
 }

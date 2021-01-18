@@ -1,8 +1,13 @@
 export { ActivityTableBody } from './ActivityTableBody';
+export { CommentTableRow } from './CommentTableRow';
 export { CourseTableBody } from './CourseTableBody';
+export { CourseTableRow } from './CourseTableRow';
 export { CustomTableFooter } from './CustomTableFooter';
-export { CustomTableHead } from './CustomTableHead';
 export { CustomTablePaginationActions } from './CustomTablePaginationActions';
 export { PaginatedTable } from './PaginatedTable';
 export { ResourceTableBody } from './ResourceTableBody';
+export { ResourceTableRow } from './ResourceTableRow';
 export { SubjectTableBody } from './SubjectTableBody';
+export { SuggestionsTable } from './SuggestionsTable';
+export { TableRowChip } from './TableRowChip';
+export { TableRowIcon } from './TableRowIcon';

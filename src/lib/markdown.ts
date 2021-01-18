@@ -2,14 +2,19 @@ import { readFileSync } from 'fs';
 import matter from 'gray-matter';
 import { defaultLocale } from 'i18n.json';
 import { join } from 'path';
+import { MarkdownPageProps } from 'types';
 
-// Load markdown content from files in `markdown` folder for statically generated pages.
-export const loadMarkdownContent = async (
+export const loadMarkdown = async (
   name: string,
   lang: string = defaultLocale,
-): Promise<string> => {
+): Promise<MarkdownPageProps> => {
   const markdownDir = join(process.cwd(), 'markdown');
   const fullPath = join(markdownDir, lang, `${name}.md`);
   const fileContents = readFileSync(fullPath, 'utf8');
-  return matter(fileContents).content;
+  const { data, content } = matter(fileContents);
+
+  return {
+    data,
+    content,
+  };
 };

@@ -4,7 +4,6 @@
   "logout": "Kirjaudu ulos",
   "username": "Käyttäjätunnus",
   "email": "Sähköposti",
-  "title": "Otsikko",
   "joined": "Liittynyt",
   "createdBy": "Lisännyt",
   "modified": "Muokattu",
@@ -39,7 +38,6 @@
   "deleteAccount": "Poista tili",
   "myData": "Datani",
   "course": "Kurssi",
-  "name": "Nimi",
   "discussion": "Keskustelu",
   "reportAbuse": "Ilmoita väärinkäytöstä (tulossa pian)",
   "comments": "Kommentit",
@@ -78,5 +76,8 @@
   "emailPlaceholder": "<sähköpostiosoitteesi>",
   "guidelinesLink": "Ohjeitamme",
   "loginRequired": "Sinun pitää kirjatua sisään jatkaaksesi.",
-  "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi."
+  "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi.",
+  "comment": "Kommentti",
+  "about": "Meistä",
+  "blog": "Blog"
 }

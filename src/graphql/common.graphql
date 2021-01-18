@@ -314,7 +314,6 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
       }
       text
       attachment
-      modified
       created
       replyComments {
         id
@@ -927,6 +926,114 @@ query Sitemap {
     users {
       id
       modified
+    }
+  }
+}
+
+query Suggestions {
+  suggestions {
+    ... on CourseObjectType {
+      id
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
+        id
+        username
+      }
+    }
+    ... on ResourceObjectType {
+      id
+      title
+      score
+      date
+      starCount
+      commentCount
+      downloads
+      resourceType {
+        name
+      }
+      user {
+        id
+        username
+      }
+    }
+    ... on CommentObjectType {
+      id
+      text
+      attachment
+      created
+      score
+      replyCount
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+        name
+      }
+      resource {
+        id
+        title
+      }
+    }
+  }
+}
+
+query SuggestionsPreview {
+  suggestionsPreview {
+    ... on CourseObjectType {
+      id
+      name
+      code
+      score
+      starCount
+      resourceCount
+      commentCount
+      user {
+        id
+        username
+      }
+    }
+    ... on ResourceObjectType {
+      id
+      title
+      score
+      starCount
+      commentCount
+      downloads
+      resourceType {
+        name
+      }
+      user {
+        id
+        username
+      }
+    }
+    ... on CommentObjectType {
+      id
+      text
+      attachment
+      created
+      score
+      replyCount
+      user {
+        id
+        username
+      }
+      course {
+        id
+        name
+      }
+      resource {
+        id
+        title
+      }
     }
   }
 }

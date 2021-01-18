@@ -169,18 +169,8 @@ const SchoolDetailPage: NextPage = () => {
   const renderSubjectsTableBody = <SubjectTableBody subjects={subjects} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
-  const commonTableHeadProps = {
-    titleLeft: t('common:name'),
-  };
-
-  const courseTableHeadProps = {
-    ...commonTableHeadProps,
-    titleRight: t('common:score'),
-  };
-
   const renderSubjectsTable = (
     <PaginatedTable
-      tableHeadProps={commonTableHeadProps}
       renderTableBody={renderSubjectsTableBody}
       count={subjectCount}
       extraFilters={variables}
@@ -189,7 +179,6 @@ const SchoolDetailPage: NextPage = () => {
 
   const renderCourseTable = (
     <PaginatedTable
-      tableHeadProps={courseTableHeadProps}
       renderTableBody={renderCourseTableBody}
       count={courseCount}
       extraFilters={variables}

@@ -30,18 +30,7 @@ const StarredPage: NextPage = () => {
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
-  const commonTableHeadProps = { titleRight: t('common:score') };
   const header = t('starred:header');
-
-  const courseTableHeadProps = {
-    titleLeft: t('common:name'),
-    ...commonTableHeadProps,
-  };
-
-  const resourceTableHeadProps = {
-    titleLeft: t('common:title'),
-    ...commonTableHeadProps,
-  };
 
   const renderBackButton = (
     <BackButton href={profileUrl} tooltip={t('common-tooltips:backToProfile')} />
@@ -52,19 +41,11 @@ const StarredPage: NextPage = () => {
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
   const renderCourseTable = (
-    <PaginatedTable
-      tableHeadProps={courseTableHeadProps}
-      renderTableBody={renderCourseTableBody}
-      count={courseCount}
-    />
+    <PaginatedTable renderTableBody={renderCourseTableBody} count={courseCount} />
   );
 
   const renderResourceTable = (
-    <PaginatedTable
-      tableHeadProps={resourceTableHeadProps}
-      renderTableBody={renderResourceTableBody}
-      count={resourceCount}
-    />
+    <PaginatedTable renderTableBody={renderResourceTableBody} count={resourceCount} />
   );
 
   const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;

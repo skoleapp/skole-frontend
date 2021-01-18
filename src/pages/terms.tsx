@@ -1,11 +1,11 @@
 import { BackButton, MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadMarkdownContent, loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const TermsPage: NextPage<MarkdownPageProps> = ({ content }) => {
+const TermsPage: NextPage<MarkdownPageProps> = ({ data: { title }, content }) => {
   const { t } = useTranslation();
 
   const layoutProps = {
@@ -15,18 +15,25 @@ const TermsPage: NextPage<MarkdownPageProps> = ({ content }) => {
     },
     topNavbarProps: {
       renderBackButton: <BackButton />,
-      header: 'Terms',
+      header: title,
     },
+    content,
   };
 
-  return <MarkdownTemplate {...layoutProps}>{content}</MarkdownTemplate>;
+  return <MarkdownTemplate {...layoutProps} />;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['terms'], locale),
-    content: await loadMarkdownContent('terms'),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const _ns = await loadNamespaces(['terms'], locale);
+  const { data, content } = await loadMarkdown('terms');
 
-export default withUserMe(TermsPage as NextPage);
+  return {
+    props: {
+      _ns,
+      data,
+      content,
+    },
+  };
+};
+
+export default withUserMe(TermsPage);

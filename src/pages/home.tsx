@@ -5,11 +5,14 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
+import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import SvgIcon from '@material-ui/core/SvgIcon';
+import TableFooter from '@material-ui/core/TableFooter';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
@@ -18,24 +21,32 @@ import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import clsx from 'clsx';
-import { ButtonLink, LandingPageTemplate } from 'components';
+import {
+  ButtonLink,
+  ErrorTemplate,
+  LandingPageTemplate,
+  LoadingTemplate,
+  SettingsButton,
+  SuggestionsTable,
+} from 'components';
 import { useAuthContext, useShareContext } from 'context';
+import { useSuggestionsPreviewQuery } from 'generated';
 import { withUserMe } from 'hocs';
-import { useSearch } from 'hooks';
+import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
+import * as R from 'ramda';
 import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'theme';
 import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
-    padding: spacing(6),
-    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(6)})`,
-    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(6)})`,
+    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(4)})`,
+    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(4)})`,
     marginTop: spacing(4),
     textAlign: 'center',
     [breakpoints.up('sm')]: {
@@ -46,13 +57,25 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     },
   },
   header: {
-    fontSize: '2rem',
+    fontSize: '1rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1.25rem',
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: '1.5rem',
+    },
     [breakpoints.up('md')]: {
-      fontSize: '2.5rem',
+      fontSize: '2rem',
     },
   },
   subheader: {
-    fontSize: '1.25rem',
+    fontSize: '0.75rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1rem',
+    },
+    [breakpoints.up('sm')]: {
+      fontSize: '1.25rem',
+    },
   },
   searchForm: {
     marginTop: spacing(4),
@@ -67,33 +90,25 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     border: `0.05rem solid ${palette.primary.main}`,
     borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
     padding: spacing(3),
-    [breakpoints.up('md')]: {
-      maxWidth: '20rem',
-    },
   },
   searchButton: {
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
-  shortcutsContainer: {
-    padding: `${spacing(4)} ${spacing(2)}`,
+  midSectionContainer: {
+    paddingTop: spacing(4),
+    paddingBottom: spacing(4),
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
-    flexGrow: 1,
+  },
+  shortcut: {
+    padding: spacing(2),
   },
   card: {
-    width: '100%',
-    minHeight: '14rem',
-    position: 'relative',
-    margin: spacing(2),
-    [breakpoints.up('md')]: {
-      width: '16rem',
-      height: '16rem',
-    },
+    flexGrow: 1,
+    display: 'flex',
   },
   cardActionArea: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
+    flexGrow: 1,
     borderRadius: BORDER_RADIUS,
   },
   cardContent: {
@@ -103,27 +118,62 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     alignItems: 'center',
   },
   shortcutText: {
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
+    [breakpoints.down('md')]: {
+      marginLeft: spacing(4),
+    },
+    [breakpoints.up('md')]: {
+      marginTop: spacing(2),
+      fontSize: '1.5rem',
+    },
+  },
+  shortcutArrow: {
+    marginLeft: spacing(2),
   },
   avatar: {
-    height: '5rem',
-    width: '5rem',
-    margin: spacing(2),
-    marginBottom: spacing(4),
+    height: '2.5rem',
+    width: '2.5rem',
     backgroundColor: palette.primary.light,
+    [breakpoints.up('md')]: {
+      height: '3.5rem',
+      width: '3.5rem',
+    },
   },
   avatarIcon: {
-    height: '3rem',
-    width: '3rem',
+    height: '1.5rem',
+    width: '1.5rem',
+    [breakpoints.up('md')]: {
+      height: '2rem',
+      width: '2rem',
+    },
+  },
+  suggestionsPaper: {
+    borderRadius: BORDER_RADIUS,
+    overflow: 'hidden',
+    margin: spacing(2),
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  suggestionsTableContainer: {
+    flexGrow: 1,
+  },
+  suggestionsCardHeader: {
+    borderBottom: BORDER,
+    color: palette.text.secondary,
+  },
+  suggestionsTableFooter: {
+    padding: spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
   },
   nextStepsContainer: {
     flexGrow: 1,
     backgroundColor: palette.grey[300],
     paddingTop: spacing(6),
-    paddingBottom: spacing(2),
-    [breakpoints.up('md')]: {
-      padding: spacing(4),
-    },
+    paddingLeft: spacing(2),
+    paddingRight: spacing(2),
+    paddingBottom: spacing(4),
   },
   nextStepsHeader: {
     fontSize: '1.75rem',
@@ -132,7 +182,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     marginTop: spacing(4),
   },
   nextStepsCard: {
-    minHeight: '12rem',
     height: '100%',
     flexGrow: 1,
     backgroundColor: palette.grey[200],
@@ -153,24 +202,30 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
 }));
 
-type SvgIconComponent = typeof SvgIcon;
-
 interface Shortcut {
   text: string;
-  icon: SvgIconComponent;
+  icon: typeof SvgIcon;
   href: string | UrlObject;
 }
 
-const IndexPage: NextPage = () => {
+const HomePage: NextPage = () => {
   const classes = useStyles();
   const { userMe, verified, school, subject } = useAuthContext();
+  const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
+  const context = useLanguageHeaderContext();
   const shareTitle = `Skole | ${t('marketing:slogan')}`;
   const shareText = t('marketing:description');
   const shareParams = { shareHeader: t('home:inviteText'), shareTitle, shareText };
   const handleClickShareButton = () => handleOpenShareDialog(shareParams);
+
+  const { data, loading, error } = useSuggestionsPreviewQuery({
+    context,
+  });
+
+  const suggestions = R.propOr([], 'suggestionsPreview', data);
 
   const shortcuts = [
     {
@@ -193,14 +248,16 @@ const IndexPage: NextPage = () => {
   const renderLaunchIconButton = !userMe && (
     <Link href={urls.index}>
       <Tooltip title="Vrooom!">
-        <IconButton // eslint-disable-line jsx-a11y/accessible-emoji
-          size="small"
-        >
-          🚀
+        <IconButton size="small">
+          <span role="img" aria-label="Vrooom!">
+            🚀
+          </span>
         </IconButton>
       </Tooltip>
     </Link>
   );
+
+  const renderSettingsButton = !userMe && <SettingsButton color="secondary" size="small" />;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
@@ -226,47 +283,87 @@ const IndexPage: NextPage = () => {
   );
 
   const renderSearch = (
-    <Grid className={classes.searchContainer} item container direction="column" alignItems="center">
-      {renderHeader}
-      {renderSubHeader}
-      {renderSearchField}
+    <Grid className={classes.searchContainer} container justify="center">
+      <Grid item xs={12} lg={8} xl={6}>
+        {renderHeader}
+        {renderSubHeader}
+        {renderSearchField}
+      </Grid>
     </Grid>
   );
 
-  const renderHomepageShortcuts = shortcuts.map(
-    ({ href, text, icon: Icon }: Shortcut, i: number) => (
-      <Link href={href} key={i}>
+  const renderArrow = isMobile && (
+    <ArrowForwardOutlined className={classes.shortcutArrow} color="primary" />
+  );
+
+  const mapShortcuts = shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+    <Grid className={classes.shortcut} item xs={12} key={i} container>
+      <Link href={href}>
         <Card className={clsx(classes.card)}>
           <CardActionArea className={classes.cardActionArea}>
             <CardContent className={classes.cardContent}>
-              <Avatar className={clsx(classes.avatar)}>
-                <Icon className={classes.avatarIcon} />
-              </Avatar>
-              <Typography
-                className={classes.shortcutText}
-                variant="subtitle1"
-                color="textSecondary"
-                align="center"
-              >
-                {t(text)}
-              </Typography>
+              <Grid container direction={isMobile ? 'row' : 'column'} alignItems="center">
+                <Avatar className={clsx(classes.avatar)}>
+                  <Icon className={classes.avatarIcon} />
+                </Avatar>
+                <Typography
+                  className={classes.shortcutText}
+                  variant="subtitle1"
+                  color="primary"
+                  align="center"
+                >
+                  <Grid container alignItems="center">
+                    {t(text)} {renderArrow}
+                  </Grid>
+                </Typography>
+              </Grid>
             </CardContent>
           </CardActionArea>
         </Card>
       </Link>
-    ),
-  );
+    </Grid>
+  ));
 
   const renderShortcuts = (
-    <Grid
-      item
-      container
-      justify="center"
-      alignItems="center"
-      className={classes.shortcutsContainer}
-    >
-      <Grid item container spacing={4} justify="center">
-        {renderHomepageShortcuts}
+    <Grid item xs={12} md={4} container>
+      {mapShortcuts}
+    </Grid>
+  );
+
+  const renderSuggestionsTableFooter = (
+    <TableFooter className={classes.suggestionsTableFooter}>
+      <ButtonLink
+        href={urls.suggestions}
+        color="primary"
+        endIcon={<ArrowForwardOutlined />}
+        fullWidth
+      >
+        {t('common:seeAll')}
+      </ButtonLink>
+    </TableFooter>
+  );
+
+  const renderSuggestionsPreview = (
+    <Grid item xs={12} md={8} container>
+      <Paper className={classes.suggestionsPaper}>
+        <CardHeader
+          className={classes.suggestionsCardHeader}
+          title={`${t('home:suggestionsHeader')} 🔥`}
+        />
+        <SuggestionsTable
+          suggestions={suggestions}
+          renderTableFooter={renderSuggestionsTableFooter}
+          tableContainerProps={{ className: classes.suggestionsTableContainer }}
+        />
+      </Paper>
+    </Grid>
+  );
+
+  const renderMidSection = (
+    <Grid className={classes.midSectionContainer} container justify="center">
+      <Grid item xs={12} lg={8} xl={6} container justify="center">
+        {renderShortcuts}
+        {renderSuggestionsPreview}
       </Grid>
     </Grid>
   );
@@ -286,7 +383,7 @@ const IndexPage: NextPage = () => {
   };
 
   const renderInviteStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:inviteHeader')}</Typography>
@@ -301,7 +398,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderTakeATourStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:takeATourHeader')}</Typography>
@@ -316,7 +413,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderVerifyStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:verifyAccountHeader')}</Typography>
@@ -331,7 +428,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderAddSchoolAndSubjectStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:addSchoolAndSubjectHeader')}</Typography>
@@ -346,7 +443,7 @@ const IndexPage: NextPage = () => {
   );
 
   const renderUploadStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:uploadHeader')}</Typography>
@@ -374,7 +471,7 @@ const IndexPage: NextPage = () => {
     : renderUploadStep;
 
   const renderContactStep = (
-    <Grid item xs={12} sm={4}>
+    <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
           <Typography {...nextStepsCardTextProps}>{t('home:contactHeader')}</Typography>
@@ -399,16 +496,7 @@ const IndexPage: NextPage = () => {
       <Typography className={classes.nextStepsHeader} variant="h2" color="textSecondary">
         {t('home:nextStepsHeader')} 🚀
       </Typography>
-      <Grid
-        className={classes.nextStepsContent}
-        item
-        xs={12}
-        md={8}
-        lg={6}
-        xl={4}
-        container
-        spacing={4}
-      >
+      <Grid className={classes.nextStepsContent} item xs={12} lg={8} xl={6} container spacing={4}>
         {renderInviteStep}
         {renderDynamicStep}
         {renderContactStep}
@@ -423,15 +511,29 @@ const IndexPage: NextPage = () => {
     },
     topNavbarProps: {
       renderHeaderLeft: renderLaunchIconButton,
+      renderHeaderRight: renderSettingsButton,
     },
     hideBottomNavbar: false,
     hideHeader: true,
+    hideAppStoreBadges: true,
   };
+
+  if (loading) {
+    return <LoadingTemplate />;
+  }
+
+  if (!!error && !!error.networkError) {
+    return <ErrorTemplate variant="offline" />;
+  }
+
+  if (error) {
+    return <ErrorTemplate variant="error" />;
+  }
 
   return (
     <LandingPageTemplate {...layoutProps}>
       {renderSearch}
-      {renderShortcuts}
+      {renderMidSection}
       {renderInfo}
     </LandingPageTemplate>
   );
@@ -443,4 +545,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withUserMe(IndexPage);
+export default withUserMe(HomePage);
