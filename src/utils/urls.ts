@@ -1,4 +1,5 @@
 export const urls = {
+  about: '/about',
   changePassword: '/account/change-password',
   deleteAccount: '/account/delete-account',
   myData: '/account/my-data',

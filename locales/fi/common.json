@@ -77,5 +77,7 @@
   "guidelinesLink": "Ohjeitamme",
   "loginRequired": "Sinun pitää kirjatua sisään jatkaaksesi.",
   "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi.",
-  "comment": "Kommentti"
+  "comment": "Kommentti",
+  "about": "Meistä",
+  "blog": "Blog"
 }

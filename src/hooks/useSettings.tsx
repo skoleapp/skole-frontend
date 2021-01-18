@@ -4,6 +4,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
+import HelpOutlined from '@material-ui/icons/HelpOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LanguageOutlined from '@material-ui/icons/LanguageOutlined';
 import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
@@ -23,9 +24,9 @@ interface UseSettings extends SettingsContextType {
 // A hook for rendering the common settings menu components.
 // The `dialog` prop indicates whether this hook is used with the settings dialog or with the settings layout.
 export const useSettings = (dialog: boolean): UseSettings => {
-  const { isMobile } = useMediaQueries();
   const { userMe, verified } = useAuthContext();
   const { settingsOpen, toggleSettings } = useSettingsContext();
+  const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
   const { pathname } = useRouter();
   const { handleOpenLanguageMenu } = useLanguageContext();
@@ -78,17 +79,14 @@ export const useSettings = (dialog: boolean): UseSettings => {
     ),
   );
 
-  // Only render the privacy, terms and contact links in the settings list on mobile
-  const renderCommonMenuItems =
-    isMobile &&
-    SETTINGS_ITEMS.common.map(({ icon: Icon, href, text }, i) => (
-      <MenuItem key={i} onClick={handleMenuItemClick(href)} selected={getSelected(href)}>
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText>{t(text)}</ListItemText>
-      </MenuItem>
-    ));
+  const renderAboutMenuItem = isMobile && (
+    <MenuItem onClick={handleMenuItemClick(urls.about)} selected={getSelected(urls.about)}>
+      <ListItemIcon>
+        <HelpOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('common:about')}</ListItemText>
+    </MenuItem>
+  );
 
   const renderLanguageMenuItem = (
     <MenuItem onClick={handleLanguageClick}>
@@ -121,7 +119,7 @@ export const useSettings = (dialog: boolean): UseSettings => {
     <List>
       {renderCommonAccountMenuItems}
       {renderLanguageMenuItem}
-      {renderCommonMenuItems}
+      {renderAboutMenuItem}
       {renderLoginMenuItem}
     </List>
   );
@@ -131,7 +129,7 @@ export const useSettings = (dialog: boolean): UseSettings => {
       {renderAccountMenuItems}
       {renderVerifyAccountMenuItem}
       {renderLanguageMenuItem}
-      {renderCommonMenuItems}
+      {renderAboutMenuItem}
       {renderLogoutMenuItem}
     </List>
   );
