@@ -1,14 +1,14 @@
+import Typography from '@material-ui/core/Typography';
 import { BackButton, MarkdownTemplate } from 'components';
+import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
+import { useDayjs } from 'hooks';
 import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult, NextPage } from 'next';
+import Image from 'next/image';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
-import { readdirSync } from 'fs';
 import { urls } from 'utils';
-import Image from 'next/image';
-import { Typography } from '@material-ui/core';
-import { useDayjs } from 'hooks';
 
 const BlogPostPage: NextPage<MarkdownPageProps> = ({
   data: { title, excerpt, coverImage = '', author, date, minutesToRead = 0 },

@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
-import { join } from 'path';
 import matter from 'gray-matter';
 import { defaultLocale } from 'i18n.json';
+import { join } from 'path';
 import { MarkdownPageProps } from 'types';
 
 export const loadMarkdown = async (
