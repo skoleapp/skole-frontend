@@ -1,5 +1,4 @@
 import CardActionArea from '@material-ui/core/CardActionArea';
-import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -10,7 +9,6 @@ import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
-import clsx from 'clsx';
 import { CourseObjectType } from 'generated';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
@@ -18,6 +16,8 @@ import React from 'react';
 import { urls } from 'utils';
 
 import { TextLink } from '../shared';
+import { TableRowChip } from './TableRowChip';
+import { TableRowIcon } from './TableRowIcon';
 
 interface Props {
   course: CourseObjectType;
@@ -32,33 +32,18 @@ export const CourseTableRow: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
 
-  const renderCourseChip = !disableCourseChip && (
-    <Chip className="table-row-chip" label={t('common:course')} />
-  );
-
-  const renderCourseCodeChip = <Chip className="table-row-chip" label={code} />;
-  const renderUserIcon = <AccountCircleOutlined className="table-row-icon" />;
-
-  const renderScoreIcon = (
-    <ThumbsUpDownOutlined className={clsx('table-row-icon', 'table-row-icon-m-left')} />
-  );
-
-  const renderStarIcon = (
-    <StarBorderOutlined className={clsx('table-row-icon', 'table-row-icon-m-left')} />
-  );
-
-  const renderResourceIcon = (
-    <AssignmentOutlined className={clsx('table-row-icon', 'table-row-icon-m-left')} />
-  );
-
-  const renderDiscussionIcon = (
-    <ChatOutlined className={clsx('table-row-icon', 'table-row-icon-m-left')} />
-  );
+  const renderCourseChip = !disableCourseChip && <TableRowChip label={t('common:course')} />;
+  const renderCourseCodeChip = <TableRowChip label={code} />;
+  const renderUserIcon = <TableRowIcon icon={AccountCircleOutlined} />;
+  const renderScoreIcon = <TableRowIcon icon={ThumbsUpDownOutlined} marginLeft />;
+  const renderStarIcon = <TableRowIcon icon={StarBorderOutlined} marginLeft />;
+  const renderResourceIcon = <TableRowIcon icon={AssignmentOutlined} marginLeft />;
+  const renderDiscussionIcon = <TableRowIcon icon={ChatOutlined} marginLeft />;
 
   const renderCourseName = (
     <Typography color="textSecondary">
       <Grid container alignItems="center">
-        <SchoolOutlined className="table-row-icon" />
+        <TableRowIcon icon={SchoolOutlined} />
         <Typography variant="body2" color="textPrimary">
           {name}
         </Typography>

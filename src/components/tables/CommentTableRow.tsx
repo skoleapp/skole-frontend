@@ -1,5 +1,4 @@
 import CardActionArea from '@material-ui/core/CardActionArea';
-import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -8,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
 import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
-import clsx from 'clsx';
 import { CommentObjectType } from 'generated';
 import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
@@ -17,6 +15,8 @@ import React from 'react';
 import { truncate, urls } from 'utils';
 
 import { MarkdownContent, TextLink } from '../shared';
+import { TableRowChip } from './TableRowChip';
+import { TableRowIcon } from './TableRowIcon';
 
 const useStyles = makeStyles(({ spacing }) => ({
   creatorLink: {
@@ -53,18 +53,12 @@ export const CommentTableRow: React.FC<Props> = ({
     },
   };
 
-  const renderScoreIcon = (
-    <ThumbsUpDownOutlined className={clsx('table-row-icon', 'table-row-icon-m-left')} />
-  );
-
-  const renderDiscussionIcon = <ChatOutlined className="table-row-icon" />;
-  const renderUserIcon = <AccountCircleOutlined className="table-row-icon" />;
-  const renderCommentChip = <Chip className="table-row-chip" label={t('common:comment')} />;
-  const renderCourseChip = !!course && <Chip className="table-row-chip" label={course.name} />;
-
-  const renderResourceChip = !!resource && (
-    <Chip className="table-row-chip" label={resource.title} />
-  );
+  const renderScoreIcon = <TableRowIcon icon={ThumbsUpDownOutlined} marginLeft />;
+  const renderDiscussionIcon = <TableRowIcon icon={ChatOutlined} />;
+  const renderUserIcon = <TableRowIcon icon={AccountCircleOutlined} />;
+  const renderCommentChip = <TableRowChip label={t('common:comment')} />;
+  const renderCourseChip = !!course && <TableRowChip label={course.name} />;
+  const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
 
   const renderCommentCreator = user ? (
     <TextLink className={classes.creatorLink} href={urls.user(user.id)} color="primary">

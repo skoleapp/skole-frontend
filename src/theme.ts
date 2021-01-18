@@ -346,21 +346,6 @@ export const theme = createMuiTheme({
           padding: `${spacing(4)} !important`,
           position: 'static !important' as 'static',
         },
-        '.table-row-icon': {
-          marginRight: spacing(0.5),
-          width: '1rem !important',
-          height: '1rem !important',
-        },
-        '.table-row-icon-m-left': {
-          marginLeft: spacing(2.5),
-        },
-        '.table-row-chip': {
-          minWidth: '5rem',
-          height: '1.25rem !important',
-          margin: spacing(1),
-          marginLeft: 0,
-          cursor: 'pointer !important',
-        },
       },
     },
   },
