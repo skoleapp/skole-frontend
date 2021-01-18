@@ -26,6 +26,7 @@ import {
   ErrorTemplate,
   LandingPageTemplate,
   LoadingTemplate,
+  SettingsButton,
   SuggestionsTable,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
@@ -255,6 +256,8 @@ const HomePage: NextPage = () => {
       </Tooltip>
     </Link>
   );
+
+  const renderSettingsButton = !userMe && <SettingsButton color="secondary" size="small" />;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
@@ -508,6 +511,7 @@ const HomePage: NextPage = () => {
     },
     topNavbarProps: {
       renderHeaderLeft: renderLaunchIconButton,
+      renderHeaderRight: renderSettingsButton,
     },
     hideBottomNavbar: false,
     hideHeader: true,
