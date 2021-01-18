@@ -1,9 +1,14 @@
-import { CardContent, CardHeader, Grid, makeStyles, Paper } from '@material-ui/core';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
+
+import { MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -49,7 +54,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
     />
   );
 
-  const renderMarkdownContent = <ReactMarkdown>{content}</ReactMarkdown>;
+  const renderMarkdownContent = <MarkdownContent>{content}</MarkdownContent>;
 
   const renderCardContent = (
     <CardContent>

@@ -1,13 +1,15 @@
-import { GavelOutlined, SchoolOutlined, ThumbsUpDownOutlined } from '@material-ui/icons';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
+import GavelOutlined from '@material-ui/icons/GavelOutlined';
 import InfoOutlined from '@material-ui/icons/InfoOutlined';
 import LibraryBooksOutlined from '@material-ui/icons/LibraryBooksOutlined';
 import LockOutlined from '@material-ui/icons/LockOutlined';
+import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import SecurityOutlined from '@material-ui/icons/SecurityOutlined';
 import SettingsBackupRestoreOutlined from '@material-ui/icons/SettingsBackupRestoreOutlined';
 import StorageOutlined from '@material-ui/icons/StorageOutlined';
+import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 
 import { urls } from './urls';
 
@@ -182,7 +184,7 @@ export const ABOUT_ITEMS = [
   {
     icon: LibraryBooksOutlined,
     text: 'common:blog',
-    href: '#', // TODO: Add blog URL here.
+    href: urls.blogs,
   },
   {
     icon: AssignmentOutlined,
