@@ -42,14 +42,14 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   const classes = useStyles();
   const { renderSettingsMenuList } = useSettings(false);
   const { t } = useTranslation();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { isTabletOrDesktop } = useMediaQueries();
   const { profileUrl } = useAuthContext();
 
   const renderBackButton = (
     <BackButton href={profileUrl} tooltip={t('common-tooltips:backToProfile')} />
   );
 
-  const renderHeaderRight = isMobile && <SettingsButton color="secondary" size="small" />;
+  const renderHeaderRight = <SettingsButton color="secondary" size="small" />;
 
   const renderSettingsHeader = (
     <CardHeader className={classes.cardHeader} title={t('common:settings')} />
