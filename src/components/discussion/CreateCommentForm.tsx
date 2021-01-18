@@ -299,7 +299,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     <>
       <FormHelperText>
         {t('discussion:helperTextMarkdown')}{' '}
-        <TextLink href="https://guides.github.com/features/mastering-markdown/" target="_blank">
+        <TextLink href="https://commonmark.org/help/" target="_blank">
           {t('discussion:markdown')}
         </TextLink>
         .
