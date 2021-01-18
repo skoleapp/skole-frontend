@@ -1,6 +1,9 @@
+import { GavelOutlined, SchoolOutlined, ThumbsUpDownOutlined } from '@material-ui/icons';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
+import InfoOutlined from '@material-ui/icons/InfoOutlined';
+import LibraryBooksOutlined from '@material-ui/icons/LibraryBooksOutlined';
 import LockOutlined from '@material-ui/icons/LockOutlined';
 import SecurityOutlined from '@material-ui/icons/SecurityOutlined';
 import SettingsBackupRestoreOutlined from '@material-ui/icons/SettingsBackupRestoreOutlined';
@@ -33,7 +36,15 @@ export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
 export const NATIVE_APP_USER_AGENT = 'skole-native-app';
 
 // The trailing slash in /account/ means to disallow all subpages.
-export const DISALLOWED_PATHS = ['/404', '/logout', '/account/'];
+export const DISALLOWED_PATHS = [
+  '/404',
+  urls.about,
+  urls.activity,
+  urls.starred,
+  urls.logout,
+  '/account/',
+];
+
 export const DYNAMIC_PATHS = ['courses', 'resources', 'schools', 'users'];
 export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
@@ -140,21 +151,47 @@ export const SETTINGS_ITEMS = {
       href: urls.resetPassword,
     },
   ],
-  common: [
-    {
-      icon: ContactSupportOutlined,
-      text: 'common:contact',
-      href: urls.contact,
-    },
-    {
-      icon: AssignmentOutlined,
-      text: 'common:terms',
-      href: urls.terms,
-    },
-    {
-      icon: SecurityOutlined,
-      text: 'common:privacy',
-      href: urls.privacy,
-    },
-  ],
 };
+
+export const ABOUT_ITEMS = [
+  {
+    icon: SchoolOutlined,
+    text: 'common:forTeachers',
+    href: urls.forTeachers,
+  },
+  {
+    icon: ContactSupportOutlined,
+    text: 'common:contact',
+    href: urls.contact,
+  },
+  {
+    icon: InfoOutlined,
+    text: 'common:guidelines',
+    href: urls.guidelines,
+  },
+  {
+    icon: ThumbsUpDownOutlined,
+    text: 'common:score',
+    href: urls.score,
+  },
+  {
+    icon: GavelOutlined,
+    text: 'common:values',
+    href: urls.values,
+  },
+  {
+    icon: LibraryBooksOutlined,
+    text: 'common:blog',
+    href: '#', // TODO: Add blog URL here.
+  },
+  {
+    icon: AssignmentOutlined,
+    text: 'common:terms',
+    href: urls.terms,
+  },
+  {
+    icon: SecurityOutlined,
+    text: 'common:privacy',
+    href: urls.privacy,
+  },
+];
