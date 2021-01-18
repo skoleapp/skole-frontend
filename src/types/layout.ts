@@ -38,3 +38,7 @@ export interface MainTemplateProps extends GridProps {
   hideBottomNavbar?: boolean; // Hide bottom navbar.
   hideFooter?: boolean; // Hide footer.
 }
+
+export interface NativeAppProps extends Record<string, unknown> {
+  nativeApp: boolean;
+}

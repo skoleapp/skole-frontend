@@ -12,6 +12,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
+import { NativeAppProps } from 'types';
 import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -51,9 +52,14 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   pitchBoxContainer: {
     backgroundColor: palette.grey[300],
     padding: `${spacing(4)} ${spacing(2)}`,
-    textAlign: 'left',
     [breakpoints.up('md')]: {
       padding: spacing(6),
+    },
+  },
+  nativeAppPitchBoxContainer: {
+    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
+    [breakpoints.up('md')]: {
+      paddingBottom: `calc(${spacing(6)} + env(safe-area-inset-bottom))`,
     },
   },
   pitchHeader: {
@@ -68,11 +74,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-interface Props extends Record<string, unknown> {
-  nativeApp: boolean;
-}
-
-const LandingPage: NextPage<Props> = ({ nativeApp }) => {
+const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
@@ -175,11 +177,11 @@ const LandingPage: NextPage<Props> = ({ nativeApp }) => {
       title: t('index:title'),
       description: t('marketing:description'),
     },
-    hideBottomNavbar: true,
     topNavbarProps: {
       hideLogo: isMobile,
-      hideDynamicButtons: true,
+      hideGetStartedButton: true,
     },
+    hideAppStoreBadges: nativeApp,
   };
 
   // Show loading screen when redirecting to home page.

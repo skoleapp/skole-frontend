@@ -3,12 +3,14 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import clsx from 'clsx';
 import { BackButton, ButtonLink, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
-import { FOR_TEACHERS_PITCH_ITEMS, urls } from 'utils';
+import { NativeAppProps } from 'types';
+import { FOR_TEACHERS_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -41,9 +43,13 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   pitchBoxContainer: {
     backgroundColor: palette.grey[300],
     padding: `${spacing(4)} ${spacing(2)}`,
-    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
     [breakpoints.up('md')]: {
       padding: spacing(6),
+    },
+  },
+  nativeAppPitchBoxContainer: {
+    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
+    [breakpoints.up('md')]: {
       paddingBottom: `calc(${spacing(6)} + env(safe-area-inset-bottom))`,
     },
   },
@@ -59,7 +65,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-const ForTeachersPage: NextPage = () => {
+const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -119,7 +125,15 @@ const ForTeachersPage: NextPage = () => {
 
   const renderPitch = (
     <Grid className={classes.pitchContainer} container direction="column" alignItems="center">
-      <Grid container item xs={12} lg={8} xl={6} className={classes.pitchBoxContainer} spacing={8}>
+      <Grid
+        container
+        item
+        xs={12}
+        lg={8}
+        xl={6}
+        className={clsx(classes.pitchBoxContainer, nativeApp && classes.nativeAppPitchBoxContainer)}
+        spacing={8}
+      >
         {renderPitchItems}
       </Grid>
     </Grid>
@@ -135,6 +149,7 @@ const ForTeachersPage: NextPage = () => {
       header: t('for-teachers:header'),
       hideForTeachersButton: true,
     },
+    hideAppStoreBadges: nativeApp,
   };
 
   return (
@@ -145,9 +160,10 @@ const ForTeachersPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => ({
   props: {
     _ns: await loadNamespaces(['for-teachers'], locale),
+    nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
   },
 });
 

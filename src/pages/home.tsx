@@ -207,7 +207,7 @@ interface Shortcut {
   href: string | UrlObject;
 }
 
-const IndexPage: NextPage = () => {
+const HomePage: NextPage = () => {
   const classes = useStyles();
   const { userMe, verified, school, subject } = useAuthContext();
   const { isMobile } = useMediaQueries();
@@ -541,4 +541,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withUserMe(IndexPage);
+export default withUserMe(HomePage);
