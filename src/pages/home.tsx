@@ -257,7 +257,7 @@ const HomePage: NextPage = () => {
     </Link>
   );
 
-  const renderSettingsButton = !userMe && <SettingsButton color="secondary" size="small" />;
+  const renderSettingsButton = !userMe && <SettingsButton />;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>

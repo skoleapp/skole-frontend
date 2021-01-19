@@ -2,7 +2,7 @@ import Typography from '@material-ui/core/Typography';
 import { BackButton, MarkdownTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
-import { useDayjs } from 'hooks';
+import { useDayjs, usePageRefQuery } from 'hooks';
 import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult, NextPage } from 'next';
 import Image from 'next/image';
@@ -14,10 +14,11 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
   data: { title, excerpt, coverImage = '', author, date, minutesToRead = 0 },
   content,
 }) => {
+  const query = usePageRefQuery();
   const { t } = useTranslation();
 
   const renderBackButton = (
-    <BackButton href={urls.blogs} tooltip={t('blog-tooltips:backToBlogs')} />
+    <BackButton href={{ pathname: urls.blogs, query }} tooltip={t('back-button-tooltips:blogs')} />
   );
 
   const renderExcerpt = (
@@ -96,7 +97,7 @@ export const getStaticProps = async ({
   locale,
   params: { slug },
 }: GetStaticPropsParams): Promise<GetStaticPropsResult<MarkdownPageProps>> => {
-  const _ns = await loadNamespaces(['blogs', 'blog-tooltips'], locale);
+  const _ns = await loadNamespaces(['blogs'], locale);
   const { data, content } = await loadMarkdown(`blogs/${slug}`);
 
   return {

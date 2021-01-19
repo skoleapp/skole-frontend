@@ -14,6 +14,7 @@ import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
+import { PageRef } from 'types';
 import { ABOUT_ITEMS } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -50,7 +51,7 @@ export const AboutPage: NextPage = () => {
   const renderBackButton = (
     <BackButton
       href={!!userMe && profileUrl}
-      tooltip={!!userMe && t('common-tooltips:backToProfile')}
+      tooltip={!!userMe && t('back-button-tooltips:profile')}
     />
   );
 
@@ -66,7 +67,15 @@ export const AboutPage: NextPage = () => {
   );
 
   const renderAboutMenuItems = ABOUT_ITEMS.map(({ icon: Icon, href, text }, i) => (
-    <Link href={href} key={i}>
+    <Link
+      href={{
+        pathname: href,
+        query: {
+          ref: PageRef.ABOUT,
+        },
+      }}
+      key={i}
+    >
       <MenuItem>
         <ListItemIcon>
           <Icon />

@@ -6,5 +6,6 @@ export * from './layout';
 export * from './markdown';
 export * from './mui';
 export * from './pdfJs';
+export * from './routing';
 export * from './tables';
 export * from './tabs';

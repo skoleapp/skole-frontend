@@ -5,7 +5,7 @@ import MaterialLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
-  AuthBackButton,
+  BackButton,
   ButtonLink,
   FormSubmitSection,
   FormTemplate,
@@ -18,7 +18,7 @@ import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
 import { LoginMutation, useLoginMutation } from 'generated';
 import { withUserMe } from 'hocs';
-import { useForm, useLanguageHeaderContext } from 'hooks';
+import { useForm, useLanguageHeaderContext, usePageRefQuery } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -53,6 +53,7 @@ const LoginPage: NextPage = () => {
   const { userMe } = useAuthContext();
   const { t } = useTranslation();
   const { query } = useRouter();
+  const pageRefQuery = usePageRefQuery();
   const { toggleNotification } = useNotificationsContext();
   const [existingUser, setExistingUser] = useState(null);
   const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
@@ -98,7 +99,7 @@ const LoginPage: NextPage = () => {
         try {
           formRef.current?.resetForm();
           toggleNotification(login.successMessage);
-          const nextUrl = query.next ? String(query.next) : urls.home;
+          const nextUrl = String(query.next) || urls.home;
           await Router.push(nextUrl);
         } catch {
           setUnexpectedFormError();
@@ -153,7 +154,10 @@ const LoginPage: NextPage = () => {
   const renderRegisterButton = (
     <FormControl className={classes.link}>
       <ButtonLink
-        href={{ pathname: urls.register, query }} // Keep the query for the `Get Started` ref.
+        href={{
+          pathname: urls.register,
+          query: pageRefQuery,
+        }}
         variant="outlined"
         color="primary"
       >
@@ -164,7 +168,14 @@ const LoginPage: NextPage = () => {
 
   const renderForgotPasswordLink = (
     <FormControl className={classes.link}>
-      <TextLink href={urls.resetPassword}>{t('login:forgotPassword')}</TextLink>
+      <TextLink
+        href={{
+          pathname: urls.resetPassword,
+          query: pageRefQuery,
+        }}
+      >
+        {t('login:forgotPassword')}
+      </TextLink>
     </FormControl>
   );
 
@@ -215,7 +226,7 @@ const LoginPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
-      renderBackButton: <AuthBackButton />,
+      renderBackButton: <BackButton />,
       header: t('login:header'),
       hideLoginButton: true,
       hideGetStartedButton: true,

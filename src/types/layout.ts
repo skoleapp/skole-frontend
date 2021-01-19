@@ -2,12 +2,14 @@ import { ContainerProps } from '@material-ui/core/Container';
 import { GridProps } from '@material-ui/core/Grid';
 import { ReactNode } from 'react';
 
+import { PageRef } from './routing';
+
 export interface SeoProps {
   title?: string;
   description?: string;
 }
 
-export interface TopNavbarProps {
+export interface TopNavbarProps extends Pick<MainTemplateProps, 'pageRef'> {
   header?: string; // Header text shown on mobile.
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.
@@ -37,6 +39,7 @@ export interface MainTemplateProps extends GridProps {
   customBottomNavbar?: JSX.Element | false; // Custom element for bottom navbar.
   hideBottomNavbar?: boolean; // Hide bottom navbar.
   hideFooter?: boolean; // Hide footer.
+  pageRef?: PageRef;
 }
 
 export interface NativeAppProps extends Record<string, unknown> {

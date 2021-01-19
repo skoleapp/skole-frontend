@@ -14,13 +14,14 @@ import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
+import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
 import { TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 import { TableRowIcon } from './TableRowIcon';
 
-interface Props {
+interface Props extends Pick<MainTemplateProps, 'pageRef'> {
   resource: ResourceObjectType;
   hideResourceChip?: boolean;
   hideDateChip?: boolean;
@@ -31,9 +32,14 @@ export const ResourceTableRow: React.FC<Props> = ({
   resource: { id, title, date, resourceType, user, score, starCount, downloads, commentCount },
   hideResourceChip,
   hideDateChip,
+  pageRef,
   key,
 }) => {
   const { t } = useTranslation();
+
+  const query = {
+    ref: pageRef,
+  };
 
   const renderResourceChip = !hideResourceChip && <TableRowChip label={t('common:resource')} />;
   const renderResourceTypeChip = !!resourceType && <TableRowChip label={resourceType.name} />;
@@ -56,7 +62,13 @@ export const ResourceTableRow: React.FC<Props> = ({
   );
 
   const renderResourceCreator = user ? (
-    <TextLink href={urls.user(user.id)} color="primary">
+    <TextLink
+      href={{
+        pathname: urls.user(user.id),
+        query,
+      }}
+      color="primary"
+    >
       {user.username}
     </TextLink>
   ) : (
@@ -89,7 +101,13 @@ export const ResourceTableRow: React.FC<Props> = ({
   );
 
   return (
-    <Link href={urls.resource(id)} key={key}>
+    <Link
+      href={{
+        pathname: urls.resource(id),
+        query,
+      }}
+      key={key}
+    >
       <CardActionArea>
         <TableRow>
           <TableCell>

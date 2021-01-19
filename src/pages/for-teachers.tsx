@@ -9,7 +9,7 @@ import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
-import { NativeAppProps } from 'types';
+import { NativeAppProps, PageRef } from 'types';
 import { FOR_TEACHERS_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -84,7 +84,12 @@ const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const renderCtaButton = (
     <ButtonLink
       className={classes.ctaButton}
-      href={urls.contact}
+      href={{
+        pathname: urls.contact,
+        query: {
+          pageRef: PageRef.FOR_TEACHERS,
+        },
+      }}
       color="primary"
       variant="contained"
       endIcon={<ArrowForwardOutlined />}
@@ -150,6 +155,7 @@ const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
       hideForTeachersButton: true,
     },
     hideAppStoreBadges: nativeApp,
+    pageRef: PageRef.FOR_TEACHERS,
   };
 
   return (

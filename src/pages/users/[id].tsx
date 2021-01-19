@@ -38,6 +38,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
+import { PageRef } from 'types';
 import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -125,6 +126,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
+interface ProfileStrengthStep {
+  label: string;
+  href: string;
+  completed: boolean;
+}
+
 const UserPage: NextPage = () => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
@@ -205,7 +212,7 @@ const UserPage: NextPage = () => {
     }
   };
 
-  const renderrenderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
+  const renderHeaderRight = isOwnProfile && <SettingsButton />;
   const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
   const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
@@ -218,10 +225,17 @@ const UserPage: NextPage = () => {
   const renderDesktopUsername = isTabletOrDesktop && renderUsername;
   const renderDesktopTitle = isTabletOrDesktop && renderTitle;
 
+  const pageRefQuery = {
+    ref: PageRef.PROFILE,
+  };
+
   const renderEditProfileButton = (
     <ButtonLink
       className={classes.button}
-      href={urls.editProfile}
+      href={{
+        pathname: urls.editProfile,
+        query: pageRefQuery,
+      }}
       color="primary"
       variant="outlined"
       endIcon={<EditOutlined />}
@@ -234,7 +248,10 @@ const UserPage: NextPage = () => {
   const renderStarredButton = (
     <ButtonLink
       className={classes.button}
-      href={urls.starred}
+      href={{
+        pathname: urls.starred,
+        query: pageRefQuery,
+      }}
       color="primary"
       variant="outlined"
       endIcon={<StarBorderOutlined />}
@@ -244,9 +261,9 @@ const UserPage: NextPage = () => {
     </ButtonLink>
   );
 
-  const renderSettingsButton = (
+  const renderDesktopSettingsButton = (
     <Tooltip title={t('common-tooltips:settings')}>
-      <SettingsButton className={classes.button} color="primary" />
+      <SettingsButton className={classes.button} />
     </Tooltip>
   );
 
@@ -327,7 +344,14 @@ const UserPage: NextPage = () => {
   );
 
   const renderVerifyAccountLink = isOwnProfile && verified === false && (
-    <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
+    <TextLink
+      className={classes.verifyAccount}
+      href={{
+        pathname: urls.verifyAccount,
+        query: pageRefQuery,
+      }}
+      color="primary"
+    >
       {t('common:verifyAccount')}
     </TextLink>
   );
@@ -338,23 +362,31 @@ const UserPage: NextPage = () => {
     </Typography>
   );
 
+  const renderProfileStrengthStepLabel = ({ label, href, completed }: ProfileStrengthStep) =>
+    !completed ? (
+      <TextLink
+        href={{
+          pathname: href,
+          query: pageRefQuery,
+        }}
+      >
+        {label}
+      </TextLink>
+    ) : (
+      <Typography variant="body2" color="textSecondary">
+        {label}
+      </Typography>
+    );
+
   // Render uncompleted items as links and completed ones as regular text.
-  const renderProfileStrengthSteps = profileStrengthSteps.map(({ label, href, completed }, i) => (
+  const renderProfileStrengthSteps = profileStrengthSteps.map((step, i) => (
     <Step
       className={classes.step}
       key={i}
       completed={profileStrengthSteps[i].completed}
       active={false}
     >
-      <StepLabel>
-        {!completed ? (
-          <TextLink href={href}>{label}</TextLink>
-        ) : (
-          <Typography variant="body2" color="textSecondary">
-            {label}
-          </Typography>
-        )}
-      </StepLabel>
+      <StepLabel>{renderProfileStrengthStepLabel(step)}</StepLabel>
     </Step>
   ));
 
@@ -376,7 +408,7 @@ const UserPage: NextPage = () => {
     <Grid item xs={12} container alignItems="center" spacing={4}>
       {renderEditProfileButton}
       {renderStarredButton}
-      {renderSettingsButton}
+      {renderDesktopSettingsButton}
     </Grid>
   );
 
@@ -509,7 +541,7 @@ const UserPage: NextPage = () => {
     topNavbarProps: {
       renderBackButton: <BackButton />,
       header: username,
-      renderHeaderRight: renderrenderHeaderRight,
+      renderHeaderRight,
     },
   };
 

@@ -1,19 +1,25 @@
-import { useSettings } from 'hooks';
+import { useSettingsContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
+import { MainTemplateProps } from 'types';
 
+import { SettingsList } from '../settings';
 import { DialogHeader, SkoleDialog } from '../shared';
 
-export const SettingsDialog: React.FC = () => {
+export const SettingsDialog: React.FC<Pick<MainTemplateProps, 'pageRef'>> = ({ pageRef }) => {
   const { t } = useTranslation();
-  const { renderSettingsMenuList, settingsOpen, toggleSettings } = useSettings(true);
-  const handleClose = (): void => toggleSettings(false);
-  const renderDialogHeader = <DialogHeader onCancel={handleClose} text={t('common:settings')} />;
+  const { settingsDialogOpen, handleCloseSettingsDialog } = useSettingsContext();
+
+  const renderDialogHeader = (
+    <DialogHeader onCancel={handleCloseSettingsDialog} text={t('common:settings')} />
+  );
+
+  const renderSettingsList = <SettingsList dialog pageRef={pageRef} />;
 
   return (
-    <SkoleDialog open={settingsOpen} onClose={handleClose} list>
+    <SkoleDialog open={settingsDialogOpen} onClose={handleCloseSettingsDialog} list>
       {renderDialogHeader}
-      {renderSettingsMenuList}
+      {renderSettingsList}
     </SkoleDialog>
   );
 };

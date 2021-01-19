@@ -22,8 +22,9 @@ export interface NotificationsContextType {
 }
 
 export interface SettingsContextType {
-  settingsOpen: boolean;
-  toggleSettings: (payload: boolean) => void;
+  settingsDialogOpen: boolean;
+  handleOpenSettingsDialog: () => void;
+  handleCloseSettingsDialog: () => void;
 }
 
 export interface PdfViewerContextType {

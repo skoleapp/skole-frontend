@@ -3,17 +3,17 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAuthContext } from 'context';
-import { useMediaQueries, useSettings } from 'hooks';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { BackButton, SettingsButton } from '../shared';
+import { SettingsButton, SettingsList } from '../settings';
+import { BackButton } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
     flexGrow: 1,
   },
@@ -29,43 +29,55 @@ const useStyles = makeStyles(({ breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  cardHeader: {
+  cardHeaderRoot: {
     borderBottom: BORDER,
+    position: 'relative',
+    padding: spacing(3),
+  },
+  cardHeaderAvatar: {
+    position: 'absolute',
+    top: spacing(2),
+    left: spacing(2),
   },
 }));
 
 export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   children,
   topNavbarProps,
+  pageRef,
   ...props
 }) => {
   const classes = useStyles();
-  const { renderSettingsMenuList } = useSettings(false);
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const { profileUrl } = useAuthContext();
 
-  const renderBackButton = (
-    <BackButton href={profileUrl} tooltip={t('common-tooltips:backToProfile')} />
-  );
-
-  const renderHeaderRight = <SettingsButton color="secondary" size="small" />;
+  const renderBackButton = <BackButton />;
+  const renderHeaderRight = <SettingsButton />;
 
   const renderSettingsHeader = (
-    <CardHeader className={classes.cardHeader} title={t('common:settings')} />
+    <CardHeader
+      classes={{
+        root: classes.cardHeaderRoot,
+        avatar: classes.cardHeaderAvatar,
+      }}
+      avatar={renderBackButton}
+      title={t('common:settings')}
+    />
   );
+
+  const renderSettingsList = <SettingsList pageRef={pageRef} />;
 
   const renderSettingsCard = isTabletOrDesktop && (
     <Grid item xs={12} md={4} lg={3} className={classes.container}>
       <Paper className={classes.paper}>
         {renderSettingsHeader}
-        {renderSettingsMenuList}
+        {renderSettingsList}
       </Paper>
     </Grid>
   );
 
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={topNavbarProps?.header} />
+    <CardHeader className={classes.cardHeaderRoot} title={topNavbarProps?.header} />
   );
 
   const renderContent = (
@@ -98,6 +110,7 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
 
   const layoutProps = {
     ...props,
+    pageRef,
     topNavbarProps: {
       ...topNavbarProps,
       renderBackButton,

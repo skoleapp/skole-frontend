@@ -61,6 +61,7 @@ import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
+import { PageRef } from 'types';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -212,7 +213,10 @@ const CourseDetailPage: NextPage = () => {
       <TextLink
         href={{
           ...searchUrl,
-          query: { ...searchUrl.query, subject: Number(id) },
+          query: {
+            ...searchUrl.query,
+            subject: Number(id),
+          },
         }}
         color="primary"
       >
@@ -341,9 +345,7 @@ const CourseDetailPage: NextPage = () => {
     </Tooltip>
   );
 
-  const renderBackButton = (
-    <BackButton href={searchUrl} tooltip={t('course-tooltips:backToSearch')} />
-  );
+  const renderBackButton = <BackButton />;
 
   const renderResourcesHeader = (
     <CardHeader

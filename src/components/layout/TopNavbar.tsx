@@ -20,7 +20,7 @@ import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import { useAuthContext } from 'context';
-import { useMediaQueries } from 'hooks';
+import { useMediaQueries, usePageRefQuery } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -62,6 +62,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
   renderBackButton,
+  pageRef,
   hideSearch,
   hideDynamicButtons,
   hideLoginButton,
@@ -75,9 +76,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   renderHeaderLeft,
 }) => {
   const classes = useStyles();
+  const { pathname } = useRouter();
+  const query = usePageRefQuery(pageRef);
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { asPath } = useRouter();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
@@ -192,7 +194,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const renderLoginButton = isDesktop && !hideLoginButton && (
     <ButtonLink
-      href={{ pathname: urls.login, query: { next: asPath } }}
+      href={{
+        pathname: urls.login,
+        query: {
+          ...query,
+          next: pathname,
+        },
+      }}
       color="secondary"
       endIcon={<HowToRegOutlined />}
     >
@@ -201,7 +209,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderRegisterButton = isDesktop && !hideRegisterButton && (
-    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
+    <ButtonLink
+      href={{ pathname: urls.register, query }}
+      color="secondary"
+      endIcon={<AddCircleOutlineOutlined />}
+    >
       {t('common:register')}
     </ButtonLink>
   );
@@ -212,8 +224,19 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
+  const pageRefQuery = !!pageRef && {
+    ref: pageRef,
+  };
+
   const renderForTeachersButton = !hideForTeachersButton && (
-    <ButtonLink href={urls.forTeachers} color="secondary" endIcon={<SchoolOutlined />}>
+    <ButtonLink
+      href={{
+        pathname: urls.forTeachers,
+        query: pageRefQuery || {},
+      }}
+      color="secondary"
+      endIcon={<SchoolOutlined />}
+    >
       {t('common:forTeachers')}
     </ButtonLink>
   );

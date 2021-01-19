@@ -11,8 +11,5 @@
   "settings": "Visa inställningar.",
   "rank": "Denna användares rankning är {{ rank }}.",
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
-  "closeMenu": "Stäng menyn.",
-  "backToHome": "Tillbaka till hem.",
-  "backToProfile": "Tillbaka till profilen.",
-  "backToGetStarted": "Tillbaka till startsidan."
+  "closeMenu": "Stäng menyn."
 }

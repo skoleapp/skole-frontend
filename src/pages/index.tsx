@@ -12,7 +12,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { NativeAppProps } from 'types';
+import { NativeAppProps, PageRef } from 'types';
 import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -88,7 +88,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const ctaUrl = {
     pathname: urls.register,
     query: {
-      ref: 'get-started',
+      pageRef: PageRef.GET_STARTED,
     },
   };
 
@@ -182,6 +182,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
       hideGetStartedButton: true,
     },
     hideAppStoreBadges: nativeApp,
+    pageRef: PageRef.GET_STARTED,
   };
 
   // Show loading screen when redirecting to home page.

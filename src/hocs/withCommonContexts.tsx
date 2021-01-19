@@ -1,11 +1,4 @@
 import {
-  ConfirmationDialog,
-  LanguageSelectorDialog,
-  Notifications,
-  SettingsDialog,
-  ShareDialog,
-} from 'components';
-import {
   AuthContextProvider,
   ConfirmContextProvider,
   LanguageContextProvider,
@@ -28,11 +21,6 @@ export const withCommonContexts = <T extends Record<string, unknown>>(
             <ConfirmContextProvider>
               <ShareContextProvider>
                 <PageComponent {...pageProps} />
-                <ConfirmationDialog />
-                <Notifications />
-                <SettingsDialog />
-                <LanguageSelectorDialog />
-                <ShareDialog />
               </ShareContextProvider>
             </ConfirmContextProvider>
           </SettingsContextProvider>

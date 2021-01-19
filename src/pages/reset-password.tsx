@@ -16,7 +16,7 @@ import {
   useSendPasswordResetEmailMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
-import { useForm, useLanguageHeaderContext } from 'hooks';
+import { useForm, useLanguageHeaderContext, usePageRefQuery } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -59,8 +59,9 @@ const ResetPasswordPage: NextPage = () => {
     setUnexpectedFormError: passwordFormUnexpectedError,
   } = useForm<PasswordFormValues>();
 
-  const { t } = useTranslation();
   const { query } = useRouter();
+  const pageRefQuery = usePageRefQuery();
+  const { t } = useTranslation();
   const { userMe } = useAuthContext();
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
@@ -137,6 +138,13 @@ const ResetPasswordPage: NextPage = () => {
     const { newPassword } = values;
     await resetPassword({ variables: { newPassword, token } });
   };
+
+  const renderBackButton = (
+    <BackButton
+      href={{ pathname: urls.login, query: pageRefQuery }}
+      tooltip={t('back-button-tooltips:login')}
+    />
+  );
 
   const renderNewPasswordField = (
     <Field
@@ -221,7 +229,7 @@ const ResetPasswordPage: NextPage = () => {
     },
     topNavbarProps: {
       header,
-      renderBackButton: <BackButton />,
+      renderBackButton,
     },
   };
 

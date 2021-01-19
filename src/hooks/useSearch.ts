@@ -2,12 +2,13 @@ import { InputProps } from '@material-ui/core/Input';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
 import Router from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
-interface SearchUrl extends UrlObject {
-  query: Record<symbol, unknown>;
+interface SearchUrl extends Omit<UrlObject, 'query'> {
+  query?: ParsedUrlQueryInput;
 }
 
 interface UseSearch {

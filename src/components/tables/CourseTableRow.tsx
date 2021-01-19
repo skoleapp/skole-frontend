@@ -13,13 +13,14 @@ import { CourseObjectType } from 'generated';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
+import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
 import { TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 import { TableRowIcon } from './TableRowIcon';
 
-interface Props {
+interface Props extends Pick<MainTemplateProps, 'pageRef'> {
   course: CourseObjectType;
   disableCourseChip?: boolean;
   key: number;
@@ -28,9 +29,14 @@ interface Props {
 export const CourseTableRow: React.FC<Props> = ({
   course: { id, name, code, user, score, starCount, resourceCount, commentCount },
   disableCourseChip,
+  pageRef,
   key,
 }) => {
   const { t } = useTranslation();
+
+  const query = {
+    ref: pageRef,
+  };
 
   const renderCourseChip = !disableCourseChip && <TableRowChip label={t('common:course')} />;
   const renderCourseCodeChip = <TableRowChip label={code} />;
@@ -52,7 +58,13 @@ export const CourseTableRow: React.FC<Props> = ({
   );
 
   const renderCourseCreator = user ? (
-    <TextLink href={urls.user(user.id)} color="primary">
+    <TextLink
+      href={{
+        pathname: urls.user(user.id),
+        query,
+      }}
+      color="primary"
+    >
       {user.username}
     </TextLink>
   ) : (
@@ -84,7 +96,13 @@ export const CourseTableRow: React.FC<Props> = ({
   );
 
   return (
-    <Link href={urls.course(id)} key={key}>
+    <Link
+      href={{
+        pathname: urls.course(id),
+        query,
+      }}
+      key={key}
+    >
       <CardActionArea>
         <TableRow>
           <TableCell>

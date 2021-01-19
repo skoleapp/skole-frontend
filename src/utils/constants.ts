@@ -60,6 +60,7 @@ export const DEFAULT_NAMESPACES = [
   'validation',
   'notifications',
   'common-tooltips',
+  'back-button-tooltips',
   'activity',
   'offline',
   'sharing',

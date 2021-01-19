@@ -17,6 +17,5 @@
   "exitDrawingMode": "Avsluta ritningsläge.",
   "downloadPdf": "Ladda ner PDF-fil.",
   "printPdf": "Skriv ut PDF-fil.",
-  "rotatePdf": "Rotera PDF-fil.",
-  "backToCourse": "Tillbaka till {{ courseName }}."
+  "rotatePdf": "Rotera PDF-fil."
 }

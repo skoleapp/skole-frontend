@@ -305,12 +305,7 @@ const ResourceDetailPage: NextPage = () => {
     }
   };
 
-  const renderBackButton = (
-    <BackButton
-      href={urls.course(courseId)}
-      tooltip={t('resource-tooltips:backToCourse', { courseName })}
-    />
-  );
+  const renderBackButton = <BackButton />;
 
   const renderCourseLink = !!courseId && (
     <TextLink href={urls.course(courseId)}>{courseName}</TextLink>
@@ -388,8 +383,6 @@ const ResourceDetailPage: NextPage = () => {
 
   const toolbarProps = {
     title,
-    courseId,
-    courseName,
     handleDownloadButtonClick,
     handlePrintButtonClick,
   };

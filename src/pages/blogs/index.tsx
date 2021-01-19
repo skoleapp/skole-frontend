@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { BackButton, MainTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
-import { useDayjs, useMediaQueries } from 'hooks';
+import { useDayjs, useMediaQueries, usePageRefQuery } from 'hooks';
 import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
@@ -48,6 +48,7 @@ interface Props extends Record<string, unknown> {
 
 const BlogsPage: NextPage<Props> = ({ blogs }) => {
   const classes = useStyles();
+  const query = usePageRefQuery();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const header = t('blogs:header');
@@ -66,7 +67,7 @@ const BlogsPage: NextPage<Props> = ({ blogs }) => {
 
   const mapBlogs = blogs.map(
     ({ title, excerpt, coverImage = '', author, date, minutesToRead = 0, slug = '' }, i) => (
-      <Link href={urls.blog(slug)}>
+      <Link href={{ pathname: urls.blog(slug), query }}>
         <ListItem key={i} button>
           <Grid container spacing={2}>
             <Grid item xs={9}>
