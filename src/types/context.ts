@@ -22,8 +22,9 @@ export interface NotificationsContextType {
 }
 
 export interface SettingsContextType {
-  settingsOpen: boolean;
-  toggleSettings: (payload: boolean) => void;
+  settingsDialogOpen: boolean;
+  handleOpenSettingsDialog: () => void;
+  handleCloseSettingsDialog: () => void;
 }
 
 export interface PdfViewerContextType {
@@ -78,6 +79,7 @@ export interface ShareParams {
   shareTitle?: string;
   shareText?: string;
   linkSuffix?: string;
+  customLink?: string;
 }
 
 export interface ShareContextType {

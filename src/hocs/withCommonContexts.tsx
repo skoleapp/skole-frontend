@@ -29,10 +29,10 @@ export const withCommonContexts = <T extends Record<string, unknown>>(
               <ShareContextProvider>
                 <PageComponent {...pageProps} />
                 <ConfirmationDialog />
-                <Notifications />
                 <SettingsDialog />
                 <LanguageSelectorDialog />
                 <ShareDialog />
+                <Notifications />
               </ShareContextProvider>
             </ConfirmContextProvider>
           </SettingsContextProvider>

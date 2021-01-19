@@ -1,10 +1,11 @@
 {
   "title": "Hemsida",
+  "shareTitle": "Skole | För studenter",
   "subheader": "Försök att söka efter en kurs!",
   "findContent": "Hitta innehåll",
   "uploadMaterial": "Ladda upp material",
   "addCourses": "Lägg till kurser",
-  "suggestionsHeader": "Heta samtalsämnen",
+  "suggestionsHeader": "Heta ämnen",
   "nextStepsHeader": "Nästa steg",
   "inviteHeader": "Skole handlar om samarbete med dina klasskamrater. Bjud in dina vänner!",
   "inviteText": "Bjud in vänner",

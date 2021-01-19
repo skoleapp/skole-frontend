@@ -85,13 +85,6 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
     !!userMe && Router.replace(urls.home);
   }, [userMe]);
 
-  const ctaUrl = {
-    pathname: urls.register,
-    query: {
-      ref: 'get-started',
-    },
-  };
-
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
       {t('marketing:description')}
@@ -101,7 +94,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const renderCtaButton = (
     <ButtonLink
       className={classes.ctaButton}
-      href={ctaUrl}
+      href={urls.register}
       color="primary"
       variant="contained"
       endIcon={<ArrowForwardOutlined />}
@@ -178,6 +171,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
       description: t('marketing:description'),
     },
     topNavbarProps: {
+      hideBackButton: true,
       hideLogo: isMobile,
       hideGetStartedButton: true,
     },

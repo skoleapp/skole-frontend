@@ -1,4 +1,4 @@
-import { BackButton, FormSubmitSection, FormTemplate, TextFormField } from 'components';
+import { FormSubmitSection, FormTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
@@ -110,7 +110,6 @@ const ContactPage: NextPage = () => {
       description: t('contact:description'),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header: t('contact:header'),
     },
   };

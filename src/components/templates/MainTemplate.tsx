@@ -61,8 +61,6 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
 }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const renderHead = <Head {...seoProps} />;
-  const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
   const containerFullWidth: boolean = R.propOr(false, 'fullWidth', containerProps);
   const containerDense: boolean = R.propOr(false, 'dense', containerProps);
 
@@ -72,6 +70,9 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
     containerFullWidth && classes.containerFullWidth,
     containerDense && classes.containerDense,
   );
+
+  const renderHead = <Head {...seoProps} />;
+  const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
 
   const renderContainer = (
     <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>

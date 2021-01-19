@@ -11,8 +11,5 @@
   "settings": "Näytä asetukset.",
   "rank": "Tämän käyttäjän arvo on {{ rank }}.",
   "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
-  "closeMenu": "Sulje valikko.",
-  "backToHome": "Takaisin kotiin.",
-  "backToProfile": "Takaisin profiiliin.",
-  "backToGetStarted": "Takaisin aloitussivulle."
+  "closeMenu": "Sulje valikko."
 }

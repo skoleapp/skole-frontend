@@ -1,4 +1,3 @@
-export { AuthBackButton } from './AuthBackButton';
 export { BackButton } from './BackButton';
 export { ButtonLink } from './ButtonLink';
 export { ConfirmationDialog } from './ConfirmationDialog';
@@ -14,7 +13,6 @@ export { LoadingBox } from './LoadingBox';
 export { MarkdownContent } from './MarkdownContent';
 export { NotFoundBox } from './NotFoundBox';
 export { ResponsiveDialog } from './ResponsiveDialog';
-export { SettingsButton } from './SettingsButton';
 export { ShareButton } from './ShareButton';
 export { SkoleDialog } from './SkoleDialog';
 export { TabPanel } from './TabPanel';

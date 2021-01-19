@@ -1,12 +1,6 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-import {
-  BackButton,
-  FormSubmitSection,
-  FormTemplate,
-  LogoutRequiredTemplate,
-  TextFormField,
-} from 'components';
+import { FormSubmitSection, FormTemplate, LogoutRequiredTemplate, TextFormField } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -59,8 +53,8 @@ const ResetPasswordPage: NextPage = () => {
     setUnexpectedFormError: passwordFormUnexpectedError,
   } = useForm<PasswordFormValues>();
 
-  const { t } = useTranslation();
   const { query } = useRouter();
+  const { t } = useTranslation();
   const { userMe } = useAuthContext();
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
@@ -221,7 +215,6 @@ const ResetPasswordPage: NextPage = () => {
     },
     topNavbarProps: {
       header,
-      renderBackButton: <BackButton />,
     },
   };
 

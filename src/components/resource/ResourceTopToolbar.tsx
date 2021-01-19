@@ -12,7 +12,6 @@ import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { BORDER } from 'theme';
-import { urls } from 'utils';
 
 import { BackButton } from '../shared';
 import { DrawModeButton } from './DrawModeButton';
@@ -28,33 +27,23 @@ const useStyles = makeStyles({
 
 interface Props {
   title: string;
-  courseId: string;
-  courseName: string;
   handleDownloadButtonClick: (e: SyntheticEvent) => Promise<void>;
   handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
 }
 
 export const ResourceTopToolbar: React.FC<Props> = ({
   title,
-  courseId,
-  courseName,
   handleDownloadButtonClick,
   handlePrintButtonClick,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { drawingMode, controlsDisabled } = usePdfViewerContext();
+
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;
-
-  const renderBackButton = (
-    <BackButton
-      href={urls.course(courseId)}
-      tooltip={t('resource-tooltips:backToCourse', { courseName })}
-      className="MuiCardHeader-avatar"
-    />
-  );
+  const renderBackButton = <BackButton className="MuiCardHeader-avatar" />;
 
   const toolbarButtonProps = {
     size: 'small' as Size,

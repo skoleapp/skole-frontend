@@ -4,7 +4,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import {
-  AuthBackButton,
   AutocompleteField,
   ButtonLink,
   ContactLink,
@@ -32,7 +31,6 @@ import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
@@ -58,7 +56,6 @@ enum RegisterPhases {
 
 const RegisterPage: NextPage = () => {
   const { t } = useTranslation();
-  const { query } = useRouter();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
@@ -233,11 +230,7 @@ const RegisterPage: NextPage = () => {
 
   const renderLoginButton = (
     <FormControl>
-      <ButtonLink
-        href={{ pathname: urls.login, query }} // Keep the query for the `Get Started` ref.
-        variant="outlined"
-        color="primary"
-      >
+      <ButtonLink href={urls.login} variant="outlined" color="primary">
         {t('common:login')}
       </ButtonLink>
     </FormControl>
@@ -356,7 +349,6 @@ const RegisterPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
-      renderBackButton: <AuthBackButton />,
       header,
       hideSearch: true,
       hideRegisterButton: true,

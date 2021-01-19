@@ -30,7 +30,7 @@ import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
-import { ButtonLink, IconButtonLink, LanguageButton } from '../shared';
+import { BackButton, ButtonLink, IconButtonLink, LanguageButton } from '../shared';
 import { Logo } from './Logo';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
@@ -61,7 +61,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
-  renderBackButton,
+  hideBackButton,
   hideSearch,
   hideDynamicButtons,
   hideLoginButton,
@@ -75,9 +75,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   renderHeaderLeft,
 }) => {
   const classes = useStyles();
+  const { asPath } = useRouter();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { asPath } = useRouter();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
@@ -99,6 +99,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperAnchorEl(e.currentTarget);
     setActivityPopperOpen(!activityPopperOpen);
   };
+
+  const renderBackButton = !hideBackButton && <BackButton />;
 
   const renderHeader = !!header && (
     <Typography variant="h6" className="truncate-text">
@@ -192,7 +194,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const renderLoginButton = isDesktop && !hideLoginButton && (
     <ButtonLink
-      href={{ pathname: urls.login, query: { next: asPath } }}
+      href={{
+        pathname: urls.login,
+        query: {
+          next: asPath,
+        },
+      }}
       color="secondary"
       endIcon={<HowToRegOutlined />}
     >

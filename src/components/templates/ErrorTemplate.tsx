@@ -62,7 +62,6 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
       title,
     },
     topNavbarProps: {
-      renderBackButton,
       header,
       hideSearch: true,
       hideDynamicButtons: true,

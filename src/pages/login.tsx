@@ -5,7 +5,6 @@ import MaterialLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
-  AuthBackButton,
   ButtonLink,
   FormSubmitSection,
   FormTemplate,
@@ -98,7 +97,7 @@ const LoginPage: NextPage = () => {
         try {
           formRef.current?.resetForm();
           toggleNotification(login.successMessage);
-          const nextUrl = query.next ? String(query.next) : urls.home;
+          const nextUrl = String(query.next) || urls.home;
           await Router.push(nextUrl);
         } catch {
           setUnexpectedFormError();
@@ -152,11 +151,7 @@ const LoginPage: NextPage = () => {
 
   const renderRegisterButton = (
     <FormControl className={classes.link}>
-      <ButtonLink
-        href={{ pathname: urls.register, query }} // Keep the query for the `Get Started` ref.
-        variant="outlined"
-        color="primary"
-      >
+      <ButtonLink href={urls.register} variant="outlined" color="primary">
         {t('common:register')}
       </ButtonLink>
     </FormControl>
@@ -215,7 +210,6 @@ const LoginPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
-      renderBackButton: <AuthBackButton />,
       header: t('login:header'),
       hideLoginButton: true,
       hideGetStartedButton: true,

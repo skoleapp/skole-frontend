@@ -6,7 +6,6 @@ export * from './useLanguageHeaderContext';
 export * from './useMediaQueries';
 export * from './useOpen';
 export * from './useSearch';
-export * from './useSettings';
 export * from './useStars';
 export * from './useStateRef';
 export * from './useTabs';

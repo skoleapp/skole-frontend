@@ -16,6 +16,13 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
   const { asPath } = useRouter();
   const handleClickCancelButton = (): void => Router.back();
 
+  const loginButtonHref = {
+    pathname: urls.login,
+    query: {
+      next: asPath,
+    },
+  };
+
   const renderText = (
     <Typography variant="subtitle1" align="center">
       {t('common:loginRequired')} 🙃
@@ -26,7 +33,7 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
 
   const renderLoginButton = (
     <ButtonLink
-      href={{ pathname: urls.login, query: { next: asPath } }}
+      href={loginButtonHref}
       color="primary"
       variant="contained"
       endIcon={<ArrowForwardOutlined />}

@@ -1,31 +1,18 @@
-import { ButtonProps } from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import ArrowBackOutlined from '@material-ui/icons/ArrowBackOutlined';
 import { useMediaQueries } from 'hooks';
-import { useTranslation } from 'lib';
-import Link from 'next/link';
+import Router from 'next/router';
 import React from 'react';
-import { UrlObject } from 'url';
-import { urls } from 'utils';
 
-interface Props extends Omit<ButtonProps, 'href'> {
-  href?: string | UrlObject | false;
-  tooltip?: string | false;
-}
-
-export const BackButton: React.FC<Props> = ({ href, tooltip, ...props }) => {
+// TODO: Implement a history context to detect when we navigate within the app and when the user comes from an external link.
+// When the user comes via an external link, we probably want to hard code this button to navigate to the home page etc. instead of acting like the browsers back button.
+export const BackButton: React.FC<IconButtonProps> = (props) => {
   const { isMobile } = useMediaQueries();
-  const { t } = useTranslation();
   const color = isMobile ? 'secondary' : 'default';
 
   return (
-    <Link href={href || urls.home}>
-      <Tooltip title={tooltip || t('common-tooltips:backToHome')}>
-        <IconButton {...props} size="small" color={color}>
-          <ArrowBackOutlined />
-        </IconButton>
-      </Tooltip>
-    </Link>
+    <IconButton onClick={() => Router.back()} size="small" color={color} {...props}>
+      <ArrowBackOutlined />
+    </IconButton>
   );
 };

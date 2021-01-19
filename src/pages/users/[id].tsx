@@ -15,7 +15,6 @@ import EditOutlined from '@material-ui/icons/EditOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
 import {
-  BackButton,
   ButtonLink,
   CourseTableBody,
   ErrorTemplate,
@@ -125,6 +124,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
+interface ProfileStrengthStep {
+  label: string;
+  href: string;
+  completed: boolean;
+}
+
 const UserPage: NextPage = () => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
@@ -205,7 +210,7 @@ const UserPage: NextPage = () => {
     }
   };
 
-  const renderrenderHeaderRight = isOwnProfile && <SettingsButton color="secondary" size="small" />;
+  const renderHeaderRight = isOwnProfile && <SettingsButton />;
   const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
   const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
 
@@ -244,9 +249,9 @@ const UserPage: NextPage = () => {
     </ButtonLink>
   );
 
-  const renderSettingsButton = (
+  const renderDesktopSettingsButton = (
     <Tooltip title={t('common-tooltips:settings')}>
-      <SettingsButton className={classes.button} color="primary" />
+      <SettingsButton className={classes.button} />
     </Tooltip>
   );
 
@@ -338,23 +343,24 @@ const UserPage: NextPage = () => {
     </Typography>
   );
 
+  const renderProfileStrengthStepLabel = ({ label, href, completed }: ProfileStrengthStep) =>
+    !completed ? (
+      <TextLink href={href}>{label}</TextLink>
+    ) : (
+      <Typography variant="body2" color="textSecondary">
+        {label}
+      </Typography>
+    );
+
   // Render uncompleted items as links and completed ones as regular text.
-  const renderProfileStrengthSteps = profileStrengthSteps.map(({ label, href, completed }, i) => (
+  const renderProfileStrengthSteps = profileStrengthSteps.map((step, i) => (
     <Step
       className={classes.step}
       key={i}
       completed={profileStrengthSteps[i].completed}
       active={false}
     >
-      <StepLabel>
-        {!completed ? (
-          <TextLink href={href}>{label}</TextLink>
-        ) : (
-          <Typography variant="body2" color="textSecondary">
-            {label}
-          </Typography>
-        )}
-      </StepLabel>
+      <StepLabel>{renderProfileStrengthStepLabel(step)}</StepLabel>
     </Step>
   ));
 
@@ -376,7 +382,7 @@ const UserPage: NextPage = () => {
     <Grid item xs={12} container alignItems="center" spacing={4}>
       {renderEditProfileButton}
       {renderStarredButton}
-      {renderSettingsButton}
+      {renderDesktopSettingsButton}
     </Grid>
   );
 
@@ -507,9 +513,8 @@ const UserPage: NextPage = () => {
       description: t('profile:description', { username }),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header: username,
-      renderHeaderRight: renderrenderHeaderRight,
+      renderHeaderRight,
     },
   };
 

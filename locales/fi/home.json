@@ -1,10 +1,11 @@
 {
   "title": "Koti",
+  "shareTitle": "Skole | Opiskelijoille",
   "subheader": "Koita etsiä kurssia!",
   "findContent": "Löydä sisältöä",
   "uploadMaterial": "Lisää materiaalia",
   "addCourses": "Lisää kursseja",
-  "suggestionsHeader": "Kuumat keskustelunaiheet",
+  "suggestionsHeader": "Kuumat aiheet",
   "nextStepsHeader": "Seuraavat vaiheet",
   "inviteHeader": "Skolessa on kyse yhteistyöstä opiskelukavereidesi kanssa. Kutsu kaverisi!",
   "inviteText": "Kutsu kavereita",

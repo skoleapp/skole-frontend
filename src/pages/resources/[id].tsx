@@ -13,7 +13,6 @@ import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import {
-  BackButton,
   CustomBottomNavbarContainer,
   DiscussionHeader,
   DrawModeButton,
@@ -305,13 +304,6 @@ const ResourceDetailPage: NextPage = () => {
     }
   };
 
-  const renderBackButton = (
-    <BackButton
-      href={urls.course(courseId)}
-      tooltip={t('resource-tooltips:backToCourse', { courseName })}
-    />
-  );
-
   const renderCourseLink = !!courseId && (
     <TextLink href={urls.course(courseId)}>{courseName}</TextLink>
   );
@@ -388,8 +380,6 @@ const ResourceDetailPage: NextPage = () => {
 
   const toolbarProps = {
     title,
-    courseId,
-    courseName,
     handleDownloadButtonClick,
     handlePrintButtonClick,
   };
@@ -513,7 +503,6 @@ const ResourceDetailPage: NextPage = () => {
     },
     customBottomNavbar: renderCustomBottomNavbar,
     topNavbarProps: {
-      renderBackButton,
       renderHeaderLeft: renderShareButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,

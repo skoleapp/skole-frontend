@@ -212,7 +212,10 @@ const CourseDetailPage: NextPage = () => {
       <TextLink
         href={{
           ...searchUrl,
-          query: { ...searchUrl.query, subject: Number(id) },
+          query: {
+            ...searchUrl.query,
+            subject: Number(id),
+          },
         }}
         color="primary"
       >
@@ -323,7 +326,10 @@ const CourseDetailPage: NextPage = () => {
 
   const uploadResourceHref = {
     pathname: urls.uploadResource,
-    query: { school: schoolId, course: courseId },
+    query: {
+      school: schoolId,
+      course: courseId,
+    },
   };
 
   // Do not render a disabled button at all on mobile.
@@ -341,9 +347,7 @@ const CourseDetailPage: NextPage = () => {
     </Tooltip>
   );
 
-  const renderBackButton = (
-    <BackButton href={searchUrl} tooltip={t('course-tooltips:backToSearch')} />
-  );
+  const renderBackButton = <BackButton />;
 
   const renderResourcesHeader = (
     <CardHeader
@@ -430,7 +434,6 @@ const CourseDetailPage: NextPage = () => {
       description: t('course:description', { courseName }),
     },
     topNavbarProps: {
-      renderBackButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
       renderHeaderLeft: renderUploadResourceButton,

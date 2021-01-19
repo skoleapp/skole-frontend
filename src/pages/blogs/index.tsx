@@ -106,7 +106,6 @@ const BlogsPage: NextPage<Props> = ({ blogs }) => {
     },
     topNavbarProps: {
       header,
-      renderBackButton,
     },
   };
 

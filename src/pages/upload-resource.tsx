@@ -3,7 +3,6 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
-  BackButton,
   DatePickerFormField,
   ErrorTemplate,
   FileField,
@@ -342,7 +341,6 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
       description: t('upload-resource:description'),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header: t('upload-resource:header'),
     },
   };

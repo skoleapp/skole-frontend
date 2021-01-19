@@ -8,7 +8,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { MarkdownContent } from '../shared';
+import { BackButton, MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -43,6 +43,8 @@ export const MarkdownTemplate: React.FC<Props> = ({
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
 
+  const renderBackButton = <BackButton />;
+
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
       classes={{
@@ -50,7 +52,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
         avatar: classes.cardHeaderAvatar,
       }}
       title={topNavbarProps?.header}
-      avatar={topNavbarProps?.renderBackButton}
+      avatar={renderBackButton}
     />
   );
 

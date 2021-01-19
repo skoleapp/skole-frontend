@@ -6,7 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { BackButton, MainTemplate } from 'components';
-import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -44,15 +43,9 @@ export const AboutPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const { userMe, profileUrl } = useAuthContext();
   const header = t('about:header');
 
-  const renderBackButton = (
-    <BackButton
-      href={!!userMe && profileUrl}
-      tooltip={!!userMe && t('common-tooltips:backToProfile')}
-    />
-  );
+  const renderBackButton = <BackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader

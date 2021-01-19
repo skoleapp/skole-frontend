@@ -16,6 +16,13 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
   const { asPath } = useRouter();
   const handleClickCancelButton = (): void => Router.back();
 
+  const logoutButtonHref = {
+    pathname: urls.logout,
+    query: {
+      next: asPath,
+    },
+  };
+
   const renderText = (
     <Typography variant="subtitle1" align="center">
       {t('common:logoutRequired')} 🙃
@@ -26,7 +33,7 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
 
   const renderLogoutButton = (
     <ButtonLink
-      href={{ pathname: urls.logout, query: { next: asPath } }}
+      href={logoutButtonHref}
       color="primary"
       variant="contained"
       endIcon={<ArrowForwardOutlined />}

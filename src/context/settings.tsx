@@ -7,12 +7,14 @@ const SettingsContext = createContext<SettingsContextType>({});
 export const useSettingsContext = (): SettingsContextType => useContext(SettingsContext);
 
 export const SettingsContextProvider: React.FC = ({ children }) => {
-  const [settingsOpen, setSettingsOpen] = useState(false);
-  const toggleSettings = (open: boolean): void => setSettingsOpen(open);
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const handleOpenSettingsDialog = () => setSettingsDialogOpen(true);
+  const handleCloseSettingsDialog = () => setSettingsDialogOpen(false);
 
   const value = {
-    settingsOpen,
-    toggleSettings,
+    settingsDialogOpen,
+    handleOpenSettingsDialog,
+    handleCloseSettingsDialog,
   };
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;

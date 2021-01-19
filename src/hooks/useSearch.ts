@@ -2,12 +2,13 @@ import { InputProps } from '@material-ui/core/Input';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
 import Router from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
-interface SearchUrl extends UrlObject {
-  query: Record<symbol, unknown>;
+interface SearchUrl extends Omit<UrlObject, 'query'> {
+  query?: ParsedUrlQueryInput;
 }
 
 interface UseSearch {
@@ -25,9 +26,15 @@ export const useSearch = (): UseSearch => {
   const fullWidth = true;
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
+  const query = school
+    ? {
+        school: school.id,
+      }
+    : {};
+
   const searchUrl = {
     pathname: urls.search,
-    query: school ? { school: school.id } : {},
+    query,
   };
 
   const handleSubmitSearch = async (e: SyntheticEvent): Promise<void> => {

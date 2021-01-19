@@ -1,13 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import {
-  BackButton,
-  ButtonLink,
-  FormSubmitSection,
-  FormTemplate,
-  LoadingTemplate,
-} from 'components';
+import { ButtonLink, FormSubmitSection, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import {
@@ -46,6 +40,13 @@ const VerifyAccountPage: NextPage = () => {
   const [confirmationError, setConfirmationError] = useState<string | null>();
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
+
+  const loginButtonHref = {
+    pathname: urls.login,
+    query: {
+      next: urls.verifyAccount,
+    },
+  };
 
   // Update state whenever context value changes.
   useEffect(() => {
@@ -140,7 +141,7 @@ const VerifyAccountPage: NextPage = () => {
 
   const renderLoginButton = (
     <ButtonLink
-      href={{ pathname: urls.login, query: { next: urls.verifyAccount } }}
+      href={loginButtonHref}
       endIcon={<ArrowForwardOutlined />}
       color="primary"
       variant="contained"
@@ -236,7 +237,6 @@ const VerifyAccountPage: NextPage = () => {
       title: t('verify-account:title'),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header,
     },
   };

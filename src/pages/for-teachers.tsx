@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
-import { BackButton, ButtonLink, LandingPageTemplate } from 'components';
+import { ButtonLink, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
@@ -145,7 +145,6 @@ const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
       description: t('for-teachers:description'),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header: t('for-teachers:header'),
       hideForTeachersButton: true,
     },

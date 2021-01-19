@@ -8,7 +8,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { TabPanel } from '../shared';
+import { BackButton, TabPanel } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -64,6 +64,8 @@ export const TabTemplate: React.FC<Props> = ({
   const { isTabletOrDesktop } = useMediaQueries();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
 
+  const renderBackButton = <BackButton />;
+
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
       classes={{
@@ -72,7 +74,7 @@ export const TabTemplate: React.FC<Props> = ({
         action: classes.cardHeaderAction,
       }}
       title={topNavbarProps?.header}
-      avatar={topNavbarProps?.renderBackButton}
+      avatar={renderBackButton}
       action={renderAction}
     />
   );
