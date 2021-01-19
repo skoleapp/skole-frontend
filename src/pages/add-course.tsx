@@ -2,7 +2,6 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
-  BackButton,
   ContactLink,
   ErrorTemplate,
   FormSubmitSection,
@@ -206,7 +205,6 @@ const AddCoursePage: NextPage = () => {
     },
     topNavbarProps: {
       header: t('add-course:header'),
-      renderBackButton: <BackButton />,
     },
   };
 

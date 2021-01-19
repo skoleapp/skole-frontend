@@ -6,7 +6,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import {
-  BackButton,
   CourseTableBody,
   ErrorTemplate,
   IconButtonLink,
@@ -78,7 +77,9 @@ const SchoolDetailPage: NextPage = () => {
 
   const addCourseHref = {
     pathname: urls.addCourse,
-    query: { school: schoolId },
+    query: {
+      school: schoolId,
+    },
   };
 
   const {
@@ -246,7 +247,6 @@ const SchoolDetailPage: NextPage = () => {
       description: t('school:description', { schoolName }),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header,
       renderHeaderLeft: renderAddCourseButton,
       renderHeaderRight: renderActionsButton,

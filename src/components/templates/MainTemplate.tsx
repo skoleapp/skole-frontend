@@ -66,18 +66,11 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   customBottomNavbar,
   hideBottomNavbar,
   hideFooter,
-  pageRef,
   children,
   ...props
 }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const renderHead = <Head {...seoProps} />;
-
-  const renderTopNavbar = (isMobile && customTopNavbar) || (
-    <TopNavbar {...topNavbarProps} pageRef={pageRef} />
-  );
-
   const containerFullWidth: boolean = R.propOr(false, 'fullWidth', containerProps);
   const containerDense: boolean = R.propOr(false, 'dense', containerProps);
 
@@ -88,6 +81,9 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
     containerDense && classes.containerDense,
   );
 
+  const renderHead = <Head {...seoProps} />;
+  const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
+
   const renderContainer = (
     <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>
       {children}
@@ -97,12 +93,12 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   const renderBottomNavbar =
     isMobile && !hideBottomNavbar && (customBottomNavbar || <BottomNavbar />);
 
-  const renderFooter = isTabletOrDesktop && !hideFooter && <Footer pageRef={pageRef} />;
+  const renderFooter = isTabletOrDesktop && !hideFooter && <Footer />;
 
   const renderDialogs = (
     <>
       <ConfirmationDialog />
-      <SettingsDialog pageRef={pageRef} />
+      <SettingsDialog />
       <LanguageSelectorDialog />
       <ShareDialog />
     </>

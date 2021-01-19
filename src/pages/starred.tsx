@@ -1,5 +1,4 @@
 import {
-  BackButton,
   CourseTableBody,
   ErrorTemplate,
   LoadingBox,
@@ -32,7 +31,6 @@ const StarredPage: NextPage = () => {
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
   const header = t('starred:header');
 
-  const renderBackButton = <BackButton />;
   const renderLoading = <LoadingBox />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
@@ -65,7 +63,6 @@ const StarredPage: NextPage = () => {
       title: t('starred:title'),
     },
     topNavbarProps: {
-      renderBackButton,
       header,
     },
     tabTemplateProps: {

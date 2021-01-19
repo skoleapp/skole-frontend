@@ -12,7 +12,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { NativeAppProps, PageRef } from 'types';
+import { NativeAppProps } from 'types';
 import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -85,13 +85,6 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
     !!userMe && Router.replace(urls.home);
   }, [userMe]);
 
-  const ctaUrl = {
-    pathname: urls.register,
-    query: {
-      pageRef: PageRef.GET_STARTED,
-    },
-  };
-
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
       {t('marketing:description')}
@@ -101,7 +94,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const renderCtaButton = (
     <ButtonLink
       className={classes.ctaButton}
-      href={ctaUrl}
+      href={urls.register}
       color="primary"
       variant="contained"
       endIcon={<ArrowForwardOutlined />}
@@ -178,11 +171,11 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
       description: t('marketing:description'),
     },
     topNavbarProps: {
+      hideBackButton: true,
       hideLogo: isMobile,
       hideGetStartedButton: true,
     },
     hideAppStoreBadges: nativeApp,
-    pageRef: PageRef.GET_STARTED,
   };
 
   // Show loading screen when redirecting to home page.

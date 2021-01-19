@@ -56,6 +56,7 @@ const SuggestionsPage: NextPage = () => {
   const { data, loading, error } = useSuggestionsQuery({ context });
   const suggestions = R.propOr([], 'suggestions', data);
   const header = `${t('suggestions:header')} 🔥`;
+
   const renderBackButton = <BackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
@@ -89,7 +90,6 @@ const SuggestionsPage: NextPage = () => {
     },
     topNavbarProps: {
       header,
-      renderBackButton,
     },
   };
 

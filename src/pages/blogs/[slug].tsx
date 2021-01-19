@@ -1,25 +1,19 @@
 import Typography from '@material-ui/core/Typography';
-import { BackButton, MarkdownTemplate } from 'components';
+import { MarkdownTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
-import { useDayjs, usePageRefQuery } from 'hooks';
+import { useDayjs } from 'hooks';
 import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult, NextPage } from 'next';
 import Image from 'next/image';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
-import { urls } from 'utils';
 
 const BlogPostPage: NextPage<MarkdownPageProps> = ({
   data: { title, excerpt, coverImage = '', author, date, minutesToRead = 0 },
   content,
 }) => {
-  const query = usePageRefQuery();
   const { t } = useTranslation();
-
-  const renderBackButton = (
-    <BackButton href={{ pathname: urls.blogs, query }} tooltip={t('back-button-tooltips:blogs')} />
-  );
 
   const renderExcerpt = (
     <Typography variant="h5" color="textSecondary" gutterBottom>
@@ -43,7 +37,6 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
       description: excerpt,
     },
     topNavbarProps: {
-      renderBackButton,
       header: title,
     },
     content,

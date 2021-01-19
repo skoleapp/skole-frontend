@@ -52,7 +52,6 @@ import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
-import { PageRef } from 'types';
 import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
@@ -401,7 +400,7 @@ const SearchPage: NextPage = () => {
     </Field>
   );
 
-  const renderContactUsLink = <ContactLink pageRef={PageRef.SEARCH} />;
+  const renderContactUsLink = <ContactLink />;
 
   const renderFormSubmitSection = (props: FormikProps<SearchFormValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
@@ -453,7 +452,7 @@ const SearchPage: NextPage = () => {
   };
 
   const renderLoading = <LoadingBox />;
-  const renderCourses = <CourseTableBody courses={courses} pageRef={PageRef.SEARCH} />;
+  const renderCourses = <CourseTableBody courses={courses} />;
 
   const renderTable = (
     <Box className={classes.tableContainer}>
@@ -568,7 +567,6 @@ const SearchPage: NextPage = () => {
     topNavbarProps: {
       hideSearch: true,
     },
-    pageRef: PageRef.SEARCH,
   };
 
   if (!!error && !!error.networkError) {

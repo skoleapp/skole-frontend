@@ -5,7 +5,6 @@ export * from './useInfoDialog';
 export * from './useLanguageHeaderContext';
 export * from './useMediaQueries';
 export * from './useOpen';
-export * from './usePageRefQuery';
 export * from './useSearch';
 export * from './useStars';
 export * from './useStateRef';

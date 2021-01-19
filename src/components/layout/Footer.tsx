@@ -3,10 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useAuthContext } from 'context';
-import { usePageRefQuery } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
-import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
 import { TextLink } from '../shared';
@@ -21,11 +19,10 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   },
 }));
 
-export const Footer: React.FC<Pick<MainTemplateProps, 'pageRef'>> = ({ pageRef }) => {
+export const Footer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
-  const query = usePageRefQuery(pageRef);
 
   const renderSkoleHeader = (
     <Typography variant="subtitle1" color="secondary" gutterBottom>
@@ -34,31 +31,31 @@ export const Footer: React.FC<Pick<MainTemplateProps, 'pageRef'>> = ({ pageRef }
   );
 
   const renderGetStartedLink = !userMe && (
-    <TextLink href={{ pathname: urls.index, query }} color="secondary">
+    <TextLink href={urls.index} color="secondary">
       {t('common:getStarted')}
     </TextLink>
   );
 
   const renderForTeachersLink = (
-    <TextLink href={{ pathname: urls.forTeachers, query }} color="secondary">
+    <TextLink href={urls.forTeachers} color="secondary">
       {t('common:forTeachers')}
     </TextLink>
   );
 
   const renderGuidelinesLink = (
-    <TextLink href={{ pathname: urls.guidelines, query }} color="secondary">
+    <TextLink href={urls.guidelines} color="secondary">
       {t('common:guidelines')}
     </TextLink>
   );
 
   const renderScoreLink = (
-    <TextLink href={{ pathname: urls.score, query }} color="secondary">
+    <TextLink href={urls.score} color="secondary">
       {t('common:score')}
     </TextLink>
   );
 
   const renderContactLink = (
-    <TextLink href={{ pathname: urls.contact, query }} color="secondary">
+    <TextLink href={urls.contact} color="secondary">
       {t('common:contact')}
     </TextLink>
   );
@@ -83,25 +80,25 @@ export const Footer: React.FC<Pick<MainTemplateProps, 'pageRef'>> = ({ pageRef }
   );
 
   const renderBlogLink = (
-    <TextLink href={{ pathname: urls.blogs, query }} color="secondary">
+    <TextLink href={urls.blogs} color="secondary">
       {t('common:blog')}
     </TextLink>
   );
 
   const renderValuesLink = (
-    <TextLink href={{ pathname: urls.values, query }} color="secondary">
+    <TextLink href={urls.values} color="secondary">
       {t('common:values')}
     </TextLink>
   );
 
   const renderTermsLink = (
-    <TextLink href={{ pathname: urls.terms, query }} color="secondary">
+    <TextLink href={urls.terms} color="secondary">
       {t('common:terms')}
     </TextLink>
   );
 
   const renderPrivacyLink = (
-    <TextLink href={{ pathname: urls.privacy, query }} color="secondary">
+    <TextLink href={urls.privacy} color="secondary">
       {t('common:privacy')}
     </TextLink>
   );

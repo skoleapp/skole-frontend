@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import {
   AutocompleteField,
-  BackButton,
   ButtonLink,
   ContactLink,
   FormSubmitSection,
@@ -29,7 +28,7 @@ import {
   useUpdateUserMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
-import { useForm, useLanguageHeaderContext, usePageRefQuery } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -57,7 +56,6 @@ enum RegisterPhases {
 
 const RegisterPage: NextPage = () => {
   const { t } = useTranslation();
-  const query = usePageRefQuery();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
@@ -232,7 +230,7 @@ const RegisterPage: NextPage = () => {
 
   const renderLoginButton = (
     <FormControl>
-      <ButtonLink href={{ pathname: urls.login, query }} variant="outlined" color="primary">
+      <ButtonLink href={urls.login} variant="outlined" color="primary">
         {t('common:login')}
       </ButtonLink>
     </FormControl>
@@ -351,7 +349,6 @@ const RegisterPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header,
       hideSearch: true,
       hideRegisterButton: true,

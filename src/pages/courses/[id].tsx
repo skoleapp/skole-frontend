@@ -61,7 +61,6 @@ import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { PageRef } from 'types';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -327,7 +326,10 @@ const CourseDetailPage: NextPage = () => {
 
   const uploadResourceHref = {
     pathname: urls.uploadResource,
-    query: { school: schoolId, course: courseId },
+    query: {
+      school: schoolId,
+      course: courseId,
+    },
   };
 
   // Do not render a disabled button at all on mobile.
@@ -432,7 +434,6 @@ const CourseDetailPage: NextPage = () => {
       description: t('course:description', { courseName }),
     },
     topNavbarProps: {
-      renderBackButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
       renderHeaderLeft: renderUploadResourceButton,

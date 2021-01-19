@@ -21,7 +21,7 @@ import {
   useUpdateUserMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
-import { useForm, useLanguageHeaderContext, usePageRefQuery } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
@@ -51,7 +51,6 @@ const EditProfilePage: NextPage = () => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-  const query = usePageRefQuery();
 
   const {
     userMe,
@@ -206,9 +205,7 @@ const EditProfilePage: NextPage = () => {
 
   const renderDeleteProfileLink = (
     <FormControl className={classes.link}>
-      <TextLink href={{ pathname: urls.deleteAccount, query }}>
-        {t('common:deleteAccount')}
-      </TextLink>
+      <TextLink href={urls.deleteAccount}>{t('common:deleteAccount')}</TextLink>
     </FormControl>
   );
 

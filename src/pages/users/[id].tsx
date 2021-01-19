@@ -15,7 +15,6 @@ import EditOutlined from '@material-ui/icons/EditOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
 import {
-  BackButton,
   ButtonLink,
   CourseTableBody,
   ErrorTemplate,
@@ -38,7 +37,6 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { PageRef } from 'types';
 import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -225,17 +223,10 @@ const UserPage: NextPage = () => {
   const renderDesktopUsername = isTabletOrDesktop && renderUsername;
   const renderDesktopTitle = isTabletOrDesktop && renderTitle;
 
-  const pageRefQuery = {
-    ref: PageRef.PROFILE,
-  };
-
   const renderEditProfileButton = (
     <ButtonLink
       className={classes.button}
-      href={{
-        pathname: urls.editProfile,
-        query: pageRefQuery,
-      }}
+      href={urls.editProfile}
       color="primary"
       variant="outlined"
       endIcon={<EditOutlined />}
@@ -248,10 +239,7 @@ const UserPage: NextPage = () => {
   const renderStarredButton = (
     <ButtonLink
       className={classes.button}
-      href={{
-        pathname: urls.starred,
-        query: pageRefQuery,
-      }}
+      href={urls.starred}
       color="primary"
       variant="outlined"
       endIcon={<StarBorderOutlined />}
@@ -344,14 +332,7 @@ const UserPage: NextPage = () => {
   );
 
   const renderVerifyAccountLink = isOwnProfile && verified === false && (
-    <TextLink
-      className={classes.verifyAccount}
-      href={{
-        pathname: urls.verifyAccount,
-        query: pageRefQuery,
-      }}
-      color="primary"
-    >
+    <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
       {t('common:verifyAccount')}
     </TextLink>
   );
@@ -364,14 +345,7 @@ const UserPage: NextPage = () => {
 
   const renderProfileStrengthStepLabel = ({ label, href, completed }: ProfileStrengthStep) =>
     !completed ? (
-      <TextLink
-        href={{
-          pathname: href,
-          query: pageRefQuery,
-        }}
-      >
-        {label}
-      </TextLink>
+      <TextLink href={href}>{label}</TextLink>
     ) : (
       <Typography variant="body2" color="textSecondary">
         {label}
@@ -539,7 +513,6 @@ const UserPage: NextPage = () => {
       description: t('profile:description', { username }),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header: username,
       renderHeaderRight,
     },

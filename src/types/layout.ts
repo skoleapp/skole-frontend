@@ -2,15 +2,14 @@ import { ContainerProps } from '@material-ui/core/Container';
 import { GridProps } from '@material-ui/core/Grid';
 import { ReactNode } from 'react';
 
-import { PageRef } from './routing';
-
 export interface SeoProps {
   title?: string;
   description?: string;
 }
 
-export interface TopNavbarProps extends Pick<MainTemplateProps, 'pageRef'> {
+export interface TopNavbarProps {
   header?: string; // Header text shown on mobile.
+  hideBackButton?: boolean; // Hide the back button on mobile.
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.
   hideDynamicButtons?: boolean; // Hide all dynamic buttons (Login, Register, Get Started, For Teachers/Activity, Starred, Profile) on desktop.
@@ -19,7 +18,6 @@ export interface TopNavbarProps extends Pick<MainTemplateProps, 'pageRef'> {
   hideGetStartedButton?: boolean; // Hide the `Get Started` button on desktop.
   hideForTeachersButton?: boolean; // Hide the `For Teachers` button on desktop.
   hideLanguageButton?: boolean; // Hide the language button on desktop.
-  renderBackButton?: JSX.Element | false;
   renderHeaderLeft?: JSX.Element | false; // Custom element for either left-most slot or for second slot from the left, depending on whether the back button is rendered.
   renderHeaderRight?: JSX.Element | false; // Custom element for right-most slot on mobile.
   renderHeaderRightSecondary?: JSX.Element | false; // Custom element for second slot from the right on mobile.
@@ -39,7 +37,6 @@ export interface MainTemplateProps extends GridProps {
   customBottomNavbar?: JSX.Element | false; // Custom element for bottom navbar.
   hideBottomNavbar?: boolean; // Hide bottom navbar.
   hideFooter?: boolean; // Hide footer.
-  pageRef?: PageRef;
 }
 
 export interface NativeAppProps extends Record<string, unknown> {

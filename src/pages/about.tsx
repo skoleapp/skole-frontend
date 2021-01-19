@@ -6,7 +6,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { BackButton, MainTemplate } from 'components';
-import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -14,7 +13,6 @@ import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { PageRef } from 'types';
 import { ABOUT_ITEMS } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -45,15 +43,9 @@ export const AboutPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const { userMe, profileUrl } = useAuthContext();
   const header = t('about:header');
 
-  const renderBackButton = (
-    <BackButton
-      href={!!userMe && profileUrl}
-      tooltip={!!userMe && t('back-button-tooltips:profile')}
-    />
-  );
+  const renderBackButton = <BackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -67,15 +59,7 @@ export const AboutPage: NextPage = () => {
   );
 
   const renderAboutMenuItems = ABOUT_ITEMS.map(({ icon: Icon, href, text }, i) => (
-    <Link
-      href={{
-        pathname: href,
-        query: {
-          ref: PageRef.ABOUT,
-        },
-      }}
-      key={i}
-    >
+    <Link href={href} key={i}>
       <MenuItem>
         <ListItemIcon>
           <Icon />

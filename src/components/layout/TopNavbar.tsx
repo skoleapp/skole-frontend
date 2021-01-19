@@ -20,7 +20,7 @@ import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import { useAuthContext } from 'context';
-import { useMediaQueries, usePageRefQuery } from 'hooks';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -30,7 +30,7 @@ import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
-import { ButtonLink, IconButtonLink, LanguageButton } from '../shared';
+import { BackButton, ButtonLink, IconButtonLink, LanguageButton } from '../shared';
 import { Logo } from './Logo';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
@@ -61,8 +61,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
-  renderBackButton,
-  pageRef,
+  hideBackButton,
   hideSearch,
   hideDynamicButtons,
   hideLoginButton,
@@ -76,8 +75,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   renderHeaderLeft,
 }) => {
   const classes = useStyles();
-  const { pathname } = useRouter();
-  const query = usePageRefQuery(pageRef);
+  const { asPath } = useRouter();
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
@@ -101,6 +99,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     setActivityPopperAnchorEl(e.currentTarget);
     setActivityPopperOpen(!activityPopperOpen);
   };
+
+  const renderBackButton = !hideBackButton && <BackButton />;
 
   const renderHeader = !!header && (
     <Typography variant="h6" className="truncate-text">
@@ -197,8 +197,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       href={{
         pathname: urls.login,
         query: {
-          ...query,
-          next: pathname,
+          next: asPath,
         },
       }}
       color="secondary"
@@ -209,11 +208,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderRegisterButton = isDesktop && !hideRegisterButton && (
-    <ButtonLink
-      href={{ pathname: urls.register, query }}
-      color="secondary"
-      endIcon={<AddCircleOutlineOutlined />}
-    >
+    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
       {t('common:register')}
     </ButtonLink>
   );
@@ -224,19 +219,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
-  const pageRefQuery = !!pageRef && {
-    ref: pageRef,
-  };
-
   const renderForTeachersButton = !hideForTeachersButton && (
-    <ButtonLink
-      href={{
-        pathname: urls.forTeachers,
-        query: pageRefQuery || {},
-      }}
-      color="secondary"
-      endIcon={<SchoolOutlined />}
-    >
+    <ButtonLink href={urls.forTeachers} color="secondary" endIcon={<SchoolOutlined />}>
       {t('common:forTeachers')}
     </ButtonLink>
   );

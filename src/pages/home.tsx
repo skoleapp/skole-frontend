@@ -510,6 +510,7 @@ const HomePage: NextPage = () => {
       description: t('marketing:description'),
     },
     topNavbarProps: {
+      hideBackButton: true,
       renderHeaderLeft: renderLaunchIconButton,
       renderHeaderRight: renderSettingsButton,
     },

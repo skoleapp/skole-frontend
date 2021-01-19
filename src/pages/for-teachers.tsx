@@ -4,12 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
-import { BackButton, ButtonLink, LandingPageTemplate } from 'components';
+import { ButtonLink, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
-import { NativeAppProps, PageRef } from 'types';
+import { NativeAppProps } from 'types';
 import { FOR_TEACHERS_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -84,12 +84,7 @@ const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   const renderCtaButton = (
     <ButtonLink
       className={classes.ctaButton}
-      href={{
-        pathname: urls.contact,
-        query: {
-          pageRef: PageRef.FOR_TEACHERS,
-        },
-      }}
+      href={urls.contact}
       color="primary"
       variant="contained"
       endIcon={<ArrowForwardOutlined />}
@@ -150,12 +145,10 @@ const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
       description: t('for-teachers:description'),
     },
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header: t('for-teachers:header'),
       hideForTeachersButton: true,
     },
     hideAppStoreBadges: nativeApp,
-    pageRef: PageRef.FOR_TEACHERS,
   };
 
   return (

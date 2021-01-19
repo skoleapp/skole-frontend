@@ -2,7 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { BackButton, ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
+import { ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext } from 'context';
 import { useGraphQlLogoutMutation } from 'generated';
 import { withUserMe } from 'hocs';
@@ -39,7 +39,6 @@ const LogoutPage: NextPage = () => {
     },
     hideBottomNavbar: true,
     topNavbarProps: {
-      renderBackButton: <BackButton />,
       header: t('logout:header'),
       hideSearch: true,
     },

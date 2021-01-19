@@ -26,9 +26,15 @@ export const useSearch = (): UseSearch => {
   const fullWidth = true;
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => setValue(e.target.value);
 
+  const query = school
+    ? {
+        school: school.id,
+      }
+    : {};
+
   const searchUrl = {
     pathname: urls.search,
-    query: school ? { school: school.id } : {},
+    query,
   };
 
   const handleSubmitSearch = async (e: SyntheticEvent): Promise<void> => {

@@ -9,26 +9,24 @@ import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LanguageOutlined from '@material-ui/icons/LanguageOutlined';
 import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
 import { useAuthContext, useLanguageContext, useSettingsContext } from 'context';
-import { useMediaQueries, usePageRefQuery } from 'hooks';
+import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { MainTemplateProps } from 'types';
 import { SETTINGS_ITEMS, urls } from 'utils';
 
-interface Props extends Pick<MainTemplateProps, 'pageRef'> {
+interface Props {
   dialog?: boolean;
 }
 
-export const SettingsList: React.FC<Props> = ({ dialog, pageRef }) => {
+export const SettingsList: React.FC<Props> = ({ dialog }) => {
   const { userMe, verified } = useAuthContext();
   const { handleCloseSettingsDialog } = useSettingsContext();
   const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
   const { handleOpenLanguageMenu } = useLanguageContext();
   const { pathname } = useRouter();
-  const query = usePageRefQuery(pageRef);
   const handleMenuItemClick = (): void | false => !!dialog && handleCloseSettingsDialog();
   const getSelected = (href: string): boolean => !dialog && href === pathname;
 
@@ -38,7 +36,7 @@ export const SettingsList: React.FC<Props> = ({ dialog, pageRef }) => {
   };
 
   const renderAccountMenuItems = SETTINGS_ITEMS.account.map(({ icon: Icon, href, text }, i) => (
-    <Link href={{ pathname: href, query }} key={i}>
+    <Link href={href} key={i}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
         <ListItemIcon>
           <Icon />
@@ -49,7 +47,7 @@ export const SettingsList: React.FC<Props> = ({ dialog, pageRef }) => {
   ));
 
   const renderVerifyAccountMenuItem = verified === false && (
-    <Link href={{ pathname: urls.verifyAccount, query }}>
+    <Link href={urls.verifyAccount}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.verifyAccount)}>
         <ListItemIcon>
           <VerifiedUserOutlined />
@@ -61,7 +59,7 @@ export const SettingsList: React.FC<Props> = ({ dialog, pageRef }) => {
 
   const renderCommonAccountMenuItems = SETTINGS_ITEMS.commonAccount.map(
     ({ icon: Icon, href, text }, i) => (
-      <Link href={{ pathname: href, query }} key={i}>
+      <Link href={href} key={i}>
         <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
           <ListItemIcon>
             <Icon />
@@ -73,7 +71,7 @@ export const SettingsList: React.FC<Props> = ({ dialog, pageRef }) => {
   );
 
   const renderAboutMenuItem = isMobile && (
-    <Link href={{ pathname: urls.about, query }}>
+    <Link href={urls.about}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.about)}>
         <ListItemIcon>
           <HelpOutlined />
@@ -93,7 +91,7 @@ export const SettingsList: React.FC<Props> = ({ dialog, pageRef }) => {
   );
 
   const renderLoginMenuItem = (
-    <Link href={{ pathname: urls.login, query }}>
+    <Link href={urls.login}>
       <MenuItem onClick={handleMenuItemClick}>
         <ListItemIcon>
           <HowToRegOutlined />

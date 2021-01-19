@@ -201,7 +201,6 @@ const ActivityPage: NextPage = () => {
     },
     topNavbarProps: {
       header,
-      renderBackButton,
       renderHeaderRight: renderActionsButton,
     },
   };

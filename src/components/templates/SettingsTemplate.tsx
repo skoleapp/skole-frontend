@@ -44,7 +44,6 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   children,
   topNavbarProps,
-  pageRef,
   ...props
 }) => {
   const classes = useStyles();
@@ -65,7 +64,7 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
     />
   );
 
-  const renderSettingsList = <SettingsList pageRef={pageRef} />;
+  const renderSettingsList = <SettingsList />;
 
   const renderSettingsCard = isTabletOrDesktop && (
     <Grid item xs={12} md={4} lg={3} className={classes.container}>
@@ -110,7 +109,6 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
 
   const layoutProps = {
     ...props,
-    pageRef,
     topNavbarProps: {
       ...topNavbarProps,
       renderBackButton,
