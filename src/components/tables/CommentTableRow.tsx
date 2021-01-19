@@ -24,6 +24,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
   commentPreview: {
     marginLeft: spacing(1),
+    '& p': {
+      margin: 0,
+    },
   },
 }));
 

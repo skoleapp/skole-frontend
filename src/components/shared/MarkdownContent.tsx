@@ -4,9 +4,6 @@ import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles(({ palette }) => ({
   markdown: {
-    '& p': {
-      margin: 0,
-    },
     '& a': {
       color: palette.primary.main,
     },
