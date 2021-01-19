@@ -216,9 +216,16 @@ const HomePage: NextPage = () => {
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
-  const shareTitle = `Skole | ${t('marketing:slogan')}`;
+  const shareTitle = t('home:shareTitle');
   const shareText = t('marketing:description');
-  const shareParams = { shareHeader: t('home:inviteText'), shareTitle, shareText };
+
+  const shareParams = {
+    shareHeader: t('home:inviteText'),
+    shareTitle,
+    shareText,
+    customLink: process.env.FRONTEND_URL,
+  };
+
   const handleClickShareButton = () => handleOpenShareDialog(shareParams);
 
   const { data, loading, error } = useSuggestionsPreviewQuery({

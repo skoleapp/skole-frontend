@@ -10,14 +10,15 @@ const initialShareParams = {
   shareTitle: '',
   shareText: '',
   linkSuffix: '',
+  customLink: '',
 };
 
 export const ShareContextProvider: React.FC = ({ children }) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [shareParams, setShareParams] = useState<ShareParams>(initialShareParams);
 
-  const handleOpenShareDialog = (shareParams: ShareParams) => {
-    setShareParams(shareParams);
+  const handleOpenShareDialog = (newShareParams: ShareParams) => {
+    setShareParams({ ...shareParams, ...newShareParams });
     setShareDialogOpen(true);
   };
 

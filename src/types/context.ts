@@ -79,6 +79,7 @@ export interface ShareParams {
   shareTitle?: string;
   shareText?: string;
   linkSuffix?: string;
+  customLink?: string;
 }
 
 export interface ShareContextType {
