@@ -8,17 +8,7 @@ import React from 'react';
 import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import {
-  BottomNavbar,
-  Footer,
-  Head,
-  LanguageSelectorDialog,
-  Notifications,
-  SettingsDialog,
-  ShareDialog,
-  TopNavbar,
-} from '../layout';
-import { ConfirmationDialog } from '../shared';
+import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   root: {
@@ -95,17 +85,6 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
 
   const renderFooter = isTabletOrDesktop && !hideFooter && <Footer />;
 
-  const renderDialogs = (
-    <>
-      <ConfirmationDialog />
-      <SettingsDialog />
-      <LanguageSelectorDialog />
-      <ShareDialog />
-    </>
-  );
-
-  const renderNotifications = <Notifications />;
-
   return (
     <Grid container direction="column" className={classes.root} {...props}>
       {renderHead}
@@ -113,8 +92,6 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
       {renderContainer}
       {renderBottomNavbar}
       {renderFooter}
-      {renderDialogs}
-      {renderNotifications}
     </Grid>
   );
 };
