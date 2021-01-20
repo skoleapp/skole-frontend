@@ -30,7 +30,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
     </Typography>
   );
 
-  const renderImage = <Image src={coverImage} layout="responsive" width={500} height={300} />;
+  const renderImage = <Image src={coverImage} layout="responsive" width={400} height={300} />;
 
   const layoutProps = {
     seoProps,
