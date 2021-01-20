@@ -1,5 +1,6 @@
+import { readdirSync } from 'fs';
 import { SitemapDocument } from 'generated';
-import { initApolloClient } from 'lib';
+import { initApolloClient, loadMarkdown } from 'lib';
 import { GetServerSideProps } from 'next';
 import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
 
@@ -31,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const staticPaths = [
     '', // Don't want the index page to have a slash.
     urls.addCourse,
+    urls.blogs,
     urls.contact,
     urls.forTeachers,
     urls.guidelines,
@@ -62,6 +64,18 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
           modified: entry.modified,
         });
       }
+    }
+
+    const blogFileNames = readdirSync('markdown/en/blogs');
+    for (const fileName of blogFileNames) {
+      const path = urls.blog(fileName.replace(/\.md$/, ''));
+      // This is quite inefficient to get the blog creation date by rendering the whole
+      // markdown file. Maybe the date could be part of the filename already?
+      const { date } = (await loadMarkdown(path)).data;
+      paths.push({
+        path,
+        modified: date || modified,
+      });
     }
 
     const translatedPaths = [];
