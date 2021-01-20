@@ -1,6 +1,6 @@
 ---
 title: 'Skole Available in App Stores!'
-excerpt: 'Skole is finally available on the Apple App Store and Google Play store.'
+excerpt: 'Skole is finally available on the Apple App Store and Google Play Store.'
 coverImage: '/images/blogs/skole-released-in-app-stores.jpg'
 author: 'Markus Blomqvist'
 date: '2021-01-20'
@@ -22,7 +22,7 @@ Our mission is to make studying more transparent and improve the co-learning cap
 
 ### Packing it All in a Mobile App
 
-Since we fist launched Skole a few weeks back, our app has been available only as a website. However, we know that students love apps! That's why we have now released Skole on the [Apple App Store](https://apps.apple.com/app/skole-for-students/id1547995609) and [Google Play](https://play.google.com/store/apps/details?id=com.skole) store. The app is free, contains no ads or in-app purchases, and requires no registration!
+Since we fist launched Skole a few weeks back, our app has been available only as a website. However, we know that students love apps! That's why we have now released Skole on the [Apple App Store](https://apps.apple.com/app/skole-for-students/id1547995609) and [Google Play Store](https://play.google.com/store/apps/details?id=com.skole). The app is free, contains no ads or in-app purchases, and requires no registration!
 
 We hope that you enjoy using Skole!
 
