@@ -3,7 +3,9 @@ import { loadNamespaces } from 'lib';
 import { GetStaticProps } from 'next';
 import React from 'react';
 
-export default (): JSX.Element => <ErrorTemplate variant="not-found" seoProps={{}} />;
+const NotFoundPage = (): JSX.Element => <ErrorTemplate variant="not-found" seoProps={{}} />;
+
+export default NotFoundPage;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
