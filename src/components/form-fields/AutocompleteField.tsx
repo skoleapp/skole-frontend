@@ -11,6 +11,7 @@ interface Props {
   field: FieldAttributes<FormikValues>;
   form: FormikProps<FormikValues>;
   labelKey: string; // Used to access the label on the object.
+  suffixKey?: string; // Used to access the label on the object which will be appended to the label
   searchKey: string; // Name of the variable that we use as the search key.
   dataKey: string; // Used to access the data after a successful query.
   document: DocumentNode; // GraphQL document the query is made with.
@@ -23,6 +24,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   field,
   form,
   labelKey = 'name',
+  suffixKey,
   searchKey,
   dataKey,
   document,
@@ -45,8 +47,14 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   const fieldError = getIn(errors, name);
   const showError = getIn(touched, name) && !!fieldError;
 
-  const getOptionLabel = (option: Record<symbol, unknown>): string =>
-    R.propOr('', labelKey, option);
+  const getOptionLabel = (option: Record<string, string>): string => {
+    let label = R.propOr('', labelKey, option);
+    const suffix = R.propOr('', suffixKey, option);
+    if (suffix) {
+      label = `${label} - ${suffix}`;
+    }
+    return label;
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void =>
     setInputValue(e.target.value);

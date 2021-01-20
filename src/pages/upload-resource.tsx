@@ -214,6 +214,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
         label={t('forms:course')}
         dataKey="autocompleteCourses"
         searchKey="name"
+        suffixKey="code"
         document={AutocompleteCoursesDocument}
         component={AutocompleteField}
         variables={{
