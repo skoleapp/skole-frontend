@@ -1,20 +1,15 @@
 import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
+import { getT, loadMarkdown, loadNamespaces } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const ScorePage: NextPage<MarkdownPageProps> = ({ content }) => {
-  const { t } = useTranslation();
-
+const ScorePage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
   const layoutProps = {
-    seoProps: {
-      title: t('score:title'),
-      description: t('score:description'),
-    },
+    seoProps,
     topNavbarProps: {
-      header: t('score:header'),
+      header: title,
     },
     content,
   };
@@ -24,11 +19,20 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ content }) => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const _ns = await loadNamespaces(['score'], locale);
-  const { content } = await loadMarkdown('score', locale);
+  const t = await getT(locale, 'score');
+
+  const seoProps = {
+    title: t('title'),
+    description: t('description'),
+  };
+
+  const { data, content } = await loadMarkdown('score', locale);
 
   return {
     props: {
       _ns,
+      seoProps,
+      data,
       content,
     },
   };

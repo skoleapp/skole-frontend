@@ -26,12 +26,13 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useActionsDialog, useLanguageHeaderContext, useMediaQueries } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
+import { SeoPageProps } from 'types';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   paper: {
@@ -62,7 +63,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
 }));
 
-const ActivityPage: NextPage = () => {
+const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
@@ -196,9 +197,7 @@ const ActivityPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('activity:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header,
       renderHeaderRight: renderActionsButton,
@@ -210,11 +209,11 @@ const ActivityPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return (
@@ -225,10 +224,17 @@ const ActivityPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['activity-tooltips'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'activity');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['activity-tooltips'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(ActivityPage);

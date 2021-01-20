@@ -1,3 +1,4 @@
+import { OperationVariables } from '@apollo/client';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 import * as url from 'url';
@@ -34,3 +35,9 @@ export const truncate = (str: string, num: number): string => {
 
   return str;
 };
+
+export const getLanguageHeaderContext = (locale?: string): OperationVariables => ({
+  headers: {
+    'Accept-Language': locale,
+  },
+});

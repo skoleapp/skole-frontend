@@ -6,10 +6,10 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
 import { ButtonLink, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
-import { NativeAppProps } from 'types';
+import { NativeAppPageProps } from 'types';
 import { FOR_TEACHERS_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -65,7 +65,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
+const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -140,10 +140,7 @@ const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('for-teachers:title'),
-      description: t('for-teachers:description'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('for-teachers:header'),
       hideForTeachersButton: true,
@@ -159,11 +156,19 @@ const ForTeachersPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['for-teachers'], locale),
-    nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
-  },
-});
+export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => {
+  const t = await getT(locale, 'for-teachers');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['for-teachers'], locale),
+      nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(ForTeachersPage);

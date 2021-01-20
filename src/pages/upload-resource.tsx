@@ -27,13 +27,14 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext, useOpen } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
 import { ContactDialog } from 'src/components/shared/ContactDialog';
 import { GuidelinesLink } from 'src/components/shared/GuidelinesLink';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -46,7 +47,7 @@ interface UploadResourceFormValues {
   file: File | null;
 }
 
-const UploadResourcePage: NextPage = () => {
+const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
@@ -336,10 +337,7 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('upload-resource:title'),
-      description: t('upload-resource:description'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('upload-resource:header'),
     },
@@ -355,11 +353,11 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return (
@@ -370,10 +368,18 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['upload-resource'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'upload-resource');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['upload-resource'], locale),
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(UploadResourcePage);

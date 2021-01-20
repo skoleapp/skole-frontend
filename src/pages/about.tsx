@@ -8,11 +8,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { BackButton, MainTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
+import { SeoPageProps } from 'types';
 import { ABOUT_ITEMS } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -39,7 +40,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
 }));
 
-export const AboutPage: NextPage = () => {
+export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
@@ -72,9 +73,7 @@ export const AboutPage: NextPage = () => {
   const renderAboutMenuList = <List>{renderAboutMenuItems}</List>;
 
   const layoutProps = {
-    seoProps: {
-      title: t('about:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header,
       renderBackButton,
@@ -91,10 +90,17 @@ export const AboutPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['about'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'about');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['about'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(AboutPage);

@@ -1,3 +1,7 @@
+---
+title: Värden
+---
+
 Våra företags värderingar bygger på integritet, öppenhet, öppenhet och upphovsrätt. Vi vidtar alla åtgärder för att genomdriva dessa principer i vår ansökan.
 
 ### Integritet

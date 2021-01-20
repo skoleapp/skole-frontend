@@ -13,11 +13,12 @@ import {
 import { useSuggestionsQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
+import { SeoPageProps } from 'types';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   paper: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
 }));
 
-const SuggestionsPage: NextPage = () => {
+const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
@@ -85,20 +86,18 @@ const SuggestionsPage: NextPage = () => {
     : renderNotFound;
 
   const layoutProps = {
-    seoProps: {
-      title: t('suggestions:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header,
     },
   };
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return (
@@ -111,10 +110,17 @@ const SuggestionsPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['suggestions'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'suggestions');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['suggestions'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(SuggestionsPage);

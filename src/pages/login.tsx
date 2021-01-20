@@ -18,11 +18,12 @@ import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
 import { LoginMutation, useLoginMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
+import { SeoPageProps } from 'types';
 import { mediaUrl, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -47,7 +48,7 @@ interface LoginFormValues {
   password: string;
 }
 
-const LoginPage: NextPage = () => {
+const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { userMe } = useAuthContext();
   const { t } = useTranslation();
@@ -204,10 +205,7 @@ const LoginPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('login:title'),
-      description: t('login:description'),
-    },
+    seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
       header: t('login:header'),
@@ -224,10 +222,18 @@ const LoginPage: NextPage = () => {
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['login'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'login');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['login'], locale),
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(LoginPage);

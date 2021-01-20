@@ -1,20 +1,15 @@
 import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
+import { getT, loadMarkdown, loadNamespaces } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const ValuesPage: NextPage<MarkdownPageProps> = ({ content }) => {
-  const { t } = useTranslation();
-
+const ValuesPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
   const layoutProps = {
-    seoProps: {
-      title: t('values:title'),
-      description: t('values:description'),
-    },
+    seoProps,
     topNavbarProps: {
-      header: t('values:header'),
+      header: title,
     },
     content,
   };
@@ -24,11 +19,20 @@ const ValuesPage: NextPage<MarkdownPageProps> = ({ content }) => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const _ns = await loadNamespaces(['values'], locale);
-  const { content } = await loadMarkdown('values', locale);
+  const t = await getT(locale, 'values');
+
+  const seoProps = {
+    title: t('title'),
+    description: t('description'),
+  };
+
+  const { data, content } = await loadMarkdown('values', locale);
 
   return {
     props: {
       _ns,
+      seoProps,
+      data,
       content,
     },
   };

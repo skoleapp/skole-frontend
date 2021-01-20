@@ -11,10 +11,11 @@ import { Field, Form, Formik, FormikProps } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import React from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -27,7 +28,7 @@ export interface DeleteAccountFormValues {
   password: string;
 }
 
-export const DeleteAccountPage: NextPage = () => {
+export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const {
     formRef,
     handleMutationErrors,
@@ -122,9 +123,7 @@ export const DeleteAccountPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('delete-account:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('delete-account:header'),
     },
@@ -137,10 +136,17 @@ export const DeleteAccountPage: NextPage = () => {
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['delete-account'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'delete-account');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['delete-account'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(DeleteAccountPage);

@@ -21,7 +21,6 @@ import {
   ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
-  LoadingTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
@@ -39,9 +38,10 @@ import {
   useNotificationsContext,
 } from 'context';
 import {
+  CourseDocument,
+  CourseQueryResult,
   DeleteCourseMutation,
   SubjectObjectType,
-  useCourseQuery,
   useDeleteCourseMutation,
 } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
@@ -55,13 +55,14 @@ import {
   useTabs,
   useVotes,
 } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent } from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { urls } from 'utils';
+import { SeoPageProps } from 'types';
+import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   mobileContainer: {
@@ -88,19 +89,22 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-const CourseDetailPage: NextPage = () => {
+const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
+  seoProps,
+  data,
+  error,
+}) => {
   const classes = useStyles();
-  const { query } = useRouter();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
-  const variables = R.pick(['id', 'page', 'pageSize'], query);
-  const context = useLanguageHeaderContext();
-  const { data, loading, error } = useCourseQuery({ variables, context });
+  const { query } = useRouter();
   const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
   const { searchUrl } = useSearch();
-  const course = R.propOr(null, 'course', data);
+  const context = useLanguageHeaderContext();
+  const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const course = R.prop('course', data);
   const courseName = R.propOr('', 'name', course);
   const courseCode = R.propOr('-', 'code', course);
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
@@ -429,10 +433,7 @@ const CourseDetailPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: courseName,
-      description: t('course:description', { courseName }),
-    },
+    seoProps,
     topNavbarProps: {
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
@@ -441,30 +442,22 @@ const CourseDetailPage: NextPage = () => {
     customBottomNavbar: renderCustomBottomNavbar,
   };
 
-  if (loading) {
-    return <LoadingTemplate />;
-  }
-
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
-  if (course) {
-    return (
-      <MainTemplate {...layoutProps}>
-        {renderMobileContent}
-        {renderDesktopContent}
-        {renderInfoDialog}
-        {renderActionsDialog}
-      </MainTemplate>
-    );
-  }
-
-  return <ErrorTemplate variant="not-found" />;
+  return (
+    <MainTemplate {...layoutProps}>
+      {renderMobileContent}
+      {renderDesktopContent}
+      {renderInfoDialog}
+      {renderActionsDialog}
+    </MainTemplate>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => ({
@@ -474,11 +467,44 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 
 const namespaces = ['course', 'course-tooltips', 'discussion', 'discussion-tooltips'];
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(namespaces, locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
+  const apolloClient = initApolloClient();
+  const t = await getT(locale, 'course');
+  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const context = getLanguageHeaderContext(locale);
+
+  const { data, error = null } = await apolloClient.query({
+    query: CourseDocument,
+    variables,
+    context,
+  });
+
+  const course = R.prop('course', data);
+
+  if (!course) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const courseName = R.propOr('', 'name', course);
+
+  const seoProps = {
+    title: courseName,
+    description: t('description', { courseName }),
+  };
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+      _ns: await loadNamespaces(namespaces, locale),
+      seoProps,
+      data,
+      error,
+    },
+    revalidate: MAX_REVALIDATION_INTERVAL,
+  };
+};
 
 const withWrappers = R.compose(withUserMe, withDiscussion);
 

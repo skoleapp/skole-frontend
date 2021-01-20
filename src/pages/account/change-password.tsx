@@ -9,9 +9,10 @@ import { Field, Form, Formik, FormikProps } from 'formik';
 import { ChangePasswordMutation, useChangePasswordMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
+import { SeoPageProps } from 'types';
 import { PASSWORD_MIN_LENGTH } from 'utils';
 import * as Yup from 'yup';
 
@@ -28,7 +29,7 @@ interface ChangePasswordFormValues {
   confirmNewPassword: string;
 }
 
-const ChangePasswordPage: NextPage = () => {
+const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const {
     formRef,
     handleMutationErrors,
@@ -113,9 +114,7 @@ const ChangePasswordPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('change-password:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('change-password:header'),
     },
@@ -128,10 +127,17 @@ const ChangePasswordPage: NextPage = () => {
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['change-password'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'change-password');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['change-password'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(ChangePasswordPage);

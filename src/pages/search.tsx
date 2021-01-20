@@ -46,12 +46,13 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import { SeoPageProps } from 'types';
 import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
@@ -134,7 +135,7 @@ interface ValidFilter {
   value: string;
 }
 
-const SearchPage: NextPage = () => {
+const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
@@ -559,10 +560,7 @@ const SearchPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('search:title'),
-      description: t('search:description'),
-    },
+    seoProps,
     customTopNavbar,
     topNavbarProps: {
       hideSearch: true,
@@ -570,11 +568,11 @@ const SearchPage: NextPage = () => {
   };
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return (
@@ -585,10 +583,18 @@ const SearchPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['search'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'search');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['search'], locale),
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(SearchPage);

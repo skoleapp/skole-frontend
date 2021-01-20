@@ -36,6 +36,7 @@ export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is 
 export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
 export const NATIVE_APP_USER_AGENT = 'skole-native-app';
+export const MAX_REVALIDATION_INTERVAL = 1; // Seconds.
 
 // The trailing slash in /account/ means to disallow all subpages.
 export const DISALLOWED_PATHS = [
@@ -52,7 +53,6 @@ export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
 export const DEFAULT_NAMESPACES = [
   'common',
-  'marketing',
   'error',
   'not-found',
   'languages',

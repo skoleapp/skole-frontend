@@ -9,13 +9,13 @@ import { BackButton, MainTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs, useMediaQueries } from 'hooks';
-import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
+import { getT, loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { MarkdownPageData } from 'types';
+import { MarkdownPageData, SeoPageProps } from 'types';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
@@ -42,11 +42,11 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
 }));
 
-interface Props extends Record<string, unknown> {
+interface Props extends SeoPageProps {
   blogs: MarkdownPageData[];
 }
 
-const BlogsPage: NextPage<Props> = ({ blogs }) => {
+const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
@@ -99,11 +99,7 @@ const BlogsPage: NextPage<Props> = ({ blogs }) => {
   const renderBlogs = <TableBody>{mapBlogs}</TableBody>;
 
   const layoutProps = {
-    seoProps: {
-      title: t('blogs:title'),
-      description: t('blogs:description'),
-      header,
-    },
+    seoProps,
     topNavbarProps: {
       header,
     },
@@ -121,6 +117,13 @@ const BlogsPage: NextPage<Props> = ({ blogs }) => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const _ns = await loadNamespaces(['blogs'], locale);
+  const t = await getT(locale, 'blogs');
+
+  const seoProps = {
+    title: t('title'),
+    description: t('description'),
+  };
+
   const fileNames = readdirSync('markdown/en/blogs');
   const blogs = [];
 
@@ -133,6 +136,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
       _ns,
+      seoProps,
       blogs,
     },
   };

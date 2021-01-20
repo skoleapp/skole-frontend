@@ -1,3 +1,7 @@
+---
+title: Guidelines
+---
+
 We expect our users to follow these guidelines. The guidelines are made for maintaining a healthy community that does not violate our terms and follows all applicable laws and regulations.
 
 ### Uploading Material

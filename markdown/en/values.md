@@ -1,3 +1,7 @@
+---
+title: Values
+---
+
 Our company values are built around privacy, transparency, openness and copyrights. We take every measure to enforce these principles in our application.
 
 ### Privacy

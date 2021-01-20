@@ -10,7 +10,6 @@ import {
   ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
-  LoadingTemplate,
   NotFoundBox,
   PaginatedTable,
   ResponsiveDialog,
@@ -20,33 +19,30 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { useSchoolQuery } from 'generated';
+import { SchoolDocument, SchoolQueryResult } from 'generated';
 import { withUserMe } from 'hocs';
-import {
-  useActionsDialog,
-  useInfoDialog,
-  useLanguageHeaderContext,
-  useMediaQueries,
-  useSearch,
-} from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { useActionsDialog, useInfoDialog, useMediaQueries, useSearch } from 'hooks';
+import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { urls } from 'utils';
+import { SeoPageProps } from 'types';
+import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
 
-const SchoolDetailPage: NextPage = () => {
+const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
+  seoProps,
+  data,
+  error,
+}) => {
   const { verified, verificationRequiredTooltip } = useAuthContext();
   const { t } = useTranslation();
   const { isTabletOrDesktop, isMobile } = useMediaQueries();
   const { searchUrl } = useSearch();
   const { query } = useRouter();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
-  const context = useLanguageHeaderContext();
-  const { data, loading, error } = useSchoolQuery({ variables, context });
-  const school = R.propOr(null, 'school', data);
+  const school = R.prop('school', data);
   const schoolId = R.propOr('', 'id', school);
   const schoolName = R.propOr('', 'name', school);
   const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school);
@@ -242,10 +238,7 @@ const SchoolDetailPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: schoolName,
-      description: t('school:description', { schoolName }),
-    },
+    seoProps,
     topNavbarProps: {
       header,
       renderHeaderLeft: renderAddCourseButton,
@@ -261,28 +254,20 @@ const SchoolDetailPage: NextPage = () => {
     },
   };
 
-  if (loading) {
-    return <LoadingTemplate />;
-  }
-
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
-  if (school) {
-    return (
-      <TabTemplate {...layoutProps}>
-        {renderInfoDialog}
-        {renderActionsDialog}
-      </TabTemplate>
-    );
-  }
-
-  return <ErrorTemplate variant="not-found" />;
+  return (
+    <TabTemplate {...layoutProps}>
+      {renderInfoDialog}
+      {renderActionsDialog}
+    </TabTemplate>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -292,10 +277,43 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['school', 'school-tooltips'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
+  const apolloClient = initApolloClient();
+  const t = await getT(locale, 'school');
+  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const context = getLanguageHeaderContext(locale);
+
+  const { data, error = null } = await apolloClient.query({
+    query: SchoolDocument,
+    variables,
+    context,
+  });
+
+  const school = R.prop('school', data);
+
+  if (!school) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const schoolName = R.propOr('', 'name', school);
+
+  const seoProps = {
+    title: schoolName,
+    description: t('description', { schoolName }),
+  };
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+      _ns: await loadNamespaces(['school', 'school-tooltips'], locale),
+      seoProps,
+      data,
+      error,
+    },
+    revalidate: MAX_REVALIDATION_INTERVAL,
+  };
+};
 
 export default withUserMe(SchoolDetailPage);

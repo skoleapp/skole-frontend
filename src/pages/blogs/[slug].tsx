@@ -10,6 +10,7 @@ import React from 'react';
 import { MarkdownPageProps } from 'types';
 
 const BlogPostPage: NextPage<MarkdownPageProps> = ({
+  seoProps,
   data: { title, excerpt, coverImage = '', author, date, minutesToRead = 0 },
   content,
 }) => {
@@ -32,10 +33,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
   const renderImage = <Image src={coverImage} layout="responsive" width={500} height={300} />;
 
   const layoutProps = {
-    seoProps: {
-      title,
-      description: excerpt,
-    },
+    seoProps,
     topNavbarProps: {
       header: title,
     },
@@ -93,9 +91,15 @@ export const getStaticProps = async ({
   const _ns = await loadNamespaces(['blogs'], locale);
   const { data, content } = await loadMarkdown(`blogs/${slug}`);
 
+  const seoProps = {
+    title: data.title,
+    description: data.excerpt,
+  };
+
   return {
     props: {
       _ns,
+      seoProps,
       data,
       content,
     },

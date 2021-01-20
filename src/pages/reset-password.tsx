@@ -11,10 +11,11 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { SeoPageProps } from 'types';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -38,7 +39,7 @@ interface PasswordFormValues {
   confirmNewPassword: string;
 }
 
-const ResetPasswordPage: NextPage = () => {
+const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const {
     formRef: emailFormRef,
     handleMutationErrors: handleEmailFormMutationErrors,
@@ -209,10 +210,7 @@ const ResetPasswordPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('reset-password:title'),
-      description: t('reset-password:description'),
-    },
+    seoProps,
     topNavbarProps: {
       header,
     },
@@ -231,10 +229,18 @@ const ResetPasswordPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['reset-password'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'reset-password');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['reset-password'], locale),
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(ResetPasswordPage);

@@ -7,7 +7,3 @@ export interface MarkdownPageData {
   minutesToRead?: string;
   slug?: string;
 }
-export interface MarkdownPageProps extends Record<string, unknown> {
-  data: MarkdownPageData;
-  content: string;
-}

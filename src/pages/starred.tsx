@@ -12,13 +12,14 @@ import { useAuthContext } from 'context';
 import { useStarredQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import { SeoPageProps } from 'types';
 
-const StarredPage: NextPage = () => {
+const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const variables = R.pick(['page', 'pageSize'], query);
@@ -59,9 +60,7 @@ const StarredPage: NextPage = () => {
     : renderResourcesNotFound;
 
   const layoutProps = {
-    seoProps: {
-      title: t('starred:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header,
     },
@@ -78,20 +77,27 @@ const StarredPage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return <TabTemplate {...layoutProps} />;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['starred'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'starred');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['starred'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(StarredPage);
