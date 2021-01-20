@@ -1,8 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { DISALLOWED_PATHS } from 'utils';
 
-export default (): void => {};
-
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const disallowed = [];
 
@@ -26,3 +24,7 @@ Sitemap: ${process.env.FRONTEND_URL}/sitemap.xml
     props: {},
   };
 };
+
+const RobotsTxt = (): void => {};
+
+export default RobotsTxt;

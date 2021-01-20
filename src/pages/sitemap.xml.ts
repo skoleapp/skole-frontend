@@ -4,8 +4,6 @@ import { initApolloClient, loadMarkdown } from 'lib';
 import { GetServerSideProps } from 'next';
 import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
 
-export default (): void => {};
-
 const toXhtmlLink = (path: string, langName: string, langPath: string): string => {
   // If the `path` is '/sv/foo' and `langPath` is '/fi', the `hrefPath` will become '/fi/foo'.
   // Demo: https://regex101.com/r/J1P2mj/1/
@@ -127,3 +125,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     props: {},
   };
 };
+
+const SitemapXml = (): void => {};
+
+export default SitemapXml;
