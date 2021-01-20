@@ -1,3 +1,4 @@
+import { UserDocument } from '__generated__/src/graphql/common.graphql';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Chip from '@material-ui/core/Chip';
@@ -18,7 +19,6 @@ import {
   ButtonLink,
   CourseTableBody,
   ErrorTemplate,
-  LoadingTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
@@ -28,16 +28,17 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { BadgeObjectType, useUserQuery } from 'generated';
+import { BadgeObjectType, UserQueryResult } from 'generated';
 import { withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useMediaQueries, useTabs } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { useDayjs, useMediaQueries, useTabs } from 'hooks';
+import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { mediaUrl, urls } from 'utils';
+import { SeoPageProps } from 'types';
+import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   paper: {
@@ -130,7 +131,7 @@ interface ProfileStrengthStep {
   completed: boolean;
 }
 
-const UserPage: NextPage = () => {
+const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, error }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
@@ -138,9 +139,7 @@ const UserPage: NextPage = () => {
   const { userMeId, school, subject, verified } = useAuthContext();
   const { query } = useRouter();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
-  const context = useLanguageHeaderContext();
-  const { data, loading, error } = useUserQuery({ variables, context });
-  const user = R.propOr(null, 'user', data);
+  const user = R.prop('user', data);
   const rank = R.propOr('', 'rank', user);
   const username = R.propOr('-', 'username', user);
   const avatar = R.propOr('', 'avatar', user);
@@ -508,39 +507,28 @@ const UserPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: username,
-      description: t('profile:description', { username }),
-    },
+    seoProps,
     topNavbarProps: {
       header: username,
       renderHeaderRight,
     },
   };
 
-  if (loading) {
-    return <LoadingTemplate />;
-  }
-
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
-  if (user) {
-    return (
-      <MainTemplate {...layoutProps}>
-        {renderResponsiveContent}
-        {renderMobileActionsCard}
-        {renderCreatedContent}
-      </MainTemplate>
-    );
-  }
-
-  return <ErrorTemplate variant="not-found" />;
+  return (
+    <MainTemplate {...layoutProps}>
+      {renderResponsiveContent}
+      {renderMobileActionsCard}
+      {renderCreatedContent}
+    </MainTemplate>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -550,10 +538,43 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['profile', 'profile-strength'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
+  const apolloClient = initApolloClient();
+  const t = await getT(locale, 'profile');
+  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const context = getLanguageHeaderContext(locale);
+
+  const { data, error = null } = await apolloClient.query({
+    query: UserDocument,
+    variables,
+    context,
+  });
+
+  const user = R.prop('user', data);
+
+  if (!user) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const username = R.propOr('', 'username', user);
+
+  const seoProps = {
+    title: username,
+    description: t('description', { username }),
+  };
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+      _ns: await loadNamespaces(['profile', 'profile-strength'], locale),
+      seoProps,
+      data,
+      error,
+    },
+    revalidate: MAX_REVALIDATION_INTERVAL,
+  };
+};
 
 export default withUserMe(UserPage);

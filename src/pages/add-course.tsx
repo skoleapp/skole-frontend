@@ -23,11 +23,12 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -39,7 +40,7 @@ interface CreateCourseFormValues {
   general: string;
 }
 
-const AddCoursePage: NextPage = () => {
+const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
   const { userMe, school: _school } = useAuthContext();
@@ -199,10 +200,7 @@ const AddCoursePage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('add-course:title'),
-      description: t('add-course:description'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('add-course:header'),
     },
@@ -213,20 +211,28 @@ const AddCoursePage: NextPage = () => {
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['add-course'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'add-course');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['add-course'], locale),
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(AddCoursePage);

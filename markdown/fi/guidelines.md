@@ -1,3 +1,7 @@
+---
+title: Ohjeet
+---
+
 Odotamme käyttäjien noudattavan näitä ohjeita. Ohjeet on tehty terveellisen yhteisön ylläpitämiseksi, joka ei riko ehtojamme ja noudattaa kaikkia sovellettavia lakeja ja määräyksiä.
 
 ### Materiaalin lataaminen

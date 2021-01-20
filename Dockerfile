@@ -57,7 +57,7 @@ COPY --from=build --chown=user:user /home/user/app/src src
 COPY --from=build --chown=user:user /home/user/app/.next .next
 COPY --from=build --chown=user:user /home/user/app/node_modules node_modules
 COPY --from=build --chown=user:user /home/user/app/next.config.js next.config.js
-COPY --from=build --chown=user:user /home/user/app/i18n.json i18n.json
+COPY --from=build --chown=user:user /home/user/app/i18n.js i18n.js
 COPY --from=build --chown=user:user /home/user/app/public public
 
 CMD ["next", "start", "-p", "3001"]

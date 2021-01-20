@@ -2,6 +2,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Image from 'next/image';
 import React from 'react';
+import { SeoPageProps } from 'types';
 
 import { MainTemplate } from './MainTemplate';
 
@@ -30,14 +31,11 @@ const useStyles = makeStyles(({ palette }) => ({
   },
 }));
 
-export const LoadingTemplate: React.FC = () => {
+export const LoadingTemplate: React.FC<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
 
   const layoutProps = {
-    seoProps: {
-      title: '',
-      description: '',
-    },
+    seoProps,
     hideBottomNavbar: true,
     hideFooter: true,
     topNavbarProps: {

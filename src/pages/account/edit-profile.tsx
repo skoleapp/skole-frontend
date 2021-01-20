@@ -22,10 +22,11 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -46,7 +47,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-const EditProfilePage: NextPage = () => {
+const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const classes = useStyles();
   const context = useLanguageHeaderContext();
@@ -237,9 +238,7 @@ const EditProfilePage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('edit-profile:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('edit-profile:header'),
     },
@@ -252,10 +251,17 @@ const EditProfilePage: NextPage = () => {
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['edit-profile'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'edit-profile');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['edit-profile'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(EditProfilePage);

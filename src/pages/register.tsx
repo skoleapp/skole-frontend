@@ -29,10 +29,11 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
 import React, { useState } from 'react';
+import { SeoPageProps } from 'types';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -54,7 +55,7 @@ enum RegisterPhases {
   REGISTER_COMPLETE = 'register-complete',
 }
 
-const RegisterPage: NextPage = () => {
+const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
@@ -343,10 +344,7 @@ const RegisterPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('register:title'),
-      description: t('register:description'),
-    },
+    seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
       header,
@@ -369,10 +367,18 @@ const RegisterPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['register'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'register');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['register'], locale),
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(RegisterPage);

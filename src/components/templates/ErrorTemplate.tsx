@@ -5,6 +5,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
+import { SeoProps } from 'types';
 
 import { BackButton, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
@@ -33,9 +34,10 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 interface Props {
   variant: 'error' | 'offline' | 'not-found';
+  seoProps: SeoProps;
 }
 
-export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
+export const ErrorTemplate: React.FC<Props> = ({ variant, seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
@@ -59,6 +61,7 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
 
   const layoutProps = {
     seoProps: {
+      ...seoProps,
       title,
     },
     topNavbarProps: {

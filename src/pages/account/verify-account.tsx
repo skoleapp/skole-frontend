@@ -12,17 +12,18 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 
 interface EmailFormValues {
   general: string;
 }
 
-const VerifyAccountPage: NextPage = () => {
+const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const {
     formRef,
     handleMutationErrors,
@@ -233,25 +234,30 @@ const VerifyAccountPage: NextPage = () => {
     renderConfirmationError;
 
   const layoutProps = {
-    seoProps: {
-      title: t('verify-account:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header,
     },
   };
 
   if (loading) {
-    return <LoadingTemplate />;
+    return <LoadingTemplate seoProps={seoProps} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderContent}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['verify-account'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'verify-account');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['verify-account'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(VerifyAccountPage);

@@ -3,7 +3,7 @@ import { loadNamespaces } from 'lib';
 import { GetStaticProps } from 'next';
 import React from 'react';
 
-export default (): JSX.Element => <ErrorTemplate variant="error" />;
+export default (): JSX.Element => <ErrorTemplate variant="error" seoProps={{}} />;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {

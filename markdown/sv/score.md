@@ -1,3 +1,7 @@
+---
+title: Poäng
+---
+
 De viktigaste aktiviteterna på Skole är att lägga till kommentarer, kurser och material som kallas resurser. Vissa poäng behövs inte för någon av dessa aktiviteter så de är tillgängliga för alla.
 
 Din poäng i Skole är ett grovt mått på hur mycket de andra eleverna litar på ditt och gillar ditt innehåll. Poäng tjänas genom att få uppröstningar från kurser, resurser och kommentarer. Ju högre poäng du har, desto mer litar andra användare på dig och innehållet du laddar upp. Genom att öka din poäng får du vissa privilegier som märken som endast ges för användare med tillräckligt hög poäng.

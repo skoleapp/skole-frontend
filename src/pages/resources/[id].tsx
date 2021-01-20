@@ -20,7 +20,6 @@ import {
   ErrorTemplate,
   InfoDialogContent,
   LoadingBox,
-  LoadingTemplate,
   MainTemplate,
   ResourceBottomToolbar,
   ResourceTopToolbar,
@@ -41,10 +40,11 @@ import {
 import {
   DeleteResourceMutation,
   DownloadResourceMutation,
+  ResourceDocument,
   ResourceObjectType,
+  ResourceQueryResult,
   useDeleteResourceMutation,
   useDownloadResourceMutation,
-  useResourceQuery,
 } from 'generated';
 import { withDiscussion, withPdfViewer, withUserMe } from 'hocs';
 import {
@@ -56,15 +56,15 @@ import {
   useTabs,
   useVotes,
 } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER_RADIUS } from 'theme';
-import { PdfViewerProps } from 'types';
-import { mediaUrl, urls } from 'utils';
+import { PdfViewerProps, SeoPageProps } from 'types';
+import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
 // Here we make an exception for exclusive usage of named exports and use a default import to make sure this is never imported server-side.
 // Reference: https://github.com/wojtekmaj/react-pdf/issues/136#issuecomment-716643894.
@@ -101,17 +101,18 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-const ResourceDetailPage: NextPage = () => {
+const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
+  seoProps,
+  data,
+  error,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { query } = useRouter();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
-  const variables = R.pick(['id', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { userMe, verified } = useAuthContext();
-  const { data, loading, error } = useResourceQuery({ variables, context });
   const [resource, setResource] = useState<ResourceObjectType | null>(null);
   const resourceTitle = R.propOr('', 'title', resource);
   const resourceDate = R.propOr('', 'date', resource);
@@ -187,9 +188,9 @@ const ResourceDetailPage: NextPage = () => {
     ownContentTooltip: t('resource-tooltips:voteOwnContent'),
   });
 
-  // Update state after data fetching is complete.
+  // Set initial state.
   useEffect(() => {
-    const initialResource = R.propOr(null, 'resource', data);
+    const initialResource = R.prop('resource', data);
     setResource(initialResource);
   }, [data]);
 
@@ -497,10 +498,7 @@ const ResourceDetailPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title,
-      description: t('resource:description', { resourceTitle }),
-    },
+    seoProps,
     customBottomNavbar: renderCustomBottomNavbar,
     topNavbarProps: {
       renderHeaderLeft: renderShareButton,
@@ -509,30 +507,22 @@ const ResourceDetailPage: NextPage = () => {
     },
   };
 
-  if (loading) {
-    return <LoadingTemplate />;
-  }
-
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
-  if (resource) {
-    return (
-      <MainTemplate {...layoutProps}>
-        {renderMobileContent}
-        {renderDesktopContent}
-        {renderInfoDialog}
-        {renderActionsDialog}
-      </MainTemplate>
-    );
-  }
-
-  return <ErrorTemplate variant="not-found" />;
+  return (
+    <MainTemplate {...layoutProps}>
+      {renderMobileContent}
+      {renderDesktopContent}
+      {renderInfoDialog}
+      {renderActionsDialog}
+    </MainTemplate>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => ({
@@ -542,11 +532,45 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 
 const namespaces = ['resource', 'resource-tooltips', 'discussion', 'discussion-tooltips'];
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(namespaces, locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
+  const apolloClient = initApolloClient();
+  const t = await getT(locale, 'resource');
+  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const context = getLanguageHeaderContext(locale);
+
+  const { data, error = null } = await apolloClient.query({
+    query: ResourceDocument,
+    variables,
+    context,
+  });
+
+  const resource = R.prop('resource', data);
+
+  if (!resource) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const resourceTitle = R.propOr('', 'title', resource);
+  const resourceDate = R.propOr('', 'date', resource);
+
+  const seoProps = {
+    title: `${resourceTitle} - ${resourceDate}`,
+    description: t('description', { resourceTitle }),
+  };
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+      _ns: await loadNamespaces(namespaces, locale),
+      seoProps,
+      data,
+      error,
+    },
+    revalidate: MAX_REVALIDATION_INTERVAL,
+  };
+};
 
 const withWrappers = R.compose(withUserMe, withPdfViewer, withDiscussion);
 

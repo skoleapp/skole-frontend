@@ -81,7 +81,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
 
   const renderSlogan = (
     <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
-      {t('marketing:slogan')}
+      {t('common:slogan')}
     </Typography>
   );
 

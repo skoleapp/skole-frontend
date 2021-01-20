@@ -8,11 +8,11 @@ import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'comp
 import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { NativeAppProps } from 'types';
+import { NativeAppPageProps } from 'types';
 import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -74,7 +74,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
+const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
@@ -87,7 +87,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
 
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
-      {t('marketing:description')}
+      {t('common:description')}
     </Typography>
   );
 
@@ -166,10 +166,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('index:title'),
-      description: t('marketing:description'),
-    },
+    seoProps,
     topNavbarProps: {
       hideBackButton: true,
       hideLogo: isMobile,
@@ -180,7 +177,7 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
 
   // Show loading screen when redirecting to home page.
   if (userMe) {
-    return <LoadingTemplate />;
+    return <LoadingTemplate seoProps={seoProps} />;
   }
 
   return (
@@ -191,11 +188,20 @@ const LandingPage: NextPage<NativeAppProps> = ({ nativeApp }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['index'], locale),
-    nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
-  },
-});
+export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => {
+  const tIndex = await getT(locale, 'index');
+  const tCommon = await getT(locale, 'common');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['index'], locale),
+      nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
+      seoProps: {
+        title: tIndex('title'),
+        description: tCommon('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(LandingPage);

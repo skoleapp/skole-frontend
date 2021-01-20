@@ -1,3 +1,7 @@
+---
+title: Riktlinjer
+---
+
 Vi förväntar oss att våra användare följer dessa riktlinjer. Riktlinjerna är gjorda för att upprätthålla en hälsosam gemenskap som inte bryter mot våra villkor och följer alla tillämpliga lagar och regler.
 
 ### Överför material

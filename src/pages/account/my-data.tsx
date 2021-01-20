@@ -8,16 +8,17 @@ import { Form, Formik, FormikProps } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { useState } from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 
 interface FormValues {
   general: string;
 }
 
-const MyDataPage: NextPage = () => {
+const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { formRef, handleMutationErrors, onError, setUnexpectedFormError } = useForm<FormValues>();
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
@@ -99,9 +100,7 @@ const MyDataPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('my-data:title'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('my-data:header'),
     },
@@ -119,10 +118,17 @@ const MyDataPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['my-data'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'my-data');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['my-data'], locale),
+      seoProps: {
+        title: t('title'),
+      },
+    },
+  };
+};
 
 export default withUserMe(MyDataPage);

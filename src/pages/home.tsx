@@ -33,13 +33,13 @@ import { useAuthContext, useShareContext } from 'context';
 import { useSuggestionsPreviewQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
-import { ButtonVariant, MuiColor, TextColor, TextVariant } from 'types';
+import { ButtonVariant, MuiColor, SeoPageProps, TextColor, TextVariant } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
@@ -208,7 +208,7 @@ interface Shortcut {
   href: string | UrlObject;
 }
 
-const HomePage: NextPage = () => {
+const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { userMe, verified, school, subject } = useAuthContext();
   const { isMobile } = useMediaQueries();
@@ -217,7 +217,7 @@ const HomePage: NextPage = () => {
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
   const shareTitle = t('home:shareTitle');
-  const shareText = t('marketing:description');
+  const shareText = t('common:description');
 
   const shareParams = {
     shareHeader: t('home:inviteText'),
@@ -268,7 +268,7 @@ const HomePage: NextPage = () => {
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
-      {t('marketing:description')}
+      {t('common:description')}
     </Typography>
   );
 
@@ -512,10 +512,7 @@ const HomePage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('home:title'),
-      description: t('marketing:description'),
-    },
+    seoProps,
     topNavbarProps: {
       hideBackButton: true,
       renderHeaderLeft: renderLaunchIconButton,
@@ -527,15 +524,15 @@ const HomePage: NextPage = () => {
   };
 
   if (loading) {
-    return <LoadingTemplate />;
+    return <LoadingTemplate seoProps={seoProps} />;
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" />;
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" />;
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return (
@@ -547,10 +544,19 @@ const HomePage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['home'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const tHome = await getT(locale, 'home');
+  const tCommon = await getT(locale, 'common');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['home'], locale),
+      seoProps: {
+        title: tHome('title'),
+        description: tCommon('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(HomePage);

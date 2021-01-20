@@ -3,14 +3,13 @@ import { useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
+import { SeoPageProps } from 'types';
 import { LS_LOGOUT_KEY, urls } from 'utils';
 
 import { withCommonContexts } from './withCommonContexts';
 
 // Fetch user from API and set context with the value.
-export const withUserMe = <T extends Record<string, unknown>>(
-  PageComponent: NextPage<T>,
-): NextPage<T> => {
+export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): NextPage<T> => {
   const WithUserMe: NextPage<T> = (pageProps: T) => {
     const { authLoading, authNetworkError } = useUserMe();
 
@@ -27,14 +26,14 @@ export const withUserMe = <T extends Record<string, unknown>>(
     }, []);
 
     if (authNetworkError) {
-      return <ErrorTemplate variant="offline" />;
+      return <ErrorTemplate variant="offline" seoProps={pageProps.seoProps} />;
     }
 
     if (!authLoading && !authNetworkError) {
       return <PageComponent {...pageProps} />;
     }
 
-    return <LoadingTemplate />;
+    return <LoadingTemplate seoProps={pageProps.seoProps} />;
   };
 
   return withCommonContexts(WithUserMe);

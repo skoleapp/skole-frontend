@@ -1,5 +1,0 @@
-{
-  "locales": ["en", "fi", "sv"],
-  "defaultLocale": "en",
-  "loader": false
-}

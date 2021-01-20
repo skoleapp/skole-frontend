@@ -15,7 +15,7 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
         name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
       />
-      <meta name="description" content={description} />
+      {!!description && <meta name="description" content={description} />}
       <title>{title}</title>
     </>
   );
@@ -46,7 +46,7 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
   // TODO: Add og:image tag.
   const renderOgMetaTags = (
     <>
-      <meta property="og:description" content={description} />
+      {!!description && <meta property="og:description" content={description} />}
       <meta property="og:title" content={title} />
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Skole" />

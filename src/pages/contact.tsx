@@ -4,9 +4,10 @@ import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
+import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
+import { SeoPageProps } from 'types';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -24,7 +25,7 @@ interface ContactFormValues {
   message: string;
 }
 
-const ContactPage: NextPage = () => {
+const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
@@ -105,10 +106,7 @@ const ContactPage: NextPage = () => {
   );
 
   const layoutProps = {
-    seoProps: {
-      title: t('contact:title'),
-      description: t('contact:description'),
-    },
+    seoProps,
     topNavbarProps: {
       header: t('contact:header'),
     },
@@ -117,10 +115,18 @@ const ContactPage: NextPage = () => {
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['contact'], locale),
-  },
-});
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  const t = await getT(locale, 'contact');
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['contact'], locale),
+      seoProps: {
+        title: t('title'),
+        description: t('description'),
+      },
+    },
+  };
+};
 
 export default withUserMe(ContactPage);

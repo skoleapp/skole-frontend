@@ -1,3 +1,7 @@
+---
+title: Arvot
+---
+
 Yrityksemme arvot rakentuvat yksityisyyden, läpinäkyvyyden, avoimuuden ja tekijänoikeuksien ympärille. Teemme kaikkemme näiden periaatteiden noudattamiseksi sovelluksessamme.
 
 ### Tietosuoja

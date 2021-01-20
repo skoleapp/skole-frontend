@@ -40,7 +40,7 @@ A quick look at the top-level files and directories excluding Git ignored locati
 18. [**`Dockerfile`**](Dockerfile): Formal instructions for Docker how to build the image for the app.
 19. [**`README.md`**](README.md): The file you're reading.
 20. [**`dependencies.md`**](dependencies.md): Documentation for top-level dependencies.
-21. [**`i18n.json`**](i18n.json): Configuration for [next-translate](https://www.npmjs.com/package/next-translate).
+21. [**`i18n.js`**](i18n.js): Configuration for [next-translate](https://www.npmjs.com/package/next-translate).
 22. [**`next-env.d.ts`**](next-env.d.ts): [Next.js](https://nextjs.org/) typings for [TypeScript](https://www.typescriptlang.org/) compiler.
 23. [**`next.config.js`**](next.config.js): Next.js configuration.
 24. [**`package.json`**](package.json): Manifest file for [Node.js](https://nodejs.org/en/).
