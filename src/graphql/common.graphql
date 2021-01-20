@@ -375,6 +375,7 @@ query AutocompleteCourses($school: ID, $name: String) {
   autocompleteCourses(school: $school, name: $name) {
     id
     name
+    code
   }
 }
 
@@ -480,6 +481,7 @@ query CreateResourceAutocompleteData($school: ID, $course: ID) {
   course(id: $course) {
     id
     name
+    code
   }
 }
 
