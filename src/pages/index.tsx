@@ -139,11 +139,8 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
       </Typography>
       <Divider className={classes.pitchHeaderDivider} />
       {bullets.map((b) => (
-        <Typography // eslint-disable-line jsx-a11y/accessible-emoji
-          variant="body2"
-          color="textSecondary"
-        >
-          ❇️ {t(b)}
+        <Typography variant="body2" color="textSecondary">
+          • {t(b)}
         </Typography>
       ))}
     </Grid>
