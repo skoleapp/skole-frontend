@@ -93,6 +93,8 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     actionsButtonTooltip: t('activity-tooltips:actions'),
   });
 
+  const renderHeaderRight = !!userMe && renderActionsButton;
+
   const onCompleted = ({
     markAllActivitiesAsRead,
   }: GraphQlMarkAllActivitiesAsReadMutation): void => {
@@ -200,7 +202,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     topNavbarProps: {
       header,
-      renderHeaderRight: renderActionsButton,
+      renderHeaderRight,
     },
   };
 
