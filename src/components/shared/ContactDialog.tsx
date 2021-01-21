@@ -9,7 +9,7 @@ import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
 
 interface Props {
-  header: string;
+  header: JSX.Element | string;
   text: JSX.Element | string;
   open: boolean;
   handleClose: () => void;

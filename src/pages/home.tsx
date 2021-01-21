@@ -23,6 +23,7 @@ import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import clsx from 'clsx';
 import {
   ButtonLink,
+  Emoji,
   ErrorTemplate,
   LandingPageTemplate,
   LoadingTemplate,
@@ -256,9 +257,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <Link href={urls.index}>
       <Tooltip title="Vrooom!">
         <IconButton size="small">
-          <span role="img" aria-label="Vrooom!">
-            🚀
-          </span>
+          <Emoji emoji="🚀" hideSpace />
         </IconButton>
       </Tooltip>
     </Link>
@@ -355,7 +354,12 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <Paper className={classes.suggestionsPaper}>
         <CardHeader
           className={classes.suggestionsCardHeader}
-          title={`${t('home:suggestionsHeader')} 🔥`}
+          title={
+            <>
+              {t('home:suggestionsHeader')}
+              <Emoji emoji="🔥" />
+            </>
+          }
         />
         <SuggestionsTable
           suggestions={suggestions}
@@ -501,7 +505,8 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       justify="center"
     >
       <Typography className={classes.nextStepsHeader} variant="h2" color="textSecondary">
-        {t('home:nextStepsHeader')} 🚀
+        {t('home:nextStepsHeader')}
+        <Emoji emoji="🚀" />
       </Typography>
       <Grid className={classes.nextStepsContent} item xs={12} lg={8} xl={6} container spacing={4}>
         {renderInviteStep}

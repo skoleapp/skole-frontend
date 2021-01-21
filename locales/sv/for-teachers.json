@@ -5,9 +5,9 @@
   "ctaHeader": "Är du en lärare? Samarbeta med oss!",
   "ctaHeaderSecondary": "nga strängar bifogade. Kontakta oss för att komma igång!",
   "cta": "Kontakta oss",
-  "studentsPitchHeader": "För studenter 🧑‍🎓",
-  "teachersPitchHeader": "För lärare 👨‍🏫",
-  "infoPitchHeader": "Hur det fungerar? 🧐",
+  "studentsPitchHeader": "För studenter",
+  "teachersPitchHeader": "För lärare",
+  "infoPitchHeader": "Hur det fungerar?",
   "studentsBullet1": "• Låg tröskel anonyma diskussioner.",
   "studentsBullet2": "• Enkel anslutning till andra studenter.",
   "studentsBullet3": "• Tillgång till material från tidigare kursinstanser.",
@@ -19,5 +19,5 @@
   "infoBullet1": "1. Låt oss veta vilka kurser du vill använda Skole med.",
   "infoBullet2": "2. Du kan lägga till ditt material själv eller skicka dem till oss. Vi krediterar dig alltid tydligt som författare.",
   "infoBullet3": "3. Bjud in dina elever till Skole.",
-  "infoBullet4": "4. Vinst! 🙌"
+  "infoBullet4": "4. Vinst!"
 }

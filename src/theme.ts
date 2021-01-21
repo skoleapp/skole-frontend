@@ -42,7 +42,7 @@ const paletteOptions = {
 };
 
 const typographyOptions: TypographyOptions = {
-  fontFamily: ['Roboto', 'sans-serif'].join(','),
+  fontFamily: ['Rubik', 'sans-serif'].join(','),
 };
 
 const palette = createPalette(paletteOptions);

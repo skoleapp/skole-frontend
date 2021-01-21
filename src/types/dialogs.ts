@@ -2,7 +2,7 @@ import { DialogProps } from '@material-ui/core/Dialog';
 import { SyntheticEvent } from 'react';
 
 export interface DialogHeaderProps {
-  text?: string;
+  text?: JSX.Element | string;
   onCancel: (e: SyntheticEvent) => void;
   renderHeaderLeft?: JSX.Element | false;
   headerCenter?: JSX.Element | false;

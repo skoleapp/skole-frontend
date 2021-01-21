@@ -8,6 +8,8 @@ Våra företags värderingar bygger på integritet, öppenhet, öppenhet och upp
 
 Vi tar våra användares integritet mycket seriöst. Vi skyddar våra användares integritet genom att samla in så lite data som möjligt från våra användare och följa allmän branschpraxis och moderna säkerhetsstandarder. Vi kommer aldrig att sälja dina uppgifter till någon. Om du vill lära dig mer om hur vi hanterar sekretessfrågor, se vår [sekretesspolicy](https://www.skoleapp.com/privacy).
 
+![Simple Analytics badge](https://simpleanalyticsbadge.com/skoleapp.com)
+
 ### Öppenhet
 
 Vi vill vara öppna för allt vi gör. Det innebär att kommunicera tydligt till våra användare om saker att tänka på när man använder Skole. Om vi ​​säger att vi inte kommer att skräpposta dig menar vi det.

@@ -4,13 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
-import { ButtonLink, LandingPageTemplate } from 'components';
+import { ButtonLink, Emoji, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
 import { NativeAppPageProps } from 'types';
-import { FOR_TEACHERS_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
+import { NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -109,19 +109,68 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
     </Grid>
   );
 
-  const renderPitchItems = FOR_TEACHERS_PITCH_ITEMS.map(({ header, bullets }) => (
-    <Grid item xs={12} md={4}>
-      <Typography className={classes.pitchHeader} variant="subtitle1">
-        {t(header).toUpperCase()}
-      </Typography>
-      <Divider className={classes.pitchHeaderDivider} />
-      {bullets.map((b) => (
-        <Typography variant="body2" color="textSecondary">
-          {t(b)}
+  const renderPitchItems = (
+    <>
+      <Grid item xs={12} md={4}>
+        <Typography className={classes.pitchHeader} variant="subtitle1">
+          {t('for-teachers:studentsPitchHeader').toUpperCase()}
+          <Emoji emoji="🧑‍🎓" />
         </Typography>
-      ))}
-    </Grid>
-  ));
+        <Divider className={classes.pitchHeaderDivider} />
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:studentsBullet1')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:studentsBullet2')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:studentsBullet3')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:studentsBullet4')}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <Typography className={classes.pitchHeader} variant="subtitle1">
+          {t('for-teachers:teachersPitchHeader').toUpperCase()}
+          <Emoji emoji="👨‍🏫" />
+        </Typography>
+        <Divider className={classes.pitchHeaderDivider} />
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:teachersBullet1')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:teachersBullet2')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:teachersBullet3')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:teachersBullet4')}
+        </Typography>
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <Typography className={classes.pitchHeader} variant="subtitle1">
+          {t('for-teachers:infoPitchHeader').toUpperCase()}
+          <Emoji emoji="🧐" />
+        </Typography>
+        <Divider className={classes.pitchHeaderDivider} />
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:infoBullet1')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:infoBullet2')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:infoBullet3')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {t('for-teachers:infoBullet4')}
+          <Emoji emoji="🙌" />
+        </Typography>
+      </Grid>
+    </>
+  );
 
   const renderPitch = (
     <Grid className={classes.pitchContainer} container direction="column" alignItems="center">

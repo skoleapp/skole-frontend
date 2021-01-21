@@ -8,7 +8,7 @@ import React from 'react';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
-import { ButtonLink } from '../shared';
+import { ButtonLink, Emoji } from '../shared';
 import { FormTemplate } from './FormTemplate';
 
 export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
@@ -25,7 +25,8 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
 
   const renderText = (
     <Typography variant="subtitle1" align="center">
-      {t('common:loginRequired')} 🙃
+      {t('common:loginRequired')}
+      <Emoji emoji="🙃" />
     </Typography>
   );
 
