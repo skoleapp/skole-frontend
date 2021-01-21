@@ -10,14 +10,12 @@ import Document, {
 } from 'next/document';
 import React from 'react';
 
-const { SA_URL } = process.env;
-
 const SAScript = () =>
-  SA_URL ? (
+  process.env.SA_URL ? (
     <>
-      <script async defer src={`https://${SA_URL}/latest.js`} />
+      <script async defer src={`${process.env.SA_URL}/latest.js`} />
       <noscript>
-        <img src={`https://${SA_URL}/noscript.gif`} alt="" />
+        <img src={`${process.env.SA_URL}/noscript.gif`} alt="" />
       </noscript>
     </>
   ) : null;
