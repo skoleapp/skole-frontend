@@ -30,7 +30,12 @@ export const SuggestionsTable: React.FC<Props> = ({
       }
 
       case 'CommentObjectType': {
-        return <CommentTableRow comment={suggestion} key={i} />;
+        // Rename the property back, since we couldn't use the `course` name for both `resource.course` and
+        // `comment.course` because of their different nullability shapes, so we used an alias for the latter.
+        // @ts-ignore: We know that this aliased key now exists on the object.
+        const { commentCourse: course, ...rest } = suggestion;
+        const commentSuggestion = { course, ...rest };
+        return <CommentTableRow comment={commentSuggestion} key={i} />;
       }
     }
   };
