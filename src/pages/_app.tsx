@@ -1,5 +1,4 @@
 import 'nprogress/nprogress.css';
-import 'typeface-roboto';
 
 import { ApolloProvider } from '@apollo/client';
 import DayJsUtils from '@date-io/dayjs';

@@ -30,7 +30,6 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [react](https://www.npmjs.com/package/react)                                         | Duh.                                                                                          |
 | [react-dom](https://www.npmjs.com/package/react-dom)                                 | Duh.                                                                                          |
 | [react-pdf](https://www.npmjs.com/package/react-pdf)                                 | Render PDF files.                                                                             |
-| [typeface-roboto](https://www.npmjs.com/package/typeface-roboto)                     | Font.                                                                                         |
 | [yup](https://www.npmjs.com/package/yup)                                             | Object schema validation (used together with [Formik](https://www.npmjs.com/package/formik)). |
 
 ### Dev requirements (excluding plugins and TypeScript typings)
