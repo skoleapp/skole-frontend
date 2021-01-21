@@ -52,7 +52,12 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,
   },
   appStoreBadgeImageContainer: {
-    maxWidth: '20rem',
+    maxWidth: '25rem',
+  },
+  appleAppStoreImage: {
+    // the Google Play badge has a border in the image so we want to compensate for that.
+    // https://stackoverflow.com/q/34941473/9835872
+    padding: '0.2rem !important',
   },
 }));
 
@@ -108,6 +113,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
             target="_blank"
           >
             <Image
+              className={classes.appleAppStoreImage}
               layout="responsive"
               height={60}
               width={180}
