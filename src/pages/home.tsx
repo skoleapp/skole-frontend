@@ -218,7 +218,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
   const shareTitle = t('home:shareTitle');
-  const shareText = t('common:description');
+  const shareText = `${t('common:description')} 🎓`;
 
   const shareParams = {
     shareHeader: t('home:inviteText'),
