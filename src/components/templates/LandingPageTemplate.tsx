@@ -57,7 +57,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   appleAppStoreImage: {
     // the Google Play badge has a border in the image so we want to compensate for that.
     // https://stackoverflow.com/q/34941473/9835872
-    padding: '0.2rem !important',
+    padding: '0.15rem !important',
   },
 }));
 

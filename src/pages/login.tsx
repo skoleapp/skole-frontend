@@ -98,7 +98,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         try {
           formRef.current?.resetForm();
           toggleNotification(login.successMessage);
-          const nextUrl = String(query.next) || urls.home;
+          const nextUrl = query.next ? String(query.next) : urls.home;
           await Router.push(nextUrl);
         } catch {
           setUnexpectedFormError();
