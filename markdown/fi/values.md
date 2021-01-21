@@ -8,6 +8,8 @@ Yrityksemme arvot rakentuvat yksityisyyden, läpinäkyvyyden, avoimuuden ja teki
 
 Suhtaudumme käyttäjien yksityisyyteen erittäin vakavasti. Suojaamme käyttäjien yksityisyyttä keräämällä käyttäjiltä mahdollisimman vähän tietoa ja noudattamalla alan yleisiä käytäntöjä ja nykyaikaisia ​​turvallisuusstandardeja. Emme koskaan myy tietojasi kenellekään. Jos haluat lisätietoja siitä, miten käsittelemme yksityisyysasioita, katso [tietosuojakäytäntömme](https://www.skoleapp.com/privacy).
 
+![Simple Analytics badge](https://simpleanalyticsbadge.com/skoleapp.com)
+
 ### Läpinäkyvyys
 
 Haluamme olla avoimia kaikessa, mitä teemme. Tämä tarkoittaa kommunikointia käyttäjille selkeästi asioista, jotka on otettava huomioon Skolea käytettäessä. Jos sanomme, ettemme lähetä sinulle roskapostia, tarkoitamme sitä.
