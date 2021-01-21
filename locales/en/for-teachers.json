@@ -5,9 +5,9 @@
   "ctaHeader": "Are you a teacher? Partner with us!",
   "ctaSubheader": "No strings attached. Contact us to get started!",
   "cta": "Contact Us",
-  "studentsPitchHeader": "For Students 🧑‍🎓",
-  "teachersPitchHeader": "For Teachers 👨‍🏫",
-  "infoPitchHeader": "How it works? 🧐",
+  "studentsPitchHeader": "For Students",
+  "teachersPitchHeader": "For Teachers",
+  "infoPitchHeader": "How it works?",
   "studentsBullet1": "• Low threshold anonymous discussions.",
   "studentsBullet2": "• Easy connection to other students.",
   "studentsBullet3": "• Access to materials from previous course instances.",
@@ -19,5 +19,5 @@
   "infoBullet1": "1. Let us know which courses you would like to use Skole with.",
   "infoBullet2": "2. You can add your materials yourself or send them to us. We always clearly credit you as the author .",
   "infoBullet3": "3. Invite your students to Skole.",
-  "infoBullet4": "4. Profit! 🙌"
+  "infoBullet4": "4. Profit!"
 }

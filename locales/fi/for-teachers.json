@@ -5,9 +5,9 @@
   "ctaHeader": "Oletko opettaja? Aloita yhteistyö kanssamme!",
   "ctaSubheader": "Ei velvoitteita. Ota meihin yhteyttö aloittaaksesi!",
   "cta": "Ota yhteyttä",
-  "studentsPitchHeader": "Opiskelijoille 🧑‍🎓",
-  "teachersPitchHeader": "Opettajille 👨‍🏫",
-  "infoPitchHeader": "Kuinka se toimii? 🧐",
+  "studentsPitchHeader": "Opiskelijoille",
+  "teachersPitchHeader": "Opettajille",
+  "infoPitchHeader": "Kuinka se toimii?",
   "studentsBullet1": "• Matalan kynnyksen anonyymit keskustelut.",
   "studentsBullet2": "• Helppo yhteys muihin opiskelijoihin.",
   "studentsBullet3": "• Pääsy aiempien kurssi-instanssien materiaaleihin.",
@@ -19,5 +19,5 @@
   "infoBullet1": "1. Kerro meille, millä kursseilla haluaisit ottaa Skolen käyttöön.",
   "infoBullet2": "2. Voit lisätä materiaalisi itse, tai lähettää ne meille. Merkitsemme aina sinut selvästi tekijäksi.",
   "infoBullet3": "3. Kutsu oppilaasi Skoleen.",
-  "infoBullet4": "4. Nauti! 🙌"
+  "infoBullet4": "4. Nauti!"
 }

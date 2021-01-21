@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
-import { ButtonLink, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
+import { ButtonLink, Emoji, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
 import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
@@ -13,7 +13,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { NativeAppPageProps } from 'types';
-import { LANDING_PAGE_PITCH_ITEMS, NATIVE_APP_USER_AGENT, urls } from 'utils';
+import { NATIVE_APP_USER_AGENT, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -88,6 +88,7 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
       {t('common:description')}
+      <Emoji emoji="🎓" />
     </Typography>
   );
 
@@ -132,19 +133,50 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
     </Grid>
   );
 
-  const renderPitchItems = LANDING_PAGE_PITCH_ITEMS.map(({ header, bullets }) => (
-    <Grid item xs={12} md={6}>
-      <Typography className={classes.pitchHeader} variant="subtitle1">
-        {t(header).toUpperCase()}
-      </Typography>
-      <Divider className={classes.pitchHeaderDivider} />
-      {bullets.map((b) => (
-        <Typography variant="body2" color="textSecondary">
-          • {t(b)}
+  const renderPitchItems = (
+    <>
+      <Grid item xs={12} md={6}>
+        <Typography className={classes.pitchHeader} variant="subtitle1">
+          {t('index:materialsPitchHeader').toUpperCase()}
+          <Emoji emoji="📚" />
         </Typography>
-      ))}
-    </Grid>
-  ));
+        <Divider className={classes.pitchHeaderDivider} />
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:materialsBullet1')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:materialsBullet2')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:materialsBullet3')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:materialsBullet4')}
+          <Emoji emoji="😁" />
+        </Typography>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Typography className={classes.pitchHeader} variant="subtitle1">
+          {t('index:discussionPitchHeader').toUpperCase()}
+          <Emoji emoji="💬" />
+        </Typography>
+        <Divider className={classes.pitchHeaderDivider} />
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:discussionBullet1')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:discussionBullet2')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:discussionBullet3')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          • {t('index:discussionBullet4')}
+          <Emoji emoji="🤓" />
+        </Typography>
+      </Grid>
+    </>
+  );
 
   const renderPitch = (
     <Grid container direction="column" alignItems="center" className={classes.pitchContainer}>

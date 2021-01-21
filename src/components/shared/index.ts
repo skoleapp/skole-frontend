@@ -3,6 +3,7 @@ export { ButtonLink } from './ButtonLink';
 export { ConfirmationDialog } from './ConfirmationDialog';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { DialogHeader } from './DialogHeader';
+export { Emoji } from './Emoji';
 export { ExternalLink } from './ExternalLink';
 export { GuidelinesLink } from './GuidelinesLink';
 export { IconButtonLink } from './IconButtonLink';

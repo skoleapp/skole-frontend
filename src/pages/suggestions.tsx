@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableFooter from '@material-ui/core/TableFooter';
 import {
   BackButton,
+  Emoji,
   ErrorTemplate,
   LoadingBox,
   MainTemplate,
@@ -56,7 +57,13 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useSuggestionsQuery({ context });
   const suggestions = R.propOr([], 'suggestions', data);
-  const header = `${t('suggestions:header')} 🔥`;
+
+  const header = (
+    <>
+      {t('suggestions:header')}
+      <Emoji emoji="🔥" />
+    </>
+  );
 
   const renderBackButton = <BackButton />;
 
