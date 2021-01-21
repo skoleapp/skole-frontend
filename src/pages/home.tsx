@@ -268,6 +268,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
       {t('common:description')}
+      <Emoji emoji="🎓" />
     </Typography>
   );
 
