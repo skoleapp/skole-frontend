@@ -70,6 +70,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   text: {
     overflow: 'hidden',
     wordBreak: 'break-word',
+    userSelect: 'text',
   },
   icon: {
     marginRight: spacing(1),
