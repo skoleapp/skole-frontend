@@ -2,7 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
+import { ButtonLink, Emoji, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext } from 'context';
 import { useGraphQlLogoutMutation } from 'generated';
 import { withUserMe } from 'hocs';
@@ -34,11 +34,18 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     logout();
   }, []);
 
+  const header = (
+    <>
+      {t('logout:header')}
+      <Emoji emoji="👋" />
+    </>
+  );
+
   const layoutProps = {
     seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
-      header: t('logout:header'),
+      header,
       hideSearch: true,
     },
   };

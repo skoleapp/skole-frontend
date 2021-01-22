@@ -13,26 +13,40 @@ import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { BORDER } from 'theme';
 
-import { BackButton } from '../shared';
+import { BackButton, Emoji } from '../shared';
 import { DrawModeButton } from './DrawModeButton';
 import { DrawModeControls } from './DrawModeControls';
 import { RotateButton } from './RotateButton';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     width: '100%',
     borderBottom: BORDER,
   },
-});
+  backButton: {
+    marginRight: spacing(2),
+  },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
+    flexGrow: 1,
+    textAlign: 'left',
+  },
+}));
 
 interface Props {
   title: string;
+  renderStarButton: JSX.Element;
+  renderUpvoteButton: JSX.Element;
+  renderDownvoteButton: JSX.Element;
   handleDownloadButtonClick: (e: SyntheticEvent) => Promise<void>;
   handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
 }
 
 export const ResourceTopToolbar: React.FC<Props> = ({
   title,
+  renderStarButton,
+  renderUpvoteButton,
+  renderDownvoteButton,
   handleDownloadButtonClick,
   handlePrintButtonClick,
 }) => {
@@ -43,7 +57,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   const renderDrawModeButton = <DrawModeButton />;
   const renderDrawModeControls = <DrawModeControls />;
   const renderRotateButton = <RotateButton />;
-  const renderBackButton = <BackButton className="MuiCardHeader-avatar" />;
+  const renderBackButton = <BackButton className={classes.backButton} />;
 
   const toolbarButtonProps = {
     size: 'small' as Size,
@@ -70,24 +84,29 @@ export const ResourceTopToolbar: React.FC<Props> = ({
     </Tooltip>
   );
 
+  const renderEmoji = <Emoji emoji="📚" />;
+
   const renderResourceTitle = (
-    <Typography className={clsx('MuiCardHeader-title', 'truncate-text')} variant="h5">
+    <Typography
+      className={clsx('MuiCardHeader-title', classes.cardHeaderTitle, 'truncate-text')}
+      variant="h5"
+    >
       {title}
+      {renderEmoji}
     </Typography>
   );
 
   const renderDefaultToolbarControls = (
-    <Grid container>
-      <Grid item xs={8} lg={9} xl={10} container justify="flex-start" alignItems="center">
-        {renderBackButton}
-        {renderResourceTitle}
-      </Grid>
-      <Grid item xs={4} lg={3} xl={2} container justify="flex-end" alignItems="center">
-        {renderDrawModeButton}
-        {renderRotateButton}
-        {renderDownloadButton}
-        {renderPrintButton}
-      </Grid>
+    <Grid container wrap="nowrap" alignItems="center">
+      {renderBackButton}
+      {renderResourceTitle}
+      {renderStarButton}
+      {renderUpvoteButton}
+      {renderDownvoteButton}
+      {renderDrawModeButton}
+      {renderRotateButton}
+      {renderDownloadButton}
+      {renderPrintButton}
     </Grid>
   );
 

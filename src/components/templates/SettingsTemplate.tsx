@@ -10,10 +10,10 @@ import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
 import { SettingsButton, SettingsList } from '../settings';
-import { BackButton } from '../shared';
+import { BackButton, Emoji } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
     flexGrow: 1,
   },
@@ -34,6 +34,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     position: 'relative',
     padding: spacing(3),
   },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
+  },
   cardHeaderAvatar: {
     position: 'absolute',
     top: spacing(2),
@@ -53,14 +56,22 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   const renderBackButton = <BackButton />;
   const renderHeaderRight = <SettingsButton />;
 
+  const settingsHeaderTitle = (
+    <>
+      {t('common:settings')}
+      <Emoji emoji="⚙️" />
+    </>
+  );
+
   const renderSettingsHeader = (
     <CardHeader
       classes={{
         root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
       avatar={renderBackButton}
-      title={t('common:settings')}
+      title={settingsHeaderTitle}
     />
   );
 
@@ -76,7 +87,10 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   );
 
   const renderHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeaderRoot} title={topNavbarProps?.header} />
+    <CardHeader
+      classes={{ root: classes.cardHeaderRoot, title: classes.cardHeaderTitle }}
+      title={topNavbarProps?.header}
+    />
   );
 
   const renderContent = (

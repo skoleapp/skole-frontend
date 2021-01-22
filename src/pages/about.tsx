@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import { BackButton, MainTemplate } from 'components';
+import { BackButton, Emoji, MainTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
@@ -16,7 +16,7 @@ import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 import { ABOUT_ITEMS } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   paper: {
     flexGrow: 1,
     display: 'flex',
@@ -33,6 +33,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     position: 'relative',
     padding: spacing(3),
   },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
+  },
   cardHeaderAvatar: {
     position: 'absolute',
     top: spacing(2),
@@ -44,7 +47,13 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const header = t('about:header');
+
+  const header = (
+    <>
+      {t('about:header')}
+      <Emoji emoji="ℹ️" />
+    </>
+  );
 
   const renderBackButton = <BackButton />;
 
@@ -52,6 +61,7 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <CardHeader
       classes={{
         root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
       title={header}
@@ -59,11 +69,11 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     />
   );
 
-  const renderAboutMenuItems = ABOUT_ITEMS.map(({ icon: Icon, href, text }, i) => (
+  const renderAboutMenuItems = ABOUT_ITEMS.map(({ emoji, href, text }, i) => (
     <Link href={href} key={i}>
       <MenuItem>
         <ListItemIcon>
-          <Icon />
+          <Emoji emoji={emoji} />
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>

@@ -1,7 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ButtonLink, FormSubmitSection, FormTemplate, LoadingTemplate } from 'components';
+import { ButtonLink, Emoji, FormSubmitSection, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import {
@@ -92,10 +92,6 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   }, [token]);
 
-  const header = !emailSubmitted
-    ? t('verify-account:header')
-    : t('verify-account:emailSubmittedHeader');
-
   const onCompleted = ({
     resendVerificationEmail,
   }: GraphQlResendVerificationEmailMutation): void => {
@@ -127,6 +123,13 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const initialValues = {
     general: '',
   };
+
+  const header = (
+    <>
+      {t('verify-account:header')}
+      <Emoji emoji="✅" />
+    </>
+  );
 
   const renderHomeButton = (
     <ButtonLink

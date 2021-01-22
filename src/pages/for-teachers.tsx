@@ -133,7 +133,7 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
       <Grid item xs={12} md={4}>
         <Typography className={classes.pitchHeader} variant="subtitle1">
           {t('for-teachers:teachersPitchHeader').toUpperCase()}
-          <Emoji emoji="👨‍🏫" />
+          <Emoji emoji="🧑‍🏫" />
         </Typography>
         <Divider className={classes.pitchHeaderDivider} />
         <Typography variant="body2" color="textSecondary">

@@ -17,6 +17,7 @@ import {
   DiscussionHeader,
   DrawModeButton,
   DrawModeControls,
+  Emoji,
   ErrorTemplate,
   InfoDialogContent,
   LoadingBox,
@@ -153,13 +154,20 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
     comments,
   );
 
+  const header = (
+    <>
+      {title}
+      <Emoji emoji="📚" />
+    </>
+  );
+
   const {
     infoDialogOpen,
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: resourceTitle,
+    header,
     infoButtonTooltip: t('resource-tooltips:info'),
   });
 
@@ -381,15 +389,15 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
 
   const toolbarProps = {
     title,
+    renderStarButton,
+    renderUpvoteButton,
+    renderDownvoteButton,
     handleDownloadButtonClick,
     handlePrintButtonClick,
   };
 
   const discussionHeaderProps = {
     commentCount,
-    renderStarButton,
-    renderUpvoteButton,
-    renderDownvoteButton,
     renderShareButton,
     renderInfoButton,
     renderActionsButton,

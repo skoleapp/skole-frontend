@@ -8,7 +8,7 @@ import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { LANGUAGES } from 'utils';
 
-import { LanguageFlag, ResponsiveDialog } from '../shared';
+import { Emoji, LanguageFlag, ResponsiveDialog } from '../shared';
 
 export const LanguageSelectorDialog: React.FC = () => {
   const { asPath } = useRouter();
@@ -23,8 +23,15 @@ export const LanguageSelectorDialog: React.FC = () => {
     document.cookie = `NEXT_LOCALE=${val}`;
   };
 
+  const header = (
+    <>
+      {t('common:changeLanguage')}
+      <Emoji emoji="🌐" />
+    </>
+  );
+
   const dialogHeaderProps = {
-    text: t('common:changeLanguage'),
+    text: header,
     onCancel: handleCloseLanguageMenu,
   };
 

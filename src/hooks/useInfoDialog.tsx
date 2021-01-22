@@ -8,7 +8,7 @@ import { useDialogButton } from './useDialogButton';
 import { useOpen } from './useOpen';
 
 interface UseInfoDialogParams {
-  header: string;
+  header: JSX.Element | string;
   infoButtonTooltip: string;
 }
 

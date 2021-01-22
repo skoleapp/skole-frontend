@@ -2,7 +2,13 @@ import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ButtonLink, FormSubmitSection, LoginRequiredTemplate, SettingsTemplate } from 'components';
+import {
+  ButtonLink,
+  Emoji,
+  FormSubmitSection,
+  LoginRequiredTemplate,
+  SettingsTemplate,
+} from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
@@ -56,6 +62,13 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
+  const header = (
+    <>
+      {t('my-data:header')}
+      <Emoji emoji="💾" />
+    </>
+  );
+
   const renderHomeButton = (
     <ButtonLink
       href={urls.home}
@@ -102,7 +115,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: t('my-data:header'),
+      header,
     },
   };
 

@@ -1,6 +1,12 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-import { FormSubmitSection, FormTemplate, LogoutRequiredTemplate, TextFormField } from 'components';
+import {
+  Emoji,
+  FormSubmitSection,
+  FormTemplate,
+  LogoutRequiredTemplate,
+  TextFormField,
+} from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -61,10 +67,6 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
-
-  const header = !emailSubmitted
-    ? t('reset-password:header')
-    : t('reset-password:emailSubmittedHeader');
 
   const emailValidationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
@@ -132,6 +134,13 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const { newPassword } = values;
     await resetPassword({ variables: { newPassword, token } });
   };
+
+  const header = (
+    <>
+      {t('reset-password:header')}
+      <Emoji emoji="😶‍🌫️" />
+    </>
+  );
 
   const renderNewPasswordField = (
     <Field

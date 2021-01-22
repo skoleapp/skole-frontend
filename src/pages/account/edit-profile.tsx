@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   AutocompleteField,
   AvatarField,
+  Emoji,
   FormSubmitSection,
   LoginRequiredTemplate,
   SettingsTemplate,
@@ -134,6 +135,13 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     subject: Yup.object().nullable(),
   });
 
+  const header = (
+    <>
+      {t('edit-profile:header')}
+      <Emoji emoji="🖊️" />
+    </>
+  );
+
   const renderAvatarField = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
     <AvatarField {...props} />
   );
@@ -240,7 +248,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: t('edit-profile:header'),
+      header,
     },
   };
 

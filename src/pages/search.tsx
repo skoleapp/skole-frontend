@@ -20,6 +20,7 @@ import {
   ContactLink,
   CourseTableBody,
   DialogHeader,
+  Emoji,
   ErrorTemplate,
   FormSubmitSection,
   LoadingBox,
@@ -83,6 +84,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     padding: spacing(3),
     position: 'relative',
     height: '3.5rem',
+  },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
   },
   cardHeaderAvatar: {
     position: 'absolute',
@@ -495,16 +499,40 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderBackButton = <BackButton />;
 
+  const filtersHeader = (
+    <>
+      {t('common:filters')}
+      <Emoji emoji="🔎" />
+    </>
+  );
+
   const renderFilterResultsHeader = (
     <CardHeader
-      classes={{ root: classes.cardHeaderRoot, avatar: classes.cardHeaderAvatar }}
-      title={t('common:filters')}
+      classes={{
+        root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
+        avatar: classes.cardHeaderAvatar,
+      }}
+      title={filtersHeader}
       avatar={renderBackButton}
     />
   );
 
+  const resultsHeader = (
+    <>
+      {t('common:searchResults')}
+      <Emoji emoji="🎓" />
+    </>
+  );
+
   const renderResultsHeader = (
-    <CardHeader className={classes.cardHeaderRoot} title={t('common:searchResults')} />
+    <CardHeader
+      classes={{
+        root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
+      }}
+      title={resultsHeader}
+    />
   );
 
   const renderDesktopContent = isTabletOrDesktop && (

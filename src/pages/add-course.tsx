@@ -3,6 +3,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
   ContactLink,
+  Emoji,
   ErrorTemplate,
   FormSubmitSection,
   FormTemplate,
@@ -119,6 +120,13 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
+  const header = (
+    <>
+      {t('add-course:header')}
+      <Emoji emoji="🎓" />
+    </>
+  );
+
   const renderCourseNameField = (
     <Field
       name="courseName"
@@ -202,7 +210,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: t('add-course:header'),
+      header,
     },
   };
 

@@ -1,4 +1,4 @@
-import { MarkdownTemplate } from 'components';
+import { Emoji, MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { getT, loadMarkdown, loadNamespaces } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -6,10 +6,17 @@ import React from 'react';
 import { MarkdownPageProps } from 'types';
 
 const PrivacyPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
+  const header = (
+    <>
+      {title}
+      <Emoji emoji="🔒" />
+    </>
+  );
+
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: title,
+      header,
     },
     content,
   };

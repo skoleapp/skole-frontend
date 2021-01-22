@@ -1,5 +1,6 @@
 import {
   CourseTableBody,
+  Emoji,
   ErrorTemplate,
   LoadingBox,
   LoginRequiredTemplate,
@@ -30,7 +31,13 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
-  const header = t('starred:header');
+
+  const header = (
+    <>
+      {t('starred:header')}
+      <Emoji emoji="🤩" />
+    </>
+  );
 
   const renderLoading = <LoadingBox />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;

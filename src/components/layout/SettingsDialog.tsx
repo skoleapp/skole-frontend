@@ -3,16 +3,20 @@ import { useTranslation } from 'lib';
 import React from 'react';
 
 import { SettingsList } from '../settings';
-import { DialogHeader, SkoleDialog } from '../shared';
+import { DialogHeader, Emoji, SkoleDialog } from '../shared';
 
 export const SettingsDialog: React.FC = () => {
   const { t } = useTranslation();
   const { settingsDialogOpen, handleCloseSettingsDialog } = useSettingsContext();
 
-  const renderDialogHeader = (
-    <DialogHeader onCancel={handleCloseSettingsDialog} text={t('common:settings')} />
+  const header = (
+    <>
+      {t('common:settings')}
+      <Emoji emoji="⚙️" />
+    </>
   );
 
+  const renderDialogHeader = <DialogHeader onCancel={handleCloseSettingsDialog} text={header} />;
   const renderSettingsList = <SettingsList dialog />;
 
   return (

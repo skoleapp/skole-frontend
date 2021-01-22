@@ -257,7 +257,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <Link href={urls.index}>
       <Tooltip title="Vrooom!">
         <IconButton size="small">
-          <Emoji emoji="🚀" hideSpace />
+          <Emoji emoji="🚀" noSpace />
         </IconButton>
       </Tooltip>
     </Link>
@@ -350,18 +350,17 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </TableFooter>
   );
 
+  const suggestionsHeader = (
+    <>
+      {t('home:suggestionsHeader')}
+      <Emoji emoji="🔥" />
+    </>
+  );
+
   const renderSuggestionsPreview = (
     <Grid item xs={12} md={8} container>
       <Paper className={classes.suggestionsPaper}>
-        <CardHeader
-          className={classes.suggestionsCardHeader}
-          title={
-            <>
-              {t('home:suggestionsHeader')}
-              <Emoji emoji="🔥" />
-            </>
-          }
-        />
+        <CardHeader className={classes.suggestionsCardHeader} title={suggestionsHeader} />
         <SuggestionsTable
           suggestions={suggestions}
           renderTableFooter={renderSuggestionsTableFooter}

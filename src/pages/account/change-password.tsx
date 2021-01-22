@@ -1,4 +1,5 @@
 import {
+  Emoji,
   FormSubmitSection,
   LoginRequiredTemplate,
   SettingsTemplate,
@@ -78,6 +79,13 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await changePassword({ variables: { oldPassword, newPassword } });
   };
 
+  const header = (
+    <>
+      {t('change-password:header')}
+      <Emoji emoji="🔑" />
+    </>
+  );
+
   const renderFormFields = (props: FormikProps<ChangePasswordFormValues>): JSX.Element => (
     <Form>
       <Field
@@ -116,7 +124,7 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: t('change-password:header'),
+      header,
     },
   };
 

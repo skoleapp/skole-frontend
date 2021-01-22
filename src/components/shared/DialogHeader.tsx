@@ -10,10 +10,13 @@ import React from 'react';
 import { TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { DialogHeaderProps } from 'types';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     padding: spacing(2),
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
+  },
+  text: {
+    color: palette.text.secondary,
   },
 }));
 
@@ -36,7 +39,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   );
 
   const renderHeaderText = (
-    <Typography className={clsx('MuiCardHeader-title', 'truncate-text')} variant="h6">
+    <Typography className={clsx('MuiCardHeader-title', classes.text, 'truncate-text')} variant="h6">
       {text}
     </Typography>
   );

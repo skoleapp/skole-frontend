@@ -1,5 +1,4 @@
 import BottomNavigation from '@material-ui/core/BottomNavigation';
-import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -18,6 +17,7 @@ import {
   BackButton,
   CustomBottomNavbarContainer,
   DiscussionHeader,
+  Emoji,
   ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
@@ -64,7 +64,7 @@ import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, palette }) => ({
   mobileContainer: {
     flexGrow: 1,
     display: 'flex',
@@ -84,8 +84,11 @@ const useStyles = makeStyles(({ breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  resourcesHeader: {
+  resourcesHeaderRoot: {
     borderBottom: BORDER,
+  },
+  resourcesHeaderTitle: {
+    color: palette.text.secondary,
   },
 }));
 
@@ -140,13 +143,22 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     unstarTooltip: t('course-tooltips:unstar'),
   });
 
+  const renderEmoji = <Emoji emoji="🎓" />;
+
+  const header = (
+    <>
+      {courseName}
+      {renderEmoji}
+    </>
+  );
+
   const {
     infoDialogOpen,
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: courseName,
+    header,
     infoButtonTooltip: t('course-tooltips:info'),
   });
 
@@ -265,9 +277,6 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
 
   const discussionHeaderProps = {
     commentCount,
-    renderStarButton,
-    renderUpvoteButton,
-    renderDownvoteButton,
     renderShareButton,
     renderInfoButton,
     renderActionsButton,
@@ -351,15 +360,32 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     </Tooltip>
   );
 
-  const renderBackButton = <BackButton />;
+  const renderBackButton = <BackButton className="MuiCardHeader-avatar" />;
+
+  const renderResourcesTitle = (
+    <Typography
+      className={clsx('MuiCardHeader-title', classes.resourcesHeaderTitle, 'truncate-text')}
+      variant="h5"
+    >
+      {header}
+    </Typography>
+  );
 
   const renderResourcesHeader = (
-    <CardHeader
-      className={classes.resourcesHeader}
-      title={courseName}
-      avatar={renderBackButton}
-      action={renderUploadResourceButton}
-    />
+    <Grid container className={clsx('MuiCardHeader-root', classes.resourcesHeaderRoot)}>
+      <Grid item xs={1} lg={3} container justify="flex-start">
+        {renderBackButton}
+      </Grid>
+      <Grid item xs={6} lg={6}>
+        {renderResourcesTitle}
+      </Grid>
+      <Grid item xs={5} lg={3} container justify="flex-end" className="MuiCardHeader-action">
+        {renderStarButton}
+        {renderUpvoteButton}
+        {renderDownvoteButton}
+        {renderUploadResourceButton}
+      </Grid>
+    </Grid>
   );
 
   const renderMobileContent = isMobile && (

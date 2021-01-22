@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
   ButtonLink,
+  Emoji,
   FormSubmitSection,
   FormTemplate,
   LogoutRequiredTemplate,
@@ -129,6 +130,13 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     formRef.current?.resetForm();
   };
 
+  const header = (
+    <>
+      {t('login:header')}
+      <Emoji emoji="👋" />
+    </>
+  );
+
   const renderExistingUserGreeting = (
     <Grid container alignItems="center" direction="column">
       <Avatar className={classes.avatar} src={existingUserAvatar} />
@@ -208,7 +216,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
-      header: t('login:header'),
+      header,
       hideLoginButton: true,
       hideGetStartedButton: true,
       hideSearch: true,

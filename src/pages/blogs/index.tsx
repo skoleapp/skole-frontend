@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-import { BackButton, MainTemplate } from 'components';
+import { BackButton, Emoji, MainTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs, useMediaQueries } from 'hooks';
@@ -18,7 +18,7 @@ import { BORDER, BORDER_RADIUS } from 'theme';
 import { MarkdownPageData, SeoPageProps } from 'types';
 import { urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   paper: {
     flexGrow: 1,
     display: 'flex',
@@ -35,6 +35,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     position: 'relative',
     padding: spacing(3),
   },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
+  },
   cardHeaderAvatar: {
     position: 'absolute',
     top: spacing(2),
@@ -50,13 +53,21 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const header = t('blogs:header');
+
   const renderBackButton = <BackButton />;
+
+  const header = (
+    <>
+      {t('blogs:header')}
+      <Emoji emoji="📃" />
+    </>
+  );
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
       classes={{
         root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
       title={header}
@@ -68,7 +79,7 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
     ({ title, excerpt, coverImage = '', author, date, minutesToRead = 0, slug = '' }, i) => (
       <Link href={urls.blog(slug)}>
         <ListItem key={i} button>
-          <Grid container spacing={2}>
+          <Grid container spacing={4}>
             <Grid item xs={9}>
               <Grid container>
                 <Grid item xs={12}>
@@ -88,7 +99,7 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
               </Grid>
             </Grid>
             <Grid item xs={3} container justify="flex-end" alignItems="center">
-              <Image width={100} height={75} src={coverImage} />
+              <Image width={140} height={100} src={coverImage} />
             </Grid>
           </Grid>
         </ListItem>

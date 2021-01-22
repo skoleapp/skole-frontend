@@ -11,7 +11,7 @@ import { MainTemplateProps } from 'types';
 import { BackButton, TabPanel } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
     flexGrow: 1,
     display: 'flex',
@@ -25,6 +25,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     borderBottom: BORDER,
     position: 'relative',
     padding: spacing(3),
+  },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
   },
   cardHeaderAvatar: {
     position: 'absolute',
@@ -71,6 +74,7 @@ export const TabTemplate: React.FC<Props> = ({
       classes={{
         root: classes.cardHeaderRoot,
         avatar: classes.cardHeaderAvatar,
+        title: classes.cardHeaderTitle,
         action: classes.cardHeaderAction,
       }}
       title={topNavbarProps?.header}

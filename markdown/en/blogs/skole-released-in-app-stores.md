@@ -10,7 +10,7 @@ slug: skole-released-in-app-stores
 
 Over a year ago, four computer engineering students at the University of Turku had an idea to build something useful for themselves and their peers. That's how the story of Skole got started. The time has come for the mere idea to bear fruit for all of our student colleagues!
 
-### What's it All About?
+### What's it All About? 🤔
 
 Skole is an app, a community and a space for students to share their thoughts and make their studying more effective. The anonymous discussions make it easy for anyone to come forward with their thoughts, allowing social interaction for anyone, which we recognize to be especially important during this remote studying period.
 

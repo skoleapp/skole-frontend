@@ -21,7 +21,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   paper: {
     flexGrow: 1,
     display: 'flex',
@@ -37,6 +37,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     borderBottom: BORDER,
     position: 'relative',
     padding: spacing(3),
+  },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
   },
   cardHeaderAvatar: {
     position: 'absolute',
@@ -71,6 +74,7 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <CardHeader
       classes={{
         root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
       title={header}

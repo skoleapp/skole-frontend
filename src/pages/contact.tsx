@@ -1,4 +1,4 @@
-import { FormSubmitSection, FormTemplate, TextFormField } from 'components';
+import { Emoji, FormSubmitSection, FormTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
@@ -78,6 +78,13 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createContactMessage({ variables });
   };
 
+  const header = (
+    <>
+      {t('contact:header')}
+      <Emoji emoji="🗣️" />
+    </>
+  );
+
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form>
       <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
@@ -108,7 +115,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: t('contact:header'),
+      header,
     },
   };
 
