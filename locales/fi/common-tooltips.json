@@ -8,7 +8,7 @@
   "language": "Vaihda kieltä.",
   "loginRequired": "Kirjaudu sisään käyttääksesi tätä ominaisuutta.",
   "verificationRequired": "Vahvista tilisi käyttääksesi tätä ominaisuutta.",
-  "settings": "Näytä asetukset.",
+  "openSettings": "Avaa asetukset.",
   "rank": "Tämän käyttäjän arvo on {{ rank }}.",
   "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
   "closeMenu": "Sulje valikko."

@@ -8,7 +8,7 @@
   "language": "Change language.",
   "loginRequired": "Please log in to enable this feature.",
   "verificationRequired": "Please verify your account to enable this feature.",
-  "settings": "View settings.",
+  "openSettings": "Open settings.",
   "rank": "This user's rank is {{ rank }}.",
   "activity": "You have {{ unreadActivityCount }} unread activities.",
   "closeMenu": "Close menu."
