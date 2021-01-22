@@ -7,6 +7,7 @@ import {
   AutocompleteField,
   ButtonLink,
   ContactLink,
+  Emoji,
   FormSubmitSection,
   FormTemplate,
   LogoutRequiredTemplate,
@@ -81,13 +82,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     onError: onUpdateUserError,
     setUnexpectedFormError: updateUserUnexpectedError,
   } = useForm<UpdateUserFormValues>();
-
-  const header =
-    phase === RegisterPhases.REGISTER
-      ? t('register:header')
-      : phase === RegisterPhases.UPDATE_USER
-      ? t('register:updateUserHeader')
-      : RegisterPhases.REGISTER_COMPLETE && t('register:registerCompleteHeader');
 
   const registerInitialValues = {
     username: '',
@@ -187,6 +181,13 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     });
   };
 
+  const header = (
+    <>
+      {t('register:header')}
+      <Emoji emoji="👋" />
+    </>
+  );
+
   const renderUsernameField = (
     <Field
       label={t('forms:username')}
@@ -261,9 +262,9 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderRegisterCompleteHelpText = (
+  const renderUpdateUserHelperText = (
     <FormControl>
-      <FormHelperText>{t('register:registerCompleteHelpText')}</FormHelperText>
+      <FormHelperText>{t('register:updateUserHelperText')}</FormHelperText>
     </FormControl>
   );
 
@@ -305,7 +306,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
     <Form>
-      {renderRegisterCompleteHelpText}
+      {renderUpdateUserHelperText}
       {renderSchoolField}
       {renderSubjectField}
       {renderUpdateUserFormSubmitSection(props)}
@@ -325,21 +326,31 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
+  const renderRegisterCompleteHelperText = (
+    <Typography variant="subtitle1" align="center">
+      {t('register:registerCompleteHelperText')}
+    </Typography>
+  );
+
+  const renderLineBreak = <Typography component="br" />;
+
+  const renderContinueButton = (
+    <ButtonLink
+      href={urls.home}
+      endIcon={<ArrowForwardOutlined />}
+      color="primary"
+      variant="contained"
+      fullWidth
+    >
+      {t('common:continue')}
+    </ButtonLink>
+  );
+
   const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t('register:registerCompleteEmailSent')}
-      </Typography>
-      <Typography component="br" />
-      <ButtonLink
-        href={urls.home}
-        endIcon={<ArrowForwardOutlined />}
-        color="primary"
-        variant="contained"
-        fullWidth
-      >
-        {t('common:continue')}
-      </ButtonLink>
+      {renderRegisterCompleteHelperText}
+      {renderLineBreak}
+      {renderContinueButton}
     </FormControl>
   );
 
