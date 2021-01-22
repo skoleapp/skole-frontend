@@ -88,3 +88,7 @@ export interface ShareContextType {
   handleCloseShareDialog: () => void;
   shareParams: ShareParams;
 }
+
+export interface HistoryContextType {
+  history: string[];
+}
