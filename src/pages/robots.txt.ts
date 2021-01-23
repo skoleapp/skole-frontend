@@ -11,6 +11,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     }
   }
 
+  // The weird indenting keeps the resulting formatting pretty.
   const robots = `User-agent: *
 ${disallowed.join('\n')}
 Sitemap: ${process.env.FRONTEND_URL}/sitemap.xml

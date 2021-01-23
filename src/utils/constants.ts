@@ -43,8 +43,9 @@ export const DISALLOWED_PATHS = [
   '/404',
   urls.about,
   urls.activity,
-  urls.starred,
   urls.logout,
+  urls.search,
+  urls.starred,
   '/account/',
 ];
 
