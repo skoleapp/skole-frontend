@@ -11,7 +11,6 @@ import Telegram from '@material-ui/icons/Telegram';
 import Twitter from '@material-ui/icons/Twitter';
 import WhatsApp from '@material-ui/icons/WhatsApp';
 import { useNotificationsContext, useShareContext } from 'context';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

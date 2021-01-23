@@ -125,71 +125,74 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   const renderHomeButton = (
-    <ButtonLink
-      href={urls.home}
-      endIcon={<ArrowForwardOutlined />}
-      color="primary"
-      variant="contained"
-      fullWidth
-    >
-      {t('common:continue')}
-    </ButtonLink>
+    <FormControl>
+      <ButtonLink
+        href={urls.home}
+        endIcon={<ArrowForwardOutlined />}
+        color="primary"
+        variant="contained"
+        fullWidth
+      >
+        {t('common:continue')}
+      </ButtonLink>
+    </FormControl>
   );
 
   const renderLoginButton = (
-    <ButtonLink
-      href={loginButtonHref}
-      endIcon={<ArrowForwardOutlined />}
-      color="primary"
-      variant="contained"
-      fullWidth
-    >
-      {t('common:login')}
-    </ButtonLink>
-  );
-
-  const renderLineBreak = <Typography component="br" />;
-
-  const renderEmailSubmittedText = (
-    <Typography variant="subtitle1" align="center">
-      {t('verify-account:emailSubmitted')}
-    </Typography>
+    <FormControl>
+      <ButtonLink
+        href={loginButtonHref}
+        endIcon={<ArrowForwardOutlined />}
+        color="primary"
+        variant="contained"
+        fullWidth
+      >
+        {t('common:login')}
+      </ButtonLink>
+    </FormControl>
   );
 
   const renderVerifiedText = (
-    <Typography variant="subtitle1" align="center">
-      {t('verify-account:verified')}
-    </Typography>
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {t('verify-account:verified')}
+      </Typography>
+    </FormControl>
   );
 
   const renderConfirmationErrorText = (
-    <Typography color="error" variant="subtitle1" align="center">
-      {confirmationError}
-    </Typography>
+    <FormControl>
+      <Typography color="error" variant="subtitle1" align="center">
+        {confirmationError}
+      </Typography>
+    </FormControl>
   );
 
   const renderLoginText = (
-    <Typography variant="subtitle1" align="center">
-      {t('verify-account:loginText')}
-    </Typography>
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {t('verify-account:loginText')}
+      </Typography>
+    </FormControl>
   );
 
   const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
     <Form>
-      <Typography variant="subtitle1" align="center">
-        {t('verify-account:emailHelpText')}
-      </Typography>
+      <FormControl>
+        <Typography variant="subtitle1" align="center">
+          {t('verify-account:emailHelpText')}
+        </Typography>
+      </FormControl>
       <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
     </Form>
   );
 
   // Render for unauthenticated users with no token.
   const renderLoginError = !userMe && !token && (
-    <FormControl>
+    <>
       {renderLoginText}
-      {renderLineBreak}
       {renderLoginButton}
-    </FormControl>
+    </>
   );
 
   // Render for unverified, authenticated users with no token.
@@ -201,25 +204,27 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // Render after email form has been submitted.
   const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
-    <FormControl>{renderEmailSubmittedText}</FormControl>
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {t('verify-account:emailSubmitted')}
+      </Typography>
+    </FormControl>
   );
 
   // Render for authenticated, verified users.
   const renderVerified = !!verified && !confirmationError && (
-    <FormControl>
+    <>
       {renderVerifiedText}
-      {renderLineBreak}
       {renderHomeButton}
-    </FormControl>
+    </>
   );
 
   // Render in case an error occurs during the verification.
   const renderConfirmationError = !!confirmationError && (
-    <FormControl>
+    <>
       {renderConfirmationErrorText}
-      {renderLineBreak}
       {renderHomeButton}
-    </FormControl>
+    </>
   );
 
   const renderContent =

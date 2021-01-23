@@ -25,25 +25,28 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
   };
 
   const renderEmoji = <Emoji emoji="🙃" />;
-  const renderLineBreak = <Typography component="br" />;
 
   const renderText = (
-    <Typography variant="subtitle1" align="center">
-      {text}
-      {renderEmoji}
-    </Typography>
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {text}
+        {renderEmoji}
+      </Typography>
+    </FormControl>
   );
 
   const renderLoginButton = (
-    <ButtonLink
-      href={loginButtonHref}
-      color="primary"
-      variant="contained"
-      endIcon={<ArrowForwardOutlined />}
-      fullWidth
-    >
-      {t('common:login')}
-    </ButtonLink>
+    <FormControl>
+      <ButtonLink
+        href={loginButtonHref}
+        color="primary"
+        variant="contained"
+        endIcon={<ArrowForwardOutlined />}
+        fullWidth
+      >
+        {t('common:login')}
+      </ButtonLink>
+    </FormControl>
   );
 
   const renderCancelButton = (
@@ -57,7 +60,6 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
   return (
     <FormTemplate {...props}>
       {renderText}
-      {renderLineBreak}
       {renderLoginButton}
       {renderCancelButton}
       {children}

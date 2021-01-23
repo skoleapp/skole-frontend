@@ -3,6 +3,7 @@ import { SyntheticEvent } from 'react';
 
 export interface DialogHeaderProps {
   text?: JSX.Element | string;
+  emoji?: string;
   onCancel: (e: SyntheticEvent) => void;
   renderHeaderLeft?: JSX.Element | false;
   headerCenter?: JSX.Element | false;

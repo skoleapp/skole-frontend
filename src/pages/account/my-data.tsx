@@ -1,4 +1,3 @@
-import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
@@ -56,31 +55,13 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
-  const renderLineBreak = <Typography component="br" />;
-
-  const renderHomeButton = (
-    <ButtonLink
-      href={urls.home}
-      endIcon={<ArrowForwardOutlined />}
-      color="primary"
-      variant="contained"
-      fullWidth
-    >
-      {t('common:continue')}
-    </ButtonLink>
-  );
-
-  const renderSubmittedText = (
-    <Typography variant="subtitle1" align="center">
-      {t('my-data:submitted')}
-    </Typography>
-  );
-
   const renderFormFields = (props: FormikProps<FormValues>): JSX.Element => (
     <Form>
-      <Box flexGrow="1" textAlign="center">
-        <Typography variant="body2">{t('my-data:helpText')}</Typography>
-      </Box>
+      <FormControl>
+        <Typography variant="subtitle1" align="center">
+          {t('my-data:helpText')}
+        </Typography>
+      </FormControl>
       <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
     </Form>
   );
@@ -91,12 +72,33 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderSubmitted = submitted && (
+  const renderSubmittedText = (
     <FormControl>
-      {renderSubmittedText}
-      {renderLineBreak}
-      {renderHomeButton}
+      <Typography variant="subtitle1" align="center">
+        {t('my-data:submitted')}
+      </Typography>
     </FormControl>
+  );
+
+  const renderHomeButton = (
+    <FormControl>
+      <ButtonLink
+        href={urls.home}
+        endIcon={<ArrowForwardOutlined />}
+        color="primary"
+        variant="contained"
+        fullWidth
+      >
+        {t('common:continue')}
+      </ButtonLink>
+    </FormControl>
+  );
+
+  const renderSubmitted = submitted && (
+    <>
+      {renderSubmittedText}
+      {renderHomeButton}
+    </>
   );
 
   const layoutProps = {

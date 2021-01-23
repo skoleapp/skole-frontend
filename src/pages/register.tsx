@@ -254,9 +254,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderUpdateUserHelperText = (
+  const renderUpdateUserText = (
     <FormControl>
-      <FormHelperText>{t('register:updateUserHelperText')}</FormHelperText>
+      <Typography variant="subtitle1" align="center">
+        {t('register:updateUserText')}
+      </Typography>
     </FormControl>
   );
 
@@ -298,7 +300,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
     <Form>
-      {renderUpdateUserHelperText}
+      {renderUpdateUserText}
       {renderSchoolField}
       {renderSubjectField}
       {renderUpdateUserFormSubmitSection(props)}
@@ -318,32 +320,33 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderRegisterCompleteHelperText = (
-    <Typography variant="subtitle1" align="center">
-      {t('register:registerCompleteHelperText')}
-    </Typography>
+  const renderRegisterCompleteText = (
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {t('register:registerCompleteText')}
+      </Typography>
+    </FormControl>
   );
 
-  const renderLineBreak = <Typography component="br" />;
-
   const renderContinueButton = (
-    <ButtonLink
-      href={urls.home}
-      endIcon={<ArrowForwardOutlined />}
-      color="primary"
-      variant="contained"
-      fullWidth
-    >
-      {t('common:continue')}
-    </ButtonLink>
+    <FormControl>
+      <ButtonLink
+        href={urls.home}
+        endIcon={<ArrowForwardOutlined />}
+        color="primary"
+        variant="contained"
+        fullWidth
+      >
+        {t('common:continue')}
+      </ButtonLink>
+    </FormControl>
   );
 
   const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
-    <FormControl>
-      {renderRegisterCompleteHelperText}
-      {renderLineBreak}
+    <>
+      {renderRegisterCompleteText}
       {renderContinueButton}
-    </FormControl>
+    </>
   );
 
   const layoutProps = {

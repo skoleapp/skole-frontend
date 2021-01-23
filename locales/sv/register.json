@@ -3,6 +3,6 @@
   "description": "Registrera dig på Skole.",
   "header": "Registrera",
   "termsHelpText": "Genom att registrera dig godkänner du våra",
-  "updateUserHelperText": "Nästan klar! Genom att ställa in din skola och ämne kan vi automatiskt visa dig innehåll baserat på dem. Du kan också lägga till dessa senare.",
-  "registerCompleteHelperText": "Klar! Kontrollera också din e-postadress för en länk som du kan använda för att verifiera ditt konto."
+  "updateUserText": "Nästan klar! Genom att ställa in din skola och ämne kan vi automatiskt visa dig innehåll baserat på dem. Du kan också lägga till dessa senare.",
+  "registerCompleteText": "Klar! Kontrollera också din e-postadress för en länk som du kan använda för att verifiera ditt konto."
 }

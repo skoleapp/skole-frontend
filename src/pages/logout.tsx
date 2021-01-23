@@ -34,6 +34,36 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     logout();
   }, []);
 
+  const renderLoggedOutText = (
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {t('logout:loggedOut')}
+      </Typography>
+    </FormControl>
+  );
+
+  const renderLoginAgainButton = (
+    <FormControl>
+      <ButtonLink
+        href={urls.login}
+        color="primary"
+        variant="contained"
+        endIcon={<ArrowForwardOutlined />}
+        fullWidth
+      >
+        {t('logout:logInAgain')}
+      </ButtonLink>
+    </FormControl>
+  );
+
+  const renderBackToHomeButton = (
+    <FormControl>
+      <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
+        {t('common:backToHome')}
+      </ButtonLink>
+    </FormControl>
+  );
+
   const layoutProps = {
     seoProps,
     hideBottomNavbar: true,
@@ -59,24 +89,9 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   return (
     <FormTemplate {...layoutProps}>
-      <Typography variant="subtitle1" align="center">
-        {t('logout:loggedOut')}
-      </Typography>
-      <Typography component="br" />
-      <ButtonLink
-        href={urls.login}
-        color="primary"
-        variant="contained"
-        endIcon={<ArrowForwardOutlined />}
-        fullWidth
-      >
-        {t('logout:logInAgain')}
-      </ButtonLink>
-      <FormControl>
-        <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
-          {t('common:backToHome')}
-        </ButtonLink>
-      </FormControl>
+      {renderLoggedOutText}
+      {renderLoginAgainButton}
+      {renderBackToHomeButton}
     </FormTemplate>
   );
 };
