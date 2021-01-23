@@ -6,14 +6,39 @@ import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
 
 export default (): void => {};
 
+const toXhtmlLink = (path: string, langName: string, langPath: string): string => {
+  // If the `path` is '/sv/foo' and `langPath` is '/fi', the `hrefPath` will become '/fi/foo'.
+  // Demo: https://regex101.com/r/J1P2mj/1/
+  const hrefPath = path.replace(/^(\/sv|\/fi)?(?=\/|$)/, langPath);
+
+  return `
+    <xhtml:link
+      rel="alternate"
+      hreflang="${langName}"
+      href="${process.env.FRONTEND_URL}${hrefPath}"
+    />`;
+};
+
 const toUrl = (path: string, modified: string): string => {
   // Slice just the date portion from the ISO datetime.
   const lastmod = modified ? `<lastmod>${modified.slice(0, 10)}</lastmod>` : '';
+
+  const languages = {
+    en: '',
+    fi: '/fi',
+    sv: '/sv',
+    'x-default': '',
+  };
+
+  const xhtmlLinks = Object.entries(languages)
+    .map(([langName, langPath]) => toXhtmlLink(path, langName, langPath))
+    .join('');
 
   return `
     <url>
       <loc>${process.env.FRONTEND_URL}${path}</loc>
       ${lastmod}
+      ${xhtmlLinks}
     </url>`;
 };
 
