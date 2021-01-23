@@ -2,13 +2,7 @@ import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import {
-  ButtonLink,
-  Emoji,
-  FormSubmitSection,
-  LoginRequiredTemplate,
-  SettingsTemplate,
-} from 'components';
+import { ButtonLink, FormSubmitSection, LoginRequiredTemplate, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
@@ -31,7 +25,6 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
-  const headerText = t('my-data:header');
 
   const onCompleted = async ({ myData }: GraphQlMyDataMutation): Promise<void> => {
     if (myData) {
@@ -63,15 +56,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
-  const renderEmoji = <Emoji emoji="💾" />;
   const renderLineBreak = <Typography component="br" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
 
   const renderHomeButton = (
     <ButtonLink
@@ -117,7 +102,8 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('my-data:header'),
+      emoji: '💾',
     },
   };
 

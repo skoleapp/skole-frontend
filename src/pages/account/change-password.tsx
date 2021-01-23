@@ -1,5 +1,4 @@
 import {
-  Emoji,
   FormSubmitSection,
   LoginRequiredTemplate,
   SettingsTemplate,
@@ -42,7 +41,6 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
-  const headerText = t('change-password:header');
 
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required(t('validation:required')),
@@ -79,15 +77,6 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   }: ChangePasswordFormValues): Promise<void> => {
     await changePassword({ variables: { oldPassword, newPassword } });
   };
-
-  const renderEmoji = <Emoji emoji="🔑" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
 
   const renderFormFields = (props: FormikProps<ChangePasswordFormValues>): JSX.Element => (
     <Form>
@@ -127,7 +116,8 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('change-password:header'),
+      emoji: '🔑',
     },
   };
 

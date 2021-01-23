@@ -9,6 +9,7 @@ export interface SeoProps {
 
 export interface TopNavbarProps {
   header?: JSX.Element | string | false; // Header shown on mobile.
+  emoji?: string | false; // Emoji shown after the header on mobile.
   hideBackButton?: boolean; // Hide the back button on mobile.
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.

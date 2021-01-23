@@ -1,12 +1,6 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-import {
-  Emoji,
-  FormSubmitSection,
-  FormTemplate,
-  LogoutRequiredTemplate,
-  TextFormField,
-} from 'components';
+import { FormSubmitSection, FormTemplate, LogoutRequiredTemplate, TextFormField } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -67,7 +61,6 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
-  const headerText = t('reset-password:header');
 
   const emailValidationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
@@ -135,15 +128,6 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const { newPassword } = values;
     await resetPassword({ variables: { newPassword, token } });
   };
-
-  const renderEmoji = <Emoji emoji="😶‍🌫️" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
 
   const renderNewPasswordField = (
     <Field
@@ -224,7 +208,8 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('reset-password:header'),
+      emoji: '😶‍🌫️',
     },
   };
 

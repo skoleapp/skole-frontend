@@ -7,7 +7,6 @@ import {
   AutocompleteField,
   ButtonLink,
   ContactLink,
-  Emoji,
   FormSubmitSection,
   FormTemplate,
   LogoutRequiredTemplate,
@@ -61,7 +60,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
-  const headerText = t('register:header');
 
   const [registeredUser, setRegisteredUser] = useState<Pick<
     UserObjectType,
@@ -181,15 +179,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       },
     });
   };
-
-  const renderEmoji = <Emoji emoji="👋" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
 
   const renderUsernameField = (
     <Field
@@ -361,7 +350,8 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('register:header'),
+      emoji: '👋',
       hideSearch: true,
       hideRegisterButton: true,
       hideGetStartedButton: true,

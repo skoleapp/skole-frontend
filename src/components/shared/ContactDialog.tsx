@@ -11,16 +11,17 @@ import { SkoleDialog } from './SkoleDialog';
 interface Props {
   header: JSX.Element | string;
   text: JSX.Element | string;
+  emoji?: string;
   open: boolean;
   handleClose: () => void;
 }
 
-export const ContactDialog: React.FC<Props> = ({ header, text, open, handleClose }) => {
+export const ContactDialog: React.FC<Props> = ({ header, text, emoji, open, handleClose }) => {
   const { t } = useTranslation();
 
   return (
     <SkoleDialog open={open} fullScreen={false}>
-      <DialogHeader onCancel={handleClose} text={header} />
+      <DialogHeader onCancel={handleClose} text={header} emoji={emoji} />
       <DialogContent>
         <DialogContentText>{text}</DialogContentText>
       </DialogContent>

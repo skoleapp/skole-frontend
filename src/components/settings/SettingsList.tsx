@@ -36,7 +36,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={href} key={i}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
         <ListItemIcon>
-          <Emoji emoji={emoji} />
+          <Emoji emoji={emoji} noSpace />
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>
@@ -47,7 +47,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.verifyAccount}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.verifyAccount)}>
         <ListItemIcon>
-          <Emoji emoji="✅" />
+          <Emoji emoji="✅" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:verifyAccount')}</ListItemText>
       </MenuItem>
@@ -59,7 +59,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
       <Link href={href} key={i}>
         <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
           <ListItemIcon>
-            <Emoji emoji={emoji} />
+            <Emoji emoji={emoji} noSpace />
           </ListItemIcon>
           <ListItemText>{t(text)}</ListItemText>
         </MenuItem>
@@ -71,7 +71,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.about}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.about)}>
         <ListItemIcon>
-          <Emoji emoji="ℹ️" />
+          <Emoji emoji="ℹ️" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:about')}</ListItemText>
       </MenuItem>
@@ -81,7 +81,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   const renderLanguageMenuItem = (
     <MenuItem onClick={handleLanguageClick}>
       <ListItemIcon>
-        <Emoji emoji="🌐" />
+        <Emoji emoji="🌐" noSpace />
       </ListItemIcon>
       <ListItemText>{t('common:changeLanguage')}</ListItemText>
     </MenuItem>
@@ -91,7 +91,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.login}>
       <MenuItem onClick={handleMenuItemClick}>
         <ListItemIcon>
-          <Emoji emoji="👋" />
+          <Emoji emoji="👋" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:login')}</ListItemText>
       </MenuItem>
@@ -102,7 +102,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.logout}>
       <MenuItem onClick={handleMenuItemClick}>
         <ListItemIcon>
-          <Emoji emoji="👋" />
+          <Emoji emoji="👋" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:logout')}</ListItemText>
       </MenuItem>

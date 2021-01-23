@@ -24,7 +24,6 @@ export const ShareDialog: React.FC = () => {
   const { toggleNotification } = useNotificationsContext();
   const { asPath: _asPath } = useRouter();
   const asPath = _asPath.split('?')[0];
-  const { isMobile } = useMediaQueries();
 
   const {
     shareDialogOpen,
@@ -35,6 +34,7 @@ export const ShareDialog: React.FC = () => {
   const dialogHeaderProps = {
     onCancel: handleCloseShareDialog,
     text: shareHeader,
+    emoji: '📤',
   };
 
   const url = customLink || `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`;
@@ -142,7 +142,7 @@ export const ShareDialog: React.FC = () => {
     </MenuItem>
   );
 
-  const renderSeeAllMenuItem = isMobile && (
+  const renderSeeAllMenuItem = (
     <MenuItem onClick={handleClickSeeAll}>
       <ListItemIcon>
         <ArrowForwardOutlined />

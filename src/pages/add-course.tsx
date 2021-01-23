@@ -3,7 +3,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
   ContactLink,
-  Emoji,
   ErrorTemplate,
   FormSubmitSection,
   FormTemplate,
@@ -48,7 +47,6 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school'], query);
-  const headerText = t('add-course:header');
 
   const { data, error } = useCreateCourseAutocompleteDataQuery({
     variables,
@@ -120,15 +118,6 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     subjects: [],
     general: '',
   };
-
-  const renderEmoji = <Emoji emoji="🎓" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
 
   const renderCourseNameField = (
     <Field
@@ -213,7 +202,8 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('add-course:header'),
+      emoji: '🎓',
     },
   };
 

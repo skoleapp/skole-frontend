@@ -14,6 +14,7 @@ import { FormTemplate } from './FormTemplate';
 export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
+  const text = t('common:logoutRequired');
   const handleClickCancelButton = (): void => Router.back();
 
   const logoutButtonHref = {
@@ -23,13 +24,15 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
     },
   };
 
+  const renderEmoji = <Emoji emoji="🙃" />;
+  const renderLineBreak = <Typography component="br" />;
+
   const renderText = (
     <Typography variant="subtitle1" align="center">
-      {t('common:logoutRequired')} 🙃
+      {text}
+      {renderEmoji}
     </Typography>
   );
-
-  const renderLineBreak = <Typography component="br" />;
 
   const renderLogoutButton = (
     <ButtonLink

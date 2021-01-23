@@ -8,9 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import {
   CustomBottomNavbarContainer,
@@ -141,6 +138,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const created = R.prop('created', resource);
   const { commentCount, commentDialogOpen } = useDiscussionContext(comments);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
+  const emoji = '📚';
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -154,22 +152,14 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
     comments,
   );
 
-  const renderEmoji = <Emoji emoji="📚" />;
-
-  const renderHeader = (
-    <>
-      {title}
-      {renderEmoji}
-    </>
-  );
-
   const {
     infoDialogOpen,
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: renderHeader,
+    header: title,
+    emoji,
     infoButtonTooltip: t('resource-tooltips:info'),
   });
 
@@ -391,6 +381,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
 
   const toolbarProps = {
     title,
+    emoji,
     renderStarButton,
     renderUpvoteButton,
     renderDownvoteButton,
@@ -462,7 +453,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const renderDownloadAction = isMobile && (
     <MenuItem onClick={handleDownloadButtonClick}>
       <ListItemIcon>
-        <CloudDownloadOutlined />
+        <Emoji emoji="📩" noSpace />
       </ListItemIcon>
       <ListItemText>{t('resource:downloadPdf')}</ListItemText>
     </MenuItem>
@@ -471,7 +462,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const renderPrintAction = isMobile && (
     <MenuItem onClick={handlePrintButtonClick}>
       <ListItemIcon>
-        <PrintOutlined />
+        <Emoji emoji="🖨️" noSpace />
       </ListItemIcon>
       <ListItemText>{t('resource:printPdf')}</ListItemText>
     </MenuItem>
@@ -480,7 +471,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const renderDeleteAction = isOwner && (
     <MenuItem onClick={handleDeleteResource} disabled={verified === false}>
       <ListItemIcon>
-        <DeleteOutline />
+        <Emoji emoji="❌️" noSpace />
       </ListItemIcon>
       <ListItemText>{t('resource:delete')}</ListItemText>
     </MenuItem>

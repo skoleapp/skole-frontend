@@ -180,8 +180,9 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const schoolTypeName = R.prop('name', schoolType);
   const countryName = R.prop('name', country);
   const cityName = R.prop('name', city);
-  const filtersHeaderText = t('common:filters');
-  const resultsHeaderText = t('common:searchResults');
+  const filtersHeader = t('common:filters');
+  const filtersEmoji = '🔎';
+  const resultsHeader = t('common:searchResults');
 
   useEffect(() => {
     formRef.current?.setFieldValue('school', school);
@@ -479,7 +480,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderDialogHeader = (
     <DialogHeader
       onCancel={handleCloseFilters}
-      text={t('common:filters')}
+      text={filtersHeader}
+      emoji={filtersEmoji}
       renderHeaderLeft={renderClearFiltersButton}
     />
   );
@@ -500,12 +502,12 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderBackButton = <BackButton />;
-  const renderFiltersEmoji = <Emoji emoji="🔎" />;
+  const renderFiltersEmoji = <Emoji emoji={filtersEmoji} />;
   const renderResultsEmoji = <Emoji emoji="🎓" />;
 
   const renderFiltersHeaderTitle = (
     <>
-      {filtersHeaderText}
+      {filtersHeader}
       {renderFiltersEmoji}
     </>
   );
@@ -524,7 +526,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderResultsHeaderTitle = (
     <>
-      {resultsHeaderText}
+      {resultsHeader}
       {renderResultsEmoji}
     </>
   );

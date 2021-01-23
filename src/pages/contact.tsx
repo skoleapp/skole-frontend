@@ -1,4 +1,4 @@
-import { Emoji, FormSubmitSection, FormTemplate, TextFormField } from 'components';
+import { FormSubmitSection, FormTemplate, TextFormField } from 'components';
 import { useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
@@ -29,7 +29,6 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-  const headerText = t('contact:header');
 
   const {
     formRef,
@@ -79,15 +78,6 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createContactMessage({ variables });
   };
 
-  const renderEmoji = <Emoji emoji="🗣️" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
-
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form>
       <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
@@ -118,7 +108,8 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('contact:header'),
+      emoji: '🗣️',
     },
   };
 

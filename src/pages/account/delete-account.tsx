@@ -1,7 +1,6 @@
 import FormControl from '@material-ui/core/FormControl';
 import {
   ButtonLink,
-  Emoji,
   FormSubmitSection,
   LoginRequiredTemplate,
   SettingsTemplate,
@@ -42,7 +41,6 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-  const headerText = t('delete-account:header');
 
   const onCompleted = async ({ deleteUser }: DeleteUserMutation): Promise<void> => {
     if (deleteUser) {
@@ -89,15 +87,6 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     password: Yup.string().required(t('validation:required')),
   });
 
-  const renderEmoji = <Emoji emoji="⚠️" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
-
   const renderPasswordField = (
     <Field name="password" label={t('forms:password')} component={TextFormField} type="password" />
   );
@@ -136,7 +125,8 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('delete-account:header'),
+      emoji: '⚠️',
     },
   };
 

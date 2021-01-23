@@ -4,7 +4,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
   DatePickerFormField,
-  Emoji,
   ErrorTemplate,
   FileField,
   FormSubmitSection,
@@ -60,7 +59,6 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const contactDialogEmailText = t('upload-resource:contactDialogEmailText');
   const contactDialogFormatText = t('upload-resource:contactDialogFormatText');
   const guidelinesInfo = t('upload-resource:guidelinesInfo');
-  const headerText = t('upload-resource:header');
 
   const {
     formRef,
@@ -152,15 +150,6 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     file: null,
     general: '',
   };
-
-  const renderEmoji = <Emoji emoji="📚" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
 
   const renderResourceTitleField = (
     <Field
@@ -329,7 +318,8 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
 
   const commonContactDialogProps = {
     ...contactDialogProps,
-    header: `${t('upload-resource:contactDialogHeader')} 💪`,
+    header: t('upload-resource:contactDialogHeader'),
+    emoji: '💪',
   };
 
   const renderContactDialog = (
@@ -351,7 +341,8 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('upload-resource:header'),
+      emoji: '📚',
     },
   };
 

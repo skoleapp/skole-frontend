@@ -35,6 +35,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 
 interface Props {
   title: string;
+  emoji: string;
   renderStarButton: JSX.Element | false;
   renderUpvoteButton: JSX.Element | false;
   renderDownvoteButton: JSX.Element | false;
@@ -44,6 +45,7 @@ interface Props {
 
 export const ResourceTopToolbar: React.FC<Props> = ({
   title,
+  emoji,
   renderStarButton,
   renderUpvoteButton,
   renderDownvoteButton,
@@ -84,7 +86,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
     </Tooltip>
   );
 
-  const renderEmoji = <Emoji emoji="📚" />;
+  const renderEmoji = <Emoji emoji={emoji} />;
 
   const renderResourceTitle = (
     <Typography

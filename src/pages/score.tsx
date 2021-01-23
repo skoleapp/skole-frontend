@@ -1,4 +1,4 @@
-import { Emoji, MarkdownTemplate } from 'components';
+import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { getT, loadMarkdown, loadNamespaces } from 'lib';
@@ -10,19 +10,13 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, con
   const { isTabletOrDesktop } = useMediaQueries();
 
   // The emoji won't stand out from the top navbar on mobile.
-  const renderEmoji = isTabletOrDesktop && <Emoji emoji="💯" />;
-
-  const renderHeader = (
-    <>
-      {title}
-      {renderEmoji}
-    </>
-  );
+  const emoji = isTabletOrDesktop && '💯';
 
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: title,
+      emoji,
     },
     content,
   };

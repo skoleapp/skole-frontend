@@ -10,6 +10,8 @@ import React from 'react';
 import { TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { DialogHeaderProps } from 'types';
 
+import { Emoji } from './Emoji';
+
 const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     padding: spacing(2),
@@ -22,6 +24,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 
 export const DialogHeader: React.FC<DialogHeaderProps> = ({
   text,
+  emoji,
   onCancel,
   renderHeaderLeft,
   headerCenter,
@@ -38,9 +41,12 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
     </Tooltip>
   );
 
+  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+
   const renderHeaderText = (
     <Typography className={clsx('MuiCardHeader-title', classes.text, 'truncate-text')} variant="h6">
       {text}
+      {renderEmoji}
     </Typography>
   );
 

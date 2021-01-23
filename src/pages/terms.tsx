@@ -1,4 +1,4 @@
-import { Emoji, MarkdownTemplate } from 'components';
+import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { getT, loadMarkdown, loadNamespaces } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -6,19 +6,11 @@ import React from 'react';
 import { MarkdownPageProps } from 'types';
 
 const TermsPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
-  const renderEmoji = <Emoji emoji="🧑‍⚖️" />;
-
-  const renderHeader = (
-    <>
-      {title}
-      {renderEmoji}
-    </>
-  );
-
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: title,
+      emoji: '🧑‍⚖️',
     },
     content,
   };

@@ -54,8 +54,8 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   const { isTabletOrDesktop } = useMediaQueries();
   const headerText = t('common:settings');
 
-  const renderEmoji = <Emoji emoji="⚙️" />;
   const renderBackButton = <BackButton />;
+  const renderEmoji = <Emoji emoji="⚙️" />;
   const renderHeaderRight = <SettingsButton />;
 
   const settingsHeaderTitle = (

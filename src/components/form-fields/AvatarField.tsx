@@ -7,9 +7,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
-import ClearOutlined from '@material-ui/icons/ClearOutlined';
-import EditOutlined from '@material-ui/icons/EditOutlined';
 import imageCompression from 'browser-image-compression';
 import { useNotificationsContext } from 'context';
 import { ErrorMessage, FormikProps, FormikValues } from 'formik';
@@ -19,7 +16,7 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { ACCEPTED_AVATAR_FILES, MAX_AVATAR_FILE_SIZE, MAX_AVATAR_WIDTH_HEIGHT } from 'utils';
 
-import { ResponsiveDialog } from '../shared';
+import { Emoji, ResponsiveDialog } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -56,6 +53,7 @@ export const AvatarField = <T extends FormikValues>({
 
   const dialogHeaderProps = {
     text: t('edit-profile:avatar'),
+    emoji: '🤳',
     onCancel: handleCloseDialog,
   };
 
@@ -102,7 +100,7 @@ export const AvatarField = <T extends FormikValues>({
     ? t('edit-profile:changeAvatar')
     : t('edit-profile:addAvatar');
 
-  const renderAddOrChangeAvatarIcon = preview ? <EditOutlined /> : <AddCircleOutlineOutlined />;
+  const renderAddOrChangeAvatarIcon = <Emoji emoji={preview ? '🖊️' : '➕'} noSpace />;
 
   const renderAddOrChangeAvatar = (
     <label htmlFor="avatar-input">
@@ -116,7 +114,7 @@ export const AvatarField = <T extends FormikValues>({
   const renderRemoveAvatar = (
     <MenuItem onClick={handleRemoveAvatar} disabled={!preview}>
       <ListItemIcon>
-        <ClearOutlined />
+        <Emoji emoji="❌" noSpace />
       </ListItemIcon>
       <ListItemText>{t('edit-profile:clearAvatar')}</ListItemText>
     </MenuItem>

@@ -1,6 +1,7 @@
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoOutlined from '@material-ui/icons/InfoOutlined';
+import { Emoji } from 'components';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
 
@@ -9,6 +10,7 @@ import { useOpen } from './useOpen';
 
 interface UseInfoDialogParams {
   header: JSX.Element | string;
+  emoji?: string | false;
   infoButtonTooltip: string;
 }
 
@@ -21,6 +23,7 @@ interface UseInfoDrawer {
 
 export const useInfoDialog = ({
   header,
+  emoji,
   infoButtonTooltip,
 }: UseInfoDialogParams): UseInfoDrawer => {
   const dialogButtonProps = useDialogButton();
@@ -36,8 +39,17 @@ export const useInfoDialog = ({
     _handleCloseInfoDialog();
   };
 
+  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+
+  const renderHeader = (
+    <>
+      {header}
+      {renderEmoji}
+    </>
+  );
+
   const infoDialogHeaderProps = {
-    text: header,
+    text: renderHeader,
     onCancel: handleCloseInfoDialog,
   };
 

@@ -11,7 +11,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import clsx from 'clsx';
 import {
   BackButton,
@@ -131,6 +130,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs(comments);
+  const emoji = '🎓';
 
   const uploadResourceButtonTooltip =
     verificationRequiredTooltip || t('course-tooltips:uploadResource');
@@ -143,22 +143,14 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     unstarTooltip: t('course-tooltips:unstar'),
   });
 
-  const renderEmoji = <Emoji emoji="🎓" />;
-
-  const renderHeader = (
-    <>
-      {courseName}
-      {renderEmoji}
-    </>
-  );
-
   const {
     infoDialogOpen,
     infoDialogHeaderProps,
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: renderHeader,
+    header: courseName,
+    emoji,
     infoButtonTooltip: t('course-tooltips:info'),
   });
 
@@ -361,6 +353,14 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   );
 
   const renderBackButton = <BackButton className="MuiCardHeader-avatar" />;
+  const renderEmoji = <Emoji emoji={emoji} />;
+
+  const renderHeader = (
+    <>
+      {courseName}
+      {renderEmoji}
+    </>
+  );
 
   const renderResourcesTitle = (
     <Typography
@@ -433,7 +433,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const renderDeleteAction = isOwner && (
     <MenuItem onClick={handleDeleteCourse} disabled={verified === false}>
       <ListItemIcon>
-        <DeleteOutline />
+        <Emoji emoji="❌" noSpace />
       </ListItemIcon>
       <ListItemText>{t('course:delete')}</ListItemText>
     </MenuItem>

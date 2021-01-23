@@ -8,7 +8,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { BackButton, TabPanel } from '../shared';
+import { BackButton, Emoji, TabPanel } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
@@ -17,6 +17,8 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -66,8 +68,18 @@ export const TabTemplate: React.FC<Props> = ({
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
+  const header = topNavbarProps?.header;
+  const emoji = topNavbarProps?.emoji;
 
   const renderBackButton = <BackButton />;
+  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+
+  const renderHeaderTitle = (
+    <>
+      {header}
+      {renderEmoji}
+    </>
+  );
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
@@ -77,7 +89,7 @@ export const TabTemplate: React.FC<Props> = ({
         title: classes.cardHeaderTitle,
         action: classes.cardHeaderAction,
       }}
-      title={topNavbarProps?.header}
+      title={renderHeaderTitle}
       avatar={renderBackButton}
       action={renderAction}
     />

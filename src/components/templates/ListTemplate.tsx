@@ -1,6 +1,4 @@
-import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
@@ -8,12 +6,17 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { BackButton, Emoji, MarkdownContent } from '../shared';
+import { BackButton, Emoji } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
     flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -31,15 +34,22 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     top: spacing(2),
     left: spacing(2),
   },
+  cardHeaderAction: {
+    position: 'absolute',
+    top: spacing(2),
+    right: spacing(2),
+  },
 }));
 
-interface Props extends MainTemplateProps {
-  content: string;
+interface Props extends Omit<MainTemplateProps, 'children'> {
+  listTemplateProps?: {
+    renderAction?: JSX.Element;
+  };
 }
 
-export const MarkdownTemplate: React.FC<Props> = ({
-  content,
+export const ListTemplate: React.FC<Props> = ({
   topNavbarProps,
+  listTemplateProps,
   children,
   ...props
 }) => {
@@ -58,29 +68,18 @@ export const MarkdownTemplate: React.FC<Props> = ({
     </>
   );
 
-  const renderCardHeader = isTabletOrDesktop && (
+  const renderHeader = isTabletOrDesktop && (
     <CardHeader
       classes={{
         root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
+        title: classes.cardHeaderTitle,
+        action: classes.cardHeaderAction,
       }}
       title={renderHeaderTitle}
       avatar={renderBackButton}
+      action={listTemplateProps?.renderAction}
     />
-  );
-
-  const renderMarkdownContent = <MarkdownContent>{content}</MarkdownContent>;
-
-  const renderCardContent = (
-    <CardContent>
-      <Grid container justify="center">
-        <Grid item xs={12} sm={8} md={6} lg={5} xl={4}>
-          {children}
-          {renderMarkdownContent}
-        </Grid>
-      </Grid>
-    </CardContent>
   );
 
   const layoutProps = {
@@ -91,8 +90,8 @@ export const MarkdownTemplate: React.FC<Props> = ({
   return (
     <MainTemplate {...layoutProps}>
       <Paper className={classes.root}>
-        {renderCardHeader}
-        {renderCardContent}
+        {renderHeader}
+        {children}
       </Paper>
     </MainTemplate>
   );

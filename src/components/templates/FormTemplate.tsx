@@ -8,7 +8,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { BackButton } from '../shared';
+import { BackButton, Emoji } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
@@ -40,8 +40,18 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
 }) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
+  const header = topNavbarProps?.header;
+  const emoji = topNavbarProps?.emoji;
 
   const renderBackButton = <BackButton />;
+  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+
+  const renderHeaderTitle = (
+    <>
+      {header}
+      {renderEmoji}
+    </>
+  );
 
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
@@ -50,7 +60,7 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
         title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={topNavbarProps?.header}
+      title={renderHeaderTitle}
       avatar={renderBackButton}
     />
   );

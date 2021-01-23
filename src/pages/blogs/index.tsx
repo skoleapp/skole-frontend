@@ -1,81 +1,25 @@
-import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-import { BackButton, Emoji, MainTemplate } from 'components';
+import { ListTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
-import { useDayjs, useMediaQueries } from 'hooks';
+import { useDayjs } from 'hooks';
 import { getT, loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
 import { MarkdownPageData, SeoPageProps } from 'types';
 import { urls } from 'utils';
-
-const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
-  paper: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)',
-    [breakpoints.up('md')]: {
-      borderRadius: BORDER_RADIUS,
-    },
-  },
-  cardHeaderRoot: {
-    borderBottom: BORDER,
-    position: 'relative',
-    padding: spacing(3),
-  },
-  cardHeaderTitle: {
-    color: palette.text.secondary,
-  },
-  cardHeaderAvatar: {
-    position: 'absolute',
-    top: spacing(2),
-    left: spacing(2),
-  },
-}));
 
 interface Props extends SeoPageProps {
   blogs: MarkdownPageData[];
 }
 
 const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
-  const classes = useStyles();
   const { t } = useTranslation();
-  const { isTabletOrDesktop } = useMediaQueries();
-  const headerText = t('blogs:header');
-
-  const renderBackButton = <BackButton />;
-  const renderEmoji = <Emoji emoji="📃" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
-
-  const renderCardHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
-        avatar: classes.cardHeaderAvatar,
-      }}
-      title={renderHeader}
-      avatar={renderBackButton}
-    />
-  );
 
   const mapBlogs = blogs.map(
     ({ title, excerpt, coverImage = '', author, date, minutesToRead = 0, slug = '' }, i) => (
@@ -109,22 +53,18 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
     ),
   );
 
-  const renderBlogs = <TableBody>{mapBlogs}</TableBody>;
-
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('blogs:header'),
+      emoji: '📃',
     },
   };
 
   return (
-    <MainTemplate {...layoutProps}>
-      <Paper className={classes.paper}>
-        {renderCardHeader}
-        {renderBlogs}
-      </Paper>
-    </MainTemplate>
+    <ListTemplate {...layoutProps}>
+      <TableBody>{mapBlogs}</TableBody>
+    </ListTemplate>
   );
 };
 

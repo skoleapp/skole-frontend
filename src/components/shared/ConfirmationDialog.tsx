@@ -29,7 +29,7 @@ export const ConfirmationDialog: React.FC = () => {
 
   return (
     <SkoleDialog open={dialogOpen} fullScreen={false}>
-      <DialogHeader onCancel={handleCancel} text={title} />
+      <DialogHeader onCancel={handleCancel} text={title} emoji="🤔" />
       <DialogContent>
         <DialogContentText className={classes.dialogContentText}>{description}</DialogContentText>
       </DialogContent>

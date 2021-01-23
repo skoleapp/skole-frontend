@@ -405,6 +405,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     <DialogHeader
       headerCenter={renderHeaderCenter(props)} // Rendered for authenticated users.
       text={t('forms:createComment')} // Rendered for anonymous users.
+      emoji="💬"
       onCancel={handleCloseCreateCommentDialog}
     />
   );

@@ -1,7 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ButtonLink, Emoji, FormSubmitSection, FormTemplate, LoadingTemplate } from 'components';
+import { ButtonLink, FormSubmitSection, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import {
@@ -41,7 +41,6 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [confirmationError, setConfirmationError] = useState<string | null>();
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
-  const headerText = t('verify-account:header');
 
   const loginButtonHref = {
     pathname: urls.login,
@@ -124,15 +123,6 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const initialValues = {
     general: '',
   };
-
-  const renderEmoji = <Emoji emoji="✅" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
 
   const renderHomeButton = (
     <ButtonLink
@@ -242,7 +232,8 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: renderHeader,
+      header: t('verify-account:header'),
+      emoji: '✅',
     },
   };
 
