@@ -124,7 +124,7 @@ export const ABOUT_ITEMS = [
     href: urls.blogs,
   },
   {
-    emoji: '👮',
+    emoji: '🧑‍⚖️',
     text: 'common:terms',
     href: urls.terms,
   },

@@ -154,10 +154,12 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
     comments,
   );
 
-  const header = (
+  const renderEmoji = <Emoji emoji="📚" />;
+
+  const renderHeader = (
     <>
       {title}
-      <Emoji emoji="📚" />
+      {renderEmoji}
     </>
   );
 
@@ -167,7 +169,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header,
+    header: renderHeader,
     infoButtonTooltip: t('resource-tooltips:info'),
   });
 

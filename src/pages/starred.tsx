@@ -31,17 +31,19 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
-
-  const header = (
-    <>
-      {t('starred:header')}
-      <Emoji emoji="🤩" />
-    </>
-  );
+  const headerText = t('starred:header');
 
   const renderLoading = <LoadingBox />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
+  const renderEmoji = <Emoji emoji="🤩" />;
+
+  const renderHeader = (
+    <>
+      {headerText}
+      {renderEmoji}
+    </>
+  );
 
   const renderCourseTable = (
     <PaginatedTable renderTableBody={renderCourseTableBody} count={courseCount} />
@@ -69,7 +71,7 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
     tabTemplateProps: {
       leftTabLabel: `${t('common:courses')} (${courseCount})`,

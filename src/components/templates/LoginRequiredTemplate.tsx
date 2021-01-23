@@ -14,6 +14,7 @@ import { FormTemplate } from './FormTemplate';
 export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
+  const text = t('common:loginRequired');
   const handleClickCancelButton = (): void => Router.back();
 
   const loginButtonHref = {
@@ -23,14 +24,15 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
     },
   };
 
+  const renderEmoji = <Emoji emoji="🙃" />;
+  const renderLineBreak = <Typography component="br" />;
+
   const renderText = (
     <Typography variant="subtitle1" align="center">
-      {t('common:loginRequired')}
-      <Emoji emoji="🙃" />
+      {text}
+      {renderEmoji}
     </Typography>
   );
-
-  const renderLineBreak = <Typography component="br" />;
 
   const renderLoginButton = (
     <ButtonLink

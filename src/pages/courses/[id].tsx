@@ -145,7 +145,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
 
   const renderEmoji = <Emoji emoji="🎓" />;
 
-  const header = (
+  const renderHeader = (
     <>
       {courseName}
       {renderEmoji}
@@ -158,7 +158,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header,
+    header: renderHeader,
     infoButtonTooltip: t('course-tooltips:info'),
   });
 
@@ -367,7 +367,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
       className={clsx('MuiCardHeader-title', classes.resourcesHeaderTitle, 'truncate-text')}
       variant="h5"
     >
-      {header}
+      {renderHeader}
     </Typography>
   );
 

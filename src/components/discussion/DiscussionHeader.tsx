@@ -32,10 +32,12 @@ export const DiscussionHeader: React.FC<Props> = ({
   const { t } = useTranslation();
   const title = `${t('common:discussion')} (${t('discussion:commentCount', { commentCount })})`;
 
-  const subheader = (
+  const renderEmoji = <Emoji emoji="💬" />;
+
+  const renderSubheader = (
     <>
       {title}
-      <Emoji emoji="💬" />
+      {renderEmoji}
     </>
   );
 
@@ -50,7 +52,7 @@ export const DiscussionHeader: React.FC<Props> = ({
   return (
     <CardHeader
       classes={{ root: classes.root, subheader: classes.subheader }}
-      subheader={subheader}
+      subheader={renderSubheader}
       action={renderAction}
     />
   );

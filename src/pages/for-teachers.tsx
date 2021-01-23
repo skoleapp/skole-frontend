@@ -109,64 +109,94 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
     </Grid>
   );
 
+  const studentsPitchHeaderText = t('for-teachers:studentsPitchHeader').toUpperCase();
+  const teachersPitchHeaderText = t('for-teachers:teachersPitchHeader').toUpperCase();
+  const infoPitchHeaderText = t('for-teachers:infoPitchHeader').toUpperCase();
+
+  const renderStudentEmoji = <Emoji emoji="🧑‍🎓" />;
+  const renderTeacherEmoji = <Emoji emoji="🧑‍🏫" />;
+  const renderInfoEmoji = <Emoji emoji="🧐" />;
+  const renderHandsUpEmoji = <Emoji emoji="🙌" />;
+
+  const studentBullets = {
+    1: t('for-teachers:studentsBullet1'),
+    2: t('for-teachers:studentsBullet2'),
+    3: t('for-teachers:studentsBullet3'),
+    4: t('for-teachers:studentsBullet4'),
+  };
+
+  const teacherBullets = {
+    1: t('for-teachers:teachersBullet1'),
+    2: t('for-teachers:teachersBullet2'),
+    3: t('for-teachers:teachersBullet3'),
+    4: t('for-teachers:teachersBullet4'),
+  };
+
+  const infoBullets = {
+    1: t('for-teachers:infoBullet1'),
+    2: t('for-teachers:infoBullet2'),
+    3: t('for-teachers:infoBullet3'),
+    4: t('for-teachers:infoBullet4'),
+  };
+
   const renderPitchItems = (
     <>
       <Grid item xs={12} md={4}>
         <Typography className={classes.pitchHeader} variant="subtitle1">
-          {t('for-teachers:studentsPitchHeader').toUpperCase()}
-          <Emoji emoji="🧑‍🎓" />
+          {studentsPitchHeaderText}
+          {renderStudentEmoji}
         </Typography>
         <Divider className={classes.pitchHeaderDivider} />
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:studentsBullet1')}
+          {studentBullets[1]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:studentsBullet2')}
+          {studentBullets[2]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:studentsBullet3')}
+          {studentBullets[3]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:studentsBullet4')}
+          {studentBullets[4]}
         </Typography>
       </Grid>
       <Grid item xs={12} md={4}>
         <Typography className={classes.pitchHeader} variant="subtitle1">
-          {t('for-teachers:teachersPitchHeader').toUpperCase()}
-          <Emoji emoji="🧑‍🏫" />
+          {teachersPitchHeaderText}
+          {renderTeacherEmoji}
         </Typography>
         <Divider className={classes.pitchHeaderDivider} />
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:teachersBullet1')}
+          {teacherBullets[1]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:teachersBullet2')}
+          {teacherBullets[2]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:teachersBullet3')}
+          {teacherBullets[3]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:teachersBullet4')}
+          {teacherBullets[4]}
         </Typography>
       </Grid>
       <Grid item xs={12} md={4}>
         <Typography className={classes.pitchHeader} variant="subtitle1">
-          {t('for-teachers:infoPitchHeader').toUpperCase()}
-          <Emoji emoji="🧐" />
+          {infoPitchHeaderText}
+          {renderInfoEmoji}
         </Typography>
         <Divider className={classes.pitchHeaderDivider} />
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:infoBullet1')}
+          {infoBullets[1]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:infoBullet2')}
+          {infoBullets[2]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:infoBullet3')}
+          {infoBullets[3]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {t('for-teachers:infoBullet4')}
-          <Emoji emoji="🙌" />
+          {infoBullets[4]}
+          {renderHandsUpEmoji}
         </Typography>
       </Grid>
     </>
@@ -178,8 +208,8 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
         container
         item
         xs={12}
-        lg={8}
-        xl={6}
+        lg={10}
+        xl={8}
         className={clsx(classes.pitchBoxContainer, nativeApp && classes.nativeAppPitchBoxContainer)}
         spacing={8}
       >

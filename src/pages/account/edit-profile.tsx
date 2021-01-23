@@ -53,6 +53,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+  const headerText = t('edit-profile:header');
 
   const {
     userMe,
@@ -135,10 +136,12 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     subject: Yup.object().nullable(),
   });
 
-  const header = (
+  const renderEmoji = <Emoji emoji="🖊️" />;
+
+  const renderHeader = (
     <>
-      {t('edit-profile:header')}
-      <Emoji emoji="🖊️" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -248,7 +251,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

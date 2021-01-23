@@ -60,15 +60,20 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useSuggestionsQuery({ context });
   const suggestions = R.propOr([], 'suggestions', data);
-
-  const header = (
-    <>
-      {t('suggestions:header')}
-      <Emoji emoji="🔥" />
-    </>
-  );
+  const headerText = t('suggestions:header');
 
   const renderBackButton = <BackButton />;
+  const renderEmoji = <Emoji emoji="🔥" />;
+  const renderLoading = <LoadingBox />;
+  const renderNotFound = <NotFoundBox text={t('suggestions:noSuggestions')} />;
+  const renderTableFooter = <TableFooter className={classes.tableFooter} />;
+
+  const renderHeader = (
+    <>
+      {headerText}
+      {renderEmoji}
+    </>
+  );
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -77,14 +82,10 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={header}
+      title={renderHeader}
       avatar={renderBackButton}
     />
   );
-
-  const renderLoading = <LoadingBox />;
-  const renderNotFound = <NotFoundBox text={t('suggestions:noSuggestions')} />;
-  const renderTableFooter = <TableFooter className={classes.tableFooter} />;
 
   const renderTable = (
     <SuggestionsTable suggestions={suggestions} renderTableFooter={renderTableFooter} />
@@ -99,7 +100,7 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

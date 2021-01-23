@@ -41,6 +41,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [confirmationError, setConfirmationError] = useState<string | null>();
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
+  const headerText = t('verify-account:header');
 
   const loginButtonHref = {
     pathname: urls.login,
@@ -124,10 +125,12 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="✅" />;
+
+  const renderHeader = (
     <>
-      {t('verify-account:header')}
-      <Emoji emoji="✅" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -239,7 +242,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

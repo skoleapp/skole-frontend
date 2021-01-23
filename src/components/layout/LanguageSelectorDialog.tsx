@@ -14,6 +14,7 @@ export const LanguageSelectorDialog: React.FC = () => {
   const { asPath } = useRouter();
   const { t } = useTranslation();
   const { languageSelectorOpen, handleCloseLanguageMenu } = useLanguageContext();
+  const headerText = t('common:changeLanguage');
 
   const handleLanguageChange = (val: string) => async (): Promise<void> => {
     handleCloseLanguageMenu();
@@ -23,15 +24,17 @@ export const LanguageSelectorDialog: React.FC = () => {
     document.cookie = `NEXT_LOCALE=${val}`;
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="🌐" />;
+
+  const renderHeader = (
     <>
-      {t('common:changeLanguage')}
-      <Emoji emoji="🌐" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
   const dialogHeaderProps = {
-    text: header,
+    text: renderHeader,
     onCancel: handleCloseLanguageMenu,
   };
 

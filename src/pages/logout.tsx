@@ -20,6 +20,7 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { query } = useRouter();
   const { setUserMe } = useAuthContext();
   const context = useLanguageHeaderContext();
+  const headerText = t('logout:header');
 
   const onCompleted = async (): Promise<void> => {
     await apolloClient.clearStore();
@@ -34,10 +35,12 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     logout();
   }, []);
 
-  const header = (
+  const renderEmoji = <Emoji emoji="👋" />;
+
+  const renderHeader = (
     <>
-      {t('logout:header')}
-      <Emoji emoji="👋" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -45,7 +48,7 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
-      header,
+      header: renderHeader,
       hideSearch: true,
     },
   };

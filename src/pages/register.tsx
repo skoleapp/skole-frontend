@@ -61,6 +61,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
+  const headerText = t('register:header');
 
   const [registeredUser, setRegisteredUser] = useState<Pick<
     UserObjectType,
@@ -181,10 +182,12 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     });
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="👋" />;
+
+  const renderHeader = (
     <>
-      {t('register:header')}
-      <Emoji emoji="👋" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -358,7 +361,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
-      header,
+      header: renderHeader,
       hideSearch: true,
       hideRegisterButton: true,
       hideGetStartedButton: true,

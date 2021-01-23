@@ -217,6 +217,9 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
+  const headerText = t('common:description');
+  const suggestionsHeaderText = t('home:suggestionsHeader');
+  const nextStepsHeaderText = t('home:nextStepsHeader');
   const shareTitle = t('home:shareTitle');
   const shareText = `${t('common:description')} 🎓`;
 
@@ -264,11 +267,14 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSettingsButton = !userMe && <SettingsButton />;
+  const renderHeaderEmoji = <Emoji emoji="🎓" />;
+  const renderSuggestionsEmoji = <Emoji emoji="🔥" />;
+  const renderNextStepsEmoji = <Emoji emoji="🚀" />;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
-      {t('common:description')}
-      <Emoji emoji="🎓" />
+      {headerText}
+      {renderHeaderEmoji}
     </Typography>
   );
 
@@ -352,8 +358,8 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const suggestionsHeader = (
     <>
-      {t('home:suggestionsHeader')}
-      <Emoji emoji="🔥" />
+      {suggestionsHeaderText}
+      {renderSuggestionsEmoji}
     </>
   );
 
@@ -505,8 +511,8 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       justify="center"
     >
       <Typography className={classes.nextStepsHeader} variant="h2" color="textSecondary">
-        {t('home:nextStepsHeader')}
-        <Emoji emoji="🚀" />
+        {nextStepsHeaderText}
+        {renderNextStepsEmoji}
       </Typography>
       <Grid className={classes.nextStepsContent} item xs={12} lg={8} xl={6} container spacing={4}>
         {renderInviteStep}

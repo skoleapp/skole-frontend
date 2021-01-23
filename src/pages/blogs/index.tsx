@@ -53,13 +53,15 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
+  const headerText = t('blogs:header');
 
   const renderBackButton = <BackButton />;
+  const renderEmoji = <Emoji emoji="📃" />;
 
-  const header = (
+  const renderHeader = (
     <>
-      {t('blogs:header')}
-      <Emoji emoji="📃" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -70,7 +72,7 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
         title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={header}
+      title={renderHeader}
       avatar={renderBackButton}
     />
   );
@@ -112,7 +114,7 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

@@ -29,6 +29,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+  const headerText = t('contact:header');
 
   const {
     formRef,
@@ -78,10 +79,12 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createContactMessage({ variables });
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="🗣️" />;
+
+  const renderHeader = (
     <>
-      {t('contact:header')}
-      <Emoji emoji="🗣️" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -115,7 +118,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

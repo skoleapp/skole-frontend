@@ -31,6 +31,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
+  const headerText = t('my-data:header');
 
   const onCompleted = async ({ myData }: GraphQlMyDataMutation): Promise<void> => {
     if (myData) {
@@ -62,10 +63,13 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="💾" />;
+  const renderLineBreak = <Typography component="br" />;
+
+  const renderHeader = (
     <>
-      {t('my-data:header')}
-      <Emoji emoji="💾" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -80,8 +84,6 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       {t('common:continue')}
     </ButtonLink>
   );
-
-  const renderLineBreak = <Typography component="br" />;
 
   const renderSubmittedText = (
     <Typography variant="subtitle1" align="center">
@@ -115,7 +117,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

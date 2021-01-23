@@ -12,7 +12,7 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, con
   // The emoji won't stand out from the top navbar on mobile.
   const renderEmoji = isTabletOrDesktop && <Emoji emoji="💯" />;
 
-  const header = (
+  const renderHeader = (
     <>
       {title}
       {renderEmoji}
@@ -22,7 +22,7 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, con
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
     content,
   };

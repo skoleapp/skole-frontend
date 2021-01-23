@@ -67,6 +67,7 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
+  const headerText = t('reset-password:header');
 
   const emailValidationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
@@ -135,10 +136,12 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await resetPassword({ variables: { newPassword, token } });
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="😶‍🌫️" />;
+
+  const renderHeader = (
     <>
-      {t('reset-password:header')}
-      <Emoji emoji="😶‍🌫️" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -221,7 +224,7 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

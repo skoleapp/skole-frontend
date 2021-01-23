@@ -48,6 +48,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school'], query);
+  const headerText = t('add-course:header');
 
   const { data, error } = useCreateCourseAutocompleteDataQuery({
     variables,
@@ -120,10 +121,12 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="🎓" />;
+
+  const renderHeader = (
     <>
-      {t('add-course:header')}
-      <Emoji emoji="🎓" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -210,7 +213,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

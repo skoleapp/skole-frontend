@@ -180,6 +180,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const schoolTypeName = R.prop('name', schoolType);
   const countryName = R.prop('name', country);
   const cityName = R.prop('name', city);
+  const filtersHeaderText = t('common:filters');
+  const resultsHeaderText = t('common:searchResults');
 
   useEffect(() => {
     formRef.current?.setFieldValue('school', school);
@@ -498,11 +500,13 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderBackButton = <BackButton />;
+  const renderFiltersEmoji = <Emoji emoji="🔎" />;
+  const renderResultsEmoji = <Emoji emoji="🎓" />;
 
-  const filtersHeader = (
+  const renderFiltersHeaderTitle = (
     <>
-      {t('common:filters')}
-      <Emoji emoji="🔎" />
+      {filtersHeaderText}
+      {renderFiltersEmoji}
     </>
   );
 
@@ -513,15 +517,15 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={filtersHeader}
+      title={renderFiltersHeaderTitle}
       avatar={renderBackButton}
     />
   );
 
-  const resultsHeader = (
+  const renderResultsHeaderTitle = (
     <>
-      {t('common:searchResults')}
-      <Emoji emoji="🎓" />
+      {resultsHeaderText}
+      {renderResultsEmoji}
     </>
   );
 
@@ -531,7 +535,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         root: classes.cardHeaderRoot,
         title: classes.cardHeaderTitle,
       }}
-      title={resultsHeader}
+      title={renderResultsHeaderTitle}
     />
   );
 

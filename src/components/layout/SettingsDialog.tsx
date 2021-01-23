@@ -8,15 +8,21 @@ import { DialogHeader, Emoji, SkoleDialog } from '../shared';
 export const SettingsDialog: React.FC = () => {
   const { t } = useTranslation();
   const { settingsDialogOpen, handleCloseSettingsDialog } = useSettingsContext();
+  const headerText = t('common:settings');
 
-  const header = (
+  const renderEmoji = <Emoji emoji="⚙️" />;
+
+  const renderHeader = (
     <>
-      {t('common:settings')}
-      <Emoji emoji="⚙️" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
-  const renderDialogHeader = <DialogHeader onCancel={handleCloseSettingsDialog} text={header} />;
+  const renderDialogHeader = (
+    <DialogHeader onCancel={handleCloseSettingsDialog} text={renderHeader} />
+  );
+
   const renderSettingsList = <SettingsList dialog />;
 
   return (

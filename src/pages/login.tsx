@@ -58,6 +58,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [existingUser, setExistingUser] = useState(null);
   const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
   const context = useLanguageHeaderContext();
+  const headerText = t('login:header');
 
   const {
     formRef,
@@ -130,10 +131,12 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     formRef.current?.resetForm();
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="👋" />;
+
+  const renderHeader = (
     <>
-      {t('login:header')}
-      <Emoji emoji="👋" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -216,7 +219,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
-      header,
+      header: renderHeader,
       hideLoginButton: true,
       hideGetStartedButton: true,
       hideSearch: true,

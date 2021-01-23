@@ -47,15 +47,17 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
+  const headerText = t('about:header');
 
-  const header = (
+  const renderEmoji = <Emoji emoji="ℹ️" />;
+  const renderBackButton = <BackButton />;
+
+  const renderHeader = (
     <>
-      {t('about:header')}
-      <Emoji emoji="ℹ️" />
+      {headerText}
+      {renderEmoji}
     </>
   );
-
-  const renderBackButton = <BackButton />;
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -64,7 +66,7 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={header}
+      title={renderHeader}
       avatar={renderBackButton}
     />
   );
@@ -85,7 +87,7 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
       renderBackButton,
     },
   };

@@ -42,6 +42,7 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
+  const headerText = t('change-password:header');
 
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required(t('validation:required')),
@@ -79,10 +80,12 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await changePassword({ variables: { oldPassword, newPassword } });
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="🔑" />;
+
+  const renderHeader = (
     <>
-      {t('change-password:header')}
-      <Emoji emoji="🔑" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -124,7 +127,7 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

@@ -6,17 +6,19 @@ import React from 'react';
 import { MarkdownPageProps } from 'types';
 
 const GuidelinesPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
-  const header = (
+  const renderEmoji = <Emoji emoji="🗺️" />;
+
+  const renderHeader = (
     <>
       {title}
-      <Emoji emoji="🗺️" />
+      {renderEmoji}
     </>
   );
 
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
     content,
   };

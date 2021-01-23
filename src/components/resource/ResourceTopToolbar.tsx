@@ -35,9 +35,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 
 interface Props {
   title: string;
-  renderStarButton: JSX.Element;
-  renderUpvoteButton: JSX.Element;
-  renderDownvoteButton: JSX.Element;
+  renderStarButton: JSX.Element | false;
+  renderUpvoteButton: JSX.Element | false;
+  renderDownvoteButton: JSX.Element | false;
   handleDownloadButtonClick: (e: SyntheticEvent) => Promise<void>;
   handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
 }

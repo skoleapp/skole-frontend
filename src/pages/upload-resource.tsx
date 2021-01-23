@@ -60,6 +60,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const contactDialogEmailText = t('upload-resource:contactDialogEmailText');
   const contactDialogFormatText = t('upload-resource:contactDialogFormatText');
   const guidelinesInfo = t('upload-resource:guidelinesInfo');
+  const headerText = t('upload-resource:header');
 
   const {
     formRef,
@@ -152,10 +153,12 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     general: '',
   };
 
-  const header = (
+  const renderEmoji = <Emoji emoji="📚" />;
+
+  const renderHeader = (
     <>
-      {t('upload-resource:header')}
-      <Emoji emoji="📚" />
+      {headerText}
+      {renderEmoji}
     </>
   );
 
@@ -348,7 +351,7 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
     },
   };
 

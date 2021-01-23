@@ -3,7 +3,6 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
 import { useAuthContext, useLanguageContext, useSettingsContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';

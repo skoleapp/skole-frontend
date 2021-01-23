@@ -80,13 +80,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [activities, setActivities] = useState([]);
   const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
-
-  const header = (
-    <>
-      {t('activity:header')}
-      <Emoji emoji="🔔" />
-    </>
-  );
+  const headerText = t('activity:header');
 
   // Update state after data fetching is complete.
   useEffect(() => {
@@ -136,7 +130,18 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleCloseActionsDialog(e);
   };
 
+  const renderEmoji = <Emoji emoji="🔔" />;
   const renderBackButton = <BackButton />;
+  const renderLoading = <LoadingBox />;
+  const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
+  const renderActivityTableBody = <ActivityTableBody activities={activities} />;
+
+  const renderHeader = (
+    <>
+      {headerText}
+      {renderEmoji}
+    </>
+  );
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
@@ -146,15 +151,11 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         avatar: classes.cardHeaderAvatar,
         action: classes.cardHeaderAction,
       }}
-      title={header}
+      title={renderHeader}
       avatar={renderBackButton}
       action={renderActionsButton}
     />
   );
-
-  const renderLoading = <LoadingBox />;
-  const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
-  const renderActivityTableBody = <ActivityTableBody activities={activities} />;
 
   const renderTable = (
     <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
@@ -212,7 +213,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: renderHeader,
       renderHeaderRight,
     },
   };

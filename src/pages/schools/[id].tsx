@@ -61,10 +61,12 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const shareParams = { shareHeader: t('school:shareHeader'), shareTitle, shareText };
   const addCourseTooltip = verificationRequiredTooltip || t('school-tooltips:addCourse');
 
-  const header = (
+  const renderEmoji = <Emoji emoji="🏫" />;
+
+  const renderHeader = (
     <>
       {schoolName}
-      <Emoji emoji="🏫" />
+      {renderEmoji}
     </>
   );
 
@@ -74,7 +76,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header,
+    header: renderHeader,
     infoButtonTooltip: t('school-tooltips:info'),
   });
 
@@ -247,7 +249,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: isTabletOrDesktop && header, // School names are too long to be used as the header on mobile.
+      header: isTabletOrDesktop && renderHeader, // School names are too long to be used as the header on mobile.
       renderHeaderLeft: renderAddCourseButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
