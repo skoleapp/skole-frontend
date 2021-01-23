@@ -7,12 +7,14 @@ import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
+import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 import { ResourceObjectType } from 'generated';
 import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
+import * as R from 'ramda';
 import React from 'react';
 import { urls } from 'utils';
 
@@ -28,7 +30,18 @@ interface Props {
 }
 
 export const ResourceTableRow: React.FC<Props> = ({
-  resource: { id, title, date, resourceType, user, score, starCount, downloads, commentCount },
+  resource: {
+    id,
+    title,
+    date,
+    resourceType,
+    user,
+    score,
+    starCount,
+    downloads,
+    commentCount,
+    course,
+  },
   hideResourceChip,
   hideDateChip,
   key,
@@ -43,6 +56,8 @@ export const ResourceTableRow: React.FC<Props> = ({
   const renderStarIcon = <TableRowIcon icon={StarBorderOutlined} marginLeft />;
   const renderDiscussionIcon = <TableRowIcon icon={ChatOutlined} marginLeft />;
   const renderDownloadsIcon = <TableRowIcon icon={CloudDownloadOutlined} marginLeft />;
+  const courseName = R.propOr('', 'name', course);
+  const courseCode = R.propOr('', 'code', course);
 
   const renderResourceTitle = (
     <Typography color="textSecondary">
@@ -50,6 +65,17 @@ export const ResourceTableRow: React.FC<Props> = ({
         <TableRowIcon icon={AssignmentOutlined} />
         <Typography variant="body2" color="textPrimary">
           {title}
+        </Typography>
+      </Grid>
+    </Typography>
+  );
+
+  const renderResourceCourse = courseName && (
+    <Typography color="textSecondary">
+      <Grid container alignItems="center">
+        <TableRowIcon icon={SchoolOutlined} />
+        <Typography variant="caption" color="textSecondary">
+          {`${courseName} - ${courseCode}`}
         </Typography>
       </Grid>
     </Typography>
@@ -94,6 +120,7 @@ export const ResourceTableRow: React.FC<Props> = ({
         <TableRow>
           <TableCell>
             {renderResourceTitle}
+            {renderResourceCourse}
             {renderChips}
             {renderResourceInfo}
           </TableCell>

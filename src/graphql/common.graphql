@@ -641,6 +641,10 @@ query Starred($page: Int, $pageSize: Int) {
       date
       starCount
       commentCount
+      course {
+        name
+        code
+      }
       downloads
       resourceType {
         name
@@ -737,6 +741,10 @@ query User($id: ID, $page: Int, $pageSize: Int) {
       id
       title
       score
+      course {
+        name
+        code
+      }
       date
       starCount
       commentCount
@@ -962,6 +970,10 @@ query Suggestions {
         id
         username
       }
+      course {
+        name
+        code
+      }
     }
     ... on CommentObjectType {
       id
@@ -975,7 +987,8 @@ query Suggestions {
         username
         avatarThumbnail
       }
-      course {
+      # Need to use an alias: https://stackoverflow.com/a/56695847/9835872
+      commentCourse: course {
         id
         name
       }
@@ -1012,6 +1025,10 @@ query SuggestionsPreview {
       resourceType {
         name
       }
+      course {
+        name
+        code
+      }
       user {
         id
         username
@@ -1028,7 +1045,7 @@ query SuggestionsPreview {
         id
         username
       }
-      course {
+      commentCourse: course {
         id
         name
       }
