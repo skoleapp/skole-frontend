@@ -1,4 +1,4 @@
-FROM node:14.10.1-alpine3.12 AS base
+FROM node:15.6.0-alpine3.12@sha256:66c568b8d2d97e42e41e2c0cb8be20c23afc3ecc00c0d7f662dbd7601c654109 AS base
 
 RUN adduser --disabled-password user
 WORKDIR /home/user/app
