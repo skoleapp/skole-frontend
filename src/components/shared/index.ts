@@ -16,5 +16,6 @@ export { NotFoundBox } from './NotFoundBox';
 export { ResponsiveDialog } from './ResponsiveDialog';
 export { ShareButton } from './ShareButton';
 export { SkoleDialog } from './SkoleDialog';
+export { SocialMediaIcon } from './SocialMediaIcon';
 export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';

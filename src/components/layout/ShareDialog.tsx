@@ -2,21 +2,13 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import EmailOutlined from '@material-ui/icons/EmailOutlined';
-import Facebook from '@material-ui/icons/Facebook';
-import LinkOutlined from '@material-ui/icons/LinkOutlined';
-import Reddit from '@material-ui/icons/Reddit';
-import Telegram from '@material-ui/icons/Telegram';
-import Twitter from '@material-ui/icons/Twitter';
-import WhatsApp from '@material-ui/icons/WhatsApp';
 import { useNotificationsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { ExternalLink, ResponsiveDialog } from '../shared';
+import { Emoji, ExternalLink, ResponsiveDialog, SocialMediaIcon } from '../shared';
 
 export const ShareDialog: React.FC = () => {
   const { t } = useTranslation();
@@ -70,7 +62,7 @@ export const ShareDialog: React.FC = () => {
     <ExternalLink href={facebookUrl}>
       <MenuItem>
         <ListItemIcon>
-          <Facebook />
+          <SocialMediaIcon name="facebook" />
         </ListItemIcon>
         <ListItemText>{t('sharing:facebook')}</ListItemText>
       </MenuItem>
@@ -81,7 +73,7 @@ export const ShareDialog: React.FC = () => {
     <ExternalLink href={whatsAppUrl}>
       <MenuItem>
         <ListItemIcon>
-          <WhatsApp />
+          <SocialMediaIcon name="whatsapp" />
         </ListItemIcon>
         <ListItemText>{t('sharing:whatsapp')}</ListItemText>
       </MenuItem>
@@ -92,7 +84,7 @@ export const ShareDialog: React.FC = () => {
     <ExternalLink href={telegramUrl}>
       <MenuItem>
         <ListItemIcon>
-          <Telegram />
+          <SocialMediaIcon name="telegram" />
         </ListItemIcon>
         <ListItemText>{t('sharing:telegram')}</ListItemText>
       </MenuItem>
@@ -103,7 +95,7 @@ export const ShareDialog: React.FC = () => {
     <ExternalLink href={redditUrl}>
       <MenuItem>
         <ListItemIcon>
-          <Reddit />
+          <SocialMediaIcon name="reddit" />
         </ListItemIcon>
         <ListItemText>{t('sharing:reddit')}</ListItemText>
       </MenuItem>
@@ -114,7 +106,7 @@ export const ShareDialog: React.FC = () => {
     <ExternalLink href={twitterUrl}>
       <MenuItem>
         <ListItemIcon>
-          <Twitter />
+          <SocialMediaIcon name="twitter" />
         </ListItemIcon>
         <ListItemText>{t('sharing:twitter')}</ListItemText>
       </MenuItem>
@@ -125,7 +117,7 @@ export const ShareDialog: React.FC = () => {
     <Link href={mailUrl}>
       <MenuItem>
         <ListItemIcon>
-          <EmailOutlined />
+          <Emoji emoji="📧" noSpace />
         </ListItemIcon>
         <ListItemText>{t('sharing:email')}</ListItemText>
       </MenuItem>
@@ -135,7 +127,7 @@ export const ShareDialog: React.FC = () => {
   const renderCopyLinkMenuItem = (
     <MenuItem onClick={handleClickCopyLink}>
       <ListItemIcon>
-        <LinkOutlined />
+        <Emoji emoji="🔗" noSpace />
       </ListItemIcon>
       <ListItemText>{t('sharing:copyLink')}</ListItemText>
     </MenuItem>
@@ -144,7 +136,7 @@ export const ShareDialog: React.FC = () => {
   const renderSeeAllMenuItem = (
     <MenuItem onClick={handleClickSeeAll}>
       <ListItemIcon>
-        <ArrowForwardOutlined />
+        <Emoji emoji="👉" noSpace />
       </ListItemIcon>
       <ListItemText>{t('sharing:seeAll')}</ListItemText>
     </MenuItem>
