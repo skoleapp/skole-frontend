@@ -8,9 +8,9 @@ We expect our users to follow these guidelines. The guidelines are made for main
 
 Uploading material that violates copyrights is forbidden. You can freely upload material such as:
 
-- Any notes or documents created by you
-- Material that is subject to copyright or for which a general right of use has been granted
+- Any notes or other documents created by you
 - Material that you are given permission to upload by the author
+- Material that is not subject to copyright
 
 You must ensure all material that you upload is in no way offensive or illegal.
 
