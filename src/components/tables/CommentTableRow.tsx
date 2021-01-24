@@ -1,31 +1,40 @@
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
-import ChatOutlined from '@material-ui/icons/ChatOutlined';
-import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 import { CommentObjectType } from 'generated';
-import { useDayjs } from 'hooks';
+import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
+import { BORDER } from 'theme';
 import { truncate, urls } from 'utils';
 
 import { MarkdownContent, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
-import { TableRowIcon } from './TableRowIcon';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  creatorLink: {
-    marginRight: spacing(1),
+  root: {
+    borderBottom: BORDER,
+  },
+  statsContainer: {
+    display: 'flex',
+  },
+  mobileStatLabel: {
+    marginLeft: spacing(2),
+  },
+  mobileReplyCount: {
+    marginLeft: spacing(4),
   },
   commentPreview: {
-    marginLeft: spacing(1),
-    '& p': {
-      margin: 0,
+    overflow: 'hidden',
+    '& *': {
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
     },
   },
 }));
@@ -42,11 +51,14 @@ export const CommentTableRow: React.FC<Props> = ({
   key,
 }) => {
   const { t } = useTranslation();
+  const { isXsMobile, isMobile } = useMediaQueries();
   const classes = useStyles();
   const renderCreated = useDayjs(created).startOf('day').fromNow();
+  const scoreLabel = t('common:score').toLowerCase();
+  const repliesLabel = t('common:replies').toLowerCase();
 
   const commentPreview =
-    (!!text && truncate(text, 40)) || (!!attachment && t('common:clickToView')) || '';
+    (!!text && truncate(text, 200)) || (!!attachment && t('common:clickToView')) || '';
 
   const pathname =
     (!!course && urls.course(course.id)) || (!!resource && urls.resource(resource.id)) || '#';
@@ -58,35 +70,65 @@ export const CommentTableRow: React.FC<Props> = ({
     },
   };
 
-  const renderScoreIcon = <TableRowIcon icon={ThumbsUpDownOutlined} marginLeft />;
-  const renderDiscussionIcon = <TableRowIcon icon={ChatOutlined} />;
-  const renderUserIcon = <TableRowIcon icon={AccountCircleOutlined} />;
   const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
   const renderCourseChip = !!course && <TableRowChip label={course.name} />;
   const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
 
   const renderCommentCreator = user ? (
-    <TextLink className={classes.creatorLink} href={urls.user(user.id)} color="primary">
+    <TextLink href={urls.user(user.id)} color="primary">
       {user.username}
     </TextLink>
   ) : (
     t('common:communityUser')
   );
 
-  const renderCommentPreview = (
+  const renderMobileStats = isMobile && (
     <Grid container alignItems="center">
-      <Typography variant="body2" color="textSecondary">
-        <Grid container alignItems="center">
-          {renderUserIcon} {renderCommentCreator} {renderCreated}:
-        </Grid>
+      <Typography variant="subtitle1">{score}</Typography>
+      <Typography className={classes.mobileStatLabel} variant="body2" color="textSecondary">
+        {scoreLabel}
       </Typography>
-      <Typography className={classes.commentPreview} variant="body2">
-        <MarkdownContent>{commentPreview}</MarkdownContent>
+      <Typography className={classes.mobileReplyCount} variant="subtitle1">
+        {replyCount}
       </Typography>
-      <Typography className={classes.commentPreview} variant="body2">
-        ...
+      <Typography className={classes.mobileStatLabel} variant="body2" color="textSecondary">
+        {repliesLabel}
       </Typography>
     </Grid>
+  );
+
+  const renderDesktopStats = (
+    <Grid container alignItems="center">
+      <Grid item md={6} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{score}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {scoreLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item md={6} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{replyCount}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {repliesLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+
+  const renderStats = renderMobileStats || renderDesktopStats;
+  const renderCommentPreview = <MarkdownContent>{commentPreview}</MarkdownContent>;
+
+  const renderCreatorInfo = (
+    <Typography variant="body2" color="textSecondary" align={isXsMobile ? 'left' : 'right'}>
+      {t('common:postedBy')} {renderCommentCreator} {renderCreated}
+    </Typography>
   );
 
   const renderChips = (
@@ -97,26 +139,38 @@ export const CommentTableRow: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderCommentInfo = (
-    <Typography variant="body2" color="textSecondary">
-      <Grid container alignItems="center">
-        {renderDiscussionIcon}
-        {replyCount}
-        {renderScoreIcon}
-        {score}
-      </Grid>
-    </Typography>
-  );
-
   return (
     <Link href={href} key={key}>
-      <CardActionArea>
+      <CardActionArea className={classes.root}>
         <TableRow>
-          <TableCell>
-            {renderCommentPreview}
-            {renderChips}
-            {renderCommentInfo}
-          </TableCell>
+          <Grid container>
+            <Grid item xs={12} container>
+              <Grid item xs={12} md={2} container>
+                <TableCell className={classes.statsContainer}>{renderStats}</TableCell>
+              </Grid>
+              <Grid item xs={12} md={10} container>
+                <TableCell className={classes.commentPreview}>{renderCommentPreview}</TableCell>
+                <Hidden xsDown>
+                  <Grid item xs={12} container alignItems="center">
+                    <Grid item xs={12} sm={6}>
+                      <TableCell>{renderChips}</TableCell>
+                    </Grid>
+                    <Grid item xs={12} sm={6} container justify="flex-end">
+                      <TableCell>{renderCreatorInfo}</TableCell>
+                    </Grid>
+                  </Grid>
+                </Hidden>
+              </Grid>
+            </Grid>
+            <Hidden smUp>
+              <Grid item xs={12} container>
+                <TableCell>{renderChips}</TableCell>
+              </Grid>
+              <Grid item xs={12} container>
+                <TableCell>{renderCreatorInfo}</TableCell>
+              </Grid>
+            </Hidden>
+          </Grid>
         </TableRow>
       </CardActionArea>
     </Link>

@@ -81,5 +81,7 @@
   "logoutRequired": "Du måste logga ut för att fortsätta.",
   "comment": "Kommentar",
   "about": "Om oss",
-  "blog": "Blogg"
+  "blog": "Blogg",
+  "replies": "Svarar",
+  "postedBy": "Postat av"
 }
