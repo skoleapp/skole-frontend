@@ -1,12 +1,14 @@
 import { ErrorTemplate } from 'components';
 import { loadNamespaces } from 'lib';
-import { GetStaticProps } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 
-export default (): JSX.Element => <ErrorTemplate variant="error" seoProps={{}} />;
+const ErrorPage: NextPage = () => <ErrorTemplate variant="error" seoProps={{}} />;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
     _ns: await loadNamespaces([], locale),
   },
 });
+
+export default ErrorPage;
