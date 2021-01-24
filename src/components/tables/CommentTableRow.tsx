@@ -32,11 +32,13 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 interface Props {
   comment: CommentObjectType;
+  hideCommentChip?: boolean;
   key: number;
 }
 
 export const CommentTableRow: React.FC<Props> = ({
   comment: { id, text, attachment, created, score, replyCount, user, course, resource },
+  hideCommentChip,
   key,
 }) => {
   const { t } = useTranslation();
@@ -59,7 +61,7 @@ export const CommentTableRow: React.FC<Props> = ({
   const renderScoreIcon = <TableRowIcon icon={ThumbsUpDownOutlined} marginLeft />;
   const renderDiscussionIcon = <TableRowIcon icon={ChatOutlined} />;
   const renderUserIcon = <TableRowIcon icon={AccountCircleOutlined} />;
-  const renderCommentChip = <TableRowChip label={t('common:comment')} />;
+  const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
   const renderCourseChip = !!course && <TableRowChip label={course.name} />;
   const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
 

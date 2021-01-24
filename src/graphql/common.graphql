@@ -772,6 +772,34 @@ query User($id: ID, $page: Int, $pageSize: Int) {
       }
     }
   }
+  comments(user: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      text
+      attachment
+      created
+      score
+      replyCount
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+        name
+      }
+      resource {
+        id
+        title
+      }
+    }
+  }
 }
 
 mutation Register($username: String!, $email: String!, $password: String!) {

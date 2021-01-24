@@ -6,11 +6,11 @@
   "rank": "Rang",
   "badges": "Märken",
   "editProfile": "Redigera Profil",
-  "noResources": "Denna användare har inga resurser.",
-  "noCourses": "Denna användare har inga kurser.",
   "viewStarred": "Visa stjärnmärkta",
-  "ownProfileCourses": "Mina kurser",
-  "ownProfileResources": "Mina resurser",
-  "ownProfileNoCourses": "Du har inga kurser. Alla kurser som du tillagt kommer att visas här.",
-  "ownProfileNoResources": "Du har inga resurser. Alla resurser som du tillagt kommer att visas här."
+  "ownProfileNoCourses": "Du har inte lagt till några kurser. Alla kurser som du tillagt kommer att visas här.",
+  "ownProfileNoResources": "Du har inte laddat upp några resurser. Alla resurser som du laddar upp visas här.",
+  "ownProfileNoComments": "Du har inte lagt till några kommentarer. Alla kommentarer som du tillagt kommer att visas här.",
+  "noCourses": "Denna användare har inte lagt till några kurser.",
+  "noResources": "Den här användaren har inte laddat upp några resurser.",
+  "noComments": "Denna användare har inte lagt till några kommentarer."
 }

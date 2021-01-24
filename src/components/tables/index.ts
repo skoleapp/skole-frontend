@@ -1,4 +1,5 @@
 export { ActivityTableBody } from './ActivityTableBody';
+export { CommentTableBody } from './CommentTableBody';
 export { CommentTableRow } from './CommentTableRow';
 export { CourseTableBody } from './CourseTableBody';
 export { CourseTableRow } from './CourseTableRow';
