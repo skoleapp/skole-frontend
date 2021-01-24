@@ -5,11 +5,14 @@ jobs:
     branches:
       ignore:
         - develop
-    machine:
-      image: ubuntu-1604:201903-01
-      docker_layer_caching: true
+    docker:
+      - image: cimg/base:2020.01
+    resource_class: small
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 19.03.13  # https://github.com/yarnpkg/yarn/issues/8389#issuecomment-754099816
       - run:
           name: "Check commits of the PR branch"
           command: ./.circleci/check_commits.sh

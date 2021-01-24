@@ -1,8 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { DISALLOWED_PATHS } from 'utils';
 
-export default (): void => {};
-
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const disallowed = [];
 
@@ -13,6 +11,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     }
   }
 
+  // The weird indenting keeps the resulting formatting pretty.
   const robots = `User-agent: *
 ${disallowed.join('\n')}
 Sitemap: ${process.env.FRONTEND_URL}/sitemap.xml
@@ -26,3 +25,7 @@ Sitemap: ${process.env.FRONTEND_URL}/sitemap.xml
     props: {},
   };
 };
+
+const RobotsTxt = (): void => {};
+
+export default RobotsTxt;
