@@ -8,9 +8,9 @@ Vi förväntar oss att våra användare följer dessa riktlinjer. Riktlinjerna �
 
 Det är förbjudet att ladda upp material som bryter mot upphovsrätten. Du kan fritt ladda upp material som:
 
-- Alla anteckningar eller dokument som du har skapat
-- Material som omfattas av upphovsrätt eller som en allmän användningsrätt har beviljats ​​för
+- Alla anteckningar eller andra dokument som du har skapat
 - Material som du får tillstånd att ladda upp av författaren
+- Material som inte omfattas av upphovsrätt
 
 Du måste se till att allt material som du laddar upp på inget sätt är stötande eller olagligt.
 

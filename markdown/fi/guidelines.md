@@ -8,9 +8,9 @@ Odotamme käyttäjien noudattavan näitä ohjeita. Ohjeet on tehty terveellisen 
 
 Tekijänoikeuksia rikkovan materiaalin lataaminen on kielletty. Voit ladata vapaasti seuraavaa materiaalia:
 
-- Kaikki luomasi muistiinpanot tai asiakirjat
-- Materiaali, joka on tekijänoikeuksien alaista tai jolle on myönnetty yleinen käyttöoikeus
+- Kaikki luomasi muistiinpanot tai muut asiakirjat
 - Materiaali, jonka tekijä on antanut sinulle luvan lisätä sen
+- Materiaali, joka ei ole tekijänoikeuksien alaista
 
 Sinun on varmistettava, että kaikki lataamasi aineisto ei ole millään tavalla loukkaavaa tai laitonta.
 
