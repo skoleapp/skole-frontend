@@ -1,3 +1,4 @@
+import { useCourseQuery } from '__generated__/src/graphql/common.graphql';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -20,6 +21,7 @@ import {
   ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
+  LoadingTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
@@ -37,8 +39,7 @@ import {
   useNotificationsContext,
 } from 'context';
 import {
-  CourseDocument,
-  CourseQueryResult,
+  CourseSeoPropsDocument,
   DeleteCourseMutation,
   SubjectObjectType,
   useDeleteCourseMutation,
@@ -63,7 +64,7 @@ import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints, palette }) => ({
+const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   mobileContainer: {
     flexGrow: 1,
     display: 'flex',
@@ -89,13 +90,13 @@ const useStyles = makeStyles(({ breakpoints, palette }) => ({
   resourcesHeaderTitle: {
     color: palette.text.secondary,
   },
+  score: {
+    marginLeft: spacing(2),
+    marginRight: spacing(2),
+  },
 }));
 
-const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
-  seoProps,
-  data,
-  error,
-}) => {
+const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
@@ -106,6 +107,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const { searchUrl } = useSearch();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
   const courseName = R.propOr('', 'name', course);
   const courseCode = R.propOr('-', 'code', course);
@@ -282,13 +284,20 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
+  const renderScore = (
+    <Typography className={classes.score} variant="subtitle1" color="textSecondary">
+      {score}
+    </Typography>
+  );
+
   const renderCustomBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
         {renderStarButton}
       </Grid>
-      <Grid item xs={6} container justify="flex-end">
+      <Grid item xs={6} container justify="flex-end" alignItems="center">
         {renderUpvoteButton}
+        {renderScore}
         {renderDownvoteButton}
       </Grid>
     </Grid>
@@ -379,9 +388,19 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
       <Grid item xs={6} lg={6}>
         {renderResourcesTitle}
       </Grid>
-      <Grid item xs={5} lg={3} container justify="flex-end" className="MuiCardHeader-action">
+      <Grid
+        item
+        xs={5}
+        lg={3}
+        container
+        spacing={2}
+        justify="flex-end"
+        alignItems="center"
+        className="MuiCardHeader-action"
+      >
         {renderStarButton}
         {renderUpvoteButton}
+        {renderScore}
         {renderDownvoteButton}
         {renderUploadResourceButton}
       </Grid>
@@ -468,6 +487,10 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     customBottomNavbar: renderCustomBottomNavbar,
   };
 
+  if (loading) {
+    return <LoadingTemplate seoProps={seoProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
@@ -496,11 +519,11 @@ const namespaces = ['course', 'course-tooltips', 'discussion', 'discussion-toolt
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'course');
-  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const variables = R.pick(['id'], params);
   const context = getLanguageHeaderContext(locale);
 
-  const { data, error = null } = await apolloClient.query({
-    query: CourseDocument,
+  const { data } = await apolloClient.query({
+    query: CourseSeoPropsDocument,
     variables,
     context,
   });
@@ -514,10 +537,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   }
 
   const courseName = R.propOr('', 'name', course);
+  const courseCode = R.propOr('', 'code', course);
 
   const seoProps = {
-    title: courseName,
-    description: t('description', { courseName }),
+    title: `${courseName} - ${courseCode}`,
+    description: t('description', { courseName, courseCode }),
   };
 
   return {
@@ -525,8 +549,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
       initialApolloState: apolloClient.cache.extract(),
       _ns: await loadNamespaces(namespaces, locale),
       seoProps,
-      data,
-      error,
     },
     revalidate: MAX_REVALIDATION_INTERVAL,
   };

@@ -364,6 +364,13 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
   }
 }
 
+query CourseSeoProps($id: ID) {
+  course(id: $id) {
+    name
+    code
+  }
+}
+
 query CreateCourseAutocompleteData($school: ID) {
   school(id: $school) {
     id
@@ -470,6 +477,13 @@ query Resource($id: ID) {
         }
       }
     }
+  }
+}
+
+query ResourceSeoProps($id: ID) {
+  resource(id: $id) {
+    title
+    date
   }
 }
 

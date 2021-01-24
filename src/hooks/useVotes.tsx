@@ -69,6 +69,10 @@ export const useVotes = ({
     setCurrentVote(initialVote);
   }, [initialVote]);
 
+  useEffect(() => {
+    setScore(initialScore);
+  }, [initialScore]);
+
   // Show different tooltip for each of these cases:
   // - User is not logged in.
   // - User is not verified.

@@ -1,4 +1,4 @@
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
@@ -36,7 +36,8 @@ export const useStars = ({
   const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
   const [stars, setStars] = useState('0');
   const [starred, setStarred] = useState(false);
-  const color = starred ? 'primary' : 'default';
+  const iconColor = starred ? 'primary' : 'disabled';
+  const textColor = starred ? 'primary' : 'textSecondary';
   const context = useLanguageHeaderContext();
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
 
@@ -77,14 +78,16 @@ export const useStars = ({
   const renderStarButton = (!!verified || isTabletOrDesktop) && (
     <Tooltip title={tooltip}>
       <Typography component="span">
-        <IconButton
+        <Button
           onClick={handleStar}
           disabled={starSubmitting || !userMe || verified === false}
           size="small"
-          color={color}
+          startIcon={<StarBorderOutlined color={iconColor} />}
         >
-          <StarBorderOutlined />
-        </IconButton>
+          <Typography variant="subtitle1" color={textColor}>
+            {stars}
+          </Typography>
+        </Button>
       </Typography>
     </Tooltip>
   );

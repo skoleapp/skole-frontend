@@ -38,6 +38,7 @@ interface Props {
   emoji: string;
   renderStarButton: JSX.Element | false;
   renderUpvoteButton: JSX.Element | false;
+  renderScore: JSX.Element | false;
   renderDownvoteButton: JSX.Element | false;
   handleDownloadButtonClick: (e: SyntheticEvent) => Promise<void>;
   handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
@@ -48,6 +49,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   emoji,
   renderStarButton,
   renderUpvoteButton,
+  renderScore,
   renderDownvoteButton,
   handleDownloadButtonClick,
   handlePrintButtonClick,
@@ -104,6 +106,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
       {renderResourceTitle}
       {renderStarButton}
       {renderUpvoteButton}
+      {renderScore}
       {renderDownvoteButton}
       {renderDrawModeButton}
       {renderRotateButton}
