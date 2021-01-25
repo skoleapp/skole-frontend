@@ -625,7 +625,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       _ns: await loadNamespaces(['search'], locale),
       seoProps: {
         title: t('title'),
-        description: t('description'),
       },
     },
   };
