@@ -1,15 +1,22 @@
 import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
+import { useMediaQueries } from 'hooks';
 import { getT, loadMarkdown, loadNamespaces } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
 const ScorePage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
+  const { isTabletOrDesktop } = useMediaQueries();
+
+  // The emoji won't stand out from the top navbar on mobile.
+  const emoji = isTabletOrDesktop && '💯';
+
   const layoutProps = {
     seoProps,
     topNavbarProps: {
       header: title,
+      emoji,
     },
     content,
   };

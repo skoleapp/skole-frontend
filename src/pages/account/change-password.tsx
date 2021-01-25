@@ -117,6 +117,7 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     topNavbarProps: {
       header: t('change-password:header'),
+      emoji: '🔑',
     },
   };
 

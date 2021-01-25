@@ -14,6 +14,7 @@ import { FormTemplate } from './FormTemplate';
 export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
+  const text = t('common:loginRequired');
   const handleClickCancelButton = (): void => Router.back();
 
   const loginButtonHref = {
@@ -23,25 +24,29 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
     },
   };
 
+  const renderEmoji = <Emoji emoji="🙃" />;
+
   const renderText = (
-    <Typography variant="subtitle1" align="center">
-      {t('common:loginRequired')}
-      <Emoji emoji="🙃" />
-    </Typography>
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {text}
+        {renderEmoji}
+      </Typography>
+    </FormControl>
   );
 
-  const renderLineBreak = <Typography component="br" />;
-
   const renderLoginButton = (
-    <ButtonLink
-      href={loginButtonHref}
-      color="primary"
-      variant="contained"
-      endIcon={<ArrowForwardOutlined />}
-      fullWidth
-    >
-      {t('common:login')}
-    </ButtonLink>
+    <FormControl>
+      <ButtonLink
+        href={loginButtonHref}
+        color="primary"
+        variant="contained"
+        endIcon={<ArrowForwardOutlined />}
+        fullWidth
+      >
+        {t('common:login')}
+      </ButtonLink>
+    </FormControl>
   );
 
   const renderCancelButton = (
@@ -55,7 +60,6 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
   return (
     <FormTemplate {...props}>
       {renderText}
-      {renderLineBreak}
       {renderLoginButton}
       {renderCancelButton}
       {children}

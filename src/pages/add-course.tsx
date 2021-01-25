@@ -203,6 +203,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     topNavbarProps: {
       header: t('add-course:header'),
+      emoji: '🎓',
     },
   };
 

@@ -17,6 +17,7 @@ import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
 import {
   ButtonLink,
+  CommentTableBody,
   CourseTableBody,
   ErrorTemplate,
   MainTemplate,
@@ -30,12 +31,12 @@ import {
 import { useAuthContext } from 'context';
 import { BadgeObjectType, UserQueryResult } from 'generated';
 import { withUserMe } from 'hocs';
-import { useDayjs, useMediaQueries, useTabs } from 'hooks';
+import { useDayjs, useMediaQueries } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
@@ -123,6 +124,9 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       marginLeft: spacing(2),
     },
   },
+  tabWrapper: {
+    alignItems: 'initial',
+  },
 }));
 
 interface ProfileStrengthStep {
@@ -135,7 +139,7 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
+  const [tabValue, setTabValue] = useState(0);
   const { userMeId, school, subject, verified } = useAuthContext();
   const { query } = useRouter();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
@@ -150,12 +154,13 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
+  const commentCount = R.pathOr(0, ['comments', 'count'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const resources = R.pathOr([], ['resources', 'objects'], data);
-  const coursesTabLabel = isOwnProfile ? t('profile:ownProfileCourses') : t('common:courses');
-  const resourcesTabLabel = isOwnProfile ? t('profile:ownProfileResources') : t('common:resources');
+  const comments = R.pathOr([], ['comments', 'objects'], data);
   const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
   const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
+  const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
   const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
 
   // Order steps so that the completed ones are first.
@@ -207,6 +212,13 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
         return '-';
       }
     }
+  };
+
+  const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
+    setTabValue(val);
+
+  const tabValueProps = {
+    value: tabValue,
   };
 
   const renderHeaderRight = isOwnProfile && <SettingsButton />;
@@ -473,6 +485,7 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
 
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
+  const renderCommentTableBody = <CommentTableBody comments={comments} />;
 
   const renderCourseTable = (
     <PaginatedTable
@@ -490,19 +503,43 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
     />
   );
 
+  const renderCommentTable = (
+    <PaginatedTable
+      renderTableBody={renderCommentTableBody}
+      count={commentCount}
+      extraFilters={variables}
+    />
+  );
+
   const renderCoursesNotFound = <NotFoundBox text={noCourses} />;
   const renderResourcesNotFound = <NotFoundBox text={noResources} />;
+  const renderCommentsNotFound = <NotFoundBox text={noComments} />;
   const renderCreatedCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
   const renderCreatedResources = resources.length ? renderResourceTable : renderResourcesNotFound;
+  const renderCreatedComments = comments.length ? renderCommentTable : renderCommentsNotFound;
+
+  const tabProps = {
+    classes: {
+      wrapper: clsx('truncate-text', classes.tabWrapper),
+    },
+  };
 
   const renderCreatedContent = (
     <Paper className={classes.createdContent}>
-      <Tabs {...tabsProps}>
-        <Tab label={`${coursesTabLabel} (${courseCount})`} />
-        <Tab label={`${resourcesTabLabel} (${resourceCount})`} />
+      <Tabs {...tabValueProps} onChange={handleTabChange}>
+        <Tab {...tabProps} label={`🎓 ${t('common:courses')} (${courseCount})`} />
+        <Tab {...tabProps} label={`📚 ${t('common:resources')} (${resourceCount})`} />
+        <Tab {...tabProps} label={`💬 ${t('common:comments')} (${commentCount})`} />
       </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderCreatedCourses}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderCreatedResources}</TabPanel>
+      <TabPanel {...tabValueProps} index={0}>
+        {renderCreatedCourses}
+      </TabPanel>
+      <TabPanel {...tabValueProps} index={1}>
+        {renderCreatedResources}
+      </TabPanel>
+      <TabPanel {...tabValueProps} index={2}>
+        {renderCreatedComments}
+      </TabPanel>
     </Paper>
   );
 

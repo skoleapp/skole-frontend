@@ -5,6 +5,7 @@ import DayJsUtils from '@date-io/dayjs';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import MuiPickersUtilsProvider from '@material-ui/pickers/MuiPickersUtilsProvider';
+import { HistoryContextProvider } from 'context';
 import i18nConfig from 'i18n';
 import { appWithI18n, I18nProvider, useApollo } from 'lib';
 import { AppProps } from 'next/app';
@@ -31,16 +32,18 @@ const SkoleApp = ({ Component, pageProps }: AppProps) => {
   }, []);
 
   return (
-    <I18nProvider lang={locale || ''} namespaces={pageProps._ns}>
-      <ApolloProvider client={apolloClient}>
-        <ThemeProvider theme={theme}>
-          <MuiPickersUtilsProvider utils={DayJsUtils}>
-            <CssBaseline />
-            <Component {...pageProps} />
-          </MuiPickersUtilsProvider>
-        </ThemeProvider>
-      </ApolloProvider>
-    </I18nProvider>
+    <HistoryContextProvider>
+      <I18nProvider lang={locale || ''} namespaces={pageProps._ns}>
+        <ApolloProvider client={apolloClient}>
+          <ThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider utils={DayJsUtils}>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </MuiPickersUtilsProvider>
+          </ThemeProvider>
+        </ApolloProvider>
+      </I18nProvider>
+    </HistoryContextProvider>
   );
 };
 

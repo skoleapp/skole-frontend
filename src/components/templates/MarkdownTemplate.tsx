@@ -8,10 +8,10 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { BackButton, MarkdownContent } from '../shared';
+import { BackButton, Emoji, MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
     flexGrow: 1,
     [breakpoints.up('md')]: {
@@ -22,6 +22,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     borderBottom: BORDER,
     position: 'relative',
     padding: spacing(3),
+  },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
   },
   cardHeaderAvatar: {
     position: 'absolute',
@@ -42,16 +45,27 @@ export const MarkdownTemplate: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
+  const header = topNavbarProps?.header;
+  const emoji = topNavbarProps?.emoji;
 
   const renderBackButton = <BackButton />;
+  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+
+  const renderHeaderTitle = (
+    <>
+      {header}
+      {renderEmoji}
+    </>
+  );
 
   const renderCardHeader = isTabletOrDesktop && (
     <CardHeader
       classes={{
         root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
         avatar: classes.cardHeaderAvatar,
       }}
-      title={topNavbarProps?.header}
+      title={renderHeaderTitle}
       avatar={renderBackButton}
     />
   );

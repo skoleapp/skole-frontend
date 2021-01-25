@@ -241,6 +241,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     topNavbarProps: {
       header: t('edit-profile:header'),
+      emoji: '🖊️',
     },
   };
 

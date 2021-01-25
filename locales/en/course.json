@@ -1,5 +1,5 @@
 {
-  "description": "View {{ courseName }} on Skole.",
+  "description": "View {{ courseName }} - {{ courseCode }} on Skole.",
   "noResources": "This course has no resources.",
   "noResourcesLink": "Add a resource here!",
   "noComments": "This course has no comments. Add a comment below!",

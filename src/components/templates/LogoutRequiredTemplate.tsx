@@ -8,12 +8,13 @@ import React from 'react';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
-import { ButtonLink } from '../shared';
+import { ButtonLink, Emoji } from '../shared';
 import { FormTemplate } from './FormTemplate';
 
 export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
+  const text = t('common:logoutRequired');
   const handleClickCancelButton = (): void => Router.back();
 
   const logoutButtonHref = {
@@ -23,24 +24,29 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
     },
   };
 
+  const renderEmoji = <Emoji emoji="🙃" />;
+
   const renderText = (
-    <Typography variant="subtitle1" align="center">
-      {t('common:logoutRequired')} 🙃
-    </Typography>
+    <FormControl>
+      <Typography variant="subtitle1" align="center">
+        {text}
+        {renderEmoji}
+      </Typography>
+    </FormControl>
   );
 
-  const renderLineBreak = <Typography component="br" />;
-
   const renderLogoutButton = (
-    <ButtonLink
-      href={logoutButtonHref}
-      color="primary"
-      variant="contained"
-      endIcon={<ArrowForwardOutlined />}
-      fullWidth
-    >
-      {t('common:logout')}
-    </ButtonLink>
+    <FormControl>
+      <ButtonLink
+        href={logoutButtonHref}
+        color="primary"
+        variant="contained"
+        endIcon={<ArrowForwardOutlined />}
+        fullWidth
+      >
+        {t('common:logout')}
+      </ButtonLink>
+    </FormControl>
   );
 
   const renderCancelButton = (
@@ -54,7 +60,6 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
   return (
     <FormTemplate {...props}>
       {renderText}
-      {renderLineBreak}
       {renderLogoutButton}
       {renderCancelButton}
       {children}

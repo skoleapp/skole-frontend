@@ -1,5 +1,5 @@
 {
-  "description": "View {{ resourceTitle }} on Skole.",
+  "description": "View {{ resourceTitle }} - {{ resourceDate }} on Skole.",
   "error": "Error loading resource.",
   "noComments": "This resource has no comments. Add a comment below!",
   "drawingMode": "Drawing Mode",

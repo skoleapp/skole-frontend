@@ -1,5 +1,5 @@
 {
-  "description": "Visa {{ resourceTitle }} på Skole.",
+  "description": "Visa {{ resourceTitle }} - {{ courseCode }} på Skole.",
   "noResources": "Denna kurs har inga resurser.",
   "noResourcesLink": "Lägg till en resurs här!",
   "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!",

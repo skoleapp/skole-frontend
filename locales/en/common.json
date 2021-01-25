@@ -81,5 +81,7 @@
   "logoutRequired": "You need to log out to continue.",
   "comment": "Comment",
   "about": "About",
-  "blog": "Blog"
+  "blog": "Blog",
+  "replies": "Replies",
+  "postedBy": "Posted by"
 }

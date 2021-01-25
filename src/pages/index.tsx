@@ -79,16 +79,19 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
   const { isMobile } = useMediaQueries();
+  const headerText = t('common:description');
 
   // Redirect authenticated users to home page.
   useEffect(() => {
     !!userMe && Router.replace(urls.home);
   }, [userMe]);
 
+  const renderHeaderEmoji = <Emoji emoji="🎓" />;
+
   const renderCtaHeader = (
     <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
-      {t('common:description')}
-      <Emoji emoji="🎓" />
+      {headerText}
+      {renderHeaderEmoji}
     </Typography>
   );
 
@@ -133,46 +136,68 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
     </Grid>
   );
 
+  const materialsPitchHeader = t('index:materialsPitchHeader').toUpperCase();
+  const discussionPitchHeader = t('index:discussionPitchHeader').toUpperCase();
+
+  const renderMaterialsEmoji = <Emoji emoji="📚" />;
+  const renderGrinningEmoji = <Emoji emoji="😁" />;
+  const renderDiscussionEmoji = <Emoji emoji="💬" />;
+  const renderNerdEmoji = <Emoji emoji="🤓" />;
+
+  const materialBullets = {
+    1: t('index:materialsBullet1'),
+    2: t('index:materialsBullet2'),
+    3: t('index:materialsBullet3'),
+    4: t('index:materialsBullet4'),
+  };
+
+  const discussionBullets = {
+    1: t('index:discussionBullet1'),
+    2: t('index:discussionBullet2'),
+    3: t('index:discussionBullet3'),
+    4: t('index:discussionBullet4'),
+  };
+
   const renderPitchItems = (
     <>
       <Grid item xs={12} md={6}>
         <Typography className={classes.pitchHeader} variant="subtitle1">
-          {t('index:materialsPitchHeader').toUpperCase()}
-          <Emoji emoji="📚" />
+          {materialsPitchHeader}
+          {renderMaterialsEmoji}
         </Typography>
         <Divider className={classes.pitchHeaderDivider} />
         <Typography variant="body2" color="textSecondary">
-          • {t('index:materialsBullet1')}
+          {materialBullets[1]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          • {t('index:materialsBullet2')}
+          {materialBullets[2]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          • {t('index:materialsBullet3')}
+          {materialBullets[3]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          • {t('index:materialsBullet4')}
-          <Emoji emoji="😁" />
+          {materialBullets[4]}
+          {renderGrinningEmoji}
         </Typography>
       </Grid>
       <Grid item xs={12} md={6}>
         <Typography className={classes.pitchHeader} variant="subtitle1">
-          {t('index:discussionPitchHeader').toUpperCase()}
-          <Emoji emoji="💬" />
+          {discussionPitchHeader}
+          {renderDiscussionEmoji}
         </Typography>
         <Divider className={classes.pitchHeaderDivider} />
         <Typography variant="body2" color="textSecondary">
-          • {t('index:discussionBullet1')}
+          {discussionBullets[1]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          • {t('index:discussionBullet2')}
+          {discussionBullets[2]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          • {t('index:discussionBullet3')}
+          {discussionBullets[3]}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          • {t('index:discussionBullet4')}
-          <Emoji emoji="🤓" />
+          {discussionBullets[4]}
+          {renderNerdEmoji}
         </Typography>
       </Grid>
     </>

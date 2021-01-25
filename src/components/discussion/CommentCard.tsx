@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import AttachFileOutlined from '@material-ui/icons/AttachFileOutlined';
 import CameraAltOutlined from '@material-ui/icons/CameraAltOutlined';
 import CommentOutlined from '@material-ui/icons/CommentOutlined';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import KeyboardArrowDownOutlined from '@material-ui/icons/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlined from '@material-ui/icons/KeyboardArrowUpOutlined';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
@@ -35,7 +34,7 @@ import React, { SyntheticEvent } from 'react';
 import { BORDER } from 'theme';
 import { mediaUrl, truncate, urls } from 'utils';
 
-import { MarkdownContent, ResponsiveDialog, TextLink } from '../shared';
+import { Emoji, MarkdownContent, ResponsiveDialog, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
@@ -346,7 +345,7 @@ export const CommentCard: React.FC<Props> = ({
   const renderDeleteAction = isOwner && (
     <MenuItem onClick={handleDeleteComment}>
       <ListItemIcon>
-        <DeleteOutline />
+        <Emoji emoji="❌" noSpace />
       </ListItemIcon>
       <ListItemText>{t('discussion:delete')}</ListItemText>
     </MenuItem>

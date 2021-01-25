@@ -1,5 +1,5 @@
+import { useCourseQuery } from '__generated__/src/graphql/common.graphql';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
-import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -12,15 +12,16 @@ import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
 import clsx from 'clsx';
 import {
   BackButton,
   CustomBottomNavbarContainer,
   DiscussionHeader,
+  Emoji,
   ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
+  LoadingTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
@@ -38,8 +39,7 @@ import {
   useNotificationsContext,
 } from 'context';
 import {
-  CourseDocument,
-  CourseQueryResult,
+  CourseSeoPropsDocument,
   DeleteCourseMutation,
   SubjectObjectType,
   useDeleteCourseMutation,
@@ -64,7 +64,7 @@ import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   mobileContainer: {
     flexGrow: 1,
     display: 'flex',
@@ -84,16 +84,23 @@ const useStyles = makeStyles(({ breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  resourcesHeader: {
+  resourcesHeaderRoot: {
     borderBottom: BORDER,
+  },
+  backButton: {
+    marginRight: spacing(2),
+  },
+  resourcesHeaderTitle: {
+    color: palette.text.secondary,
+    flexGrow: 1,
+  },
+  score: {
+    marginLeft: spacing(2),
+    marginRight: spacing(2),
   },
 }));
 
-const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
-  seoProps,
-  data,
-  error,
-}) => {
+const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
@@ -104,6 +111,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const { searchUrl } = useSearch();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
   const courseName = R.propOr('', 'name', course);
   const courseCode = R.propOr('-', 'code', course);
@@ -128,6 +136,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs(comments);
+  const emoji = '🎓';
 
   const uploadResourceButtonTooltip =
     verificationRequiredTooltip || t('course-tooltips:uploadResource');
@@ -147,6 +156,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     handleCloseInfoDialog,
   } = useInfoDialog({
     header: courseName,
+    emoji,
     infoButtonTooltip: t('course-tooltips:info'),
   });
 
@@ -265,9 +275,6 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
 
   const discussionHeaderProps = {
     commentCount,
-    renderStarButton,
-    renderUpvoteButton,
-    renderDownvoteButton,
     renderShareButton,
     renderInfoButton,
     renderActionsButton,
@@ -281,13 +288,20 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
   const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
 
+  const renderScore = (
+    <Typography className={classes.score} variant="subtitle1" color="textSecondary">
+      {score}
+    </Typography>
+  );
+
   const renderCustomBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
         {renderStarButton}
       </Grid>
-      <Grid item xs={6} container justify="flex-end">
+      <Grid item xs={6} container justify="flex-end" alignItems="center">
         {renderUpvoteButton}
+        {renderScore}
         {renderDownvoteButton}
       </Grid>
     </Grid>
@@ -312,7 +326,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     text: t('course:noResourcesLink'),
   };
 
-  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
+  const renderResourceTableBody = <ResourceTableBody resources={resources} dense />;
 
   const renderResourceTable = (
     <PaginatedTable
@@ -351,15 +365,40 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     </Tooltip>
   );
 
-  const renderBackButton = <BackButton />;
+  const renderBackButton = <BackButton className={classes.backButton} />;
+  const renderEmoji = <Emoji emoji={emoji} />;
+
+  const renderHeader = (
+    <>
+      {courseName}
+      {renderEmoji}
+    </>
+  );
+
+  const renderResourcesTitle = (
+    <Typography
+      className={clsx('MuiCardHeader-subheader', classes.resourcesHeaderTitle, 'truncate-text')}
+      variant="body1"
+      align="left"
+    >
+      {renderHeader}
+    </Typography>
+  );
 
   const renderResourcesHeader = (
-    <CardHeader
-      className={classes.resourcesHeader}
-      title={courseName}
-      avatar={renderBackButton}
-      action={renderUploadResourceButton}
-    />
+    <Grid
+      container
+      className={clsx('MuiCardHeader-root', classes.resourcesHeaderRoot)}
+      wrap="nowrap"
+    >
+      {renderBackButton}
+      {renderResourcesTitle}
+      {renderStarButton}
+      {renderUpvoteButton}
+      {renderScore}
+      {renderDownvoteButton}
+      {renderUploadResourceButton}
+    </Grid>
   );
 
   const renderMobileContent = isMobile && (
@@ -407,7 +446,7 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
   const renderDeleteAction = isOwner && (
     <MenuItem onClick={handleDeleteCourse} disabled={verified === false}>
       <ListItemIcon>
-        <DeleteOutline />
+        <Emoji emoji="❌" noSpace />
       </ListItemIcon>
       <ListItemText>{t('course:delete')}</ListItemText>
     </MenuItem>
@@ -442,6 +481,10 @@ const CourseDetailPage: NextPage<CourseQueryResult & SeoPageProps> = ({
     customBottomNavbar: renderCustomBottomNavbar,
   };
 
+  if (loading) {
+    return <LoadingTemplate seoProps={seoProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
@@ -470,11 +513,11 @@ const namespaces = ['course', 'course-tooltips', 'discussion', 'discussion-toolt
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'course');
-  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const variables = R.pick(['id'], params);
   const context = getLanguageHeaderContext(locale);
 
-  const { data, error = null } = await apolloClient.query({
-    query: CourseDocument,
+  const { data } = await apolloClient.query({
+    query: CourseSeoPropsDocument,
     variables,
     context,
   });
@@ -488,10 +531,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   }
 
   const courseName = R.propOr('', 'name', course);
+  const courseCode = R.propOr('', 'code', course);
 
   const seoProps = {
-    title: courseName,
-    description: t('description', { courseName }),
+    title: `${courseName} - ${courseCode}`,
+    description: t('description', { courseName, courseCode }),
   };
 
   return {
@@ -499,8 +543,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
       initialApolloState: apolloClient.cache.extract(),
       _ns: await loadNamespaces(namespaces, locale),
       seoProps,
-      data,
-      error,
     },
     revalidate: MAX_REVALIDATION_INTERVAL,
   };

@@ -109,6 +109,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     topNavbarProps: {
       header: t('contact:header'),
+      emoji: '🗣️',
     },
   };
 

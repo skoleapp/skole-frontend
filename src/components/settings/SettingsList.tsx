@@ -3,11 +3,6 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
-import HelpOutlined from '@material-ui/icons/HelpOutlined';
-import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
-import LanguageOutlined from '@material-ui/icons/LanguageOutlined';
-import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
 import { useAuthContext, useLanguageContext, useSettingsContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
@@ -15,6 +10,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { SETTINGS_ITEMS, urls } from 'utils';
+
+import { Emoji } from '../shared';
 
 interface Props {
   dialog?: boolean;
@@ -35,11 +32,11 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     handleOpenLanguageMenu();
   };
 
-  const renderAccountMenuItems = SETTINGS_ITEMS.account.map(({ icon: Icon, href, text }, i) => (
+  const renderAccountMenuItems = SETTINGS_ITEMS.account.map(({ emoji, href, text }, i) => (
     <Link href={href} key={i}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
         <ListItemIcon>
-          <Icon />
+          <Emoji emoji={emoji} noSpace />
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>
@@ -50,7 +47,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.verifyAccount}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.verifyAccount)}>
         <ListItemIcon>
-          <VerifiedUserOutlined />
+          <Emoji emoji="✅" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:verifyAccount')}</ListItemText>
       </MenuItem>
@@ -58,11 +55,11 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   );
 
   const renderCommonAccountMenuItems = SETTINGS_ITEMS.commonAccount.map(
-    ({ icon: Icon, href, text }, i) => (
+    ({ emoji, href, text }, i) => (
       <Link href={href} key={i}>
         <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
           <ListItemIcon>
-            <Icon />
+            <Emoji emoji={emoji} noSpace />
           </ListItemIcon>
           <ListItemText>{t(text)}</ListItemText>
         </MenuItem>
@@ -74,7 +71,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.about}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.about)}>
         <ListItemIcon>
-          <HelpOutlined />
+          <Emoji emoji="ℹ️" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:about')}</ListItemText>
       </MenuItem>
@@ -84,7 +81,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   const renderLanguageMenuItem = (
     <MenuItem onClick={handleLanguageClick}>
       <ListItemIcon>
-        <LanguageOutlined />
+        <Emoji emoji="🌐" noSpace />
       </ListItemIcon>
       <ListItemText>{t('common:changeLanguage')}</ListItemText>
     </MenuItem>
@@ -94,7 +91,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.login}>
       <MenuItem onClick={handleMenuItemClick}>
         <ListItemIcon>
-          <HowToRegOutlined />
+          <Emoji emoji="👋" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:login')}</ListItemText>
       </MenuItem>
@@ -105,7 +102,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <Link href={urls.logout}>
       <MenuItem onClick={handleMenuItemClick}>
         <ListItemIcon>
-          <ExitToAppOutlined />
+          <Emoji emoji="👋" noSpace />
         </ListItemIcon>
         <ListItemText>{t('common:logout')}</ListItemText>
       </MenuItem>

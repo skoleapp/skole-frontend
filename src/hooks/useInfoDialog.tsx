@@ -4,11 +4,13 @@ import InfoOutlined from '@material-ui/icons/InfoOutlined';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
 
+import { Emoji } from '../components/shared/Emoji'; // TODO: Transform this hook to a component to mitigate circular import here.import React, { SyntheticEvent } from 'react';
 import { useDialogButton } from './useDialogButton';
 import { useOpen } from './useOpen';
 
 interface UseInfoDialogParams {
-  header: string;
+  header: JSX.Element | string;
+  emoji?: string | false;
   infoButtonTooltip: string;
 }
 
@@ -21,6 +23,7 @@ interface UseInfoDrawer {
 
 export const useInfoDialog = ({
   header,
+  emoji,
   infoButtonTooltip,
 }: UseInfoDialogParams): UseInfoDrawer => {
   const dialogButtonProps = useDialogButton();
@@ -36,8 +39,17 @@ export const useInfoDialog = ({
     _handleCloseInfoDialog();
   };
 
+  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+
+  const renderHeader = (
+    <>
+      {header}
+      {renderEmoji}
+    </>
+  );
+
   const infoDialogHeaderProps = {
-    text: header,
+    text: renderHeader,
     onCancel: handleCloseInfoDialog,
   };
 

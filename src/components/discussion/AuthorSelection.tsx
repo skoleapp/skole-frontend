@@ -7,7 +7,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import DeviceUnknownOutlined from '@material-ui/icons/DeviceUnknownOutlined';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import { useAuthContext } from 'context';
 import { FormikProps } from 'formik';
@@ -16,7 +15,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { CreateCommentFormValues } from 'types';
 
-import { ResponsiveDialog } from '../shared';
+import { Emoji, ResponsiveDialog } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
   button: {
@@ -75,6 +74,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
 
   const authorSelectionDialogHeaderProps = {
     text: t('common:selectAuthor'),
+    emoji: '👤',
     onCancel: handleCloseAuthorSelection,
   };
 
@@ -90,7 +90,7 @@ export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = (
   const renderAnonymousMenuItem = (
     <MenuItem onClick={handleAnonymousMenuItemClick}>
       <ListItemIcon>
-        <DeviceUnknownOutlined />
+        <Emoji emoji="❓" noSpace />
       </ListItemIcon>
       <ListItemText>{t('common:postAsAnonymous')}</ListItemText>
     </MenuItem>

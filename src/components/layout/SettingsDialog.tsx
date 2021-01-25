@@ -10,7 +10,7 @@ export const SettingsDialog: React.FC = () => {
   const { settingsDialogOpen, handleCloseSettingsDialog } = useSettingsContext();
 
   const renderDialogHeader = (
-    <DialogHeader onCancel={handleCloseSettingsDialog} text={t('common:settings')} />
+    <DialogHeader onCancel={handleCloseSettingsDialog} text={t('common:settings')} emoji="⚙️" />
   );
 
   const renderSettingsList = <SettingsList dialog />;

@@ -4,47 +4,60 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
-import ChatOutlined from '@material-ui/icons/ChatOutlined';
-import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
+import clsx from 'clsx';
 import { CommentObjectType } from 'generated';
-import { useDayjs } from 'hooks';
+import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
+import { BORDER } from 'theme';
+import { ColSpan, TableRowProps } from 'types';
 import { truncate, urls } from 'utils';
 
 import { MarkdownContent, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
-import { TableRowIcon } from './TableRowIcon';
 
 const useStyles = makeStyles(({ spacing }) => ({
-  creatorLink: {
-    marginRight: spacing(1),
+  root: {
+    borderBottom: BORDER,
   },
-  commentPreview: {
-    marginLeft: spacing(1),
-    '& p': {
-      margin: 0,
+  statsContainer: {
+    display: 'flex',
+  },
+  commentPreviewTableCell: {
+    paddingBottom: 0,
+    overflow: 'hidden',
+    '& *': {
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
     },
+  },
+  tableCell: {
+    padding: spacing(1),
   },
 }));
 
-interface Props {
+interface Props extends TableRowProps {
   comment: CommentObjectType;
-  key: number;
+  hideCommentChip?: boolean;
 }
 
 export const CommentTableRow: React.FC<Props> = ({
-  comment: { id, text, attachment, created, score, replyCount, user, course, resource },
+  comment: { id, text, attachment, created: _created, score, replyCount, user, course, resource },
+  hideCommentChip,
+  dense,
   key,
 }) => {
   const { t } = useTranslation();
+  const { isMobile } = useMediaQueries();
   const classes = useStyles();
-  const renderCreated = useDayjs(created).startOf('day').fromNow();
+  const created = useDayjs(_created).startOf('day').fromNow();
+  const scoreLabel = t('common:score').toLowerCase();
+  const repliesLabel = t('common:replies').toLowerCase();
 
   const commentPreview =
-    (!!text && truncate(text, 40)) || (!!attachment && t('common:clickToView')) || '';
+    (!!text && truncate(text, 50)) || (!!attachment && t('common:clickToView')) || '';
 
   const pathname =
     (!!course && urls.course(course.id)) || (!!resource && urls.resource(resource.id)) || '#';
@@ -56,35 +69,89 @@ export const CommentTableRow: React.FC<Props> = ({
     },
   };
 
-  const renderScoreIcon = <TableRowIcon icon={ThumbsUpDownOutlined} marginLeft />;
-  const renderDiscussionIcon = <TableRowIcon icon={ChatOutlined} />;
-  const renderUserIcon = <TableRowIcon icon={AccountCircleOutlined} />;
-  const renderCommentChip = <TableRowChip label={t('common:comment')} />;
+  const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
   const renderCourseChip = !!course && <TableRowChip label={course.name} />;
   const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
 
   const renderCommentCreator = user ? (
-    <TextLink className={classes.creatorLink} href={urls.user(user.id)} color="primary">
+    <TextLink href={urls.user(user.id)} color="primary">
       {user.username}
     </TextLink>
   ) : (
     t('common:communityUser')
   );
 
-  const renderCommentPreview = (
+  const renderMobileStats = isMobile && (
     <Grid container alignItems="center">
-      <Typography variant="body2" color="textSecondary">
-        <Grid container alignItems="center">
-          {renderUserIcon} {renderCommentCreator} {renderCreated}:
+      <Grid item xs={4} container>
+        <Grid item xs={2} container alignItems="center">
+          <Typography variant="subtitle1">{score}</Typography>
         </Grid>
-      </Typography>
-      <Typography className={classes.commentPreview} variant="body2">
-        <MarkdownContent>{commentPreview}</MarkdownContent>
-      </Typography>
-      <Typography className={classes.commentPreview} variant="body2">
-        ...
-      </Typography>
+        <Grid item xs={10} container alignItems="center">
+          <Typography variant="body2" color="textSecondary">
+            {scoreLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={4} container>
+        <Grid item xs={2} container alignItems="center">
+          <Typography variant="subtitle1">{replyCount}</Typography>
+        </Grid>
+        <Grid item xs={10} container alignItems="center">
+          <Typography variant="body2" color="textSecondary">
+            {repliesLabel}
+          </Typography>
+        </Grid>
+      </Grid>
     </Grid>
+  );
+
+  const desktopStatsColSpan: ColSpan = {
+    md: dense ? 6 : 3,
+    lg: 3,
+  };
+
+  const renderDesktopStats = (
+    <Grid container alignItems="center">
+      <Grid item {...desktopStatsColSpan} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{score}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {scoreLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item {...desktopStatsColSpan} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{replyCount}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {repliesLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+
+  const renderCommentStats = (
+    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+      {renderMobileStats || renderDesktopStats}
+    </TableCell>
+  );
+
+  const renderCommentPreview = (
+    <TableCell className={classes.tableCell}>
+      <MarkdownContent>{commentPreview}</MarkdownContent>
+    </TableCell>
+  );
+
+  const renderCreatorInfo = (
+    <Typography variant="body2" color="textSecondary" align={isMobile || dense ? 'left' : 'right'}>
+      {t('common:postedBy')} {renderCommentCreator} {created}
+    </Typography>
   );
 
   const renderChips = (
@@ -95,26 +162,49 @@ export const CommentTableRow: React.FC<Props> = ({
     </Grid>
   );
 
+  const commentInfoColSpan: ColSpan = {
+    xs: 12,
+    sm: dense ? 12 : 6,
+  };
+
   const renderCommentInfo = (
-    <Typography variant="body2" color="textSecondary">
-      <Grid container alignItems="center">
-        {renderDiscussionIcon}
-        {replyCount}
-        {renderScoreIcon}
-        {score}
+    <Grid item xs={12} container alignItems="flex-end">
+      <Grid item {...commentInfoColSpan}>
+        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
       </Grid>
-    </Typography>
+      <Grid item {...commentInfoColSpan} container>
+        <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
+      </Grid>
+    </Grid>
   );
+
+  const statsColSpan: ColSpan = {
+    xs: 12,
+    md: dense ? 6 : 4,
+    lg: dense ? 5 : 3,
+  };
+
+  const mainColSpan: ColSpan = {
+    xs: 12,
+    md: dense ? 6 : 8,
+    lg: dense ? 7 : 9,
+  };
 
   return (
     <Link href={href} key={key}>
-      <CardActionArea>
+      <CardActionArea className={classes.root}>
         <TableRow>
-          <TableCell>
-            {renderCommentPreview}
-            {renderChips}
-            {renderCommentInfo}
-          </TableCell>
+          <Grid container>
+            <Grid item xs={12} container>
+              <Grid item {...statsColSpan} container>
+                {renderCommentStats}
+              </Grid>
+              <Grid item {...mainColSpan} container>
+                {renderCommentPreview}
+                {renderCommentInfo}
+              </Grid>
+            </Grid>
+          </Grid>
         </TableRow>
       </CardActionArea>
     </Link>

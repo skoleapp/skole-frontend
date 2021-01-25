@@ -201,7 +201,7 @@ export const theme = createMuiTheme({
         backgroundColor: COLORS.white,
         flexGrow: 1,
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'hidden !important',
       },
     },
     MuiTable: {
@@ -229,13 +229,6 @@ export const theme = createMuiTheme({
         flexGrow: 1,
         padding: spacing(2),
         borderBottom: 'none',
-      },
-    },
-    MuiTableFooter: {
-      root: {
-        [breakpoints.up('md')]: {
-          borderTop: BORDER,
-        },
       },
     },
     MuiTablePagination: {

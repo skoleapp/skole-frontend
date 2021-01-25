@@ -30,11 +30,12 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
   const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
   const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
-  const header = t('starred:header');
 
   const renderLoading = <LoadingBox />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
+  const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
+  const renderResourcesNotFound = <NotFoundBox text={t('starred:noResources')} />;
 
   const renderCourseTable = (
     <PaginatedTable renderTableBody={renderCourseTableBody} count={courseCount} />
@@ -43,9 +44,6 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderResourceTable = (
     <PaginatedTable renderTableBody={renderResourceTableBody} count={resourceCount} />
   );
-
-  const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
-  const renderResourcesNotFound = <NotFoundBox text={t('starred:noResources')} />;
 
   const renderLeftTabContent = loading
     ? renderLoading
@@ -62,7 +60,8 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: t('starred:header'),
+      emoji: '🤩',
     },
     tabTemplateProps: {
       leftTabLabel: `${t('common:courses')} (${courseCount})`,

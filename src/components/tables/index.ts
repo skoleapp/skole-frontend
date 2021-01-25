@@ -1,4 +1,5 @@
 export { ActivityTableBody } from './ActivityTableBody';
+export { CommentTableBody } from './CommentTableBody';
 export { CommentTableRow } from './CommentTableRow';
 export { CourseTableBody } from './CourseTableBody';
 export { CourseTableRow } from './CourseTableRow';
@@ -10,4 +11,3 @@ export { ResourceTableRow } from './ResourceTableRow';
 export { SubjectTableBody } from './SubjectTableBody';
 export { SuggestionsTable } from './SuggestionsTable';
 export { TableRowChip } from './TableRowChip';
-export { TableRowIcon } from './TableRowIcon';

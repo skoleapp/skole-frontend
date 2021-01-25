@@ -1,5 +1,5 @@
 {
-  "description": "Näytä {{ resourceTitle }} Skolessa.",
+  "description": "Näytä {{ resourceTitle }} - {{ resourceDate }} Skolessa.",
   "error": "Virhe ladattaessa resurssia.",
   "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
   "drawingMode": "Piirtotila",

@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import {
   CourseTableBody,
+  Emoji,
   ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
@@ -60,6 +61,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const shareParams = { shareHeader: t('school:shareHeader'), shareTitle, shareText };
   const addCourseTooltip = verificationRequiredTooltip || t('school-tooltips:addCourse');
   const header = isTabletOrDesktop && schoolName; // School names are too long to be used as the header on mobile.
+  const emoji = isTabletOrDesktop && '🏫';
 
   const {
     infoDialogOpen,
@@ -67,7 +69,8 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: schoolName,
+    header,
+    emoji,
     infoButtonTooltip: t('school-tooltips:info'),
   });
 
@@ -212,7 +215,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     <Link href={addCourseHref}>
       <MenuItem>
         <ListItemIcon>
-          <AddCircleOutlineOutlined />
+          <Emoji emoji="➕" noSpace />
         </ListItemIcon>
         <ListItemText>{t('school:addCourse')}</ListItemText>
       </MenuItem>
@@ -241,6 +244,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     seoProps,
     topNavbarProps: {
       header,
+      emoji,
       renderHeaderLeft: renderAddCourseButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,

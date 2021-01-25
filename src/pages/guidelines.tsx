@@ -10,6 +10,7 @@ const GuidelinesPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }
     seoProps,
     topNavbarProps: {
       header: title,
+      emoji: '🗺️',
     },
     content,
   };

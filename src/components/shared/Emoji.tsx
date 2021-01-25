@@ -11,13 +11,13 @@ const useStyles = makeStyles(({ palette }) => ({
 
 interface Props {
   emoji: string;
-  hideSpace?: boolean;
+  noSpace?: boolean;
 }
 
-// Force consistent text color for all emojis. Do not set a normal space before this component.
-export const Emoji: React.FC<Props> = ({ emoji, hideSpace }) => {
+// A non-breaking space followed by the emoji. The emoji has a forced text color for consistency.
+export const Emoji: React.FC<Props> = ({ emoji, noSpace }) => {
   const classes = useStyles();
-  const renderSpace = !hideSpace && <>&nbsp;</>;
+  const renderSpace = !noSpace && <>&nbsp;</>;
 
   return (
     <Typography className={classes.root} component="span">

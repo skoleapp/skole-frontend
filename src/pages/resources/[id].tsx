@@ -8,18 +8,18 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import PrintOutlined from '@material-ui/icons/PrintOutlined';
+import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import {
   CustomBottomNavbarContainer,
   DiscussionHeader,
   DrawModeButton,
   DrawModeControls,
+  Emoji,
   ErrorTemplate,
   InfoDialogContent,
   LoadingBox,
+  LoadingTemplate,
   MainTemplate,
   ResourceBottomToolbar,
   ResourceTopToolbar,
@@ -40,11 +40,10 @@ import {
 import {
   DeleteResourceMutation,
   DownloadResourceMutation,
-  ResourceDocument,
-  ResourceObjectType,
-  ResourceQueryResult,
+  ResourceSeoPropsDocument,
   useDeleteResourceMutation,
   useDownloadResourceMutation,
+  useResourceQuery,
 } from 'generated';
 import { withDiscussion, withPdfViewer, withUserMe } from 'hocs';
 import {
@@ -59,7 +58,7 @@ import {
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 import { BORDER_RADIUS } from 'theme';
@@ -73,7 +72,7 @@ const PdfViewer = dynamic<PdfViewerProps>(() => import('../../components/resourc
   loading: () => <LoadingBox />,
 });
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   mobileContainer: {
     flexGrow: 1,
     display: 'flex',
@@ -99,21 +98,24 @@ const useStyles = makeStyles(({ breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
+  score: {
+    marginLeft: spacing(2),
+    marginRight: spacing(2),
+  },
 }));
 
-const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
-  seoProps,
-  data,
-  error,
-}) => {
+const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
-  const context = useLanguageHeaderContext();
   const { userMe, verified } = useAuthContext();
-  const [resource, setResource] = useState<ResourceObjectType | null>(null);
+  const context = useLanguageHeaderContext();
+  const { query } = useRouter();
+  const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const { data, loading, error } = useResourceQuery({ variables, context });
+  const resource = R.prop('resource', data);
   const resourceTitle = R.propOr('', 'title', resource);
   const resourceDate = R.propOr('', 'date', resource);
   const resourceType = R.pathOr('-', ['resourceType', 'name'], resource);
@@ -129,7 +131,8 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const initialVote = R.propOr(null, 'vote', resource);
   const initialScore = String(R.propOr(0, 'score', resource));
   const initialStars = String(R.propOr(0, 'starCount', resource));
-  const downloads = String(R.propOr(0, 'downloads', resource));
+  const initialDownloads = String(R.propOr(0, 'downloads', resource));
+  const [downloads, setDownloads] = useState('0');
   const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
   const resourceCreator = R.prop('user', resource);
@@ -140,6 +143,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const created = R.prop('created', resource);
   const { commentCount, commentDialogOpen } = useDiscussionContext(comments);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
+  const emoji = '📚';
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -159,7 +163,8 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
     renderInfoButton,
     handleCloseInfoDialog,
   } = useInfoDialog({
-    header: resourceTitle,
+    header: title,
+    emoji,
     infoButtonTooltip: t('resource-tooltips:info'),
   });
 
@@ -188,12 +193,6 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
     ownContentTooltip: t('resource-tooltips:voteOwnContent'),
   });
 
-  // Set initial state.
-  useEffect(() => {
-    const initialResource = R.prop('resource', data);
-    setResource(initialResource);
-  }, [data]);
-
   // If comment dialog is opened in main tab, automatically switch to discussion tab.
   useEffect(() => {
     commentDialogOpen && tabValue === 0 && setTabValue(1);
@@ -203,6 +202,10 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   useEffect(() => {
     drawingMode && tabValue === 1 && setDrawingMode(false);
   }, [drawingMode, tabValue]);
+
+  useEffect(() => {
+    setDownloads(initialDownloads);
+  }, [initialDownloads]);
 
   const deleteResourceError = (): void =>
     toggleNotification(t('notifications:deleteResourceError'));
@@ -247,11 +250,8 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
 
   const onDownloadResourceCompleted = ({ downloadResource }: DownloadResourceMutation): void => {
     if (downloadResource && downloadResource.resource) {
-      !!resource &&
-        setResource({
-          ...resource,
-          downloads: downloadResource.resource.downloads,
-        });
+      const downloads = String(downloadResource.resource.downloads);
+      setDownloads(downloads);
     }
   };
 
@@ -353,6 +353,12 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
   const renderRotateButton = tabValue === 0 && <RotateButton />;
 
+  const renderScore = (
+    <Typography className={classes.score} variant="subtitle1" color="textSecondary">
+      {score}
+    </Typography>
+  );
+
   const renderDefaultCustomBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
@@ -362,6 +368,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
       <Grid item xs={6} container justify="flex-end">
         {renderStarButton}
         {renderUpvoteButton}
+        {renderScore}
         {renderDownvoteButton}
       </Grid>
     </Grid>
@@ -381,15 +388,17 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
 
   const toolbarProps = {
     title,
+    emoji,
+    renderStarButton,
+    renderUpvoteButton,
+    renderScore,
+    renderDownvoteButton,
     handleDownloadButtonClick,
     handlePrintButtonClick,
   };
 
   const discussionHeaderProps = {
     commentCount,
-    renderStarButton,
-    renderUpvoteButton,
-    renderDownvoteButton,
     renderShareButton,
     renderInfoButton,
     renderActionsButton,
@@ -452,7 +461,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const renderDownloadAction = isMobile && (
     <MenuItem onClick={handleDownloadButtonClick}>
       <ListItemIcon>
-        <CloudDownloadOutlined />
+        <Emoji emoji="📩" noSpace />
       </ListItemIcon>
       <ListItemText>{t('resource:downloadPdf')}</ListItemText>
     </MenuItem>
@@ -461,7 +470,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const renderPrintAction = isMobile && (
     <MenuItem onClick={handlePrintButtonClick}>
       <ListItemIcon>
-        <PrintOutlined />
+        <Emoji emoji="🖨️" noSpace />
       </ListItemIcon>
       <ListItemText>{t('resource:printPdf')}</ListItemText>
     </MenuItem>
@@ -470,7 +479,7 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
   const renderDeleteAction = isOwner && (
     <MenuItem onClick={handleDeleteResource} disabled={verified === false}>
       <ListItemIcon>
-        <DeleteOutline />
+        <Emoji emoji="❌️" noSpace />
       </ListItemIcon>
       <ListItemText>{t('resource:delete')}</ListItemText>
     </MenuItem>
@@ -507,6 +516,10 @@ const ResourceDetailPage: NextPage<SeoPageProps & ResourceQueryResult> = ({
     },
   };
 
+  if (loading) {
+    return <LoadingTemplate seoProps={seoProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
@@ -535,11 +548,11 @@ const namespaces = ['resource', 'resource-tooltips', 'discussion', 'discussion-t
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'resource');
-  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const variables = R.pick(['id'], params);
   const context = getLanguageHeaderContext(locale);
 
-  const { data, error = null } = await apolloClient.query({
-    query: ResourceDocument,
+  const { data } = await apolloClient.query({
+    query: ResourceSeoPropsDocument,
     variables,
     context,
   });
@@ -557,7 +570,7 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
 
   const seoProps = {
     title: `${resourceTitle} - ${resourceDate}`,
-    description: t('description', { resourceTitle }),
+    description: t('description', { resourceTitle, resourceDate }),
   };
 
   return {
@@ -565,8 +578,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
       initialApolloState: apolloClient.cache.extract(),
       _ns: await loadNamespaces(namespaces, locale),
       seoProps,
-      data,
-      error,
     },
     revalidate: MAX_REVALIDATION_INTERVAL,
   };

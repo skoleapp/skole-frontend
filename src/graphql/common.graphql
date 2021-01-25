@@ -353,6 +353,7 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
       starCount
       commentCount
       downloads
+      created
       resourceType {
         name
       }
@@ -361,6 +362,13 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
         username
       }
     }
+  }
+}
+
+query CourseSeoProps($id: ID) {
+  course(id: $id) {
+    name
+    code
   }
 }
 
@@ -470,6 +478,13 @@ query Resource($id: ID) {
         }
       }
     }
+  }
+}
+
+query ResourceSeoProps($id: ID) {
+  resource(id: $id) {
+    title
+    date
   }
 }
 
@@ -725,6 +740,7 @@ query User($id: ID, $page: Int, $pageSize: Int) {
       starCount
       resourceCount
       commentCount
+      created
       user {
         id
         username
@@ -741,20 +757,49 @@ query User($id: ID, $page: Int, $pageSize: Int) {
       id
       title
       score
-      course {
-        name
-        code
-      }
       date
       starCount
       commentCount
       downloads
+      created
+      course {
+        name
+        code
+      }
       resourceType {
         name
       }
       user {
         id
         username
+      }
+    }
+  }
+  comments(user: $id, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      id
+      text
+      attachment
+      created
+      score
+      replyCount
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      course {
+        id
+        name
+      }
+      resource {
+        id
+        title
       }
     }
   }
@@ -950,6 +995,7 @@ query Suggestions {
       starCount
       resourceCount
       commentCount
+      created
       user {
         id
         username
@@ -963,6 +1009,7 @@ query Suggestions {
       starCount
       commentCount
       downloads
+      created
       resourceType {
         name
       }

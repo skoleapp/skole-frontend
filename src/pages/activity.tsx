@@ -1,19 +1,14 @@
-import CardHeader from '@material-ui/core/CardHeader';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import DoneOutlineOutlined from '@material-ui/icons/DoneOutlineOutlined';
-import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import {
   ActivityTableBody,
-  BackButton,
+  Emoji,
   ErrorTemplate,
+  ListTemplate,
   LoadingBox,
   LoginRequiredTemplate,
-  MainTemplate,
   NotFoundBox,
   PaginatedTable,
   ResponsiveDialog,
@@ -25,58 +20,25 @@ import {
   useGraphQlMarkAllActivitiesAsReadMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
-import { useActionsDialog, useLanguageHeaderContext, useMediaQueries } from 'hooks';
+import { useActionsDialog, useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
-  paper: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)',
-    [breakpoints.up('md')]: {
-      borderRadius: BORDER_RADIUS,
-    },
-  },
-  cardHeaderRoot: {
-    borderBottom: BORDER,
-    position: 'relative',
-    padding: spacing(3),
-  },
-  cardHeaderAvatar: {
-    position: 'absolute',
-    top: spacing(2),
-    left: spacing(2),
-  },
-  cardHeaderAction: {
-    position: 'absolute',
-    top: spacing(2),
-    right: spacing(2),
-  },
-}));
-
 const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
-  const classes = useStyles();
   const { t } = useTranslation();
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const { query } = useRouter();
-  const { isTabletOrDesktop } = useMediaQueries();
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
   const [activities, setActivities] = useState([]);
   const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
-  const header = t('activity:header');
 
   // Update state after data fetching is complete.
   useEffect(() => {
@@ -126,21 +88,6 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleCloseActionsDialog(e);
   };
 
-  const renderBackButton = <BackButton />;
-
-  const renderCardHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        avatar: classes.cardHeaderAvatar,
-        action: classes.cardHeaderAction,
-      }}
-      title={header}
-      avatar={renderBackButton}
-      action={renderActionsButton}
-    />
-  );
-
   const renderLoading = <LoadingBox />;
   const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
   const renderActivityTableBody = <ActivityTableBody activities={activities} />;
@@ -159,7 +106,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderMarkAllAsReadAction = (
     <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton} disabled={markAllAsReadDisabled}>
       <ListItemIcon>
-        <DoneOutlineOutlined />
+        <Emoji emoji="✅" noSpace />
       </ListItemIcon>
       <ListItemText>{t('activity:markAllAsRead')}</ListItemText>
     </MenuItem>
@@ -168,7 +115,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderNotificationSettingsAction = (
     <MenuItem disabled>
       <ListItemIcon>
-        <SettingsOutlined />
+        <Emoji emoji="⚙️" noSpace />
       </ListItemIcon>
       <ListItemText>{t('activity:notificationSettings')}</ListItemText>
     </MenuItem>
@@ -191,18 +138,15 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </ResponsiveDialog>
   );
 
-  const renderContent = (
-    <Paper className={classes.paper}>
-      {renderCardHeader}
-      {renderActivities}
-    </Paper>
-  );
-
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header,
+      header: t('activity:header'),
+      emoji: '🔔',
       renderHeaderRight,
+    },
+    listTemplateProps: {
+      renderActions: renderActionsButton,
     },
   };
 
@@ -219,10 +163,10 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   }
 
   return (
-    <MainTemplate {...layoutProps}>
-      {renderContent}
+    <ListTemplate {...layoutProps}>
+      {renderActivities}
       {renderActionsDialog}
-    </MainTemplate>
+    </ListTemplate>
   );
 };
 

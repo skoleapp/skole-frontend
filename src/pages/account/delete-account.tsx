@@ -126,6 +126,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     topNavbarProps: {
       header: t('delete-account:header'),
+      emoji: '⚠️',
     },
   };
 

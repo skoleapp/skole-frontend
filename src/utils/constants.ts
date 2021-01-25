@@ -1,16 +1,3 @@
-import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
-import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
-import EditOutlined from '@material-ui/icons/EditOutlined';
-import GavelOutlined from '@material-ui/icons/GavelOutlined';
-import InfoOutlined from '@material-ui/icons/InfoOutlined';
-import LibraryBooksOutlined from '@material-ui/icons/LibraryBooksOutlined';
-import LockOutlined from '@material-ui/icons/LockOutlined';
-import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
-import SecurityOutlined from '@material-ui/icons/SecurityOutlined';
-import SettingsBackupRestoreOutlined from '@material-ui/icons/SettingsBackupRestoreOutlined';
-import StorageOutlined from '@material-ui/icons/StorageOutlined';
-import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
-
 import { urls } from './urls';
 
 export const LANGUAGES = [
@@ -81,24 +68,24 @@ export const IMAGE_TYPES = [
 export const SETTINGS_ITEMS = {
   account: [
     {
-      icon: EditOutlined,
+      emoji: '🖊️',
       text: 'common:editProfile',
       href: urls.editProfile,
     },
     {
-      icon: LockOutlined,
+      emoji: '🔑',
       text: 'common:changePassword',
       href: urls.changePassword,
     },
     {
-      icon: StorageOutlined,
+      emoji: '💾',
       text: 'common:myData',
       href: urls.myData,
     },
   ],
   commonAccount: [
     {
-      icon: SettingsBackupRestoreOutlined,
+      emoji: '😶‍🌫️',
       text: 'common:resetPassword',
       href: urls.resetPassword,
     },
@@ -107,42 +94,42 @@ export const SETTINGS_ITEMS = {
 
 export const ABOUT_ITEMS = [
   {
-    icon: SchoolOutlined,
+    emoji: '🧑‍🏫',
     text: 'common:forTeachers',
     href: urls.forTeachers,
   },
   {
-    icon: ContactSupportOutlined,
+    emoji: '🗣️',
     text: 'common:contact',
     href: urls.contact,
   },
   {
-    icon: InfoOutlined,
+    emoji: '🗺️',
     text: 'common:guidelines',
     href: urls.guidelines,
   },
   {
-    icon: ThumbsUpDownOutlined,
+    emoji: '💯',
     text: 'common:score',
     href: urls.score,
   },
   {
-    icon: GavelOutlined,
+    emoji: '💂',
     text: 'common:values',
     href: urls.values,
   },
   {
-    icon: LibraryBooksOutlined,
+    emoji: '📃',
     text: 'common:blog',
     href: urls.blogs,
   },
   {
-    icon: AssignmentOutlined,
+    emoji: '🧑‍⚖️',
     text: 'common:terms',
     href: urls.terms,
   },
   {
-    icon: SecurityOutlined,
+    emoji: '🔒',
     text: 'common:privacy',
     href: urls.privacy,
   },

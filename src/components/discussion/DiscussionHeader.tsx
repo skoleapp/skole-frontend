@@ -1,25 +1,22 @@
 import CardHeader from '@material-ui/core/CardHeader';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-const useStyles = makeStyles(({ spacing }) => ({
-  subheader: {
-    display: 'flex',
-    alignItems: 'center',
+import { Emoji } from '../shared';
+
+const useStyles = makeStyles(({ spacing, palette }) => ({
+  root: {
+    textAlign: 'left',
+    marginLeft: spacing(2),
   },
-  icon: {
-    marginRight: spacing(1),
+  subheader: {
+    color: palette.text.secondary,
   },
 }));
 
 interface Props {
   commentCount: number;
-  renderStarButton: JSX.Element | false;
-  renderUpvoteButton: JSX.Element | false;
-  renderDownvoteButton: JSX.Element | false;
   renderShareButton: JSX.Element;
   renderInfoButton: JSX.Element;
   renderActionsButton: JSX.Element;
@@ -27,9 +24,6 @@ interface Props {
 
 export const DiscussionHeader: React.FC<Props> = ({
   commentCount,
-  renderStarButton,
-  renderUpvoteButton,
-  renderDownvoteButton,
   renderShareButton,
   renderInfoButton,
   renderActionsButton,
@@ -37,29 +31,29 @@ export const DiscussionHeader: React.FC<Props> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const title = `${t('common:discussion')} (${t('discussion:commentCount', { commentCount })})`;
-  const renderIcon = <ChatOutlined className={classes.icon} color="disabled" />;
+
+  const renderEmoji = <Emoji emoji="💬" />;
 
   const renderSubheader = (
-    <Typography
-      className={classes.subheader}
-      variant="subtitle1"
-      color="textSecondary"
-      align="left"
-    >
-      {renderIcon} {title}
-    </Typography>
+    <>
+      {title}
+      {renderEmoji}
+    </>
   );
 
   const renderAction = (
     <>
-      {renderStarButton}
-      {renderUpvoteButton}
-      {renderDownvoteButton}
       {renderShareButton}
       {renderInfoButton}
       {renderActionsButton}
     </>
   );
 
-  return <CardHeader subheader={renderSubheader} action={renderAction} />;
+  return (
+    <CardHeader
+      classes={{ root: classes.root, subheader: classes.subheader }}
+      subheader={renderSubheader}
+      action={renderAction}
+    />
+  );
 };

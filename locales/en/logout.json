@@ -1,6 +1,6 @@
 {
-  "title": "Logged Out",
-  "header": "Logged Out",
+  "title": "Log out",
+  "header": "Log out",
   "loggedOut": "You have been logged out!",
   "logInAgain": "Log in again"
 }

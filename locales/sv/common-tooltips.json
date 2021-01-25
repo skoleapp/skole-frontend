@@ -8,7 +8,7 @@
   "language": "Ändra språk.",
   "loginRequired": "Logga in för att aktivera den här funktionen.",
   "verificationRequired": "Verifiera ditt konto för att aktivera den här funktionen.",
-  "settings": "Visa inställningar.",
+  "openSettings": "Öppna inställningar.",
   "rank": "Denna användares rankning är {{ rank }}.",
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
   "closeMenu": "Stäng menyn."

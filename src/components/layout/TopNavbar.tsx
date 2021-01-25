@@ -30,7 +30,7 @@ import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
-import { BackButton, ButtonLink, IconButtonLink, LanguageButton } from '../shared';
+import { BackButton, ButtonLink, Emoji, IconButtonLink, LanguageButton } from '../shared';
 import { Logo } from './Logo';
 import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
 
@@ -61,6 +61,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
+  emoji,
   hideBackButton,
   hideSearch,
   hideDynamicButtons,
@@ -101,10 +102,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   };
 
   const renderBackButton = !hideBackButton && <BackButton />;
+  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
 
-  const renderHeader = !!header && (
+  const renderHeader = (!!header || !!emoji) && (
     <Typography variant="h6" className="truncate-text">
       {header}
+      {renderEmoji}
     </Typography>
   );
 

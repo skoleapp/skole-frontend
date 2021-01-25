@@ -1,5 +1,5 @@
 {
-  "description": "Näytä {{ courseName }} Skolessa.",
+  "description": "Näytä {{ courseName }} - {{ courseCode }} Skolessa.",
   "noResources": "Tällä kurssilla ei ole resursseja.",
   "noResourcesLink": "Lisää resurssi täältä!",
   "noComments": "Tällä kurssilla ei ole kommentteja. Lisää kommentti alta!",

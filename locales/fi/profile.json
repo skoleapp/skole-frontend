@@ -6,11 +6,11 @@
   "rank": "Arvo",
   "badges": "Merkit",
   "editProfile": "Muokkaa profiilia",
-  "noResources": "Tämä käyttäjä ei ole lisännyt yhtään resurssia.",
-  "noCourses": "Tämä käyttäjä ei ole lisännyt yhtään kurssia.",
   "viewStarred": "Näytä tähdellä merkityt",
-  "ownProfileCourses": "Kurssini",
-  "ownProfileResources": "Resurssini",
   "ownProfileNoCourses": "Et ole lisännyt yhtään kurssia. Kaikki lisäämäsi kurssit ilmestyvät tänne.",
-  "ownProfileNoResources": "Et ole lisännyt yhtään resurssia. Kaikki lisäämäsi resurssit ilmestyvät tänne."
+  "ownProfileNoResources": "Et ole lisännyt yhtään resurssia. Kaikki lisäämäsi resurssit ilmestyvät tänne.",
+  "ownProfileNoComments": "Et ole lisännyt yhtään kommenttia. Kaikki lisäämäsi kommentit ilmestyvät tänne.",
+  "noCourses": "Tämä käyttäjä ei ole lisännyt yhtään kurssia.",
+  "noResources": "Tämä käyttäjä ei ole lisännyt yhtään resurssia.",
+  "noComments": "Tämä käyttäjä ei ole lisännyt yhtään kommenttia."
 }

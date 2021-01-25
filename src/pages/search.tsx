@@ -20,6 +20,7 @@ import {
   ContactLink,
   CourseTableBody,
   DialogHeader,
+  Emoji,
   ErrorTemplate,
   FormSubmitSection,
   LoadingBox,
@@ -84,6 +85,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     position: 'relative',
     height: '3.5rem',
   },
+  cardHeaderTitle: {
+    color: palette.text.secondary,
+  },
   cardHeaderAvatar: {
     position: 'absolute',
     top: spacing(2),
@@ -137,7 +141,7 @@ interface ValidFilter {
 
 const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop, isXlDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { pathname, query } = useRouter();
 
@@ -176,6 +180,9 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const schoolTypeName = R.prop('name', schoolType);
   const countryName = R.prop('name', country);
   const cityName = R.prop('name', city);
+  const filtersHeader = t('common:filters');
+  const filtersEmoji = '🔎';
+  const resultsHeader = t('common:searchResults');
 
   useEffect(() => {
     formRef.current?.setFieldValue('school', school);
@@ -453,7 +460,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   const renderLoading = <LoadingBox />;
-  const renderCourses = <CourseTableBody courses={courses} />;
+  const renderCourses = <CourseTableBody courses={courses} dense={!isXlDesktop} />;
 
   const renderTable = (
     <Box className={classes.tableContainer}>
@@ -473,7 +480,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderDialogHeader = (
     <DialogHeader
       onCancel={handleCloseFilters}
-      text={t('common:filters')}
+      text={filtersHeader}
+      emoji={filtersEmoji}
       renderHeaderLeft={renderClearFiltersButton}
     />
   );
@@ -494,17 +502,43 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderBackButton = <BackButton />;
+  const renderFiltersEmoji = <Emoji emoji={filtersEmoji} />;
+  const renderResultsEmoji = <Emoji emoji="🎓" />;
+
+  const renderFiltersHeaderTitle = (
+    <>
+      {filtersHeader}
+      {renderFiltersEmoji}
+    </>
+  );
 
   const renderFilterResultsHeader = (
     <CardHeader
-      classes={{ root: classes.cardHeaderRoot, avatar: classes.cardHeaderAvatar }}
-      title={t('common:filters')}
+      classes={{
+        root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
+        avatar: classes.cardHeaderAvatar,
+      }}
+      title={renderFiltersHeaderTitle}
       avatar={renderBackButton}
     />
   );
 
+  const renderResultsHeaderTitle = (
+    <>
+      {resultsHeader}
+      {renderResultsEmoji}
+    </>
+  );
+
   const renderResultsHeader = (
-    <CardHeader className={classes.cardHeaderRoot} title={t('common:searchResults')} />
+    <CardHeader
+      classes={{
+        root: classes.cardHeaderRoot,
+        title: classes.cardHeaderTitle,
+      }}
+      title={renderResultsHeaderTitle}
+    />
   );
 
   const renderDesktopContent = isTabletOrDesktop && (
@@ -591,7 +625,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
       _ns: await loadNamespaces(['search'], locale),
       seoProps: {
         title: t('title'),
-        description: t('description'),
       },
     },
   };

@@ -217,6 +217,9 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
+  const headerText = t('common:description');
+  const suggestionsHeaderText = t('home:suggestionsHeader');
+  const nextStepsHeaderText = t('home:nextStepsHeader');
   const shareTitle = t('home:shareTitle');
   const shareText = `${t('common:description')} 🎓`;
 
@@ -257,18 +260,21 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <Link href={urls.index}>
       <Tooltip title="Vrooom!">
         <IconButton size="small">
-          <Emoji emoji="🚀" hideSpace />
+          <Emoji emoji="🚀" noSpace />
         </IconButton>
       </Tooltip>
     </Link>
   );
 
   const renderSettingsButton = !userMe && <SettingsButton />;
+  const renderHeaderEmoji = <Emoji emoji="🎓" />;
+  const renderSuggestionsEmoji = <Emoji emoji="🔥" />;
+  const renderNextStepsEmoji = <Emoji emoji="🚀" />;
 
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
-      {t('common:description')}
-      <Emoji emoji="🎓" />
+      {headerText}
+      {renderHeaderEmoji}
     </Typography>
   );
 
@@ -291,7 +297,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSearch = (
     <Grid className={classes.searchContainer} container justify="center">
-      <Grid item xs={12} lg={8} xl={6}>
+      <Grid item xs={12} lg={10} xl={7}>
         {renderHeader}
         {renderSubHeader}
         {renderSearchField}
@@ -332,7 +338,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   ));
 
   const renderShortcuts = (
-    <Grid item xs={12} md={4} container>
+    <Grid item xs={12} md={4} lg={3} container>
       {mapShortcuts}
     </Grid>
   );
@@ -350,22 +356,22 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </TableFooter>
   );
 
+  const suggestionsHeader = (
+    <>
+      {suggestionsHeaderText}
+      {renderSuggestionsEmoji}
+    </>
+  );
+
   const renderSuggestionsPreview = (
-    <Grid item xs={12} md={8} container>
+    <Grid item xs={12} md={8} lg={9} container>
       <Paper className={classes.suggestionsPaper}>
-        <CardHeader
-          className={classes.suggestionsCardHeader}
-          title={
-            <>
-              {t('home:suggestionsHeader')}
-              <Emoji emoji="🔥" />
-            </>
-          }
-        />
+        <CardHeader className={classes.suggestionsCardHeader} title={suggestionsHeader} />
         <SuggestionsTable
           suggestions={suggestions}
           renderTableFooter={renderSuggestionsTableFooter}
           tableContainerProps={{ className: classes.suggestionsTableContainer }}
+          dense
         />
       </Paper>
     </Grid>
@@ -373,7 +379,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderMidSection = (
     <Grid className={classes.midSectionContainer} container justify="center">
-      <Grid item xs={12} lg={8} xl={6} container justify="center">
+      <Grid item xs={12} lg={10} xl={7} container justify="center">
         {renderShortcuts}
         {renderSuggestionsPreview}
       </Grid>
@@ -506,10 +512,10 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       justify="center"
     >
       <Typography className={classes.nextStepsHeader} variant="h2" color="textSecondary">
-        {t('home:nextStepsHeader')}
-        <Emoji emoji="🚀" />
+        {nextStepsHeaderText}
+        {renderNextStepsEmoji}
       </Typography>
-      <Grid className={classes.nextStepsContent} item xs={12} lg={8} xl={6} container spacing={4}>
+      <Grid className={classes.nextStepsContent} item xs={12} lg={10} xl={7} container spacing={4}>
         {renderInviteStep}
         {renderDynamicStep}
         {renderContactStep}

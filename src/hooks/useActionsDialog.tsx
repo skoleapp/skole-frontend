@@ -4,14 +4,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Size } from '@material-ui/core/TableCell';
 import Tooltip from '@material-ui/core/Tooltip';
-import FlagOutlined from '@material-ui/icons/FlagOutlined';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
-import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import { useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps, ShareParams } from 'types';
 
+import { Emoji } from '../components/shared/Emoji'; // TODO: Transform this hook to a component to mitigate circular import here.
 import { useDialogButton } from './useDialogButton';
 import { useOpen } from './useOpen';
 
@@ -79,7 +78,7 @@ export const useActionsDialog = ({
   const renderShareAction = (
     <MenuItem onClick={handleClickShare}>
       <ListItemIcon>
-        <ShareOutlined />
+        <Emoji emoji="📤" noSpace />
       </ListItemIcon>
       <ListItemText>{share}</ListItemText>
     </MenuItem>
@@ -88,7 +87,7 @@ export const useActionsDialog = ({
   const renderReportAction = (
     <MenuItem disabled>
       <ListItemIcon>
-        <FlagOutlined />
+        <Emoji emoji="🤦‍♂️" noSpace />
       </ListItemIcon>
       <ListItemText>{t('common:reportAbuse')}</ListItemText>
     </MenuItem>

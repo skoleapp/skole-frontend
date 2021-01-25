@@ -4,7 +4,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
   DatePickerFormField,
-  Emoji,
   ErrorTemplate,
   FileField,
   FormSubmitSection,
@@ -319,12 +318,8 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
 
   const commonContactDialogProps = {
     ...contactDialogProps,
-    header: (
-      <>
-        {t('upload-resource:contactDialogHeader')}
-        <Emoji emoji="💪" />
-      </>
-    ),
+    header: t('upload-resource:contactDialogHeader'),
+    emoji: '💪',
   };
 
   const renderContactDialog = (
@@ -347,6 +342,7 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
     seoProps,
     topNavbarProps: {
       header: t('upload-resource:header'),
+      emoji: '📚',
     },
   };
 

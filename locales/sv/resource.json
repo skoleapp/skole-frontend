@@ -1,5 +1,5 @@
 {
-  "description": "Visa {{ resourceTitle }} på Skole.",
+  "description": "Visa {{ resourceTitle }} - {{ resourceDate }} på Skole.",
   "error": "Fel vid inläsning av resurs.",
   "noComments": "Den här resursen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
   "drawingMode": "Ritningsläge",

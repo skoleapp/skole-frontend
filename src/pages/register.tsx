@@ -82,13 +82,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     setUnexpectedFormError: updateUserUnexpectedError,
   } = useForm<UpdateUserFormValues>();
 
-  const header =
-    phase === RegisterPhases.REGISTER
-      ? t('register:header')
-      : phase === RegisterPhases.UPDATE_USER
-      ? t('register:updateUserHeader')
-      : RegisterPhases.REGISTER_COMPLETE && t('register:registerCompleteHeader');
-
   const registerInitialValues = {
     username: '',
     email: '',
@@ -261,9 +254,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderRegisterCompleteHelpText = (
+  const renderUpdateUserText = (
     <FormControl>
-      <FormHelperText>{t('register:registerCompleteHelpText')}</FormHelperText>
+      <Typography variant="subtitle1" align="center">
+        {t('register:updateUserText')}
+      </Typography>
     </FormControl>
   );
 
@@ -305,7 +300,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
     <Form>
-      {renderRegisterCompleteHelpText}
+      {renderUpdateUserText}
       {renderSchoolField}
       {renderSubjectField}
       {renderUpdateUserFormSubmitSection(props)}
@@ -325,12 +320,16 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
+  const renderRegisterCompleteText = (
     <FormControl>
       <Typography variant="subtitle1" align="center">
-        {t('register:registerCompleteEmailSent')}
+        {t('register:registerCompleteText')}
       </Typography>
-      <Typography component="br" />
+    </FormControl>
+  );
+
+  const renderContinueButton = (
+    <FormControl>
       <ButtonLink
         href={urls.home}
         endIcon={<ArrowForwardOutlined />}
@@ -343,11 +342,19 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </FormControl>
   );
 
+  const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
+    <>
+      {renderRegisterCompleteText}
+      {renderContinueButton}
+    </>
+  );
+
   const layoutProps = {
     seoProps,
     hideBottomNavbar: true,
     topNavbarProps: {
-      header,
+      header: t('register:header'),
+      emoji: '👋',
       hideSearch: true,
       hideRegisterButton: true,
       hideGetStartedButton: true,

@@ -1,32 +1,39 @@
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
-import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
-import ChatOutlined from '@material-ui/icons/ChatOutlined';
-import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
-import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
-import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
-import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
+import clsx from 'clsx';
 import { ResourceObjectType } from 'generated';
-import { useDayjs } from 'hooks';
+import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
+import { BORDER } from 'theme';
+import { ColSpan, TableRowProps } from 'types';
 import { urls } from 'utils';
 
 import { TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
-import { TableRowIcon } from './TableRowIcon';
 
-interface Props {
+const useStyles = makeStyles(({ spacing }) => ({
+  root: {
+    borderBottom: BORDER,
+  },
+  statsContainer: {
+    display: 'flex',
+  },
+  tableCell: {
+    padding: spacing(1),
+  },
+}));
+
+interface Props extends TableRowProps {
   resource: ResourceObjectType;
   hideResourceChip?: boolean;
   hideDateChip?: boolean;
-  key: number;
 }
 
 export const ResourceTableRow: React.FC<Props> = ({
@@ -41,45 +48,29 @@ export const ResourceTableRow: React.FC<Props> = ({
     downloads,
     commentCount,
     course,
+    created: _created,
   },
   hideResourceChip,
   hideDateChip,
+  dense,
   key,
 }) => {
   const { t } = useTranslation();
+  const { isMobile } = useMediaQueries();
+  const classes = useStyles();
+  const _courseName = R.propOr('', 'name', course);
+  const courseCode = R.propOr('', 'code', course);
+  const courseName = courseCode ? `${_courseName} - ${courseCode}` : _courseName;
+  const scoreLabel = t('common:score').toLowerCase();
+  const commentsLabel = t('common:comments').toLowerCase();
+  const starsLabel = t('common:stars').toLowerCase();
+  const downloadsLabel = t('common:downloads').toLowerCase();
+  const created = useDayjs(_created).startOf('day').fromNow();
 
   const renderResourceChip = !hideResourceChip && <TableRowChip label={t('common:resource')} />;
   const renderResourceTypeChip = !!resourceType && <TableRowChip label={resourceType.name} />;
+  const renderCourseChip = !!courseName && <TableRowChip label={courseName} />;
   const renderDateChip = !hideDateChip && <TableRowChip label={useDayjs(date).format('LL')} />;
-  const renderUserIcon = <TableRowIcon icon={AccountCircleOutlined} />;
-  const renderScoreIcon = <TableRowIcon icon={ThumbsUpDownOutlined} marginLeft />;
-  const renderStarIcon = <TableRowIcon icon={StarBorderOutlined} marginLeft />;
-  const renderDiscussionIcon = <TableRowIcon icon={ChatOutlined} marginLeft />;
-  const renderDownloadsIcon = <TableRowIcon icon={CloudDownloadOutlined} marginLeft />;
-  const courseName = R.propOr('', 'name', course);
-  const courseCode = R.propOr('', 'code', course);
-
-  const renderResourceTitle = (
-    <Typography color="textSecondary">
-      <Grid container alignItems="center">
-        <TableRowIcon icon={AssignmentOutlined} />
-        <Typography variant="body2" color="textPrimary">
-          {title}
-        </Typography>
-      </Grid>
-    </Typography>
-  );
-
-  const renderResourceCourse = courseName && (
-    <Typography color="textSecondary">
-      <Grid container alignItems="center">
-        <TableRowIcon icon={SchoolOutlined} />
-        <Typography variant="caption" color="textSecondary">
-          {`${courseName} - ${courseCode}`}
-        </Typography>
-      </Grid>
-    </Typography>
-  );
 
   const renderResourceCreator = user ? (
     <TextLink href={urls.user(user.id)} color="primary">
@@ -89,41 +80,175 @@ export const ResourceTableRow: React.FC<Props> = ({
     t('common:communityUser')
   );
 
+  const renderMobileStats = isMobile && (
+    <Grid container>
+      <Grid item xs={12} container>
+        <Grid item xs={4} container>
+          <Grid item xs={2} container alignItems="center">
+            <Typography variant="subtitle1">{score}</Typography>
+          </Grid>
+          <Grid item xs={10} container alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+              {scoreLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={4} container>
+          <Grid item xs={2} container alignItems="center">
+            <Typography variant="subtitle1">{commentCount}</Typography>
+          </Grid>
+          <Grid item xs={10} container alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+              {commentsLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} container>
+        <Grid item xs={4} container>
+          <Grid item xs={2} container alignItems="center">
+            <Typography variant="subtitle1">{starCount}</Typography>
+          </Grid>
+          <Grid item xs={10} container alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+              {starsLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={4} container>
+          <Grid item xs={2} container alignItems="center">
+            <Typography variant="subtitle1">{downloads}</Typography>
+          </Grid>
+          <Grid item xs={10} container alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+              {downloadsLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+
+  const desktopStatsColSpan: ColSpan = {
+    md: dense ? 6 : 3,
+    lg: 3,
+  };
+
+  const renderDesktopStats = (
+    <Grid container alignItems="center">
+      <Grid item {...desktopStatsColSpan} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{score}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {scoreLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item {...desktopStatsColSpan} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{commentCount}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {commentsLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item {...desktopStatsColSpan} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{starCount}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {starsLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item {...desktopStatsColSpan} container>
+        <Grid item md={12} container justify="center">
+          <Typography variant="subtitle1">{downloads}</Typography>
+        </Grid>
+        <Grid item md={12} container justify="center">
+          <Typography variant="body2" color="textSecondary">
+            {downloadsLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+
+  const renderResourceStats = (
+    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+      {renderMobileStats || renderDesktopStats}
+    </TableCell>
+  );
+
+  const renderCreatorInfo = (
+    <Typography variant="body2" color="textSecondary" align={isMobile || dense ? 'left' : 'right'}>
+      {t('common:createdBy')} {renderResourceCreator} {created}
+    </Typography>
+  );
+
   const renderChips = (
     <Grid container>
       {renderResourceChip}
       {renderResourceTypeChip}
       {renderDateChip}
+      {renderCourseChip}
     </Grid>
   );
 
-  const renderResourceInfo = (
-    <Typography variant="body2" color="textSecondary">
-      <Grid container alignItems="center">
-        {renderUserIcon}
-        {renderResourceCreator}
-        {renderStarIcon}
-        {starCount}
-        {renderDiscussionIcon}
-        {commentCount}
-        {renderDownloadsIcon}
-        {downloads}
-        {renderScoreIcon}
-        {score}
-      </Grid>
-    </Typography>
+  const renderResourceTitle = (
+    <TableCell className={classes.tableCell}>
+      <Typography variant="subtitle1">{title}</Typography>
+    </TableCell>
   );
+
+  const resourceInfoColSpan: ColSpan = {
+    xs: 12,
+    sm: dense ? 12 : 6,
+  };
+
+  const renderResourceInfo = (
+    <Grid item xs={12} container alignItems="flex-end">
+      <Grid item {...resourceInfoColSpan}>
+        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+      </Grid>
+      <Grid item {...resourceInfoColSpan} container>
+        <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
+      </Grid>
+    </Grid>
+  );
+
+  const statsColSpan: ColSpan = {
+    xs: 12,
+    md: dense ? 6 : 4,
+    lg: dense ? 5 : 3,
+  };
+
+  const mainColSpan: ColSpan = {
+    xs: 12,
+    md: dense ? 6 : 8,
+    lg: dense ? 7 : 9,
+  };
 
   return (
     <Link href={urls.resource(id)} key={key}>
-      <CardActionArea>
+      <CardActionArea className={classes.root}>
         <TableRow>
-          <TableCell>
-            {renderResourceTitle}
-            {renderResourceCourse}
-            {renderChips}
-            {renderResourceInfo}
-          </TableCell>
+          <Grid container>
+            <Grid item xs={12} container>
+              <Grid item {...statsColSpan} container>
+                {renderResourceStats}
+              </Grid>
+              <Grid item {...mainColSpan} container>
+                {renderResourceTitle}
+                {renderResourceInfo}
+              </Grid>
+            </Grid>
+          </Grid>
         </TableRow>
       </CardActionArea>
     </Link>

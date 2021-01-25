@@ -1,6 +1,5 @@
 {
   "title": "Sökning",
-  "description": "Sök på kurser på Skole.",
   "coursesSubHeader": "Kurser",
   "noCourses": "Inga kurser slår med de angivna sökkriterierna. Du kan lägga till en kurs själv om den ännu inte finns.",
   "noCoursesLink": "Lägg till en kurs här!"
