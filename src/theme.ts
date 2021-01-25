@@ -201,7 +201,7 @@ export const theme = createMuiTheme({
         backgroundColor: COLORS.white,
         flexGrow: 1,
         position: 'relative',
-        overflow: 'hidden',
+        overflow: 'hidden !important',
       },
     },
     MuiTable: {
