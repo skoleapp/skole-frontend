@@ -1,10 +1,10 @@
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoOutlined from '@material-ui/icons/InfoOutlined';
-import { Emoji } from 'components';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps } from 'types';
 
+import { Emoji } from '../components/shared/Emoji'; // TODO: Transform this hook to a component to mitigate circular import here.import React, { SyntheticEvent } from 'react';
 import { useDialogButton } from './useDialogButton';
 import { useOpen } from './useOpen';
 

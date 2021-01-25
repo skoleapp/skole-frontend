@@ -5,12 +5,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Size } from '@material-ui/core/TableCell';
 import Tooltip from '@material-ui/core/Tooltip';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
-import { Emoji } from 'components';
 import { useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { SyntheticEvent } from 'react';
 import { DialogHeaderProps, ShareParams } from 'types';
 
+import { Emoji } from '../components/shared/Emoji'; // TODO: Transform this hook to a component to mitigate circular import here.
 import { useDialogButton } from './useDialogButton';
 import { useOpen } from './useOpen';
 
