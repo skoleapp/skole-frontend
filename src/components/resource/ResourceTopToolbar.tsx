@@ -29,7 +29,6 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   cardHeaderTitle: {
     color: palette.text.secondary,
     flexGrow: 1,
-    textAlign: 'left',
   },
 }));
 
@@ -92,8 +91,9 @@ export const ResourceTopToolbar: React.FC<Props> = ({
 
   const renderResourceTitle = (
     <Typography
-      className={clsx('MuiCardHeader-title', classes.cardHeaderTitle, 'truncate-text')}
-      variant="h5"
+      className={clsx('MuiCardHeader-subheader', classes.cardHeaderTitle, 'truncate-text')}
+      variant="body1"
+      align="left"
     >
       {title}
       {renderEmoji}
