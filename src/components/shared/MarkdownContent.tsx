@@ -2,10 +2,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles(({ palette, spacing }) => ({
   markdown: {
     '& a': {
       color: palette.primary.main,
+    },
+    '& p': {
+      marginTop: spacing(2),
+      marginBottom: spacing(2),
     },
   },
 }));
