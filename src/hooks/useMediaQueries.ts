@@ -7,6 +7,7 @@ interface UseMediaQueries {
   isMobileOrTablet: boolean;
   isTabletOrDesktop: boolean;
   isDesktop: boolean;
+  isXlDesktop: boolean;
 }
 
 export const useMediaQueries = (): UseMediaQueries => {
@@ -14,6 +15,7 @@ export const useMediaQueries = (): UseMediaQueries => {
   const isXsMobile = useMediaQuery(breakpoints.down('xs'));
   const isMobile = useMediaQuery(breakpoints.down('sm'));
   const isMobileOrTablet = useMediaQuery(breakpoints.down('md'));
+  const isXlDesktop = useMediaQuery(breakpoints.up('xl'));
 
   return {
     isXsMobile,
@@ -21,5 +23,6 @@ export const useMediaQueries = (): UseMediaQueries => {
     isMobileOrTablet,
     isTabletOrDesktop: !isMobile,
     isDesktop: !isMobileOrTablet,
+    isXlDesktop,
   };
 };

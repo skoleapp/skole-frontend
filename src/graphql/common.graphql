@@ -353,6 +353,7 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
       starCount
       commentCount
       downloads
+      created
       resourceType {
         name
       }
@@ -739,6 +740,7 @@ query User($id: ID, $page: Int, $pageSize: Int) {
       starCount
       resourceCount
       commentCount
+      created
       user {
         id
         username
@@ -755,14 +757,15 @@ query User($id: ID, $page: Int, $pageSize: Int) {
       id
       title
       score
-      course {
-        name
-        code
-      }
       date
       starCount
       commentCount
       downloads
+      created
+      course {
+        name
+        code
+      }
       resourceType {
         name
       }
@@ -992,6 +995,7 @@ query Suggestions {
       starCount
       resourceCount
       commentCount
+      created
       user {
         id
         username
@@ -1005,6 +1009,7 @@ query Suggestions {
       starCount
       commentCount
       downloads
+      created
       resourceType {
         name
       }

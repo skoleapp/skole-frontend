@@ -141,7 +141,7 @@ interface ValidFilter {
 
 const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { isMobile, isTabletOrDesktop, isXlDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const { pathname, query } = useRouter();
 
@@ -460,7 +460,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   const renderLoading = <LoadingBox />;
-  const renderCourses = <CourseTableBody courses={courses} />;
+  const renderCourses = <CourseTableBody courses={courses} dense={!isXlDesktop} />;
 
   const renderTable = (
     <Box className={classes.tableContainer}>

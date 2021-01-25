@@ -11,4 +11,3 @@ export { ResourceTableRow } from './ResourceTableRow';
 export { SubjectTableBody } from './SubjectTableBody';
 export { SuggestionsTable } from './SuggestionsTable';
 export { TableRowChip } from './TableRowChip';
-export { TableRowIcon } from './TableRowIcon';

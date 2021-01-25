@@ -297,7 +297,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSearch = (
     <Grid className={classes.searchContainer} container justify="center">
-      <Grid item xs={12} lg={8} xl={6}>
+      <Grid item xs={12} lg={10} xl={7}>
         {renderHeader}
         {renderSubHeader}
         {renderSearchField}
@@ -338,7 +338,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   ));
 
   const renderShortcuts = (
-    <Grid item xs={12} md={4} container>
+    <Grid item xs={12} md={4} lg={3} container>
       {mapShortcuts}
     </Grid>
   );
@@ -364,13 +364,14 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSuggestionsPreview = (
-    <Grid item xs={12} md={8} container>
+    <Grid item xs={12} md={8} lg={9} container>
       <Paper className={classes.suggestionsPaper}>
         <CardHeader className={classes.suggestionsCardHeader} title={suggestionsHeader} />
         <SuggestionsTable
           suggestions={suggestions}
           renderTableFooter={renderSuggestionsTableFooter}
           tableContainerProps={{ className: classes.suggestionsTableContainer }}
+          dense
         />
       </Paper>
     </Grid>
@@ -378,7 +379,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderMidSection = (
     <Grid className={classes.midSectionContainer} container justify="center">
-      <Grid item xs={12} lg={8} xl={6} container justify="center">
+      <Grid item xs={12} lg={10} xl={7} container justify="center">
         {renderShortcuts}
         {renderSuggestionsPreview}
       </Grid>
@@ -514,7 +515,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
         {nextStepsHeaderText}
         {renderNextStepsEmoji}
       </Typography>
-      <Grid className={classes.nextStepsContent} item xs={12} lg={8} xl={6} container spacing={4}>
+      <Grid className={classes.nextStepsContent} item xs={12} lg={10} xl={7} container spacing={4}>
         {renderInviteStep}
         {renderDynamicStep}
         {renderContactStep}

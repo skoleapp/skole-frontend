@@ -163,8 +163,6 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
   const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
   const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
 
-  console.log('comments', comments);
-
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
     {

@@ -87,8 +87,12 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   resourcesHeaderRoot: {
     borderBottom: BORDER,
   },
+  backButton: {
+    marginRight: spacing(2),
+  },
   resourcesHeaderTitle: {
     color: palette.text.secondary,
+    flexGrow: 1,
   },
   score: {
     marginLeft: spacing(2),
@@ -322,7 +326,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     text: t('course:noResourcesLink'),
   };
 
-  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
+  const renderResourceTableBody = <ResourceTableBody resources={resources} dense />;
 
   const renderResourceTable = (
     <PaginatedTable
@@ -361,7 +365,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Tooltip>
   );
 
-  const renderBackButton = <BackButton className="MuiCardHeader-avatar" />;
+  const renderBackButton = <BackButton className={classes.backButton} />;
   const renderEmoji = <Emoji emoji={emoji} />;
 
   const renderHeader = (
@@ -373,37 +377,27 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderResourcesTitle = (
     <Typography
-      className={clsx('MuiCardHeader-title', classes.resourcesHeaderTitle, 'truncate-text')}
-      variant="h5"
+      className={clsx('MuiCardHeader-subheader', classes.resourcesHeaderTitle, 'truncate-text')}
+      variant="body1"
+      align="left"
     >
       {renderHeader}
     </Typography>
   );
 
   const renderResourcesHeader = (
-    <Grid container className={clsx('MuiCardHeader-root', classes.resourcesHeaderRoot)}>
-      <Grid item xs={1} lg={3} container justify="flex-start">
-        {renderBackButton}
-      </Grid>
-      <Grid item xs={6} lg={6}>
-        {renderResourcesTitle}
-      </Grid>
-      <Grid
-        item
-        xs={5}
-        lg={3}
-        container
-        spacing={2}
-        justify="flex-end"
-        alignItems="center"
-        className="MuiCardHeader-action"
-      >
-        {renderStarButton}
-        {renderUpvoteButton}
-        {renderScore}
-        {renderDownvoteButton}
-        {renderUploadResourceButton}
-      </Grid>
+    <Grid
+      container
+      className={clsx('MuiCardHeader-root', classes.resourcesHeaderRoot)}
+      wrap="nowrap"
+    >
+      {renderBackButton}
+      {renderResourcesTitle}
+      {renderStarButton}
+      {renderUpvoteButton}
+      {renderScore}
+      {renderDownvoteButton}
+      {renderUploadResourceButton}
     </Grid>
   );
 

@@ -1,16 +1,17 @@
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Grid from '@material-ui/core/Grid';
-import Hidden from '@material-ui/core/Hidden';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import { CommentObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER } from 'theme';
+import { ColSpan, TableRowProps } from 'types';
 import { truncate, urls } from 'utils';
 
 import { MarkdownContent, TextLink } from '../shared';
@@ -23,13 +24,8 @@ const useStyles = makeStyles(({ spacing }) => ({
   statsContainer: {
     display: 'flex',
   },
-  mobileStatLabel: {
-    marginLeft: spacing(2),
-  },
-  mobileReplyCount: {
-    marginLeft: spacing(4),
-  },
-  commentPreview: {
+  commentPreviewTableCell: {
+    paddingBottom: 0,
     overflow: 'hidden',
     '& *': {
       overflow: 'hidden',
@@ -37,28 +33,31 @@ const useStyles = makeStyles(({ spacing }) => ({
       textOverflow: 'ellipsis',
     },
   },
+  tableCell: {
+    padding: spacing(1),
+  },
 }));
 
-interface Props {
+interface Props extends TableRowProps {
   comment: CommentObjectType;
   hideCommentChip?: boolean;
-  key: number;
 }
 
 export const CommentTableRow: React.FC<Props> = ({
-  comment: { id, text, attachment, created, score, replyCount, user, course, resource },
+  comment: { id, text, attachment, created: _created, score, replyCount, user, course, resource },
   hideCommentChip,
+  dense,
   key,
 }) => {
   const { t } = useTranslation();
-  const { isXsMobile, isMobile } = useMediaQueries();
+  const { isMobile } = useMediaQueries();
   const classes = useStyles();
-  const renderCreated = useDayjs(created).startOf('day').fromNow();
+  const created = useDayjs(_created).startOf('day').fromNow();
   const scoreLabel = t('common:score').toLowerCase();
   const repliesLabel = t('common:replies').toLowerCase();
 
   const commentPreview =
-    (!!text && truncate(text, 200)) || (!!attachment && t('common:clickToView')) || '';
+    (!!text && truncate(text, 50)) || (!!attachment && t('common:clickToView')) || '';
 
   const pathname =
     (!!course && urls.course(course.id)) || (!!resource && urls.resource(resource.id)) || '#';
@@ -84,22 +83,37 @@ export const CommentTableRow: React.FC<Props> = ({
 
   const renderMobileStats = isMobile && (
     <Grid container alignItems="center">
-      <Typography variant="subtitle1">{score}</Typography>
-      <Typography className={classes.mobileStatLabel} variant="body2" color="textSecondary">
-        {scoreLabel}
-      </Typography>
-      <Typography className={classes.mobileReplyCount} variant="subtitle1">
-        {replyCount}
-      </Typography>
-      <Typography className={classes.mobileStatLabel} variant="body2" color="textSecondary">
-        {repliesLabel}
-      </Typography>
+      <Grid item xs={4} container>
+        <Grid item xs={2} container alignItems="center">
+          <Typography variant="subtitle1">{score}</Typography>
+        </Grid>
+        <Grid item xs={10} container alignItems="center">
+          <Typography variant="body2" color="textSecondary">
+            {scoreLabel}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item xs={4} container>
+        <Grid item xs={2} container alignItems="center">
+          <Typography variant="subtitle1">{replyCount}</Typography>
+        </Grid>
+        <Grid item xs={10} container alignItems="center">
+          <Typography variant="body2" color="textSecondary">
+            {repliesLabel}
+          </Typography>
+        </Grid>
+      </Grid>
     </Grid>
   );
 
+  const desktopStatsColSpan: ColSpan = {
+    md: dense ? 6 : 3,
+    lg: 3,
+  };
+
   const renderDesktopStats = (
     <Grid container alignItems="center">
-      <Grid item md={6} container>
+      <Grid item {...desktopStatsColSpan} container>
         <Grid item md={12} container justify="center">
           <Typography variant="subtitle1">{score}</Typography>
         </Grid>
@@ -109,7 +123,7 @@ export const CommentTableRow: React.FC<Props> = ({
           </Typography>
         </Grid>
       </Grid>
-      <Grid item md={6} container>
+      <Grid item {...desktopStatsColSpan} container>
         <Grid item md={12} container justify="center">
           <Typography variant="subtitle1">{replyCount}</Typography>
         </Grid>
@@ -122,12 +136,21 @@ export const CommentTableRow: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderStats = renderMobileStats || renderDesktopStats;
-  const renderCommentPreview = <MarkdownContent>{commentPreview}</MarkdownContent>;
+  const renderCommentStats = (
+    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+      {renderMobileStats || renderDesktopStats}
+    </TableCell>
+  );
+
+  const renderCommentPreview = (
+    <TableCell className={classes.tableCell}>
+      <MarkdownContent>{commentPreview}</MarkdownContent>
+    </TableCell>
+  );
 
   const renderCreatorInfo = (
-    <Typography variant="body2" color="textSecondary" align={isXsMobile ? 'left' : 'right'}>
-      {t('common:postedBy')} {renderCommentCreator} {renderCreated}
+    <Typography variant="body2" color="textSecondary" align={isMobile || dense ? 'left' : 'right'}>
+      {t('common:postedBy')} {renderCommentCreator} {created}
     </Typography>
   );
 
@@ -139,37 +162,48 @@ export const CommentTableRow: React.FC<Props> = ({
     </Grid>
   );
 
+  const commentInfoColSpan: ColSpan = {
+    xs: 12,
+    sm: dense ? 12 : 6,
+  };
+
+  const renderCommentInfo = (
+    <Grid item xs={12} container alignItems="flex-end">
+      <Grid item {...commentInfoColSpan}>
+        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+      </Grid>
+      <Grid item {...commentInfoColSpan} container>
+        <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
+      </Grid>
+    </Grid>
+  );
+
+  const statsColSpan: ColSpan = {
+    xs: 12,
+    md: dense ? 6 : 4,
+    lg: dense ? 5 : 3,
+  };
+
+  const mainColSpan: ColSpan = {
+    xs: 12,
+    md: dense ? 6 : 8,
+    lg: dense ? 7 : 9,
+  };
+
   return (
     <Link href={href} key={key}>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>
             <Grid item xs={12} container>
-              <Grid item xs={12} md={2} container>
-                <TableCell className={classes.statsContainer}>{renderStats}</TableCell>
+              <Grid item {...statsColSpan} container>
+                {renderCommentStats}
               </Grid>
-              <Grid item xs={12} md={10} container>
-                <TableCell className={classes.commentPreview}>{renderCommentPreview}</TableCell>
-                <Hidden xsDown>
-                  <Grid item xs={12} container alignItems="center">
-                    <Grid item xs={12} sm={6}>
-                      <TableCell>{renderChips}</TableCell>
-                    </Grid>
-                    <Grid item xs={12} sm={6} container justify="flex-end">
-                      <TableCell>{renderCreatorInfo}</TableCell>
-                    </Grid>
-                  </Grid>
-                </Hidden>
+              <Grid item {...mainColSpan} container>
+                {renderCommentPreview}
+                {renderCommentInfo}
               </Grid>
             </Grid>
-            <Hidden smUp>
-              <Grid item xs={12} container>
-                <TableCell>{renderChips}</TableCell>
-              </Grid>
-              <Grid item xs={12} container>
-                <TableCell>{renderCreatorInfo}</TableCell>
-              </Grid>
-            </Hidden>
           </Grid>
         </TableRow>
       </CardActionArea>

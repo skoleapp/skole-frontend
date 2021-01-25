@@ -231,13 +231,6 @@ export const theme = createMuiTheme({
         borderBottom: 'none',
       },
     },
-    MuiTableFooter: {
-      root: {
-        [breakpoints.up('md')]: {
-          borderTop: BORDER,
-        },
-      },
-    },
     MuiTablePagination: {
       input: {
         margin: 0,
