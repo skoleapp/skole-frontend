@@ -73,52 +73,46 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   ];
 
   const paths = staticPaths.map((path) => ({ path, modified }));
+
   const apolloClient = initApolloClient();
+  const { data } = await apolloClient.query({
+    query: SitemapDocument,
+  });
 
-  try {
-    const { data } = await apolloClient.query({
-      query: SitemapDocument,
-    });
-
-    for (const page of DYNAMIC_PATHS) {
-      for (const entry of data.sitemap[page]) {
-        paths.push({
-          path: `/${page}/${entry.id}`,
-          modified: entry.modified,
-        });
-      }
-    }
-
-    const blogFileNames = readdirSync('markdown/en/blogs');
-    for (const fileName of blogFileNames) {
-      const path = urls.blog(fileName.replace(/\.md$/, ''));
-      // This is quite inefficient to get the blog creation date by rendering the whole
-      // markdown file. Maybe the date could be part of the filename already?
-      const { date } = (await loadMarkdown(path)).data;
+  for (const page of DYNAMIC_PATHS) {
+    for (const entry of data.sitemap[page]) {
       paths.push({
-        path,
-        modified: date || modified,
+        path: `/${page}/${entry.id}`,
+        modified: entry.modified,
       });
     }
-
-    const translatedPaths = [];
-
-    for (const lang of LOCALE_PATHS) {
-      for (const path of paths) {
-        translatedPaths.push({
-          ...path,
-          path: `${lang}${path.path}`,
-        });
-      }
-    }
-
-    const sitemap = createSitemap(translatedPaths);
-    res.setHeader('Content-Type', 'application/xml');
-    res.write(sitemap);
-  } catch {
-    res.statusCode = 500;
   }
 
+  const blogFileNames = readdirSync('markdown/en/blogs');
+  for (const fileName of blogFileNames) {
+    const path = urls.blog(fileName.replace(/\.md$/, ''));
+    // This is quite inefficient to get the blog creation date by rendering the whole
+    // markdown file. Maybe the date could be part of the filename already?
+    const { date } = (await loadMarkdown(path)).data;
+    paths.push({
+      path,
+      modified: date || modified,
+    });
+  }
+
+  const translatedPaths = [];
+  for (const lang of LOCALE_PATHS) {
+    for (const path of paths) {
+      translatedPaths.push({
+        ...path,
+        path: `${lang}${path.path}`,
+      });
+    }
+  }
+
+  const sitemap = createSitemap(translatedPaths);
+  res.setHeader('Content-Type', 'application/xml');
+  res.write(sitemap);
   res.end();
 
   return {
