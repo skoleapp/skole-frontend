@@ -10,7 +10,7 @@ import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import { BORDER } from 'theme';
 
 import { BackButton, Emoji } from '../shared';
@@ -39,8 +39,8 @@ interface Props {
   renderUpvoteButton: JSX.Element | false;
   renderScore: JSX.Element | false;
   renderDownvoteButton: JSX.Element | false;
-  handleDownloadButtonClick: (e: SyntheticEvent) => Promise<void>;
-  handlePrintButtonClick: (e: SyntheticEvent) => Promise<void>;
+  handleDownloadButtonClick: () => Promise<void>;
+  handlePrintButtonClick: () => Promise<void>;
 }
 
 export const ResourceTopToolbar: React.FC<Props> = ({

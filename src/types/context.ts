@@ -2,6 +2,8 @@ import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 
+import { ActionsDialogParams, InfoDialogParams, ShareDialogParams } from './dialogs';
+
 export interface AuthContextType {
   userMe: UserObjectType | null;
   setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
@@ -25,6 +27,20 @@ export interface SettingsContextType {
   settingsDialogOpen: boolean;
   handleOpenSettingsDialog: () => void;
   handleCloseSettingsDialog: () => void;
+}
+
+export interface ActionsContextType {
+  actionsDialogOpen: boolean;
+  actionsDialogParams: ActionsDialogParams;
+  handleOpenActionsDialog: (actionsDialogParams: ActionsDialogParams) => void;
+  handleCloseActionsDialog: () => void;
+}
+
+export interface InfoContextType {
+  infoDialogOpen: boolean;
+  infoDialogParams: InfoDialogParams;
+  handleOpenInfoDialog: (infoDialogParams: InfoDialogParams) => void;
+  handleCloseInfoDialog: () => void;
 }
 
 export interface PdfViewerContextType {
@@ -74,19 +90,11 @@ export interface ConfirmContextType {
   handleCancel: () => void;
 }
 
-export interface ShareParams {
-  shareHeader?: string;
-  shareTitle?: string;
-  shareText?: string;
-  linkSuffix?: string;
-  customLink?: string;
-}
-
 export interface ShareContextType {
   shareDialogOpen: boolean;
-  handleOpenShareDialog: (shareParams: ShareParams) => void;
+  handleOpenShareDialog: (shareDialogParams: ShareDialogParams) => void;
   handleCloseShareDialog: () => void;
-  shareParams: ShareParams;
+  shareDialogParams: ShareDialogParams;
 }
 
 export interface HistoryContextType {

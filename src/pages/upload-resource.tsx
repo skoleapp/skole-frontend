@@ -3,11 +3,13 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {
   AutocompleteField,
+  ContactDialog,
   DatePickerFormField,
   ErrorTemplate,
   FileField,
   FormSubmitSection,
   FormTemplate,
+  GuidelinesLink,
   LoginRequiredTemplate,
   TextFormField,
   TextLink,
@@ -32,8 +34,6 @@ import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
-import { ContactDialog } from 'src/components/shared/ContactDialog';
-import { GuidelinesLink } from 'src/components/shared/GuidelinesLink';
 import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';

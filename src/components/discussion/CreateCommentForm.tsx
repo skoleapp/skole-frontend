@@ -34,8 +34,9 @@ import {
   MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
 } from 'utils';
 
+import { DialogHeader, SkoleDialog } from '../dialogs';
 import { TextFormField } from '../form-fields';
-import { DialogHeader, SkoleDialog, TextLink } from '../shared';
+import { TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({

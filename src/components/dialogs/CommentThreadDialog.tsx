@@ -4,7 +4,8 @@ import { useDiscussionContext } from 'context';
 import React from 'react';
 
 import { ReplyCommentThread } from '../discussion';
-import { DialogHeader, SkoleDialog } from '../shared';
+import { DialogHeader } from './DialogHeader';
+import { SkoleDialog } from './SkoleDialog';
 
 const useStyles = makeStyles({
   paper: {

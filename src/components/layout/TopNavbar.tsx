@@ -30,9 +30,15 @@ import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
-import { BackButton, ButtonLink, Emoji, IconButtonLink, LanguageButton } from '../shared';
-import { Logo } from './Logo';
-import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
+import {
+  BackButton,
+  ButtonLink,
+  Emoji,
+  IconButtonLink,
+  LanguageButton,
+  Logo,
+  TopNavbarSearchWidget,
+} from '../shared';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {

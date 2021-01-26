@@ -10,7 +10,7 @@ import React from 'react';
 import { TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
 import { DialogHeaderProps } from 'types';
 
-import { Emoji } from './Emoji';
+import { Emoji } from '../shared';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {

@@ -3,7 +3,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import { DialogHeaderProps, SkoleDialogProps } from 'types';
 
 import { DialogHeader } from './DialogHeader';
@@ -11,7 +11,7 @@ import { SkoleDialog } from './SkoleDialog';
 
 interface Props extends SkoleDialogProps {
   open: boolean;
-  onClose: (e: SyntheticEvent) => void;
+  onClose: () => void;
   dialogHeaderProps: DialogHeaderProps;
 }
 
