@@ -9,5 +9,7 @@
   "helperTextMarkdown": "Format your comment with",
   "markdown": "Markdown",
   "helperTextCombination": "{{ combination }} to add a new line.",
-  "commentCount": "{{ commentCount }} comments"
+  "commentCount": "{{ commentCount }} comments",
+  "postingComment": "Posting comment...",
+  "loadingMoreComments": "Loading more comments..."
 }

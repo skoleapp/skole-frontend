@@ -16,7 +16,7 @@ import { useTranslation } from 'lib';
 import React from 'react';
 import { CreateCommentFormValues } from 'types';
 
-import { ResponsiveDialog } from '../shared';
+import { ResponsiveDialog } from '../dialogs';
 
 const useStyles = makeStyles(({ spacing }) => ({
   button: {

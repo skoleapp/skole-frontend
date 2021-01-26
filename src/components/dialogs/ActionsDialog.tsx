@@ -2,11 +2,13 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import FlagOutlined from '@material-ui/icons/FlagOutlined';
+import MailOutlined from '@material-ui/icons/MailOutlined';
+import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import { useActionsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { Emoji } from '../shared';
 import { ResponsiveDialog } from './ResponsiveDialog';
 
 export const ActionsDialog: React.FC = () => {
@@ -44,7 +46,7 @@ export const ActionsDialog: React.FC = () => {
   const renderShareAction = !hideShareAction && (
     <MenuItem onClick={handleClickShare}>
       <ListItemIcon>
-        <Emoji emoji="📤" noSpace />
+        <MailOutlined />
       </ListItemIcon>
       <ListItemText>{shareText}</ListItemText>
     </MenuItem>
@@ -53,7 +55,7 @@ export const ActionsDialog: React.FC = () => {
   const renderDeleteAction = !hideDeleteAction && (
     <MenuItem onClick={handleClickDelete} disabled={deleteActionParams?.disabled}>
       <ListItemIcon>
-        <Emoji emoji="❌" noSpace />
+        <ShareOutlined />
       </ListItemIcon>
       <ListItemText>{deleteActionParams?.text}</ListItemText>
     </MenuItem>
@@ -62,7 +64,7 @@ export const ActionsDialog: React.FC = () => {
   const renderReportAction = !hideReportAction && (
     <MenuItem disabled>
       <ListItemIcon>
-        <Emoji emoji="🤦‍♂️" noSpace />
+        <FlagOutlined />
       </ListItemIcon>
       <ListItemText>{t('common:reportAbuse')}</ListItemText>
     </MenuItem>

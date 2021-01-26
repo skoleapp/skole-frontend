@@ -1,50 +1,50 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import AttachFileOutlined from '@material-ui/icons/AttachFileOutlined';
-import CameraAltOutlined from '@material-ui/icons/CameraAltOutlined';
 import CommentOutlined from '@material-ui/icons/CommentOutlined';
-import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
 import KeyboardArrowDownOutlined from '@material-ui/icons/KeyboardArrowDownOutlined';
 import KeyboardArrowUpOutlined from '@material-ui/icons/KeyboardArrowUpOutlined';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
 import clsx from 'clsx';
 import {
+  useActionsContext,
   useAuthContext,
   useConfirmContext,
   useDiscussionContext,
   useNotificationsContext,
 } from 'context';
 import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation } from 'generated';
-import { useActionsDialog, useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useEffect, useRef } from 'react';
 import { BORDER } from 'theme';
-import { mediaUrl, truncate, urls } from 'utils';
+import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
-import { MarkdownContent, ResponsiveDialog, TextLink } from '../shared';
+import { MarkdownContent, TextLink } from '../shared';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     borderRadius: 0,
     overflow: 'visible',
     boxShadow: 'none',
-  },
-  topComment: {
     borderBottom: BORDER,
+    position: 'relative',
+  },
+  noBorderBottom: {
+    borderBottom: 'none',
+  },
+  replyComment: {
+    borderLeft: `${spacing(1)} solid ${palette.primary.main}`,
   },
   cardHeader: {
     padding: 0,
@@ -64,13 +64,20 @@ const useStyles = makeStyles(({ spacing }) => ({
     padding: `${spacing(3)} !important`,
   },
   messageContent: {
-    paddingTop: spacing(3),
-    paddingBottom: spacing(3),
+    padding: `${spacing(3)} 0`,
   },
   text: {
     overflow: 'hidden',
     wordBreak: 'break-word',
-    userSelect: 'text',
+  },
+  attachmentPreviewContainer: {
+    marginRight: spacing(3),
+    display: 'flex',
+  },
+  attachmentPreview: {
+    border: `0.1rem solid ${palette.primary.main} !important`,
+    borderRadius: '0.5rem',
+    cursor: 'pointer',
   },
   icon: {
     marginRight: spacing(1),
@@ -101,25 +108,27 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 interface Props {
   comment: CommentObjectType;
-  isThread?: boolean;
-  isTopComment?: boolean;
-  removeComment: (id: string) => void; // Callback function for removing the comment.
+  onCommentDeleted: () => void;
+  topComment?: boolean;
+  lastReply?: boolean;
 }
 
 export const CommentCard: React.FC<Props> = ({
   comment,
-  isThread,
-  isTopComment,
-  removeComment,
+  onCommentDeleted,
+  topComment,
+  lastReply,
 }) => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
+  const commentRef = useRef<HTMLDivElement>(null);
+  const { query } = useRouter();
   const { t } = useTranslation();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const { confirm } = useConfirmContext();
+  const { handleOpenActionsDialog } = useActionsContext();
   const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
-  const attachmentOnly = comment.text == '' && comment.attachment !== '';
   const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));
   const creatorId = R.propOr('', 'id', comment.user);
@@ -127,39 +136,10 @@ export const CommentCard: React.FC<Props> = ({
   const commentId = R.propOr('', 'id', comment);
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
-  const { setTopComment, setAttachmentViewerValue } = useDiscussionContext();
+  const { setAttachmentViewerValue } = useDiscussionContext();
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
-
-  const shareTitle = t('discussion:shareTitle', {
-    creatorUsername,
-  });
-
-  const shareText = t('discussion:shareText', {
-    creatorUsername,
-    commentPreview,
-  });
-
-  const shareParams = {
-    shareHeader: t('discussion:share'),
-    shareTitle,
-    shareText,
-    linkSuffix: `?comment=${commentId}`,
-  };
-
-  const {
-    actionsDialogOpen,
-    actionsDialogHeaderProps,
-    handleCloseActionsDialog,
-    renderShareAction,
-    renderReportAction,
-    actionsButtonProps,
-  } = useActionsDialog({
-    share: t('discussion:share'),
-    shareParams,
-    actionsButtonTooltip: t('discussion-tooltips:actions'),
-  });
 
   const {
     score,
@@ -179,20 +159,21 @@ export const CommentCard: React.FC<Props> = ({
     ownContentTooltip: t('discussion-tooltips:voteOwnContent'),
   });
 
-  const handleClick = (): void => {
-    if (isThread) {
-      attachmentOnly && setAttachmentViewerValue(comment.attachment);
-    } else {
-      setTopComment(comment);
+  // If a comment has been provided as a query parameter, automatically scroll into the comment.
+  useEffect(() => {
+    if (query.comment === comment.id) {
+      commentRef.current?.scrollIntoView({ block: 'center' });
     }
-  };
+  }, [query]);
+
+  const handleClickAttachment = (): void => setAttachmentViewerValue(comment.attachment);
 
   const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
     if (deleteComment) {
       if (!!deleteComment.errors && !!deleteComment.errors.length) {
         toggleUnexpectedErrorNotification();
       } else if (deleteComment.successMessage) {
-        removeComment(comment.id);
+        onCommentDeleted();
         toggleNotification(deleteComment.successMessage);
       } else {
         toggleUnexpectedErrorNotification();
@@ -208,18 +189,10 @@ export const CommentCard: React.FC<Props> = ({
     context,
   });
 
-  const handleAttachmentClick = (e: SyntheticEvent): void => {
-    e.stopPropagation();
-    setAttachmentViewerValue(comment.attachment);
-  };
-
-  const handleDeleteComment = async (e: SyntheticEvent): Promise<void> => {
-    e.stopPropagation();
-    handleCloseActionsDialog(e);
-
+  const handleDeleteComment = async (): Promise<void> => {
     try {
       await confirm({
-        title: t('discussion:delete'),
+        title: `${t('discussion:delete')}?`,
         description: t('discussion:confirmDelete'),
       });
 
@@ -227,6 +200,29 @@ export const CommentCard: React.FC<Props> = ({
     } catch {
       // User cancelled.
     }
+  };
+
+  const handleClickActionsButton = (e: SyntheticEvent) => {
+    e.stopPropagation(); // Prevent opening comment thread for top-level comments.
+
+    const shareDialogParams = {
+      header: t('discussion:share'),
+      title: t('discussion:shareTitle', { creatorUsername }),
+      text: t('discussion:shareText', { creatorUsername, commentPreview }),
+      linkSuffix: `?comment=${commentId}`,
+    };
+
+    const deleteActionParams = {
+      text: t('discussion:delete'),
+      callback: handleDeleteComment,
+    };
+
+    handleOpenActionsDialog({
+      shareText: t('discussion:share'),
+      shareDialogParams,
+      hideDeleteAction: !isOwner,
+      deleteActionParams,
+    });
   };
 
   const renderTitle = comment.user ? (
@@ -255,13 +251,20 @@ export const CommentCard: React.FC<Props> = ({
     />
   );
 
-  const renderAttachment = (
-    <Grid container>
-      <CameraAltOutlined className={classes.icon} color="disabled" />
-      <Typography className={classes.text} variant="body2">
-        {t('common:clickToView')}
-      </Typography>
-    </Grid>
+  const renderAttachment = !!comment.attachment && (
+    <Box className={classes.attachmentPreviewContainer}>
+      <Tooltip title={t('discussion-tooltips:attachment')}>
+        <Image
+          className={classes.attachmentPreview}
+          onClick={handleClickAttachment}
+          loader={mediaLoader}
+          src={comment.attachment}
+          layout="fixed"
+          width={60}
+          height={60}
+        />
+      </Tooltip>
+    </Box>
   );
 
   const renderText = (
@@ -271,10 +274,13 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderMessageContent = (
-    <Box className={classes.messageContent}>{attachmentOnly ? renderAttachment : renderText}</Box>
+    <Grid className={classes.messageContent} container alignItems="center">
+      {renderAttachment}
+      {renderText}
+    </Grid>
   );
 
-  const renderReplyCount = (!isThread || isTopComment) && (
+  const renderReplyCount = topComment && (
     <Tooltip title={t('discussion-tooltips:replies', { replyCount })}>
       <Box display="flex" className={classes.replyCount}>
         <CommentOutlined className={classes.icon} color="disabled" />
@@ -285,18 +291,10 @@ export const CommentCard: React.FC<Props> = ({
     </Tooltip>
   );
 
-  const renderAttachmentButton = !!comment.attachment && !attachmentOnly && (
-    <Tooltip title={t('discussion-tooltips:attachment')}>
-      <IconButton className={classes.iconButton} size="small" onClick={handleAttachmentClick}>
-        <AttachFileOutlined />
-      </IconButton>
-    </Tooltip>
-  );
-
   const renderActionsButton = (
     <Tooltip title={t('discussion-tooltips:actions')}>
       <IconButton
-        {...actionsButtonProps}
+        onClick={handleClickActionsButton}
         className={clsx(classes.iconButton, classes.actionsButton)}
         color="default"
       >
@@ -308,7 +306,6 @@ export const CommentCard: React.FC<Props> = ({
   const renderMessageInfo = (
     <Grid className={classes.messageInfo} container alignItems="center">
       {renderReplyCount}
-      {renderAttachmentButton}
       {renderActionsButton}
     </Grid>
   );
@@ -343,53 +340,29 @@ export const CommentCard: React.FC<Props> = ({
     </Grid>
   );
 
-  const renderDeleteAction = isOwner && (
-    <MenuItem onClick={handleDeleteComment}>
-      <ListItemIcon>
-        <DeleteForeverOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('discussion:delete')}</ListItemText>
-    </MenuItem>
-  );
-
-  const renderActionsDialogContent = (
-    <List>
-      {renderShareAction}
-      {renderDeleteAction}
-      {renderReportAction}
-    </List>
-  );
-
-  const renderActionsDrawer = (
-    <ResponsiveDialog
-      open={actionsDialogOpen}
-      onClose={handleCloseActionsDialog}
-      dialogHeaderProps={actionsDialogHeaderProps}
-      list
-    >
-      {renderActionsDialogContent}
-    </ResponsiveDialog>
-  );
-
   const renderMessage = (
     <Grid item xs={10} sm={11}>
       <CardContent className={classes.cardContent}>
         {renderCardHeader}
         {renderMessageContent}
         {renderMessageInfo}
-        {renderActionsDrawer}
       </CardContent>
     </Grid>
   );
 
   return (
-    <Card className={clsx(classes.root, isTopComment && classes.topComment)}>
-      <CardActionArea onClick={handleClick}>
-        <Grid container>
-          {renderMessage}
-          {renderVoteButtons}
-        </Grid>
-      </CardActionArea>
+    <Card
+      ref={commentRef}
+      className={clsx(
+        classes.root,
+        !topComment && classes.replyComment,
+        (topComment || lastReply) && classes.noBorderBottom,
+      )}
+    >
+      <Grid container>
+        {renderMessage}
+        {renderVoteButtons}
+      </Grid>
     </Card>
   );
 };

@@ -3,6 +3,7 @@ export { BackButton } from './BackButton';
 export { ButtonLink } from './ButtonLink';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { Emoji } from './Emoji';
+export { ErrorBox } from './ErrorBox';
 export { ExternalLink } from './ExternalLink';
 export { GuidelinesLink } from './GuidelinesLink';
 export { IconButtonLink } from './IconButtonLink';

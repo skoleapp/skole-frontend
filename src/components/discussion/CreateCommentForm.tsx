@@ -21,7 +21,7 @@ import {
   usePdfViewerContext,
 } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { CommentObjectType, CreateCommentMutation, useCreateCommentMutation } from 'generated';
+import { CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataUriToFile, useTranslation } from 'lib';
 import Image from 'next/image';
@@ -36,7 +36,7 @@ import {
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
 import { TextFormField } from '../form-fields';
-import { TextLink } from '../shared';
+import { LoadingBox, TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -81,14 +81,27 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     padding: spacing(2),
     overflow: 'hidden',
   },
+  loadingDialogContent: {
+    minHeight: '15rem',
+    display: 'flex',
+  },
 }));
 
 interface CreateCommentFormProps {
   target: CommentTarget;
-  appendComments: (comments: CommentObjectType) => void;
+  onCommentCreated: () => void;
+  placeholder: string;
+  dialogPlaceholder: string;
+  resetCommentTarget: () => void;
 }
 
-export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComments, target }) => {
+export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
+  onCommentCreated,
+  target,
+  placeholder,
+  dialogPlaceholder,
+  resetCommentTarget,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { loginRequiredTooltip, verificationRequiredTooltip, userMe, verified } = useAuthContext();
@@ -105,8 +118,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     loginRequiredTooltip || verificationRequiredTooltip || t('discussion-tooltips:attachFile');
 
   const {
-    commentDialogOpen,
-    toggleCommentDialog,
+    createCommentDialogOpen,
+    setCreateCommentDialogOpen,
     commentAttachment,
     setCommentAttachment,
   } = useDiscussionContext();
@@ -122,8 +135,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   const handleCloseCreateCommentDialog = (): void => {
     formRef.current?.setFieldValue('attachment', null);
-    toggleCommentDialog(false);
+    setCreateCommentDialogOpen(false);
     setCommentAttachment(null);
+    resetCommentTarget();
     !!setScreenshot && setScreenshot(null); // Not defined when in course page.
   };
 
@@ -131,8 +145,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     if (createComment) {
       if (!!createComment.errors && !!createComment.errors.length) {
         toggleUnexpectedErrorNotification();
-      } else if (createComment.comment) {
-        appendComments(createComment.comment as CommentObjectType);
+      } else if (createComment.successMessage) {
+        toggleNotification(createComment.successMessage);
+        onCommentCreated();
       } else {
         toggleUnexpectedErrorNotification();
       }
@@ -163,11 +178,10 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
       });
 
       formRef.current?.resetForm();
-      toggleCommentDialog(false);
+      handleCloseCreateCommentDialog();
     }
 
     formRef.current?.setSubmitting(false);
-    setCommentAttachment(null);
   };
 
   const initialValues = {
@@ -179,7 +193,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
 
   const setAttachment = (file: File | Blob) => {
     formRef.current?.setFieldValue('attachment', file);
-    toggleCommentDialog(true);
+    setCreateCommentDialogOpen(true);
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -282,7 +296,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const textFieldProps = {
     name: 'text',
     component: TextFormField,
-    placeholder: `${t('forms:createComment')}...`,
+    placeholder,
     multiline: true,
     rowsMax: '10',
     InputProps: {
@@ -290,11 +304,22 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     },
   };
 
-  const renderDesktopTextField = (
-    <Field {...textFieldProps} rows="4" className={classes.desktopTextField} />
+  const renderDesktopTextField = ({ values }: FormikProps<CreateCommentFormValues>) => (
+    <Field
+      {...textFieldProps}
+      value={createCommentDialogOpen ? '' : values.text}
+      rows="4"
+      className={classes.desktopTextField}
+    />
   );
 
-  const renderDialogTextField = <Field {...textFieldProps} className={classes.dialogTextField} />;
+  const renderDialogTextField = (
+    <Field
+      {...textFieldProps}
+      placeholder={dialogPlaceholder}
+      className={classes.dialogTextField}
+    />
+  );
 
   const renderFormHelperText = isTabletOrDesktop && (
     <>
@@ -358,7 +383,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
           variant="contained"
           color="primary"
           className={classes.desktopSendButton}
-          disabled={!text && !attachment} // Require either text content or an attachment.
+          disabled={(!text && !attachment) || createCommentDialogOpen} // Require either text content or an attachment.
           endIcon={<SendOutlined />}
         >
           {t('common:send')}
@@ -390,7 +415,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
     isTabletOrDesktop && (
       <>
         {renderDesktopTopToolbar(props)}
-        {renderDesktopTextField}
+        {renderDesktopTextField(props)}
         {renderDesktopBottomToolbar(props)}
       </>
     );
@@ -405,7 +430,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   const renderDialogHeader = (props: FormikProps<CreateCommentFormValues>) => (
     <DialogHeader
       headerCenter={renderHeaderCenter(props)} // Rendered for authenticated users.
-      text={t('forms:createComment')} // Rendered for anonymous users.
+      text={dialogPlaceholder} // Rendered for anonymous users.
       emoji="💬"
       onCancel={handleCloseCreateCommentDialog}
     />
@@ -422,9 +447,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
   );
 
   const renderCreateCommentDialog = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
-    <SkoleDialog open={commentDialogOpen} onClose={handleCloseCreateCommentDialog}>
+    <SkoleDialog open={createCommentDialogOpen} onClose={handleCloseCreateCommentDialog}>
       {renderDialogHeader(props)}
       {renderDialogContent(props)}
+    </SkoleDialog>
+  );
+
+  const renderLoadingDialog = ({ isSubmitting }: FormikProps<CreateCommentFormValues>) => (
+    <SkoleDialog open={isSubmitting} fullScreen={false} fullWidth>
+      <DialogContent className={classes.loadingDialogContent}>
+        <LoadingBox text={t('discussion:postingComment')} />
+      </DialogContent>
     </SkoleDialog>
   );
 
@@ -433,11 +466,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({ appendComm
       {renderDesktopInput(props)}
       {renderCreateCommentDialog(props)}
       {renderHiddenAttachmentInput}
+      {renderLoadingDialog(props)}
     </Form>
   );
 
   return (
-    <Formik onSubmit={handleSubmit} initialValues={initialValues} innerRef={formRef}>
+    <Formik
+      onSubmit={handleSubmit}
+      initialValues={initialValues}
+      innerRef={formRef}
+      enableReinitialize
+    >
       {renderFormFields}
     </Formik>
   );

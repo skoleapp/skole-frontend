@@ -13,7 +13,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import AddCircleOutlined from '@material-ui/icons/AddCircleOutlined';
+import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
@@ -217,7 +217,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderRegisterButton = isDesktop && !hideRegisterButton && (
-    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlined />}>
+    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
       {t('common:register')}
     </ButtonLink>
   );

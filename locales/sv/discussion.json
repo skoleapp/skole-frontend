@@ -9,5 +9,7 @@
   "helperTextMarkdown": "Formatera din kommentar med",
   "markdown": "Markdown",
   "helperTextCombination": "{{ combination }} för att lägga till en ny rad.",
-  "commentCount": "{{ commentCount }} kommentarer"
+  "commentCount": "{{ commentCount }} kommentarer",
+  "postingComment": "Skickar kommentar...",
+  "loadingMoreComments": "Läser in fler kommentarer..."
 }

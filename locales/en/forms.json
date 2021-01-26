@@ -38,7 +38,9 @@
   "nameOptional": "Name (optional)",
   "schoolHelpText": "Your preferred school. With this information we can automatically show you content based on it. This field is only visible for you.",
   "subjectHelpText": "Your preferred subject. With this information we can automatically show you content based on it. This field is only visible for you.",
-  "createComment": "Add Comment",
+  "postToCourse": "Post to {{ courseName }}",
+  "postToResource": "Post to {{ resourceTitle }}",
+  "replyTo": "Reply to {{ username }}",
   "contactLinkText": "PS. If you can't find the school or subject you're looking for, you can",
   "contactLinkLink": "contact us and we'll add them for you!"
 }

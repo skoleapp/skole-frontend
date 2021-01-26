@@ -1,5 +1,4 @@
 export { ActionsDialog } from './ActionsDialog';
-export { CommentThreadDialog } from './CommentThreadDialog';
 export { ConfirmationDialog } from './ConfirmationDialog';
 export { ContactDialog } from './ContactDialog';
 export { DialogHeader } from './DialogHeader';

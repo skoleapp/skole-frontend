@@ -1,10 +1,6 @@
 import { useCourseQuery } from '__generated__/src/graphql/common.graphql';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
@@ -12,26 +8,25 @@ import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
-import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
 import clsx from 'clsx';
 import {
+  ActionsButton,
   BackButton,
   CustomBottomNavbarContainer,
+  Discussion,
   DiscussionHeader,
   Emoji,
   ErrorTemplate,
   IconButtonLink,
-  InfoDialogContent,
+  InfoButton,
   LoadingTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
   ResourceTableBody,
-  ResponsiveDialog,
   ShareButton,
   TabPanel,
   TextLink,
-  TopLevelCommentThread,
 } from 'components';
 import {
   useAuthContext,
@@ -45,10 +40,8 @@ import {
   SubjectObjectType,
   useDeleteCourseMutation,
 } from 'generated';
-import { withDiscussion, withUserMe } from 'hocs';
+import { withActions, withDiscussion, withInfo, withUserMe } from 'hocs';
 import {
-  useActionsDialog,
-  useInfoDialog,
   useLanguageHeaderContext,
   useMediaQueries,
   useSearch,
@@ -60,7 +53,7 @@ import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
@@ -124,19 +117,16 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const initialScore = String(R.propOr(0, 'score', course));
   const initialStars = String(R.propOr(0, 'starCount', course));
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-  const comments = R.propOr([], 'comments', course);
-  const { commentCount } = useDiscussionContext(comments);
+  const initialCommentCount = R.prop('commentCount', course);
   const initialVote = R.propOr(null, 'vote', course);
   const starred = !!R.prop('starred', course);
   const isOwner = !!userMe && userMe.id === creatorId;
   const courseCreator = R.prop('user', course);
-  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
-  const shareTitle = t('course:shareTitle', { courseName });
-  const shareText = t('course:shareText', { courseName, creatorUsername });
-  const shareParams = { shareHeader: t('course:shareHeader'), shareTitle, shareText };
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs(comments);
+  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
+  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
+  const { commentCount } = useDiscussionContext();
   const emoji = '🎓';
 
   const uploadResourceButtonTooltip =
@@ -148,30 +138,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     course: courseId,
     starTooltip: t('course-tooltips:star'),
     unstarTooltip: t('course-tooltips:unstar'),
-  });
-
-  const {
-    infoDialogOpen,
-    infoDialogHeaderProps,
-    renderInfoButton,
-    handleCloseInfoDialog,
-  } = useInfoDialog({
-    header: courseName,
-    emoji,
-    infoButtonTooltip: t('course-tooltips:info'),
-  });
-
-  const {
-    actionsDialogOpen,
-    actionsDialogHeaderProps,
-    handleCloseActionsDialog,
-    renderShareAction,
-    renderReportAction,
-    renderActionsButton,
-  } = useActionsDialog({
-    shareParams,
-    share: t('course:share'),
-    actionsButtonTooltip: t('course-tooltips:actions'),
   });
 
   const { renderUpvoteButton, renderDownvoteButton, score } = useVotes({
@@ -207,12 +173,10 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleDeleteCourse = async (e: SyntheticEvent): Promise<void> => {
-    handleCloseActionsDialog(e);
-
+  const handleDeleteCourse = async (): Promise<void> => {
     try {
       await confirm({
-        title: t('course:delete'),
+        title: `${t('course:delete')}?`,
         description: t('course:confirmDelete'),
       });
 
@@ -272,22 +236,62 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   ];
 
-  const renderShareButton = <ShareButton {...shareParams} tooltip={t('course-tooltips:share')} />;
-
-  const discussionHeaderProps = {
-    commentCount,
-    renderShareButton,
-    renderInfoButton,
-    renderActionsButton,
+  const shareDialogParams = {
+    header: t('course:shareHeader'),
+    title: t('course:shareTitle', { courseName }),
+    text: t('course:shareText', { courseName, creatorUsername }),
   };
 
-  const commentThreadProps = {
-    target: { course: Number(courseId) },
-    noComments: t('course:noComments'),
+  const renderShareButton = (
+    <ShareButton tooltip={t('course-tooltips:share')} shareDialogParams={shareDialogParams} />
+  );
+
+  const infoDialogParams = {
+    header: courseName,
+    emoji,
+    creator: courseCreator,
+    created,
+    infoItems,
   };
 
-  const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
-  const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
+  const renderInfoButton = (
+    <InfoButton tooltip={t('course-tooltips:info')} infoDialogParams={infoDialogParams} />
+  );
+
+  const actionsDialogParams = {
+    shareDialogParams,
+    deleteActionParams: {
+      text: t('course:delete'),
+      callback: handleDeleteCourse,
+      disabled: verified === false,
+    },
+    shareText: t('course:share'),
+    hideDeleteAction: !isOwner,
+  };
+
+  const renderActionsButton = (
+    <ActionsButton
+      tooltip={t('course-tooltips:actions')}
+      actionsDialogParams={actionsDialogParams}
+    />
+  );
+
+  const renderDiscussionHeader = (
+    <DiscussionHeader
+      renderShareButton={renderShareButton}
+      renderInfoButton={renderInfoButton}
+      renderActionsButton={renderActionsButton}
+    />
+  );
+
+  const renderDiscussion = (
+    <Discussion
+      course={courseId}
+      initialCommentCount={initialCommentCount}
+      noCommentsText={t('course:noComments')}
+      courseName={courseName}
+    />
+  );
 
   const renderScore = (
     <Typography className={classes.score} variant="subtitle1" color="textSecondary">
@@ -430,48 +434,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   );
 
-  const renderInfoDialogContent = (
-    <InfoDialogContent creator={courseCreator} created={created} infoItems={infoItems} />
-  );
-
-  const renderInfoDialog = (
-    <ResponsiveDialog
-      open={infoDialogOpen}
-      onClose={handleCloseInfoDialog}
-      dialogHeaderProps={infoDialogHeaderProps}
-    >
-      {renderInfoDialogContent}
-    </ResponsiveDialog>
-  );
-
-  const renderDeleteAction = isOwner && (
-    <MenuItem onClick={handleDeleteCourse} disabled={verified === false}>
-      <ListItemIcon>
-        <DeleteForeverOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('course:delete')}</ListItemText>
-    </MenuItem>
-  );
-
-  const renderActionsDialogContent = (
-    <List>
-      {renderShareAction}
-      {renderDeleteAction}
-      {renderReportAction}
-    </List>
-  );
-
-  const renderActionsDialog = (
-    <ResponsiveDialog
-      open={actionsDialogOpen}
-      onClose={handleCloseActionsDialog}
-      dialogHeaderProps={actionsDialogHeaderProps}
-      list
-    >
-      {renderActionsDialogContent}
-    </ResponsiveDialog>
-  );
-
   const layoutProps = {
     seoProps,
     topNavbarProps: {
@@ -498,8 +460,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <MainTemplate {...layoutProps}>
       {renderMobileContent}
       {renderDesktopContent}
-      {renderInfoDialog}
-      {renderActionsDialog}
     </MainTemplate>
   );
 };
@@ -549,6 +509,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   };
 };
 
-const withWrappers = R.compose(withUserMe, withDiscussion);
+const withWrappers = R.compose(withUserMe, withActions, withInfo, withDiscussion);
 
 export default withWrappers(CourseDetailPage);

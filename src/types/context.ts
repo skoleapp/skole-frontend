@@ -65,12 +65,12 @@ export interface PdfViewerContextType {
 }
 
 export interface DiscussionContextType {
-  commentDialogOpen: boolean;
-  toggleCommentDialog: (payload: boolean) => void;
-  topLevelComments: CommentObjectType[];
-  setTopLevelComments: (comments: CommentObjectType[]) => void;
-  topComment: CommentObjectType | null;
-  setTopComment: Dispatch<SetStateAction<CommentObjectType | null>>;
+  comments: CommentObjectType[];
+  setComments: Dispatch<SetStateAction<CommentObjectType[]>>;
+  commentCount: string;
+  setCommentCount: Dispatch<SetStateAction<string>>;
+  createCommentDialogOpen: boolean;
+  setCreateCommentDialogOpen: Dispatch<SetStateAction<boolean>>;
   attachmentViewerValue: string | null;
   setAttachmentViewerValue: Dispatch<SetStateAction<string | null>>;
   commentAttachment: string | ArrayBuffer | null;
