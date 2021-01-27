@@ -54,6 +54,7 @@ ENV PATH="/home/user/app/node_modules/.bin:${PATH}"
 
 # The production app needs exactly these and nothing more.
 COPY --from=build --chown=user:user /home/user/app/src src
+COPY --from=build --chown=user:user /home/user/app/markdown markdown
 COPY --from=build --chown=user:user /home/user/app/.next .next
 COPY --from=build --chown=user:user /home/user/app/node_modules node_modules
 COPY --from=build --chown=user:user /home/user/app/next.config.js next.config.js
