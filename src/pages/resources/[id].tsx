@@ -365,7 +365,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         {renderRotateButton}
         {renderDrawModeButton}
       </Grid>
-      <Grid item xs={6} container justify="flex-end">
+      <Grid item xs={6} container justify="flex-end" alignItems="center">
         {renderStarButton}
         {renderUpvoteButton}
         {renderScore}
