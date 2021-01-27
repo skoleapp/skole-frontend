@@ -2,7 +2,7 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Emoji, ListTemplate } from 'components';
+import { ListTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -14,11 +14,11 @@ import { ABOUT_ITEMS } from 'utils';
 export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
 
-  const renderAboutMenuItems = ABOUT_ITEMS.map(({ emoji, href, text }, i) => (
+  const renderAboutMenuItems = ABOUT_ITEMS.map(({ icon: Icon, href, text }, i) => (
     <Link href={href} key={i}>
       <MenuItem>
         <ListItemIcon>
-          <Emoji emoji={emoji} noSpace />
+          <Icon />
         </ListItemIcon>
         <ListItemText>{t(text)}</ListItemText>
       </MenuItem>

@@ -9,13 +9,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
+import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
+import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
+import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import {
   CustomBottomNavbarContainer,
   DiscussionHeader,
   DrawModeButton,
   DrawModeControls,
-  Emoji,
   ErrorTemplate,
   InfoDialogContent,
   LoadingBox,
@@ -461,7 +463,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderDownloadAction = isMobile && (
     <MenuItem onClick={handleDownloadButtonClick}>
       <ListItemIcon>
-        <Emoji emoji="📩" noSpace />
+        <CloudDownloadOutlined />
       </ListItemIcon>
       <ListItemText>{t('resource:downloadPdf')}</ListItemText>
     </MenuItem>
@@ -470,7 +472,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderPrintAction = isMobile && (
     <MenuItem onClick={handlePrintButtonClick}>
       <ListItemIcon>
-        <Emoji emoji="🖨️" noSpace />
+        <PrintOutlined />
       </ListItemIcon>
       <ListItemText>{t('resource:printPdf')}</ListItemText>
     </MenuItem>
@@ -479,7 +481,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderDeleteAction = isOwner && (
     <MenuItem onClick={handleDeleteResource} disabled={verified === false}>
       <ListItemIcon>
-        <Emoji emoji="❌️" noSpace />
+        <DeleteForeverOutlined />
       </ListItemIcon>
       <ListItemText>{t('resource:delete')}</ListItemText>
     </MenuItem>

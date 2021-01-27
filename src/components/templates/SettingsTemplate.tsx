@@ -52,16 +52,18 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
-  const headerText = t('common:settings');
+  const settingsHeaderText = t('common:settings');
+  const mainHeaderText = topNavbarProps?.header;
 
   const renderBackButton = <BackButton />;
-  const renderEmoji = <Emoji emoji="⚙️" />;
+  const renderSettingsEmoji = <Emoji emoji="⚙️" />;
+  const renderMainEmojiEmoji = topNavbarProps?.emoji && <Emoji emoji={topNavbarProps.emoji} />;
   const renderHeaderRight = <SettingsButton />;
 
   const settingsHeaderTitle = (
     <>
-      {headerText}
-      {renderEmoji}
+      {settingsHeaderText}
+      {renderSettingsEmoji}
     </>
   );
 
@@ -88,10 +90,17 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
     </Grid>
   );
 
+  const renderMainHeaderTitle = (
+    <>
+      {mainHeaderText}
+      {renderMainEmojiEmoji}
+    </>
+  );
+
   const renderHeader = isTabletOrDesktop && (
     <CardHeader
       classes={{ root: classes.cardHeaderRoot, title: classes.cardHeaderTitle }}
-      title={topNavbarProps?.header}
+      title={renderMainHeaderTitle}
     />
   );
 

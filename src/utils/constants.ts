@@ -1,3 +1,14 @@
+import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
+import DescriptionOutlined from '@material-ui/icons/DescriptionOutlined';
+import EditOutlined from '@material-ui/icons/EditOutlined';
+import HelpOutlined from '@material-ui/icons/HelpOutlined';
+import PolicyOutlined from '@material-ui/icons/PolicyOutlined';
+import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
+import ScoreOutlined from '@material-ui/icons/ScoreOutlined';
+import StorageOutlined from '@material-ui/icons/StorageOutlined';
+import SubjectOutlined from '@material-ui/icons/SubjectOutlined';
+import VpnKeyOutlined from '@material-ui/icons/VpnKeyOutlined';
+
 import { urls } from './urls';
 
 export const LANGUAGES = [
@@ -68,24 +79,24 @@ export const IMAGE_TYPES = [
 export const SETTINGS_ITEMS = {
   account: [
     {
-      emoji: '🖊️',
+      icon: EditOutlined,
       text: 'common:editProfile',
       href: urls.editProfile,
     },
     {
-      emoji: '🔑',
+      icon: VpnKeyOutlined,
       text: 'common:changePassword',
       href: urls.changePassword,
     },
     {
-      emoji: '💾',
+      icon: StorageOutlined,
       text: 'common:myData',
       href: urls.myData,
     },
   ],
   commonAccount: [
     {
-      emoji: '😶‍🌫️',
+      icon: VpnKeyOutlined,
       text: 'common:resetPassword',
       href: urls.resetPassword,
     },
@@ -94,42 +105,42 @@ export const SETTINGS_ITEMS = {
 
 export const ABOUT_ITEMS = [
   {
-    emoji: '🧑‍🏫',
+    icon: SchoolOutlined,
     text: 'common:forTeachers',
     href: urls.forTeachers,
   },
   {
-    emoji: '🗣️',
+    icon: ContactSupportOutlined,
     text: 'common:contact',
     href: urls.contact,
   },
   {
-    emoji: '🗺️',
+    icon: HelpOutlined,
     text: 'common:guidelines',
     href: urls.guidelines,
   },
   {
-    emoji: '💯',
+    icon: ScoreOutlined,
     text: 'common:score',
     href: urls.score,
   },
   {
-    emoji: '💂',
+    icon: DescriptionOutlined,
     text: 'common:values',
     href: urls.values,
   },
   {
-    emoji: '📃',
+    icon: SubjectOutlined,
     text: 'common:blog',
     href: urls.blogs,
   },
   {
-    emoji: '🧑‍⚖️',
+    icon: PolicyOutlined,
     text: 'common:terms',
     href: urls.terms,
   },
   {
-    emoji: '🔒',
+    icon: PolicyOutlined,
     text: 'common:privacy',
     href: urls.privacy,
   },
