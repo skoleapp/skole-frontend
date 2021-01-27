@@ -4,10 +4,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
+import AddCircleOutlined from '@material-ui/icons/AddCircleOutlined';
 import {
   CourseTableBody,
-  Emoji,
   ErrorTemplate,
   IconButtonLink,
   InfoDialogContent,
@@ -156,7 +155,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
       <Typography component="span">
         <IconButtonLink
           href={addCourseHref}
-          icon={AddCircleOutlineOutlined}
+          icon={AddCircleOutlined}
           disabled={verified === false}
           color={isMobile ? 'secondary' : 'default'}
           size="small"
@@ -215,7 +214,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     <Link href={addCourseHref}>
       <MenuItem>
         <ListItemIcon>
-          <Emoji emoji="➕" noSpace />
+          <AddCircleOutlined />
         </ListItemIcon>
         <ListItemText>{t('school:addCourse')}</ListItemText>
       </MenuItem>

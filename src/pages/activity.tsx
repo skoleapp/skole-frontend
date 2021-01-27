@@ -2,9 +2,10 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import CheckCircleOutlined from '@material-ui/icons/CheckCircleOutline';
+import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import {
   ActivityTableBody,
-  Emoji,
   ErrorTemplate,
   ListTemplate,
   LoadingBox,
@@ -106,7 +107,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderMarkAllAsReadAction = (
     <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton} disabled={markAllAsReadDisabled}>
       <ListItemIcon>
-        <Emoji emoji="✅" noSpace />
+        <CheckCircleOutlined />
       </ListItemIcon>
       <ListItemText>{t('activity:markAllAsRead')}</ListItemText>
     </MenuItem>
@@ -115,7 +116,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderNotificationSettingsAction = (
     <MenuItem disabled>
       <ListItemIcon>
-        <Emoji emoji="⚙️" noSpace />
+        <SettingsOutlined />
       </ListItemIcon>
       <ListItemText>{t('activity:notificationSettings')}</ListItemText>
     </MenuItem>

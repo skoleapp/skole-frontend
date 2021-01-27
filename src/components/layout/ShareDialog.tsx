@@ -2,13 +2,16 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import LinkOutlined from '@material-ui/icons/LinkOutlined';
+import MailOutlined from '@material-ui/icons/MailOutlined';
 import { useNotificationsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { Emoji, ExternalLink, ResponsiveDialog, SocialMediaIcon } from '../shared';
+import { ExternalLink, ResponsiveDialog, SocialMediaIcon } from '../shared';
 
 export const ShareDialog: React.FC = () => {
   const { t } = useTranslation();
@@ -117,7 +120,7 @@ export const ShareDialog: React.FC = () => {
     <Link href={mailUrl}>
       <MenuItem>
         <ListItemIcon>
-          <Emoji emoji="📧" noSpace />
+          <MailOutlined />
         </ListItemIcon>
         <ListItemText>{t('sharing:email')}</ListItemText>
       </MenuItem>
@@ -127,7 +130,7 @@ export const ShareDialog: React.FC = () => {
   const renderCopyLinkMenuItem = (
     <MenuItem onClick={handleClickCopyLink}>
       <ListItemIcon>
-        <Emoji emoji="🔗" noSpace />
+        <LinkOutlined />
       </ListItemIcon>
       <ListItemText>{t('sharing:copyLink')}</ListItemText>
     </MenuItem>
@@ -136,7 +139,7 @@ export const ShareDialog: React.FC = () => {
   const renderSeeAllMenuItem = (
     <MenuItem onClick={handleClickSeeAll}>
       <ListItemIcon>
-        <Emoji emoji="👉" noSpace />
+        <ArrowForwardOutlined />
       </ListItemIcon>
       <ListItemText>{t('sharing:seeAll')}</ListItemText>
     </MenuItem>

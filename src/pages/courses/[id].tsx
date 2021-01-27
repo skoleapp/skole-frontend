@@ -12,6 +12,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
 import clsx from 'clsx';
 import {
   BackButton,
@@ -446,7 +447,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderDeleteAction = isOwner && (
     <MenuItem onClick={handleDeleteCourse} disabled={verified === false}>
       <ListItemIcon>
-        <Emoji emoji="❌" noSpace />
+        <DeleteForeverOutlined />
       </ListItemIcon>
       <ListItemText>{t('course:delete')}</ListItemText>
     </MenuItem>

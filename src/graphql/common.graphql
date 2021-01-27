@@ -251,6 +251,7 @@ query Courses(
       starCount
       resourceCount
       commentCount
+      created
       user {
         id
         username
@@ -1057,6 +1058,7 @@ query SuggestionsPreview {
       starCount
       resourceCount
       commentCount
+      created
       user {
         id
         username
@@ -1069,6 +1071,7 @@ query SuggestionsPreview {
       starCount
       commentCount
       downloads
+      created
       resourceType {
         name
       }
