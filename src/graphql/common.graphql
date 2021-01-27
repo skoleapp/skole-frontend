@@ -251,6 +251,7 @@ query Courses(
       starCount
       resourceCount
       commentCount
+      created
       user {
         id
         username
