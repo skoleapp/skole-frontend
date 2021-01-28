@@ -10,7 +10,7 @@ Trending content, improved discussion, see your comments in your profile and muc
 
 ### Trending Content 🔥
 
-We added a feature for showing trending content, including courses, resources and comments. You can have your content included there too by adding comments, resources or resources. Make sure they're good though, our AI-powered algorithm is quite picky on the content it selects 😉
+We added a feature for showing trending content, including courses, resources and comments. You can have your content included there too by by adding comments, creating courses, or uploading recources. Make sure they're good though, our AI-powered algorithm is quite picky on the content it selects 😉
 
 ### Improved Performance for Comments ⚡
 
@@ -22,4 +22,4 @@ We finally added thumbnails on our comment attachments. Now you can instantly se
 
 ### Comments in Profile 💬
 
-Just like we show the courses and resources our users create in their, profiles, we did the same for their comments. Thats right, you can now see the comments made by anyone by visiting their profile!
+Just like we show the courses and resources our users create in their profiles, we did the same for their comments. Thats right, you can now see the comments made by anyone by visiting their profile!
