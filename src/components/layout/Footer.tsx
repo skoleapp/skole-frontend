@@ -14,6 +14,10 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     backgroundColor: palette.primary.main,
     padding: spacing(4),
   },
+  header: {
+    fontWeight: 'bold',
+    marginBottom: spacing(4),
+  },
   copyRightSection: {
     marginTop: spacing(8),
   },
@@ -25,7 +29,7 @@ export const Footer: React.FC = () => {
   const { userMe } = useAuthContext();
 
   const renderSkoleHeader = (
-    <Typography variant="subtitle1" color="secondary" gutterBottom>
+    <Typography className={classes.header} variant="subtitle1" color="secondary">
       SKOLE
     </Typography>
   );
@@ -74,7 +78,7 @@ export const Footer: React.FC = () => {
   );
 
   const renderCompanyHeader = (
-    <Typography variant="subtitle1" color="secondary" gutterBottom>
+    <Typography className={classes.header} variant="subtitle1" color="secondary">
       {t('common:company').toUpperCase()}
     </Typography>
   );
@@ -116,7 +120,7 @@ export const Footer: React.FC = () => {
   );
 
   const renderSocialHeader = (
-    <Typography variant="subtitle1" color="secondary" gutterBottom>
+    <Typography className={classes.header} variant="subtitle1" color="secondary">
       {t('common:social').toUpperCase()}
     </Typography>
   );
