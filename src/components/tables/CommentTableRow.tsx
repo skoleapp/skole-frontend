@@ -44,7 +44,18 @@ interface Props extends TableRowProps {
 }
 
 export const CommentTableRow: React.FC<Props> = ({
-  comment: { id, text, attachment, created: _created, score, replyCount, user, course, resource },
+  comment: {
+    id,
+    text,
+    attachment,
+    created: _created,
+    score,
+    replyCount,
+    user,
+    course,
+    resource,
+    comment,
+  },
   hideCommentChip,
   dense,
   key,
@@ -60,7 +71,11 @@ export const CommentTableRow: React.FC<Props> = ({
     (!!text && truncate(text, 50)) || (!!attachment && t('common:clickToView')) || '';
 
   const pathname =
-    (!!course && urls.course(course.id)) || (!!resource && urls.resource(resource.id)) || '#';
+    (!!course && urls.course(course.id)) ||
+    (!!resource && urls.resource(resource.id)) ||
+    (!!comment && !!comment.course && urls.course(comment.course.id)) ||
+    (!!comment && !!comment.resource && urls.resource(comment.resource.id)) ||
+    '';
 
   const href = {
     pathname,

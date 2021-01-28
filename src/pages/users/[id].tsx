@@ -124,9 +124,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       marginLeft: spacing(2),
     },
   },
-  tabWrapper: {
-    alignItems: 'initial',
-  },
 }));
 
 interface ProfileStrengthStep {
@@ -518,18 +515,12 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
   const renderCreatedResources = resources.length ? renderResourceTable : renderResourcesNotFound;
   const renderCreatedComments = comments.length ? renderCommentTable : renderCommentsNotFound;
 
-  const tabProps = {
-    classes: {
-      wrapper: clsx('truncate-text', classes.tabWrapper),
-    },
-  };
-
   const renderCreatedContent = (
     <Paper className={classes.createdContent}>
       <Tabs {...tabValueProps} onChange={handleTabChange}>
-        <Tab {...tabProps} label={`🎓 ${t('common:courses')} (${courseCount})`} />
-        <Tab {...tabProps} label={`📚 ${t('common:resources')} (${resourceCount})`} />
-        <Tab {...tabProps} label={`💬 ${t('common:comments')} (${commentCount})`} />
+        <Tab label={`${t('common:courses')} (${courseCount})`} wrapped />
+        <Tab label={`${t('common:resources')} (${resourceCount})`} wrapped />
+        <Tab label={`${t('common:comments')} (${commentCount})`} wrapped />
       </Tabs>
       <TabPanel {...tabValueProps} index={0}>
         {renderCreatedCourses}
