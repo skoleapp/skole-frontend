@@ -20,6 +20,8 @@ import { TableRowChip } from './TableRowChip';
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
     borderBottom: BORDER,
+    paddingLeft: '0.3rem',
+    paddingRight: '0.3rem',
   },
   statsContainer: {
     display: 'flex',
@@ -96,29 +98,31 @@ export const CommentTableRow: React.FC<Props> = ({
     t('common:communityUser')
   );
 
-  const renderMobileStats = isMobile && (
-    <Grid container alignItems="center">
-      <Grid item xs={4} container>
-        <Grid item xs={2} container alignItems="center">
-          <Typography variant="subtitle1">{score}</Typography>
+  const renderMobileCommentStats = isMobile && (
+    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+      <Grid container alignItems="center">
+        <Grid item xs={4} container>
+          <Grid item xs={2} container alignItems="center">
+            <Typography variant="subtitle1">{score}</Typography>
+          </Grid>
+          <Grid item xs={10} container alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+              {scoreLabel}
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={10} container alignItems="center">
-          <Typography variant="body2" color="textSecondary">
-            {scoreLabel}
-          </Typography>
+        <Grid item xs={4} container>
+          <Grid item xs={2} container alignItems="center">
+            <Typography variant="subtitle1">{replyCount}</Typography>
+          </Grid>
+          <Grid item xs={10} container alignItems="center">
+            <Typography variant="body2" color="textSecondary">
+              {repliesLabel}
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={4} container>
-        <Grid item xs={2} container alignItems="center">
-          <Typography variant="subtitle1">{replyCount}</Typography>
-        </Grid>
-        <Grid item xs={10} container alignItems="center">
-          <Typography variant="body2" color="textSecondary">
-            {repliesLabel}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Grid>
+    </TableCell>
   );
 
   const desktopStatsColSpan: ColSpan = {
@@ -126,34 +130,30 @@ export const CommentTableRow: React.FC<Props> = ({
     lg: 3,
   };
 
-  const renderDesktopStats = (
-    <Grid container alignItems="center">
-      <Grid item {...desktopStatsColSpan} container>
-        <Grid item md={12} container justify="center">
-          <Typography variant="subtitle1">{score}</Typography>
-        </Grid>
-        <Grid item md={12} container justify="center">
-          <Typography variant="body2" color="textSecondary">
-            {scoreLabel}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid item {...desktopStatsColSpan} container>
-        <Grid item md={12} container justify="center">
-          <Typography variant="subtitle1">{replyCount}</Typography>
-        </Grid>
-        <Grid item md={12} container justify="center">
-          <Typography variant="body2" color="textSecondary">
-            {repliesLabel}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-
-  const renderCommentStats = (
+  const renderDesktopCommentStats = (
     <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
-      {renderMobileStats || renderDesktopStats}
+      <Grid container alignItems="center">
+        <Grid item {...desktopStatsColSpan} container>
+          <Grid item md={12} container justify="center">
+            <Typography variant="subtitle1">{score}</Typography>
+          </Grid>
+          <Grid item md={12} container justify="center">
+            <Typography variant="body2" color="textSecondary">
+              {scoreLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item {...desktopStatsColSpan} container>
+          <Grid item md={12} container justify="center">
+            <Typography variant="subtitle1">{replyCount}</Typography>
+          </Grid>
+          <Grid item md={12} container justify="center">
+            <Typography variant="body2" color="textSecondary">
+              {repliesLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
     </TableCell>
   );
 
@@ -211,12 +211,12 @@ export const CommentTableRow: React.FC<Props> = ({
         <TableRow>
           <Grid container>
             <Grid item xs={12} container>
-              <Grid item {...statsColSpan} container>
-                {renderCommentStats}
-              </Grid>
               <Grid item {...mainColSpan} container>
                 {renderCommentPreview}
                 {renderCommentInfo}
+              </Grid>
+              <Grid item {...statsColSpan} container>
+                {renderMobileCommentStats || renderDesktopCommentStats}
               </Grid>
             </Grid>
           </Grid>
