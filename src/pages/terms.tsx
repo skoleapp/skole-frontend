@@ -11,6 +11,7 @@ const TermsPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, con
     topNavbarProps: {
       header: title,
       emoji: '🧑‍⚖️',
+      hideLanguageButton: true,
     },
     content,
   };

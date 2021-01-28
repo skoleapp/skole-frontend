@@ -36,6 +36,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
     seoProps,
     topNavbarProps: {
       header: title,
+      hideLanguageButton: true,
     },
     content,
   };

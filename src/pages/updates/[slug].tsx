@@ -32,6 +32,7 @@ const UpdatePage: NextPage<MarkdownPageProps> = ({
     seoProps,
     topNavbarProps: {
       header: title,
+      hideLanguageButton: true,
     },
     content,
   };

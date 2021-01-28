@@ -11,6 +11,7 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, c
     topNavbarProps: {
       header: title,
       emoji: '🔒',
+      hideLanguageButton: true,
     },
     content,
   };
