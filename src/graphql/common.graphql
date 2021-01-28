@@ -802,6 +802,14 @@ query User($id: ID, $page: Int, $pageSize: Int) {
         id
         title
       }
+      comment {
+        course {
+          id
+        }
+        resource {
+          id
+        }
+      }
     }
   }
 }
