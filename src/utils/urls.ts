@@ -28,6 +28,8 @@ export const urls = {
   starred: '/starred',
   suggestions: '/suggestions',
   terms: '/terms',
+  updates: '/updates',
+  update: (slug: string): string => `/updates/${slug}`,
   uploadResource: '/upload-resource',
   values: '/values',
 };
