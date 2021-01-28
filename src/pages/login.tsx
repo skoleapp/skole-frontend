@@ -206,7 +206,6 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const layoutProps = {
     seoProps,
-    hideBottomNavbar: true,
     topNavbarProps: {
       header: t('login:header'),
       emoji: '👋',

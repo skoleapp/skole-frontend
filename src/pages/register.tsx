@@ -351,7 +351,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const layoutProps = {
     seoProps,
-    hideBottomNavbar: true,
     topNavbarProps: {
       header: t('register:header'),
       emoji: '👋',

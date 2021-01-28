@@ -66,7 +66,6 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const layoutProps = {
     seoProps,
-    hideBottomNavbar: true,
     topNavbarProps: {
       header: t('logout:header'),
       emoji: '👋',
