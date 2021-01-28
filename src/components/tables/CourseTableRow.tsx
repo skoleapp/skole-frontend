@@ -20,8 +20,13 @@ import { TableRowChip } from './TableRowChip';
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
     borderBottom: BORDER,
+    paddingLeft: '0.3rem',
+    paddingRight: '0.3rem',
   },
   statsContainer: {
+    display: 'flex',
+  },
+  flex: {
     display: 'flex',
   },
   tableCell: {
@@ -70,53 +75,55 @@ export const CourseTableRow: React.FC<Props> = ({
     t('common:communityUser')
   );
 
-  const renderMobileStats = isMobile && (
-    <Grid container>
-      <Grid item xs={12} container>
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{score}</Typography>
+  const renderMobileCourseStats = isMobile && (
+    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+      <Grid container>
+        <Grid item xs={12} container>
+          <Grid item xs={4} container>
+            <Grid item xs={2} container alignItems="center">
+              <Typography variant="subtitle1">{score}</Typography>
+            </Grid>
+            <Grid item xs={10} container alignItems="center">
+              <Typography variant="body2" color="textSecondary">
+                {scoreLabel}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={10} container alignItems="center">
-            <Typography variant="body2" color="textSecondary">
-              {scoreLabel}
-            </Typography>
+          <Grid item xs={4} container>
+            <Grid item xs={2} container alignItems="center">
+              <Typography variant="subtitle1">{commentCount}</Typography>
+            </Grid>
+            <Grid item xs={10} container alignItems="center">
+              <Typography variant="body2" color="textSecondary">
+                {commentsLabel}
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{commentCount}</Typography>
+        <Grid item xs={12} container>
+          <Grid item xs={4} container>
+            <Grid item xs={2} container alignItems="center">
+              <Typography variant="subtitle1">{starCount}</Typography>
+            </Grid>
+            <Grid item xs={10} container alignItems="center">
+              <Typography variant="body2" color="textSecondary">
+                {starsLabel}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={10} container alignItems="center">
-            <Typography variant="body2" color="textSecondary">
-              {commentsLabel}
-            </Typography>
+          <Grid item xs={4} container>
+            <Grid item xs={2} container alignItems="center">
+              <Typography variant="subtitle1">{resourceCount}</Typography>
+            </Grid>
+            <Grid item xs={10} container alignItems="center">
+              <Typography variant="body2" color="textSecondary">
+                {resourcesLabel}
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12} container>
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{starCount}</Typography>
-          </Grid>
-          <Grid item xs={10} container alignItems="center">
-            <Typography variant="body2" color="textSecondary">
-              {starsLabel}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{resourceCount}</Typography>
-          </Grid>
-          <Grid item xs={10} container alignItems="center">
-            <Typography variant="body2" color="textSecondary">
-              {resourcesLabel}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+    </TableCell>
   );
 
   const desktopStatsColSpan: ColSpan = {
@@ -124,54 +131,50 @@ export const CourseTableRow: React.FC<Props> = ({
     lg: 3,
   };
 
-  const renderDesktopStats = (
-    <Grid container alignItems="center">
-      <Grid item {...desktopStatsColSpan} container>
-        <Grid item md={12} container justify="center">
-          <Typography variant="subtitle1">{score}</Typography>
-        </Grid>
-        <Grid item md={12} container justify="center">
-          <Typography variant="body2" color="textSecondary">
-            {scoreLabel}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid item {...desktopStatsColSpan} container>
-        <Grid item md={12} container justify="center">
-          <Typography variant="subtitle1">{commentCount}</Typography>
-        </Grid>
-        <Grid item md={12} container justify="center">
-          <Typography variant="body2" color="textSecondary">
-            {commentsLabel}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid item {...desktopStatsColSpan} container>
-        <Grid item md={12} container justify="center">
-          <Typography variant="subtitle1">{starCount}</Typography>
-        </Grid>
-        <Grid item md={12} container justify="center">
-          <Typography variant="body2" color="textSecondary">
-            {starsLabel}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Grid item {...desktopStatsColSpan} container>
-        <Grid item md={12} container justify="center">
-          <Typography variant="subtitle1">{resourceCount}</Typography>
-        </Grid>
-        <Grid item md={12} container justify="center">
-          <Typography variant="body2" color="textSecondary">
-            {resourcesLabel}
-          </Typography>
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-
-  const renderCourseStats = (
+  const renderDesktopCourseStats = (
     <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
-      {renderMobileStats || renderDesktopStats}
+      <Grid container alignItems="center">
+        <Grid item {...desktopStatsColSpan} container>
+          <Grid item md={12} container justify="center">
+            <Typography variant="subtitle1">{score}</Typography>
+          </Grid>
+          <Grid item md={12} container justify="center">
+            <Typography variant="body2" color="textSecondary">
+              {scoreLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item {...desktopStatsColSpan} container>
+          <Grid item md={12} container justify="center">
+            <Typography variant="subtitle1">{commentCount}</Typography>
+          </Grid>
+          <Grid item md={12} container justify="center">
+            <Typography variant="body2" color="textSecondary">
+              {commentsLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item {...desktopStatsColSpan} container>
+          <Grid item md={12} container justify="center">
+            <Typography variant="subtitle1">{starCount}</Typography>
+          </Grid>
+          <Grid item md={12} container justify="center">
+            <Typography variant="body2" color="textSecondary">
+              {starsLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item {...desktopStatsColSpan} container>
+          <Grid item md={12} container justify="center">
+            <Typography variant="subtitle1">{resourceCount}</Typography>
+          </Grid>
+          <Grid item md={12} container justify="center">
+            <Typography variant="body2" color="textSecondary">
+              {resourcesLabel}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
     </TableCell>
   );
 
@@ -202,7 +205,7 @@ export const CourseTableRow: React.FC<Props> = ({
   const renderCourseInfo = (
     <Grid item xs={12} container alignItems="flex-end">
       <Grid item {...courseInfoColSpan}>
-        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+        <TableCell className={clsx(classes.tableCell, classes.flex)}>{renderChips}</TableCell>
       </Grid>
       <Grid item {...courseInfoColSpan} container>
         <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
@@ -228,12 +231,12 @@ export const CourseTableRow: React.FC<Props> = ({
         <TableRow>
           <Grid container>
             <Grid item xs={12} container>
-              <Grid item {...statsColSpan} container>
-                {renderCourseStats}
-              </Grid>
               <Grid item {...mainColSpan} container>
                 {renderCourseName}
                 {renderCourseInfo}
+              </Grid>
+              <Grid item {...statsColSpan} container>
+                {renderMobileCourseStats || renderDesktopCourseStats}
               </Grid>
             </Grid>
           </Grid>
