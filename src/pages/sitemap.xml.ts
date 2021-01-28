@@ -41,10 +41,11 @@ const toUrl = (path: string, modified: string): string => {
 };
 
 const createSitemap = (routes: { path: string; modified: string }[]): string =>
-  // This xmlns URL has to use http.
+  // These xmlns URLs have to use http.
   `<?xml version="1.0" encoding="UTF-8"?>
     <urlset
-    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xhtml="http://www.w3.org/1999/xhtml"
     >
       ${routes.map((route) => toUrl(route.path, route.modified)).join('')}
     </urlset>`;
