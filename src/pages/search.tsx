@@ -124,8 +124,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
 }));
 
 interface SearchFormValues {
-  courseName: string;
-  courseCode: string;
+  searchTerm: string;
   school: SchoolObjectType | null;
   subject: SubjectObjectType | null;
   schoolType: SchoolTypeObjectType | null;
@@ -147,8 +146,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const variables = R.pick(
     [
-      'courseName',
-      'courseCode',
+      'searchTerm',
       'school',
       'subject',
       'schoolType',
@@ -171,10 +169,9 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const country = R.propOr(null, 'country', data);
   const city = R.propOr(null, 'city', data);
   const count = R.pathOr(0, ['courses', 'count'], data);
-  const courseName = R.propOr('', 'courseName', query);
-  const courseCode = R.propOr('', 'courseCode', query);
+  const searchTerm = R.propOr('', 'searchTerm', query);
   const ordering = R.propOr('', 'ordering', query);
-  const [searchValue, setSearchValue] = useState(courseName);
+  const [searchValue, setSearchValue] = useState(searchTerm);
   const schoolName = R.prop('name', school);
   const subjectName = R.prop('name', subject);
   const schoolTypeName = R.prop('name', schoolType);
@@ -200,8 +197,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // Pre-load query params to the form.
   const initialValues = {
-    courseName,
-    courseCode,
+    searchTerm,
     school,
     subject,
     schoolType,
@@ -239,12 +235,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const filtersArr = [
     {
-      name: 'courseName',
-      value: courseName,
-    },
-    {
-      name: 'courseCode',
-      value: courseCode,
+      name: 'searchTerm',
+      value: searchTerm,
     },
     {
       name: 'school',
@@ -284,13 +276,12 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     e.preventDefault();
     await Router.push({
       pathname,
-      query: { ...queryWithPagination, courseName: searchValue },
+      query: { ...queryWithPagination, searchTerm: searchValue },
     });
   };
 
   const handlePreSubmit = async ({
-    courseName,
-    courseCode,
+    searchTerm,
     school: _school,
     subject: _subject,
     schoolType: _schoolType,
@@ -306,8 +297,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
     const filteredValues = {
       ...queryWithPagination, // Define this first to override the values.
-      courseName,
-      courseCode,
+      searchTerm,
       school,
       subject,
       schoolType,
@@ -322,7 +312,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
     const query = R.pickBy((_: string, key: string) => key !== filterName, queryWithPagination);
 
-    filterName === 'courseName' && (await handleClearSearchInput());
+    filterName === 'searchTerm' && (await handleClearSearchInput());
     await Router.push({ pathname, query });
   };
 
@@ -334,12 +324,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Box>
   );
 
-  const renderCourseNameField = isTabletOrDesktop && (
-    <Field name="courseName" label={t('forms:courseName')} component={TextFormField} />
-  );
-
-  const renderCourseCodeField = (
-    <Field name="courseCode" label={t('forms:courseCode')} component={TextFormField} />
+  const renderCourseSearchTermField = isTabletOrDesktop && (
+    <Field name="searchTerm" label={t('forms:searchTerm')} component={TextFormField} />
   );
 
   const renderSubjectField = (
@@ -399,7 +385,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       name="ordering"
       label={t('forms:ordering')}
       component={NativeSelectField}
-      className="Mui-InputLabel-shrink" // We want the label to be always shrinked.
+      className="Mui-InputLabel-shrink" // We want the label to be always shrunk.
     >
       <option value="best">{t('forms:bestOrdering')}</option>
       <option value="score">{t('forms:scoreOrdering')}</option>
@@ -432,8 +418,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSearchFormFields = (props: FormikProps<SearchFormValues>): JSX.Element => (
     <Form>
-      {renderCourseNameField}
-      {renderCourseCodeField}
+      {renderCourseSearchTermField}
       {renderSubjectField}
       {renderSchoolField}
       {renderSchoolTypeField}
