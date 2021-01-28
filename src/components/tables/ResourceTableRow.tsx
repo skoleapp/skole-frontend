@@ -30,6 +30,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   tableCell: {
     padding: spacing(1),
   },
+  flex: {
+    display: 'flex',
+  },
 }));
 
 interface Props extends TableRowProps {
@@ -214,7 +217,7 @@ export const ResourceTableRow: React.FC<Props> = ({
   const renderResourceInfo = (
     <Grid item xs={12} container alignItems="flex-end">
       <Grid item {...resourceInfoColSpan}>
-        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+        <TableCell className={clsx(classes.tableCell, classes.flex)}>{renderChips}</TableCell>
       </Grid>
       <Grid item {...resourceInfoColSpan} container>
         <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>

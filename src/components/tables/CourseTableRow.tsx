@@ -26,6 +26,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   statsContainer: {
     display: 'flex',
   },
+  flex: {
+    display: 'flex',
+  },
   tableCell: {
     padding: spacing(1),
   },
@@ -202,7 +205,7 @@ export const CourseTableRow: React.FC<Props> = ({
   const renderCourseInfo = (
     <Grid item xs={12} container alignItems="flex-end">
       <Grid item {...courseInfoColSpan}>
-        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+        <TableCell className={clsx(classes.tableCell, classes.flex)}>{renderChips}</TableCell>
       </Grid>
       <Grid item {...courseInfoColSpan} container>
         <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>

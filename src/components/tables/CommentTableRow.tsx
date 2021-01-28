@@ -26,6 +26,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   statsContainer: {
     display: 'flex',
   },
+  flex: {
+    display: 'flex',
+  },
   commentPreviewTableCell: {
     paddingBottom: 0,
     overflow: 'hidden',
@@ -185,7 +188,7 @@ export const CommentTableRow: React.FC<Props> = ({
   const renderCommentInfo = (
     <Grid item xs={12} container alignItems="flex-end">
       <Grid item {...commentInfoColSpan}>
-        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+        <TableCell className={clsx(classes.tableCell, classes.flex)}>{renderChips}</TableCell>
       </Grid>
       <Grid item {...commentInfoColSpan} container>
         <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
