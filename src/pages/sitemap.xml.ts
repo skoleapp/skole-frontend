@@ -90,11 +90,27 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   }
 
   const blogFileNames = readdirSync('markdown/en/blogs');
+
   for (const fileName of blogFileNames) {
     const path = urls.blog(fileName.replace(/\.md$/, ''));
     // This is quite inefficient to get the blog creation date by rendering the whole
     // markdown file. Maybe the date could be part of the filename already?
     const { date } = (await loadMarkdown(path)).data;
+
+    paths.push({
+      path,
+      modified: date || modified,
+    });
+  }
+
+  const productUpdateFileNames = readdirSync('markdown/en/updates');
+
+  for (const fileName of productUpdateFileNames) {
+    const path = urls.update(fileName.replace(/\.md$/, ''));
+    // This is quite inefficient to get the product update creation date by rendering the whole
+    // markdown file. Maybe the date could be part of the filename already?
+    const { date } = (await loadMarkdown(path)).data;
+
     paths.push({
       path,
       modified: date || modified,
