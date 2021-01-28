@@ -251,14 +251,14 @@ export const CommentCard: React.FC<Props> = ({
     />
   );
 
-  const renderAttachment = !!comment.attachment && (
+  const renderAttachmentThumbnail = !!comment.attachmentThumbnail && (
     <Box className={classes.attachmentPreviewContainer}>
       <Tooltip title={t('discussion-tooltips:attachment')}>
         <Image
           className={classes.attachmentPreview}
           onClick={handleClickAttachment}
           loader={mediaLoader}
-          src={comment.attachment}
+          src={comment.attachmentThumbnail}
           layout="fixed"
           width={60}
           height={60}
@@ -275,7 +275,7 @@ export const CommentCard: React.FC<Props> = ({
 
   const renderMessageContent = (
     <Grid className={classes.messageContent} container alignItems="center">
-      {renderAttachment}
+      {renderAttachmentThumbnail}
       {renderText}
     </Grid>
   );
