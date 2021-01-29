@@ -6,5 +6,5 @@ interface Props {
 }
 
 export const SocialMediaIcon: React.FC<Props> = ({ name }) => (
-  <Image src={`/images/social-media-icons/${name}.svg`} width={20} height={20} />
+  <Image src={`/images/share-social-media-icons/${name}.svg`} width={20} height={20} />
 );
