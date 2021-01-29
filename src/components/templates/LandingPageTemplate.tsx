@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
 import React from 'react';
 import { MainTemplateProps } from 'types';
+import { isNotNativeApp } from 'utils';
 
 import { MainBackground } from '../layout';
 import { MainTemplate } from './MainTemplate';
@@ -71,7 +72,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
   topNavbarProps,
   containerProps,
   hideLogo,
-  hideAppStoreBadges,
+  hideAppStoreBadges = !isNotNativeApp,
   ...props
 }) => {
   const classes = useStyles();

@@ -9,7 +9,3 @@ export interface MarkdownPageProps extends SeoPageProps {
   data: MarkdownPageData;
   content: string;
 }
-
-export interface NativeAppPageProps extends SeoPageProps {
-  nativeApp: boolean;
-}

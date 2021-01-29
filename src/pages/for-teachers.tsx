@@ -9,8 +9,8 @@ import { withUserMe } from 'hocs';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import React from 'react';
-import { NativeAppPageProps } from 'types';
-import { NATIVE_APP_USER_AGENT, urls } from 'utils';
+import { SeoPageProps } from 'types';
+import { isNotNativeApp, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -65,7 +65,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) => {
+const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
 
@@ -214,7 +214,10 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
         xs={12}
         lg={10}
         xl={8}
-        className={clsx(classes.pitchBoxContainer, nativeApp && classes.nativeAppPitchBoxContainer)}
+        className={clsx(
+          classes.pitchBoxContainer,
+          isNotNativeApp && classes.nativeAppPitchBoxContainer,
+        )}
         spacing={8}
       >
         {renderPitchItems}
@@ -228,7 +231,6 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
       header: t('for-teachers:header'),
       hideForTeachersButton: true,
     },
-    hideAppStoreBadges: nativeApp,
   };
 
   return (
@@ -239,13 +241,12 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const t = await getT(locale, 'for-teachers');
 
   return {
     props: {
       _ns: await loadNamespaces(['for-teachers'], locale),
-      nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
       seoProps: {
         title: t('title'),
         description: t('description'),

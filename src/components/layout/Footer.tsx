@@ -4,22 +4,44 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
+import Image from 'next/image';
 import React from 'react';
-import { urls } from 'utils';
+import { isNotNativeApp, urls } from 'utils';
 
-import { TextLink } from '../shared';
+import { ExternalLink, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   root: {
     backgroundColor: palette.primary.main,
-    padding: spacing(4),
+    paddingTop: spacing(8),
+    paddingBottom: spacing(8),
+    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(4)})`,
+    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(4)})`,
   },
   header: {
     fontWeight: 'bold',
     marginBottom: spacing(4),
   },
-  copyRightSection: {
+  socialMediaIcon: {
+    color: palette.secondary.main,
+    padding: `${spacing(2)} !important`,
+  },
+  bottomRow: {
     marginTop: spacing(8),
+  },
+  privacyLink: {
+    marginLeft: spacing(2),
+  },
+  appStoreBadgeContainer: {
+    position: 'relative',
+  },
+  appStoreBadgeImageContainer: {
+    maxWidth: '20rem',
+  },
+  appleAppStoreImage: {
+    // the Google Play badge has a border in the image so we want to compensate for that.
+    // https://stackoverflow.com/q/34941473/9835872
+    padding: '0.15rem !important',
   },
 }));
 
@@ -70,16 +92,14 @@ export const Footer: React.FC = () => {
     </TextLink>
   );
 
-  const renderSkole = (
-    <Grid item xs={4} container justify="center">
-      <Box display="flex" flexDirection="column">
-        {renderProductHeader}
-        {renderGetStartedLink}
-        {renderGuidelinesLink}
-        {renderScoreLink}
-        {renderForTeachersLink}
-        {renderUpdatesLink}
-      </Box>
+  const renderProduct = (
+    <Grid item xs={4} container direction="column" alignItems="flex-start">
+      {renderProductHeader}
+      {renderGetStartedLink}
+      {renderGuidelinesLink}
+      {renderScoreLink}
+      {renderForTeachersLink}
+      {renderUpdatesLink}
     </Grid>
   );
 
@@ -101,6 +121,62 @@ export const Footer: React.FC = () => {
     </TextLink>
   );
 
+  const renderCompany = (
+    <Grid item xs={4} container direction="column" alignItems="flex-start">
+      {renderCompanyHeader}
+      {renderContactLink}
+      {renderBlogLink}
+      {renderValuesLink}
+    </Grid>
+  );
+
+  const socialMediaLinks = [
+    {
+      href: 'https://www.facebook.com/skoleofficial',
+      name: 'facebook',
+    },
+    {
+      href: 'https://www.instagram.com/skoleofficial/',
+      name: 'instagram',
+    },
+    {
+      href: 'https://twitter.com/skoleofficial',
+      name: 'twitter',
+    },
+    {
+      href: 'https://www.linkedin.com/company/skole-inc',
+      name: 'linkedin',
+    },
+  ];
+
+  const mapSocialMediaLinks = socialMediaLinks.map(({ href, name }) => (
+    <ExternalLink href={href}>
+      <Image
+        className={classes.socialMediaIcon}
+        src={`/images/footer-social-media-icons/${name}.svg`}
+        width={40}
+        height={40}
+      />
+    </ExternalLink>
+  ));
+
+  const renderSocialMediaLinks = (
+    <Grid item xs={4} container direction="column" alignItems="center">
+      <Typography className={classes.header} variant="subtitle1" color="secondary">
+        #studyinskole
+      </Typography>
+      <Box>{mapSocialMediaLinks}</Box>
+    </Grid>
+  );
+
+  const renderCopyright = (
+    <Grid container xs={4} alignItems="center">
+      <Typography variant="subtitle1" color="secondary">
+        © {new Date().getFullYear()} Skole
+      </Typography>
+    </Grid>
+  );
+
   const renderTermsLink = (
     <TextLink href={urls.terms} color="secondary">
       {t('common:terms')}
@@ -108,101 +184,67 @@ export const Footer: React.FC = () => {
   );
 
   const renderPrivacyLink = (
-    <TextLink href={urls.privacy} color="secondary">
+    <TextLink className={classes.privacyLink} href={urls.privacy} color="secondary">
       {t('common:privacy')}
     </TextLink>
   );
 
-  const renderCompany = (
-    <Grid item xs={4} container justify="center">
-      <Box display="flex" flexDirection="column">
-        {renderCompanyHeader}
-        {renderContactLink}
-        {renderBlogLink}
-        {renderValuesLink}
-        {renderTermsLink}
-        {renderPrivacyLink}
-      </Box>
+  const renderLegal = (
+    <Grid item xs={4} container alignItems="center">
+      {renderTermsLink}
+      {renderPrivacyLink}
     </Grid>
   );
 
-  const renderSocialHeader = (
-    <Typography className={classes.header} variant="subtitle1" color="secondary">
-      {t('common:social').toUpperCase()}
-    </Typography>
-  );
-
-  const renderFacebookLink = (
-    <TextLink
-      href="https://www.facebook.com/skoleofficial"
-      color="secondary"
-      target="_blank"
-      rel="noreferrer"
-    >
-      Facebook
-    </TextLink>
-  );
-
-  const renderInstagramLink = (
-    <TextLink
-      href="https://www.instagram.com/skoleofficial/"
-      color="secondary"
-      target="_blank"
-      rel="noreferrer"
-    >
-      Instagram
-    </TextLink>
-  );
-
-  const renderTwitterLink = (
-    <TextLink
-      href="https://twitter.com/skoleofficial"
-      color="secondary"
-      target="_blank"
-      rel="noreferrer"
-    >
-      Twitter
-    </TextLink>
-  );
-
-  const renderLinkedInLink = (
-    <TextLink
-      href="https://www.linkedin.com/company/skole-inc"
-      color="secondary"
-      target="_blank"
-      rel="noreferrer"
-    >
-      LinkedIn
-    </TextLink>
-  );
-
-  const renderSocial = (
-    <Grid item xs={4} container justify="center">
-      <Box display="flex" flexDirection="column">
-        {renderSocialHeader}
-        {renderFacebookLink}
-        {renderInstagramLink}
-        {renderTwitterLink}
-        {renderLinkedInLink}
-      </Box>
+  const renderAppStoreBadges = isNotNativeApp && (
+    <Grid className={classes.appStoreBadgeContainer} item xs={4} container justify="center">
+      <Grid className={classes.appStoreBadgeImageContainer} container justify="center">
+        <Grid item xs={6}>
+          <Typography
+            component="a"
+            href="https://apps.apple.com/app/skole-for-students/id1547995609"
+            target="_blank"
+          >
+            <Image
+              className={classes.appleAppStoreImage}
+              layout="responsive"
+              height={60}
+              width={180}
+              src="/images/app-store-badges/apple-app-store-badge.svg"
+            />
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Typography
+            component="a"
+            href="https://play.google.com/store/apps/details?id=com.skole"
+            target="_blank"
+          >
+            <Image
+              layout="responsive"
+              height={60}
+              width={180}
+              src="/images/app-store-badges/google-play-badge.svg"
+            />
+          </Typography>
+        </Grid>
+      </Grid>
     </Grid>
-  );
-
-  const renderCopyRight = (
-    <Typography variant="subtitle1" color="secondary">
-      © {new Date().getFullYear()} Skole
-    </Typography>
   );
 
   return (
     <Grid container className={classes.root} justify="center">
       <Grid item xs={12} lg={10} xl={7} container>
-        {renderSkole}
-        {renderCompany}
-        {renderSocial}
-      </Grid>
-      <Grid item xs={12} container justify="center" className={classes.copyRightSection}>
-        {renderCopyRight}
+        <Grid item xs={12} container>
+          {renderProduct}
+          {renderCompany}
+          {renderSocialMediaLinks}
+        </Grid>
+        <Grid className={classes.bottomRow} item xs={12} container>
+          {renderCopyright}
+          {renderLegal}
+          {renderAppStoreBadges}
+        </Grid>
       </Grid>
     </Grid>
   );

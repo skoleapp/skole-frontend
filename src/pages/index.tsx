@@ -12,8 +12,8 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetServerSideProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { NativeAppPageProps } from 'types';
-import { NATIVE_APP_USER_AGENT, urls } from 'utils';
+import { SeoPageProps } from 'types';
+import { isNotNativeApp, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -75,7 +75,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
-const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
+const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
@@ -218,7 +218,10 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
         xs={12}
         lg={8}
         xl={6}
-        className={clsx(classes.pitchBoxContainer, nativeApp && classes.nativeAppPitchBoxContainer)}
+        className={clsx(
+          classes.pitchBoxContainer,
+          isNotNativeApp && classes.nativeAppPitchBoxContainer,
+        )}
         spacing={8}
       >
         {renderPitchItems}
@@ -233,7 +236,6 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
       hideLogo: isMobile,
       hideGetStartedButton: true,
     },
-    hideAppStoreBadges: nativeApp,
   };
 
   // Show loading screen when redirecting to home page.
@@ -249,14 +251,13 @@ const LandingPage: NextPage<NativeAppPageProps> = ({ nativeApp, seoProps }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req: { headers }, locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const tIndex = await getT(locale, 'index');
   const tCommon = await getT(locale, 'common');
 
   return {
     props: {
       _ns: await loadNamespaces(['index'], locale),
-      nativeApp: headers['user-agent'] === NATIVE_APP_USER_AGENT,
       seoProps: {
         title: tIndex('title'),
         description: tCommon('description'),
