@@ -9,7 +9,7 @@ import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { SeoPageProps } from 'types';
@@ -251,7 +251,7 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const tIndex = await getT(locale, 'index');
   const tCommon = await getT(locale, 'common');
 

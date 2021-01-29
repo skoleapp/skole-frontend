@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { ButtonLink, Emoji, LandingPageTemplate } from 'components';
 import { withUserMe } from 'hocs';
 import { getT, loadNamespaces, useTranslation } from 'lib';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { SeoPageProps } from 'types';
 import { isNotNativeApp, urls } from 'utils';
@@ -241,7 +241,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const t = await getT(locale, 'for-teachers');
 
   return {
