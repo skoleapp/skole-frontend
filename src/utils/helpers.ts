@@ -3,7 +3,11 @@ import { ImageLoader } from 'next/image';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
 
-export const mediaUrl = (filePath: string): string => `${process.env.API_URL}${filePath}`;
+// A utility that we use to display all media from our backend.
+// In the dev env `filePath` will be relative URL e.g. `/media/uploads/foo.jpeg`,
+// in the prod env it will instead be a absolute URL: `https://s3-media.com/foo.jepg`.
+export const mediaUrl = (filePath: string): string =>
+  process.env.API_URL ? new URL(filePath, process.env.API_URL).href : filePath;
 
 export const mediaLoader: ImageLoader = ({ src, width, quality }) =>
   `${process.env.API_URL}${src}?w=${width}&q=${quality || 75}`;
