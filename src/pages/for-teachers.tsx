@@ -16,20 +16,20 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
     flexGrow: 1,
     padding: `${spacing(8)} ${spacing(2)}`,
-    paddingTop: 0,
-    fontWeight: 'bold',
   },
   ctaHeader: {
-    marginTop: spacing(8),
-    fontSize: '1rem',
+    fontSize: '1.25rem',
     [breakpoints.up('xs')]: {
-      fontSize: '1.25rem',
+      fontSize: '1.5rem',
     },
     [breakpoints.up('sm')]: {
-      fontSize: '1.5rem',
+      fontSize: '1.75rem',
     },
     [breakpoints.up('md')]: {
       fontSize: '2rem',
+    },
+    [breakpoints.up('lg')]: {
+      fontSize: '2.75rem',
     },
   },
   ctaButton: {
@@ -70,7 +70,13 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
   const { t } = useTranslation();
 
   const renderCtaHeader = (
-    <Typography className={classes.ctaHeader} variant="subtitle1" color="secondary" align="center">
+    <Typography
+      className={classes.ctaHeader}
+      variant="subtitle1"
+      color="secondary"
+      align="center"
+      gutterBottom
+    >
       {t('for-teachers:ctaHeader')}
     </Typography>
   );
@@ -101,11 +107,9 @@ const ForTeachersPage: NextPage<NativeAppPageProps> = ({ seoProps, nativeApp }) 
       alignItems="center"
       justify="center"
     >
-      <Grid item xs={12} md={10} lg={8} xl={6} container direction="column" alignItems="center">
-        {renderCtaHeader}
-        {renderCtaSubheader}
-        {renderCtaButton}
-      </Grid>
+      {renderCtaHeader}
+      {renderCtaSubheader}
+      {renderCtaButton}
     </Grid>
   );
 

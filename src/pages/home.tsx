@@ -531,7 +531,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       renderHeaderRight: renderSettingsButton,
     },
     hideBottomNavbar: false,
-    hideHeader: true,
+    hideLogo: true,
     hideAppStoreBadges: true,
   };
 
