@@ -68,7 +68,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 interface Props {
   course?: string;
   resource?: string;
-  initialCommentCount: string;
   noCommentsText?: string;
   courseName?: string;
   resourceTitle?: string;
@@ -83,7 +82,6 @@ const initialTarget = {
 export const Discussion: React.FC<Props> = ({
   course = null,
   resource = null,
-  initialCommentCount,
   noCommentsText,
   courseName,
   resourceTitle,
@@ -174,10 +172,6 @@ export const Discussion: React.FC<Props> = ({
   useEffect(() => {
     !query.comment && comments.length === visibleComments && scrollToBottom();
   }, [comments, visibleComments, query]);
-
-  useEffect(() => {
-    setCommentCount(initialCommentCount);
-  }, [initialCommentCount]);
 
   useEffect(() => {
     setTarget({
