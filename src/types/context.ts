@@ -2,6 +2,8 @@ import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 
+import { ActionsDialogParams, InfoDialogParams, ShareDialogParams } from './dialogs';
+
 export interface AuthContextType {
   userMe: UserObjectType | null;
   setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
@@ -27,6 +29,20 @@ export interface SettingsContextType {
   handleCloseSettingsDialog: () => void;
 }
 
+export interface ActionsContextType {
+  actionsDialogOpen: boolean;
+  actionsDialogParams: ActionsDialogParams;
+  handleOpenActionsDialog: (actionsDialogParams: ActionsDialogParams) => void;
+  handleCloseActionsDialog: () => void;
+}
+
+export interface InfoContextType {
+  infoDialogOpen: boolean;
+  infoDialogParams: InfoDialogParams;
+  handleOpenInfoDialog: (infoDialogParams: InfoDialogParams) => void;
+  handleCloseInfoDialog: () => void;
+}
+
 export interface PdfViewerContextType {
   documentRef: MutableRefObject<Document>;
   pageNumberInputRef: MutableRefObject<HTMLInputElement>;
@@ -49,12 +65,12 @@ export interface PdfViewerContextType {
 }
 
 export interface DiscussionContextType {
-  commentDialogOpen: boolean;
-  toggleCommentDialog: (payload: boolean) => void;
-  topLevelComments: CommentObjectType[];
-  setTopLevelComments: (comments: CommentObjectType[]) => void;
-  topComment: CommentObjectType | null;
-  setTopComment: Dispatch<SetStateAction<CommentObjectType | null>>;
+  comments: CommentObjectType[];
+  setComments: Dispatch<SetStateAction<CommentObjectType[]>>;
+  commentCount: string;
+  setCommentCount: Dispatch<SetStateAction<string>>;
+  createCommentDialogOpen: boolean;
+  setCreateCommentDialogOpen: Dispatch<SetStateAction<boolean>>;
   attachmentViewerValue: string | null;
   setAttachmentViewerValue: Dispatch<SetStateAction<string | null>>;
   commentAttachment: string | ArrayBuffer | null;
@@ -74,19 +90,11 @@ export interface ConfirmContextType {
   handleCancel: () => void;
 }
 
-export interface ShareParams {
-  shareHeader?: string;
-  shareTitle?: string;
-  shareText?: string;
-  linkSuffix?: string;
-  customLink?: string;
-}
-
 export interface ShareContextType {
   shareDialogOpen: boolean;
-  handleOpenShareDialog: (shareParams: ShareParams) => void;
+  handleOpenShareDialog: (shareDialogParams: ShareDialogParams) => void;
   handleCloseShareDialog: () => void;
-  shareParams: ShareParams;
+  shareDialogParams: ShareDialogParams;
 }
 
 export interface HistoryContextType {

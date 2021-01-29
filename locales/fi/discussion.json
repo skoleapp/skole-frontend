@@ -9,5 +9,7 @@
   "helperTextMarkdown": "Käytä kommenttisi formatointiin",
   "markdown": "Markdownia",
   "helperTextCombination": "{{ combination }} lisätäksesi uuden rivin.",
-  "commentCount": "{{ commentCount }} kommenttia"
+  "commentCount": "{{ commentCount }} kommenttia",
+  "postingComment": "Lähetetään kommenttia...",
+  "loadingMoreComments": "Ladataan lisää kommentteja..."
 }

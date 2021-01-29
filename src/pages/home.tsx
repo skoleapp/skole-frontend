@@ -223,14 +223,14 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const shareTitle = t('home:shareTitle');
   const shareText = `${t('common:description')} 🎓`;
 
-  const shareParams = {
+  const ShareDialogParams = {
     shareHeader: t('home:inviteText'),
     shareTitle,
     shareText,
     customLink: process.env.FRONTEND_URL,
   };
 
-  const handleClickShareButton = () => handleOpenShareDialog(shareParams);
+  const handleClickShareButton = () => handleOpenShareDialog(ShareDialogParams);
 
   const { data, loading, error } = useSuggestionsPreviewQuery({
     context,

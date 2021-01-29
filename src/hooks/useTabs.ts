@@ -1,5 +1,3 @@
-import { useDiscussionContext } from 'context';
-import { CommentObjectType } from 'generated';
 import { useRouter } from 'next/router';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { TabPanelProps } from 'types';
@@ -18,36 +16,23 @@ interface UseTabs {
 }
 
 // Custom helper hook for views that contain tabs.
-// If a comment has been provided as a query parameter, change to the discussion tab and open comment dialog automatically.
-export const useTabs = (comments?: CommentObjectType[]): UseTabs => {
+export const useTabs = (): UseTabs => {
   const { query } = useRouter();
-  const { setTopComment } = useDiscussionContext();
   const [tabValue, setTabValue] = useState(0);
-
-  const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
-    setTabValue(val);
-
-  useEffect(() => {
-    if (!!comments && query.comment) {
-      const comment = comments.find((c) => c.id === query.comment);
-
-      if (comment) {
-        setTopComment(comment); // Query is  a top level comment.
-      } else {
-        // Query is a reply comment. We find it's top level comment.
-        const comment = comments.find((c) => c.replyComments.some((r) => r.id === query.comment));
-
-        if (comment) {
-          setTabValue(1);
-          setTopComment(comment);
-        }
-      }
-    }
-  }, [comments, query]);
 
   const valueProp = {
     value: tabValue,
   };
+
+  // If a comment has been provided as a query parameter, automatically switch to discussion tab.
+  useEffect(() => {
+    if (query.comment) {
+      setTabValue(1);
+    }
+  }, [query]);
+
+  const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
+    setTabValue(val);
 
   const tabsProps = {
     ...valueProp,

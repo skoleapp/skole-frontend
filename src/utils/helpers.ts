@@ -1,15 +1,12 @@
 import { OperationVariables } from '@apollo/client';
+import { ImageLoader } from 'next/image';
 import { ParsedUrlQueryInput } from 'querystring';
 import * as R from 'ramda';
-import * as url from 'url';
 
-// A utility that we use to display all media from our backend.
-export const mediaUrl = (filePath: string): string =>
-  !filePath
-    ? ''
-    : filePath.includes('//')
-    ? filePath
-    : url.resolve(process.env.API_URL || '', filePath);
+export const mediaUrl = (filePath: string): string => `${process.env.API_URL}${filePath}`;
+
+export const mediaLoader: ImageLoader = ({ src, width, quality }) =>
+  `${process.env.API_URL}${src}?w=${width}&q=${quality || 75}`;
 
 interface QueryWithPaginationProps {
   query: Record<symbol, unknown>;

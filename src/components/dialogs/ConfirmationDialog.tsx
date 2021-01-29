@@ -31,7 +31,9 @@ export const ConfirmationDialog: React.FC = () => {
     <SkoleDialog open={dialogOpen} fullScreen={false}>
       <DialogHeader onCancel={handleCancel} text={title} emoji="🤔" />
       <DialogContent>
-        <DialogContentText className={classes.dialogContentText}>{description}</DialogContentText>
+        <DialogContentText className={classes.dialogContentText} color="textPrimary">
+          {description}
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleCancel} fullWidth>

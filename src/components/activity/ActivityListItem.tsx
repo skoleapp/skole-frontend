@@ -41,6 +41,7 @@ export const ActivityListItem: React.FC<Props> = ({
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
+  const avatarThumbnail = R.propOr('', 'avatarThumbnail', targetUser);
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead) {
@@ -85,7 +86,7 @@ export const ActivityListItem: React.FC<Props> = ({
 
   const renderAvatar = (
     <ListItemAvatar>
-      <Avatar src={mediaUrl(R.propOr('', 'avatarThumbnail', targetUser))} />
+      <Avatar src={mediaUrl(avatarThumbnail)} />
     </ListItemAvatar>
   );
 

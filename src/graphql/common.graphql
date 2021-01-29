@@ -139,40 +139,6 @@ mutation CreateComment(
     }
   ) {
     successMessage
-    comment {
-      id
-      user {
-        id
-        username
-        avatarThumbnail
-      }
-      text
-      attachment
-      modified
-      created
-      replyComments {
-        id
-        user {
-          id
-          username
-          avatarThumbnail
-        }
-        text
-        attachment
-        modified
-        created
-        score
-        vote {
-          id
-          status
-        }
-      }
-      score
-      vote {
-        id
-        status
-      }
-    }
     errors {
       field
       messages
@@ -290,6 +256,7 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
     score
     starred
     starCount
+    commentCount
     vote {
       id
       status
@@ -305,39 +272,6 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
     user {
       id
       username
-    }
-    comments {
-      id
-      user {
-        id
-        username
-        avatarThumbnail
-      }
-      text
-      attachment
-      created
-      replyComments {
-        id
-        user {
-          id
-          username
-          avatarThumbnail
-        }
-        text
-        attachment
-        modified
-        created
-        score
-        vote {
-          id
-          status
-        }
-      }
-      score
-      vote {
-        id
-        status
-      }
     }
   }
   resources(course: $id, page: $page, pageSize: $pageSize) {
@@ -425,6 +359,7 @@ query Resource($id: ID) {
     starred
     starCount
     downloads
+    commentCount
     resourceType {
       id
       name
@@ -444,40 +379,6 @@ query Resource($id: ID) {
     vote {
       id
       status
-    }
-    comments {
-      id
-      text
-      attachment
-      modified
-      created
-      modified
-      created
-      score
-      user {
-        id
-        username
-        avatarThumbnail
-      }
-      vote {
-        id
-        status
-      }
-      replyComments {
-        id
-        user {
-          id
-          username
-          avatarThumbnail
-        }
-        text
-        attachment
-        score
-        vote {
-          id
-          status
-        }
-      }
     }
   }
 }
@@ -1110,6 +1011,42 @@ query SuggestionsPreview {
       resource {
         id
         title
+      }
+    }
+  }
+}
+
+query Discussion($course: ID, $resource: ID) {
+  discussion(course: $course, resource: $resource) {
+    id
+    text
+    attachment
+    attachmentThumbnail
+    created
+    score
+    user {
+      id
+      username
+      avatarThumbnail
+    }
+    vote {
+      id
+      status
+    }
+    replyComments {
+      id
+      text
+      attachment
+      created
+      score
+      user {
+        id
+        username
+        avatarThumbnail
+      }
+      vote {
+        id
+        status
       }
     }
   }

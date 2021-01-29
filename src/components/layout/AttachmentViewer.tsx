@@ -54,11 +54,8 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
 export const AttachmentViewer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-
   const { attachmentViewerValue, setAttachmentViewerValue } = useDiscussionContext();
-
   const attachmentName = attachmentViewerValue && attachmentViewerValue.split('/').pop();
-
   const handleClose = (): void => setAttachmentViewerValue(null);
 
   const renderToolbar = (

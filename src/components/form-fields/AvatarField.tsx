@@ -7,7 +7,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-import AddCircleOutlined from '@material-ui/icons/AddCircleOutlined';
+import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import imageCompression from 'browser-image-compression';
@@ -19,7 +19,7 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
 import { ACCEPTED_AVATAR_FILES, MAX_AVATAR_FILE_SIZE, MAX_AVATAR_WIDTH_HEIGHT } from 'utils';
 
-import { ResponsiveDialog } from '../shared';
+import { ResponsiveDialog } from '../dialogs';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -103,7 +103,7 @@ export const AvatarField = <T extends FormikValues>({
     ? t('edit-profile:changeAvatar')
     : t('edit-profile:addAvatar');
 
-  const renderAddOrChangeAvatarIcon = preview ? <EditOutlined /> : <AddCircleOutlined />;
+  const renderAddOrChangeAvatarIcon = preview ? <EditOutlined /> : <AddCircleOutlineOutlined />;
 
   const renderAddOrChangeAvatar = (
     <label htmlFor="avatar-input">

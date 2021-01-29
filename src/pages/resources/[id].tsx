@@ -1,6 +1,5 @@
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -10,29 +9,29 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
-import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
 import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import {
+  ActionsButton,
   CustomBottomNavbarContainer,
+  Discussion,
   DiscussionHeader,
   DrawModeButton,
   DrawModeControls,
   ErrorTemplate,
-  InfoDialogContent,
+  InfoButton,
   LoadingBox,
   LoadingTemplate,
   MainTemplate,
   ResourceBottomToolbar,
   ResourceTopToolbar,
-  ResponsiveDialog,
   RotateButton,
   ShareButton,
   TabPanel,
   TextLink,
-  TopLevelCommentThread,
 } from 'components';
 import {
+  useActionsContext,
   useAuthContext,
   useConfirmContext,
   useDiscussionContext,
@@ -47,27 +46,19 @@ import {
   useDownloadResourceMutation,
   useResourceQuery,
 } from 'generated';
-import { withDiscussion, withPdfViewer, withUserMe } from 'hocs';
-import {
-  useActionsDialog,
-  useInfoDialog,
-  useLanguageHeaderContext,
-  useMediaQueries,
-  useStars,
-  useTabs,
-  useVotes,
-} from 'hooks';
+import { withActions, withDiscussion, withInfo, withPdfViewer, withUserMe } from 'hocs';
+import { useLanguageHeaderContext, useMediaQueries, useStars, useTabs, useVotes } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BORDER_RADIUS } from 'theme';
 import { PdfViewerProps, SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
-// Here we make an exception for exclusive usage of named exports and use a default import to make sure this is never imported server-side.
+// Make sure this is never imported server-side.
 // Reference: https://github.com/wojtekmaj/react-pdf/issues/136#issuecomment-716643894.
 const PdfViewer = dynamic<PdfViewerProps>(() => import('../../components/resource/PdfViewer'), {
   ssr: false,
@@ -129,22 +120,21 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const title = `${resourceTitle} - ${resourceDate}`;
   const file = mediaUrl(R.propOr('', 'file', resource));
   const resourceId = R.propOr('', 'id', resource);
-  const comments = R.propOr([], 'comments', resource);
   const initialVote = R.propOr(null, 'vote', resource);
   const initialScore = String(R.propOr(0, 'score', resource));
   const initialStars = String(R.propOr(0, 'starCount', resource));
   const initialDownloads = String(R.propOr(0, 'downloads', resource));
+  const initialCommentCount = R.prop('commentCount', resource);
   const [downloads, setDownloads] = useState('0');
   const starred = !!R.prop('starred', resource);
   const isOwner = !!userMe && userMe.id === creatorId;
   const resourceCreator = R.prop('user', resource);
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], resource);
-  const shareTitle = t('resource:shareTitle', { resourceTitle });
-  const shareText = t('resource:shareText', { resourceTitle, creatorUsername });
-  const shareParams = { shareHeader: t('resource:shareHeader'), shareTitle, shareText };
   const created = R.prop('created', resource);
-  const { commentCount, commentDialogOpen } = useDiscussionContext(comments);
+  const { commentCount, createCommentDialogOpen } = useDiscussionContext();
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
+  const { handleCloseActionsDialog } = useActionsContext();
+  const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs();
   const emoji = '📚';
 
   const { stars, renderStarButton } = useStars({
@@ -153,34 +143,6 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     resource: resourceId,
     starTooltip: t('resource-tooltips:star'),
     unstarTooltip: t('resource-tooltips:unstar'),
-  });
-
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs(
-    comments,
-  );
-
-  const {
-    infoDialogOpen,
-    infoDialogHeaderProps,
-    renderInfoButton,
-    handleCloseInfoDialog,
-  } = useInfoDialog({
-    header: title,
-    emoji,
-    infoButtonTooltip: t('resource-tooltips:info'),
-  });
-
-  const {
-    actionsDialogOpen,
-    actionsDialogHeaderProps,
-    handleCloseActionsDialog,
-    renderShareAction,
-    renderReportAction,
-    renderActionsButton,
-  } = useActionsDialog({
-    share: t('resource:share'),
-    actionsButtonTooltip: t('resource-tooltips:actions'),
-    shareParams,
   });
 
   const { renderUpvoteButton, renderDownvoteButton, score } = useVotes({
@@ -197,8 +159,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // If comment dialog is opened in main tab, automatically switch to discussion tab.
   useEffect(() => {
-    commentDialogOpen && tabValue === 0 && setTabValue(1);
-  }, [commentDialogOpen, tabValue]);
+    createCommentDialogOpen && tabValue === 0 && setTabValue(1);
+  }, [createCommentDialogOpen, tabValue]);
 
   // If drawing mode is on and user changes to discussion tab, toggle drawing mode off.
   useEffect(() => {
@@ -235,13 +197,11 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleDeleteResource = async (e: SyntheticEvent): Promise<void> => {
-    handleCloseActionsDialog(e);
-
+  const handleDeleteResource = async (): Promise<void> => {
     try {
       await confirm({
-        title: t('resource:delete'),
-        description: t('common:confirmDelete', { deleteTarget: t('resource:deleteTarget') }),
+        title: `${t('resource:delete')}?`,
+        description: t('resource:confirmDelete'),
       });
 
       await deleteResource({ variables: { id: resourceId } });
@@ -262,8 +222,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleDownloadButtonClick = async (e: SyntheticEvent): Promise<void> => {
-    handleCloseActionsDialog(e);
+  const handleDownloadButtonClick = async (): Promise<void> => {
+    handleCloseActionsDialog();
     await downloadResource({ variables: { id: resourceId } });
 
     try {
@@ -285,8 +245,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   };
 
-  const handlePrintButtonClick = async (e: SyntheticEvent): Promise<void> => {
-    handleCloseActionsDialog(e);
+  const handlePrintButtonClick = async (): Promise<void> => {
+    handleCloseActionsDialog();
 
     try {
       const res = await fetch(file, {
@@ -349,7 +309,64 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   ];
 
   const renderDrawModeControls = <DrawModeControls />;
-  const renderShareButton = <ShareButton {...shareParams} tooltip={t('resource-tooltips:share')} />;
+
+  const shareDialogParams = {
+    header: t('resource:shareHeader'),
+    title: t('resource:shareTitle', { resourceTitle }),
+    text: t('resource:shareText', { resourceTitle, creatorUsername }),
+  };
+
+  const renderShareButton = (
+    <ShareButton tooltip={t('resource-tooltips:share')} shareDialogParams={shareDialogParams} />
+  );
+
+  const infoDialogParams = {
+    header: title,
+    emoji,
+    creator: resourceCreator,
+    created,
+    infoItems,
+  };
+
+  const renderInfoButton = (
+    <InfoButton tooltip={t('resource-tooltips:info')} infoDialogParams={infoDialogParams} />
+  );
+
+  const renderDownloadAction = isMobile && (
+    <MenuItem onClick={handleDownloadButtonClick}>
+      <ListItemIcon>
+        <CloudDownloadOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('resource:downloadPdf')}</ListItemText>
+    </MenuItem>
+  );
+
+  const renderPrintAction = isMobile && (
+    <MenuItem onClick={handlePrintButtonClick}>
+      <ListItemIcon>
+        <PrintOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('resource:printPdf')}</ListItemText>
+    </MenuItem>
+  );
+  const actionsDialogParams = {
+    shareDialogParams,
+    deleteActionParams: {
+      text: t('resource:delete'),
+      callback: handleDeleteResource,
+      disabled: verified === false,
+    },
+    shareText: t('resource:share'),
+    renderCustomActions: [renderDownloadAction, renderPrintAction],
+    hideDeleteAction: !isOwner,
+  };
+
+  const renderActionsButton = (
+    <ActionsButton
+      tooltip={t('resource-tooltips:actions')}
+      actionsDialogParams={actionsDialogParams}
+    />
+  );
 
   // Hide these buttons from the custom bottom navbar when in discussion tab.
   const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
@@ -367,7 +384,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         {renderRotateButton}
         {renderDrawModeButton}
       </Grid>
-      <Grid item xs={6} container justify="flex-end" alignItems="center">
+      <Grid item xs={6} container justify="flex-end">
         {renderStarButton}
         {renderUpvoteButton}
         {renderScore}
@@ -399,23 +416,26 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handlePrintButtonClick,
   };
 
-  const discussionHeaderProps = {
-    commentCount,
-    renderShareButton,
-    renderInfoButton,
-    renderActionsButton,
-  };
-
-  const commentThreadProps = {
-    target: { resource: Number(resourceId) },
-    noComments: t('resource:noComments'),
-  };
-
   const renderTopToolbar = <ResourceTopToolbar {...toolbarProps} />;
   const renderPdfViewer = <PdfViewer file={file} />;
   const renderBottomToolbar = <ResourceBottomToolbar />;
-  const renderDiscussionHeader = <DiscussionHeader {...discussionHeaderProps} />;
-  const renderDiscussion = <TopLevelCommentThread {...commentThreadProps} />;
+
+  const renderDiscussionHeader = (
+    <DiscussionHeader
+      renderShareButton={renderShareButton}
+      renderInfoButton={renderInfoButton}
+      renderActionsButton={renderActionsButton}
+    />
+  );
+
+  const renderDiscussion = (
+    <Discussion
+      resource={resourceId}
+      initialCommentCount={initialCommentCount}
+      noCommentsText={t('resource:noComments')}
+      resourceTitle={title}
+    />
+  );
 
   const renderMobileContent = isMobile && (
     <Paper className={classes.mobileContainer}>
@@ -446,68 +466,6 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   );
 
-  const renderInfoDialogContent = (
-    <InfoDialogContent creator={resourceCreator} created={created} infoItems={infoItems} />
-  );
-
-  const renderInfoDialog = (
-    <ResponsiveDialog
-      open={infoDialogOpen}
-      onClose={handleCloseInfoDialog}
-      dialogHeaderProps={infoDialogHeaderProps}
-    >
-      {renderInfoDialogContent}
-    </ResponsiveDialog>
-  );
-
-  const renderDownloadAction = isMobile && (
-    <MenuItem onClick={handleDownloadButtonClick}>
-      <ListItemIcon>
-        <CloudDownloadOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('resource:downloadPdf')}</ListItemText>
-    </MenuItem>
-  );
-
-  const renderPrintAction = isMobile && (
-    <MenuItem onClick={handlePrintButtonClick}>
-      <ListItemIcon>
-        <PrintOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('resource:printPdf')}</ListItemText>
-    </MenuItem>
-  );
-
-  const renderDeleteAction = isOwner && (
-    <MenuItem onClick={handleDeleteResource} disabled={verified === false}>
-      <ListItemIcon>
-        <DeleteForeverOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('resource:delete')}</ListItemText>
-    </MenuItem>
-  );
-
-  const renderActionsDialogContent = (
-    <List>
-      {renderShareAction}
-      {renderDownloadAction}
-      {renderPrintAction}
-      {renderDeleteAction}
-      {renderReportAction}
-    </List>
-  );
-
-  const renderActionsDialog = (
-    <ResponsiveDialog
-      open={actionsDialogOpen}
-      onClose={handleCloseActionsDialog}
-      dialogHeaderProps={actionsDialogHeaderProps}
-      list
-    >
-      {renderActionsDialogContent}
-    </ResponsiveDialog>
-  );
-
   const layoutProps = {
     seoProps,
     customBottomNavbar: renderCustomBottomNavbar,
@@ -534,8 +492,6 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <MainTemplate {...layoutProps}>
       {renderMobileContent}
       {renderDesktopContent}
-      {renderInfoDialog}
-      {renderActionsDialog}
     </MainTemplate>
   );
 };
@@ -585,6 +541,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   };
 };
 
-const withWrappers = R.compose(withUserMe, withPdfViewer, withDiscussion);
+const withWrappers = R.compose(withUserMe, withActions, withInfo, withPdfViewer, withDiscussion);
 
 export default withWrappers(ResourceDetailPage);

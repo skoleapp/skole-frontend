@@ -1,29 +1,31 @@
 import React, { createContext, useContext, useState } from 'react';
-import { ShareContextType, ShareParams } from 'types';
+import { ShareContextType, ShareDialogParams } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const ShareContext = createContext<ShareContextType>({});
 export const useShareContext = (): ShareContextType => useContext(ShareContext);
 
-const initialShareParams = {
-  shareHeader: '',
-  shareTitle: '',
-  shareText: '',
+const initialShareDialogParams: ShareDialogParams = {
+  header: '',
+  title: '',
+  text: '',
   linkSuffix: '',
   customLink: '',
 };
 
 export const ShareContextProvider: React.FC = ({ children }) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
-  const [shareParams, setShareParams] = useState<ShareParams>(initialShareParams);
+  const [shareDialogParams, setShareDialogParams] = useState<ShareDialogParams>(
+    initialShareDialogParams,
+  );
 
-  const handleOpenShareDialog = (newShareParams: ShareParams) => {
-    setShareParams({ ...shareParams, ...newShareParams });
+  const handleOpenShareDialog = (newShareDialogParams: ShareDialogParams) => {
+    setShareDialogParams({ ...shareDialogParams, ...newShareDialogParams });
     setShareDialogOpen(true);
   };
 
   const handleCloseShareDialog = () => {
-    setShareParams(initialShareParams);
+    setShareDialogParams(initialShareDialogParams);
     setShareDialogOpen(false);
   };
 
@@ -31,7 +33,7 @@ export const ShareContextProvider: React.FC = ({ children }) => {
     shareDialogOpen,
     handleOpenShareDialog,
     handleCloseShareDialog,
-    shareParams,
+    shareDialogParams,
   };
 
   return <ShareContext.Provider value={value}>{children}</ShareContext.Provider>;

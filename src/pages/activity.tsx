@@ -1,10 +1,10 @@
-import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import CheckCircleOutlined from '@material-ui/icons/CheckCircleOutline';
 import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import {
+  ActionsButton,
   ActivityTableBody,
   ErrorTemplate,
   ListTemplate,
@@ -12,21 +12,20 @@ import {
   LoginRequiredTemplate,
   NotFoundBox,
   PaginatedTable,
-  ResponsiveDialog,
 } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useActionsContext, useAuthContext, useNotificationsContext } from 'context';
 import {
   GraphQlMarkAllActivitiesAsReadMutation,
   useActivitiesQuery,
   useGraphQlMarkAllActivitiesAsReadMutation,
 } from 'generated';
-import { withUserMe } from 'hocs';
-import { useActionsDialog, useLanguageHeaderContext } from 'hooks';
+import { withActions, withUserMe } from 'hocs';
+import { useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SeoPageProps } from 'types';
 
 const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
@@ -40,23 +39,13 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [activities, setActivities] = useState([]);
   const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
+  const { handleCloseActionsDialog } = useActionsContext();
 
   // Update state after data fetching is complete.
   useEffect(() => {
     const initialActivities = R.pathOr([], ['activities', 'objects'], data);
     setActivities(initialActivities);
   }, [data]);
-
-  const {
-    actionsDialogOpen,
-    actionsDialogHeaderProps,
-    renderActionsButton,
-    handleCloseActionsDialog,
-  } = useActionsDialog({
-    actionsButtonTooltip: t('activity-tooltips:actions'),
-  });
-
-  const renderHeaderRight = !!userMe && renderActionsButton;
 
   const onCompleted = ({
     markAllActivitiesAsRead,
@@ -84,24 +73,14 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleClickMarkAllActivitiesAsReadButton = async (e: SyntheticEvent): Promise<void> => {
+  const handleClickMarkAllActivitiesAsReadButton = async (): Promise<void> => {
     await markAllActivitiesAsRead();
-    handleCloseActionsDialog(e);
+    handleCloseActionsDialog();
   };
 
   const renderLoading = <LoadingBox />;
   const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
   const renderActivityTableBody = <ActivityTableBody activities={activities} />;
-
-  const renderTable = (
-    <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
-  );
-
-  const renderActivities = loading
-    ? renderLoading
-    : activities.length
-    ? renderTable
-    : renderNotFound;
 
   // Disable this action if user has no activities.
   const renderMarkAllAsReadAction = (
@@ -122,32 +101,39 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </MenuItem>
   );
 
-  const renderActionsDialogContent = (
-    <List>
-      {renderMarkAllAsReadAction}
-      {renderNotificationSettingsAction}
-    </List>
+  const actionsDialogParams = {
+    renderCustomActions: [renderMarkAllAsReadAction, renderNotificationSettingsAction],
+    hideShareAction: true,
+    hideDeleteAction: true,
+    hideReportAction: true,
+  };
+
+  const renderActionsButton = (
+    <ActionsButton
+      tooltip={t('activity-tooltips:actions')}
+      actionsDialogParams={actionsDialogParams}
+    />
   );
 
-  const renderActionsDialog = (
-    <ResponsiveDialog
-      open={actionsDialogOpen}
-      onClose={handleCloseActionsDialog}
-      dialogHeaderProps={actionsDialogHeaderProps}
-    >
-      {renderActionsDialogContent}
-    </ResponsiveDialog>
+  const renderTable = (
+    <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
   );
+
+  const renderActivities = loading
+    ? renderLoading
+    : activities.length
+    ? renderTable
+    : renderNotFound;
 
   const layoutProps = {
     seoProps,
     topNavbarProps: {
       header: t('activity:header'),
       emoji: '🔔',
-      renderHeaderRight,
+      renderHeaderRight: !!userMe && renderActionsButton,
     },
     listTemplateProps: {
-      renderActions: renderActionsButton,
+      renderAction: renderActionsButton,
     },
   };
 
@@ -163,12 +149,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
-  return (
-    <ListTemplate {...layoutProps}>
-      {renderActivities}
-      {renderActionsDialog}
-    </ListTemplate>
-  );
+  return <ListTemplate {...layoutProps}>{renderActivities}</ListTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
@@ -184,4 +165,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default withUserMe(ActivityPage);
+const withWrappers = R.compose(withUserMe, withActions);
+
+export default withWrappers(ActivityPage);

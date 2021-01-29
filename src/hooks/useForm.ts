@@ -18,7 +18,7 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
   };
 
   const unexpectedError: GeneralFormValues = {
-    general: t('validation:unexpectedError'),
+    general: t('common:unexpectedError'),
   };
 
   const setUnexpectedFormError = (): void => formRef.current.setErrors(unexpectedError);
@@ -41,7 +41,7 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
         }
       });
     } else {
-      formErrors.general = t('validation:unexpectedError');
+      formErrors.general = t('common:unexpectedError');
     }
 
     formRef.current.setSubmitting(false);
@@ -55,7 +55,7 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
     if (err.networkError) {
       formErrors.general = t('validation:networkError');
     } else {
-      formErrors.general = t('validation:unexpectedError');
+      formErrors.general = t('common:unexpectedError');
     }
 
     formRef.current.setSubmitting(false);

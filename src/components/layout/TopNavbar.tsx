@@ -13,7 +13,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import AddCircleOutlined from '@material-ui/icons/AddCircleOutlined';
+import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
@@ -30,9 +30,15 @@ import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
 import { ActivityPreview } from '../activity';
-import { BackButton, ButtonLink, Emoji, IconButtonLink, LanguageButton } from '../shared';
-import { Logo } from './Logo';
-import { TopNavbarSearchWidget } from './TopNavbarSearchWidget';
+import {
+  BackButton,
+  ButtonLink,
+  Emoji,
+  IconButtonLink,
+  LanguageButton,
+  Logo,
+  TopNavbarSearchWidget,
+} from '../shared';
 
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
@@ -211,7 +217,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderRegisterButton = isDesktop && !hideRegisterButton && (
-    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlined />}>
+    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
       {t('common:register')}
     </ButtonLink>
   );

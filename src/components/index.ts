@@ -1,4 +1,5 @@
 export * from './activity';
+export * from './dialogs';
 export * from './discussion';
 export * from './form-fields';
 export * from './layout';

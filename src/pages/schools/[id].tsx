@@ -1,18 +1,14 @@
-import List from '@material-ui/core/List';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import AddCircleOutlined from '@material-ui/icons/AddCircleOutlined';
+import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import {
+  ActionsButton,
   CourseTableBody,
   ErrorTemplate,
   IconButtonLink,
-  InfoDialogContent,
+  InfoButton,
   NotFoundBox,
   PaginatedTable,
-  ResponsiveDialog,
   ShareButton,
   SubjectTableBody,
   TabTemplate,
@@ -20,11 +16,10 @@ import {
 } from 'components';
 import { useAuthContext } from 'context';
 import { SchoolDocument, SchoolQueryResult } from 'generated';
-import { withUserMe } from 'hocs';
-import { useActionsDialog, useInfoDialog, useMediaQueries, useSearch } from 'hooks';
+import { withActions, withInfo, withUserMe } from 'hocs';
+import { useMediaQueries, useSearch } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
@@ -55,23 +50,9 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const cityId = R.pathOr('', ['city', 'id'], school);
   const subjects = R.pathOr([], ['subjects', 'objects'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
-  const shareTitle = t('school:shareTitle', { schoolName });
-  const shareText = t('school:shareText', { schoolName });
-  const shareParams = { shareHeader: t('school:shareHeader'), shareTitle, shareText };
   const addCourseTooltip = verificationRequiredTooltip || t('school-tooltips:addCourse');
   const header = isTabletOrDesktop && schoolName; // School names are too long to be used as the header on mobile.
   const emoji = isTabletOrDesktop && '🏫';
-
-  const {
-    infoDialogOpen,
-    infoDialogHeaderProps,
-    renderInfoButton,
-    handleCloseInfoDialog,
-  } = useInfoDialog({
-    header,
-    emoji,
-    infoButtonTooltip: t('school-tooltips:info'),
-  });
 
   const addCourseHref = {
     pathname: urls.addCourse,
@@ -79,18 +60,6 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
       school: schoolId,
     },
   };
-
-  const {
-    actionsDialogOpen,
-    actionsDialogHeaderProps,
-    handleCloseActionsDialog,
-    renderActionsButton,
-    renderShareAction,
-  } = useActionsDialog({
-    share: t('school:share'),
-    shareParams,
-    actionsButtonTooltip: t('school-tooltips:actions'),
-  });
 
   const schoolTypeLink = {
     ...searchUrl,
@@ -155,7 +124,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
       <Typography component="span">
         <IconButtonLink
           href={addCourseHref}
-          icon={AddCircleOutlined}
+          icon={AddCircleOutlineOutlined}
           disabled={verified === false}
           color={isMobile ? 'secondary' : 'default'}
           size="small"
@@ -164,7 +133,36 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     </Tooltip>
   );
 
-  const renderShareButton = <ShareButton {...shareParams} tooltip={t('school-tooltips:share')} />;
+  const shareDialogParams = {
+    header: t('school:shareHeader'),
+    title: t('school:shareTitle', { schoolName }),
+    text: t('school:shareText', { schoolName }),
+  };
+
+  const renderShareButton = (
+    <ShareButton tooltip={t('school-tooltips:share')} shareDialogParams={shareDialogParams} />
+  );
+
+  const infoDialogParams = {
+    header: schoolName,
+    emoji,
+    infoItems,
+  };
+
+  const renderInfoButton = (
+    <InfoButton tooltip="school-tooltips:info" infoDialogParams={infoDialogParams} />
+  );
+
+  const actionsDialogParams = {
+    shareDialogParams,
+    shareText: t('school:share'),
+    hideDeleteAction: true,
+  };
+
+  const renderActionsButton = (
+    <ActionsButton tooltip="school-tooltips:actions" actionsDialogParams={actionsDialogParams} />
+  );
+
   const renderSubjectsTableBody = <SubjectTableBody subjects={subjects} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} />;
 
@@ -198,47 +196,6 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     </>
   );
 
-  const renderInfoDialogContent = <InfoDialogContent infoItems={infoItems} />;
-
-  const renderInfoDialog = (
-    <ResponsiveDialog
-      open={infoDialogOpen}
-      onClose={handleCloseInfoDialog}
-      dialogHeaderProps={infoDialogHeaderProps}
-    >
-      {renderInfoDialogContent}
-    </ResponsiveDialog>
-  );
-
-  const renderAddCourseAction = (
-    <Link href={addCourseHref}>
-      <MenuItem>
-        <ListItemIcon>
-          <AddCircleOutlined />
-        </ListItemIcon>
-        <ListItemText>{t('school:addCourse')}</ListItemText>
-      </MenuItem>
-    </Link>
-  );
-
-  const renderActionsDialogContent = (
-    <List>
-      {renderShareAction}
-      {renderAddCourseAction}
-    </List>
-  );
-
-  const renderActionsDialog = (
-    <ResponsiveDialog
-      open={actionsDialogOpen}
-      onClose={handleCloseActionsDialog}
-      dialogHeaderProps={actionsDialogHeaderProps}
-      list
-    >
-      {renderActionsDialogContent}
-    </ResponsiveDialog>
-  );
-
   const layoutProps = {
     seoProps,
     topNavbarProps: {
@@ -265,12 +222,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
-  return (
-    <TabTemplate {...layoutProps}>
-      {renderInfoDialog}
-      {renderActionsDialog}
-    </TabTemplate>
-  );
+  return <TabTemplate {...layoutProps} />;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -319,4 +271,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   };
 };
 
-export default withUserMe(SchoolDetailPage);
+const withWrappers = R.compose(withUserMe, withActions, withInfo);
+
+export default withWrappers(SchoolDetailPage);

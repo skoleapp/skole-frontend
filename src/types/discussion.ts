@@ -1,19 +1,13 @@
 import { UserObjectType } from 'generated';
 
 export interface CommentTarget {
-  [key: string]: number;
+  course: string | null;
+  resource: string | null;
+  comment: string | null;
 }
 
-export interface TopLevelCommentThreadProps {
-  target: CommentTarget;
-  noComments?: string;
-}
-
-export interface CreateCommentFormValues {
+export interface CreateCommentFormValues extends CommentTarget {
   user: UserObjectType | null;
   text: string;
   attachment: string | null;
-  course?: string;
-  resource?: string;
-  comment?: string;
 }

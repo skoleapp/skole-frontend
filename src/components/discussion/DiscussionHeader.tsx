@@ -1,5 +1,6 @@
 import CardHeader from '@material-ui/core/CardHeader';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDiscussionContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
 
@@ -16,20 +17,19 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 }));
 
 interface Props {
-  commentCount: number;
   renderShareButton: JSX.Element;
   renderInfoButton: JSX.Element;
   renderActionsButton: JSX.Element;
 }
 
 export const DiscussionHeader: React.FC<Props> = ({
-  commentCount,
   renderShareButton,
   renderInfoButton,
   renderActionsButton,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { commentCount } = useDiscussionContext();
   const title = `${t('common:discussion')} (${t('discussion:commentCount', { commentCount })})`;
 
   const renderEmoji = <Emoji emoji="💬" />;

@@ -8,7 +8,6 @@ import { LS_LOGOUT_KEY, urls } from 'utils';
 
 import { withCommonContexts } from './withCommonContexts';
 
-// Fetch user from API and set context with the value.
 export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): NextPage<T> => {
   const WithUserMe: NextPage<T> = (pageProps: T) => {
     const { authLoading, authNetworkError } = useUserMe();

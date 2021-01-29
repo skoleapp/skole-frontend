@@ -1,32 +1,41 @@
-import Box from '@material-ui/core/Box';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { UserObjectType } from 'generated';
+import { useInfoContext } from 'context';
 import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React from 'react';
 import { urls } from 'utils';
 
-import { TextLink } from './TextLink';
+import { TextLink } from '../shared';
+import { ResponsiveDialog } from './ResponsiveDialog';
 
-interface InfoItem {
-  label: string;
-  value?: JSX.Element | JSX.Element[] | string | number | boolean;
-}
+const useStyles = makeStyles(({ spacing }) => ({
+  created: {
+    marginTop: spacing(4),
+  },
+}));
 
-interface Props {
-  creator?: UserObjectType | null;
-  created?: string;
-  infoItems: InfoItem[];
-}
+export const InfoDialog: React.FC = () => {
+  const {
+    infoDialogOpen,
+    handleCloseInfoDialog,
+    infoDialogParams: { header, emoji, creator, created, infoItems },
+  } = useInfoContext();
 
-export const InfoDialogContent: React.FC<Props> = ({ creator, created, infoItems }) => {
   const { t } = useTranslation();
+  const classes = useStyles();
   const userId = R.prop('id', creator);
   const communityUser = t('common:communityUser');
   const createdBy = t('common:createdBy');
+
+  const infoDialogHeaderProps = {
+    text: header,
+    emoji,
+    onCancel: handleCloseInfoDialog,
+  };
 
   const renderInfoItems = infoItems.map(({ label, value }, i) => (
     <Grid key={i} container>
@@ -53,17 +62,21 @@ export const InfoDialogContent: React.FC<Props> = ({ creator, created, infoItems
   const renderCreationTime = useDayjs(created).startOf('day').fromNow();
 
   const renderCreated = !!created && (
-    <Box marginTop="1rem">
-      <Typography variant="body2" color="textSecondary">
-        {createdBy} {renderCreator} {renderCreationTime}
-      </Typography>
-    </Box>
+    <Typography className={classes.created} variant="body2" color="textSecondary">
+      {createdBy} {renderCreator} {renderCreationTime}
+    </Typography>
   );
 
   return (
-    <CardContent>
-      {renderInfoItems}
-      {renderCreated}
-    </CardContent>
+    <ResponsiveDialog
+      open={infoDialogOpen}
+      onClose={handleCloseInfoDialog}
+      dialogHeaderProps={infoDialogHeaderProps}
+    >
+      <CardContent>
+        {renderInfoItems}
+        {renderCreated}
+      </CardContent>
+    </ResponsiveDialog>
   );
 };

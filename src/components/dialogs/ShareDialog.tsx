@@ -11,7 +11,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { ExternalLink, ResponsiveDialog, SocialMediaIcon } from '../shared';
+import { ExternalLink, SocialMediaIcon } from '../shared';
+import { ResponsiveDialog } from './ResponsiveDialog';
 
 export const ShareDialog: React.FC = () => {
   const { t } = useTranslation();
@@ -22,12 +23,12 @@ export const ShareDialog: React.FC = () => {
   const {
     shareDialogOpen,
     handleCloseShareDialog,
-    shareParams: { shareHeader, shareTitle: title, shareText: text, linkSuffix, customLink },
+    shareDialogParams: { header, title, text, linkSuffix, customLink },
   } = useShareContext();
 
   const dialogHeaderProps = {
     onCancel: handleCloseShareDialog,
-    text: shareHeader,
+    text: header,
     emoji: '📤',
   };
 

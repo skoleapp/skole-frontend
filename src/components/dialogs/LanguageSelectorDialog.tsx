@@ -8,13 +8,13 @@ import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { LANGUAGES } from 'utils';
 
-import { Emoji, LanguageFlag, ResponsiveDialog } from '../shared';
+import { LanguageFlag } from '../shared';
+import { ResponsiveDialog } from './ResponsiveDialog';
 
 export const LanguageSelectorDialog: React.FC = () => {
   const { asPath } = useRouter();
   const { t } = useTranslation();
   const { languageSelectorOpen, handleCloseLanguageMenu } = useLanguageContext();
-  const headerText = t('common:changeLanguage');
 
   const handleLanguageChange = (val: string) => async (): Promise<void> => {
     handleCloseLanguageMenu();
@@ -24,17 +24,9 @@ export const LanguageSelectorDialog: React.FC = () => {
     document.cookie = `NEXT_LOCALE=${val}`;
   };
 
-  const renderEmoji = <Emoji emoji="🌐" />;
-
-  const renderHeader = (
-    <>
-      {headerText}
-      {renderEmoji}
-    </>
-  );
-
   const dialogHeaderProps = {
-    text: renderHeader,
+    text: t('common:changeLanguage'),
+    emoji: '🌐',
     onCancel: handleCloseLanguageMenu,
   };
 
