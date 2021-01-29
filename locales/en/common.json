@@ -44,6 +44,7 @@
   "reportAbuse": "Report Abuse (coming soon)",
   "comments": "Comments",
   "resultsPerPage": "Results per page",
+  "clickToView": "Click to view!",
   "starred": "Starred",
   "settings": "Settings",
   "communityUser": "Community User",
@@ -83,5 +84,6 @@
   "blog": "Blog",
   "replies": "Replies",
   "postedBy": "Posted by",
-  "unexpectedError": "Unexpected error."
+  "product": "Product",
+  "updates": "Updates"
 }

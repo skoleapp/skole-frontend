@@ -44,6 +44,7 @@
   "reportAbuse": "Rapportera missbruk (på kommande)",
   "comments": "Kommentarer",
   "resultsPerPage": "Resultat per sida",
+  "clickToView": "Klicka för att se!",
   "starred": "Favoriter",
   "settings": "Inställningar",
   "communityUser": "Gemenskapsanvändare",
@@ -83,5 +84,6 @@
   "blog": "Blogg",
   "replies": "Svarar",
   "postedBy": "Postat av",
-  "unexpectedError": "Oväntat fel."
+  "product": "Produkt",
+  "updates": "Updates"
 }

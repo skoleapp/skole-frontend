@@ -28,21 +28,15 @@ export const Footer: React.FC = () => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
 
-  const renderSkoleHeader = (
+  const renderProductHeader = (
     <Typography className={classes.header} variant="subtitle1" color="secondary">
-      SKOLE
+      {t('common:product').toUpperCase()}
     </Typography>
   );
 
   const renderGetStartedLink = !userMe && (
     <TextLink href={urls.index} color="secondary">
       {t('common:getStarted')}
-    </TextLink>
-  );
-
-  const renderForTeachersLink = (
-    <TextLink href={urls.forTeachers} color="secondary">
-      {t('common:forTeachers')}
     </TextLink>
   );
 
@@ -58,6 +52,18 @@ export const Footer: React.FC = () => {
     </TextLink>
   );
 
+  const renderForTeachersLink = (
+    <TextLink href={urls.forTeachers} color="secondary">
+      {t('common:forTeachers')}
+    </TextLink>
+  );
+
+  const renderUpdatesLink = (
+    <TextLink href={urls.updates} color="secondary">
+      {t('common:updates')}
+    </TextLink>
+  );
+
   const renderContactLink = (
     <TextLink href={urls.contact} color="secondary">
       {t('common:contact')}
@@ -67,12 +73,12 @@ export const Footer: React.FC = () => {
   const renderSkole = (
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
-        {renderSkoleHeader}
+        {renderProductHeader}
         {renderGetStartedLink}
-        {renderForTeachersLink}
         {renderGuidelinesLink}
         {renderScoreLink}
-        {renderContactLink}
+        {renderForTeachersLink}
+        {renderUpdatesLink}
       </Box>
     </Grid>
   );
@@ -111,6 +117,7 @@ export const Footer: React.FC = () => {
     <Grid item xs={4} container justify="center">
       <Box display="flex" flexDirection="column">
         {renderCompanyHeader}
+        {renderContactLink}
         {renderBlogLink}
         {renderValuesLink}
         {renderTermsLink}
@@ -189,7 +196,7 @@ export const Footer: React.FC = () => {
 
   return (
     <Grid container className={classes.root} justify="center">
-      <Grid item xs={12} lg={8} xl={6} container>
+      <Grid item xs={12} lg={10} xl={7} container>
         {renderSkole}
         {renderCompany}
         {renderSocial}

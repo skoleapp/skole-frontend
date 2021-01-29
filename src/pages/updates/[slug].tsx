@@ -3,30 +3,26 @@ import { MarkdownTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
-import { loadMarkdown, loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown, loadNamespaces } from 'lib';
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult, NextPage } from 'next';
 import Image from 'next/image';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const BlogPostPage: NextPage<MarkdownPageProps> = ({
+const UpdatePage: NextPage<MarkdownPageProps> = ({
   seoProps,
-  data: { title, excerpt, coverImage = '', author, date, minutesToRead = 0 },
+  data: { title, excerpt, coverImage = '', date },
   content,
 }) => {
-  const { t } = useTranslation();
-
   const renderExcerpt = (
     <Typography variant="h5" color="textSecondary" gutterBottom>
       {excerpt}
     </Typography>
   );
 
-  const renderAuthor = <Typography variant="subtitle1">{author}</Typography>;
-
-  const renderBlogInfo = (
+  const renderUpdateInfo = (
     <Typography variant="body2" color="textSecondary" gutterBottom>
-      {useDayjs(date).format('LL')} - {t('blogs:readTime', { minutesToRead })}
+      {useDayjs(date).format('LL')}
     </Typography>
   );
 
@@ -44,8 +40,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
   return (
     <MarkdownTemplate {...layoutProps}>
       {renderExcerpt}
-      {renderAuthor}
-      {renderBlogInfo}
+      {renderUpdateInfo}
       {renderImage}
     </MarkdownTemplate>
   );
@@ -58,7 +53,7 @@ interface GetStaticPathsParams {
 export const getStaticPaths = async ({
   locales,
 }: GetStaticPathsParams): Promise<GetStaticPathsResult<{ slug: string }>> => {
-  const fileNames = readdirSync('markdown/en/blogs');
+  const fileNames = readdirSync('markdown/en/updates');
 
   const params = fileNames.map((f) => ({
     params: {
@@ -89,8 +84,8 @@ export const getStaticProps = async ({
   locale,
   params: { slug },
 }: GetStaticPropsParams): Promise<GetStaticPropsResult<MarkdownPageProps>> => {
-  const _ns = await loadNamespaces(['blogs'], locale);
-  const { data, content } = await loadMarkdown(`blogs/${slug}`);
+  const _ns = await loadNamespaces(['updates'], locale);
+  const { data, content } = await loadMarkdown(`updates/${slug}`);
 
   const seoProps = {
     title: data.title,
@@ -107,4 +102,4 @@ export const getStaticProps = async ({
   };
 };
 
-export default withUserMe(BlogPostPage);
+export default withUserMe(UpdatePage);
