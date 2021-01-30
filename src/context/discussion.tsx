@@ -1,10 +1,19 @@
 import { CommentObjectType } from 'generated';
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { DiscussionContextType } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const DiscussionContext = createContext<DiscussionContextType>({});
-export const useDiscussionContext = (): DiscussionContextType => useContext(DiscussionContext);
+
+export const useDiscussionContext = (initialCommentCount?: string): DiscussionContextType => {
+  const discussionContext = useContext(DiscussionContext);
+
+  useEffect(() => {
+    !!initialCommentCount && discussionContext.setCommentCount(initialCommentCount);
+  }, [initialCommentCount]);
+
+  return discussionContext;
+};
 
 export const DiscussionContextProvider: React.FC = ({ children }) => {
   const [comments, setComments] = useState<CommentObjectType[]>([]);

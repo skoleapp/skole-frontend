@@ -33,7 +33,6 @@ export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
 export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
-export const NATIVE_APP_USER_AGENT = 'skole-native-app';
 export const MAX_REVALIDATION_INTERVAL = 1; // Seconds.
 
 // The trailing slash in /account/ means to disallow all subpages.

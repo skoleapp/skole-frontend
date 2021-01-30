@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   markdown: {
@@ -20,5 +21,15 @@ interface Props {
 
 export const MarkdownContent: React.FC<Props> = ({ children }) => {
   const classes = useStyles();
-  return <ReactMarkdown className={classes.markdown}>{children}</ReactMarkdown>;
+
+  return (
+    <ReactMarkdown
+      className={classes.markdown}
+      plugins={[gfm]}
+      disallowedTypes={['image']} // Do not render images.
+      linkTarget="_blank" // Open all links externally.
+    >
+      {children}
+    </ReactMarkdown>
+  );
 };

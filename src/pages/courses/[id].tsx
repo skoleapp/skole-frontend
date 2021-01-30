@@ -126,7 +126,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
   const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
-  const { commentCount } = useDiscussionContext();
+  const { commentCount } = useDiscussionContext(initialCommentCount);
   const emoji = '🎓';
 
   const uploadResourceButtonTooltip =
@@ -285,12 +285,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderDiscussion = (
-    <Discussion
-      course={courseId}
-      initialCommentCount={initialCommentCount}
-      noCommentsText={t('course:noComments')}
-      courseName={courseName}
-    />
+    <Discussion course={courseId} noCommentsText={t('course:noComments')} courseName={courseName} />
   );
 
   const renderScore = (

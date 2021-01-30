@@ -42,3 +42,6 @@ export const getLanguageHeaderContext = (locale?: string): OperationVariables =>
     'Accept-Language': locale,
   },
 });
+
+export const isNotNativeApp =
+  typeof window !== 'undefined' && navigator.userAgent !== 'skole-native-app';

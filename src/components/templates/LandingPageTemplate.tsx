@@ -2,10 +2,10 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { useTranslation } from 'lib';
 import Image from 'next/image';
 import React from 'react';
 import { MainTemplateProps } from 'types';
+import { isNotNativeApp } from 'utils';
 
 import { MainBackground } from '../layout';
 import { MainTemplate } from './MainTemplate';
@@ -13,11 +13,9 @@ import { MainTemplate } from './MainTemplate';
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   container: {
     flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
     position: 'relative',
   },
-  headerContainer: {
+  logoContainer: {
     position: 'relative',
     textAlign: 'center',
     padding: `${spacing(8)} ${spacing(2)}`,
@@ -35,21 +33,24 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
       height: '6rem',
     },
   },
-  slogan: {
-    fontSize: '1.5rem',
-    marginTop: spacing(4),
-  },
   children: {
     position: 'relative',
     flexGrow: 1,
   },
   appStoreBadgeContainer: {
-    flexGrow: 1,
     position: 'relative',
     backgroundColor: palette.grey[300],
     padding: spacing(4),
     paddingTop: spacing(8),
     paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,
+    [breakpoints.up('md')]: {
+      paddingTop: spacing(16),
+      paddingBottom: `calc(${spacing(16)} + env(safe-area-inset-bottom))`,
+    },
+    [breakpoints.up('lg')]: {
+      paddingTop: spacing(24),
+      paddingBottom: `calc(${spacing(24)} + env(safe-area-inset-bottom))`,
+    },
   },
   appStoreBadgeImageContainer: {
     maxWidth: '25rem',
@@ -62,7 +63,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
 }));
 
 interface Props extends MainTemplateProps {
-  hideHeader?: boolean;
+  hideLogo?: boolean;
   hideAppStoreBadges?: boolean;
 }
 
@@ -70,30 +71,18 @@ export const LandingPageTemplate: React.FC<Props> = ({
   children,
   topNavbarProps,
   containerProps,
-  hideHeader,
-  hideAppStoreBadges,
+  hideLogo,
+  hideAppStoreBadges = !isNotNativeApp,
   ...props
 }) => {
   const classes = useStyles();
-  const { t } = useTranslation();
   const renderBackground = <MainBackground />;
 
-  const renderLogo = (
-    <Box className={classes.logo}>
-      <Image layout="fill" src="/images/icons/skole-icon-text.svg" />
-    </Box>
-  );
-
-  const renderSlogan = (
-    <Typography className={classes.slogan} variant="h1" color="secondary" gutterBottom>
-      {t('common:slogan')}
-    </Typography>
-  );
-
-  const renderHeader = !hideHeader && (
-    <Box className={classes.headerContainer}>
-      {renderLogo}
-      {renderSlogan}
+  const renderHeader = !hideLogo && (
+    <Box className={classes.logoContainer}>
+      <Box className={classes.logo}>
+        <Image layout="fill" src="/images/icons/skole-icon-text.svg" />
+      </Box>
     </Box>
   );
 
@@ -155,12 +144,12 @@ export const LandingPageTemplate: React.FC<Props> = ({
 
   return (
     <MainTemplate {...layoutProps}>
-      <Box className={classes.container}>
+      <Grid container direction="column" className={classes.container}>
         {renderBackground}
         {renderHeader}
         {renderChildren}
         {renderAppStoreBadges}
-      </Box>
+      </Grid>
     </MainTemplate>
   );
 };

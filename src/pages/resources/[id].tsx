@@ -131,7 +131,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const resourceCreator = R.prop('user', resource);
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], resource);
   const created = R.prop('created', resource);
-  const { commentCount, createCommentDialogOpen } = useDiscussionContext();
+  const { commentCount, createCommentDialogOpen } = useDiscussionContext(initialCommentCount);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
   const { handleCloseActionsDialog } = useActionsContext();
   const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs();
@@ -431,7 +431,6 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderDiscussion = (
     <Discussion
       resource={resourceId}
-      initialCommentCount={initialCommentCount}
       noCommentsText={t('resource:noComments')}
       resourceTitle={title}
     />
