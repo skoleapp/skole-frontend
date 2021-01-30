@@ -17,20 +17,20 @@ import { urls } from 'utils';
 import { TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   root: {
     borderBottom: BORDER,
     paddingLeft: '0.3rem',
     paddingRight: '0.3rem',
   },
-  statsContainer: {
-    display: 'flex',
-  },
-  flex: {
-    display: 'flex',
-  },
   tableCell: {
     padding: spacing(1),
+    display: 'flex',
+  },
+  creatorInfoTableCell: {
+    [breakpoints.up('md')]: {
+      justifyContent: 'flex-end',
+    },
   },
 }));
 
@@ -76,7 +76,7 @@ export const CourseTableRow: React.FC<Props> = ({
   );
 
   const renderMobileCourseStats = isMobile && (
-    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+    <TableCell className={classes.tableCell}>
       <Grid container>
         <Grid item xs={12} container>
           <Grid item xs={4} container>
@@ -132,7 +132,7 @@ export const CourseTableRow: React.FC<Props> = ({
   };
 
   const renderDesktopCourseStats = (
-    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+    <TableCell className={classes.tableCell}>
       <Grid container alignItems="center">
         <Grid item {...desktopStatsColSpan} container>
           <Grid item md={12} container justify="center">
@@ -179,7 +179,7 @@ export const CourseTableRow: React.FC<Props> = ({
   );
 
   const renderCreatorInfo = (
-    <Typography variant="body2" color="textSecondary" align={isMobile || dense ? 'left' : 'right'}>
+    <Typography variant="body2" color="textSecondary">
       {t('common:createdBy')} {renderCourseCreator} {created}
     </Typography>
   );
@@ -199,16 +199,18 @@ export const CourseTableRow: React.FC<Props> = ({
 
   const courseInfoColSpan: ColSpan = {
     xs: 12,
-    sm: dense ? 12 : 6,
+    md: dense ? 12 : 6,
   };
 
   const renderCourseInfo = (
     <Grid item xs={12} container alignItems="flex-end">
       <Grid item {...courseInfoColSpan}>
-        <TableCell className={clsx(classes.tableCell, classes.flex)}>{renderChips}</TableCell>
+        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
       </Grid>
-      <Grid item {...courseInfoColSpan} container>
-        <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
+      <Grid item {...courseInfoColSpan}>
+        <TableCell className={clsx(classes.tableCell, !dense && classes.creatorInfoTableCell)}>
+          {renderCreatorInfo}
+        </TableCell>
       </Grid>
     </Grid>
   );

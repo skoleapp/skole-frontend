@@ -17,16 +17,14 @@ import { truncate, urls } from 'utils';
 import { MarkdownContent, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   root: {
     borderBottom: BORDER,
     paddingLeft: '0.3rem',
     paddingRight: '0.3rem',
   },
-  statsContainer: {
-    display: 'flex',
-  },
-  flex: {
+  tableCell: {
+    padding: spacing(1),
     display: 'flex',
   },
   commentPreviewTableCell: {
@@ -38,8 +36,10 @@ const useStyles = makeStyles(({ spacing }) => ({
       textOverflow: 'ellipsis',
     },
   },
-  tableCell: {
-    padding: spacing(1),
+  creatorInfoTableCell: {
+    [breakpoints.up('md')]: {
+      justifyContent: 'flex-end',
+    },
   },
 }));
 
@@ -102,7 +102,7 @@ export const CommentTableRow: React.FC<Props> = ({
   );
 
   const renderMobileCommentStats = isMobile && (
-    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+    <TableCell className={classes.tableCell}>
       <Grid container alignItems="center">
         <Grid item xs={4} container>
           <Grid item xs={2} container alignItems="center">
@@ -134,7 +134,7 @@ export const CommentTableRow: React.FC<Props> = ({
   };
 
   const renderDesktopCommentStats = (
-    <TableCell className={clsx(classes.tableCell, classes.statsContainer)}>
+    <TableCell className={classes.tableCell}>
       <Grid container alignItems="center">
         <Grid item {...desktopStatsColSpan} container>
           <Grid item md={12} container justify="center">
@@ -167,7 +167,7 @@ export const CommentTableRow: React.FC<Props> = ({
   );
 
   const renderCreatorInfo = (
-    <Typography variant="body2" color="textSecondary" align={isMobile || dense ? 'left' : 'right'}>
+    <Typography variant="body2" color="textSecondary">
       {t('common:postedBy')} {renderCommentCreator} {created}
     </Typography>
   );
@@ -182,16 +182,18 @@ export const CommentTableRow: React.FC<Props> = ({
 
   const commentInfoColSpan: ColSpan = {
     xs: 12,
-    sm: dense ? 12 : 6,
+    md: dense ? 12 : 6,
   };
 
   const renderCommentInfo = (
     <Grid item xs={12} container alignItems="flex-end">
       <Grid item {...commentInfoColSpan}>
-        <TableCell className={clsx(classes.tableCell, classes.flex)}>{renderChips}</TableCell>
+        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
       </Grid>
       <Grid item {...commentInfoColSpan} container>
-        <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
+        <TableCell className={clsx(classes.tableCell, !dense && classes.creatorInfoTableCell)}>
+          {renderCreatorInfo}
+        </TableCell>
       </Grid>
     </Grid>
   );
