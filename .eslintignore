@@ -3,3 +3,4 @@ build
 next.config.js
 *.graphql.d.ts
 __generated__
+public/saEvents.js

@@ -87,6 +87,8 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     !!userMe && Router.replace(urls.home);
   }, [userMe]);
 
+  const handleSkipLogin = () => sa_event('click_skip_login');
+
   const renderHeaderEmoji = <Emoji emoji="🎓" />;
 
   const renderCtaHeader = (
@@ -122,7 +124,7 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderAuthLink = (
     <Typography className={classes.authLink}>
-      <TextLink href={urls.home} color="secondary">
+      <TextLink onClick={handleSkipLogin} href={urls.home} color="secondary">
         {t('index:skipLogin')}
       </TextLink>
     </Typography>

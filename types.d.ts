@@ -18,3 +18,5 @@ declare namespace window {
     navigator: ShareNavigator;
   }
 }
+
+declare function sa_event(name: string): void;

@@ -118,6 +118,8 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
     </>
   );
 
+  const renderSaEventsScript = <script src="/saEvents.js" />;
+
   return (
     <Head>
       {renderCommonMetaTags}
@@ -126,6 +128,7 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
       {renderOgMetaTags}
       {renderTwitterMetaTags}
       {renderLinkTags}
+      {renderSaEventsScript}
     </Head>
   );
 };
