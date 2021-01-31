@@ -2,6 +2,8 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import LinkOutlined from '@material-ui/icons/LinkOutlined';
 import MailOutlined from '@material-ui/icons/MailOutlined';
@@ -11,13 +13,21 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { ExternalLink, SocialMediaIcon } from '../shared';
+import { SocialMediaIcon } from '../shared';
 import { ResponsiveDialog } from './ResponsiveDialog';
 
+const useStyles = makeStyles({
+  socialLink: {
+    textDecoration: 'none',
+    color: 'inherit',
+  },
+});
+
 export const ShareDialog: React.FC = () => {
+  const classes = useStyles();
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
-  const { asPath: _asPath } = useRouter();
+  const { asPath: _asPath, pathname } = useRouter();
   const asPath = _asPath.split('?')[0];
 
   const {
@@ -34,16 +44,20 @@ export const ShareDialog: React.FC = () => {
 
   const url = customLink || `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`; // Does not work from localhost.
-  const whatsAppUrl = `https://api.whatsapp.com/send?text=${title}: ${url}`;
+  const whatsAppUrl = `https://api.whatsapp.com/send?text=${url}`;
   const telegramUrl = `https://t.me/share/url?url=${url}&text=${text}`; // TODO: Ensure this works on QA, this is from: https://core.telegram.org/widgets/share#custom-buttons
   const redditUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
   const twitterUrl = `https://twitter.com/share?url=${url}&text=${text}`;
   const mailUrl = `mailto:?subject=${title}&body=${text}: ${url}`;
 
+  const shareEvent = (name: string) => sa_event(`click_${name}_share_link_from_${pathname}`);
+  const handleClickMenuItem = (name: string) => () => shareEvent(name);
+
   const handleClickCopyLink = () => {
     toggleNotification(t('notifications:linkCopied'));
     navigator.clipboard.writeText(url);
     handleCloseShareDialog();
+    shareEvent('copy_link');
   };
 
   const handleClickSeeAll = async (): Promise<void> => {
@@ -62,64 +76,55 @@ export const ShareDialog: React.FC = () => {
     }
   };
 
-  const renderFacebookMenuItem = (
-    <ExternalLink href={facebookUrl}>
-      <MenuItem>
-        <ListItemIcon>
-          <SocialMediaIcon name="facebook" />
-        </ListItemIcon>
-        <ListItemText>{t('sharing:facebook')}</ListItemText>
-      </MenuItem>
-    </ExternalLink>
-  );
+  const socialMenuItems = [
+    {
+      href: facebookUrl,
+      name: 'facebook',
+      text: 'sharing:facebook',
+    },
+    {
+      href: whatsAppUrl,
+      name: 'whatsapp',
+      text: 'sharing:whatsapp',
+    },
+    {
+      href: telegramUrl,
+      name: 'telegram',
+      text: 'sharing:telegram',
+    },
+    {
+      href: redditUrl,
+      name: 'reddit',
+      text: 'sharing:reddit',
+    },
+    {
+      href: twitterUrl,
+      name: 'twitter',
+      text: 'sharing:twitter',
+    },
+  ];
 
-  const renderWhatsAppMenuItem = (
-    <ExternalLink href={whatsAppUrl}>
-      <MenuItem>
+  const renderSocialMenuItems = socialMenuItems.map(({ href, name, text }, i) => (
+    <Typography
+      className={classes.socialLink}
+      component="a"
+      target="_blank"
+      rel="noreferrer"
+      href={href}
+      key={i}
+    >
+      <MenuItem onClick={handleClickMenuItem(name)}>
         <ListItemIcon>
-          <SocialMediaIcon name="whatsapp" />
+          <SocialMediaIcon name={name} />
         </ListItemIcon>
-        <ListItemText>{t('sharing:whatsapp')}</ListItemText>
+        <ListItemText>{t(text)}</ListItemText>
       </MenuItem>
-    </ExternalLink>
-  );
-
-  const renderTelegramMenuItem = (
-    <ExternalLink href={telegramUrl}>
-      <MenuItem>
-        <ListItemIcon>
-          <SocialMediaIcon name="telegram" />
-        </ListItemIcon>
-        <ListItemText>{t('sharing:telegram')}</ListItemText>
-      </MenuItem>
-    </ExternalLink>
-  );
-
-  const renderRedditMenuItem = (
-    <ExternalLink href={redditUrl}>
-      <MenuItem>
-        <ListItemIcon>
-          <SocialMediaIcon name="reddit" />
-        </ListItemIcon>
-        <ListItemText>{t('sharing:reddit')}</ListItemText>
-      </MenuItem>
-    </ExternalLink>
-  );
-
-  const renderTwitterMenuItem = (
-    <ExternalLink href={twitterUrl}>
-      <MenuItem>
-        <ListItemIcon>
-          <SocialMediaIcon name="twitter" />
-        </ListItemIcon>
-        <ListItemText>{t('sharing:twitter')}</ListItemText>
-      </MenuItem>
-    </ExternalLink>
-  );
+    </Typography>
+  ));
 
   const renderEmailMenuItem = (
     <Link href={mailUrl}>
-      <MenuItem>
+      <MenuItem onClick={handleClickMenuItem('twitter')}>
         <ListItemIcon>
           <MailOutlined />
         </ListItemIcon>
@@ -148,11 +153,7 @@ export const ShareDialog: React.FC = () => {
 
   const renderDialogContent = (
     <List>
-      {renderFacebookMenuItem}
-      {renderWhatsAppMenuItem}
-      {renderTwitterMenuItem}
-      {renderTelegramMenuItem}
-      {renderRedditMenuItem}
+      {renderSocialMenuItems}
       {renderEmailMenuItem}
       {renderCopyLinkMenuItem}
       {renderSeeAllMenuItem}
