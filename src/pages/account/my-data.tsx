@@ -33,6 +33,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         formRef.current?.resetForm();
         toggleNotification(myData.successMessage);
         setSubmitted(true);
+        sa_event('request_data');
       } else {
         setUnexpectedFormError();
       }

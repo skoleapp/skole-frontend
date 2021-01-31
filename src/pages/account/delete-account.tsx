@@ -51,6 +51,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         toggleNotification(deleteUser.successMessage);
         localStorage.removeItem('user');
         await Router.push(urls.logout);
+        sa_event('delete_account');
       } else {
         setUnexpectedFormError();
       }
