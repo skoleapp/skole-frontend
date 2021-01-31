@@ -2,8 +2,8 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
 import FlagOutlined from '@material-ui/icons/FlagOutlined';
-import MailOutlined from '@material-ui/icons/MailOutlined';
 import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import { useActionsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
@@ -46,7 +46,7 @@ export const ActionsDialog: React.FC = () => {
   const renderShareAction = !hideShareAction && (
     <MenuItem onClick={handleClickShare}>
       <ListItemIcon>
-        <MailOutlined />
+        <ShareOutlined />
       </ListItemIcon>
       <ListItemText>{shareText}</ListItemText>
     </MenuItem>
@@ -55,7 +55,7 @@ export const ActionsDialog: React.FC = () => {
   const renderDeleteAction = !hideDeleteAction && (
     <MenuItem onClick={handleClickDelete} disabled={deleteActionParams?.disabled}>
       <ListItemIcon>
-        <ShareOutlined />
+        <DeleteForeverOutlined />
       </ListItemIcon>
       <ListItemText>{deleteActionParams?.text}</ListItemText>
     </MenuItem>
