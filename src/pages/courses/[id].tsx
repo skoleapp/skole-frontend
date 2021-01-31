@@ -11,7 +11,6 @@ import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import clsx from 'clsx';
 import {
   ActionsButton,
-  BackButton,
   CustomBottomNavbarContainer,
   Discussion,
   DiscussionHeader,
@@ -87,6 +86,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   resourcesHeaderTitle: {
     color: palette.text.secondary,
     flexGrow: 1,
+    marginLeft: spacing(2),
   },
   score: {
     marginLeft: spacing(2),
@@ -366,7 +366,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Tooltip>
   );
 
-  const renderBackButton = <BackButton className={classes.backButton} />;
   const renderEmoji = <Emoji emoji={emoji} />;
 
   const renderHeader = (
@@ -378,8 +377,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderResourcesTitle = (
     <Typography
-      className={clsx('MuiCardHeader-subheader', classes.resourcesHeaderTitle, 'truncate-text')}
-      variant="body1"
+      className={clsx('MuiCardHeader-title', classes.resourcesHeaderTitle, 'truncate-text')}
+      variant="h5"
       align="left"
     >
       {renderHeader}
@@ -392,7 +391,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       className={clsx('MuiCardHeader-root', classes.resourcesHeaderRoot)}
       wrap="nowrap"
     >
-      {renderBackButton}
       {renderResourcesTitle}
       {renderStarButton}
       {renderUpvoteButton}
