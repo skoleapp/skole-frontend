@@ -82,6 +82,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
         formRef.current?.resetForm();
         toggleNotification(createCourse.successMessage);
         await Router.push(urls.course(createCourse.course.id));
+        sa_event('add_course');
       } else {
         setUnexpectedFormError();
       }

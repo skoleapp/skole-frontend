@@ -183,6 +183,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       } else if (deleteResource.successMessage) {
         toggleNotification(deleteResource.successMessage);
         await Router.push(urls.course(courseId));
+        sa_event('delete_resource');
       } else {
         deleteResourceError();
       }

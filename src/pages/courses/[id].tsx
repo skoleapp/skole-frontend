@@ -159,6 +159,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       } else if (deleteCourse.successMessage) {
         toggleNotification(deleteCourse.successMessage);
         await Router.push(urls.home);
+        sa_event('delete_course');
       } else {
         toggleUnexpectedErrorNotification();
       }

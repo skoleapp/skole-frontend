@@ -148,6 +148,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       } else if (createComment.successMessage) {
         toggleNotification(createComment.successMessage);
         onCommentCreated();
+        sa_event('create_comment');
       } else {
         toggleUnexpectedErrorNotification();
       }

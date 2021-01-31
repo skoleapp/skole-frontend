@@ -102,6 +102,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
         formRef.current?.resetForm();
         toggleNotification(createResource.successMessage);
         await Router.push(urls.resource(createResource.resource.id));
+        sa_event('upload_resource');
       } else {
         setUnexpectedFormError();
       }
