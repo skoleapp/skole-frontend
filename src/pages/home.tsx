@@ -220,13 +220,11 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const headerText = t('common:description');
   const suggestionsHeaderText = t('home:suggestionsHeader');
   const nextStepsHeaderText = t('home:nextStepsHeader');
-  const shareTitle = t('home:shareTitle');
-  const shareText = `${t('common:description')} 🎓`;
 
   const ShareDialogParams = {
-    shareHeader: t('home:inviteText'),
-    shareTitle,
-    shareText,
+    header: t('home:inviteText'),
+    title: 'Skole',
+    text: `${t('common:description')} 🎓`,
     customLink: process.env.FRONTEND_URL,
   };
 
