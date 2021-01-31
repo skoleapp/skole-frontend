@@ -11,7 +11,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     textAlign: 'left',
     marginLeft: spacing(2),
   },
-  subheader: {
+  title: {
     color: palette.text.secondary,
   },
 }));
@@ -30,11 +30,11 @@ export const DiscussionHeader: React.FC<Props> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const { commentCount } = useDiscussionContext();
-  const title = `${t('common:discussion')} (${t('discussion:commentCount', { commentCount })})`;
+  const title = t('discussion:commentCount', { commentCount });
 
   const renderEmoji = <Emoji emoji="💬" />;
 
-  const renderSubheader = (
+  const renderTitle = (
     <>
       {title}
       {renderEmoji}
@@ -51,8 +51,8 @@ export const DiscussionHeader: React.FC<Props> = ({
 
   return (
     <CardHeader
-      classes={{ root: classes.root, subheader: classes.subheader }}
-      subheader={renderSubheader}
+      classes={{ root: classes.root, title: classes.title }}
+      title={renderTitle}
       action={renderAction}
     />
   );
