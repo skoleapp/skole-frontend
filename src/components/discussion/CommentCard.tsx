@@ -175,6 +175,7 @@ export const CommentCard: React.FC<Props> = ({
       } else if (deleteComment.successMessage) {
         onCommentDeleted();
         toggleNotification(deleteComment.successMessage);
+        sa_event('delete_comment');
       } else {
         toggleUnexpectedErrorNotification();
       }
