@@ -409,6 +409,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const toolbarProps = {
     title,
     emoji,
+    courseId,
     renderStarButton,
     renderUpvoteButton,
     renderScore,
