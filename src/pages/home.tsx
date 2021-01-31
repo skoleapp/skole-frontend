@@ -125,7 +125,13 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   shortcutText: {
     fontSize: '1.25rem',
-    marginLeft: spacing(4),
+    [breakpoints.down('md')]: {
+      marginLeft: spacing(4),
+    },
+    [breakpoints.up('md')]: {
+      marginTop: spacing(2),
+      fontSize: '1.5rem',
+    },
   },
   shortcutArrow: {
     marginLeft: spacing(2),
@@ -134,10 +140,18 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     height: '2.5rem',
     width: '2.5rem',
     backgroundColor: palette.primary.light,
+    [breakpoints.up('md')]: {
+      height: '3.5rem',
+      width: '3.5rem',
+    },
   },
   avatarIcon: {
     height: '1.5rem',
     width: '1.5rem',
+    [breakpoints.up('md')]: {
+      height: '2rem',
+      width: '2rem',
+    },
   },
   suggestionsPaper: {
     borderRadius: BORDER_RADIUS,
@@ -304,7 +318,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
         <Card className={clsx(classes.card)}>
           <CardActionArea className={classes.cardActionArea}>
             <CardContent className={classes.cardContent}>
-              <Grid container alignItems="center">
+              <Grid container direction={isMobile ? 'row' : 'column'} alignItems="center">
                 <Avatar className={clsx(classes.avatar)}>
                   <Icon className={classes.avatarIcon} />
                 </Avatar>
@@ -326,8 +340,8 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   ));
 
-  const renderShortcuts = isMobile && (
-    <Grid item xs={12} container>
+  const renderShortcuts = (
+    <Grid item xs={12} md={4} lg={3} container>
       {mapShortcuts}
     </Grid>
   );
@@ -353,7 +367,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSuggestionsPreview = (
-    <Grid item xs={12} container>
+    <Grid item xs={12} md={8} lg={9} container>
       <Paper className={classes.suggestionsPaper}>
         <CardHeader className={classes.suggestionsCardHeader} title={suggestionsHeader} />
         <SuggestionsTable
