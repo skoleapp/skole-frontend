@@ -1,7 +1,7 @@
 import { InputProps } from '@material-ui/core/Input';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { UrlObject } from 'url';
@@ -19,6 +19,7 @@ interface UseSearch {
 
 export const useSearch = (): UseSearch => {
   const { t } = useTranslation();
+  const { pathname } = useRouter();
   const { school } = useAuthContext();
   const [value, setValue] = useState('');
   const placeholder = t('forms:searchCourses');
@@ -41,6 +42,7 @@ export const useSearch = (): UseSearch => {
     e.preventDefault();
     setValue('');
     await Router.push({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
+    sa_event(`submit_search_${value}_from_${pathname}`);
   };
 
   return {
