@@ -1,13 +1,13 @@
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
 import React from 'react';
 import { MainTemplateProps } from 'types';
 import { isNotNativeApp } from 'utils';
 
 import { MainBackground } from '../layout';
+import { AppStoreBadge, GooglePlayBadge } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -55,11 +55,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   appStoreBadgeImageContainer: {
     maxWidth: '25rem',
   },
-  appleAppStoreImage: {
-    // the Google Play badge has a border in the image so we want to compensate for that.
-    // https://stackoverflow.com/q/34941473/9835872
-    padding: '0.15rem !important',
-  },
 }));
 
 interface Props extends MainTemplateProps {
@@ -96,33 +91,10 @@ export const LandingPageTemplate: React.FC<Props> = ({
     <Grid className={classes.appStoreBadgeContainer} container justify="center" alignItems="center">
       <Grid className={classes.appStoreBadgeImageContainer} container justify="center" spacing={4}>
         <Grid item xs={6}>
-          <Typography
-            component="a"
-            href="https://apps.apple.com/app/skole-for-students/id1547995609"
-            target="_blank"
-          >
-            <Image
-              className={classes.appleAppStoreImage}
-              layout="responsive"
-              height={60}
-              width={180}
-              src="/images/app-store-badges/apple-app-store-badge.svg"
-            />
-          </Typography>
+          <AppStoreBadge />
         </Grid>
         <Grid item xs={6}>
-          <Typography
-            component="a"
-            href="https://play.google.com/store/apps/details?id=com.skole"
-            target="_blank"
-          >
-            <Image
-              layout="responsive"
-              height={60}
-              width={180}
-              src="/images/app-store-badges/google-play-badge.svg"
-            />
-          </Typography>
+          <GooglePlayBadge />
         </Grid>
       </Grid>
     </Grid>

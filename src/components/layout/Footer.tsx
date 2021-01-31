@@ -8,7 +8,7 @@ import Image from 'next/image';
 import React from 'react';
 import { isNotNativeApp, urls } from 'utils';
 
-import { ExternalLink, TextLink } from '../shared';
+import { AppStoreBadge, ExternalLink, GooglePlayBadge, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   root: {
@@ -37,11 +37,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   },
   appStoreBadgeImageContainer: {
     maxWidth: '20rem',
-  },
-  appleAppStoreImage: {
-    // the Google Play badge has a border in the image so we want to compensate for that.
-    // https://stackoverflow.com/q/34941473/9835872
-    padding: '0.15rem !important',
   },
 }));
 
@@ -200,33 +195,10 @@ export const Footer: React.FC = () => {
     <Grid className={classes.appStoreBadgeContainer} item xs={4} container justify="center">
       <Grid className={classes.appStoreBadgeImageContainer} container justify="center">
         <Grid item xs={6}>
-          <Typography
-            component="a"
-            href="https://apps.apple.com/app/skole-for-students/id1547995609"
-            target="_blank"
-          >
-            <Image
-              className={classes.appleAppStoreImage}
-              layout="responsive"
-              height={60}
-              width={180}
-              src="/images/app-store-badges/apple-app-store-badge.svg"
-            />
-          </Typography>
+          <AppStoreBadge />
         </Grid>
         <Grid item xs={6}>
-          <Typography
-            component="a"
-            href="https://play.google.com/store/apps/details?id=com.skole"
-            target="_blank"
-          >
-            <Image
-              layout="responsive"
-              height={60}
-              width={180}
-              src="/images/app-store-badges/google-play-badge.svg"
-            />
-          </Typography>
+          <GooglePlayBadge />
         </Grid>
       </Grid>
     </Grid>
