@@ -84,13 +84,18 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     justifyContent: 'center',
     width: '100%',
   },
-  searchField: {
+  searchFieldBox: {
     display: 'flex',
     flexGrow: 1,
     backgroundColor: palette.common.white,
     border: `0.05rem solid ${palette.primary.main}`,
     borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
     padding: spacing(3),
+  },
+  searchFieldInput: {
+    [breakpoints.down('xs')]: {
+      fontSize: '0.82rem', // Make the text fit exactly on iPhone SE on the top of the search page.
+    },
   },
   searchButton: {
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
@@ -284,8 +289,8 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSearchField = (
     <form className={classes.searchForm} onSubmit={handleSubmitSearch}>
-      <Box className={classes.searchField}>
-        <InputBase {...searchInputProps} />
+      <Box className={classes.searchFieldBox}>
+        <InputBase {...searchInputProps} className={classes.searchFieldInput} />
       </Box>
       <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
         <SearchOutlined />

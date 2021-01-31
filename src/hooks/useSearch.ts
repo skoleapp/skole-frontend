@@ -41,7 +41,7 @@ export const useSearch = (): UseSearch => {
   const handleSubmitSearch = async (e: SyntheticEvent): Promise<void> => {
     e.preventDefault();
     setValue('');
-    await Router.push({ ...searchUrl, query: { ...searchUrl.query, courseName: value } });
+    await Router.push({ ...searchUrl, query: { ...searchUrl.query, searchTerm: value } });
     sa_event(`submit_search_${value}_from_${pathname}`);
   };
 

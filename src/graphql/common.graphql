@@ -181,8 +181,7 @@ query AutocompleteCountries {
 }
 
 query Courses(
-  $courseName: String
-  $courseCode: String
+  $searchTerm: String
   $school: ID
   $subject: ID
   $schoolType: ID
@@ -193,8 +192,7 @@ query Courses(
   $pageSize: Int
 ) {
   courses(
-    courseName: $courseName
-    courseCode: $courseCode
+    searchTerm: $searchTerm
     school: $school
     subject: $subject
     schoolType: $schoolType
