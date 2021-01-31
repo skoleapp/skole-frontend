@@ -6,8 +6,6 @@ import Router from 'next/router';
 import React from 'react';
 import { urls } from 'utils';
 
-// TODO: Implement a history context to detect when we navigate within the app and when the user comes from an external link.
-// When the user comes via an external link, we probably want to hard code this button to navigate to the home page etc. instead of acting like the browsers back button.
 export const BackButton: React.FC<IconButtonProps> = (props) => {
   const { isMobile } = useMediaQueries();
   const { history } = useHistoryContext();

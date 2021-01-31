@@ -6,7 +6,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { BackButton, Emoji } from '../shared';
+import { Emoji } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
@@ -28,11 +28,6 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   },
   cardHeaderTitle: {
     color: palette.text.secondary,
-  },
-  cardHeaderAvatar: {
-    position: 'absolute',
-    top: spacing(2),
-    left: spacing(2),
   },
   cardHeaderAction: {
     position: 'absolute',
@@ -58,7 +53,6 @@ export const ListTemplate: React.FC<Props> = ({
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
-  const renderBackButton = <BackButton />;
   const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
 
   const renderHeaderTitle = (
@@ -72,12 +66,10 @@ export const ListTemplate: React.FC<Props> = ({
     <CardHeader
       classes={{
         root: classes.cardHeaderRoot,
-        avatar: classes.cardHeaderAvatar,
         title: classes.cardHeaderTitle,
         action: classes.cardHeaderAction,
       }}
       title={renderHeaderTitle}
-      avatar={renderBackButton}
       action={listTemplateProps?.renderAction}
     />
   );
