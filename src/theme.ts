@@ -242,7 +242,7 @@ export const theme = createMuiTheme({
         textAlign: 'center',
       },
       title: {
-        fontSize: '1.35rem',
+        fontSize: '1.25rem',
       },
       action: {
         margin: '0 !important',
