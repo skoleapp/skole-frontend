@@ -45,10 +45,15 @@ export const ShareDialog: React.FC = () => {
   const url = customLink || `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`; // Does not work from localhost.
   const whatsAppUrl = `https://api.whatsapp.com/send?text=${url}`;
-  const telegramUrl = `https://t.me/share/url?url=${url}&text=${text}`; // TODO: Ensure this works on QA, this is from: https://core.telegram.org/widgets/share#custom-buttons
+  const telegramUrl = `https://t.me/share/url?url=${url}&text=${text}`;
   const redditUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
   const twitterUrl = `https://twitter.com/share?url=${url}&text=${text}`;
-  const mailUrl = `mailto:?subject=${title}&body=${text}: ${url}`;
+
+  const emailBody = `
+${text}
+${url}`;
+
+  const mailUrl = `mailto:?subject=${title}&body=${encodeURIComponent(emailBody)}`;
 
   const shareEvent = (name: string) => sa_event(`click_${name}_share_link_from_${pathname}`);
   const handleClickMenuItem = (name: string) => () => shareEvent(name);
