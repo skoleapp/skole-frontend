@@ -77,13 +77,13 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  resourcesHeaderRoot: {
+  courseHeaderRoot: {
     borderBottom: BORDER,
   },
   backButton: {
     marginRight: spacing(2),
   },
-  resourcesHeaderTitle: {
+  headerTitle: {
     color: palette.text.secondary,
     flexGrow: 1,
     marginLeft: spacing(2),
@@ -125,7 +125,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
+  const { tabsProps, firstTabPanelProps, secondTabPanelProps } = useTabs();
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const emoji = '🎓';
 
@@ -373,9 +373,9 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </>
   );
 
-  const renderResourcesTitle = (
+  const renderHeaderTitle = (
     <Typography
-      className={clsx('MuiCardHeader-title', classes.resourcesHeaderTitle, 'truncate-text')}
+      className={clsx('MuiCardHeader-title', classes.headerTitle, 'truncate-text')}
       variant="h5"
       align="left"
     >
@@ -383,13 +383,9 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
-  const renderResourcesHeader = (
-    <Grid
-      container
-      className={clsx('MuiCardHeader-root', classes.resourcesHeaderRoot)}
-      wrap="nowrap"
-    >
-      {renderResourcesTitle}
+  const renderCourseHeader = (
+    <Grid container className={clsx('MuiCardHeader-root', classes.courseHeaderRoot)} wrap="nowrap">
+      {renderHeaderTitle}
       {renderStarButton}
       {renderUpvoteButton}
       {renderScore}
@@ -404,21 +400,21 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         <Tab label={`${t('common:resources')} (${resourceCount})`} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderResources}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderDiscussion}</TabPanel>
+      <TabPanel {...firstTabPanelProps}>{renderResources}</TabPanel>
+      <TabPanel {...secondTabPanelProps}>{renderDiscussion}</TabPanel>
     </Paper>
   );
 
   const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.desktopContainer}>
       <Grid item container xs={12} md={6} lg={7} xl={8}>
-        <Paper className={clsx(classes.paperContainer)}>
-          {renderResourcesHeader}
+        <Paper className={classes.paperContainer}>
+          {renderCourseHeader}
           {renderResources}
         </Paper>
       </Grid>
       <Grid item container xs={12} md={6} lg={5} xl={4}>
-        <Paper className={clsx(classes.paperContainer)}>
+        <Paper className={classes.paperContainer}>
           {renderDiscussionHeader}
           {renderDiscussion}
         </Paper>

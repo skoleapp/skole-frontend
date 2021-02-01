@@ -134,7 +134,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { commentCount, createCommentDialogOpen } = useDiscussionContext(initialCommentCount);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
   const { handleCloseActionsDialog } = useActionsContext();
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs();
+  const { tabsProps, firstTabPanelProps, secondTabPanelProps, tabValue, setTabValue } = useTabs();
   const emoji = '📚';
 
   const { stars, renderStarButton } = useStars({
@@ -440,8 +440,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         <Tab label={t('common:resource')} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderPdfViewer}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderDiscussion}</TabPanel>
+      <TabPanel {...firstTabPanelProps}>{renderPdfViewer}</TabPanel>
+      <TabPanel {...secondTabPanelProps}>{renderDiscussion}</TabPanel>
     </Paper>
   );
 

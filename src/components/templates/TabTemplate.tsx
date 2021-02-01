@@ -62,7 +62,7 @@ export const TabTemplate: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
+  const { tabsProps, firstTabPanelProps, secondTabPanelProps } = useTabs();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
@@ -93,8 +93,8 @@ export const TabTemplate: React.FC<Props> = ({
         <Tab label={leftTabLabel} />
         <Tab label={rightTabLabel} />
       </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderLeftTabContent}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderRightTabContent}</TabPanel>
+      <TabPanel {...firstTabPanelProps}>{renderLeftTabContent}</TabPanel>
+      <TabPanel {...secondTabPanelProps}>{renderRightTabContent}</TabPanel>
     </>
   );
 

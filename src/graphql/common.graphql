@@ -468,6 +468,7 @@ query School($id: ID, $page: Int, $pageSize: Int) {
   school(id: $id) {
     id
     name
+    commentCount
     city {
       id
       name
@@ -1022,8 +1023,8 @@ query SuggestionsPreview {
   }
 }
 
-query Discussion($course: ID, $resource: ID) {
-  discussion(course: $course, resource: $resource) {
+query Discussion($course: ID, $resource: ID, $school: ID) {
+  discussion(course: $course, resource: $resource, school: $school) {
     id
     text
     attachment

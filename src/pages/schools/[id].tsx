@@ -1,41 +1,84 @@
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
+import clsx from 'clsx';
 import {
   ActionsButton,
   CourseTableBody,
+  Discussion,
+  DiscussionHeader,
+  Emoji,
   ErrorTemplate,
   IconButtonLink,
   InfoButton,
+  MainTemplate,
   NotFoundBox,
   PaginatedTable,
   ShareButton,
   SubjectTableBody,
-  TabTemplate,
+  TabPanel,
   TextLink,
 } from 'components';
-import { useAuthContext } from 'context';
+import { useAuthContext, useDiscussionContext } from 'context';
 import { SchoolDocument, SchoolQueryResult } from 'generated';
-import { withActions, withInfo, withUserMe } from 'hocs';
-import { useMediaQueries, useSearch } from 'hooks';
+import { withActions, withDiscussion, withInfo, withUserMe } from 'hocs';
+import { useMediaQueries, useSearch, useTabs } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
+import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
+
+const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
+  mobileContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
+  },
+  desktopContainer: {
+    flexGrow: 1,
+  },
+  paperContainer: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    [breakpoints.up('md')]: {
+      borderRadius: BORDER_RADIUS,
+    },
+  },
+  schoolHeaderRoot: {
+    borderBottom: BORDER,
+  },
+  headerTitle: {
+    color: palette.text.secondary,
+    flexGrow: 1,
+    marginLeft: spacing(2),
+  },
+}));
 
 const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   seoProps,
   data,
   error,
 }) => {
+  const classes = useStyles();
   const { verified, verificationRequiredTooltip } = useAuthContext();
   const { t } = useTranslation();
   const { isTabletOrDesktop, isMobile } = useMediaQueries();
   const { searchUrl } = useSearch();
   const { query } = useRouter();
+  const { tabsProps, firstTabPanelProps, secondTabPanelProps, thirdTabPanelProps } = useTabs();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
   const school = R.prop('school', data);
   const schoolId = R.propOr('', 'id', school);
@@ -50,9 +93,11 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const cityId = R.pathOr('', ['city', 'id'], school);
   const subjects = R.pathOr([], ['subjects', 'objects'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
+  const initialCommentCount = R.prop('commentCount', school);
+  const { commentCount } = useDiscussionContext(initialCommentCount);
   const addCourseTooltip = verificationRequiredTooltip || t('school-tooltips:addCourse');
   const header = isTabletOrDesktop && schoolName; // School names are too long to be used as the header on mobile.
-  const emoji = isTabletOrDesktop && '🏫';
+  const emoji = isTabletOrDesktop ? '🏫' : '';
 
   const addCourseHref = {
     pathname: urls.addCourse,
@@ -150,7 +195,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   };
 
   const renderInfoButton = (
-    <InfoButton tooltip="school-tooltips:info" infoDialogParams={infoDialogParams} />
+    <InfoButton tooltip={t('school-tooltips:info')} infoDialogParams={infoDialogParams} />
   );
 
   const actionsDialogParams = {
@@ -160,11 +205,14 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   };
 
   const renderActionsButton = (
-    <ActionsButton tooltip="school-tooltips:actions" actionsDialogParams={actionsDialogParams} />
+    <ActionsButton
+      tooltip={t('school-tooltips:actions')}
+      actionsDialogParams={actionsDialogParams}
+    />
   );
 
   const renderSubjectsTableBody = <SubjectTableBody subjects={subjects} />;
-  const renderCourseTableBody = <CourseTableBody courses={courses} />;
+  const renderCourseTableBody = <CourseTableBody courses={courses} dense />;
 
   const renderSubjectsTable = (
     <PaginatedTable
@@ -184,16 +232,83 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
 
   const renderSubjectsNotFound = <NotFoundBox text={t('school:noSubjects')} />;
   const renderCoursesNotFound = <NotFoundBox text={t('school:noCourses')} />;
-  const renderLeftTabContent = subjects.length ? renderSubjectsTable : renderSubjectsNotFound;
-  const renderRightTabContent = courses.length ? renderCourseTable : renderCoursesNotFound;
+  const renderSubjects = subjects.length ? renderSubjectsTable : renderSubjectsNotFound;
+  const renderCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
 
-  const renderAction = (
+  const renderDiscussionHeader = (
+    <DiscussionHeader
+      renderShareButton={renderShareButton}
+      renderInfoButton={renderInfoButton}
+      renderActionsButton={renderActionsButton}
+    />
+  );
+
+  const renderDiscussion = <Discussion school={school} noCommentsText={t('school:noComments')} />;
+  const renderEmoji = <Emoji emoji={emoji} />;
+
+  const renderHeader = (
     <>
-      {renderAddCourseButton}
-      {renderShareButton}
-      {renderInfoButton}
-      {renderActionsButton}
+      {schoolName}
+      {renderEmoji}
     </>
+  );
+
+  const renderHeaderTitle = (
+    <Typography
+      className={clsx('MuiCardHeader-title', classes.headerTitle, 'truncate-text')}
+      variant="h5"
+      align="left"
+    >
+      {renderHeader}
+    </Typography>
+  );
+
+  const renderSchoolHeader = (
+    <Grid container className={clsx('MuiCardHeader-root', classes.schoolHeaderRoot)} wrap="nowrap">
+      {renderHeaderTitle}
+      {renderAddCourseButton}
+    </Grid>
+  );
+
+  const renderSchoolContent = (
+    <>
+      <Tabs {...tabsProps}>
+        <Tab label={`${t('common:subjects')} (${subjectCount})`} />
+        <Tab label={`${t('common:courses')} (${courseCount})`} />
+      </Tabs>
+      <TabPanel {...firstTabPanelProps}>{renderSubjects}</TabPanel>
+      <TabPanel {...secondTabPanelProps}>{renderCourses}</TabPanel>
+    </>
+  );
+
+  const renderMobileContent = isMobile && (
+    <Paper className={classes.mobileContainer}>
+      <Tabs {...tabsProps}>
+        <Tab label={`${t('common:subjects')} (${subjectCount})`} wrapped />
+        <Tab label={`${t('common:courses')} (${courseCount})`} wrapped />
+        <Tab label={`${t('common:discussion')} (${commentCount})`} wrapped />
+      </Tabs>
+      <TabPanel {...firstTabPanelProps}>{renderSubjects}</TabPanel>
+      <TabPanel {...secondTabPanelProps}>{renderCourses}</TabPanel>
+      <TabPanel {...thirdTabPanelProps}>{renderDiscussion}</TabPanel>
+    </Paper>
+  );
+
+  const renderDesktopContent = isTabletOrDesktop && (
+    <Grid container spacing={2} className={classes.desktopContainer}>
+      <Grid item container xs={12} md={6} lg={7} xl={8}>
+        <Paper className={classes.paperContainer}>
+          {renderSchoolHeader}
+          {renderSchoolContent}
+        </Paper>
+      </Grid>
+      <Grid item container xs={12} md={6} lg={5} xl={4}>
+        <Paper className={classes.paperContainer}>
+          {renderDiscussionHeader}
+          {renderDiscussion}
+        </Paper>
+      </Grid>
+    </Grid>
   );
 
   const layoutProps = {
@@ -205,13 +320,6 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
     },
-    tabTemplateProps: {
-      leftTabLabel: `${t('common:subjects')} (${subjectCount})`,
-      rightTabLabel: `${t('common:courses')} (${courseCount})`,
-      renderLeftTabContent,
-      renderRightTabContent,
-      renderAction,
-    },
   };
 
   if (!!error && !!error.networkError) {
@@ -222,7 +330,12 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
-  return <TabTemplate {...layoutProps} />;
+  return (
+    <MainTemplate {...layoutProps}>
+      {renderMobileContent}
+      {renderDesktopContent}
+    </MainTemplate>
+  );
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -231,6 +344,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: 'blocking',
   };
 };
+
+const namespaces = ['school', 'school-tooltips', 'discussion', 'discussion-tooltips'];
 
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
@@ -262,7 +377,7 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   return {
     props: {
       initialApolloState: apolloClient.cache.extract(),
-      _ns: await loadNamespaces(['school', 'school-tooltips'], locale),
+      _ns: await loadNamespaces(namespaces, locale),
       seoProps,
       data,
       error,
@@ -271,6 +386,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   };
 };
 
-const withWrappers = R.compose(withUserMe, withActions, withInfo);
+const withWrappers = R.compose(withUserMe, withActions, withInfo, withDiscussion);
 
 export default withWrappers(SchoolDetailPage);

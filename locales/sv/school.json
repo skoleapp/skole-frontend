@@ -6,5 +6,6 @@
   "shareHeader": "Dela skolan",
   "shareTitle": "{{ schoolName }} på Skole",
   "shareText": "Visa {{ schoolName }} på Skole",
-  "share": "Dela skolan"
+  "share": "Dela skolan",
+  "noComments": "Den här skolan har inga kommentarer. Lägg till en kommentar nedan!"
 }

@@ -6,5 +6,6 @@
   "shareHeader": "Jaa koulu",
   "shareTitle": "{{ schoolName }} Skolessa",
   "shareText": "Näytä {{ schoolName }} Skolessa",
-  "share": "Jaa koulu"
+  "share": "Jaa koulu",
+  "noComments": "Tällä koululla ei ole kommentteja. Lisää kommentti alta!"
 }
