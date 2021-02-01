@@ -42,25 +42,25 @@ export const SubjectTableRow: React.FC<Props> = ({
   const renderMobileSubjectStats = isMobile && (
     <TableCell className={classes.tableCell}>
       <Grid container>
-        <Grid item xs={12} container>
-          <Grid item xs={4} container>
-            <Grid item xs={2} container alignItems="center">
-              <Typography variant="subtitle1">{courseCount}</Typography>
-            </Grid>
-            <Grid item xs={10} container alignItems="center">
+        <Grid item xs={12} container spacing={4}>
+          <Grid item xs={6} container>
+            <Grid item xs={8} sm={10} container alignItems="center">
               <Typography variant="body2" color="textSecondary">
                 {coursesLabel}
               </Typography>
             </Grid>
-          </Grid>
-          <Grid item xs={4} container>
-            <Grid item xs={2} container alignItems="center">
-              <Typography variant="subtitle1">{resourceCount}</Typography>
+            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+              <Typography variant="subtitle1">{courseCount}</Typography>
             </Grid>
-            <Grid item xs={10} container alignItems="center">
+          </Grid>
+          <Grid item xs={6} container>
+            <Grid item xs={8} sm={10} container alignItems="center">
               <Typography variant="body2" color="textSecondary">
                 {resourcesLabel}
               </Typography>
+            </Grid>
+            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+              <Typography variant="subtitle1">{resourceCount}</Typography>
             </Grid>
           </Grid>
         </Grid>

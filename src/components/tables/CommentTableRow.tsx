@@ -103,25 +103,25 @@ export const CommentTableRow: React.FC<Props> = ({
 
   const renderMobileCommentStats = isMobile && (
     <TableCell className={classes.tableCell}>
-      <Grid container alignItems="center">
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{score}</Typography>
-          </Grid>
-          <Grid item xs={10} container alignItems="center">
+      <Grid container spacing={4}>
+        <Grid item xs={6} container>
+          <Grid item xs={8} sm={10} container alignItems="center">
             <Typography variant="body2" color="textSecondary">
               {scoreLabel}
             </Typography>
           </Grid>
-        </Grid>
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{replyCount}</Typography>
+          <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+            <Typography variant="subtitle1">{score}</Typography>
           </Grid>
-          <Grid item xs={10} container alignItems="center">
+        </Grid>
+        <Grid item xs={6} container>
+          <Grid item xs={8} sm={10} container alignItems="center">
             <Typography variant="body2" color="textSecondary">
               {repliesLabel}
             </Typography>
+          </Grid>
+          <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+            <Typography variant="subtitle1">{replyCount}</Typography>
           </Grid>
         </Grid>
       </Grid>

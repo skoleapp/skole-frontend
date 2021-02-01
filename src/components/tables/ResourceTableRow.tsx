@@ -88,47 +88,47 @@ export const ResourceTableRow: React.FC<Props> = ({
   const renderMobileResourceStats = isMobile && (
     <TableCell className={classes.tableCell}>
       <Grid container>
-        <Grid item xs={12} container>
-          <Grid item xs={4} container>
-            <Grid item xs={2} container alignItems="center">
-              <Typography variant="subtitle1">{score}</Typography>
-            </Grid>
-            <Grid item xs={10} container alignItems="center">
+        <Grid item xs={12} container spacing={4}>
+          <Grid item xs={6} container>
+            <Grid item xs={8} sm={10} container alignItems="center">
               <Typography variant="body2" color="textSecondary">
                 {scoreLabel}
               </Typography>
             </Grid>
-          </Grid>
-          <Grid item xs={4} container>
-            <Grid item xs={2} container alignItems="center">
-              <Typography variant="subtitle1">{commentCount}</Typography>
+            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+              <Typography variant="subtitle1">{score}</Typography>
             </Grid>
-            <Grid item xs={10} container alignItems="center">
+          </Grid>
+          <Grid item xs={6} container>
+            <Grid item xs={8} sm={10} container alignItems="center">
               <Typography variant="body2" color="textSecondary">
                 {commentsLabel}
               </Typography>
             </Grid>
+            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+              <Typography variant="subtitle1">{commentCount}</Typography>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} container>
-          <Grid item xs={4} container>
-            <Grid item xs={2} container alignItems="center">
-              <Typography variant="subtitle1">{starCount}</Typography>
-            </Grid>
-            <Grid item xs={10} container alignItems="center">
+        <Grid item xs={12} container spacing={4}>
+          <Grid item xs={6} container>
+            <Grid item xs={8} sm={10} container alignItems="center">
               <Typography variant="body2" color="textSecondary">
                 {starsLabel}
               </Typography>
             </Grid>
-          </Grid>
-          <Grid item xs={4} container>
-            <Grid item xs={2} container alignItems="center">
-              <Typography variant="subtitle1">{downloads}</Typography>
+            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+              <Typography variant="subtitle1">{starCount}</Typography>
             </Grid>
-            <Grid item xs={10} container alignItems="center">
+          </Grid>
+          <Grid item xs={6} container>
+            <Grid item xs={8} sm={10} container alignItems="center">
               <Typography variant="body2" color="textSecondary">
                 {downloadsLabel}
               </Typography>
+            </Grid>
+            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+              <Typography variant="subtitle1">{downloads}</Typography>
             </Grid>
           </Grid>
         </Grid>
