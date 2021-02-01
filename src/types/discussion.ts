@@ -1,13 +1,17 @@
-import { UserObjectType } from 'generated';
+import {
+  CommentObjectType,
+  CourseObjectType,
+  ResourceObjectType,
+  SchoolObjectType,
+  UserObjectType,
+} from 'generated';
 
-export interface CommentTarget {
-  course: string | null;
-  resource: string | null;
-  comment: string | null;
-}
-
-export interface CreateCommentFormValues extends CommentTarget {
+export interface CreateCommentFormValues {
   user: UserObjectType | null;
   text: string;
   attachment: string | null;
+  course: CourseObjectType | null;
+  resource: ResourceObjectType | null;
+  comment: CommentObjectType | null;
+  school: SchoolObjectType | null;
 }

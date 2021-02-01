@@ -127,6 +127,7 @@ mutation CreateComment(
   $course: ID
   $resource: ID
   $comment: ID
+  $school: ID
 ) {
   createComment(
     input: {
@@ -136,6 +137,7 @@ mutation CreateComment(
       course: $course
       resource: $resource
       comment: $comment
+      school: $school
     }
   ) {
     successMessage
@@ -1035,6 +1037,7 @@ query Discussion($course: ID, $resource: ID) {
       id
       text
       attachment
+      attachmentThumbnail
       created
       score
       user {

@@ -431,11 +431,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderDiscussion = (
-    <Discussion
-      resource={resourceId}
-      noCommentsText={t('resource:noComments')}
-      resourceTitle={title}
-    />
+    <Discussion resource={resource} noCommentsText={t('resource:noComments')} />
   );
 
   const renderMobileContent = isMobile && (

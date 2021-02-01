@@ -15,6 +15,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import TableFooter from '@material-ui/core/TableFooter';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import { ChatOutlined } from '@material-ui/icons';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
@@ -243,17 +244,22 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shortcuts = [
     {
-      text: 'common:findContent',
+      text: 'home:addComment',
+      icon: ChatOutlined,
+      href: urls.addComment,
+    },
+    {
+      text: 'home:findContent',
       icon: AssignmentOutlined,
       href: searchUrl,
     },
     {
-      text: 'common:uploadMaterial',
+      text: 'home:uploadMaterial',
       icon: CloudUploadOutlined,
       href: urls.uploadResource,
     },
     {
-      text: 'common:addCourses',
+      text: 'home:addCourses',
       icon: SchoolOutlined,
       href: urls.addCourse,
     },

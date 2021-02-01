@@ -21,7 +21,7 @@ import { ResponsiveDialog } from '../dialogs';
 const useStyles = makeStyles(({ spacing }) => ({
   button: {
     borderRadius: '0.25rem',
-    padding: spacing(2),
+    padding: `${spacing(2)} ${spacing(4)}`,
     textTransform: 'none',
     textAlign: 'left',
   },

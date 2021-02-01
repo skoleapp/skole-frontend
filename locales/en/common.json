@@ -84,7 +84,6 @@
   "postedBy": "Posted by",
   "product": "Product",
   "updates": "Updates",
-  "findContent": "Find Content",
-  "uploadMaterial": "Upload Material",
-  "addCourses": "Add Courses"
+  "unexpectedError": "Unexpected error.",
+  "addComment": "Add Comment"
 }

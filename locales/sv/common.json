@@ -84,7 +84,6 @@
   "postedBy": "Postat av",
   "product": "Produkt",
   "updates": "Updates",
-  "findContent": "Hitta innehåll",
-  "uploadMaterial": "Ladda upp material",
-  "addCourses": "Lägg till kurser"
+  "unexpectedError": "Oväntat fel.",
+  "addComment": "Lägg till kommentar"
 }

@@ -15,6 +15,7 @@ export const urls = {
   contact: '/contact',
   forTeachers: '/for-teachers',
   addCourse: '/add-course',
+  addComment: '/add-comment',
   index: '/',
   guidelines: '/guidelines',
   home: '/home',

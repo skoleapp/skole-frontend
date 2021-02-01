@@ -1,6 +1,7 @@
 import { CommentObjectType } from 'generated';
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { DiscussionContextType } from 'types';
+import { useForm } from 'hooks';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { CreateCommentFormValues, DiscussionContextType } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const DiscussionContext = createContext<DiscussionContextType>({});
@@ -21,6 +22,8 @@ export const DiscussionContextProvider: React.FC = ({ children }) => {
   const [createCommentDialogOpen, setCreateCommentDialogOpen] = useState(false);
   const [attachmentViewerValue, setAttachmentViewerValue] = useState<string | null>(null); // Attachment of an existing comment.
   const [commentAttachment, setCommentAttachment] = useState<string | ArrayBuffer | null>(null); // Attachment for comment creation form.
+  const attachmentInputRef = useRef<HTMLInputElement>(null!);
+  const { formRef } = useForm<CreateCommentFormValues>();
 
   const value = {
     comments,
@@ -33,6 +36,8 @@ export const DiscussionContextProvider: React.FC = ({ children }) => {
     setAttachmentViewerValue,
     commentAttachment,
     setCommentAttachment,
+    attachmentInputRef,
+    formRef,
   };
 
   return <DiscussionContext.Provider value={value}>{children}</DiscussionContext.Provider>;

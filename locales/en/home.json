@@ -1,6 +1,10 @@
 {
   "title": "Home",
   "subheader": "Try searching for a course!",
+  "addComment": "Add Comment",
+  "findContent": "Find Content",
+  "uploadMaterial": "Upload Material",
+  "addCourses": "Add Courses",
   "suggestionsHeader": "Trending",
   "nextStepsHeader": "Next Steps",
   "inviteHeader": "Skole is all about collaboration. Invite your friends!",

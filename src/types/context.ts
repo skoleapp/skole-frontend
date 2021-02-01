@@ -1,8 +1,10 @@
+import { FormikProps } from 'formik';
 import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 
 import { ActionsDialogParams, InfoDialogParams, ShareDialogParams } from './dialogs';
+import { CreateCommentFormValues } from './discussion';
 
 export interface AuthContextType {
   userMe: UserObjectType | null;
@@ -75,6 +77,8 @@ export interface DiscussionContextType {
   setAttachmentViewerValue: Dispatch<SetStateAction<string | null>>;
   commentAttachment: string | ArrayBuffer | null;
   setCommentAttachment: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
+  attachmentInputRef: MutableRefObject<HTMLInputElement>;
+  formRef: MutableRefObject<FormikProps<CreateCommentFormValues> | null>;
 }
 
 export interface ConfirmOptions {

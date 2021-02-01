@@ -84,7 +84,6 @@
   "postedBy": "Lähettänyt",
   "product": "Tuote",
   "updates": "Updates",
-  "findContent": "Löydä sisältöä",
-  "uploadMaterial": "Lisää materiaalia",
-  "addCourses": "Lisää kursseja"
+  "unexpectedError": "Odottamaton virhe.",
+  "addComment": "Lisää kommentti"
 }

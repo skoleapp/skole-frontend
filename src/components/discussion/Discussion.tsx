@@ -1,4 +1,3 @@
-import { useDiscussionLazyQuery } from '__generated__/src/graphql/common.graphql';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
@@ -7,13 +6,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddOutlined from '@material-ui/icons/AddOutlined';
 import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
-import { CommentObjectType, DiscussionQuery } from 'generated';
+import {
+  CommentObjectType,
+  CourseObjectType,
+  DiscussionQuery,
+  ResourceObjectType,
+  SchoolObjectType,
+  useDiscussionLazyQuery,
+} from 'generated';
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'theme';
-import { CommentTarget } from 'types';
 
 import { ErrorBox, LoadingBox, NotFoundBox } from '../shared';
 import { CommentCard } from './CommentCard';
@@ -66,25 +71,17 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 }));
 
 interface Props {
-  course?: string;
-  resource?: string;
+  course?: CourseObjectType;
+  resource?: ResourceObjectType;
+  school?: SchoolObjectType;
   noCommentsText?: string;
-  courseName?: string;
-  resourceTitle?: string;
 }
-
-const initialTarget = {
-  course: null,
-  resource: null,
-  comment: null,
-};
 
 export const Discussion: React.FC<Props> = ({
   course = null,
   resource = null,
+  school = null,
   noCommentsText,
-  courseName,
-  resourceTitle,
 }) => {
   const classes = useStyles();
   const { query } = useRouter();
@@ -92,9 +89,7 @@ export const Discussion: React.FC<Props> = ({
   const { t } = useTranslation();
   const messageAreaRef = useRef<HTMLDivElement>(null);
   const context = useLanguageHeaderContext();
-  const variables = { course, resource };
-  const [target, setTarget] = useState<CommentTarget>(initialTarget);
-  const [replyToUsername, setReplyToUsername] = useState('');
+  const [comment, setComment] = useState<CommentObjectType | null>(null);
   const [prevCommentCount, setPrevCommentCount] = useState(0);
   const [visibleComments, setVisibleComments] = useState(10);
   const [loadingMoreComments, setLoadingMoreComments] = useState(false);
@@ -108,6 +103,12 @@ export const Discussion: React.FC<Props> = ({
 
   const onCompleted = ({ discussion }: DiscussionQuery) =>
     setComments(discussion as CommentObjectType[]);
+
+  const variables = {
+    course: course?.id,
+    resource: resource?.id,
+    school: school?.id,
+  };
 
   const [discussionQuery, { loading, error }] = useDiscussionLazyQuery({
     variables,
@@ -173,32 +174,17 @@ export const Discussion: React.FC<Props> = ({
     !query.comment && comments.length === visibleComments && scrollToBottom();
   }, [comments, visibleComments, query]);
 
-  useEffect(() => {
-    setTarget({
-      ...target,
-      course,
-      resource,
-    });
-  }, [course, resource]);
-
   //   When loading more visibleComments, scroll to bottom.
   useEffect(() => {
     !!loadingMoreComments && scrollToBottom();
   }, [loadingMoreComments, isMobile]);
 
   const handleClickCreateComment = () => setCreateCommentDialogOpen(true);
-
-  const handleResetCommentTarget = () =>
-    setTarget({
-      ...initialTarget,
-      course,
-      resource,
-    });
+  const handleResetCommentTarget = () => setComment(null);
 
   const handleClickReplyButton = (comment: CommentObjectType) => () => {
     setCreateCommentDialogOpen(true);
-    setReplyToUsername(comment.user?.username || t('common:communityUser'));
-    setTarget({ ...initialTarget, comment: comment.id });
+    setComment(comment);
   };
 
   const handleDesktopMessageAreaScroll = () => {
@@ -277,22 +263,21 @@ export const Discussion: React.FC<Props> = ({
     </Grid>
   );
 
-  const placeholder = courseName
-    ? t('forms:postToCourse', { courseName })
-    : resourceTitle
-    ? t('forms:postToResource', { resourceTitle })
-    : '';
-
-  const dialogPlaceholder =
-    (!!target.comment && !!replyToUsername && t('forms:replyTo', { username: replyToUsername })) ||
-    placeholder;
+  const placeholder =
+    (!!comment &&
+      t('forms:replyTo', { username: comment.user?.username || t('common:communityUser') })) ||
+    t('forms:postTo', {
+      target: course?.name || resource?.title || school?.name || '',
+    });
 
   const renderInputArea = (
     <CreateCommentForm
-      target={target}
+      course={course}
+      resource={resource}
+      school={school}
+      comment={comment}
       onCommentCreated={discussionQuery}
       placeholder={placeholder}
-      dialogPlaceholder={dialogPlaceholder}
       resetCommentTarget={handleResetCommentTarget}
     />
   );

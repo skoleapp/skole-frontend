@@ -1,4 +1,11 @@
+export { AuthorSelection } from './AuthorSelection';
+export { ClearCommentAttachmentButton } from './ClearCommentAttachmentButton';
+export { CommentAttachmentButton } from './CommentAttachmentButton';
+export { CommentAttachmentInput } from './CommentAttachmentInput';
 export { CommentCard } from './CommentCard';
+export { CommentTextField } from './CommentTextField';
+export { CommentTextFieldHelperText } from './CommentTextFieldHelperText';
+export { CommentTextFieldToolbar } from './CommentTextFieldToolbar';
 export { CreateCommentForm } from './CreateCommentForm';
 export { Discussion } from './Discussion';
 export { DiscussionHeader } from './DiscussionHeader';

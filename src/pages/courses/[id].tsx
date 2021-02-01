@@ -285,9 +285,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     />
   );
 
-  const renderDiscussion = (
-    <Discussion course={courseId} noCommentsText={t('course:noComments')} courseName={courseName} />
-  );
+  const renderDiscussion = <Discussion course={course} noCommentsText={t('course:noComments')} />;
 
   const renderScore = (
     <Typography className={classes.score} variant="subtitle1" color="textSecondary">
