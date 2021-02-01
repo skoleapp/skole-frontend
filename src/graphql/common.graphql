@@ -141,6 +141,12 @@ mutation CreateComment(
     }
   ) {
     successMessage
+    comment {
+      id
+      school {
+        id
+      }
+    }
     errors {
       field
       messages

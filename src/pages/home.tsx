@@ -244,22 +244,22 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shortcuts = [
     {
-      text: 'home:addComment',
+      text: 'common:addComment',
       icon: ChatOutlined,
       href: urls.addComment,
     },
     {
-      text: 'home:findContent',
+      text: 'common:findContent',
       icon: AssignmentOutlined,
       href: searchUrl,
     },
     {
-      text: 'home:uploadMaterial',
+      text: 'common:uploadMaterial',
       icon: CloudUploadOutlined,
       href: urls.uploadResource,
     },
     {
-      text: 'home:addCourses',
+      text: 'common:addCourses',
       icon: SchoolOutlined,
       href: urls.addCourse,
     },

@@ -85,5 +85,8 @@
   "product": "Tuote",
   "updates": "Updates",
   "unexpectedError": "Odottamaton virhe.",
-  "addComment": "Lisää kommentti"
+  "addComment": "Lisää kommentti",
+  "findContent": "Löydä sisältöä",
+  "uploadMaterial": "Lisää materiaalia",
+  "addCourses": "Lisää kursseja"
 }
