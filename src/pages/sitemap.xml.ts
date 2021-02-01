@@ -93,8 +93,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
   for (const fileName of blogFileNames) {
     const path = urls.blog(fileName.replace(/\.md$/, ''));
-    // This is quite inefficient to get the blog creation date by rendering the whole
-    // markdown file. Maybe the date could be part of the filename already?
     const { date } = (await loadMarkdown(path)).data;
 
     paths.push({
@@ -107,8 +105,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
   for (const fileName of productUpdateFileNames) {
     const path = urls.update(fileName.replace(/\.md$/, ''));
-    // This is quite inefficient to get the product update creation date by rendering the whole
-    // markdown file. Maybe the date could be part of the filename already?
     const { date } = (await loadMarkdown(path)).data;
 
     paths.push({
