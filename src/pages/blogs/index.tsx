@@ -10,6 +10,7 @@ import { getT, loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import * as R from 'ramda';
 import React from 'react';
 import { MarkdownPageData, SeoPageProps } from 'types';
 import { urls } from 'utils';
@@ -21,7 +22,9 @@ interface Props extends SeoPageProps {
 const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   const { t } = useTranslation();
 
-  const mapBlogs = blogs.map(
+  const sortedBlogs: MarkdownPageData[] = R.sortBy(R.prop('date'), blogs).reverse();
+
+  const mapBlogs = sortedBlogs.map(
     ({ title, excerpt, coverImage = '', author, date, minutesToRead = 0, slug = '' }, i) => (
       <Link href={urls.blog(slug)}>
         <ListItem key={i} button>

@@ -10,6 +10,7 @@ import { getT, loadMarkdown, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import * as R from 'ramda';
 import React from 'react';
 import { MarkdownPageData, SeoPageProps } from 'types';
 import { urls } from 'utils';
@@ -21,32 +22,36 @@ interface Props extends SeoPageProps {
 const UpdatesPage: NextPage<Props> = ({ seoProps, updates }) => {
   const { t } = useTranslation();
 
-  const mapUpdates = updates.map(({ title, excerpt, coverImage = '', date, slug = '' }, i) => (
-    <Link href={urls.update(slug)}>
-      <ListItem key={i} button>
-        <Grid container spacing={4}>
-          <Grid item xs={9}>
-            <Grid container>
-              <Grid item xs={12}>
-                <Typography variant="h5">{title}</Typography>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  {excerpt}
+  const sortedUpdates: MarkdownPageData[] = R.sortBy(R.prop('date'), updates).reverse();
+
+  const mapUpdates = sortedUpdates.map(
+    ({ title, excerpt, coverImage = '', date, slug = '' }, i) => (
+      <Link href={urls.update(slug)}>
+        <ListItem key={i} button>
+          <Grid container spacing={4}>
+            <Grid item xs={9}>
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography variant="h5">{title}</Typography>
+                  <Typography variant="body2" color="textSecondary" gutterBottom>
+                    {excerpt}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Typography variant="body2" color="textSecondary">
+                  {useDayjs(date).format('LL')}
                 </Typography>
               </Grid>
             </Grid>
-            <Grid container>
-              <Typography variant="body2" color="textSecondary">
-                {useDayjs(date).format('LL')}
-              </Typography>
+            <Grid item xs={3} container justify="flex-end" alignItems="center">
+              <Image width={140} height={100} src={coverImage} />
             </Grid>
           </Grid>
-          <Grid item xs={3} container justify="flex-end" alignItems="center">
-            <Image width={140} height={100} src={coverImage} />
-          </Grid>
-        </Grid>
-      </ListItem>
-    </Link>
-  ));
+        </ListItem>
+      </Link>
+    ),
+  );
 
   const layoutProps = {
     seoProps,
