@@ -111,11 +111,17 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
     !!searchKey && fetchOptions();
   }, [inputValue]);
 
+  // Close the options when clearing the value.
+  const handleClearSelection = () => {
+    form.setFieldValue(name, null);
+    handleClose();
+  };
+
   const handleAutocompleteChange = <T extends Record<symbol, unknown>>(
     _e: ChangeEvent<T>,
     val: T | T[] | null,
   ): void => {
-    val ? form.setFieldValue(name, val) : form.setFieldValue(name, null);
+    val ? form.setFieldValue(name, val) : handleClearSelection();
   };
 
   const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
