@@ -19,10 +19,12 @@ import { withDiscussion, withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import Router from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
 import { CommentAttachmentPreview } from 'src/components/discussion/CommentAttachmentPreview';
 import { CreateCommentFormValues, SeoPageProps } from 'types';
+import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
@@ -32,14 +34,22 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const context = useLanguageHeaderContext();
   const { setCommentAttachment, formRef } = useDiscussionContext();
 
-  const onCompleted = ({ createComment }: CreateCommentMutation): void => {
+  const onCompleted = async ({ createComment }: CreateCommentMutation): Promise<void> => {
     if (createComment) {
       if (!!createComment.errors && !!createComment.errors.length) {
         toggleUnexpectedErrorNotification();
-      } else if (createComment.successMessage) {
+      } else if (!!createComment.successMessage && !!createComment.comment?.school) {
         formRef.current?.resetForm();
         setCommentAttachment(null);
         toggleNotification(createComment.successMessage);
+
+        await Router.push({
+          pathname: urls.school(createComment.comment.school.id),
+          query: {
+            comment: createComment.comment.id,
+          },
+        });
+
         sa_event('create_comment');
       } else {
         toggleUnexpectedErrorNotification();
