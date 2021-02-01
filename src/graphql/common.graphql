@@ -942,7 +942,7 @@ query Suggestions {
     ... on CommentObjectType {
       id
       text
-      attachment
+      attachmentThumbnail
       created
       score
       replyCount
@@ -1003,7 +1003,7 @@ query SuggestionsPreview {
     ... on CommentObjectType {
       id
       text
-      attachment
+      attachmentThumbnail
       created
       score
       replyCount
