@@ -17,8 +17,8 @@ import { BORDER } from 'theme';
 import { urls } from 'utils';
 
 import { Emoji } from '../shared';
-import { DrawModeButton } from './DrawModeButton';
-import { DrawModeControls } from './DrawModeControls';
+import { DrawingModeButton } from './DrawingModeButton';
+import { DrawingModeControls } from './DrawingModeControls';
 import { RotateButton } from './RotateButton';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
@@ -62,8 +62,8 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   const { t } = useTranslation();
   const { drawingMode, controlsDisabled } = usePdfViewerContext();
 
-  const renderDrawModeButton = <DrawModeButton />;
-  const renderDrawModeControls = <DrawModeControls />;
+  const renderDrawingModeButton = <DrawingModeButton />;
+  const renderDrawingModeControls = <DrawingModeControls />;
   const renderRotateButton = <RotateButton />;
 
   const renderBackButton = (
@@ -122,13 +122,13 @@ export const ResourceTopToolbar: React.FC<Props> = ({
       {renderUpvoteButton}
       {renderScore}
       {renderDownvoteButton}
-      {renderDrawModeButton}
+      {renderDrawingModeButton}
       {renderRotateButton}
       {renderDownloadButton}
       {renderPrintButton}
     </Grid>
   );
 
-  const renderControls = drawingMode ? renderDrawModeControls : renderDefaultToolbarControls;
+  const renderControls = drawingMode ? renderDrawingModeControls : renderDefaultToolbarControls;
   return <Box className={clsx('MuiCardHeader-root', classes.root)}>{renderControls}</Box>;
 };

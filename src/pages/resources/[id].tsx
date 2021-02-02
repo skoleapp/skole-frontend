@@ -16,8 +16,8 @@ import {
   CustomBottomNavbarContainer,
   Discussion,
   DiscussionHeader,
-  DrawModeButton,
-  DrawModeControls,
+  DrawingModeButton,
+  DrawingModeControls,
   ErrorTemplate,
   InfoButton,
   LoadingBox,
@@ -309,7 +309,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   ];
 
-  const renderDrawModeControls = <DrawModeControls />;
+  const renderDrawingModeControls = <DrawingModeControls />;
 
   const shareDialogParams = {
     header: t('resource:shareHeader'),
@@ -370,7 +370,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   // Hide these buttons from the custom bottom navbar when in discussion tab.
-  const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
+  const renderDrawingModeButton = tabValue === 0 && <DrawingModeButton />;
   const renderRotateButton = tabValue === 0 && <RotateButton />;
 
   const renderScore = (
@@ -383,7 +383,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
         {renderRotateButton}
-        {renderDrawModeButton}
+        {renderDrawingModeButton}
       </Grid>
       <Grid item xs={6} container justify="flex-end">
         {renderStarButton}
@@ -395,7 +395,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderCustomBottomNavbarContent = drawingMode
-    ? renderDrawModeControls
+    ? renderDrawingModeControls
     : renderDefaultCustomBottomNavbarContent;
 
   // Only render the custom bottom navbar in the resource tab or if the user is verified since all of the non-PDF actions are only available for verified users.
