@@ -1,6 +1,9 @@
 import { useCourseQuery } from '__generated__/src/graphql/common.graphql';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Grid from '@material-ui/core/Grid';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
@@ -11,12 +14,12 @@ import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import clsx from 'clsx';
 import {
   ActionsButton,
+  ButtonLink,
   CustomBottomNavbarContainer,
   Discussion,
   DiscussionHeader,
   Emoji,
   ErrorTemplate,
-  IconButtonLink,
   InfoButton,
   LoadingTemplate,
   MainTemplate,
@@ -92,6 +95,10 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     marginLeft: spacing(2),
     marginRight: spacing(2),
   },
+  uploadResourceButton: {
+    minWidth: 'auto',
+    whiteSpace: 'nowrap',
+  },
 }));
 
 const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
@@ -128,9 +135,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { tabsProps, firstTabPanelProps, secondTabPanelProps } = useTabs();
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const emoji = '🎓';
-
-  const uploadResourceButtonTooltip =
-    verificationRequiredTooltip || t('course-tooltips:uploadResource');
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -259,6 +263,15 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <InfoButton tooltip={t('course-tooltips:info')} infoDialogParams={infoDialogParams} />
   );
 
+  const renderUploadResourceAction = (
+    <MenuItem>
+      <ListItemIcon>
+        <CloudUploadOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('common:uploadMaterial')}</ListItemText>
+    </MenuItem>
+  );
+
   const actionsDialogParams = {
     shareDialogParams,
     deleteActionParams: {
@@ -268,6 +281,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
     shareText: t('course:share'),
     hideDeleteAction: !isOwner,
+    renderCustomActions: [renderUploadResourceAction],
   };
 
   const renderActionsButton = (
@@ -278,11 +292,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderDiscussionHeader = (
-    <DiscussionHeader
-      renderShareButton={renderShareButton}
-      renderInfoButton={renderInfoButton}
-      renderActionsButton={renderActionsButton}
-    />
+    <DiscussionHeader renderShareButton={renderShareButton} renderInfoButton={renderInfoButton} />
   );
 
   const renderDiscussion = <Discussion course={course} noCommentsText={t('course:noComments')} />;
@@ -349,17 +359,20 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   };
 
-  // Do not render a disabled button at all on mobile.
-  const renderUploadResourceButton = (!!verified || isTabletOrDesktop) && (
-    <Tooltip title={uploadResourceButtonTooltip}>
+  // On desktop, render a disabled button for non-verified users.
+  const renderUploadResourceButton = isTabletOrDesktop && (
+    <Tooltip title={verificationRequiredTooltip || ''}>
       <Typography component="span">
-        <IconButtonLink
+        <ButtonLink
+          className={classes.uploadResourceButton}
           href={uploadResourceHref}
-          icon={CloudUploadOutlined}
           disabled={verified === false}
-          color={isMobile ? 'secondary' : 'default'}
+          color="primary"
           size="small"
-        />
+          endIcon={<CloudUploadOutlined />}
+        >
+          {t('common:uploadMaterial')}
+        </ButtonLink>
       </Typography>
     </Tooltip>
   );
@@ -427,7 +440,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     topNavbarProps: {
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
-      renderHeaderLeft: renderUploadResourceButton,
     },
     customBottomNavbar: renderCustomBottomNavbar,
   };

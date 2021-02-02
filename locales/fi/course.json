@@ -1,7 +1,7 @@
 {
   "description": "Näytä {{ courseName }} - {{ courseCode }} Skolessa.",
-  "noResources": "Tällä kurssilla ei ole resursseja.",
-  "noResourcesLink": "Lisää resurssi täältä!",
+  "noResources": "Tällä kurssilla ei ole materiaaleja.",
+  "noResourcesLink": "Lisää materiaaleja täältä!",
   "noComments": "Tällä kurssilla ei ole kommentteja. Lisää kommentti alta!",
   "shareHeader": "Jaa kurssi",
   "shareTitle": "{{ courseName }} Skolessa",
