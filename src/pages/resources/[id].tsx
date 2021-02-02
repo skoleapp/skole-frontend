@@ -162,9 +162,9 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     createCommentDialogOpen && tabValue === 0 && setTabValue(1);
   }, [createCommentDialogOpen, tabValue]);
 
-  // If drawing mode is on and user changes to discussion tab, toggle drawing mode off.
+  // If drawing mode is on and user changes to discussion tab on mobile, toggle drawing mode off.
   useEffect(() => {
-    drawingMode && tabValue === 1 && setDrawingMode(false);
+    isMobile && drawingMode && tabValue === 1 && setDrawingMode(false);
   }, [drawingMode, tabValue]);
 
   useEffect(() => {
