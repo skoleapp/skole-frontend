@@ -280,6 +280,13 @@ export const theme = createMuiTheme({
         height: '100%',
       },
     },
+    MuiAvatar: {
+      root: {
+        '& img': {
+          borderRadius: '50%',
+        },
+      },
+    },
     MuiCssBaseline: {
       '@global': {
         html: {
