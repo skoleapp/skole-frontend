@@ -69,7 +69,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     flexGrow: 1,
     margin: `0 ${spacing(2)}`,
   },
-  desktopAddCourseButton: {
+  addCoursesButton: {
     minWidth: 'auto',
     whiteSpace: 'nowrap',
   },
@@ -171,10 +171,10 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
 
   // On desktop, render a disabled button for non-verified users.
   const renderAddCourseButton = isTabletOrDesktop && (
-    <Tooltip title={verificationRequiredTooltip}>
+    <Tooltip title={verificationRequiredTooltip || ''}>
       <Typography component="span">
         <ButtonLink
-          className={classes.desktopAddCourseButton}
+          className={classes.addCoursesButton}
           href={addCourseHref}
           disabled={verified === false}
           color="primary"
