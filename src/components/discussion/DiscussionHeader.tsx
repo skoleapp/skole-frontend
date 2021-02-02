@@ -1,5 +1,6 @@
 import CardHeader from '@material-ui/core/CardHeader';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -10,6 +11,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     textAlign: 'left',
     marginLeft: spacing(2),
+  },
+  content: {
+    overflow: 'hidden',
   },
   title: {
     color: palette.text.secondary,
@@ -51,7 +55,11 @@ export const DiscussionHeader: React.FC<Props> = ({
 
   return (
     <CardHeader
-      classes={{ root: classes.root, title: classes.title }}
+      classes={{
+        root: classes.root,
+        content: classes.content,
+        title: clsx('MuiCardHeader-title', classes.title, 'truncate-text'),
+      }}
       title={renderTitle}
       action={renderAction}
     />
