@@ -1,4 +1,7 @@
 import Grid from '@material-ui/core/Grid';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
@@ -9,12 +12,12 @@ import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutline
 import clsx from 'clsx';
 import {
   ActionsButton,
+  ButtonLink,
   CourseTableBody,
   Discussion,
   DiscussionHeader,
   Emoji,
   ErrorTemplate,
-  IconButtonLink,
   InfoButton,
   MainTemplate,
   NotFoundBox,
@@ -59,11 +62,16 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
   schoolHeaderRoot: {
     borderBottom: BORDER,
+    height: '3.5rem',
   },
   headerTitle: {
     color: palette.text.secondary,
     flexGrow: 1,
-    marginLeft: spacing(2),
+    margin: `0 ${spacing(2)}`,
+  },
+  desktopAddCourseButton: {
+    minWidth: 'auto',
+    whiteSpace: 'nowrap',
   },
 }));
 
@@ -95,9 +103,8 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const initialCommentCount = R.prop('commentCount', school);
   const { commentCount } = useDiscussionContext(initialCommentCount);
-  const addCourseTooltip = verificationRequiredTooltip || t('school-tooltips:addCourse');
   const header = isTabletOrDesktop && schoolName; // School names are too long to be used as the header on mobile.
-  const emoji = isTabletOrDesktop ? '🏫' : '';
+  const emoji = '🏫';
 
   const addCourseHref = {
     pathname: urls.addCourse,
@@ -163,17 +170,19 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   ];
 
   // On desktop, render a disabled button for non-verified users.
-  // On mobile, do not render the button at all for non-verified users.
-  const renderAddCourseButton = (isTabletOrDesktop || (isMobile && !!verified)) && (
-    <Tooltip title={addCourseTooltip}>
+  const renderAddCourseButton = isTabletOrDesktop && (
+    <Tooltip title={verificationRequiredTooltip}>
       <Typography component="span">
-        <IconButtonLink
+        <ButtonLink
+          className={classes.desktopAddCourseButton}
           href={addCourseHref}
-          icon={AddCircleOutlineOutlined}
           disabled={verified === false}
-          color={isMobile ? 'secondary' : 'default'}
+          color="primary"
           size="small"
-        />
+          endIcon={<AddCircleOutlineOutlined />}
+        >
+          {t('common:addCourses')}
+        </ButtonLink>
       </Typography>
     </Tooltip>
   );
@@ -198,10 +207,20 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     <InfoButton tooltip={t('school-tooltips:info')} infoDialogParams={infoDialogParams} />
   );
 
+  const renderAddCoursesAction = (
+    <MenuItem>
+      <ListItemIcon>
+        <AddCircleOutlineOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('common:addCourses')}</ListItemText>
+    </MenuItem>
+  );
+
   const actionsDialogParams = {
     shareDialogParams,
     shareText: t('school:share'),
     hideDeleteAction: true,
+    renderCustomActions: [renderAddCoursesAction],
   };
 
   const renderActionsButton = (
@@ -236,11 +255,7 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const renderCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
 
   const renderDiscussionHeader = (
-    <DiscussionHeader
-      renderShareButton={renderShareButton}
-      renderInfoButton={renderInfoButton}
-      renderActionsButton={renderActionsButton}
-    />
+    <DiscussionHeader renderShareButton={renderShareButton} renderInfoButton={renderInfoButton} />
   );
 
   const renderDiscussion = <Discussion school={school} noCommentsText={t('school:noComments')} />;
@@ -316,7 +331,6 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     topNavbarProps: {
       header,
       emoji,
-      renderHeaderLeft: renderAddCourseButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
     },

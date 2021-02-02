@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 interface Props {
   renderShareButton: JSX.Element;
   renderInfoButton: JSX.Element;
-  renderActionsButton: JSX.Element;
+  renderActionsButton?: JSX.Element;
 }
 
 export const DiscussionHeader: React.FC<Props> = ({

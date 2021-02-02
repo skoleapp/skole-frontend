@@ -15,7 +15,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import { StarOutlineOutlined } from '@material-ui/icons';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
@@ -141,7 +140,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderBackButton = !hideBackButton && <BackButton />;
   const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
 
-  const renderHeader = (!!header || !!emoji) && (
+  const renderHeader = !!header && (
     <Typography variant="h6" className="truncate-text">
       {header}
       {renderEmoji}

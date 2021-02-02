@@ -2,7 +2,6 @@
   "description": "Visa {{ schoolName }} på Skole.",
   "noSubjects": "Den här skolan har inga ämnen.",
   "noCourses": "Den här skolan har inga kurser.",
-  "addCourse": "Lägg till en kurs för den här skolan",
   "shareHeader": "Dela skolan",
   "shareTitle": "{{ schoolName }} på Skole",
   "shareText": "Visa {{ schoolName }} på Skole",
