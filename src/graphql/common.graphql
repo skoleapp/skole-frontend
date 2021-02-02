@@ -833,6 +833,8 @@ mutation UpdateUser(
     user {
       id
       username
+      avatar
+      avatarThumbnail
       email
       title
       bio

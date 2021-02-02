@@ -17,7 +17,6 @@ import {
   SchoolObjectType,
   SubjectObjectType,
   UpdateUserMutation,
-  UserObjectType,
   useUpdateUserMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
@@ -79,10 +78,10 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     if (updateUser) {
       if (!!updateUser.errors && !!updateUser.errors.length) {
         handleMutationErrors(updateUser.errors);
-      } else if (updateUser.successMessage) {
+      } else if (!!updateUser.successMessage && !!updateUser.user) {
         formRef.current?.setSubmitting(false);
         toggleNotification(updateUser.successMessage);
-        setUserMe(updateUser.user as UserObjectType);
+        setUserMe(updateUser.user);
       } else {
         setUnexpectedFormError();
       }
