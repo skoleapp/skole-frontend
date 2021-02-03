@@ -17,6 +17,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
@@ -301,6 +302,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       href: urls.home,
       label: t('common:home'),
       icon: HomeOutlined,
+    },
+    {
+      href: urls.addComment,
+      label: t('common:startDiscussion'),
+      icon: ChatOutlined,
     },
     {
       href: urls.search,
