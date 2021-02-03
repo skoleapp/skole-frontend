@@ -2,6 +2,7 @@ export { AuthorSelection } from './AuthorSelection';
 export { ClearCommentAttachmentButton } from './ClearCommentAttachmentButton';
 export { CommentAttachmentButton } from './CommentAttachmentButton';
 export { CommentAttachmentInput } from './CommentAttachmentInput';
+export { CommentAttachmentPreview } from './CommentAttachmentPreview';
 export { CommentCard } from './CommentCard';
 export { CommentTextField } from './CommentTextField';
 export { CommentTextFieldHelperText } from './CommentTextFieldHelperText';

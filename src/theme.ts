@@ -86,6 +86,9 @@ export const theme = createMuiTheme({
     MuiList: {
       disablePadding: true,
     },
+    MuiCheckbox: {
+      color: 'primary',
+    },
   },
   overrides: {
     MuiButton: {

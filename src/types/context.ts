@@ -4,7 +4,6 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 
 import { ActionsDialogParams, InfoDialogParams, ShareDialogParams } from './dialogs';
-import { CreateCommentFormValues } from './discussion';
 
 export interface AuthContextType {
   userMe: UserObjectType | null;
@@ -66,7 +65,7 @@ export interface PdfViewerContextType {
   centerHorizontalScroll: () => void;
 }
 
-export interface DiscussionContextType {
+export interface DiscussionContextType<T> {
   comments: CommentObjectType[];
   setComments: Dispatch<SetStateAction<CommentObjectType[]>>;
   commentCount: string;
@@ -78,7 +77,7 @@ export interface DiscussionContextType {
   commentAttachment: string | ArrayBuffer | null;
   setCommentAttachment: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
   attachmentInputRef: MutableRefObject<HTMLInputElement>;
-  formRef: MutableRefObject<FormikProps<CreateCommentFormValues> | null>;
+  formRef: MutableRefObject<FormikProps<T> | null>;
 }
 
 export interface ConfirmOptions {

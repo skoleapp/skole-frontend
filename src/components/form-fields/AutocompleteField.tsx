@@ -10,8 +10,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 interface Props {
   field: FieldAttributes<FormikValues>;
   form: FormikProps<FormikValues>;
-  labelKey: string; // Used to access the label on the object.
-  suffixKey?: string; // Used to access the label on the object which will be appended to the label
+  labelKeys?: string[]; // Used to access the label on the object.
+  suffixKey?: string; // Key of value show after the label, e.g. a course code.
   searchKey: string; // Name of the variable that we use as the search key.
   dataKey: string; // Used to access the data after a successful query.
   document: DocumentNode; // GraphQL document the query is made with.
@@ -23,7 +23,7 @@ interface Props {
 export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   field,
   form,
-  labelKey = 'name',
+  labelKeys = ['name'],
   suffixKey,
   searchKey,
   dataKey,
@@ -48,11 +48,17 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   const showError = getIn(touched, name) && !!fieldError;
 
   const getOptionLabel = (option: Record<string, string>): string => {
-    let label = R.propOr('', labelKey, option);
     const suffix = R.propOr('', suffixKey, option);
+    let label = '';
+
+    labelKeys.forEach((l) => {
+      label = R.propOr(label, l, option);
+    });
+
     if (suffix) {
       label = `${label} - ${suffix}`;
     }
+
     return label;
   };
 
@@ -124,6 +130,9 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
     val ? form.setFieldValue(name, val) : handleClearSelection();
   };
 
+  const getOptionSelected = (option: Record<string, unknown>, value: Record<string, unknown>) =>
+    option.id === value?.id;
+
   const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
     <TextField
       {...params}
@@ -152,6 +161,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
       options={options}
       loading={loading}
       value={value}
+      getOptionSelected={getOptionSelected}
       onChange={handleAutocompleteChange}
       renderInput={renderInput}
       disabled={disabled !== undefined ? disabled : isSubmitting}

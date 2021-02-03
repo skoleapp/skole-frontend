@@ -143,6 +143,12 @@ mutation CreateComment(
     successMessage
     comment {
       id
+      course {
+        id
+      }
+      resource {
+        id
+      }
       school {
         id
       }
@@ -1058,6 +1064,35 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
         id
         status
       }
+    }
+  }
+}
+
+query AutocompleteDiscussions($searchTerm: String) {
+  autocompleteDiscussions(searchTerm: $searchTerm) {
+    ... on CourseObjectType {
+      id
+      courseName: name
+      code
+      __typename
+      school {
+        id
+        name
+      }
+    }
+    ... on ResourceObjectType {
+      id
+      title
+      __typename
+      course {
+        id
+        name
+      }
+    }
+    ... on SchoolObjectType {
+      id
+      name
+      __typename
     }
   }
 }

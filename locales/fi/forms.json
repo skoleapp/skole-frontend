@@ -41,7 +41,9 @@
   "subjectHelpText": "Valitsemasi oppiaine, jota käytämme näyttääksemme sinulle automaattisesti sisältöä perustuen siihen.",
   "postTo": "Lähetä keskusteluun {{ target }}",
   "replyTo": "Reply to {{ username }}",
-  "selectSchoolToPost": "Valitse koulu lähettääksesi",
+  "selectDiscussionToPost": "Valitse keskustelu lähettääksesi",
   "contactLinkText": "PS. Jos et löydä etsimääsi koulua tai oppiainetta, voit",
-  "contactLinkLink": "ottaa meihin yhteyttä niin lisäämme ne sinulle!"
+  "contactLinkLink": "ottaa meihin yhteyttä niin lisäämme ne sinulle!",
+  "discussion": "Keskustelu",
+  "alsoSendTo": "Lähetä myös keskusteluun"
 }

@@ -41,7 +41,9 @@
   "subjectHelpText": "Your preferred subject. With this information we can automatically show you content based on it. This field is only visible for you.",
   "postTo": "Post to {{ target }}",
   "replyTo": "Reply to {{ username }}",
-  "selectSchoolToPost": "Select school to post",
+  "selectDiscussionToPost": "Select discussion to post",
   "contactLinkText": "PS. If you can't find the school or subject you're looking for, you can",
-  "contactLinkLink": "contact us and we'll add them for you!"
+  "contactLinkLink": "contact us and we'll add them for you!",
+  "discussion": "Discussion",
+  "alsoSendTo": "Include also in"
 }

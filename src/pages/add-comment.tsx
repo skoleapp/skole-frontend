@@ -1,19 +1,27 @@
+import { DiscussionsUnion } from '__generated__/src/graphql/common.graphql';
+import Collapse from '@material-ui/core/Collapse';
 import FormControl from '@material-ui/core/FormControl';
 import {
   AuthorSelection,
   AutocompleteField,
+  CheckboxFormField,
   CommentAttachmentInput,
+  CommentAttachmentPreview,
   CommentTextField,
   CommentTextFieldToolbar,
   FormSubmitSection,
   FormTemplate,
+  TextLink,
 } from 'components';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
-  AutocompleteSchoolsDocument,
+  AutocompleteDiscussionsDocument,
+  CourseObjectType,
   CreateCommentMutation,
+  SchoolObjectType,
   useCreateCommentMutation,
+  UserObjectType,
 } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -21,39 +29,55 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
-import { CommentAttachmentPreview } from 'src/components/discussion/CommentAttachmentPreview';
-import { CreateCommentFormValues, SeoPageProps } from 'types';
+import React, { ChangeEvent } from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
+
+interface AddCommentFormValues {
+  user: UserObjectType | null;
+  text: string;
+  attachment: string | null;
+  discussion: DiscussionsUnion | null;
+  include: CourseObjectType | SchoolObjectType | null;
+}
 
 const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const { userMe, school } = useAuthContext();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
-  const { setCommentAttachment, formRef } = useDiscussionContext();
+  const { setCommentAttachment, formRef } = useDiscussionContext<AddCommentFormValues>();
 
   const onCompleted = async ({ createComment }: CreateCommentMutation): Promise<void> => {
-    if (createComment) {
-      if (!!createComment.errors && !!createComment.errors.length) {
-        toggleUnexpectedErrorNotification();
-      } else if (!!createComment.successMessage && !!createComment.comment?.school) {
-        formRef.current?.resetForm();
-        setCommentAttachment(null);
-        toggleNotification(createComment.successMessage);
+    const errors = R.prop('errors', createComment);
+    const successMessage = R.prop('successMessage', createComment);
+    const course = R.path(['comment', 'course', 'id'], createComment);
+    const resource = R.path(['comment', 'resource', 'id'], createComment);
+    const school = R.path(['comment', 'school', 'id'], createComment);
+    const comment = R.path(['comment', 'id'], createComment);
 
-        await Router.push({
-          pathname: urls.school(createComment.comment.school.id),
-          query: {
-            comment: createComment.comment.id,
-          },
-        });
+    if (errors.length) {
+      toggleUnexpectedErrorNotification();
+    } else if (!!successMessage && (!!course || !!resource || !!school)) {
+      formRef.current?.resetForm();
+      setCommentAttachment(null);
+      toggleNotification(successMessage);
 
-        sa_event('create_comment');
-      } else {
-        toggleUnexpectedErrorNotification();
-      }
+      const pathname = course
+        ? urls.course(course)
+        : resource
+        ? urls.resource(resource)
+        : school && urls.school(school);
+
+      await Router.push({
+        pathname,
+        query: {
+          comment,
+        },
+      });
+
+      sa_event('create_comment');
     } else {
       toggleUnexpectedErrorNotification();
     }
@@ -64,23 +88,33 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     onError: toggleUnexpectedErrorNotification,
   });
 
-  // Only used for making TS compiler happy.
-  const placeholderTargets = {
-    course: null,
-    resource: null,
-    comment: null,
-  };
-
+  // See if course, resource or school is selected or a course or school is included.
   const handleSubmit = async ({
+    discussion,
+    include,
     user: _user,
-    school: _school,
     ...values
-  }: CreateCommentFormValues): Promise<void> => {
+  }: AddCommentFormValues): Promise<void> => {
     const user = R.prop('id', _user);
-    const school = R.prop('id', _school);
+
+    const course =
+      discussion?.__typename === 'CourseObjectType'
+        ? discussion.id
+        : include?.__typename === 'CourseObjectType'
+        ? include.id
+        : null;
+
+    const resource = discussion?.__typename === 'ResourceObjectType' ? discussion.id : null;
+
+    const school =
+      discussion?.__typename === 'SchoolObjectType'
+        ? discussion.id
+        : include?.__typename === 'SchoolObjectType'
+        ? include.id
+        : null;
 
     await createCommentMutation({
-      variables: { ...values, user, school, ...placeholderTargets },
+      variables: { ...values, user, course, resource, school },
       context,
     });
 
@@ -89,15 +123,14 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const initialValues = {
     user: userMe,
-    text: '',
+    discussion: school,
+    include: null,
     attachment: null,
-    school,
-    ...placeholderTargets,
+    text: '',
   };
 
   const validationSchema = Yup.object().shape({
-    school: Yup.object().nullable().required(t('validation:required')),
-    attachment: Yup.mixed(),
+    discussion: Yup.mixed().required(t('validation:required')),
     text: Yup.string().when('attachment', {
       is: (attachment: string) => !attachment,
       then: Yup.string().required(t('validation:textOrAttachmentRequired')),
@@ -105,19 +138,54 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }),
   });
 
-  const renderSchoolField = (
+  const renderDiscussionField = (
     <Field
-      name="school"
-      label={t('forms:school')}
-      dataKey="autocompleteSchools"
-      searchKey="name"
-      document={AutocompleteSchoolsDocument}
+      name="discussion"
+      label={t('forms:discussion')}
+      dataKey="autocompleteDiscussions"
+      searchKey="searchTerm"
+      labelKeys={['name', 'title', 'courseName']}
+      suffixKey="code"
+      document={AutocompleteDiscussionsDocument}
       component={AutocompleteField}
       helperText={t('add-comment:schoolHelperText')}
     />
   );
 
-  const renderAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
+  const renderIncludeField = ({ values }: FormikProps<AddCommentFormValues>) => {
+    const visible = ['CourseObjectType', 'ResourceObjectType'].includes(
+      String(values.discussion?.__typename),
+    );
+
+    const course: CourseObjectType | null = R.pathOr(null, ['discussion', 'course'], values);
+    const school: SchoolObjectType | null = R.pathOr(null, ['discussion', 'school'], values);
+    const href = course ? urls.course(course.id) : school ? urls.school(school.id) : '#';
+    const name = course?.name || school?.name;
+
+    const handleChange = (_: ChangeEvent<Record<string, unknown>>, checked: string) => {
+      const val = checked ? course || school : null;
+      formRef.current?.setFieldValue('include', val);
+    };
+
+    const renderLabel = (
+      <>
+        {t('forms:alsoSendTo')} <TextLink href={href}>{name}</TextLink>
+      </>
+    );
+
+    return (
+      <Collapse in={visible}>
+        <Field
+          name="include"
+          label={renderLabel}
+          component={CheckboxFormField}
+          onChange={handleChange}
+        />
+      </Collapse>
+    );
+  };
+
+  const renderAuthorSelection = (props: FormikProps<AddCommentFormValues>) =>
     !!userMe && (
       <FormControl>
         <AuthorSelection {...props} />
@@ -128,24 +196,28 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderAttachmentPreview = <CommentAttachmentPreview />;
   const renderAttachmentInput = <CommentAttachmentInput />;
 
-  const getPlaceholder = (school: CreateCommentFormValues['school']) =>
-    school
+  const getPlaceholder = (discussion: AddCommentFormValues['discussion']) =>
+    discussion
       ? t('forms:postTo', {
-          target: R.prop('name', school),
+          target:
+            R.prop('name', discussion) ||
+            R.prop('title', discussion) ||
+            R.prop('courseName', discussion),
         })
-      : t('forms:selectSchoolToPost');
+      : t('forms:selectDiscussionToPost');
 
-  const renderTextField = (props: FormikProps<CreateCommentFormValues>) => (
-    <CommentTextField {...props} placeholder={getPlaceholder(props.values.school)} />
+  const renderTextField = (props: FormikProps<AddCommentFormValues>) => (
+    <CommentTextField {...props} placeholder={getPlaceholder(props.values.discussion)} />
   );
 
-  const renderFormSubmitSection = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderFormSubmitSection = (props: FormikProps<AddCommentFormValues>) => (
     <FormSubmitSection submitButtonText={t('common:send')} {...props} />
   );
 
-  const renderFormFields = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderFormFields = (props: FormikProps<AddCommentFormValues>) => (
     <Form>
-      {renderSchoolField}
+      {renderDiscussionField}
+      {renderIncludeField(props)}
       {renderAuthorSelection(props)}
       {renderAttachmentPreview}
       {renderTextFieldToolbar}

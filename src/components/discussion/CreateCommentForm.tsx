@@ -14,12 +14,19 @@ import {
   usePdfViewerContext,
 } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
-import { CreateCommentMutation, useCreateCommentMutation } from 'generated';
+import {
+  CommentObjectType,
+  CourseObjectType,
+  CreateCommentMutation,
+  ResourceObjectType,
+  SchoolObjectType,
+  useCreateCommentMutation,
+  UserObjectType,
+} from 'generated';
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataUriToFile, useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
-import { CreateCommentFormValues } from 'types';
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
 import { LoadingBox } from '../shared';
@@ -64,6 +71,16 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
+interface CreateCommentFormValues {
+  user: UserObjectType | null;
+  text: string;
+  attachment: string | null;
+  course: CourseObjectType | null;
+  resource: ResourceObjectType | null;
+  comment: CommentObjectType | null;
+  school: SchoolObjectType | null;
+}
+
 interface CreateCommentFormProps
   extends Pick<CreateCommentFormValues, 'course' | 'resource' | 'school' | 'comment'> {
   onCommentCreated: () => void;
@@ -85,7 +102,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     setCreateCommentDialogOpen,
     setCommentAttachment,
     formRef,
-  } = useDiscussionContext();
+  } = useDiscussionContext<CreateCommentFormValues>();
 
   const classes = useStyles();
   const { t } = useTranslation();

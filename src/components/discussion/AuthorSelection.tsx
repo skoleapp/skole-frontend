@@ -10,11 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import DeviceUnknownOutlined from '@material-ui/icons/DeviceUnknownOutlined';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import { useAuthContext } from 'context';
-import { FormikProps } from 'formik';
+import { FormikProps, FormikValues } from 'formik';
 import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
-import { CreateCommentFormValues } from 'types';
 
 import { ResponsiveDialog } from '../dialogs';
 
@@ -31,10 +30,10 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-export const AuthorSelection: React.FC<FormikProps<CreateCommentFormValues>> = ({
+export const AuthorSelection = <T extends FormikValues>({
   values: { user },
   setFieldValue,
-}) => {
+}: FormikProps<T>): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe, username, avatarThumbnail } = useAuthContext();

@@ -1,15 +1,14 @@
 import { TextFieldProps } from '@material-ui/core/TextField';
 import { useDiscussionContext } from 'context';
-import { Field, FormikProps } from 'formik';
+import { Field, FormikProps, FormikValues } from 'formik';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
-import { CreateCommentFormValues } from 'types';
 
 import { TextFormField } from '../form-fields';
 
-export const CommentTextField: React.FC<FormikProps<CreateCommentFormValues> & TextFieldProps> = (
-  props,
-) => {
+export const CommentTextField = <T extends FormikValues>(
+  props: FormikProps<T> & TextFieldProps,
+): JSX.Element => {
   const { isTabletOrDesktop } = useMediaQueries();
   const { formRef } = useDiscussionContext();
 
