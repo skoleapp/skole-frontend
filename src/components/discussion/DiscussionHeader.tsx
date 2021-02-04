@@ -1,5 +1,6 @@
 import CardHeader from '@material-ui/core/CardHeader';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -11,7 +12,10 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     textAlign: 'left',
     marginLeft: spacing(2),
   },
-  subheader: {
+  content: {
+    overflow: 'hidden',
+  },
+  title: {
     color: palette.text.secondary,
   },
 }));
@@ -19,7 +23,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 interface Props {
   renderShareButton: JSX.Element;
   renderInfoButton: JSX.Element;
-  renderActionsButton: JSX.Element;
+  renderActionsButton?: JSX.Element;
 }
 
 export const DiscussionHeader: React.FC<Props> = ({
@@ -30,11 +34,11 @@ export const DiscussionHeader: React.FC<Props> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const { commentCount } = useDiscussionContext();
-  const title = `${t('common:discussion')} (${t('discussion:commentCount', { commentCount })})`;
+  const title = t('discussion:commentCount', { commentCount });
 
   const renderEmoji = <Emoji emoji="💬" />;
 
-  const renderSubheader = (
+  const renderTitle = (
     <>
       {title}
       {renderEmoji}
@@ -51,8 +55,12 @@ export const DiscussionHeader: React.FC<Props> = ({
 
   return (
     <CardHeader
-      classes={{ root: classes.root, subheader: classes.subheader }}
-      subheader={renderSubheader}
+      classes={{
+        root: classes.root,
+        content: classes.content,
+        title: clsx('MuiCardHeader-title', classes.title, 'truncate-text'),
+      }}
+      title={renderTitle}
       action={renderAction}
     />
   );

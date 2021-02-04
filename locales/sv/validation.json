@@ -7,5 +7,6 @@
   "fileSizeError": "Filen är för stor!",
   "invalidDate": "Ogiltigt datum!",
   "minDate": "Datumet är för tidigt!",
-  "maxDate": "Datumet är för sent!"
+  "maxDate": "Datumet är för sent!",
+  "textOrAttachmentRequired": "Antingen text eller bilaga krävs."
 }

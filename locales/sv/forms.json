@@ -39,9 +39,11 @@
   "nameOptional": "Namn (frivillig)",
   "schoolHelpText": "Din föredragna skola som vi använder för att automatiskt visa innehåll baserat på det.",
   "subjectHelpText": "Ditt föredragna ämne som vi använder för att automatiskt visa innehåll baserat på det.",
-  "postToCourse": "Skicka till {{ courseName }}",
-  "postToResource": "Skicka till {{ resourceTitle }}",
+  "postTo": "Skicka till {{ target }}",
   "replyTo": "Svara till {{ användarnamn }}",
+  "selectDiscussionToPost": "Välj en diskussion at skicka",
   "contactLinkText": "PS. Om du inte hittar skolan eller ämnet du letar efter, du kan",
-  "contactLinkLink": "kontakta oss så lägger vi till dem för dig!"
+  "contactLinkLink": "kontakta oss så lägger vi till dem för dig!",
+  "discussion": "Diskussion",
+  "alsoSendTo": "Skicka också till"
 }

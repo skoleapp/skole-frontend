@@ -28,6 +28,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useRef } from 'react';
 import { BORDER } from 'theme';
+import { DiscussionTypes } from 'types';
 import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
 import { MarkdownContent, TextLink } from '../shared';
@@ -56,6 +57,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
   cardTitle: {
     fontSize: '1rem',
+  },
+  secondaryDiscussion: {
+    marginLeft: spacing(1),
   },
   cardSubHeader: {
     fontSize: '0.75rem',
@@ -111,6 +115,7 @@ interface Props {
   onCommentDeleted: () => void;
   topComment?: boolean;
   lastReply?: boolean;
+  discussionType?: DiscussionTypes | null;
 }
 
 export const CommentCard: React.FC<Props> = ({
@@ -118,6 +123,7 @@ export const CommentCard: React.FC<Props> = ({
   onCommentDeleted,
   topComment,
   lastReply,
+  discussionType,
 }) => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
@@ -226,17 +232,77 @@ export const CommentCard: React.FC<Props> = ({
     });
   };
 
-  const renderTitle = comment.user ? (
-    <TextLink
-      href={urls.user(comment.user.id)}
-      onClick={(e: SyntheticEvent): void => e.stopPropagation()}
-    >
-      {comment.user.username}
-    </TextLink>
+  const renderCreator = comment.user ? (
+    <TextLink href={urls.user(comment.user.id)}>{comment.user.username}</TextLink>
   ) : (
+    t('common:communityUser')
+  );
+
+  const renderCreatorTitle = (
     <Typography variant="body2" color="textSecondary">
-      {t('common:communityUser')}
+      {renderCreator}
     </Typography>
+  );
+
+  // Render dynamic label depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
+  const renderSecondaryDiscussionLabel =
+    (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
+    (discussionType === DiscussionTypes.COURSE && !!comment.resource)
+      ? t('discussion:postedIn')
+      : (discussionType === DiscussionTypes.COURSE && !!comment.school) ||
+        (discussionType === DiscussionTypes.RESOURCE && !!comment.course)
+      ? t('discussion:alsoSentTo')
+      : '';
+
+  // Render dynamic path name depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
+  const secondaryDiscussionPathname =
+    discussionType === DiscussionTypes.SCHOOL && !!comment.course
+      ? urls.course(comment.course.id)
+      : discussionType === DiscussionTypes.COURSE && !!comment.resource
+      ? urls.resource(comment.resource.id)
+      : discussionType === DiscussionTypes.COURSE && !!comment.school
+      ? urls.school(comment.school.id)
+      : discussionType === DiscussionTypes.RESOURCE && !!comment.course
+      ? urls.course(comment.course.id)
+      : '#';
+
+  const secondaryDiscussionLinkHref = {
+    pathname: secondaryDiscussionPathname,
+    query: {
+      comment: comment.id,
+    },
+  };
+
+  // Render dynamic name depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
+  const renderSecondaryDiscussionName =
+    (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
+    (discussionType === DiscussionTypes.RESOURCE && !!comment.course)
+      ? comment.course?.name
+      : discussionType === DiscussionTypes.COURSE && comment.resource
+      ? comment.resource?.title
+      : discussionType === DiscussionTypes.COURSE && !!comment.school
+      ? comment.school?.name
+      : '';
+
+  const renderSecondaryDiscussionLink = (
+    <TextLink href={secondaryDiscussionLinkHref}>{renderSecondaryDiscussionName}</TextLink>
+  );
+
+  const renderSecondaryDiscussion = (
+    <Typography className={classes.secondaryDiscussion} variant="body2" color="textSecondary">
+      {renderSecondaryDiscussionLabel} {renderSecondaryDiscussionLink}
+    </Typography>
+  );
+
+  // Render title with secondary discussion info if comment is posted to multiple discussions.
+  const renderSecondaryDiscussionTitle = ((discussionType === DiscussionTypes.COURSE &&
+    !!comment.resource) ||
+    (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
+    (discussionType === DiscussionTypes.COURSE && !!comment.school) ||
+    (discussionType === DiscussionTypes.RESOURCE && !!comment.course)) && (
+    <Grid container alignItems="center">
+      {renderCreatorTitle} {renderSecondaryDiscussion}
+    </Grid>
   );
 
   const renderCardHeader = (
@@ -247,7 +313,7 @@ export const CommentCard: React.FC<Props> = ({
         subheader: classes.cardSubHeader,
       }}
       avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
-      title={renderTitle}
+      title={renderSecondaryDiscussionTitle || renderCreatorTitle}
       subheader={created}
     />
   );

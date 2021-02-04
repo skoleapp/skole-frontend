@@ -11,5 +11,7 @@
   "helperTextCombination": "{{ combination }} lisätäksesi uuden rivin.",
   "commentCount": "{{ commentCount }} kommenttia",
   "postingComment": "Lähetetään kommenttia...",
-  "loadingMoreComments": "Ladataan lisää kommentteja..."
+  "loadingMoreComments": "Ladataan lisää kommentteja...",
+  "postedIn": "lähetti keskusteluun",
+  "alsoSentTo": "lähetti myös keskusteluun"
 }

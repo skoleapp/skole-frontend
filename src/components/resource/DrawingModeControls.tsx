@@ -10,7 +10,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-export const DrawModeControls: React.FC = () => {
+export const DrawingModeControls: React.FC = () => {
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const { setDrawingMode, screenshot, setScreenshot } = usePdfViewerContext();
@@ -28,7 +28,7 @@ export const DrawModeControls: React.FC = () => {
 
   const renderExitButton = (
     <Grid item xs={6} md={2} container justify="flex-start">
-      <Tooltip title={t('resource-tooltips:exitDrawMode')}>
+      <Tooltip title={t('resource-tooltips:exitDrawingMode')}>
         <IconButton onClick={handleExitButtonClick} size="small">
           <ClearOutlined />
         </IconButton>

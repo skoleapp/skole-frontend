@@ -1,13 +1,9 @@
-import { UserObjectType } from 'generated';
+import { CourseObjectType, SchoolObjectType } from 'generated';
 
-export interface CommentTarget {
-  course: string | null;
-  resource: string | null;
-  comment: string | null;
-}
+export type SecondaryDiscussion = CourseObjectType | SchoolObjectType | null;
 
-export interface CreateCommentFormValues extends CommentTarget {
-  user: UserObjectType | null;
-  text: string;
-  attachment: string | null;
+export enum DiscussionTypes {
+  COURSE = 'course',
+  RESOURCE = 'resource',
+  SCHOOL = 'school',
 }

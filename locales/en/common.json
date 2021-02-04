@@ -43,7 +43,6 @@
   "reportAbuse": "Report Abuse (coming soon)",
   "comments": "Comments",
   "resultsPerPage": "Results per page",
-  "clickToView": "Click to view!",
   "starred": "Starred",
   "settings": "Settings",
   "communityUser": "Community User",
@@ -83,5 +82,11 @@
   "replies": "Replies",
   "postedBy": "Posted by",
   "product": "Product",
-  "updates": "Updates"
+  "updates": "Updates",
+  "unexpectedError": "Unexpected error.",
+  "addComment": "Add Comment",
+  "startDiscussion": "Start Discussion",
+  "findContent": "Find Content",
+  "addCourses": "Add Courses",
+  "uploadMaterial": "Upload Material"
 }

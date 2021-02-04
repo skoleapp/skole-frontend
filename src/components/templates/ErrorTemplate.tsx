@@ -7,10 +7,10 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoProps } from 'types';
 
-import { BackButton, NotFoundBox } from '../shared';
+import { NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints }) => ({
   root: {
     flexGrow: 1,
     display: 'flex',
@@ -20,15 +20,8 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  cardHeaderRoot: {
+  cardHeader: {
     borderBottom: BORDER,
-    position: 'relative',
-    padding: spacing(3),
-  },
-  cardHeaderAvatar: {
-    position: 'absolute',
-    top: spacing(2),
-    left: spacing(2),
   },
 }));
 
@@ -45,18 +38,10 @@ export const ErrorTemplate: React.FC<Props> = ({ variant, seoProps }) => {
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);
 
-  const renderBackButton = <BackButton />;
   const renderContent = <NotFoundBox text={text} />;
 
   const renderCardHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        avatar: classes.cardHeaderAvatar,
-      }}
-      title={header}
-      avatar={renderBackButton}
-    />
+    <CardHeader className={classes.cardHeader} title={header} />
   );
 
   const layoutProps = {

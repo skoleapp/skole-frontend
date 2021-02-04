@@ -5,17 +5,20 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Size } from '@material-ui/core/TableCell';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import ArrowBackOutlined from '@material-ui/icons/ArrowBackOutlined';
 import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
 import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
+import Link from 'next/link';
 import React from 'react';
 import { BORDER } from 'theme';
+import { urls } from 'utils';
 
-import { BackButton, Emoji } from '../shared';
-import { DrawModeButton } from './DrawModeButton';
-import { DrawModeControls } from './DrawModeControls';
+import { Emoji } from '../shared';
+import { DrawingModeButton } from './DrawingModeButton';
+import { DrawingModeControls } from './DrawingModeControls';
 import { RotateButton } from './RotateButton';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
@@ -35,6 +38,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 interface Props {
   title: string;
   emoji: string;
+  courseId: string;
   renderStarButton: JSX.Element | false;
   renderUpvoteButton: JSX.Element | false;
   renderScore: JSX.Element | false;
@@ -46,6 +50,7 @@ interface Props {
 export const ResourceTopToolbar: React.FC<Props> = ({
   title,
   emoji,
+  courseId,
   renderStarButton,
   renderUpvoteButton,
   renderScore,
@@ -57,10 +62,19 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   const { t } = useTranslation();
   const { drawingMode, controlsDisabled } = usePdfViewerContext();
 
-  const renderDrawModeButton = <DrawModeButton />;
-  const renderDrawModeControls = <DrawModeControls />;
+  const renderDrawingModeButton = <DrawingModeButton />;
+  const renderDrawingModeControls = <DrawingModeControls />;
   const renderRotateButton = <RotateButton />;
-  const renderBackButton = <BackButton className={classes.backButton} />;
+
+  const renderBackButton = (
+    <Link href={urls.course(courseId)}>
+      <Tooltip title={t('resource-tooltips:backToCourse')}>
+        <IconButton className={classes.backButton} size="small">
+          <ArrowBackOutlined />
+        </IconButton>
+      </Tooltip>
+    </Link>
+  );
 
   const toolbarButtonProps = {
     size: 'small' as Size,
@@ -91,8 +105,8 @@ export const ResourceTopToolbar: React.FC<Props> = ({
 
   const renderResourceTitle = (
     <Typography
-      className={clsx('MuiCardHeader-subheader', classes.cardHeaderTitle, 'truncate-text')}
-      variant="body1"
+      className={clsx('MuiCardHeader-title', classes.cardHeaderTitle, 'truncate-text')}
+      variant="h5"
       align="left"
     >
       {title}
@@ -108,13 +122,13 @@ export const ResourceTopToolbar: React.FC<Props> = ({
       {renderUpvoteButton}
       {renderScore}
       {renderDownvoteButton}
-      {renderDrawModeButton}
+      {renderDrawingModeButton}
       {renderRotateButton}
       {renderDownloadButton}
       {renderPrintButton}
     </Grid>
   );
 
-  const renderControls = drawingMode ? renderDrawModeControls : renderDefaultToolbarControls;
+  const renderControls = drawingMode ? renderDrawingModeControls : renderDefaultToolbarControls;
   return <Box className={clsx('MuiCardHeader-root', classes.root)}>{renderControls}</Box>;
 };

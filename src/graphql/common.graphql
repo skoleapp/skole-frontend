@@ -127,6 +127,7 @@ mutation CreateComment(
   $course: ID
   $resource: ID
   $comment: ID
+  $school: ID
 ) {
   createComment(
     input: {
@@ -136,9 +137,22 @@ mutation CreateComment(
       course: $course
       resource: $resource
       comment: $comment
+      school: $school
     }
   ) {
     successMessage
+    comment {
+      id
+      course {
+        id
+      }
+      resource {
+        id
+      }
+      school {
+        id
+      }
+    }
     errors {
       field
       messages
@@ -460,6 +474,7 @@ query School($id: ID, $page: Int, $pageSize: Int) {
   school(id: $id) {
     id
     name
+    commentCount
     city {
       id
       name
@@ -505,6 +520,12 @@ query School($id: ID, $page: Int, $pageSize: Int) {
         username
       }
     }
+  }
+}
+
+query SchoolSeoProps($id: ID) {
+  school(id: $id) {
+    name
   }
 }
 
@@ -713,6 +734,12 @@ query User($id: ID, $page: Int, $pageSize: Int) {
   }
 }
 
+query UserSeoProps($id: ID) {
+  user(id: $id) {
+    username
+  }
+}
+
 mutation Register($username: String!, $email: String!, $password: String!) {
   register(input: { username: $username, email: $email, password: $password }) {
     errors {
@@ -824,6 +851,8 @@ mutation UpdateUser(
     user {
       id
       username
+      avatar
+      avatarThumbnail
       email
       title
       bio
@@ -933,7 +962,7 @@ query Suggestions {
     ... on CommentObjectType {
       id
       text
-      attachment
+      attachmentThumbnail
       created
       score
       replyCount
@@ -994,7 +1023,7 @@ query SuggestionsPreview {
     ... on CommentObjectType {
       id
       text
-      attachment
+      attachmentThumbnail
       created
       score
       replyCount
@@ -1014,8 +1043,8 @@ query SuggestionsPreview {
   }
 }
 
-query Discussion($course: ID, $resource: ID) {
-  discussion(course: $course, resource: $resource) {
+query Discussion($course: ID, $resource: ID, $school: ID) {
+  discussion(course: $course, resource: $resource, school: $school) {
     id
     text
     attachment
@@ -1031,10 +1060,23 @@ query Discussion($course: ID, $resource: ID) {
       id
       status
     }
+    course {
+      id
+      name
+    }
+    resource {
+      id
+      title
+    }
+    school {
+      id
+      name
+    }
     replyComments {
       id
       text
       attachment
+      attachmentThumbnail
       created
       score
       user {
@@ -1046,6 +1088,35 @@ query Discussion($course: ID, $resource: ID) {
         id
         status
       }
+    }
+  }
+}
+
+query AutocompleteDiscussions($searchTerm: String) {
+  autocompleteDiscussions(searchTerm: $searchTerm) {
+    ... on CourseObjectType {
+      id
+      courseName: name
+      code
+      __typename
+      school {
+        id
+        name
+      }
+    }
+    ... on ResourceObjectType {
+      id
+      title
+      __typename
+      course {
+        id
+        name
+      }
+    }
+    ... on SchoolObjectType {
+      id
+      name
+      __typename
     }
   }
 }

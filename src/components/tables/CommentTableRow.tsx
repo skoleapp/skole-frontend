@@ -1,3 +1,4 @@
+import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,16 +9,17 @@ import clsx from 'clsx';
 import { CommentObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { BORDER } from 'theme';
 import { ColSpan, TableRowProps } from 'types';
-import { truncate, urls } from 'utils';
+import { mediaLoader, truncate, urls } from 'utils';
 
 import { MarkdownContent, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   root: {
     borderBottom: BORDER,
     paddingLeft: '0.3rem',
@@ -41,6 +43,14 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       justifyContent: 'flex-end',
     },
   },
+  attachmentPreviewContainer: {
+    marginRight: spacing(3),
+    display: 'flex',
+  },
+  attachmentPreview: {
+    border: `0.1rem solid ${palette.primary.main} !important`,
+    borderRadius: '0.5rem',
+  },
 }));
 
 interface Props extends TableRowProps {
@@ -52,7 +62,7 @@ export const CommentTableRow: React.FC<Props> = ({
   comment: {
     id,
     text,
-    attachment,
+    attachmentThumbnail,
     created: _created,
     score,
     replyCount,
@@ -71,9 +81,7 @@ export const CommentTableRow: React.FC<Props> = ({
   const created = useDayjs(_created).startOf('day').fromNow();
   const scoreLabel = t('common:score').toLowerCase();
   const repliesLabel = t('common:replies').toLowerCase();
-
-  const commentPreview =
-    (!!text && truncate(text, 50)) || (!!attachment && t('common:clickToView')) || '';
+  const commentPreview = !!text && truncate(text, 50);
 
   const pathname =
     (!!course && urls.course(course.id)) ||
@@ -103,25 +111,25 @@ export const CommentTableRow: React.FC<Props> = ({
 
   const renderMobileCommentStats = isMobile && (
     <TableCell className={classes.tableCell}>
-      <Grid container alignItems="center">
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{score}</Typography>
-          </Grid>
-          <Grid item xs={10} container alignItems="center">
+      <Grid container spacing={4}>
+        <Grid item xs={6} container>
+          <Grid item xs={8} sm={10} container alignItems="center">
             <Typography variant="body2" color="textSecondary">
               {scoreLabel}
             </Typography>
           </Grid>
-        </Grid>
-        <Grid item xs={4} container>
-          <Grid item xs={2} container alignItems="center">
-            <Typography variant="subtitle1">{replyCount}</Typography>
+          <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+            <Typography variant="subtitle1">{score}</Typography>
           </Grid>
-          <Grid item xs={10} container alignItems="center">
+        </Grid>
+        <Grid item xs={6} container>
+          <Grid item xs={8} sm={10} container alignItems="center">
             <Typography variant="body2" color="textSecondary">
               {repliesLabel}
             </Typography>
+          </Grid>
+          <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
+            <Typography variant="subtitle1">{replyCount}</Typography>
           </Grid>
         </Grid>
       </Grid>
@@ -160,9 +168,27 @@ export const CommentTableRow: React.FC<Props> = ({
     </TableCell>
   );
 
+  const renderCommentAttachmentThumbnail = !!attachmentThumbnail && (
+    <Box className={classes.attachmentPreviewContainer}>
+      <Image
+        className={classes.attachmentPreview}
+        loader={mediaLoader}
+        src={attachmentThumbnail}
+        layout="fixed"
+        width={40}
+        height={40}
+      />
+    </Box>
+  );
+
+  const renderMarkdownContent = !!commentPreview && (
+    <MarkdownContent>{commentPreview}</MarkdownContent>
+  );
+
   const renderCommentPreview = (
     <TableCell className={classes.tableCell}>
-      <MarkdownContent>{commentPreview}</MarkdownContent>
+      {renderCommentAttachmentThumbnail}
+      {renderMarkdownContent}
     </TableCell>
   );
 

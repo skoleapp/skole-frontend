@@ -5,8 +5,7 @@ import React from 'react';
 const useStyles = makeStyles({
   errorMessage: {
     whiteSpace: 'pre-line', // Break lines at '\n' characters.
-    // The margin size is taken from `MuiFormHelperText-contained`,
-    // so that help texts and error messages get rendered to the same indent level.
+    // Use consistent margins with other form helper texts.
     marginLeft: '14px',
     marginRight: '14px',
   },

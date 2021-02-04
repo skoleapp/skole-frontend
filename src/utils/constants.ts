@@ -1,12 +1,13 @@
 import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
 import DescriptionOutlined from '@material-ui/icons/DescriptionOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
-import HelpOutlined from '@material-ui/icons/HelpOutlined';
+import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import PolicyOutlined from '@material-ui/icons/PolicyOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import ScoreOutlined from '@material-ui/icons/ScoreOutlined';
 import StorageOutlined from '@material-ui/icons/StorageOutlined';
 import SubjectOutlined from '@material-ui/icons/SubjectOutlined';
+import UpdateOutlined from '@material-ui/icons/UpdateOutlined';
 import VpnKeyOutlined from '@material-ui/icons/VpnKeyOutlined';
 
 import { urls } from './urls';
@@ -29,7 +30,7 @@ export const MAX_AVATAR_FILE_SIZE = 3500000; // 3.5 MB.
 export const MAX_AVATAR_WIDTH_HEIGHT = 200; // Pixels.
 export const MAX_COMMENT_ATTACHMENT_FILE_SIZE = 3500000; // 3.5 MB.
 export const MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT = 1200; // Pixels.
-export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
+export const RESULTS_PER_PAGE_OPTIONS = [10, 25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
 export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
@@ -114,7 +115,7 @@ export const ABOUT_ITEMS = [
     href: urls.contact,
   },
   {
-    icon: HelpOutlined,
+    icon: HelpOutlineOutlined,
     text: 'common:guidelines',
     href: urls.guidelines,
   },
@@ -132,6 +133,11 @@ export const ABOUT_ITEMS = [
     icon: SubjectOutlined,
     text: 'common:blog',
     href: urls.blogs,
+  },
+  {
+    icon: UpdateOutlined,
+    text: 'common:updates',
+    href: urls.updates,
   },
   {
     icon: PolicyOutlined,

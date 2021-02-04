@@ -7,5 +7,6 @@
   "fileSizeError": "File is too large!",
   "invalidDate": "Invalid date!",
   "minDate": "Date is too early!",
-  "maxDate": "Date is too late!"
+  "maxDate": "Date is too late!",
+  "textOrAttachmentRequired": "Either text or attachment is required."
 }

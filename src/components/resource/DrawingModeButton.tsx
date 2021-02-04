@@ -6,7 +6,7 @@ import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-export const DrawModeButton: React.FC = () => {
+export const DrawingModeButton: React.FC = () => {
   const { t } = useTranslation();
   const { setDrawingMode, controlsDisabled } = usePdfViewerContext();
   const handleClick = (): void => setDrawingMode(true);

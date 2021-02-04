@@ -1,6 +1,9 @@
 import { useCourseQuery } from '__generated__/src/graphql/common.graphql';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Grid from '@material-ui/core/Grid';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
@@ -8,16 +11,16 @@ import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 import clsx from 'clsx';
 import {
   ActionsButton,
-  BackButton,
+  ButtonLink,
   CustomBottomNavbarContainer,
   Discussion,
   DiscussionHeader,
   Emoji,
   ErrorTemplate,
-  IconButtonLink,
   InfoButton,
   LoadingTemplate,
   MainTemplate,
@@ -78,19 +81,25 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
-  resourcesHeaderRoot: {
+  courseHeaderRoot: {
     borderBottom: BORDER,
   },
   backButton: {
     marginRight: spacing(2),
   },
-  resourcesHeaderTitle: {
+  headerTitle: {
     color: palette.text.secondary,
     flexGrow: 1,
+    marginLeft: spacing(2),
   },
   score: {
     marginLeft: spacing(2),
     marginRight: spacing(2),
+  },
+  uploadResourceButton: {
+    minWidth: 'auto',
+    whiteSpace: 'nowrap',
+    marginLeft: spacing(2),
   },
 }));
 
@@ -125,12 +134,9 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps } = useTabs();
+  const { tabsProps, firstTabPanelProps, secondTabPanelProps } = useTabs();
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const emoji = '🎓';
-
-  const uploadResourceButtonTooltip =
-    verificationRequiredTooltip || t('course-tooltips:uploadResource');
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -259,6 +265,15 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <InfoButton tooltip={t('course-tooltips:info')} infoDialogParams={infoDialogParams} />
   );
 
+  const renderUploadResourceAction = (
+    <MenuItem>
+      <ListItemIcon>
+        <CloudUploadOutlined />
+      </ListItemIcon>
+      <ListItemText>{t('common:uploadMaterial')}</ListItemText>
+    </MenuItem>
+  );
+
   const actionsDialogParams = {
     shareDialogParams,
     deleteActionParams: {
@@ -268,6 +283,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
     shareText: t('course:share'),
     hideDeleteAction: !isOwner,
+    renderCustomActions: [renderUploadResourceAction],
   };
 
   const renderActionsButton = (
@@ -278,22 +294,19 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderDiscussionHeader = (
-    <DiscussionHeader
-      renderShareButton={renderShareButton}
-      renderInfoButton={renderInfoButton}
-      renderActionsButton={renderActionsButton}
-    />
+    <DiscussionHeader renderShareButton={renderShareButton} renderInfoButton={renderInfoButton} />
   );
 
-  const renderDiscussion = (
-    <Discussion course={courseId} noCommentsText={t('course:noComments')} courseName={courseName} />
-  );
+  const renderDiscussion = <Discussion course={course} noCommentsText={t('course:noComments')} />;
 
   const renderScore = (
     <Typography className={classes.score} variant="subtitle1" color="textSecondary">
       {score}
     </Typography>
   );
+
+  // Only render for non-verified users to make the score more clear.
+  const renderScoreIcon = !verified && <ThumbsUpDownOutlined color="disabled" />;
 
   const renderCustomBottomNavbarContent = (
     <Grid container>
@@ -302,6 +315,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       </Grid>
       <Grid item xs={6} container justify="flex-end" alignItems="center">
         {renderUpvoteButton}
+        {renderScoreIcon}
         {renderScore}
         {renderDownvoteButton}
       </Grid>
@@ -351,22 +365,24 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   };
 
-  // Do not render a disabled button at all on mobile.
-  const renderUploadResourceButton = (!!verified || isTabletOrDesktop) && (
-    <Tooltip title={uploadResourceButtonTooltip}>
+  // On desktop, render a disabled button for non-verified users.
+  const renderUploadResourceButton = isTabletOrDesktop && (
+    <Tooltip title={verificationRequiredTooltip || ''}>
       <Typography component="span">
-        <IconButtonLink
+        <ButtonLink
+          className={classes.uploadResourceButton}
           href={uploadResourceHref}
-          icon={CloudUploadOutlined}
           disabled={verified === false}
-          color={isMobile ? 'secondary' : 'default'}
+          color="primary"
           size="small"
-        />
+          endIcon={<CloudUploadOutlined />}
+        >
+          {t('common:uploadMaterial')}
+        </ButtonLink>
       </Typography>
     </Tooltip>
   );
 
-  const renderBackButton = <BackButton className={classes.backButton} />;
   const renderEmoji = <Emoji emoji={emoji} />;
 
   const renderHeader = (
@@ -376,24 +392,19 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </>
   );
 
-  const renderResourcesTitle = (
+  const renderHeaderTitle = (
     <Typography
-      className={clsx('MuiCardHeader-subheader', classes.resourcesHeaderTitle, 'truncate-text')}
-      variant="body1"
+      className={clsx('MuiCardHeader-title', classes.headerTitle, 'truncate-text')}
+      variant="h5"
       align="left"
     >
       {renderHeader}
     </Typography>
   );
 
-  const renderResourcesHeader = (
-    <Grid
-      container
-      className={clsx('MuiCardHeader-root', classes.resourcesHeaderRoot)}
-      wrap="nowrap"
-    >
-      {renderBackButton}
-      {renderResourcesTitle}
+  const renderCourseHeader = (
+    <Grid container className={clsx('MuiCardHeader-root', classes.courseHeaderRoot)} wrap="nowrap">
+      {renderHeaderTitle}
       {renderStarButton}
       {renderUpvoteButton}
       {renderScore}
@@ -408,21 +419,21 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         <Tab label={`${t('common:resources')} (${resourceCount})`} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderResources}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderDiscussion}</TabPanel>
+      <TabPanel {...firstTabPanelProps}>{renderResources}</TabPanel>
+      <TabPanel {...secondTabPanelProps}>{renderDiscussion}</TabPanel>
     </Paper>
   );
 
   const renderDesktopContent = isTabletOrDesktop && (
     <Grid container spacing={2} className={classes.desktopContainer}>
       <Grid item container xs={12} md={6} lg={7} xl={8}>
-        <Paper className={clsx(classes.paperContainer)}>
-          {renderResourcesHeader}
+        <Paper className={classes.paperContainer}>
+          {renderCourseHeader}
           {renderResources}
         </Paper>
       </Grid>
       <Grid item container xs={12} md={6} lg={5} xl={4}>
-        <Paper className={clsx(classes.paperContainer)}>
+        <Paper className={classes.paperContainer}>
           {renderDiscussionHeader}
           {renderDiscussion}
         </Paper>
@@ -435,7 +446,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     topNavbarProps: {
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
-      renderHeaderLeft: renderUploadResourceButton,
     },
     customBottomNavbar: renderCustomBottomNavbar,
   };

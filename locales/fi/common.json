@@ -43,7 +43,6 @@
   "reportAbuse": "Ilmoita väärinkäytöstä (tulossa pian)",
   "comments": "Kommentit",
   "resultsPerPage": "Tuloksia per sivu",
-  "clickToView": "Klikkaa avataksesi!",
   "starred": "Tähdellä merkityt",
   "settings": "Asetukset",
   "communityUser": "Yhteisökäyttäjä",
@@ -83,5 +82,11 @@
   "replies": "Vastaukset",
   "postedBy": "Lähettänyt",
   "product": "Tuote",
-  "updates": "Updates"
+  "updates": "Updates",
+  "unexpectedError": "Odottamaton virhe.",
+  "addComment": "Lisää kommentti",
+  "startDiscussion": "Aloita keskustelu",
+  "findContent": "Löydä sisältöä",
+  "uploadMaterial": "Lisää materiaalia",
+  "addCourses": "Lisää kursseja"
 }

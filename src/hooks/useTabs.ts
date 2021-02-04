@@ -11,8 +11,9 @@ interface UseTabs {
   tabValue: number;
   setTabValue: Dispatch<SetStateAction<number>>;
   tabsProps: CustomTabsProps;
-  leftTabPanelProps: TabPanelProps;
-  rightTabPanelProps: TabPanelProps;
+  firstTabPanelProps: TabPanelProps;
+  secondTabPanelProps: TabPanelProps;
+  thirdTabPanelProps: TabPanelProps;
 }
 
 // Custom helper hook for views that contain tabs.
@@ -39,15 +40,27 @@ export const useTabs = (): UseTabs => {
     onChange: handleTabChange,
   };
 
-  const leftTabPanelProps = {
+  const firstTabPanelProps = {
     ...valueProp,
     index: 0,
   };
 
-  const rightTabPanelProps = {
+  const secondTabPanelProps = {
     ...valueProp,
     index: 1,
   };
 
-  return { tabValue, setTabValue, tabsProps, leftTabPanelProps, rightTabPanelProps };
+  const thirdTabPanelProps = {
+    ...valueProp,
+    index: 2,
+  };
+
+  return {
+    tabValue,
+    setTabValue,
+    tabsProps,
+    firstTabPanelProps,
+    secondTabPanelProps,
+    thirdTabPanelProps,
+  };
 };

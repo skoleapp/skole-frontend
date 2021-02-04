@@ -1,7 +1,7 @@
 {
   "description": "Visa {{ resourceTitle }} - {{ courseCode }} på Skole.",
-  "noResources": "Denna kurs har inga resurser.",
-  "noResourcesLink": "Lägg till en resurs här!",
+  "noResources": "Denna kurs har inga materialer.",
+  "noResourcesLink": "Lägg till material här!",
   "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!",
   "shareHeader": "Dela kurs",
   "shareTitle": "{{ courseName }} på Skole",

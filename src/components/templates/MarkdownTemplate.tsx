@@ -8,10 +8,10 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { MainTemplateProps } from 'types';
 
-import { BackButton, Emoji, MarkdownContent } from '../shared';
+import { Emoji, MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
+const useStyles = makeStyles(({ breakpoints, palette }) => ({
   root: {
     flexGrow: 1,
     [breakpoints.up('md')]: {
@@ -20,16 +20,9 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   },
   cardHeaderRoot: {
     borderBottom: BORDER,
-    position: 'relative',
-    padding: spacing(3),
   },
   cardHeaderTitle: {
     color: palette.text.secondary,
-  },
-  cardHeaderAvatar: {
-    position: 'absolute',
-    top: spacing(2),
-    left: spacing(2),
   },
 }));
 
@@ -48,7 +41,6 @@ export const MarkdownTemplate: React.FC<Props> = ({
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
-  const renderBackButton = <BackButton />;
   const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
 
   const renderHeaderTitle = (
@@ -63,10 +55,8 @@ export const MarkdownTemplate: React.FC<Props> = ({
       classes={{
         root: classes.cardHeaderRoot,
         title: classes.cardHeaderTitle,
-        avatar: classes.cardHeaderAvatar,
       }}
       title={renderHeaderTitle}
-      avatar={renderBackButton}
     />
   );
 

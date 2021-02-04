@@ -1,7 +1,7 @@
 {
   "description": "View {{ courseName }} - {{ courseCode }} on Skole.",
-  "noResources": "This course has no resources.",
-  "noResourcesLink": "Add a resource here!",
+  "noResources": "This course has no materials.",
+  "noResourcesLink": "Add material here!",
   "noComments": "This course has no comments. Add a comment below!",
   "shareHeader": "Share Course",
   "shareTitle": "{{ courseName }} on Skole",

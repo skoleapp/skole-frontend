@@ -1,19 +1,12 @@
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
 import Fab from '@material-ui/core/Fab';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import AttachFileOutlined from '@material-ui/icons/AttachFileOutlined';
-import CameraAltOutlined from '@material-ui/icons/CameraAltOutlined';
-import ClearOutlined from '@material-ui/icons/ClearOutlined';
 import SendOutlined from '@material-ui/icons/SendOutlined';
-import imageCompression from 'browser-image-compression';
-import clsx from 'clsx';
 import {
   useAuthContext,
   useDiscussionContext,
@@ -21,29 +14,36 @@ import {
   usePdfViewerContext,
 } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import { CreateCommentMutation, useCreateCommentMutation } from 'generated';
-import { useForm, useLanguageHeaderContext, useMediaQueries } from 'hooks';
-import { dataUriToFile, useTranslation } from 'lib';
-import Image from 'next/image';
-import * as R from 'ramda';
-import React, { ChangeEvent, useEffect, useRef } from 'react';
-import { CommentTarget, CreateCommentFormValues } from 'types';
 import {
-  ACCEPTED_ATTACHMENT_FILES,
-  MAX_COMMENT_ATTACHMENT_FILE_SIZE,
-  MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
-} from 'utils';
+  CommentObjectType,
+  CourseObjectType,
+  CreateCommentMutation,
+  ResourceObjectType,
+  SchoolObjectType,
+  useCreateCommentMutation,
+  UserObjectType,
+} from 'generated';
+import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
+import { dataUriToFile, useTranslation } from 'lib';
+import * as R from 'ramda';
+import React, { ChangeEvent, useEffect } from 'react';
+import { SecondaryDiscussion } from 'types';
+import { urls } from 'utils';
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
-import { TextFormField } from '../form-fields';
+import { CheckboxFormField } from '../form-fields';
 import { LoadingBox, TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
+import { CommentAttachmentButton } from './CommentAttachmentButton';
+import { CommentAttachmentInput } from './CommentAttachmentInput';
+import { CommentAttachmentPreview } from './CommentAttachmentPreview';
+import { CommentTextField } from './CommentTextField';
+import { CommentTextFieldHelperText } from './CommentTextFieldHelperText';
+import { CommentTextFieldToolbar } from './CommentTextFieldToolbar';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   desktopContainer: {
-    [breakpoints.up('md')]: {
-      padding: spacing(2),
-    },
+    padding: spacing(2),
   },
   desktopTextField: {
     margin: `${spacing(2)} 0`,
@@ -51,15 +51,8 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   dialogTextField: {
     margin: 0,
   },
-  attachmentContainer: {
-    width: '100%',
-    height: '25rem',
-    margin: `${spacing(2)} 0`,
+  attachmentPreview: {
     marginBottom: 'auto',
-    position: 'relative',
-    [breakpoints.up('md')]: {
-      marginBottom: spacing(8),
-    },
   },
   desktopSendButton: {
     minWidth: '7.5rem',
@@ -67,14 +60,8 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   desktopSendButtonSpan: {
     marginLeft: 'auto',
   },
-  dialogToolbar: {
-    margin: `${spacing(2)} 0`,
-  },
   dialogSendButton: {
     marginLeft: spacing(2),
-  },
-  attachmentImage: {
-    objectFit: 'contain',
   },
   dialogContent: {
     display: 'flex',
@@ -87,42 +74,47 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   },
 }));
 
-interface CreateCommentFormProps {
-  target: CommentTarget;
+interface CreateCommentFormValues {
+  user: UserObjectType | null;
+  text: string;
+  attachment: string | null;
+  course: CourseObjectType | null;
+  resource: ResourceObjectType | null;
+  comment: CommentObjectType | null;
+  school: SchoolObjectType | null;
+  secondaryDiscussion: SecondaryDiscussion;
+}
+
+interface CreateCommentFormProps
+  extends Pick<CreateCommentFormValues, 'course' | 'resource' | 'school' | 'comment'> {
   onCommentCreated: () => void;
   placeholder: string;
-  dialogPlaceholder: string;
   resetCommentTarget: () => void;
 }
 
 export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
+  course,
+  resource,
+  school,
+  comment,
   onCommentCreated,
-  target,
   placeholder,
-  dialogPlaceholder,
   resetCommentTarget,
 }) => {
-  const classes = useStyles();
-  const { t } = useTranslation();
-  const { loginRequiredTooltip, verificationRequiredTooltip, userMe, verified } = useAuthContext();
-  const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
-  const { screenshot, setScreenshot } = usePdfViewerContext();
-  const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
-  const { drawingMode } = usePdfViewerContext();
-  const context = useLanguageHeaderContext();
-  const attachmentInputRef = useRef<HTMLInputElement>(null!);
-  const handleUploadAttachment = (): false | void => attachmentInputRef.current.click();
-  const { formRef } = useForm<CreateCommentFormValues>();
-
-  const attachmentTooltip =
-    loginRequiredTooltip || verificationRequiredTooltip || t('discussion-tooltips:attachFile');
-
   const {
     createCommentDialogOpen,
     setCreateCommentDialogOpen,
-    commentAttachment,
     setCommentAttachment,
-  } = useDiscussionContext();
+    formRef,
+  } = useDiscussionContext<CreateCommentFormValues>();
+
+  const classes = useStyles();
+  const { t } = useTranslation();
+  const { userMe } = useAuthContext();
+  const { isTabletOrDesktop } = useMediaQueries();
+  const { screenshot, setScreenshot, drawingMode } = usePdfViewerContext();
+  const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
+  const context = useLanguageHeaderContext();
 
   // Use screenshot as attachment if area has been marked and drawing mode is toggled off.
   useEffect(() => {
@@ -166,187 +158,122 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     user: _user,
     text,
     attachment,
-    ...values
+    course: _course,
+    resource: _resource,
+    school: _school,
+    comment: _comment,
+    secondaryDiscussion,
   }: CreateCommentFormValues): Promise<void> => {
     if (!text && !attachment) {
-      toggleNotification(t('notifications:messageEmpty'));
+      toggleNotification(t('validation:textOrAttachmentRequired'));
     } else {
       const user = R.prop('id', _user);
 
+      const secondaryCourse =
+        secondaryDiscussion?.__typename === 'CourseObjectType' ? secondaryDiscussion.id : null;
+
+      // Use course as either primary or secondary target for non-replies.
+      const course = !_comment ? R.propOr(secondaryCourse, 'id', _course) : null;
+
+      // Use resource only as primary target for non-replies.
+      const resource = !_comment ? R.prop('id', _resource) : null;
+
+      const secondarySchool =
+        secondaryDiscussion?.__typename === 'SchoolObjectType' ? secondaryDiscussion.id : null;
+
+      // Use school as either primary or secondary target for non-replies.
+      const school = !_comment ? R.propOr(secondarySchool, 'id', _school) : null;
+
+      // Use comment only as primary target for all replies.
+      const comment = R.prop('id', _comment);
+
       await createCommentMutation({
-        variables: { user, text, attachment, ...values },
+        variables: { user, text, attachment, course, resource, school, comment },
         context,
       });
 
       formRef.current?.resetForm();
       handleCloseCreateCommentDialog();
+      formRef.current?.setSubmitting(false);
     }
-
-    formRef.current?.setSubmitting(false);
   };
 
   const initialValues = {
     user: userMe,
     text: '',
     attachment: null,
-    ...target,
+    course,
+    resource,
+    school,
+    comment,
+    secondaryDiscussion: null,
   };
 
-  const setAttachment = (file: File | Blob) => {
-    formRef.current?.setFieldValue('attachment', file);
-    setCreateCommentDialogOpen(true);
+  const renderDialogTextFieldToolbar = <CommentTextFieldToolbar />;
+  const renderAttachmentButton = <CommentAttachmentButton />;
+  const renderAttachmentInput = <CommentAttachmentInput dialog />;
+  const renderHelperText = <CommentTextFieldHelperText />;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    reader.onloadend = (): void => {
-      setCommentAttachment(reader.result);
-    };
-  };
-
-  // Automatically resize the image and update the field value.
-  const handleAttachmentChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
-    const file: File = R.path(['currentTarget', 'files', '0'], e);
-
-    const options = {
-      maxSizeMB: MAX_COMMENT_ATTACHMENT_FILE_SIZE / 1000000,
-      maxWidthOrHeight: MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT,
-    };
-
-    if (file.size > MAX_COMMENT_ATTACHMENT_FILE_SIZE) {
-      try {
-        const compressedFile = await imageCompression(file, options);
-        setAttachment(compressedFile);
-      } catch {
-        toggleNotification(t('validation:fileSizeError'));
-      }
-    } else {
-      setAttachment(file);
-    }
-  };
-
-  const handleClearAttachment = (): void => {
-    formRef.current?.setFieldValue('attachment', null);
-    setCommentAttachment(null);
-  };
-
-  // On desktop, submit form from enter key and add new line from Shift + Enter.
-  const handleKeydown = (e: KeyboardEvent) => {
-    if (isDesktop && e.code === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      formRef.current?.submitForm();
-    }
-  };
-
-  const submitForm = () => formRef.current?.submitForm();
+  const renderAttachmentPreview = (
+    <CommentAttachmentPreview className={classes.attachmentPreview} />
+  );
 
   const renderAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
     !!userMe && <AuthorSelection {...props} />;
 
-  const renderHiddenAttachmentInput = (
-    <input
-      ref={attachmentInputRef}
-      value=""
-      type="file"
-      accept={ACCEPTED_ATTACHMENT_FILES.toString()}
-      onChange={handleAttachmentChange}
-      disabled={!userMe}
-    />
-  );
+  const renderDialogAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
+    !!userMe && <FormControl>{renderAuthorSelection(props)}</FormControl>;
 
-  // For anonymous users and user without verification that are on mobile, hide the entire button.
-  const renderAttachmentButton = ((isMobile && !!userMe && !!verified) || isTabletOrDesktop) && (
-    <Tooltip title={attachmentTooltip}>
-      <Typography component="span">
-        <IconButton
-          onClick={handleUploadAttachment}
-          disabled={verified === false || !userMe}
-          size="small"
-        >
-          {isMobile ? <CameraAltOutlined /> : <AttachFileOutlined />}
-        </IconButton>
-      </Typography>
-    </Tooltip>
-  );
-
-  const renderClearAttachmentButton = ({
-    values: { attachment },
-  }: FormikProps<CreateCommentFormValues>) =>
-    !!attachment && (
-      <Tooltip title={t('discussion-tooltips:clearAttachment')}>
-        <Typography component="span">
-          <IconButton onClick={handleClearAttachment} size="small">
-            <ClearOutlined />
-          </IconButton>
-        </Typography>
-      </Tooltip>
-    );
-
-  const renderAttachmentPreview = !!commentAttachment && (
-    <Box className={clsx(classes.attachmentContainer, !!screenshot && 'screenshot-border')}>
-      <Image
-        layout="fill"
-        className={classes.attachmentImage}
-        src={String(commentAttachment)}
-        unoptimized // Must be used for base64 images for now (v10.0.1). TODO: See if this is fixed in future Next.js versions.
-        alt={t('discussion:attachmentAlt')}
-      />
-    </Box>
-  );
-
-  const textFieldProps = {
-    name: 'text',
-    component: TextFormField,
-    placeholder,
-    multiline: true,
-    rowsMax: '10',
-    InputProps: {
-      onKeyDown: handleKeydown,
-    },
+  const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const secondaryDiscussion = course?.school || resource?.course;
+    const val = checked ? secondaryDiscussion : null;
+    formRef.current?.setFieldValue('secondaryDiscussion', val);
   };
 
-  const renderDesktopTextField = ({ values }: FormikProps<CreateCommentFormValues>) => (
+  const secondaryDiscussionLinkHref = resource?.course
+    ? urls.course(resource.course.id)
+    : course?.school
+    ? urls.school(course.school.id)
+    : '#';
+
+  const renderSecondaryDiscussionLink = (
+    <TextLink href={secondaryDiscussionLinkHref}>
+      {resource?.course.name || course?.school.name}
+    </TextLink>
+  );
+
+  const renderLabel = (
+    <Typography variant="body2" color="textSecondary">
+      {t('forms:alsoSendTo')} {renderSecondaryDiscussionLink}
+    </Typography>
+  );
+
+  const renderSecondaryDiscussionField = (!!course || !!resource) && !comment && (
     <Field
-      {...textFieldProps}
-      value={createCommentDialogOpen ? '' : values.text}
-      rows="4"
+      name="secondaryDiscussion"
+      formControlProps={{ margin: 'none' }}
+      component={CheckboxFormField}
+      onChange={handleChange}
+      label={renderLabel}
+    />
+  );
+
+  const renderDesktopTextField = (props: FormikProps<CreateCommentFormValues>) => (
+    <CommentTextField
+      placeholder={placeholder}
+      value={createCommentDialogOpen ? '' : props.values.text}
       className={classes.desktopTextField}
+      {...props}
     />
   );
 
-  const renderDialogTextField = (
-    <Field
-      {...textFieldProps}
-      placeholder={dialogPlaceholder}
+  const renderDialogTextField = (props: FormikProps<CreateCommentFormValues>) => (
+    <CommentTextField
+      placeholder={placeholder}
       className={classes.dialogTextField}
+      rows="1"
+      {...props}
     />
-  );
-
-  const renderFormHelperText = isTabletOrDesktop && (
-    <>
-      <FormHelperText>
-        {t('discussion:helperTextMarkdown')}{' '}
-        <TextLink href="https://commonmark.org/help/" target="_blank">
-          {t('discussion:markdown')}
-        </TextLink>
-        .
-      </FormHelperText>
-      <FormHelperText>
-        {t('discussion:helperTextCombination', { combination: 'Shift + Enter' })}
-      </FormHelperText>
-    </>
-  );
-
-  const renderDialogToolbar = (props: FormikProps<CreateCommentFormValues>) => (
-    <Grid className={classes.dialogToolbar} container alignItems="center">
-      <Grid item xs={4}>
-        {renderAttachmentButton}
-        {renderClearAttachmentButton(props)}
-      </Grid>
-      <Grid item xs={8} container alignItems="flex-end" direction="column">
-        {renderFormHelperText}
-      </Grid>
-    </Grid>
   );
 
   const renderDialogSendButton = ({
@@ -359,7 +286,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
           size="small"
           color="primary"
           disabled={!text && !attachment} // Require either text content or an attachment.
-          onClick={submitForm}
+          onClick={formRef.current?.submitForm}
         >
           <SendOutlined />
         </Fab>
@@ -367,11 +294,13 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     </Tooltip>
   );
 
-  const renderDialogInput = (props: FormikProps<CreateCommentFormValues>) => (
-    <Box display="flex" alignItems="center">
-      {renderDialogTextField}
-      {renderDialogSendButton(props)}
-    </Box>
+  const renderDialogInputArea = (props: FormikProps<CreateCommentFormValues>) => (
+    <FormControl>
+      <Grid container alignItems="center" wrap="nowrap">
+        {renderDialogTextField(props)}
+        {renderDialogSendButton(props)}
+      </Grid>
+    </FormControl>
   );
 
   const renderDesktopSendButton = ({
@@ -380,11 +309,11 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     <Tooltip title={t('discussion-tooltips:sendMessage')}>
       <Typography className={classes.desktopSendButtonSpan} component="span">
         <Button
-          onClick={submitForm}
           variant="contained"
           color="primary"
           className={classes.desktopSendButton}
           disabled={(!text && !attachment) || createCommentDialogOpen} // Require either text content or an attachment.
+          type="submit"
           endIcon={<SendOutlined />}
         >
           {t('common:send')}
@@ -394,25 +323,25 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   );
 
   const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (
-    <Grid container alignItems="center">
+    <Grid container alignItems="center" spacing={2}>
       <Grid item xs={6}>
         {renderAuthorSelection(props)}
       </Grid>
-      <Grid item xs={6} container justify="flex-end">
-        {renderFormHelperText}
+      <Grid item xs={6}>
+        {renderHelperText}
       </Grid>
     </Grid>
   );
 
   const renderDesktopBottomToolbar = (props: FormikProps<CreateCommentFormValues>) => (
-    <Grid container alignItems="center">
+    <Grid container alignItems="center" wrap="nowrap">
       {renderAttachmentButton}
-      {renderClearAttachmentButton}
+      {renderSecondaryDiscussionField}
       {renderDesktopSendButton(props)}
     </Grid>
   );
 
-  const renderDesktopInput = (props: FormikProps<CreateCommentFormValues>) =>
+  const renderDesktopInputArea = (props: FormikProps<CreateCommentFormValues>) =>
     isTabletOrDesktop && (
       <>
         {renderDesktopTopToolbar(props)}
@@ -421,17 +350,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       </>
     );
 
-  const renderHeaderCenter = (props: FormikProps<CreateCommentFormValues>) =>
-    !!userMe && (
-      <Grid container justify="center">
-        {renderAuthorSelection(props)}
-      </Grid>
-    );
-
-  const renderDialogHeader = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderDialogHeader = (
     <DialogHeader
-      headerCenter={renderHeaderCenter(props)} // Rendered for authenticated users.
-      text={dialogPlaceholder} // Rendered for anonymous users.
+      text={t('common:addComment')}
       emoji="💬"
       onCancel={handleCloseCreateCommentDialog}
     />
@@ -441,15 +362,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     <DialogContent className={classes.dialogContent}>
       <Grid container direction="column" justify="flex-end" wrap="nowrap">
         {renderAttachmentPreview}
-        {renderDialogToolbar(props)}
-        {renderDialogInput(props)}
+        {renderDialogAuthorSelection(props)}
+        {renderSecondaryDiscussionField}
+        {renderDialogTextFieldToolbar}
+        {renderDialogInputArea(props)}
       </Grid>
     </DialogContent>
   );
 
   const renderCreateCommentDialog = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={createCommentDialogOpen} onClose={handleCloseCreateCommentDialog}>
-      {renderDialogHeader(props)}
+      {renderDialogHeader}
       {renderDialogContent(props)}
     </SkoleDialog>
   );
@@ -464,10 +387,10 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const renderFormFields = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <Form className={classes.desktopContainer}>
-      {renderDesktopInput(props)}
+      {renderDesktopInputArea(props)}
       {renderCreateCommentDialog(props)}
-      {renderHiddenAttachmentInput}
       {renderLoadingDialog(props)}
+      {renderAttachmentInput}
     </Form>
   );
 

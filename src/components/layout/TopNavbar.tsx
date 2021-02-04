@@ -10,15 +10,22 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
+import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import ChatOutlined from '@material-ui/icons/ChatOutlined';
+import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
+import clsx from 'clsx';
 import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
@@ -40,7 +47,7 @@ import {
   TopNavbarSearchWidget,
 } from '../shared';
 
-const useStyles = makeStyles(({ breakpoints, spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   root: {
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
     display: 'flex',
@@ -51,6 +58,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
     },
   },
   toolbar: {
+    height: '4rem',
     [breakpoints.up('md')]: {
       paddingLeft: spacing(4),
       paddingRight: spacing(4),
@@ -62,6 +70,28 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   },
   seeAllButton: {
     marginTop: spacing(2),
+  },
+  tabs: {
+    backgroundColor: palette.primary.dark,
+  },
+  tab: {
+    borderBottom: 'none',
+    color: palette.secondary.main,
+    minHeight: 'auto',
+    minWidth: 'auto',
+    padding: `${spacing(2)} ${spacing(3)}`,
+  },
+  selectedTab: {
+    borderBottom: `0.1rem solid ${palette.secondary.main}`,
+  },
+  tabWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  tabLabelIcon: {
+    marginRight: '0.3rem',
+    marginBottom: '0.2rem !important',
   },
 }));
 
@@ -86,6 +116,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
+  const { pathname } = useRouter();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
@@ -110,7 +141,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderBackButton = !hideBackButton && <BackButton />;
   const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
 
-  const renderHeader = (!!header || !!emoji) && (
+  const renderHeader = !!header && (
     <Typography variant="h6" className="truncate-text">
       {header}
       {renderEmoji}
@@ -253,18 +284,71 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       </Grid>
       <Grid item xs={10} container justify="flex-end" alignItems="center">
         {renderSearch}
-        {renderDynamicButtons}
         {renderLanguageButton}
+        {renderDynamicButtons}
       </Grid>
     </Grid>
   );
 
+  const renderToolbar = (
+    <Toolbar className={classes.toolbar} variant="dense">
+      {renderMobileContent}
+      {renderDesktopContent}
+    </Toolbar>
+  );
+
+  const tabs = [
+    {
+      href: urls.home,
+      label: t('common:home'),
+      icon: HomeOutlined,
+    },
+    {
+      href: urls.addComment,
+      label: t('common:startDiscussion'),
+      icon: ChatOutlined,
+    },
+    {
+      href: urls.search,
+      label: t('common:findContent'),
+      icon: AssignmentOutlined,
+    },
+    {
+      href: urls.addCourse,
+      label: t('common:addCourses'),
+      icon: SchoolOutlined,
+    },
+    {
+      href: urls.uploadResource,
+      label: t('common:uploadMaterial'),
+      icon: CloudUploadOutlined,
+    },
+  ];
+
+  const mapTabs = tabs.map(({ href, label, icon: Icon }) => (
+    <Link href={href}>
+      <Tab
+        classes={{
+          root: clsx(classes.tab, pathname === href && classes.selectedTab),
+          wrapper: classes.tabWrapper,
+        }}
+        label={label}
+        icon={<Icon className={classes.tabLabelIcon} />}
+        selected={pathname === href}
+      />
+    </Link>
+  ));
+
+  const renderTabs = isTabletOrDesktop && (
+    <Tabs className={classes.tabs} variant="standard" textColor="secondary">
+      {mapTabs}
+    </Tabs>
+  );
+
   return (
     <AppBar className={classes.root}>
-      <Toolbar className={classes.toolbar} variant="dense">
-        {renderMobileContent}
-        {renderDesktopContent}
-      </Toolbar>
+      {renderToolbar}
+      {renderTabs}
     </AppBar>
   );
 };

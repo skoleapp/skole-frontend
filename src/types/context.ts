@@ -1,3 +1,4 @@
+import { FormikProps } from 'formik';
 import { CommentObjectType, UserObjectType } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
@@ -64,7 +65,7 @@ export interface PdfViewerContextType {
   centerHorizontalScroll: () => void;
 }
 
-export interface DiscussionContextType {
+export interface DiscussionContextType<T> {
   comments: CommentObjectType[];
   setComments: Dispatch<SetStateAction<CommentObjectType[]>>;
   commentCount: string;
@@ -75,6 +76,8 @@ export interface DiscussionContextType {
   setAttachmentViewerValue: Dispatch<SetStateAction<string | null>>;
   commentAttachment: string | ArrayBuffer | null;
   setCommentAttachment: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
+  attachmentInputRef: MutableRefObject<HTMLInputElement>;
+  formRef: MutableRefObject<FormikProps<T> | null>;
 }
 
 export interface ConfirmOptions {

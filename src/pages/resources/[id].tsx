@@ -10,14 +10,15 @@ import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
 import PrintOutlined from '@material-ui/icons/PrintOutlined';
+import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 import clsx from 'clsx';
 import {
   ActionsButton,
   CustomBottomNavbarContainer,
   Discussion,
   DiscussionHeader,
-  DrawModeButton,
-  DrawModeControls,
+  DrawingModeButton,
+  DrawingModeControls,
   ErrorTemplate,
   InfoButton,
   LoadingBox,
@@ -134,7 +135,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { commentCount, createCommentDialogOpen } = useDiscussionContext(initialCommentCount);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
   const { handleCloseActionsDialog } = useActionsContext();
-  const { tabsProps, leftTabPanelProps, rightTabPanelProps, tabValue, setTabValue } = useTabs();
+  const { tabsProps, firstTabPanelProps, secondTabPanelProps, tabValue, setTabValue } = useTabs();
   const emoji = '📚';
 
   const { stars, renderStarButton } = useStars({
@@ -162,9 +163,9 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     createCommentDialogOpen && tabValue === 0 && setTabValue(1);
   }, [createCommentDialogOpen, tabValue]);
 
-  // If drawing mode is on and user changes to discussion tab, toggle drawing mode off.
+  // If drawing mode is on and user changes to discussion tab on mobile, toggle drawing mode off.
   useEffect(() => {
-    drawingMode && tabValue === 1 && setDrawingMode(false);
+    isMobile && drawingMode && tabValue === 1 && setDrawingMode(false);
   }, [drawingMode, tabValue]);
 
   useEffect(() => {
@@ -309,7 +310,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   ];
 
-  const renderDrawModeControls = <DrawModeControls />;
+  const renderDrawingModeControls = <DrawingModeControls />;
 
   const shareDialogParams = {
     header: t('resource:shareHeader'),
@@ -370,7 +371,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   // Hide these buttons from the custom bottom navbar when in discussion tab.
-  const renderDrawModeButton = tabValue === 0 && <DrawModeButton />;
+  const renderDrawingModeButton = tabValue === 0 && <DrawingModeButton />;
   const renderRotateButton = tabValue === 0 && <RotateButton />;
 
   const renderScore = (
@@ -379,15 +380,19 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
+  // Only render for non-verified users to make the score more clear.
+  const renderScoreIcon = !verified && <ThumbsUpDownOutlined color="disabled" />;
+
   const renderDefaultCustomBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
         {renderRotateButton}
-        {renderDrawModeButton}
+        {renderDrawingModeButton}
       </Grid>
-      <Grid item xs={6} container justify="flex-end">
+      <Grid item xs={6} container justify="flex-end" alignItems="center">
         {renderStarButton}
         {renderUpvoteButton}
+        {renderScoreIcon}
         {renderScore}
         {renderDownvoteButton}
       </Grid>
@@ -395,7 +400,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderCustomBottomNavbarContent = drawingMode
-    ? renderDrawModeControls
+    ? renderDrawingModeControls
     : renderDefaultCustomBottomNavbarContent;
 
   // Only render the custom bottom navbar in the resource tab or if the user is verified since all of the non-PDF actions are only available for verified users.
@@ -409,6 +414,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const toolbarProps = {
     title,
     emoji,
+    courseId,
     renderStarButton,
     renderUpvoteButton,
     renderScore,
@@ -430,11 +436,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderDiscussion = (
-    <Discussion
-      resource={resourceId}
-      noCommentsText={t('resource:noComments')}
-      resourceTitle={title}
-    />
+    <Discussion resource={resource} noCommentsText={t('resource:noComments')} />
   );
 
   const renderMobileContent = isMobile && (
@@ -443,8 +445,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         <Tab label={t('common:resource')} />
         <Tab label={`${t('common:discussion')} (${commentCount})`} />
       </Tabs>
-      <TabPanel {...leftTabPanelProps}>{renderPdfViewer}</TabPanel>
-      <TabPanel {...rightTabPanelProps}>{renderDiscussion}</TabPanel>
+      <TabPanel {...firstTabPanelProps}>{renderPdfViewer}</TabPanel>
+      <TabPanel {...secondTabPanelProps}>{renderDiscussion}</TabPanel>
     </Paper>
   );
 
@@ -470,7 +472,6 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     customBottomNavbar: renderCustomBottomNavbar,
     topNavbarProps: {
-      renderHeaderLeft: renderShareButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
     },

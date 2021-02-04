@@ -16,7 +16,6 @@ import FilterListOutlined from '@material-ui/icons/FilterListOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import {
   AutocompleteField,
-  BackButton,
   ContactLink,
   CourseTableBody,
   DialogHeader,
@@ -81,17 +80,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   cardHeaderRoot: {
     borderBottom: BORDER,
-    padding: spacing(3),
-    position: 'relative',
-    height: '3.5rem',
   },
   cardHeaderTitle: {
     color: palette.text.secondary,
-  },
-  cardHeaderAvatar: {
-    position: 'absolute',
-    top: spacing(2),
-    left: spacing(2),
   },
   searchContainer: {
     padding: spacing(1),
@@ -486,7 +477,6 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Paper>
   );
 
-  const renderBackButton = <BackButton />;
   const renderFiltersEmoji = <Emoji emoji={filtersEmoji} />;
   const renderResultsEmoji = <Emoji emoji="🎓" />;
 
@@ -502,10 +492,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       classes={{
         root: classes.cardHeaderRoot,
         title: classes.cardHeaderTitle,
-        avatar: classes.cardHeaderAvatar,
       }}
       title={renderFiltersHeaderTitle}
-      avatar={renderBackButton}
     />
   );
 
