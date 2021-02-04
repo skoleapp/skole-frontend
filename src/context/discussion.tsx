@@ -1,6 +1,5 @@
-import { FormikValues } from 'formik';
+import { FormikProps, FormikValues } from 'formik';
 import { CommentObjectType } from 'generated';
-import { useForm } from 'hooks';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { DiscussionContextType } from 'types';
 
@@ -26,7 +25,7 @@ export const DiscussionContextProvider: React.FC = ({ children }) => {
   const [attachmentViewerValue, setAttachmentViewerValue] = useState<string | null>(null); // Attachment of an existing comment.
   const [commentAttachment, setCommentAttachment] = useState<string | ArrayBuffer | null>(null); // Attachment for comment creation form.
   const attachmentInputRef = useRef<HTMLInputElement>(null!);
-  const { formRef } = useForm<FormikValues>();
+  const formRef = useRef<FormikProps<FormikValues>>(null!);
 
   const value = {
     comments,
