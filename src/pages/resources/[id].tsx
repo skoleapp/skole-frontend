@@ -467,7 +467,6 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     customBottomNavbar: renderCustomBottomNavbar,
     topNavbarProps: {
-      renderHeaderLeft: renderShareButton,
       renderHeaderRight: renderActionsButton,
       renderHeaderRightSecondary: renderInfoButton,
     },
