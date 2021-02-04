@@ -10,6 +10,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Typography from '@material-ui/core/Typography';
 import CloudDownloadOutlined from '@material-ui/icons/CloudDownloadOutlined';
 import PrintOutlined from '@material-ui/icons/PrintOutlined';
+import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
 import clsx from 'clsx';
 import {
   ActionsButton,
@@ -379,15 +380,19 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
+  // Only render for non-verified users to make the score more clear.
+  const renderScoreIcon = !verified && <ThumbsUpDownOutlined color="disabled" />;
+
   const renderDefaultCustomBottomNavbarContent = (
     <Grid container>
       <Grid item xs={6} container justify="flex-start">
         {renderRotateButton}
         {renderDrawingModeButton}
       </Grid>
-      <Grid item xs={6} container justify="flex-end">
+      <Grid item xs={6} container justify="flex-end" alignItems="center">
         {renderStarButton}
         {renderUpvoteButton}
+        {renderScoreIcon}
         {renderScore}
         {renderDownvoteButton}
       </Grid>
