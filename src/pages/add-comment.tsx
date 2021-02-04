@@ -64,11 +64,13 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       setCommentAttachment(null);
       toggleNotification(successMessage);
 
-      const pathname = course
-        ? urls.course(course)
-        : resource
+      const pathname = resource
         ? urls.resource(resource)
-        : school && urls.school(school);
+        : course
+        ? urls.course(course)
+        : school
+        ? urls.school(school)
+        : '#';
 
       await Router.push({
         pathname,
@@ -181,7 +183,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     return (
       <Collapse in={visible}>
         <Field
-          name="include"
+          name="secondaryDiscussion"
           label={renderLabel}
           component={CheckboxFormField}
           onChange={handleChange}
