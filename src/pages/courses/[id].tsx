@@ -98,6 +98,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   uploadResourceButton: {
     minWidth: 'auto',
     whiteSpace: 'nowrap',
+    marginLeft: spacing(2),
   },
 }));
 
