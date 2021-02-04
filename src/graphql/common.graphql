@@ -734,6 +734,12 @@ query User($id: ID, $page: Int, $pageSize: Int) {
   }
 }
 
+query UserSeoProps($id: ID) {
+  user(id: $id) {
+    username
+  }
+}
+
 mutation Register($username: String!, $email: String!, $password: String!) {
   register(input: { username: $username, email: $email, password: $password }) {
     errors {

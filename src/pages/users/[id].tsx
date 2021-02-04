@@ -1,4 +1,3 @@
-import { UserDocument } from '__generated__/src/graphql/common.graphql';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Chip from '@material-ui/core/Chip';
@@ -20,6 +19,7 @@ import {
   CommentTableBody,
   CourseTableBody,
   ErrorTemplate,
+  LoadingTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
@@ -29,9 +29,9 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext } from 'context';
-import { BadgeObjectType, UserQueryResult } from 'generated';
+import { BadgeObjectType, UserSeoPropsDocument, useUserQuery } from 'generated';
 import { withUserMe } from 'hocs';
-import { useDayjs, useMediaQueries } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -132,14 +132,16 @@ interface ProfileStrengthStep {
   completed: boolean;
 }
 
-const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, error }) => {
+const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const { userMeId, school, subject, verified } = useAuthContext();
   const { query } = useRouter();
+  const context = useLanguageHeaderContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const { data, loading, error } = useUserQuery({ variables, context });
   const user = R.prop('user', data);
   const rank = R.propOr('', 'rank', user);
   const username = R.propOr('-', 'username', user);
@@ -542,6 +544,10 @@ const UserPage: NextPage<SeoPageProps & UserQueryResult> = ({ seoProps, data, er
     },
   };
 
+  if (loading) {
+    return <LoadingTemplate seoProps={seoProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
@@ -569,11 +575,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'profile');
-  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const variables = R.pick(['id'], params);
   const context = getLanguageHeaderContext(locale);
 
-  const { data, error = null } = await apolloClient.query({
-    query: UserDocument,
+  const { data } = await apolloClient.query({
+    query: UserSeoPropsDocument,
     variables,
     context,
   });
@@ -598,8 +604,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
       initialApolloState: apolloClient.cache.extract(),
       _ns: await loadNamespaces(['profile', 'profile-strength'], locale),
       seoProps,
-      data,
-      error,
     },
     revalidate: MAX_REVALIDATION_INTERVAL,
   };

@@ -30,7 +30,7 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext, useDiscussionContext } from 'context';
-import { SchoolQueryResult, SchoolSeoPropsDocument } from 'generated';
+import { SchoolSeoPropsDocument } from 'generated';
 import { withActions, withDiscussion, withInfo, withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries, useSearch, useTabs } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
@@ -77,7 +77,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
 }));
 
-const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({ seoProps }) => {
+const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { verified, verificationRequiredTooltip } = useAuthContext();
   const { t } = useTranslation();
