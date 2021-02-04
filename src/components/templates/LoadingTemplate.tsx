@@ -41,6 +41,7 @@ export const LoadingTemplate: React.FC<SeoPageProps> = ({ seoProps }) => {
     topNavbarProps: {
       hideBackButton: true,
       hideLogo: true,
+      hideNavigation: true,
       hideSearch: true,
       hideDynamicButtons: true,
       hideLanguageButton: true,

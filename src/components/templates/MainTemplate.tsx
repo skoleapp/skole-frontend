@@ -5,7 +5,12 @@ import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import * as R from 'ramda';
 import React from 'react';
-import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import {
+  BOTTOM_NAVBAR_HEIGHT,
+  TOP_NAVBAR_HEIGHT_DESKTOP,
+  TOP_NAVBAR_HEIGHT_MOBILE,
+  TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
+} from 'theme';
 import { MainTemplateProps } from 'types';
 
 import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
@@ -28,6 +33,11 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     [breakpoints.up('md')]: {
       minHeight: '100vh',
       padding: spacing(4),
+      paddingTop: `calc(${TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION} + ${spacing(4)})`,
+    },
+  },
+  containerHideNavigation: {
+    [breakpoints.up('md')]: {
       paddingTop: `calc(${TOP_NAVBAR_HEIGHT_DESKTOP} + ${spacing(4)})`,
     },
   },
@@ -39,6 +49,11 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     paddingRight: 0,
     paddingBottom: 0,
     paddingTop: TOP_NAVBAR_HEIGHT_MOBILE,
+    [breakpoints.up('md')]: {
+      paddingTop: TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
+    },
+  },
+  containerDenseHideNavigation: {
     [breakpoints.up('md')]: {
       paddingTop: TOP_NAVBAR_HEIGHT_DESKTOP,
     },
@@ -61,14 +76,17 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
 }) => {
   const classes = useStyles();
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const containerFullWidth: boolean = R.propOr(false, 'fullWidth', containerProps);
-  const containerDense: boolean = R.propOr(false, 'dense', containerProps);
+  const containerFullWidth = R.propOr(false, 'fullWidth', containerProps);
+  const containerDense = R.propOr(false, 'dense', containerProps);
+  const hideNavigation = R.propOr(false, 'hideNavigation', topNavbarProps);
 
   const containerClasses = clsx(
     classes.container,
     (hideBottomNavbar || isTabletOrDesktop) && classes.disableMarginBottom,
     containerFullWidth && classes.containerFullWidth,
     containerDense && classes.containerDense,
+    hideNavigation && !containerDense && classes.containerHideNavigation,
+    hideNavigation && !!containerDense && classes.containerDenseHideNavigation,
   );
 
   const renderHead = <Head {...seoProps} />;

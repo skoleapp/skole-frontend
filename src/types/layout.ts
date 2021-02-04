@@ -11,6 +11,7 @@ export interface TopNavbarProps {
   header?: JSX.Element | string | false; // Header shown on mobile.
   emoji?: string | false; // Emoji shown after the header on mobile.
   hideBackButton?: boolean; // Hide the back button on mobile.
+  hideNavigation?: boolean; // Hide navigation tabs on desktop.
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.
   hideDynamicButtons?: boolean; // Hide all dynamic buttons (Login, Register, Get Started, For Teachers/Activity, Starred, Profile) on desktop.

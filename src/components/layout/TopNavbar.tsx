@@ -32,7 +32,12 @@ import { useTranslation } from 'lib';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { MouseEvent, useState } from 'react';
-import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import {
+  BORDER_RADIUS,
+  TOP_NAVBAR_HEIGHT_DESKTOP,
+  TOP_NAVBAR_HEIGHT_MOBILE,
+  TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
+} from 'theme';
 import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
@@ -53,8 +58,13 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     display: 'flex',
     justifyContent: 'center',
     [breakpoints.up('md')]: {
-      height: TOP_NAVBAR_HEIGHT_DESKTOP,
+      height: TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
       justifyContent: 'center',
+    },
+  },
+  hideNavigation: {
+    [breakpoints.up('md')]: {
+      height: TOP_NAVBAR_HEIGHT_DESKTOP,
     },
   },
   toolbar: {
@@ -99,6 +109,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
   emoji,
   hideBackButton,
+  hideNavigation,
   hideSearch,
   hideDynamicButtons,
   hideLoginButton,
@@ -325,6 +336,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     },
   ];
 
+  console.log('hide tabs', hideNavigation);
+
   const mapTabs = tabs.map(({ href, label, icon: Icon }) => (
     <Link href={href}>
       <Tab
@@ -339,14 +352,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Link>
   ));
 
-  const renderTabs = isTabletOrDesktop && (
+  const renderTabs = isTabletOrDesktop && !hideNavigation && (
     <Tabs className={classes.tabs} variant="standard" textColor="secondary">
       {mapTabs}
     </Tabs>
   );
 
   return (
-    <AppBar className={classes.root}>
+    <AppBar className={clsx(classes.root, hideNavigation && classes.hideNavigation)}>
       {renderToolbar}
       {renderTabs}
     </AppBar>

@@ -228,6 +228,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
+      hideNavigation: true,
       header: t('for-teachers:header'),
       hideForTeachersButton: true,
     },

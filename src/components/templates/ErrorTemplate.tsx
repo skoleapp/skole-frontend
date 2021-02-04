@@ -7,7 +7,7 @@ import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'theme';
 import { SeoProps } from 'types';
 
-import { NotFoundBox } from '../shared';
+import { Emoji, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -37,12 +37,22 @@ export const ErrorTemplate: React.FC<Props> = ({ variant, seoProps }) => {
   const title = t(`${variant}:title`);
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);
+  const emoji = '⚠️';
 
-  const renderContent = <NotFoundBox text={text} />;
+  const renderEmoji = <Emoji emoji={emoji} />;
+
+  const renderTitle = (
+    <>
+      {header}
+      {renderEmoji}
+    </>
+  );
 
   const renderCardHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={header} />
+    <CardHeader className={classes.cardHeader} title={renderTitle} />
   );
+
+  const renderContent = <NotFoundBox text={text} />;
 
   const layoutProps = {
     seoProps: {
@@ -51,6 +61,7 @@ export const ErrorTemplate: React.FC<Props> = ({ variant, seoProps }) => {
     },
     topNavbarProps: {
       header,
+      emoji,
       hideSearch: true,
       hideDynamicButtons: true,
       hideLanguageButton: true,
