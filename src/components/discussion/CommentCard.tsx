@@ -47,21 +47,25 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   replyComment: {
     borderLeft: `${spacing(1)} solid ${palette.primary.main}`,
   },
-  cardHeader: {
+  cardHeaderRoot: {
     padding: 0,
     textAlign: 'left',
+  },
+  cardHeaderContent: {
+    overflow: 'hidden',
   },
   avatar: {
     width: '2rem',
     height: '2rem',
   },
-  cardTitle: {
+  cardHeaderTitle: {
     fontSize: '1rem',
+    whiteSpace: 'nowrap',
   },
   secondaryDiscussion: {
     marginLeft: spacing(1),
   },
-  cardSubHeader: {
+  cardHeaderSubheader: {
     fontSize: '0.75rem',
   },
   cardContent: {
@@ -289,7 +293,11 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderSecondaryDiscussion = (
-    <Typography className={classes.secondaryDiscussion} variant="body2" color="textSecondary">
+    <Typography
+      className={clsx(classes.secondaryDiscussion, 'truncate-text')}
+      variant="body2"
+      color="textSecondary"
+    >
       {renderSecondaryDiscussionLabel} {renderSecondaryDiscussionLink}
     </Typography>
   );
@@ -300,7 +308,7 @@ export const CommentCard: React.FC<Props> = ({
     (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
     (discussionType === DiscussionTypes.COURSE && !!comment.school) ||
     (discussionType === DiscussionTypes.RESOURCE && !!comment.course)) && (
-    <Grid container alignItems="center">
+    <Grid container alignItems="center" wrap="nowrap">
       {renderCreatorTitle} {renderSecondaryDiscussion}
     </Grid>
   );
@@ -308,9 +316,10 @@ export const CommentCard: React.FC<Props> = ({
   const renderCardHeader = (
     <CardHeader
       classes={{
-        root: classes.cardHeader,
-        title: classes.cardTitle,
-        subheader: classes.cardSubHeader,
+        root: classes.cardHeaderRoot,
+        content: classes.cardHeaderContent,
+        title: classes.cardHeaderTitle,
+        subheader: classes.cardHeaderSubheader,
       }}
       avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
       title={renderSecondaryDiscussionTitle || renderCreatorTitle}
