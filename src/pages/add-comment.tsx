@@ -64,6 +64,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       setCommentAttachment(null);
       toggleNotification(successMessage);
 
+      // Redirect to the `lowest` possible discussion.
       const pathname = resource
         ? urls.resource(resource)
         : course
@@ -104,12 +105,12 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const secondaryCourse =
       secondaryDiscussion?.__typename === 'CourseObjectType' && secondaryDiscussion.id;
 
-    // Use course as primary or secondary target.
+    // Use course as either primary or secondary target.
     const course = primaryCourse || secondaryCourse || null;
 
     const primaryResource = discussion?.__typename === 'ResourceObjectType' && discussion.id;
 
-    // Use resource as primary target.
+    // Use resource only as primary target.
     const resource = primaryResource || null;
 
     const primarySchool = discussion?.__typename === 'SchoolObjectType' && discussion.id;
@@ -117,7 +118,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const secondarySchool =
       secondaryDiscussion?.__typename === 'SchoolObjectType' && secondaryDiscussion.id;
 
-    // Use school as primary or secondary target.
+    // Use school as either primary or secondary target.
     const school = primarySchool || secondarySchool || null;
 
     await createCommentMutation({

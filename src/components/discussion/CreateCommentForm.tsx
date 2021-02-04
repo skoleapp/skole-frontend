@@ -175,7 +175,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       // Use course as either primary or secondary target for non-replies.
       const course = !_comment ? R.propOr(secondaryCourse, 'id', _course) : null;
 
-      // Use resource as primary target for non-replies.
+      // Use resource only as primary target for non-replies.
       const resource = !_comment ? R.prop('id', _resource) : null;
 
       const secondarySchool =
@@ -184,7 +184,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       // Use school as either primary or secondary target for non-replies.
       const school = !_comment ? R.propOr(secondarySchool, 'id', _school) : null;
 
-      // Use comment as primary target for all replies.
+      // Use comment only as primary target for all replies.
       const comment = R.prop('id', _comment);
 
       await createCommentMutation({
