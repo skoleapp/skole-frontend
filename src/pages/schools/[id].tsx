@@ -74,6 +74,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   addCoursesButton: {
     minWidth: 'auto',
     whiteSpace: 'nowrap',
+    padding: `${spacing(2)} ${spacing(4)}`,
   },
 }));
 
@@ -178,7 +179,6 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           href={addCourseHref}
           disabled={verified === false}
           color="primary"
-          size="small"
           endIcon={<AddCircleOutlineOutlined />}
         >
           {t('common:addCourses')}

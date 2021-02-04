@@ -100,6 +100,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     minWidth: 'auto',
     whiteSpace: 'nowrap',
     marginLeft: spacing(2),
+    padding: `${spacing(2)} ${spacing(4)}`,
   },
 }));
 
@@ -374,7 +375,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           href={uploadResourceHref}
           disabled={verified === false}
           color="primary"
-          size="small"
           endIcon={<CloudUploadOutlined />}
         >
           {t('common:uploadMaterial')}
