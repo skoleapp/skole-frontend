@@ -523,6 +523,12 @@ query School($id: ID, $page: Int, $pageSize: Int) {
   }
 }
 
+query SchoolSeoProps($id: ID) {
+  school(id: $id) {
+    name
+  }
+}
+
 query AutocompleteSchools($name: String) {
   autocompleteSchools(name: $name) {
     id

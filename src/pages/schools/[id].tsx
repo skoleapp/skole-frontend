@@ -1,3 +1,4 @@
+import { useSchoolQuery } from '__generated__/src/graphql/common.graphql';
 import Grid from '@material-ui/core/Grid';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -19,6 +20,7 @@ import {
   Emoji,
   ErrorTemplate,
   InfoButton,
+  LoadingTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
@@ -28,9 +30,9 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext, useDiscussionContext } from 'context';
-import { SchoolDocument, SchoolQueryResult } from 'generated';
+import { SchoolQueryResult, SchoolSeoPropsDocument } from 'generated';
 import { withActions, withDiscussion, withInfo, withUserMe } from 'hocs';
-import { useMediaQueries, useSearch, useTabs } from 'hooks';
+import { useLanguageHeaderContext, useMediaQueries, useSearch, useTabs } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -75,11 +77,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
 }));
 
-const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
-  seoProps,
-  data,
-  error,
-}) => {
+const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({ seoProps }) => {
   const classes = useStyles();
   const { verified, verificationRequiredTooltip } = useAuthContext();
   const { t } = useTranslation();
@@ -87,7 +85,9 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
   const { searchUrl } = useSearch();
   const { query } = useRouter();
   const { tabsProps, firstTabPanelProps, secondTabPanelProps, thirdTabPanelProps } = useTabs();
+  const context = useLanguageHeaderContext();
   const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const { data, loading, error } = useSchoolQuery({ variables, context });
   const school = R.prop('school', data);
   const schoolId = R.propOr('', 'id', school);
   const schoolName = R.propOr('', 'name', school);
@@ -336,6 +336,10 @@ const SchoolDetailPage: NextPage<SeoPageProps & SchoolQueryResult> = ({
     },
   };
 
+  if (loading) {
+    return <LoadingTemplate seoProps={seoProps} />;
+  }
+
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" seoProps={seoProps} />;
   }
@@ -364,11 +368,11 @@ const namespaces = ['school', 'school-tooltips', 'discussion', 'discussion-toolt
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'school');
-  const variables = R.pick(['id', 'page', 'pageSize'], params);
+  const variables = R.pick(['id'], params);
   const context = getLanguageHeaderContext(locale);
 
-  const { data, error = null } = await apolloClient.query({
-    query: SchoolDocument,
+  const { data } = await apolloClient.query({
+    query: SchoolSeoPropsDocument,
     variables,
     context,
   });
@@ -393,8 +397,6 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
       initialApolloState: apolloClient.cache.extract(),
       _ns: await loadNamespaces(namespaces, locale),
       seoProps,
-      data,
-      error,
     },
     revalidate: MAX_REVALIDATION_INTERVAL,
   };
