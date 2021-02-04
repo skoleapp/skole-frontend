@@ -1048,6 +1048,18 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
       id
       status
     }
+    course {
+      id
+      name
+    }
+    resource {
+      id
+      title
+    }
+    school {
+      id
+      name
+    }
     replyComments {
       id
       text

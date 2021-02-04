@@ -30,7 +30,7 @@ import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent } from 'react';
-import { SeoPageProps } from 'types';
+import { SecondaryDiscussion, SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -39,7 +39,7 @@ interface AddCommentFormValues {
   text: string;
   attachment: string | null;
   discussion: DiscussionsUnion | null;
-  include: CourseObjectType | SchoolObjectType | null;
+  secondaryDiscussion: SecondaryDiscussion;
 }
 
 const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
@@ -91,27 +91,32 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // See if course, resource or school is selected or a course or school is included.
   const handleSubmit = async ({
     discussion,
-    include,
+    secondaryDiscussion,
     user: _user,
     ...values
   }: AddCommentFormValues): Promise<void> => {
     const user = R.prop('id', _user);
 
-    const course =
-      discussion?.__typename === 'CourseObjectType'
-        ? discussion.id
-        : include?.__typename === 'CourseObjectType'
-        ? include.id
-        : null;
+    const primaryCourse = discussion?.__typename === 'CourseObjectType' && discussion.id;
 
-    const resource = discussion?.__typename === 'ResourceObjectType' ? discussion.id : null;
+    const secondaryCourse =
+      secondaryDiscussion?.__typename === 'CourseObjectType' && secondaryDiscussion.id;
 
-    const school =
-      discussion?.__typename === 'SchoolObjectType'
-        ? discussion.id
-        : include?.__typename === 'SchoolObjectType'
-        ? include.id
-        : null;
+    // Use course as primary or secondary target.
+    const course = primaryCourse || secondaryCourse || null;
+
+    const primaryResource = discussion?.__typename === 'ResourceObjectType' && discussion.id;
+
+    // Use resource as primary target.
+    const resource = primaryResource || null;
+
+    const primarySchool = discussion?.__typename === 'SchoolObjectType' && discussion.id;
+
+    const secondarySchool =
+      secondaryDiscussion?.__typename === 'SchoolObjectType' && secondaryDiscussion.id;
+
+    // Use school as primary or secondary target.
+    const school = primarySchool || secondarySchool || null;
 
     await createCommentMutation({
       variables: { ...values, user, course, resource, school },
@@ -124,7 +129,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const initialValues = {
     user: userMe,
     discussion: school,
-    include: null,
+    secondaryDiscussion: null,
     attachment: null,
     text: '',
   };
@@ -152,7 +157,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     />
   );
 
-  const renderIncludeField = ({ values }: FormikProps<AddCommentFormValues>) => {
+  const renderSecondaryDiscussionField = ({ values }: FormikProps<AddCommentFormValues>) => {
     const visible = ['CourseObjectType', 'ResourceObjectType'].includes(
       String(values.discussion?.__typename),
     );
@@ -162,9 +167,9 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const href = course ? urls.course(course.id) : school ? urls.school(school.id) : '#';
     const name = course?.name || school?.name;
 
-    const handleChange = (_: ChangeEvent<Record<string, unknown>>, checked: string) => {
+    const handleChange = (_: ChangeEvent<Record<string, unknown>>, checked: boolean) => {
       const val = checked ? course || school : null;
-      formRef.current?.setFieldValue('include', val);
+      formRef.current?.setFieldValue('secondaryDiscussion', val);
     };
 
     const renderLabel = (
@@ -217,7 +222,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderFormFields = (props: FormikProps<AddCommentFormValues>) => (
     <Form>
       {renderDiscussionField}
-      {renderIncludeField(props)}
+      {renderSecondaryDiscussionField(props)}
       {renderAuthorSelection(props)}
       {renderAttachmentPreview}
       {renderTextFieldToolbar}

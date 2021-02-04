@@ -19,6 +19,7 @@ import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'theme';
+import { DiscussionTypes } from 'types';
 
 import { ErrorBox, LoadingBox, NotFoundBox } from '../shared';
 import { CommentCard } from './CommentCard';
@@ -91,8 +92,16 @@ export const Discussion: React.FC<Props> = ({
   const context = useLanguageHeaderContext();
   const [comment, setComment] = useState<CommentObjectType | null>(null);
   const [prevCommentCount, setPrevCommentCount] = useState(0);
-  const [visibleComments, setVisibleComments] = useState(10);
+  const [visibleComments, setVisibleComments] = useState(20);
   const [loadingMoreComments, setLoadingMoreComments] = useState(false);
+
+  const discussionType = course
+    ? DiscussionTypes.COURSE
+    : resource
+    ? DiscussionTypes.RESOURCE
+    : school
+    ? DiscussionTypes.SCHOOL
+    : null;
 
   const {
     comments,
@@ -122,7 +131,7 @@ export const Discussion: React.FC<Props> = ({
 
       setTimeout(() => {
         setLoadingMoreComments(false);
-        setVisibleComments(visibleComments + 10);
+        setVisibleComments(visibleComments + 20);
       }, 400);
     }
   };
@@ -199,7 +208,13 @@ export const Discussion: React.FC<Props> = ({
   };
 
   const renderTopComment = (comment: CommentObjectType, i: number) => (
-    <CommentCard comment={comment} onCommentDeleted={discussionQuery} key={i} topComment />
+    <CommentCard
+      comment={comment}
+      onCommentDeleted={discussionQuery}
+      discussionType={discussionType}
+      topComment
+      key={i}
+    />
   );
 
   const getLastReply = (tc: CommentObjectType, rc: CommentObjectType) =>

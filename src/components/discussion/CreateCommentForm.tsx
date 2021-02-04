@@ -13,7 +13,7 @@ import {
   useNotificationsContext,
   usePdfViewerContext,
 } from 'context';
-import { Form, Formik, FormikProps } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   CommentObjectType,
   CourseObjectType,
@@ -26,12 +26,14 @@ import {
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataUriToFile, useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
+import { SecondaryDiscussion } from 'types';
+import { urls } from 'utils';
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
-import { LoadingBox } from '../shared';
+import { CheckboxFormField } from '../form-fields';
+import { LoadingBox, TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
-import { ClearCommentAttachmentButton } from './ClearCommentAttachmentButton';
 import { CommentAttachmentButton } from './CommentAttachmentButton';
 import { CommentAttachmentInput } from './CommentAttachmentInput';
 import { CommentAttachmentPreview } from './CommentAttachmentPreview';
@@ -64,6 +66,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   dialogContent: {
     display: 'flex',
     padding: spacing(2),
+    overflow: 'hidden',
   },
   loadingDialogContent: {
     minHeight: '15rem',
@@ -79,6 +82,7 @@ interface CreateCommentFormValues {
   resource: ResourceObjectType | null;
   comment: CommentObjectType | null;
   school: SchoolObjectType | null;
+  secondaryDiscussion: SecondaryDiscussion;
 }
 
 interface CreateCommentFormProps
@@ -158,14 +162,29 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     resource: _resource,
     school: _school,
     comment: _comment,
+    secondaryDiscussion,
   }: CreateCommentFormValues): Promise<void> => {
     if (!text && !attachment) {
       toggleNotification(t('validation:textOrAttachmentRequired'));
     } else {
       const user = R.prop('id', _user);
-      const course = !_comment ? R.prop('id', _course) : null;
+
+      const secondaryCourse =
+        secondaryDiscussion?.__typename === 'CourseObjectType' ? secondaryDiscussion.id : null;
+
+      // Use course as either primary or secondary target for non-replies.
+      const course = !_comment ? R.propOr(secondaryCourse, 'id', _course) : null;
+
+      // Use resource as primary target for non-replies.
       const resource = !_comment ? R.prop('id', _resource) : null;
-      const school = !_comment ? R.prop('id', _school) : null;
+
+      const secondarySchool =
+        secondaryDiscussion?.__typename === 'SchoolObjectType' ? secondaryDiscussion.id : null;
+
+      // Use school as either primary or secondary target for non-replies.
+      const school = !_comment ? R.propOr(secondarySchool, 'id', _school) : null;
+
+      // Use comment as primary target for all replies.
       const comment = R.prop('id', _comment);
 
       await createCommentMutation({
@@ -187,9 +206,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     resource,
     school,
     comment,
+    secondaryDiscussion: null,
   };
 
-  const renderClearAttachmentButton = <ClearCommentAttachmentButton />;
   const renderDialogTextFieldToolbar = <CommentTextFieldToolbar />;
   const renderAttachmentButton = <CommentAttachmentButton />;
   const renderAttachmentInput = <CommentAttachmentInput dialog />;
@@ -204,6 +223,40 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const renderDialogAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
     !!userMe && <FormControl>{renderAuthorSelection(props)}</FormControl>;
+
+  const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const secondaryDiscussion = course?.school || resource?.course;
+    const val = checked ? secondaryDiscussion : null;
+    formRef.current?.setFieldValue('secondaryDiscussion', val);
+  };
+
+  const secondaryDiscussionLinkHref = resource?.course
+    ? urls.course(resource.course.id)
+    : course?.school
+    ? urls.school(course.school.id)
+    : '#';
+
+  const renderSecondaryDiscussionLink = (
+    <TextLink href={secondaryDiscussionLinkHref}>
+      {resource?.course.name || course?.school.name}
+    </TextLink>
+  );
+
+  const renderLabel = (
+    <Typography variant="body2" color="textSecondary">
+      {t('forms:alsoSendTo')} {renderSecondaryDiscussionLink}
+    </Typography>
+  );
+
+  const renderSecondaryDiscussionField = (!!course || !!resource) && !comment && (
+    <Field
+      name="secondaryDiscussion"
+      formControlProps={{ margin: 'none' }}
+      component={CheckboxFormField}
+      onChange={handleChange}
+      label={renderLabel}
+    />
+  );
 
   const renderDesktopTextField = (props: FormikProps<CreateCommentFormValues>) => (
     <CommentTextField
@@ -281,9 +334,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   );
 
   const renderDesktopBottomToolbar = (props: FormikProps<CreateCommentFormValues>) => (
-    <Grid container alignItems="center">
+    <Grid container alignItems="center" wrap="nowrap">
       {renderAttachmentButton}
-      {renderClearAttachmentButton}
+      {renderSecondaryDiscussionField}
       {renderDesktopSendButton(props)}
     </Grid>
   );
@@ -310,6 +363,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       <Grid container direction="column" justify="flex-end" wrap="nowrap">
         {renderAttachmentPreview}
         {renderDialogAuthorSelection(props)}
+        {renderSecondaryDiscussionField}
         {renderDialogTextFieldToolbar}
         {renderDialogInputArea(props)}
       </Grid>

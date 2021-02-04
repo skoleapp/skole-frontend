@@ -11,5 +11,7 @@
   "helperTextCombination": "{{ combination }} to add a new line.",
   "commentCount": "{{ commentCount }} comments",
   "postingComment": "Posting comment...",
-  "loadingMoreComments": "Loading more comments..."
+  "loadingMoreComments": "Loading more comments...",
+  "postedIn": "posted in",
+  "alsoSentTo": "also sent to"
 }
