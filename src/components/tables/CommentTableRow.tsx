@@ -181,7 +181,7 @@ export const CommentTableRow: React.FC<Props> = ({
     </Box>
   );
 
-  const renderMarkdownContent = !commentPreview && (
+  const renderMarkdownContent = !!commentPreview && (
     <MarkdownContent>{commentPreview}</MarkdownContent>
   );
 
