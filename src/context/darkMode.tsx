@@ -9,10 +9,19 @@ export const useDarkModeContext = (): DarkModeContextType => useContext(DarkMode
 export const DarkModeContextProvider: React.FC = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [darkMode, setDarkMode] = useState(prefersDarkMode);
-  const toggleDarkMode = () => setDarkMode(!darkMode);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    localStorage.removeItem('dark-mode');
+    localStorage.setItem('dark-mode', String(!darkMode));
+  };
 
   useEffect(() => {
-    setDarkMode(prefersDarkMode);
+    const savedDarkMode = localStorage.getItem('dark-mode');
+
+    setDarkMode(
+      savedDarkMode === 'false' ? false : savedDarkMode === 'true' ? true : prefersDarkMode,
+    );
   }, [prefersDarkMode]);
 
   const value = {
