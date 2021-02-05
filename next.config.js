@@ -52,14 +52,10 @@ const config = {
       use: 'raw-loader',
     });
 
-    // Fixes NPM packages that depend on `fs` module: https://github.com/vercel/next.js/issues/7755#issuecomment-508633125
-    if (!options.isServer) {
-      config.node = {
-        fs: 'empty',
-      };
-    }
-
     return config;
+  },
+  future: {
+    webpack5: true,
   },
 };
 
