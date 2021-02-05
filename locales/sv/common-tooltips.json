@@ -10,6 +10,7 @@
   "verificationRequired": "Verifiera ditt konto för att aktivera den här funktionen.",
   "openSettings": "Öppna inställningar.",
   "rank": "Denna användares rankning är {{ rank }}.",
+  "ownRank": "Din rankning är {{ rank }}.",
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
   "closeMenu": "Stäng menyn.",
   "toggleDarkMode": "Växla mörkt/ljus läge."

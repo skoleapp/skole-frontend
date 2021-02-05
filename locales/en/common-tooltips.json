@@ -10,6 +10,7 @@
   "verificationRequired": "Please verify your account to enable this feature.",
   "openSettings": "Open settings.",
   "rank": "This user's rank is {{ rank }}.",
+  "ownRank": "Your rank is {{ rank }}.",
   "activity": "You have {{ unreadActivityCount }} unread activities.",
   "closeMenu": "Close menu.",
   "toggleDarkMode": "Toggle dark/light mode."

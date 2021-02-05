@@ -18,6 +18,7 @@ import {
   ButtonLink,
   CommentTableBody,
   CourseTableBody,
+  Emoji,
   ErrorTemplate,
   LoadingTemplate,
   MainTemplate,
@@ -161,6 +162,10 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
   const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
   const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
+
+  const rankTooltip = isOwnProfile
+    ? t('common-tooltips:ownRank', { rank })
+    : t('common-tooltips:rank', { rank });
 
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
@@ -311,13 +316,22 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
+  const renderRankEmoji = <Emoji emoji="🎖️" />;
+
+  const renderRankLabel = (
+    <>
+      {rank}
+      {renderRankEmoji}
+    </>
+  );
+
   const renderRank = !!rank && (
     <Box className={classes.rankContainer}>
       <Typography variant="body2" color="textSecondary" gutterBottom>
         {t('profile:rank')}
       </Typography>
-      <Tooltip title={t('common-tooltips:rank', { rank })}>
-        <Chip size="small" label={rank} />
+      <Tooltip title={rankTooltip}>
+        <Chip size="small" label={renderRankLabel} />
       </Tooltip>
     </Box>
   );

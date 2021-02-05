@@ -2,6 +2,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
+import Chip from '@material-ui/core/Chip';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Divider from '@material-ui/core/Divider';
 import Fade from '@material-ui/core/Fade';
@@ -110,6 +111,9 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     marginRight: '0.3rem',
     marginBottom: '0.2rem !important',
   },
+  rank: {
+    cursor: 'pointer',
+  },
 }));
 
 export const TopNavbar: React.FC<TopNavbarProps> = ({
@@ -143,10 +147,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const {
     userMe,
-    userMeId,
     avatarThumbnail,
     authNetworkError,
     unreadActivityCount,
+    profileUrl,
+    rank,
   } = useAuthContext();
 
   const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(
@@ -237,6 +242,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Popper>
   );
 
+  const renderRankEmoji = <Emoji emoji="🎖️" />;
+
+  const renderRankLabel = (
+    <>
+      {rank}
+      {renderRankEmoji}
+    </>
+  );
+
   const renderAuthenticatedButtons = !!userMe && !hideDynamicButtons && (
     <>
       <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
@@ -249,9 +263,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <Tooltip title={t('common-tooltips:starred')}>
         <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
       </Tooltip>
+      <Link href={profileUrl}>
+        <Tooltip title={t('common-tooltips:ownRank', { rank })}>
+          <Chip className={classes.rank} label={renderRankLabel} />
+        </Tooltip>
+      </Link>
       <Tooltip title={t('common-tooltips:profile')}>
         <Typography component="span">
-          <Link href={urls.user(userMeId)}>
+          <Link href={profileUrl}>
             <IconButton color="secondary">
               <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
             </IconButton>
