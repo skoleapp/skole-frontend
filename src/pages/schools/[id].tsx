@@ -38,7 +38,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
 
@@ -129,23 +129,9 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     query: { ...searchUrl.query, city: cityId },
   };
 
-  const renderSchoolTypeLink = (
-    <TextLink href={schoolTypeLink} color="primary">
-      {schoolTypeName}
-    </TextLink>
-  );
-
-  const renderCountryLink = (
-    <TextLink href={countryLink} color="primary">
-      {country}
-    </TextLink>
-  );
-
-  const renderCityLink = (
-    <TextLink href={cityLink} color="primary">
-      {city}
-    </TextLink>
-  );
+  const renderSchoolTypeLink = <TextLink href={schoolTypeLink}>{schoolTypeName}</TextLink>;
+  const renderCountryLink = <TextLink href={countryLink}>{country}</TextLink>;
+  const renderCityLink = <TextLink href={cityLink}>{city}</TextLink>;
 
   const infoItems = [
     {
@@ -178,7 +164,6 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           className={classes.addCoursesButton}
           href={addCourseHref}
           disabled={verified === false}
-          color="primary"
           endIcon={<AddCircleOutlineOutlined />}
         >
           {t('common:addCourses')}

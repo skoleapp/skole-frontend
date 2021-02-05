@@ -16,7 +16,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
+import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
+import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
 import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
@@ -26,7 +29,7 @@ import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
-import { useAuthContext } from 'context';
+import { useAuthContext, useDarkModeContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
@@ -37,7 +40,7 @@ import {
   TOP_NAVBAR_HEIGHT_DESKTOP,
   TOP_NAVBAR_HEIGHT_MOBILE,
   TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
-} from 'theme';
+} from 'styles';
 import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
@@ -57,6 +60,7 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
     display: 'flex',
     justifyContent: 'center',
+    zIndex: 1,
     [breakpoints.up('md')]: {
       height: TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
       justifyContent: 'center',
@@ -74,7 +78,10 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
       paddingRight: spacing(4),
     },
   },
-  paper: {
+  activityPopper: {
+    zIndex: 2,
+  },
+  activityPopperPaper: {
     borderRadius: `0 0 ${BORDER_RADIUS} ${BORDER_RADIUS}`,
     padding: spacing(2),
   },
@@ -82,7 +89,7 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     marginTop: spacing(2),
   },
   tabs: {
-    backgroundColor: palette.primary.dark,
+    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.primary.dark,
   },
   tab: {
     borderBottom: 'none',
@@ -117,6 +124,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   hideGetStartedButton,
   hideForTeachersButton,
   hideLanguageButton,
+  hideDarkModeButton,
   hideLogo,
   renderHeaderRight,
   renderHeaderRightSecondary,
@@ -128,6 +136,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
   const { pathname } = useRouter();
+  const { darkMode, toggleDarkMode } = useDarkModeContext();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
@@ -162,6 +171,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderLogo = !hideLogo && <Logo />;
   const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
 
+  const renderDarkModeButton = !hideDarkModeButton && (
+    <Tooltip title={t('common-tooltips:toggleDarkMode')}>
+      <IconButton onClick={toggleDarkMode}>
+        {darkMode ? <Brightness7Outlined /> : <Brightness6Outlined />}
+      </IconButton>
+    </Tooltip>
+  );
+
   const renderMobileContent = isMobile && (
     <Grid container alignItems="center">
       <Grid item xs={dense ? 4 : 2} container justify="flex-start" alignItems="center">
@@ -194,11 +211,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       anchorEl={activityPopperAnchorEl}
       placement="bottom"
       transition
+      className={classes.activityPopper}
     >
       {({ TransitionProps }): JSX.Element => (
         <Fade {...TransitionProps} timeout={500}>
-          <Box marginTop={spacing(2)}>
-            <Paper className={classes.paper}>
+          <Box marginTop={spacing(1)}>
+            <Paper className={classes.activityPopperPaper}>
               <Box height="20rem" width="20rem" display="flex">
                 <ActivityPreview />
               </Box>
@@ -206,8 +224,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               <ButtonLink
                 className={classes.seeAllButton}
                 href={urls.activity}
-                color="primary"
                 variant="outlined"
+                endIcon={<ArrowForwardOutlined />}
                 fullWidth
               >
                 {t('common:seeAll')}
@@ -296,6 +314,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <Grid item xs={10} container justify="flex-end" alignItems="center">
         {renderSearch}
         {renderLanguageButton}
+        {renderDarkModeButton}
         {renderDynamicButtons}
       </Grid>
     </Grid>
@@ -336,8 +355,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     },
   ];
 
-  console.log('hide tabs', hideNavigation);
-
   const mapTabs = tabs.map(({ href, label, icon: Icon }) => (
     <Link href={href}>
       <Tab
@@ -352,7 +369,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Link>
   ));
 
-  const renderTabs = isTabletOrDesktop && !hideNavigation && (
+  const renderNavigation = isTabletOrDesktop && !hideNavigation && (
     <Tabs className={classes.tabs} variant="standard" textColor="secondary">
       {mapTabs}
     </Tabs>
@@ -361,7 +378,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   return (
     <AppBar className={clsx(classes.root, hideNavigation && classes.hideNavigation)}>
       {renderToolbar}
-      {renderTabs}
+      {renderNavigation}
     </AppBar>
   );
 };

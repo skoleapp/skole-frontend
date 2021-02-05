@@ -7,6 +7,7 @@ import { useTranslation } from 'lib';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { FooterProps } from 'types';
 import { isNotNativeApp, urls } from 'utils';
 
 import { AppStoreBadge, GooglePlayBadge, TextLink } from '../shared';
@@ -42,7 +43,7 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   },
 }));
 
-export const Footer: React.FC = () => {
+export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   const classes = useStyles();
   const { pathname } = useRouter();
   const { t } = useTranslation();
@@ -203,7 +204,7 @@ export const Footer: React.FC = () => {
     </Grid>
   );
 
-  const renderAppStoreBadges = isNotNativeApp && (
+  const renderAppStoreBadges = isNotNativeApp && !hideAppStoreBadges && (
     <Grid className={classes.appStoreBadgeContainer} item xs={4} container justify="center">
       <Grid className={classes.appStoreBadgeImageContainer} container justify="center">
         <Grid item xs={6}>

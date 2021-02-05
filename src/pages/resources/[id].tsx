@@ -55,7 +55,7 @@ import dynamic from 'next/dynamic';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useEffect, useState } from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER_RADIUS } from 'styles';
 import { PdfViewerProps, SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
@@ -274,9 +274,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSchoolLink = !!schoolId && (
-    <TextLink href={urls.school(schoolId)} color="primary">
-      {schoolName}
-    </TextLink>
+    <TextLink href={urls.school(schoolId)}>{schoolName}</TextLink>
   );
 
   const infoItems = [

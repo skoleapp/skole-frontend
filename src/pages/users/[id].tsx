@@ -37,7 +37,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER_RADIUS } from 'styles';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
@@ -85,6 +85,10 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   stepper: {
     padding: `${spacing(6)} 0`,
   },
+  step: {
+    paddingLeft: 0,
+    paddingRight: spacing(4),
+  },
   bio: {
     wordBreak: 'break-word',
     marginTop: spacing(4),
@@ -108,10 +112,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     [breakpoints.up('md')]: {
       marginTop: spacing(4),
     },
-  },
-  step: {
-    paddingLeft: 0,
-    paddingRight: spacing(4),
   },
   joined: {
     marginTop: spacing(2),
@@ -237,7 +237,6 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <ButtonLink
       className={classes.button}
       href={urls.editProfile}
-      color="primary"
       variant="outlined"
       endIcon={<EditOutlined />}
       fullWidth={isMobile}
@@ -250,7 +249,6 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <ButtonLink
       className={classes.button}
       href={urls.starred}
-      color="primary"
       variant="outlined"
       endIcon={<StarBorderOutlined />}
       fullWidth={isMobile}

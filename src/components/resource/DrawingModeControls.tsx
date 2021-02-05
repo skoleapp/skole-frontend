@@ -1,4 +1,3 @@
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -9,6 +8,8 @@ import { useDiscussionContext, usePdfViewerContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
+
+import { Emoji, SkoleButton } from '../shared';
 
 export const DrawingModeControls: React.FC = () => {
   const { t } = useTranslation();
@@ -40,21 +41,21 @@ export const DrawingModeControls: React.FC = () => {
     <Grid item md={8}>
       <Typography className="MuiCardHeader-title" variant="h5">
         {t('resource:drawingMode')}
+        <Emoji emoji="✏️" />
       </Typography>
     </Grid>
   );
 
   const renderContinueButton = (
     <Grid item xs={6} md={2} container justify="flex-end">
-      <Button
+      <SkoleButton
         onClick={handleContinueButtonClick}
         endIcon={<ArrowForwardOutlined />}
         disabled={!screenshot}
-        color="primary"
         size="small"
       >
         {t('common:continue')}
-      </Button>
+      </SkoleButton>
     </Grid>
   );
 

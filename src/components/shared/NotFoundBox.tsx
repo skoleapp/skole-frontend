@@ -12,7 +12,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     flexGrow: 1,
     padding: spacing(4),
     textAlign: 'center',
-    backgroundColor: palette.common.white,
+    backgroundColor: palette.background.paper,
     minHeight: '15rem',
   },
   icon: {

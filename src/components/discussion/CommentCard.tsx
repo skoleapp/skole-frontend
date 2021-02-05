@@ -27,7 +27,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useRef } from 'react';
-import { BORDER } from 'theme';
+import { BORDER } from 'styles';
 import { DiscussionTypes } from 'types';
 import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
@@ -40,12 +40,15 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     boxShadow: 'none',
     borderBottom: BORDER,
     position: 'relative',
+    maxWidth: '100vw',
   },
   noBorderBottom: {
     borderBottom: 'none',
   },
   replyComment: {
-    borderLeft: `${spacing(1)} solid ${palette.primary.main}`,
+    borderLeft: `${spacing(1)} solid ${
+      palette.type === 'dark' ? palette.secondary.main : palette.primary.main
+    }`,
   },
   cardHeaderRoot: {
     padding: 0,
@@ -83,7 +86,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     display: 'flex',
   },
   attachmentPreview: {
-    border: `0.1rem solid ${palette.primary.main} !important`,
+    border: `0.1rem solid ${
+      palette.type === 'dark' ? palette.secondary.main : palette.primary.main
+    } !important`,
     borderRadius: '0.5rem',
     cursor: 'pointer',
   },

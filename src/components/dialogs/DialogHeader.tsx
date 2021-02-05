@@ -7,7 +7,7 @@ import CloseOutlined from '@material-ui/icons/CloseOutlined';
 import clsx from 'clsx';
 import { useTranslation } from 'lib';
 import React from 'react';
-import { TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import { TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { DialogHeaderProps } from 'types';
 
 import { Emoji } from '../shared';

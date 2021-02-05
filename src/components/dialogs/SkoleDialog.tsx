@@ -5,7 +5,7 @@ import { TransitionProps } from '@material-ui/core/transitions';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import React, { forwardRef, Ref, SyntheticEvent } from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER_RADIUS } from 'styles';
 import { SkoleDialogProps } from 'types';
 
 const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (

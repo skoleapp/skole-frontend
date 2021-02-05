@@ -1,10 +1,10 @@
-import Button from '@material-ui/core/Button';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { useTranslation } from 'lib';
 import React from 'react';
 
+import { SkoleButton } from '../shared';
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
 
@@ -26,9 +26,9 @@ export const ContactDialog: React.FC<Props> = ({ header, text, emoji, open, hand
         <DialogContentText>{text}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={handleClose} fullWidth>
+        <SkoleButton onClick={handleClose} fullWidth>
           {t('common:gotIt')}
-        </Button>
+        </SkoleButton>
       </DialogActions>
     </SkoleDialog>
   );

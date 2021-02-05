@@ -39,7 +39,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
   appStoreBadgeContainer: {
     position: 'relative',
-    backgroundColor: palette.grey[300],
+    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.grey[300],
     padding: spacing(4),
     paddingTop: spacing(8),
     paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,

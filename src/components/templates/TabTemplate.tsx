@@ -5,7 +5,7 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import { useMediaQueries, useTabs } from 'hooks';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 
 import { Emoji, TabPanel } from '../shared';

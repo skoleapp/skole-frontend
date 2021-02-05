@@ -1,62 +1,56 @@
-import { grey } from '@material-ui/core/colors';
-import { createMuiTheme } from '@material-ui/core/styles';
-import createBreakpoints from '@material-ui/core/styles/createBreakpoints'; // eslint-disable-line no-restricted-imports
-import createPalette from '@material-ui/core/styles/createPalette'; // eslint-disable-line no-restricted-imports
-import createTypography, { TypographyOptions } from '@material-ui/core/styles/createTypography'; // eslint-disable-line no-restricted-imports
+import { createMuiTheme, Theme } from '@material-ui/core/styles';
+import createBreakpoints, { BreakpointsOptions } from '@material-ui/core/styles/createBreakpoints'; // eslint-disable-line no-restricted-imports
+import createPalette, { PaletteOptions } from '@material-ui/core/styles/createPalette'; // eslint-disable-line no-restricted-imports
+import { TypographyOptions } from '@material-ui/core/styles/createTypography'; // eslint-disable-line no-restricted-imports
+import { Overrides } from '@material-ui/core/styles/overrides'; // eslint-disable-line no-restricted-imports
+import { ComponentsProps } from '@material-ui/core/styles/props'; // eslint-disable-line no-restricted-imports
+import { useDarkModeContext } from 'context';
+import { useMemo } from 'react';
+import {
+  BORDER,
+  BORDER_RADIUS,
+  BOTTOM_NAVBAR_HEIGHT,
+  COLORS,
+  TOP_NAVBAR_HEIGHT_MOBILE,
+} from 'styles';
 
-// Global constants, feel free to use these where ever.
-export const BORDER_RADIUS = '1.75rem';
-export const BORDER = `0.05rem solid ${grey[300]}`;
-export const BOTTOM_NAVBAR_HEIGHT = '3.25rem';
-export const TOP_NAVBAR_HEIGHT_MOBILE = '3.25rem';
-export const TOP_NAVBAR_HEIGHT_DESKTOP = '4rem';
-export const TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION = '7rem';
+export const useMuiTheme = (): Theme => {
+  const { darkMode } = useDarkModeContext();
 
-export const COLORS = {
-  primary: '#ad3636',
-  secondary: '#faf2de',
-  white: '#ffffff',
-  black: '#000000',
-};
+  const palette: PaletteOptions = {
+    primary: {
+      main: COLORS.primary,
+    },
+    secondary: {
+      main: COLORS.secondary,
+    },
+    common: {
+      white: COLORS.white,
+      black: COLORS.black,
+    },
+    type: darkMode ? 'dark' : 'light',
+  };
 
-const breakpointOptions = {
-  values: {
-    xs: 350,
-    sm: 600,
-    md: 960,
-    lg: 1280,
-    xl: 1920,
-  },
-};
+  const spacing = (factor: number): string => `${0.25 * factor}rem`;
 
-const paletteOptions = {
-  primary: {
-    main: COLORS.primary,
-  },
-  secondary: {
-    main: COLORS.secondary,
-  },
-  common: {
-    white: COLORS.white,
-    black: COLORS.black,
-  },
-};
+  const typography: TypographyOptions = {
+    fontFamily: ['Rubik', 'sans-serif'].join(','),
+  };
 
-const typographyOptions: TypographyOptions = {
-  fontFamily: ['Rubik', 'sans-serif'].join(','),
-};
+  const breakpoints: BreakpointsOptions = {
+    values: {
+      xs: 350,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  };
 
-const palette = createPalette(paletteOptions);
-const typography = createTypography(palette, typographyOptions);
-const spacing = (factor: number): string => `${0.25 * factor}rem`;
-const breakpoints = createBreakpoints(breakpointOptions);
+  const _palette = createPalette(palette);
+  const _breakpoints = createBreakpoints(breakpoints);
 
-export const theme = createMuiTheme({
-  palette,
-  typography,
-  spacing,
-  breakpoints,
-  props: {
+  const props: ComponentsProps = {
     MuiContainer: {
       maxWidth: 'xl',
     },
@@ -80,18 +74,29 @@ export const theme = createMuiTheme({
       margin: 'none',
     },
     MuiTabs: {
-      textColor: 'primary',
+      textColor: darkMode ? 'secondary' : 'primary',
       variant: 'fullWidth',
-      indicatorColor: 'primary',
+      indicatorColor: darkMode ? 'secondary' : 'primary',
     },
     MuiList: {
       disablePadding: true,
     },
     MuiCheckbox: {
-      color: 'primary',
+      color: darkMode ? 'secondary' : 'primary',
     },
-  },
-  overrides: {
+    MuiLink: {
+      color: darkMode ? 'secondary' : 'primary',
+    },
+    MuiCircularProgress: {
+      color: darkMode ? 'secondary' : 'primary',
+      disableShrink: true,
+    },
+    MuiBadge: {
+      color: darkMode ? 'secondary' : 'primary',
+    },
+  };
+
+  const overrides: Overrides = {
     MuiButton: {
       root: {
         borderRadius: BORDER_RADIUS,
@@ -132,7 +137,7 @@ export const theme = createMuiTheme({
       shrink: {
         paddingLeft: spacing(1),
         paddingRight: spacing(1),
-        backgroundColor: palette.common.white,
+        backgroundColor: _palette.background.paper,
       },
     },
     MuiListItemAvatar: {
@@ -185,6 +190,7 @@ export const theme = createMuiTheme({
         padding: spacing(1),
         '&.Mui-selected': {
           padding: spacing(1),
+          color: _palette.type === 'dark' ? _palette.secondary.main : _palette.primary.main,
         },
       },
       label: {
@@ -202,7 +208,7 @@ export const theme = createMuiTheme({
     MuiTableContainer: {
       root: {
         display: 'flex',
-        backgroundColor: COLORS.white,
+        // backgroundColor: COLORS.white,
         flexGrow: 1,
         position: 'relative',
         overflow: 'hidden !important',
@@ -217,7 +223,7 @@ export const theme = createMuiTheme({
     MuiTableBody: {
       root: {
         flexGrow: 1,
-        [breakpoints.up('md')]: {
+        [_breakpoints.up('md')]: {
           overflowY: 'auto',
         },
       },
@@ -291,14 +297,19 @@ export const theme = createMuiTheme({
         },
       },
     },
+    MuiStepIcon: {
+      completed: {
+        color: `${_palette.success.main} !important`,
+      },
+    },
     MuiCssBaseline: {
       '@global': {
         html: {
           '-webkit-text-size-adjust': '100%', // https://github.com/mui-org/material-ui/issues/22423#issuecomment-683391113.
         },
         body: {
-          backgroundColor: COLORS.secondary,
-          [breakpoints.down('md')]: {
+          //   backgroundColor: COLORS.secondary,
+          [_breakpoints.down('md')]: {
             userSelect: 'none',
           },
         },
@@ -352,5 +363,18 @@ export const theme = createMuiTheme({
         },
       },
     },
-  },
-});
+  };
+
+  return useMemo(
+    () =>
+      createMuiTheme({
+        palette,
+        typography,
+        spacing,
+        breakpoints,
+        props,
+        overrides,
+      }),
+    [darkMode],
+  );
+};

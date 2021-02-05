@@ -11,5 +11,6 @@
   "openSettings": "Öppna inställningar.",
   "rank": "Denna användares rankning är {{ rank }}.",
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
-  "closeMenu": "Stäng menyn."
+  "closeMenu": "Stäng menyn.",
+  "toggleDarkMode": "Växla mörkt/ljus läge."
 }

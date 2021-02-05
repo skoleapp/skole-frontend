@@ -9,7 +9,7 @@ import React from 'react';
 const useStyles = makeStyles(({ palette }) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: palette.common.white,
+    backgroundColor: palette.background.paper,
   },
 }));
 
@@ -30,7 +30,7 @@ export const LoadingBox: React.FC<Props> = ({ text }) => {
       alignItems="center"
       justify="center"
     >
-      <CircularProgress color="primary" disableShrink size={40} />
+      <CircularProgress size={40} />
       <Box marginTop={spacing(2)}>
         <Typography variant="subtitle1" color="textSecondary">
           {text || t('common:loading')}

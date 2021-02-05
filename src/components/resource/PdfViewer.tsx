@@ -33,7 +33,7 @@ const useStyles = makeStyles(({ palette }) => ({
         position: 'absolute',
         width: '100%',
         height: '100%',
-        backgroundColor: palette.common.white,
+        backgroundColor: palette.background.paper,
         display: 'flex',
         alignItems: 'center',
       },

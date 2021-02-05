@@ -11,5 +11,6 @@
   "openSettings": "Avaa asetukset.",
   "rank": "Tämän käyttäjän arvo on {{ rank }}.",
   "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
-  "closeMenu": "Sulje valikko."
+  "closeMenu": "Sulje valikko.",
+  "toggleDarkMode": "Vaihda tumma/vaalea teema."
 }

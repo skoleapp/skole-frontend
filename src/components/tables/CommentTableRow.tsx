@@ -12,7 +12,7 @@ import { useTranslation } from 'lib';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { BORDER } from 'theme';
+import { BORDER } from 'styles';
 import { ColSpan, TableRowProps } from 'types';
 import { mediaLoader, truncate, urls } from 'utils';
 
@@ -102,9 +102,7 @@ export const CommentTableRow: React.FC<Props> = ({
   const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
 
   const renderCommentCreator = user ? (
-    <TextLink href={urls.user(user.id)} color="primary">
-      {user.username}
-    </TextLink>
+    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
   ) : (
     t('common:communityUser')
   );

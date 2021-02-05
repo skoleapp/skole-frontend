@@ -144,7 +144,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
         ...params.InputProps,
         endAdornment: (
           <>
-            {loading && <CircularProgress color="primary" size={20} />}
+            {loading && <CircularProgress size={20} />}
             {params.InputProps.endAdornment}
           </>
         ),

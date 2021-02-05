@@ -24,7 +24,8 @@
       "lib": ["src/lib"],
       "types": ["src/types"],
       "utils": ["src/utils"],
-      "theme": ["src/theme"]
+      "styles": ["src/styles"],
+      "markdown": ["src/markdown"]
     }
   },
   "exclude": ["node_modules"],

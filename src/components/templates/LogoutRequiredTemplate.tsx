@@ -1,4 +1,3 @@
-import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
@@ -8,7 +7,7 @@ import React from 'react';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
-import { ButtonLink, Emoji } from '../shared';
+import { ButtonLink, Emoji, SkoleButton } from '../shared';
 import { FormTemplate } from './FormTemplate';
 
 export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
@@ -51,9 +50,9 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
 
   const renderCancelButton = (
     <FormControl>
-      <Button onClick={handleClickCancelButton} color="primary" variant="outlined" fullWidth>
+      <SkoleButton onClick={handleClickCancelButton} variant="outlined" fullWidth>
         {t('common:cancel')}
-      </Button>
+      </SkoleButton>
     </FormControl>
   );
 

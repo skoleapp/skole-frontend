@@ -1,6 +1,6 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
+import { ButtonProps } from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import TableFooter from '@material-ui/core/TableFooter';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import Typography, { TypographyProps } from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import ChatOutlined from '@material-ui/icons/ChatOutlined';
@@ -29,6 +29,7 @@ import {
   LandingPageTemplate,
   LoadingTemplate,
   SettingsButton,
+  SkoleButton,
   SuggestionsTable,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
@@ -40,8 +41,8 @@ import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
-import { ButtonVariant, MuiColor, SeoPageProps, TextColor, TextVariant } from 'types';
+import { BORDER, BORDER_RADIUS } from 'styles';
+import { SeoPageProps } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
@@ -88,8 +89,10 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchFieldBox: {
     display: 'flex',
     flexGrow: 1,
-    backgroundColor: palette.common.white,
-    border: `0.05rem solid ${palette.primary.main}`,
+    backgroundColor: palette.background.default,
+    border: `0.05rem solid ${
+      palette.type === 'dark' ? palette.secondary.main : palette.primary.main
+    }`,
     borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
     padding: spacing(3),
   },
@@ -140,7 +143,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   avatar: {
     height: '2.5rem',
     width: '2.5rem',
-    backgroundColor: palette.primary.light,
+    backgroundColor: palette.type === 'dark' ? palette.secondary.main : palette.primary.main,
     [breakpoints.up('md')]: {
       height: '3.5rem',
       width: '3.5rem',
@@ -176,7 +179,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   nextStepsContainer: {
     flexGrow: 1,
-    backgroundColor: palette.grey[300],
+    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.grey[300],
     paddingTop: spacing(6),
     paddingLeft: spacing(2),
     paddingRight: spacing(2),
@@ -191,7 +194,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   nextStepsCard: {
     height: '100%',
     flexGrow: 1,
-    backgroundColor: palette.grey[200],
+    backgroundColor: palette.background.paper,
     display: 'flex',
     flexDirection: 'column',
     boxShadow: 'none',
@@ -298,9 +301,9 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <Box className={classes.searchFieldBox}>
         <InputBase {...searchInputProps} className={classes.searchFieldInput} />
       </Box>
-      <Button className={classes.searchButton} type="submit" color="primary" variant="contained">
+      <SkoleButton className={classes.searchButton} type="submit" variant="contained">
         <SearchOutlined />
-      </Button>
+      </SkoleButton>
     </form>
   );
 
@@ -314,9 +317,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   );
 
-  const renderArrow = isMobile && (
-    <ArrowForwardOutlined className={classes.shortcutArrow} color="primary" />
-  );
+  const renderArrow = isMobile && <ArrowForwardOutlined className={classes.shortcutArrow} />;
 
   const mapShortcuts = shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
     <Grid className={classes.shortcut} item xs={12} key={i} container>
@@ -331,7 +332,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
                 <Typography
                   className={classes.shortcutText}
                   variant="subtitle1"
-                  color="primary"
+                  color="textSecondary"
                   align="center"
                 >
                   <Grid container alignItems="center">
@@ -354,12 +355,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSuggestionsTableFooter = (
     <TableFooter className={classes.suggestionsTableFooter}>
-      <ButtonLink
-        href={urls.suggestions}
-        color="primary"
-        endIcon={<ArrowForwardOutlined />}
-        fullWidth
-      >
+      <ButtonLink href={urls.suggestions} endIcon={<ArrowForwardOutlined />} fullWidth>
         {t('common:seeAll')}
       </ButtonLink>
     </TableFooter>
@@ -395,16 +391,15 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   );
 
-  const nextStepsCardTextProps = {
+  const nextStepsCardTextProps: TypographyProps = {
     className: classes.nextStepsCardText,
-    variant: 'body2' as TextVariant,
-    color: 'textSecondary' as TextColor,
+    variant: 'body2',
+    color: 'textSecondary',
   };
 
-  const nextStepButtonProps = {
+  const nextStepButtonProps: ButtonProps = {
     className: classes.nextStepsButton,
-    color: 'primary' as MuiColor,
-    variant: 'outlined' as ButtonVariant,
+    variant: 'outlined',
     fullWidth: true,
     endIcon: <ArrowForwardOutlined />,
   };
@@ -416,9 +411,9 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
           <Typography {...nextStepsCardTextProps}>{t('home:inviteHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <Button {...nextStepButtonProps} onClick={handleClickShareButton}>
+          <SkoleButton {...nextStepButtonProps} onClick={handleClickShareButton}>
             {t('home:inviteText')}
-          </Button>
+          </SkoleButton>
         </CardActions>
       </Card>
     </Grid>

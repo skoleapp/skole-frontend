@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import { useSearch } from 'hooks';
 import React from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER_RADIUS } from 'styles';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   inputBase: {

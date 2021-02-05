@@ -41,7 +41,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     overflow: 'hidden',
   },
   pitchBoxContainer: {
-    backgroundColor: palette.grey[300],
+    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.grey[300],
     padding: `${spacing(4)} ${spacing(2)}`,
     [breakpoints.up('md')]: {
       padding: spacing(6),
@@ -231,6 +231,9 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       hideNavigation: true,
       header: t('for-teachers:header'),
       hideForTeachersButton: true,
+    },
+    footerProps: {
+      hideAppStoreBadges: true,
     },
   };
 

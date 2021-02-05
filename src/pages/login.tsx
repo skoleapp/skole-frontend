@@ -152,7 +152,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderRegisterButton = (
     <FormControl className={classes.link}>
-      <ButtonLink href={urls.register} variant="outlined" color="primary">
+      <ButtonLink href={urls.register} variant="outlined">
         {t('common:register')}
       </ButtonLink>
     </FormControl>

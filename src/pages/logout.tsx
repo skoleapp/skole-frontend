@@ -58,7 +58,7 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderBackToHomeButton = (
     <FormControl>
-      <ButtonLink href={urls.home} color="primary" variant="outlined" fullWidth>
+      <ButtonLink href={urls.home} variant="outlined" fullWidth>
         {t('common:backToHome')}
       </ButtonLink>
     </FormControl>

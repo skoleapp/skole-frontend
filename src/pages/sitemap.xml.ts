@@ -1,6 +1,7 @@
 import { readdirSync } from 'fs';
 import { SitemapDocument } from 'generated';
-import { initApolloClient, loadMarkdown } from 'lib';
+import { initApolloClient } from 'lib';
+import { loadMarkdown } from 'markdown';
 import { GetServerSideProps } from 'next';
 import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
 

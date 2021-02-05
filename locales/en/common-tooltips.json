@@ -11,5 +11,6 @@
   "openSettings": "Open settings.",
   "rank": "This user's rank is {{ rank }}.",
   "activity": "You have {{ unreadActivityCount }} unread activities.",
-  "closeMenu": "Close menu."
+  "closeMenu": "Close menu.",
+  "toggleDarkMode": "Toggle dark/light mode."
 }

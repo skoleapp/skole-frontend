@@ -9,7 +9,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
-import { BORDER } from 'theme';
+import { BORDER } from 'styles';
 import { TableRowProps } from 'types';
 import { urls } from 'utils';
 

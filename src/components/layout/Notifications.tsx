@@ -6,7 +6,7 @@ import Close from '@material-ui/icons/Close';
 import { useNotificationsContext } from 'context';
 import Router from 'next/router';
 import React, { SyntheticEvent } from 'react';
-import { BOTTOM_NAVBAR_HEIGHT } from 'theme';
+import { BOTTOM_NAVBAR_HEIGHT } from 'styles';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
   root: {

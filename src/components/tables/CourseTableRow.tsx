@@ -10,7 +10,7 @@ import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
 import React from 'react';
-import { BORDER } from 'theme';
+import { BORDER } from 'styles';
 import { ColSpan, TableRowProps } from 'types';
 import { urls } from 'utils';
 
@@ -68,9 +68,7 @@ export const CourseTableRow: React.FC<Props> = ({
   const renderCourseCodeChip = <TableRowChip label={code} />;
 
   const renderCourseCreator = user ? (
-    <TextLink href={urls.user(user.id)} color="primary">
-      {user.username}
-    </TextLink>
+    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
   ) : (
     t('common:communityUser')
   );
