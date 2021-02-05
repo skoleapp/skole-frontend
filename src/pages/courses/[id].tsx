@@ -303,8 +303,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
-  // Only render for non-verified users to make the score more clear.
-  const renderScoreIcon = !verified && <ThumbsUpDownOutlined color="disabled" />;
+  // Only render for non-verified users and owners to make the score more clear.
+  const renderScoreIcon = (!verified || isOwner) && <ThumbsUpDownOutlined color="disabled" />;
 
   const renderCustomBottomNavbarContent = (
     <Grid container>
