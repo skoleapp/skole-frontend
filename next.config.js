@@ -1,5 +1,10 @@
 const withOffline = require('next-offline');
 const withTranslate = require('next-translate');
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL, EMAIL_ADDRESS } = process.env;
 
 const config = {
@@ -58,4 +63,4 @@ const config = {
   },
 };
 
-module.exports = withOffline(withTranslate(config));
+module.exports = withBundleAnalyzer(withOffline(withTranslate(config)));

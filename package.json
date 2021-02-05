@@ -14,7 +14,8 @@
     "format": "yarn prettier --write '**/*.{ts,tsx,js,json}' && yarn run-eslint --fix",
     "lint": "yarn prettier --check '**/*.{ts,tsx,js,json}' && yarn run-eslint && dpdm --tree=false --exit-code=circular:1 $(find src/)",
     "update-deps:patch": "yarn upgrade",
-    "update-deps:latest": "yarn upgrade --latest"
+    "update-deps:latest": "yarn upgrade --latest",
+    "analyze": "ANALYZE=true yarn build"
   },
   "dependencies": {
     "@apollo/client": "^3.3.7",
@@ -23,6 +24,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@material-ui/pickers": "^3.2.10",
+    "@next/bundle-analyzer": "^10.0.6",
     "apollo-upload-client": "^14.1.3",
     "browser-image-compression": "^1.0.14",
     "clsx": "^1.1.1",
