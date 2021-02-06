@@ -178,7 +178,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const renderDarkModeButton = !hideDarkModeButton && (
     <Tooltip title={t('common-tooltips:toggleDarkMode')}>
-      <IconButton onClick={toggleDarkMode}>
+      <IconButton onClick={toggleDarkMode} color="secondary">
         {darkMode ? <Brightness7Outlined /> : <Brightness6Outlined />}
       </IconButton>
     </Tooltip>
