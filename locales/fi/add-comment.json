@@ -2,5 +2,6 @@
   "title": "Lisää kommentti",
   "description": "Lisää uusi kommentti.",
   "header": "Lisää kommentti",
-  "schoolHelperText": "Kommenttisi näkyy valitsemasi keskustelun alla."
+  "schoolHelperText": "Kommenttisi näkyy valitsemasi keskustelun alla.",
+  "selectDiscussion": "Valitse keskustelu"
 }

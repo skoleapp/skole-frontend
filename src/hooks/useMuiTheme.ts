@@ -94,6 +94,9 @@ export const useMuiTheme = (): Theme => {
     MuiBadge: {
       color: darkMode ? 'secondary' : 'primary',
     },
+    MuiRadio: {
+      color: darkMode ? 'secondary' : 'primary',
+    },
   };
 
   const overrides: Overrides = {

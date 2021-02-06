@@ -2,5 +2,6 @@
   "title": "Lägg till kommentar",
   "description": "Lägg till en ny kommentar.",
   "header": "Lägg till kommentar",
-  "schoolHelperText": "Din kommentar kommer att visas under diskussionen du väljer."
+  "schoolHelperText": "Din kommentar kommer att visas under diskussionen du väljer.",
+  "selectDiscussion": "Väljä diskussion"
 }
