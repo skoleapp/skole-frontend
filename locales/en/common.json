@@ -88,5 +88,6 @@
   "startDiscussion": "Start Discussion",
   "findContent": "Find Content",
   "addCourses": "Add Courses",
-  "uploadMaterial": "Upload Material"
+  "uploadMaterial": "Upload Material",
+  "toggleDarkMode": "Toggle dark/light mode"
 }

@@ -88,5 +88,6 @@
   "startDiscussion": "Aloita keskustelu",
   "findContent": "Löydä sisältöä",
   "uploadMaterial": "Lisää materiaalia",
-  "addCourses": "Lisää kursseja"
+  "addCourses": "Lisää kursseja",
+  "toggleDarkMode": "Vaihda tumma/vaalea teema"
 }

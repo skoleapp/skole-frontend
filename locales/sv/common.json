@@ -88,5 +88,6 @@
   "startDiscussion": "Starta diskussion",
   "findContent": "Hitta innehåll",
   "uploadMaterial": "Ladda upp material",
-  "addCourses": "Lägg till kurser"
+  "addCourses": "Lägg till kurser",
+  "toggleDarkMode": "Växla mörkt/ljus läge"
 }
