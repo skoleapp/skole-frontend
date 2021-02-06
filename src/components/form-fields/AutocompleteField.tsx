@@ -56,7 +56,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
     });
 
     if (suffix) {
-      label = `${label} - ${suffix}`;
+      label = `${label} (${suffix})`;
     }
 
     return label;
