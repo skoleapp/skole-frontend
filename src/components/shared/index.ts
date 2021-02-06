@@ -16,7 +16,6 @@ export { Logo } from './Logo';
 export { MarkdownContent } from './MarkdownContent';
 export { NotFoundBox } from './NotFoundBox';
 export { ShareButton } from './ShareButton';
-export { SkoleButton } from './SkoleButton';
 export { SocialMediaIcon } from './SocialMediaIcon';
 export { TabPanel } from './TabPanel';
 export { TextLink } from './TextLink';

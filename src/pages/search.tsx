@@ -1,5 +1,6 @@
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import CardHeader from '@material-ui/core/CardHeader';
 import Chip from '@material-ui/core/Chip';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -26,7 +27,6 @@ import {
   NativeSelectField,
   NotFoundBox,
   PaginatedTable,
-  SkoleButton,
   SkoleDialog,
   TextFormField,
 } from 'components';
@@ -397,7 +397,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderClearButton = (props: FormikProps<SearchFormValues>): JSX.Element | false =>
     isTabletOrDesktop && (
       <FormControl>
-        <SkoleButton
+        <Button
           onClick={handleClearFilters}
           variant="outlined"
           endIcon={<ClearAllOutlined />}
@@ -405,7 +405,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           fullWidth
         >
           {t('common:clear')}
-        </SkoleButton>
+        </Button>
       </FormControl>
     );
 

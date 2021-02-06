@@ -1,5 +1,6 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -19,7 +20,6 @@ import React, { ChangeEvent, useState } from 'react';
 import { ACCEPTED_AVATAR_FILES, MAX_AVATAR_FILE_SIZE, MAX_AVATAR_WIDTH_HEIGHT } from 'utils';
 
 import { ResponsiveDialog } from '../dialogs';
-import { SkoleButton } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -133,9 +133,9 @@ export const AvatarField = <T extends FormikValues>({
         accept={ACCEPTED_AVATAR_FILES.toString()}
         onChange={handleAvatarChange}
       />
-      <SkoleButton className={classes.button} onClick={handleOpenDialog} variant="text">
+      <Button className={classes.button} onClick={handleOpenDialog} variant="text">
         {t('edit-profile:changeAvatar')}
-      </SkoleButton>
+      </Button>
     </Box>
   );
 

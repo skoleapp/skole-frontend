@@ -1,4 +1,4 @@
-import { FormControl } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import { ErrorMessage, FieldAttributes, FormikProps, FormikValues } from 'formik';
 import React from 'react';

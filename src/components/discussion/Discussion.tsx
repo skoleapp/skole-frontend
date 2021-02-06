@@ -1,4 +1,5 @@
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,7 +20,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'styles';
 import { DiscussionTypes } from 'types';
 
-import { ErrorBox, LoadingBox, NotFoundBox, SkoleButton } from '../shared';
+import { ErrorBox, LoadingBox, NotFoundBox } from '../shared';
 import { CommentCard } from './CommentCard';
 import { CreateCommentForm } from './CreateCommentForm';
 
@@ -227,11 +228,11 @@ export const Discussion: React.FC<Props> = ({
 
   const renderReplyButton = (comment: CommentObjectType) => (
     <Box className={classes.replyButtonContainer}>
-      <SkoleButton onClick={handleClickReplyButton(comment)} variant="text" fullWidth>
+      <Button onClick={handleClickReplyButton(comment)} variant="text" fullWidth>
         {t('forms:replyTo', {
           username: comment.user?.username?.toString() || t('common:communityUser'),
         })}
-      </SkoleButton>
+      </Button>
     </Box>
   );
 

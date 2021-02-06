@@ -1,4 +1,5 @@
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,7 +19,7 @@ import {
   urls,
 } from 'utils';
 
-import { SkoleButton, TextLink } from '../shared';
+import { TextLink } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
@@ -101,9 +102,9 @@ export const FileField: React.FC<Props> = ({ form: { setFieldValue }, field: { n
     : t('upload-resource:uploadFileButtonText');
 
   const renderMobileUploadFileButton = isMobile && (
-    <SkoleButton onClick={handleFileInputClick} variant="outlined" fullWidth>
+    <Button onClick={handleFileInputClick} variant="outlined" fullWidth>
       {renderMobileFileUploadButtonText}
-    </SkoleButton>
+    </Button>
   );
 
   const renderDropZoneText = fileName ? renderFileSelectedText : t('upload-resource:dropZoneText');

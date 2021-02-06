@@ -97,6 +97,9 @@ export const useMuiTheme = (): Theme => {
     MuiRadio: {
       color: darkMode ? 'secondary' : 'primary',
     },
+    MuiButton: {
+      color: darkMode ? 'secondary' : 'primary',
+    },
   };
 
   const overrides: Overrides = {

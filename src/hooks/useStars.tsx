@@ -1,7 +1,7 @@
+import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
-import { SkoleButton } from 'components';
 import { useAuthContext, useDarkModeContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
 import React, { useEffect, useState } from 'react';
@@ -79,7 +79,7 @@ export const useStars = ({
   const renderStarButton = (!!verified || isTabletOrDesktop) && (
     <Tooltip title={tooltip}>
       <Typography component="span">
-        <SkoleButton
+        <Button
           onClick={handleStar}
           disabled={starSubmitting || !userMe || verified === false}
           size="small"
@@ -88,7 +88,7 @@ export const useStars = ({
           <Typography variant="subtitle1" color={textColor}>
             {stars}
           </Typography>
-        </SkoleButton>
+        </Button>
       </Typography>
     </Tooltip>
   );

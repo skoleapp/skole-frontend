@@ -1,6 +1,6 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
-import { ButtonProps } from '@material-ui/core/Button';
+import Button, { ButtonProps } from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -29,7 +29,6 @@ import {
   LandingPageTemplate,
   LoadingTemplate,
   SettingsButton,
-  SkoleButton,
   SuggestionsTable,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
@@ -301,9 +300,9 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <Box className={classes.searchFieldBox}>
         <InputBase {...searchInputProps} className={classes.searchFieldInput} />
       </Box>
-      <SkoleButton className={classes.searchButton} type="submit" variant="contained">
+      <Button className={classes.searchButton} type="submit" variant="contained">
         <SearchOutlined />
-      </SkoleButton>
+      </Button>
     </form>
   );
 
@@ -411,9 +410,9 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
           <Typography {...nextStepsCardTextProps}>{t('home:inviteHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <SkoleButton {...nextStepButtonProps} onClick={handleClickShareButton}>
+          <Button {...nextStepButtonProps} onClick={handleClickShareButton}>
             {t('home:inviteText')}
-          </SkoleButton>
+          </Button>
         </CardActions>
       </Card>
     </Grid>

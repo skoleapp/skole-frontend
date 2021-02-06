@@ -1,3 +1,4 @@
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -9,7 +10,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { Emoji, SkoleButton } from '../shared';
+import { Emoji } from '../shared';
 
 export const DrawingModeControls: React.FC = () => {
   const { t } = useTranslation();
@@ -48,14 +49,14 @@ export const DrawingModeControls: React.FC = () => {
 
   const renderContinueButton = (
     <Grid item xs={6} md={2} container justify="flex-end">
-      <SkoleButton
+      <Button
         onClick={handleContinueButtonClick}
         endIcon={<ArrowForwardOutlined />}
         disabled={!screenshot}
         size="small"
       >
         {t('common:continue')}
-      </SkoleButton>
+      </Button>
     </Grid>
   );
 

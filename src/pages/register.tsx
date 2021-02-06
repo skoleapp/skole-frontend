@@ -1,3 +1,4 @@
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Typography from '@material-ui/core/Typography';
@@ -10,7 +11,6 @@ import {
   FormTemplate,
   LogoutRequiredTemplate,
   PasswordField,
-  SkoleButton,
   TextFormField,
   TextLink,
 } from 'components';
@@ -290,9 +290,9 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSkipButton = (
     <FormControl>
-      <SkoleButton variant="outlined" onClick={handleSkipUpdateProfile}>
+      <Button variant="outlined" onClick={handleSkipUpdateProfile}>
         {t('common:setupLater')}
-      </SkoleButton>
+      </Button>
     </FormControl>
   );
 
