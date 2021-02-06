@@ -12,6 +12,7 @@ import {
   CommentAttachmentPreview,
   CommentTextField,
   CommentTextFieldToolbar,
+  ErrorTemplate,
   FormErrorMessage,
   FormSubmitSection,
   FormTemplate,
@@ -57,7 +58,12 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { setCommentAttachment, formRef } = useDiscussionContext<AddCommentFormValues>();
-  const [discussionSuggestionsQuery, { data, loading }] = useDiscussionSuggestionsLazyQuery();
+
+  const [
+    discussionSuggestionsQuery,
+    { data, loading, error },
+  ] = useDiscussionSuggestionsLazyQuery();
+
   const discussionSuggestions: DiscussionsUnion[] = R.propOr([], 'discussionSuggestions', data);
 
   useEffect(() => {
@@ -275,6 +281,14 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   if (loading) {
     return <LoadingTemplate seoProps={seoProps} />;
+  }
+
+  if (!!error && !!error.networkError) {
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+  }
+
+  if (error) {
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
