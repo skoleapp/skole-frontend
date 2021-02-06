@@ -1,25 +1,20 @@
 import { DiscussionsUnion } from '__generated__/src/graphql/common.graphql';
-import Collapse from '@material-ui/core/Collapse';
 import FormControl from '@material-ui/core/FormControl';
 import {
   AuthorSelection,
   AutocompleteField,
-  CheckboxFormField,
   CommentAttachmentInput,
   CommentAttachmentPreview,
   CommentTextField,
   CommentTextFieldToolbar,
   FormSubmitSection,
   FormTemplate,
-  TextLink,
 } from 'components';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
-  AutocompleteDiscussionsDocument,
-  CourseObjectType,
+  AutocompleteSchoolsDocument,
   CreateCommentMutation,
-  SchoolObjectType,
   useCreateCommentMutation,
   UserObjectType,
 } from 'generated';
@@ -29,8 +24,8 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent } from 'react';
-import { SecondaryDiscussion, SeoPageProps } from 'types';
+import React from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -39,7 +34,6 @@ interface AddCommentFormValues {
   text: string;
   attachment: string | null;
   discussion: DiscussionsUnion | null;
-  secondaryDiscussion: SecondaryDiscussion;
 }
 
 const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
@@ -52,29 +46,18 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const onCompleted = async ({ createComment }: CreateCommentMutation): Promise<void> => {
     const errors = R.prop('errors', createComment);
     const successMessage = R.prop('successMessage', createComment);
-    const course = R.path(['comment', 'course', 'id'], createComment);
-    const resource = R.path(['comment', 'resource', 'id'], createComment);
     const school = R.path(['comment', 'school', 'id'], createComment);
     const comment = R.path(['comment', 'id'], createComment);
 
     if (errors.length) {
       toggleUnexpectedErrorNotification();
-    } else if (!!successMessage && (!!course || !!resource || !!school)) {
+    } else if (!!successMessage && !!school) {
       formRef.current?.resetForm();
       setCommentAttachment(null);
       toggleNotification(successMessage);
 
-      // Redirect to the `lowest` possible discussion.
-      const pathname = resource
-        ? urls.resource(resource)
-        : course
-        ? urls.course(course)
-        : school
-        ? urls.school(school)
-        : '#';
-
       await Router.push({
-        pathname,
+        pathname: urls.school(school),
         query: {
           comment,
         },
@@ -94,35 +77,14 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // See if course, resource or school is selected or a course or school is included.
   const handleSubmit = async ({
     discussion,
-    secondaryDiscussion,
     user: _user,
     ...values
   }: AddCommentFormValues): Promise<void> => {
     const user = R.prop('id', _user);
-
-    const primaryCourse = discussion?.__typename === 'CourseObjectType' && discussion.id;
-
-    const secondaryCourse =
-      secondaryDiscussion?.__typename === 'CourseObjectType' && secondaryDiscussion.id;
-
-    // Use course as either primary or secondary target.
-    const course = primaryCourse || secondaryCourse || null;
-
-    const primaryResource = discussion?.__typename === 'ResourceObjectType' && discussion.id;
-
-    // Use resource only as primary target.
-    const resource = primaryResource || null;
-
-    const primarySchool = discussion?.__typename === 'SchoolObjectType' && discussion.id;
-
-    const secondarySchool =
-      secondaryDiscussion?.__typename === 'SchoolObjectType' && secondaryDiscussion.id;
-
-    // Use school as either primary or secondary target.
-    const school = primarySchool || secondarySchool || null;
+    const school = R.prop('id', discussion);
 
     await createCommentMutation({
-      variables: { ...values, user, course, resource, school },
+      variables: { ...values, user, school },
       context,
     });
 
@@ -132,7 +94,6 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const initialValues = {
     user: userMe,
     discussion: school,
-    secondaryDiscussion: null,
     attachment: null,
     text: '',
   };
@@ -150,48 +111,14 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <Field
       name="discussion"
       label={t('forms:discussion')}
-      dataKey="autocompleteDiscussions"
-      searchKey="searchTerm"
-      labelKeys={['name', 'title', 'courseName']}
+      dataKey="autocompleteSchools"
+      searchKey="name"
       suffixKey="code"
-      document={AutocompleteDiscussionsDocument}
+      document={AutocompleteSchoolsDocument}
       component={AutocompleteField}
       helperText={t('add-comment:schoolHelperText')}
     />
   );
-
-  const renderSecondaryDiscussionField = ({ values }: FormikProps<AddCommentFormValues>) => {
-    const visible = ['CourseObjectType', 'ResourceObjectType'].includes(
-      String(values.discussion?.__typename),
-    );
-
-    const course: CourseObjectType | null = R.pathOr(null, ['discussion', 'course'], values);
-    const school: SchoolObjectType | null = R.pathOr(null, ['discussion', 'school'], values);
-    const href = course ? urls.course(course.id) : school ? urls.school(school.id) : '#';
-    const name = course?.name || school?.name;
-
-    const handleChange = (_: ChangeEvent<Record<string, unknown>>, checked: boolean) => {
-      const val = checked ? course || school : null;
-      formRef.current?.setFieldValue('secondaryDiscussion', val);
-    };
-
-    const renderLabel = (
-      <>
-        {t('forms:alsoSendTo')} <TextLink href={href}>{name}</TextLink>
-      </>
-    );
-
-    return (
-      <Collapse in={visible}>
-        <Field
-          name="secondaryDiscussion"
-          label={renderLabel}
-          component={CheckboxFormField}
-          onChange={handleChange}
-        />
-      </Collapse>
-    );
-  };
 
   const renderAuthorSelection = (props: FormikProps<AddCommentFormValues>) =>
     !!userMe && (
@@ -207,10 +134,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const getPlaceholder = (discussion: AddCommentFormValues['discussion']) =>
     discussion
       ? t('forms:postTo', {
-          target:
-            R.prop('name', discussion) ||
-            R.prop('title', discussion) ||
-            R.prop('courseName', discussion),
+          target: R.prop('name', discussion),
         })
       : t('forms:selectDiscussionToPost');
 
@@ -225,7 +149,6 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderFormFields = (props: FormikProps<AddCommentFormValues>) => (
     <Form>
       {renderDiscussionField}
-      {renderSecondaryDiscussionField(props)}
       {renderAuthorSelection(props)}
       {renderAttachmentPreview}
       {renderTextFieldToolbar}
