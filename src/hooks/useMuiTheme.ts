@@ -314,7 +314,7 @@ export const useMuiTheme = (): Theme => {
           '-webkit-text-size-adjust': '100%', // https://github.com/mui-org/material-ui/issues/22423#issuecomment-683391113.
         },
         body: {
-          //   backgroundColor: COLORS.secondary,
+          backgroundColor: COLORS.secondary,
           [_breakpoints.down('md')]: {
             userSelect: 'none',
           },
