@@ -70,6 +70,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
       hideLanguageButton: true,
     },
     content,
+    hideFeedback: true,
   };
 
   return (

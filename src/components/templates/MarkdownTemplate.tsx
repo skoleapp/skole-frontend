@@ -40,12 +40,14 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
 
 interface Props extends MainTemplateProps {
   content: string;
+  hideFeedback?: boolean;
 }
 
 export const MarkdownTemplate: React.FC<Props> = ({
   content,
   topNavbarProps,
   children,
+  hideFeedback,
   ...props
 }) => {
   const classes = useStyles();
@@ -89,7 +91,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
   const feedbackHeaderText = t('common:feedbackHeader');
   const renderFeedbackHeaderEmoji = <Emoji emoji="🤔" />;
 
-  const renderFeedback = (
+  const renderFeedback = !hideFeedback && (
     <Grid className={classes.feedbackContainer} container direction="column" alignItems="center">
       <Typography variant="subtitle1" gutterBottom>
         {feedbackHeaderText}
