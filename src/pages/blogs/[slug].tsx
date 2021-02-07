@@ -1,3 +1,5 @@
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { MarkdownTemplate } from 'components';
 import { readdirSync } from 'fs';
@@ -10,11 +12,19 @@ import Image from 'next/image';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
+const useStyles = makeStyles({
+  authorImage: {
+    borderRadius: '50%',
+    padding: '0.4rem !important',
+  },
+});
+
 const BlogPostPage: NextPage<MarkdownPageProps> = ({
   seoProps,
-  data: { title, excerpt, coverImage = '', author, date, minutesToRead = 0 },
+  data: { title, excerpt, coverImage = '', author, authorImage, date, minutesToRead = 0 },
   content,
 }) => {
+  const classes = useStyles();
   const { t } = useTranslation();
 
   const renderExcerpt = (
@@ -23,15 +33,35 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
     </Typography>
   );
 
-  const renderAuthor = <Typography variant="subtitle1">{author}</Typography>;
+  const renderAuthorImage = !!authorImage && (
+    <Image
+      className={classes.authorImage}
+      src={authorImage}
+      layout="fixed"
+      width={50}
+      height={50}
+    />
+  );
 
-  const renderBlogInfo = (
+  const renderAuthorText = <Typography variant="subtitle1">{author}</Typography>;
+
+  const renderBlogInfoText = (
     <Typography variant="body2" color="textSecondary" gutterBottom>
       {useDayjs(date).format('LL')} - {t('blogs:readTime', { minutesToRead })}
     </Typography>
   );
 
-  const renderImage = <Image src={coverImage} layout="responsive" width={400} height={300} />;
+  const renderBlogAndAuthorInfo = (
+    <Grid container>
+      {renderAuthorImage}
+      <Grid item>
+        {renderAuthorText}
+        {renderBlogInfoText}
+      </Grid>
+    </Grid>
+  );
+
+  const renderCoverImage = <Image src={coverImage} layout="responsive" width={400} height={300} />;
 
   const layoutProps = {
     seoProps,
@@ -45,9 +75,8 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
   return (
     <MarkdownTemplate {...layoutProps}>
       {renderExcerpt}
-      {renderAuthor}
-      {renderBlogInfo}
-      {renderImage}
+      {renderBlogAndAuthorInfo}
+      {renderCoverImage}
     </MarkdownTemplate>
   );
 };

@@ -3,6 +3,7 @@ title: 'Skole Available in App Stores!'
 excerpt: 'Skole is finally available on the Apple App Store and Google Play Store.'
 coverImage: '/images/blogs/skole-released-in-app-stores.jpg'
 author: 'Markus Blomqvist'
+authorImage: '/images/authors/markus-blomqvist.jpeg'
 date: '2021-01-20'
 minutesToRead: 3
 slug: skole-released-in-app-stores

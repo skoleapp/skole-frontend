@@ -3,6 +3,7 @@ export interface MarkdownPageData {
   excerpt?: string;
   coverImage?: string;
   author?: string;
+  authorImage?: string;
   date?: string;
   minutesToRead?: string;
   slug?: string;
