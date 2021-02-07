@@ -32,21 +32,23 @@ import {
   SuggestionsTable,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
+import { readdirSync } from 'fs';
 import { useSuggestionsPreviewQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
-import { SeoPageProps } from 'types';
+import { MarkdownPageData, SeoPageProps } from 'types';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
-  searchContainer: {
+  topSectionContainer: {
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(4)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(4)})`,
     marginTop: spacing(4),
@@ -55,8 +57,20 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
       marginTop: spacing(10),
     },
     [breakpoints.up('md')]: {
-      marginTop: spacing(16),
+      marginTop: spacing(8),
     },
+  },
+  updateCard: {
+    backgroundColor: palette.background.paper,
+    boxShadow: 'none',
+    border: `0.15rem solid ${palette.grey[400]}`,
+    borderRadius: '1rem',
+  },
+  updateTitle: {
+    margin: `0 ${spacing(2)}`,
+  },
+  updateCardContent: {
+    padding: `${spacing(1)} ${spacing(4)} !important`,
   },
   header: {
     fontSize: '1rem',
@@ -211,13 +225,17 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
 }));
 
+interface Props extends SeoPageProps {
+  update: MarkdownPageData;
+}
+
 interface Shortcut {
   text: string;
   icon: typeof SvgIcon;
   href: string | UrlObject;
 }
 
-const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) => {
   const classes = useStyles();
   const { userMe, verified, school, subject } = useAuthContext();
   const { isMobile } = useMediaQueries();
@@ -282,6 +300,31 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderSuggestionsEmoji = <Emoji emoji="🔥" />;
   const renderNextStepsEmoji = <Emoji emoji="🚀" />;
 
+  const renderUpdate = (
+    <Grid className={classes.topSectionContainer} container justify="center">
+      <Grid item xs={12} lg={10} xl={7} container justify="center">
+        <Link href={urls.update(slug)}>
+          <Card className={classes.updateCard}>
+            <CardActionArea>
+              <CardContent className={classes.updateCardContent}>
+                <Grid container alignItems="center" wrap="nowrap">
+                  <Emoji emoji="🆕" noSpace />
+                  <Typography
+                    className={clsx(classes.updateTitle, 'truncate-text')}
+                    variant="subtitle1"
+                  >
+                    {title}
+                  </Typography>
+                  <ArrowForwardOutlined />
+                </Grid>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Link>
+      </Grid>
+    </Grid>
+  );
+
   const renderHeader = (
     <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
       {headerText}
@@ -307,7 +350,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSearch = (
-    <Grid className={classes.searchContainer} container justify="center">
+    <Grid className={classes.topSectionContainer} container justify="center">
       <Grid item xs={12} lg={10} xl={7}>
         {renderHeader}
         {renderSubHeader}
@@ -552,6 +595,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   return (
     <LandingPageTemplate {...layoutProps}>
+      {renderUpdate}
       {renderSearch}
       {renderMidSection}
       {renderInfo}
@@ -563,6 +607,22 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const tHome = await getT(locale, 'home');
   const tCommon = await getT(locale, 'common');
 
+  const fileNames = readdirSync('markdown/en/updates');
+  const updates = [];
+
+  for (const fileName of fileNames) {
+    const slug = fileName.replace(/\.md$/, '');
+    const { data } = await loadMarkdown(`updates/${slug}`);
+    updates.push(data);
+  }
+
+  const mostRecentDate = updates
+    .map(({ date }) => date)
+    .sort()
+    .reverse()[0];
+
+  const update = updates.find(({ date }) => date === mostRecentDate);
+
   return {
     props: {
       _ns: await loadNamespaces(['home'], locale),
@@ -570,6 +630,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
         title: tHome('title'),
         description: tCommon('description'),
       },
+      update,
     },
   };
 };
