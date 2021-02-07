@@ -9,8 +9,7 @@ import * as R from 'ramda';
 export const mediaUrl = (filePath: string): string =>
   process.env.API_URL ? new URL(filePath, process.env.API_URL).href : filePath;
 
-export const mediaLoader: ImageLoader = ({ src, width, quality }) =>
-  `${mediaUrl(src)}?w=${width}&q=${quality || 75}`;
+export const mediaLoader: ImageLoader = ({ src }) => mediaUrl(src);
 
 interface QueryWithPaginationProps {
   query: Record<symbol, unknown>;
