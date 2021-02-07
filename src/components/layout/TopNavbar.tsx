@@ -284,7 +284,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 
-  const renderLoginButton = isDesktop && !hideLoginButton && (
+  const renderLoginButton = isTabletOrDesktop && !hideLoginButton && (
     <ButtonLink
       href={{
         pathname: urls.login,
@@ -299,7 +299,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
-  const renderRegisterButton = isDesktop && !hideRegisterButton && (
+  const renderRegisterButton = isTabletOrDesktop && !hideRegisterButton && (
     <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
       {t('common:register')}
     </ButtonLink>
@@ -326,7 +326,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 
-  const renderSearch = !hideSearch && <TopNavbarSearchWidget />;
+  const renderSearch = !hideSearch && isDesktop && <TopNavbarSearchWidget />;
   const renderDynamicButtons = userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
 
   const renderDesktopContent = isTabletOrDesktop && (
