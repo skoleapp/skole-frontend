@@ -9,8 +9,8 @@
   "loginRequired": "Please log in to enable this feature.",
   "verificationRequired": "Please verify your account to enable this feature.",
   "openSettings": "Open settings.",
-  "rank": "This user's rank is {{ rank }}.",
-  "ownRank": "Your rank is {{ rank }}.",
+  "rank": "This user's rank is {{ rank }} with a score of {{ score }}.",
+  "ownRank": "Your rank is {{ rank }} with a score of {{ score }}.",
   "activity": "You have {{ unreadActivityCount }} unread activities.",
   "closeMenu": "Close menu.",
   "toggleDarkMode": "Toggle dark/light mode."
