@@ -89,5 +89,7 @@
   "findContent": "Find Content",
   "addCourses": "Add Courses",
   "uploadMaterial": "Upload Material",
-  "toggleDarkMode": "Toggle dark/light mode"
+  "toggleDarkMode": "Toggle dark/light mode",
+  "feedbackHeader": "Was this page helpful?",
+  "feedbackText": "Give us feedback"
 }

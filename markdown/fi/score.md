@@ -22,6 +22,20 @@ Ensisijainen tapa lisätä pisteitä on lähettää hyviä kysymyksiä ja hyödy
 - Kurssisi saa alas-äänen: -5
 - Kommenttisi saa alas-äänen: -1
 
+### Arvo 🎖️
+
+Arvosi on visualisointi pisteistäsi. Arvosi lasketaan seuraavasti:
+
+| Pisteet   | Arvo        |
+| --------- | ----------- |
+| 0-100     | Fuksi       |
+| 100-250   | Tuutori     |
+| 250-500   | Mentori     |
+| 500-1000  | Kandidaatti |
+| 1000-2000 | Maisteri    |
+| 2000-5000 | Tohtori     |
+| 5000+     | Professori  |
+
 ### Entä jos poistan asioita? 🧐
 
 Sisällön poistaminen, jolla on joko ylös- tai alas-ääniä, ei vaikuta pisteisiisi.

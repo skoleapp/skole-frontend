@@ -5,6 +5,7 @@ import gfm from 'remark-gfm';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
   markdown: {
+    textAlign: 'left',
     '& a': {
       color: palette.type === 'dark' ? palette.secondary.main : palette.primary.main,
     },
