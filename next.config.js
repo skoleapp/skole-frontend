@@ -54,9 +54,6 @@ const config = {
 
     return config;
   },
-  future: {
-    webpack5: true,
-  },
 };
 
 module.exports = withBundleAnalyzer(withOffline(withTranslate(config)));
