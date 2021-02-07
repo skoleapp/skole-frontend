@@ -9,8 +9,8 @@
   "loginRequired": "Logga in för att aktivera den här funktionen.",
   "verificationRequired": "Verifiera ditt konto för att aktivera den här funktionen.",
   "openSettings": "Öppna inställningar.",
-  "rank": "Denna användares rankning är {{ rank }}.",
-  "ownRank": "Din rankning är {{ rank }}.",
+  "rank": "Denna användares rankning är {{ rank }} med {{ score }} poäng.",
+  "ownRank": "Din rankning är {{ rank }} med {{ score }} poäng.",
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
   "closeMenu": "Stäng menyn.",
   "toggleDarkMode": "Växla mörkt/ljus läge."

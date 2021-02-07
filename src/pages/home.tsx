@@ -19,6 +19,7 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import FiberNew from '@material-ui/icons/FiberNew';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import clsx from 'clsx';
@@ -66,11 +67,15 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     border: `0.15rem solid ${palette.grey[400]}`,
     borderRadius: '1rem',
   },
+  newIcon: {
+    width: '2rem',
+    height: '2rem',
+  },
   updateTitle: {
     margin: `0 ${spacing(2)}`,
   },
   updateCardContent: {
-    padding: `${spacing(1)} ${spacing(4)} !important`,
+    padding: `${spacing(1)} ${spacing(2)} !important`,
   },
   header: {
     fontSize: '1rem',
@@ -308,7 +313,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) =
             <CardActionArea>
               <CardContent className={classes.updateCardContent}>
                 <Grid container alignItems="center" wrap="nowrap">
-                  <Emoji emoji="🆕" noSpace />
+                  <FiberNew className={classes.newIcon} color="primary" />
                   <Typography
                     className={clsx(classes.updateTitle, 'truncate-text')}
                     variant="subtitle1"

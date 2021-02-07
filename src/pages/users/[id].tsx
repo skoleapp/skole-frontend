@@ -35,6 +35,7 @@ import { withUserMe } from 'hocs';
 import { useDayjs, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';
@@ -149,7 +150,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const avatar = R.propOr('', 'avatar', user);
   const title = R.propOr('', 'title', user);
   const bio = R.propOr('', 'bio', user);
-  const score = R.propOr('-', 'score')(user);
+  const score = R.propOr('0', 'score')(user);
   const isOwnProfile = R.propOr('', 'id', user) === userMeId;
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
@@ -164,8 +165,8 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
 
   const rankTooltip = isOwnProfile
-    ? t('common-tooltips:ownRank', { rank })
-    : t('common-tooltips:rank', { rank });
+    ? t('common-tooltips:ownRank', { rank, score })
+    : t('common-tooltips:rank', { rank, score });
 
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
@@ -330,9 +331,11 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <Typography variant="body2" color="textSecondary" gutterBottom>
         {t('profile:rank')}
       </Typography>
-      <Tooltip title={rankTooltip}>
-        <Chip size="small" label={renderRankLabel} />
-      </Tooltip>
+      <Link href={urls.score}>
+        <Tooltip title={rankTooltip}>
+          <Chip size="small" label={renderRankLabel} />
+        </Tooltip>
+      </Link>
     </Box>
   );
 

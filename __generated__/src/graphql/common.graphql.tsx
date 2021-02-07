@@ -39,7 +39,8 @@ export type Query = {
   /** Return comments filtered by query params. */
   discussion?: Maybe<Array<Maybe<CommentObjectType>>>;
   /**
-   * Results are sorted alphabetically.
+   * Return a selection of courses, resources and schools that are most relevant
+   * to discuss for the given user.
    *
    * Only allowed for authenticated users.
    */

@@ -111,8 +111,8 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     marginRight: '0.3rem',
     marginBottom: '0.2rem !important',
   },
-  rank: {
-    cursor: 'pointer',
+  score: {
+    marginLeft: spacing(1),
   },
 }));
 
@@ -152,6 +152,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     unreadActivityCount,
     profileUrl,
     rank,
+    score,
   } = useAuthContext();
 
   const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(
@@ -245,10 +246,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderRankEmoji = <Emoji emoji="🎖️" />;
 
   const renderRankLabel = (
-    <>
+    <Grid container>
       {rank}
+      <Typography className={classes.score} variant="body2" color="textSecondary">
+        {score}
+      </Typography>
       {renderRankEmoji}
-    </>
+    </Grid>
   );
 
   const renderAuthenticatedButtons = !!userMe && !hideDynamicButtons && (
@@ -263,9 +267,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       <Tooltip title={t('common-tooltips:starred')}>
         <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
       </Tooltip>
-      <Link href={profileUrl}>
-        <Tooltip title={t('common-tooltips:ownRank', { rank })}>
-          <Chip className={classes.rank} label={renderRankLabel} />
+      <Link href={urls.score}>
+        <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
+          <Chip label={renderRankLabel} />
         </Tooltip>
       </Link>
       <Tooltip title={t('common-tooltips:profile')}>

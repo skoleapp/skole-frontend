@@ -24,6 +24,7 @@ interface UseAuthContext extends AuthContextType {
   avatarThumbnail: string;
   avatar: string;
   rank: string;
+  score: string;
   school: SchoolObjectType | null;
   subject: SubjectObjectType | null;
   loginRequiredTooltip: string | false;
@@ -42,6 +43,7 @@ export const useAuthContext = (): UseAuthContext => {
   const title = R.propOr('', 'title', userMe);
   const bio = R.propOr('', 'bio', userMe);
   const rank = R.propOr('', 'rank', userMe);
+  const score = R.propOr('', 'score', userMe);
   const _avatarThumbnail = R.propOr('', 'avatarThumbnail', userMe);
   const avatarThumbnail = mediaUrl(_avatarThumbnail);
   const _avatar = R.propOr('', 'avatar', userMe);
@@ -65,6 +67,7 @@ export const useAuthContext = (): UseAuthContext => {
     title,
     bio,
     rank,
+    score,
     avatarThumbnail,
     avatar,
     school,
