@@ -10,7 +10,7 @@ export const mediaUrl = (filePath: string): string =>
   process.env.API_URL ? new URL(filePath, process.env.API_URL).href : filePath;
 
 export const mediaLoader: ImageLoader = ({ src, width, quality }) =>
-  `${process.env.API_URL}${src}?w=${width}&q=${quality || 75}`;
+  `${mediaUrl(src)}?w=${width}&q=${quality || 75}`;
 
 interface QueryWithPaginationProps {
   query: Record<symbol, unknown>;
