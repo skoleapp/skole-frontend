@@ -4,7 +4,6 @@ import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import AddOutlined from '@material-ui/icons/AddOutlined';
-import clsx from 'clsx';
 import { useDiscussionContext } from 'context';
 import {
   CommentObjectType,
@@ -18,7 +17,7 @@ import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'theme';
+import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'styles';
 import { DiscussionTypes } from 'types';
 
 import { ErrorBox, LoadingBox, NotFoundBox } from '../shared';
@@ -36,7 +35,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       bottom: 0,
     },
   },
-
   messageArea: {
     flexGrow: 1,
     overflowX: 'hidden',
@@ -47,8 +45,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       borderTop: BORDER,
       borderBottom: BORDER,
     },
-  },
-  topLevelMessageArea: {
     [breakpoints.down('sm')]: {
       paddingBottom: spacing(22), // Make room for the create comment button on mobile.
     },
@@ -232,7 +228,7 @@ export const Discussion: React.FC<Props> = ({
 
   const renderReplyButton = (comment: CommentObjectType) => (
     <Box className={classes.replyButtonContainer}>
-      <Button onClick={handleClickReplyButton(comment)} color="primary" variant="text" fullWidth>
+      <Button onClick={handleClickReplyButton(comment)} variant="text" fullWidth>
         {t('forms:replyTo', {
           username: comment.user?.username?.toString() || t('common:communityUser'),
         })}
@@ -271,7 +267,7 @@ export const Discussion: React.FC<Props> = ({
       onScroll={handleDesktopMessageAreaScroll}
       container
       direction="column"
-      className={clsx(classes.messageArea, classes.topLevelMessageArea)}
+      className={classes.messageArea}
     >
       {renderComments}
       {renderLoadingMoreItems}

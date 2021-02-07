@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { usePdfViewerContext } from 'context';
 import * as R from 'ramda';
 import React, { ChangeEvent } from 'react';
-import { BORDER } from 'theme';
+import { BORDER } from 'styles';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {

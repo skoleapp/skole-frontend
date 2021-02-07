@@ -30,6 +30,7 @@ import {
   SkoleDialog,
   TextFormField,
 } from 'components';
+import { useDarkModeContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteCitiesDocument,
@@ -51,7 +52,7 @@ import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
-import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { SeoPageProps } from 'types';
 import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
 
@@ -87,7 +88,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   searchContainer: {
     padding: spacing(1),
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
-    backgroundColor: palette.common.white,
+    backgroundColor: palette.background.paper,
     display: 'flex',
     alignItems: 'center',
   },
@@ -171,6 +172,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const filtersHeader = t('common:filters');
   const filtersEmoji = '🔎';
   const resultsHeader = t('common:searchResults');
+  const { darkMode } = useDarkModeContext();
+  const iconButtonColor = darkMode ? 'secondary' : 'primary';
 
   useEffect(() => {
     formRef.current?.setFieldValue('school', school);
@@ -397,7 +400,6 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         <Button
           onClick={handleClearFilters}
           variant="outlined"
-          color="primary"
           endIcon={<ClearAllOutlined />}
           disabled={props.isSubmitting}
           fullWidth
@@ -448,7 +450,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderResults = loading ? renderLoading : courses.length ? renderTable : renderNotFound;
 
   const renderClearFiltersButton = (
-    <IconButton onClick={handleClearFilters} size="small">
+    <IconButton onClick={handleClearFilters} size="small" color={iconButtonColor}>
       <ClearAllOutlined />
     </IconButton>
   );
@@ -533,17 +535,17 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSearchNavbarStartAdornment = searchValue ? (
-    <IconButton onClick={handleClearSearchInput} color="primary" size="small">
+    <IconButton onClick={handleClearSearchInput} color={iconButtonColor} size="small">
       <ArrowBackOutlined />
     </IconButton>
   ) : (
-    <IconButton onClick={handleSearchIconClick} color="primary" size="small">
+    <IconButton onClick={handleSearchIconClick} color={iconButtonColor} size="small">
       <SearchOutlined />
     </IconButton>
   );
 
   const renderSearchNavbarEndAdornment = (
-    <IconButton onClick={handleOpenFilters} size="small" color="primary">
+    <IconButton onClick={handleOpenFilters} size="small" color={iconButtonColor}>
       <FilterListOutlined />
     </IconButton>
   );

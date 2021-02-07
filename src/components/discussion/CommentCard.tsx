@@ -27,7 +27,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useEffect, useRef } from 'react';
-import { BORDER } from 'theme';
+import { BORDER } from 'styles';
 import { DiscussionTypes } from 'types';
 import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
@@ -40,28 +40,35 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     boxShadow: 'none',
     borderBottom: BORDER,
     position: 'relative',
+    maxWidth: '100vw',
   },
   noBorderBottom: {
     borderBottom: 'none',
   },
   replyComment: {
-    borderLeft: `${spacing(1)} solid ${palette.primary.main}`,
+    borderLeft: `${spacing(1)} solid ${
+      palette.type === 'dark' ? palette.secondary.main : palette.primary.main
+    }`,
   },
-  cardHeader: {
+  cardHeaderRoot: {
     padding: 0,
     textAlign: 'left',
+  },
+  cardHeaderContent: {
+    overflow: 'hidden',
   },
   avatar: {
     width: '2rem',
     height: '2rem',
   },
-  cardTitle: {
+  cardHeaderTitle: {
     fontSize: '1rem',
+    whiteSpace: 'nowrap',
   },
   secondaryDiscussion: {
     marginLeft: spacing(1),
   },
-  cardSubHeader: {
+  cardHeaderSubheader: {
     fontSize: '0.75rem',
   },
   cardContent: {
@@ -79,7 +86,9 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     display: 'flex',
   },
   attachmentPreview: {
-    border: `0.1rem solid ${palette.primary.main} !important`,
+    border: `0.1rem solid ${
+      palette.type === 'dark' ? palette.secondary.main : palette.primary.main
+    } !important`,
     borderRadius: '0.5rem',
     cursor: 'pointer',
   },
@@ -289,7 +298,11 @@ export const CommentCard: React.FC<Props> = ({
   );
 
   const renderSecondaryDiscussion = (
-    <Typography className={classes.secondaryDiscussion} variant="body2" color="textSecondary">
+    <Typography
+      className={clsx(classes.secondaryDiscussion, 'truncate-text')}
+      variant="body2"
+      color="textSecondary"
+    >
       {renderSecondaryDiscussionLabel} {renderSecondaryDiscussionLink}
     </Typography>
   );
@@ -300,7 +313,7 @@ export const CommentCard: React.FC<Props> = ({
     (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
     (discussionType === DiscussionTypes.COURSE && !!comment.school) ||
     (discussionType === DiscussionTypes.RESOURCE && !!comment.course)) && (
-    <Grid container alignItems="center">
+    <Grid container alignItems="center" wrap="nowrap">
       {renderCreatorTitle} {renderSecondaryDiscussion}
     </Grid>
   );
@@ -308,9 +321,10 @@ export const CommentCard: React.FC<Props> = ({
   const renderCardHeader = (
     <CardHeader
       classes={{
-        root: classes.cardHeader,
-        title: classes.cardTitle,
-        subheader: classes.cardSubHeader,
+        root: classes.cardHeaderRoot,
+        content: classes.cardHeaderContent,
+        title: classes.cardHeaderTitle,
+        subheader: classes.cardHeaderSubheader,
       }}
       avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
       title={renderSecondaryDiscussionTitle || renderCreatorTitle}

@@ -4,6 +4,7 @@ import { defaultLocale } from 'i18n';
 import { join } from 'path';
 import { MarkdownPageProps } from 'types';
 
+// Must be used server-side only - fs module not available in the browser.
 export const loadMarkdown = async (
   name: string,
   lang: string = defaultLocale,

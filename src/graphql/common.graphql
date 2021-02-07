@@ -619,6 +619,7 @@ query UserMe {
     created
     verified
     unreadActivityCount
+    rank
     school {
       id
       name
@@ -1092,8 +1093,8 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
   }
 }
 
-query AutocompleteDiscussions($searchTerm: String) {
-  autocompleteDiscussions(searchTerm: $searchTerm) {
+query DiscussionSuggestions {
+  discussionSuggestions {
     ... on CourseObjectType {
       id
       courseName: name

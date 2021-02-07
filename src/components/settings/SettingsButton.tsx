@@ -1,7 +1,7 @@
 import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
-import { useSettingsContext } from 'context';
+import { useDarkModeContext, useSettingsContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import useTranslation from 'next-translate/useTranslation';
 import React from 'react';
@@ -9,7 +9,8 @@ import React from 'react';
 export const SettingsButton: React.FC<IconButtonProps> = (props) => {
   const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
-  const color = isMobile ? 'secondary' : 'primary';
+  const { darkMode } = useDarkModeContext();
+  const color = isMobile ? 'secondary' : darkMode ? 'secondary' : 'primary';
   const size = isMobile ? 'small' : 'medium';
   const { handleOpenSettingsDialog } = useSettingsContext();
 

@@ -224,7 +224,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderLoginButton = (
     <FormControl>
-      <ButtonLink href={urls.login} variant="outlined" color="primary">
+      <ButtonLink href={urls.login} variant="outlined">
         {t('common:login')}
       </ButtonLink>
     </FormControl>
@@ -290,7 +290,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSkipButton = (
     <FormControl>
-      <Button variant="outlined" color="primary" onClick={handleSkipUpdateProfile}>
+      <Button variant="outlined" onClick={handleSkipUpdateProfile}>
         {t('common:setupLater')}
       </Button>
     </FormControl>

@@ -103,3 +103,8 @@ export interface ShareContextType {
 export interface HistoryContextType {
   history: string[];
 }
+
+export interface DarkModeContextType {
+  darkMode: boolean;
+  toggleDarkMode: () => void;
+}

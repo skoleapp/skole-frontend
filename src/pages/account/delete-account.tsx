@@ -98,7 +98,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderCancelButton = (
     <FormControl>
-      <ButtonLink href={urls.editProfile} variant="outlined" color="primary">
+      <ButtonLink href={urls.editProfile} variant="outlined">
         {t('common:cancel')}
       </ButtonLink>
     </FormControl>

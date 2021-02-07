@@ -51,7 +51,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     overflow: 'hidden',
   },
   pitchBoxContainer: {
-    backgroundColor: palette.grey[300],
+    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.grey[300],
     padding: `${spacing(4)} ${spacing(2)}`,
     [breakpoints.up('md')]: {
       padding: spacing(6),
@@ -238,6 +238,9 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       hideLogo: isMobile,
       hideNavigation: true,
       hideGetStartedButton: true,
+    },
+    footerProps: {
+      hideAppStoreBadges: true,
     },
   };
 

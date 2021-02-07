@@ -8,7 +8,7 @@ import { useDiscussionContext } from 'context';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
 import React from 'react';
-import { TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'theme';
+import { TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { mediaLoader } from 'utils';
 
 const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({

@@ -10,7 +10,7 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, DragEvent, useRef } from 'react';
-import { BORDER_RADIUS } from 'theme';
+import { BORDER_RADIUS } from 'styles';
 import {
   IMAGE_TYPES,
   MAX_RESOURCE_FILE_SIZE,
@@ -102,7 +102,7 @@ export const FileField: React.FC<Props> = ({ form: { setFieldValue }, field: { n
     : t('upload-resource:uploadFileButtonText');
 
   const renderMobileUploadFileButton = isMobile && (
-    <Button onClick={handleFileInputClick} color="primary" variant="outlined" fullWidth>
+    <Button onClick={handleFileInputClick} variant="outlined" fullWidth>
       {renderMobileFileUploadButtonText}
     </Button>
   );

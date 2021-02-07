@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { SeoProps } from 'types';
 
 import { Emoji, NotFoundBox } from '../shared';
@@ -65,6 +65,7 @@ export const ErrorTemplate: React.FC<Props> = ({ variant, seoProps }) => {
       hideSearch: true,
       hideDynamicButtons: true,
       hideLanguageButton: true,
+      hideDarkModeButton: true,
     },
   };
 

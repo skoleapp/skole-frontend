@@ -10,6 +10,8 @@ import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
 
+import { Emoji } from '../shared';
+
 export const DrawingModeControls: React.FC = () => {
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
@@ -40,6 +42,7 @@ export const DrawingModeControls: React.FC = () => {
     <Grid item md={8}>
       <Typography className="MuiCardHeader-title" variant="h5">
         {t('resource:drawingMode')}
+        <Emoji emoji="✏️" />
       </Typography>
     </Grid>
   );
@@ -50,7 +53,6 @@ export const DrawingModeControls: React.FC = () => {
         onClick={handleContinueButtonClick}
         endIcon={<ArrowForwardOutlined />}
         disabled={!screenshot}
-        color="primary"
         size="small"
       >
         {t('common:continue')}

@@ -1,5 +1,10 @@
 const withOffline = require('next-offline');
 const withTranslate = require('next-translate');
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL, EMAIL_ADDRESS } = process.env;
 
 const config = {
@@ -47,15 +52,11 @@ const config = {
       use: 'raw-loader',
     });
 
-    // Fixes NPM packages that depend on `fs` module: https://github.com/vercel/next.js/issues/7755#issuecomment-508633125
-    if (!options.isServer) {
-      config.node = {
-        fs: 'empty',
-      };
-    }
-
     return config;
+  },
+  future: {
+    webpack5: true,
   },
 };
 
-module.exports = withOffline(withTranslate(config));
+module.exports = withBundleAnalyzer(withOffline(withTranslate(config)));

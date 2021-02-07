@@ -10,7 +10,7 @@ import {
   TOP_NAVBAR_HEIGHT_DESKTOP,
   TOP_NAVBAR_HEIGHT_MOBILE,
   TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
-} from 'theme';
+} from 'styles';
 import { MainTemplateProps } from 'types';
 
 import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
@@ -18,7 +18,7 @@ import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   root: {
     minHeight: '100vh',
-    backgroundColor: palette.secondary.main,
+    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.secondary.main,
     paddingTop: 'env(safe-area-inset-top)',
     overflow: 'hidden',
   },
@@ -71,6 +71,7 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   customBottomNavbar,
   hideBottomNavbar,
   hideFooter,
+  footerProps,
   children,
   ...props
 }) => {
@@ -101,7 +102,7 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   const renderBottomNavbar =
     isMobile && !hideBottomNavbar && (customBottomNavbar || <BottomNavbar />);
 
-  const renderFooter = isTabletOrDesktop && !hideFooter && <Footer />;
+  const renderFooter = isTabletOrDesktop && !hideFooter && <Footer {...footerProps} />;
 
   return (
     <Grid container direction="column" className={classes.root} {...props}>

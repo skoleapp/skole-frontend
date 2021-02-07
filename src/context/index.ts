@@ -1,6 +1,7 @@
 export * from './actions';
 export * from './auth';
 export * from './confirm';
+export * from './darkMode';
 export * from './discussion';
 export * from './history';
 export * from './info';

@@ -51,7 +51,7 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
 
   const renderCancelButton = (
     <FormControl>
-      <Button onClick={handleClickCancelButton} color="primary" variant="outlined" fullWidth>
+      <Button onClick={handleClickCancelButton} variant="outlined" fullWidth>
         {t('common:cancel')}
       </Button>
     </FormControl>

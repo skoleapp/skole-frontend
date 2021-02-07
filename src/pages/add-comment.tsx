@@ -1,26 +1,30 @@
 import { DiscussionsUnion } from '__generated__/src/graphql/common.graphql';
-import Collapse from '@material-ui/core/Collapse';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   AuthorSelection,
   AutocompleteField,
-  CheckboxFormField,
   CommentAttachmentInput,
   CommentAttachmentPreview,
   CommentTextField,
   CommentTextFieldToolbar,
+  ErrorTemplate,
+  FormErrorMessage,
   FormSubmitSection,
   FormTemplate,
-  TextLink,
+  LoadingTemplate,
 } from 'components';
 import { useAuthContext, useDiscussionContext, useNotificationsContext } from 'context';
-import { Field, Form, Formik, FormikProps } from 'formik';
+import { ErrorMessage, Field, Form, Formik, FormikProps } from 'formik';
 import {
-  AutocompleteDiscussionsDocument,
-  CourseObjectType,
+  AutocompleteSchoolsDocument,
   CreateCommentMutation,
-  SchoolObjectType,
   useCreateCommentMutation,
+  useDiscussionSuggestionsLazyQuery,
   UserObjectType,
 } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
@@ -29,25 +33,42 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent } from 'react';
-import { SecondaryDiscussion, SeoPageProps } from 'types';
+import React, { ChangeEvent, useEffect } from 'react';
+import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
+
+const useStyles = makeStyles(({ spacing }) => ({
+  discussionSuggestionsLabel: {
+    marginBottom: spacing(2),
+  },
+}));
 
 interface AddCommentFormValues {
   user: UserObjectType | null;
   text: string;
   attachment: string | null;
   discussion: DiscussionsUnion | null;
-  secondaryDiscussion: SecondaryDiscussion;
 }
 
 const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+  const classes = useStyles();
   const { t } = useTranslation();
-  const { userMe, school } = useAuthContext();
+  const { userMe } = useAuthContext();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { setCommentAttachment, formRef } = useDiscussionContext<AddCommentFormValues>();
+
+  const [
+    discussionSuggestionsQuery,
+    { data, loading, error },
+  ] = useDiscussionSuggestionsLazyQuery();
+
+  const discussionSuggestions: DiscussionsUnion[] = R.propOr([], 'discussionSuggestions', data);
+
+  useEffect(() => {
+    !!userMe && discussionSuggestionsQuery();
+  }, [userMe]);
 
   const onCompleted = async ({ createComment }: CreateCommentMutation): Promise<void> => {
     const errors = R.prop('errors', createComment);
@@ -64,7 +85,6 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       setCommentAttachment(null);
       toggleNotification(successMessage);
 
-      // Redirect to the `lowest` possible discussion.
       const pathname = resource
         ? urls.resource(resource)
         : course
@@ -94,32 +114,21 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // See if course, resource or school is selected or a course or school is included.
   const handleSubmit = async ({
     discussion,
-    secondaryDiscussion,
     user: _user,
     ...values
   }: AddCommentFormValues): Promise<void> => {
     const user = R.prop('id', _user);
+    let course = null;
+    let resource = null;
+    let school = null;
 
-    const primaryCourse = discussion?.__typename === 'CourseObjectType' && discussion.id;
-
-    const secondaryCourse =
-      secondaryDiscussion?.__typename === 'CourseObjectType' && secondaryDiscussion.id;
-
-    // Use course as either primary or secondary target.
-    const course = primaryCourse || secondaryCourse || null;
-
-    const primaryResource = discussion?.__typename === 'ResourceObjectType' && discussion.id;
-
-    // Use resource only as primary target.
-    const resource = primaryResource || null;
-
-    const primarySchool = discussion?.__typename === 'SchoolObjectType' && discussion.id;
-
-    const secondarySchool =
-      secondaryDiscussion?.__typename === 'SchoolObjectType' && secondaryDiscussion.id;
-
-    // Use school as either primary or secondary target.
-    const school = primarySchool || secondarySchool || null;
+    if (userMe) {
+      course = discussion?.__typename === 'CourseObjectType' ? discussion.id : null;
+      resource = discussion?.__typename === 'ResourceObjectType' ? discussion.id : null;
+      school = discussion?.__typename === 'SchoolObjectType' ? discussion.id : null;
+    } else {
+      school = R.prop('id', discussion);
+    }
 
     await createCommentMutation({
       variables: { ...values, user, course, resource, school },
@@ -131,8 +140,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const initialValues = {
     user: userMe,
-    discussion: school,
-    secondaryDiscussion: null,
+    discussion: null,
     attachment: null,
     text: '',
   };
@@ -146,52 +154,68 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }),
   });
 
-  const renderDiscussionField = (
+  const handleRadioGroupChange = (_e: ChangeEvent<HTMLInputElement>, value: string) => {
+    const discussionAttrs = value.split('-');
+
+    const discussion = discussionSuggestions.find(
+      (s) => s.__typename === discussionAttrs[0] && s.id === discussionAttrs[1],
+    );
+
+    formRef.current?.setFieldValue('discussion', discussion);
+  };
+
+  // Render for unauthenticated users and for user's that have no discussion suggestions.
+  const renderDiscussionField = (!userMe || (!!userMe && !discussionSuggestions.length)) && (
     <Field
       name="discussion"
       label={t('forms:discussion')}
-      dataKey="autocompleteDiscussions"
-      searchKey="searchTerm"
-      labelKeys={['name', 'title', 'courseName']}
+      dataKey="autocompleteSchools"
+      searchKey="name"
       suffixKey="code"
-      document={AutocompleteDiscussionsDocument}
+      document={AutocompleteSchoolsDocument}
       component={AutocompleteField}
       helperText={t('add-comment:schoolHelperText')}
     />
   );
 
-  const renderSecondaryDiscussionField = ({ values }: FormikProps<AddCommentFormValues>) => {
-    const visible = ['CourseObjectType', 'ResourceObjectType'].includes(
-      String(values.discussion?.__typename),
-    );
+  const renderDiscussionSuggestionLabel = (d: DiscussionsUnion) => {
+    switch (d.__typename) {
+      case 'CourseObjectType': {
+        // @ts-ignore: `courseName` has been renamed in the GraphQL query.
+        return d.code ? `${d.courseName} (${d.code})` : d.courseName;
+      }
 
-    const course: CourseObjectType | null = R.pathOr(null, ['discussion', 'course'], values);
-    const school: SchoolObjectType | null = R.pathOr(null, ['discussion', 'school'], values);
-    const href = course ? urls.course(course.id) : school ? urls.school(school.id) : '#';
-    const name = course?.name || school?.name;
+      case 'ResourceObjectType': {
+        return `${d.title} (${d.course.name})`;
+      }
 
-    const handleChange = (_: ChangeEvent<Record<string, unknown>>, checked: boolean) => {
-      const val = checked ? course || school : null;
-      formRef.current?.setFieldValue('secondaryDiscussion', val);
-    };
-
-    const renderLabel = (
-      <>
-        {t('forms:alsoSendTo')} <TextLink href={href}>{name}</TextLink>
-      </>
-    );
-
-    return (
-      <Collapse in={visible}>
-        <Field
-          name="secondaryDiscussion"
-          label={renderLabel}
-          component={CheckboxFormField}
-          onChange={handleChange}
-        />
-      </Collapse>
-    );
+      case 'SchoolObjectType': {
+        return d.name;
+      }
+    }
   };
+
+  const mapDiscussionSuggestions = discussionSuggestions.map((d, i) => (
+    <FormControlLabel
+      value={`${d.__typename}-${d.id}`} // Radio values must be string.
+      control={<Radio />}
+      label={renderDiscussionSuggestionLabel(d)}
+      key={i}
+    />
+  ));
+
+  // Render for authenticated users that have discussion suggestions.
+  const renderDiscussionSuggestions = !!userMe && !!discussionSuggestions.length && (
+    <FormControl>
+      <FormLabel className={classes.discussionSuggestionsLabel}>
+        {t('add-comment:selectDiscussion')}
+      </FormLabel>
+      <RadioGroup value={formRef.current?.values.discussion} onChange={handleRadioGroupChange}>
+        {mapDiscussionSuggestions}
+      </RadioGroup>
+      <ErrorMessage name="discussion" component={FormErrorMessage} />
+    </FormControl>
+  );
 
   const renderAuthorSelection = (props: FormikProps<AddCommentFormValues>) =>
     !!userMe && (
@@ -225,7 +249,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderFormFields = (props: FormikProps<AddCommentFormValues>) => (
     <Form>
       {renderDiscussionField}
-      {renderSecondaryDiscussionField(props)}
+      {renderDiscussionSuggestions}
       {renderAuthorSelection(props)}
       {renderAttachmentPreview}
       {renderTextFieldToolbar}
@@ -254,6 +278,18 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       emoji: '💬',
     },
   };
+
+  if (loading) {
+    return <LoadingTemplate seoProps={seoProps} />;
+  }
+
+  if (!!error && !!error.networkError) {
+    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+  }
+
+  if (error) {
+    return <ErrorTemplate variant="error" seoProps={seoProps} />;
+  }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };

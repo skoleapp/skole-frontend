@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { TabPanelProps } from 'types';
 
+import { useMediaQueries } from './useMediaQueries';
+
 interface CustomTabsProps {
   value: number;
   onChange: (_e: ChangeEvent<Record<symbol, unknown>>, val: number) => void;
@@ -19,15 +21,16 @@ interface UseTabs {
 // Custom helper hook for views that contain tabs.
 export const useTabs = (): UseTabs => {
   const { query } = useRouter();
+  const { isMobile } = useMediaQueries();
   const [tabValue, setTabValue] = useState(0);
 
   const valueProp = {
     value: tabValue,
   };
 
-  // If a comment has been provided as a query parameter, automatically switch to discussion tab.
+  // If a comment has been provided as a query parameter, automatically switch to discussion tab on mobile.
   useEffect(() => {
-    if (query.comment) {
+    if (query.comment && isMobile) {
       setTabValue(1);
     }
   }, [query]);

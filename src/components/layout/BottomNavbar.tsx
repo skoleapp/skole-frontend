@@ -96,7 +96,7 @@ export const BottomNavbar: React.FC = () => {
   );
 
   const renderActivityIcon = (
-    <Badge badgeContent={unreadActivityCount} color="primary" variant="dot">
+    <Badge badgeContent={unreadActivityCount} variant="dot">
       <NotificationsOutlined />
     </Badge>
   );

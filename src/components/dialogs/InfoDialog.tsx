@@ -53,9 +53,7 @@ export const InfoDialog: React.FC = () => {
   ));
 
   const renderCreatorLink = !!creator && (
-    <TextLink href={urls.user(userId)} color="primary">
-      {creator.username}
-    </TextLink>
+    <TextLink href={urls.user(userId)}>{creator.username}</TextLink>
   );
 
   const renderCreator = creator ? renderCreatorLink : communityUser;

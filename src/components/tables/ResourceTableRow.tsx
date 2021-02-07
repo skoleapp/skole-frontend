@@ -11,7 +11,7 @@ import { useTranslation } from 'lib';
 import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
-import { BORDER } from 'theme';
+import { BORDER } from 'styles';
 import { ColSpan, TableRowProps } from 'types';
 import { urls } from 'utils';
 
@@ -78,9 +78,7 @@ export const ResourceTableRow: React.FC<Props> = ({
   const renderDateChip = !hideDateChip && <TableRowChip label={useDayjs(date).format('LL')} />;
 
   const renderResourceCreator = user ? (
-    <TextLink href={urls.user(user.id)} color="primary">
-      {user.username}
-    </TextLink>
+    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
   ) : (
     t('common:communityUser')
   );

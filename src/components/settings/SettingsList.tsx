@@ -3,11 +3,18 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
+import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
 import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
 import InfoOutlined from '@material-ui/icons/InfoOutlined';
 import LanguageOutlined from '@material-ui/icons/LanguageOutlined';
 import VerifiedUserOutlined from '@material-ui/icons/VerifiedUserOutlined';
-import { useAuthContext, useLanguageContext, useSettingsContext } from 'context';
+import {
+  useAuthContext,
+  useDarkModeContext,
+  useLanguageContext,
+  useSettingsContext,
+} from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
@@ -21,6 +28,7 @@ interface Props {
 
 export const SettingsList: React.FC<Props> = ({ dialog }) => {
   const { userMe, verified } = useAuthContext();
+  const { darkMode, toggleDarkMode } = useDarkModeContext();
   const { handleCloseSettingsDialog } = useSettingsContext();
   const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
@@ -69,6 +77,13 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     ),
   );
 
+  const renderDarkModeMenuItem = isMobile && (
+    <MenuItem onClick={toggleDarkMode}>
+      <ListItemIcon>{darkMode ? <Brightness7Outlined /> : <Brightness6Outlined />}</ListItemIcon>
+      <ListItemText>{t('common:toggleDarkMode')}</ListItemText>
+    </MenuItem>
+  );
+
   const renderAboutMenuItem = isMobile && (
     <Link href={urls.about}>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.about)}>
@@ -115,6 +130,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
     <List>
       {renderCommonAccountMenuItems}
       {renderLanguageMenuItem}
+      {renderDarkModeMenuItem}
       {renderAboutMenuItem}
       {renderLoginMenuItem}
     </List>
@@ -125,6 +141,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
       {renderAccountMenuItems}
       {renderVerifyAccountMenuItem}
       {renderLanguageMenuItem}
+      {renderDarkModeMenuItem}
       {renderAboutMenuItem}
       {renderLogoutMenuItem}
     </List>

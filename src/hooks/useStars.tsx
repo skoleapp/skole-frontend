@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useAuthContext, useDarkModeContext, useNotificationsContext } from 'context';
 import { StarMutation, useStarMutation } from 'generated';
 import React, { useEffect, useState } from 'react';
 
@@ -34,10 +34,11 @@ export const useStars = ({
 }: UseStarsParams): UseStars => {
   const { isTabletOrDesktop } = useMediaQueries();
   const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
+  const { darkMode } = useDarkModeContext();
   const [stars, setStars] = useState('0');
   const [starred, setStarred] = useState(false);
-  const iconColor = starred ? 'primary' : 'disabled';
-  const textColor = starred ? 'primary' : 'textSecondary';
+  const iconColor = starred ? (darkMode ? 'secondary' : 'primary') : 'disabled';
+  const textColor = starred ? (darkMode ? 'secondary' : 'primary') : 'textSecondary';
   const context = useLanguageHeaderContext();
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
 

@@ -26,7 +26,7 @@ export const ContactDialog: React.FC<Props> = ({ header, text, emoji, open, hand
         <DialogContentText>{text}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={handleClose} fullWidth>
+        <Button onClick={handleClose} fullWidth>
           {t('common:gotIt')}
         </Button>
       </DialogActions>

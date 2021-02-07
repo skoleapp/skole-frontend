@@ -133,13 +133,7 @@ export const AvatarField = <T extends FormikValues>({
         accept={ACCEPTED_AVATAR_FILES.toString()}
         onChange={handleAvatarChange}
       />
-      <Button
-        className={classes.button}
-        onClick={handleOpenDialog}
-        variant="text"
-        color="primary"
-        component="span"
-      >
+      <Button className={classes.button} onClick={handleOpenDialog} variant="text">
         {t('edit-profile:changeAvatar')}
       </Button>
     </Box>

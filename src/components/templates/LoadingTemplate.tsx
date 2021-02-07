@@ -1,5 +1,6 @@
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDarkModeContext } from 'context';
 import Image from 'next/image';
 import React from 'react';
 import { SeoPageProps } from 'types';
@@ -9,7 +10,7 @@ import { MainTemplate } from './MainTemplate';
 const useStyles = makeStyles(({ palette }) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: palette.secondary.main,
+    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.secondary.main,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -33,6 +34,11 @@ const useStyles = makeStyles(({ palette }) => ({
 
 export const LoadingTemplate: React.FC<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
+  const { darkMode } = useDarkModeContext();
+
+  const src = darkMode
+    ? '/images/icons/skole-icon-text.svg'
+    : '/images/icons/skole-icon-text-red.svg';
 
   const layoutProps = {
     seoProps,
@@ -45,6 +51,7 @@ export const LoadingTemplate: React.FC<SeoPageProps> = ({ seoProps }) => {
       hideSearch: true,
       hideDynamicButtons: true,
       hideLanguageButton: true,
+      hideDarkModeButton: true,
     },
     containerProps: {
       fullWidth: true,
@@ -55,12 +62,7 @@ export const LoadingTemplate: React.FC<SeoPageProps> = ({ seoProps }) => {
   return (
     <MainTemplate {...layoutProps}>
       <Box className={classes.root}>
-        <Image
-          height={120}
-          width={150}
-          className={classes.bounce}
-          src="/images/icons/skole-icon-text-red.svg"
-        />
+        <Image height={120} width={150} className={classes.bounce} src={src} />
       </Box>
     </MainTemplate>
   );

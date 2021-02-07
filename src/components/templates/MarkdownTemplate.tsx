@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 
 import { Emoji, MarkdownContent } from '../shared';

@@ -36,10 +36,10 @@ export const ConfirmationDialog: React.FC = () => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel} fullWidth>
+        <Button color="default" onClick={handleCancel} fullWidth>
           {t('common:cancel')}
         </Button>
-        <Button color="primary" onClick={handleConfirm} fullWidth>
+        <Button onClick={handleConfirm} fullWidth>
           {t('common:confirm')}
         </Button>
       </DialogActions>

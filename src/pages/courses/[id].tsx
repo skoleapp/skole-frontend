@@ -57,7 +57,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React from 'react';
-import { BORDER, BORDER_RADIUS } from 'theme';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, urls } from 'utils';
 
@@ -204,7 +204,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
             subject: Number(id),
           },
         }}
-        color="primary"
       >
         {name}
       </TextLink>
@@ -212,9 +211,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   ));
 
   const renderSchoolLink = !!schoolId && (
-    <TextLink href={urls.school(schoolId)} color="primary">
-      {schoolName}
-    </TextLink>
+    <TextLink href={urls.school(schoolId)}>{schoolName}</TextLink>
   );
 
   const infoItems = [
@@ -306,8 +303,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
-  // Only render for non-verified users to make the score more clear.
-  const renderScoreIcon = !verified && <ThumbsUpDownOutlined color="disabled" />;
+  // Only render for non-verified users and owners to make the score more clear.
+  const renderScoreIcon = (!verified || isOwner) && <ThumbsUpDownOutlined color="disabled" />;
 
   const renderCustomBottomNavbarContent = (
     <Grid container>
@@ -374,7 +371,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           className={classes.uploadResourceButton}
           href={uploadResourceHref}
           disabled={verified === false}
-          color="primary"
           endIcon={<CloudUploadOutlined />}
         >
           {t('common:uploadMaterial')}
