@@ -82,14 +82,14 @@
   "replies": "Vastaukset",
   "postedBy": "Lähettänyt",
   "product": "Tuote",
-  "updates": "Updates",
+  "updates": "Uutta",
   "unexpectedError": "Odottamaton virhe.",
   "addComment": "Lisää kommentti",
   "startDiscussion": "Aloita keskustelu",
   "findContent": "Löydä sisältöä",
   "uploadMaterial": "Lisää materiaalia",
   "addCourses": "Lisää kursseja",
-  "toggleDarkMode": "Vaihda tumma/vaalea teema"
+  "toggleDarkMode": "Vaihda tumma/vaalea teema",
   "feedbackHeader": "Oliko tästä sivusta apua?",
   "feedbackText": "Anna meille palautetta"
 }
