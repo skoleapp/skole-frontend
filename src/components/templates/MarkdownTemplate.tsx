@@ -3,17 +3,23 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useMediaQueries } from 'hooks';
+import { useTranslation } from 'lib';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
+import { urls } from 'utils';
 
-import { Emoji, MarkdownContent } from '../shared';
+import { ButtonLink, Emoji, MarkdownContent } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
-const useStyles = makeStyles(({ breakpoints, palette }) => ({
+const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   root: {
     flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -23,6 +29,12 @@ const useStyles = makeStyles(({ breakpoints, palette }) => ({
   },
   cardHeaderTitle: {
     color: palette.text.secondary,
+  },
+  cardContent: {
+    flexGrow: 1,
+  },
+  feedbackContainer: {
+    padding: spacing(4),
   },
 }));
 
@@ -38,6 +50,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   const { isTabletOrDesktop } = useMediaQueries();
+  const { t } = useTranslation();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
@@ -63,7 +76,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
   const renderMarkdownContent = <MarkdownContent>{content}</MarkdownContent>;
 
   const renderCardContent = (
-    <CardContent>
+    <CardContent className={classes.cardContent}>
       <Grid container justify="center">
         <Grid item xs={12} sm={8} md={6} lg={5} xl={4}>
           {children}
@@ -71,6 +84,21 @@ export const MarkdownTemplate: React.FC<Props> = ({
         </Grid>
       </Grid>
     </CardContent>
+  );
+
+  const feedbackHeaderText = t('common:feedbackHeader');
+  const renderFeedbackHeaderEmoji = <Emoji emoji="🤔" />;
+
+  const renderFeedback = (
+    <Grid className={classes.feedbackContainer} container direction="column" alignItems="center">
+      <Typography variant="subtitle1" gutterBottom>
+        {feedbackHeaderText}
+        {renderFeedbackHeaderEmoji}
+      </Typography>
+      <ButtonLink href={urls.contact} variant="outlined" endIcon={<ArrowForwardOutlined />}>
+        {t('common:feedbackText')}
+      </ButtonLink>
+    </Grid>
   );
 
   const layoutProps = {
@@ -83,6 +111,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
       <Paper className={classes.root}>
         {renderCardHeader}
         {renderCardContent}
+        {renderFeedback}
       </Paper>
     </MainTemplate>
   );
