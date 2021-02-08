@@ -47,11 +47,6 @@ const config = {
       use: [options.defaultLoaders.babel, { loader: 'graphql-let/loader' }],
     });
 
-    config.module.rules.push({
-      test: /\.md$/,
-      use: 'raw-loader',
-    });
-
     return config;
   },
 };
