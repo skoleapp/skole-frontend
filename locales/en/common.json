@@ -91,5 +91,6 @@
   "uploadMaterial": "Upload Material",
   "toggleDarkMode": "Toggle dark/light mode",
   "feedbackHeader": "Was this page helpful?",
-  "feedbackText": "Give us feedback"
+  "feedbackText": "Give us feedback",
+  "feedback": "Feedback"
 }

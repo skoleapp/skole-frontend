@@ -91,5 +91,6 @@
   "addCourses": "Lägg till kurser",
   "toggleDarkMode": "Växla mörkt/ljus läge",
   "feedbackHeader": "Hjälpte den här sidan?",
-  "feedbackText": "Ge oss feedback"
+  "feedbackText": "Ge oss feedback",
+  "feedback": "Feedback"
 }

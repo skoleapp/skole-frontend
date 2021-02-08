@@ -82,9 +82,9 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     </TextLink>
   );
 
-  const renderContactLink = (
+  const renderFeedbackLink = (
     <TextLink href={urls.contact} color="secondary">
-      {t('common:contact')}
+      {t('common:feedback')}
     </TextLink>
   );
 
@@ -95,6 +95,7 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
       {renderGuidelinesLink}
       {renderScoreLink}
       {renderUpdatesLink}
+      {renderFeedbackLink}
     </Grid>
   );
 
@@ -102,6 +103,12 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     <Typography className={classes.header} variant="subtitle1" color="secondary">
       {t('common:company').toUpperCase()}
     </Typography>
+  );
+
+  const renderContactLink = (
+    <TextLink href={urls.contact} color="secondary">
+      {t('common:contact')}
+    </TextLink>
   );
 
   const renderBlogLink = (
