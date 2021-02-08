@@ -51,7 +51,7 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useMemo, useState } from 'react';
 import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { SeoPageProps } from 'types';
 import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
@@ -175,22 +175,13 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { darkMode } = useDarkModeContext();
   const iconButtonColor = darkMode ? 'secondary' : 'primary';
 
-  useEffect(() => {
-    formRef.current?.setFieldValue('school', school);
-    formRef.current?.setFieldValue('subject', subject);
-    formRef.current?.setFieldValue('schoolType', schoolType);
-    formRef.current?.setFieldValue('country', country);
-    formRef.current?.setFieldValue('city', city);
-  }, [school, subject, schoolType, country, city]);
-
   const {
     open: filtersOpen,
     handleOpen: handleOpenFilters,
     handleClose: handleCloseFilters,
   } = useOpen();
 
-  // Pre-load query params to the form.
-  const initialValues = {
+  const dynamicInitialValues = {
     searchTerm,
     school,
     subject,
@@ -199,6 +190,9 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     city,
     ordering,
   };
+
+  // Only re-render when one of the dynamic values changes - the form values will reset every time.
+  const initialValues = useMemo(() => dynamicInitialValues, Object.values(dynamicInitialValues));
 
   const paginationQuery = getPaginationQuery(query); // Query that holds only pagination.
 
@@ -283,11 +277,11 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     city: _city,
     ordering,
   }: SearchFormValues): Promise<void> => {
-    const school = R.propOr('', 'id', _school);
-    const subject = R.propOr('', 'id', _subject);
-    const schoolType = R.propOr('', 'id', _schoolType);
-    const country = R.propOr('', 'id', _country);
-    const city = R.propOr('', 'id', _city);
+    const school = R.propOr('', 'slug', _school);
+    const subject = R.propOr('', 'slug', _subject);
+    const schoolType = R.propOr('', 'slug', _schoolType);
+    const country = R.propOr('', 'slug', _country);
+    const city = R.propOr('', 'slug', _city);
 
     const filteredValues = {
       ...queryWithPagination, // Define this first to override the values.
@@ -426,7 +420,12 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderFilterResultsForm = (
     <DialogContent className={classes.dialogContent}>
-      <Formik onSubmit={handlePreSubmit} initialValues={initialValues} innerRef={formRef}>
+      <Formik
+        onSubmit={handlePreSubmit}
+        initialValues={initialValues}
+        innerRef={formRef}
+        enableReinitialize
+      >
         {renderSearchFormFields}
       </Formik>
     </DialogContent>

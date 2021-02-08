@@ -54,13 +54,11 @@ export const useStars = ({
     loginRequiredTooltip || verificationRequiredTooltip || (starred ? unstarTooltip : starTooltip);
 
   const onCompleted = ({ star }: StarMutation): void => {
-    if (star) {
-      if (!!star.errors && !!star.errors.length) {
-        onError();
-      } else {
-        setStarred(!!star.starred);
-        setStars(String(Number(stars) + (star.starred ? 1 : -1)));
-      }
+    if (star?.errors?.length) {
+      onError();
+    } else if (star) {
+      setStarred(!!star.starred);
+      setStars(String(Number(stars) + (star.starred ? 1 : -1)));
     }
   };
 

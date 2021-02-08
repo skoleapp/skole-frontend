@@ -27,7 +27,7 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
@@ -37,7 +37,6 @@ interface CreateCourseFormValues {
   courseCode: string;
   subjects: SubjectObjectType[];
   school: SchoolObjectType | null;
-  general: string;
 }
 
 const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
@@ -63,10 +62,6 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // Prefill user's own school, if one exists and no other school is provided as a query parameter.
   const school = R.propOr(_school, 'school', data);
 
-  useEffect(() => {
-    formRef.current?.setFieldValue('school', school);
-  }, [school]);
-
   const validationSchema = Yup.object().shape({
     courseName: Yup.string().required(t('validation:required')),
     courseCode: Yup.string(),
@@ -75,17 +70,13 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const onCompleted = async ({ createCourse }: CreateCourseMutation): Promise<void> => {
-    if (createCourse) {
-      if (!!createCourse.errors && !!createCourse.errors.length) {
-        handleMutationErrors(createCourse.errors);
-      } else if (!!createCourse.course && !!createCourse.successMessage) {
-        formRef.current?.resetForm();
-        toggleNotification(createCourse.successMessage);
-        await Router.push(urls.course(createCourse.course.id));
-        sa_event('add_course');
-      } else {
-        setUnexpectedFormError();
-      }
+    if (createCourse?.errors?.length) {
+      handleMutationErrors(createCourse.errors);
+    } else if (!!createCourse?.course?.slug && !!createCourse?.successMessage) {
+      formRef.current?.resetForm();
+      toggleNotification(createCourse.successMessage);
+      await Router.push(urls.course(createCourse.course.slug));
+      sa_event('add_course');
     } else {
       setUnexpectedFormError();
     }
@@ -97,8 +88,12 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSubmit = async (values: CreateCourseFormValues): Promise<void> => {
-    const { courseName, courseCode, school: _school, subjects: _subjects } = values;
+  const handleSubmit = async ({
+    courseName,
+    courseCode,
+    school: _school,
+    subjects: _subjects,
+  }: CreateCourseFormValues): Promise<void> => {
     const school = R.propOr('', 'id', _school);
     const subjects = _subjects.map((s) => s.id);
 
@@ -112,13 +107,16 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createCourse({ variables });
   };
 
-  const initialValues = {
-    courseName: '',
-    courseCode: '',
-    school,
-    subjects: [],
-    general: '',
-  };
+  // Only re-render when one of the dynamic values changes - the form values will reset every time.
+  const initialValues = useMemo(
+    () => ({
+      courseName: '',
+      courseCode: '',
+      school,
+      subjects: [],
+    }),
+    [school],
+  );
 
   const renderCourseNameField = (
     <Field
@@ -195,6 +193,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       innerRef={formRef}
+      enableReinitialize
     >
       {renderFormFields}
     </Formik>

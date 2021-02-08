@@ -38,7 +38,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 interface Props {
   title: string;
   emoji: string;
-  courseId: string;
+  courseSlug: string;
   renderStarButton: JSX.Element | false;
   renderUpvoteButton: JSX.Element | false;
   renderScore: JSX.Element | false;
@@ -50,7 +50,7 @@ interface Props {
 export const ResourceTopToolbar: React.FC<Props> = ({
   title,
   emoji,
-  courseId,
+  courseSlug,
   renderStarButton,
   renderUpvoteButton,
   renderScore,
@@ -67,7 +67,7 @@ export const ResourceTopToolbar: React.FC<Props> = ({
   const renderRotateButton = <RotateButton />;
 
   const renderBackButton = (
-    <Link href={urls.course(courseId)}>
+    <Link href={urls.course(courseSlug)}>
       <Tooltip title={t('resource-tooltips:backToCourse')}>
         <IconButton className={classes.backButton} size="small">
           <ArrowBackOutlined />

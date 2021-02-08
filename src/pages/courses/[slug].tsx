@@ -114,23 +114,23 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe, verified, verificationRequiredTooltip } = useAuthContext();
   const { searchUrl } = useSearch();
   const context = useLanguageHeaderContext();
-  const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
   const courseName = R.propOr('', 'name', course);
   const courseCode = R.propOr('-', 'code', course);
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
   const schoolName = R.pathOr('', ['school', 'name'], course);
-  const creatorId = R.pathOr('', ['user', 'id'], course);
   const courseId = R.propOr('', 'id', course);
-  const schoolId = R.pathOr('', ['school', 'id'], course);
+  const courseSlug = R.propOr('', 'slug', course);
+  const schoolSlug = R.pathOr('', ['school', 'slug'], course);
   const initialScore = String(R.propOr(0, 'score', course));
   const initialStars = String(R.propOr(0, 'starCount', course));
   const resourceCount = R.pathOr(0, ['resources', 'count'], data);
   const initialCommentCount = R.prop('commentCount', course);
   const initialVote = R.propOr(null, 'vote', course);
   const starred = !!R.prop('starred', course);
-  const isOwner = !!userMe && userMe.id === creatorId;
+  const isOwner = !!course?.user && userMe?.id === course.user.id;
   const courseCreator = R.prop('user', course);
   const created = R.prop('created', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
@@ -160,16 +160,12 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const deleteCourseCompleted = async ({ deleteCourse }: DeleteCourseMutation): Promise<void> => {
-    if (deleteCourse) {
-      if (!!deleteCourse.errors && !!deleteCourse.errors.length) {
-        toggleUnexpectedErrorNotification();
-      } else if (deleteCourse.successMessage) {
-        toggleNotification(deleteCourse.successMessage);
-        await Router.push(urls.home);
-        sa_event('delete_course');
-      } else {
-        toggleUnexpectedErrorNotification();
-      }
+    if (deleteCourse?.errors?.length) {
+      toggleUnexpectedErrorNotification();
+    } else if (deleteCourse?.successMessage) {
+      toggleNotification(deleteCourse.successMessage);
+      await Router.push(urls.home);
+      sa_event('delete_course');
     } else {
       toggleUnexpectedErrorNotification();
     }
@@ -210,8 +206,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   ));
 
-  const renderSchoolLink = !!schoolId && (
-    <TextLink href={urls.school(schoolId)}>{schoolName}</TextLink>
+  const renderSchoolLink = !!schoolSlug && (
+    <TextLink href={urls.school(schoolSlug)}>{schoolName}</TextLink>
   );
 
   const infoItems = [
@@ -328,14 +324,16 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </BottomNavigation>
   );
 
-  const notFoundLinkProps = {
-    href: {
-      pathname: urls.uploadResource,
-      query: {
-        school: schoolId,
-        course: courseId,
-      },
+  const uploadResourceHref = {
+    pathname: urls.uploadResource,
+    query: {
+      school: schoolSlug,
+      course: courseSlug,
     },
+  };
+
+  const notFoundLinkProps = {
+    href: uploadResourceHref,
     text: t('course:noResourcesLink'),
   };
 
@@ -354,14 +352,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderResources = resources.length ? renderResourceTable : renderResourcesNotFound;
-
-  const uploadResourceHref = {
-    pathname: urls.uploadResource,
-    query: {
-      school: schoolId,
-      course: courseId,
-    },
-  };
 
   // On desktop, render a disabled button for non-verified users.
   const renderUploadResourceButton = isTabletOrDesktop && (
@@ -476,7 +466,7 @@ const namespaces = ['course', 'course-tooltips', 'discussion', 'discussion-toolt
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'course');
-  const variables = R.pick(['id'], params);
+  const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
 
   const { data } = await apolloClient.query({

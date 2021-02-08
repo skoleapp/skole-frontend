@@ -142,7 +142,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMeId, school, subject, verified } = useAuthContext();
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
-  const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useUserQuery({ variables, context });
   const user = R.prop('user', data);
   const rank = R.propOr('', 'rank', user);
@@ -590,7 +590,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'profile');
-  const variables = R.pick(['id'], params);
+  const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
 
   const { data } = await apolloClient.query({

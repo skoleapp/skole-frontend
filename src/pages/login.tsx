@@ -87,23 +87,18 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const initialValues = {
     usernameOrEmail: '',
     password: '',
-    general: '',
   };
 
   const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
-    if (login) {
-      if (!!login.errors && !!login.errors.length) {
-        handleMutationErrors(login.errors);
-      } else if (login.successMessage) {
-        try {
-          formRef.current?.resetForm();
-          toggleNotification(login.successMessage);
-          const nextUrl = query.next ? String(query.next) : urls.home;
-          await Router.push(nextUrl);
-        } catch {
-          setUnexpectedFormError();
-        }
-      } else {
+    if (login?.errors?.length) {
+      handleMutationErrors(login.errors);
+    } else if (login?.successMessage) {
+      try {
+        formRef.current?.resetForm();
+        toggleNotification(login.successMessage);
+        const nextUrl = query.next ? String(query.next) : urls.home;
+        await Router.push(nextUrl);
+      } catch {
         setUnexpectedFormError();
       }
     } else {

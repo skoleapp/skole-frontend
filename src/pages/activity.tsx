@@ -50,18 +50,11 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const onCompleted = ({
     markAllActivitiesAsRead,
   }: GraphQlMarkAllActivitiesAsReadMutation): void => {
-    if (markAllActivitiesAsRead) {
-      if (!!markAllActivitiesAsRead.errors && !!markAllActivitiesAsRead.errors.length) {
-        toggleUnexpectedErrorNotification();
-      } else if (
-        !!markAllActivitiesAsRead.activities &&
-        !!markAllActivitiesAsRead.activities.objects
-      ) {
-        const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
-        setActivities(newActivities);
-      } else {
-        toggleUnexpectedErrorNotification();
-      }
+    if (markAllActivitiesAsRead?.errors?.length) {
+      toggleUnexpectedErrorNotification();
+    } else if (markAllActivitiesAsRead?.activities?.objects) {
+      const newActivities = R.pathOr([], ['activities', 'objects'], markAllActivitiesAsRead);
+      setActivities(newActivities);
     } else {
       toggleUnexpectedErrorNotification();
     }

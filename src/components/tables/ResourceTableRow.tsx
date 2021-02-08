@@ -43,7 +43,7 @@ interface Props extends TableRowProps {
 
 export const ResourceTableRow: React.FC<Props> = ({
   resource: {
-    id,
+    slug,
     title,
     date,
     resourceType,
@@ -77,8 +77,8 @@ export const ResourceTableRow: React.FC<Props> = ({
   const renderCourseChip = !!courseName && <TableRowChip label={courseName} />;
   const renderDateChip = !hideDateChip && <TableRowChip label={useDayjs(date).format('LL')} />;
 
-  const renderResourceCreator = user ? (
-    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
+  const renderResourceCreator = user?.slug ? (
+    <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
   ) : (
     t('common:communityUser')
   );
@@ -238,7 +238,7 @@ export const ResourceTableRow: React.FC<Props> = ({
   };
 
   return (
-    <Link href={urls.resource(id)} key={key}>
+    <Link href={urls.resource(slug || '')} key={key}>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>

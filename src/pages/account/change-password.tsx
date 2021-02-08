@@ -20,7 +20,6 @@ const initialValues = {
   oldPassword: '',
   newPassword: '',
   confirmNewPassword: '',
-  general: '',
 };
 
 interface ChangePasswordFormValues {
@@ -53,15 +52,13 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const onCompleted = async ({ changePassword }: ChangePasswordMutation): Promise<void> => {
-    if (changePassword) {
-      if (!!changePassword.errors && !!changePassword.errors.length) {
-        handleMutationErrors(changePassword.errors);
-      } else if (changePassword.successMessage) {
-        formRef.current?.resetForm();
-        toggleNotification(changePassword.successMessage);
-      } else {
-        setUnexpectedFormError();
-      }
+    if (changePassword?.errors?.length) {
+      handleMutationErrors(changePassword.errors);
+    } else if (changePassword?.successMessage) {
+      formRef.current?.resetForm();
+      toggleNotification(changePassword.successMessage);
+    } else {
+      setUnexpectedFormError();
     }
   };
 

@@ -1,4 +1,4 @@
-import { useSchoolQuery } from '__generated__/src/graphql/common.graphql';
+import { SchoolObjectType, useSchoolQuery } from '__generated__/src/graphql/common.graphql';
 import Grid from '@material-ui/core/Grid';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -87,21 +87,21 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { query } = useRouter();
   const { tabsProps, firstTabPanelProps, secondTabPanelProps, thirdTabPanelProps } = useTabs();
   const context = useLanguageHeaderContext();
-  const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useSchoolQuery({ variables, context });
-  const school = R.prop('school', data);
-  const schoolId = R.propOr('', 'id', school);
+  const school: SchoolObjectType = R.propOr(null, 'school', data);
+  const slug = R.propOr('', 'slug', school);
   const schoolName = R.propOr('', 'name', school);
   const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school);
-  const schoolTypeId = R.pathOr('', ['schoolType', 'id'], school);
-  const country = R.pathOr('', ['country', 'name'], school);
-  const city = R.pathOr('', ['city', 'name'], school);
-  const subjectCount = R.pathOr(0, ['subjects', 'count'], data);
-  const courseCount = R.pathOr(0, ['courses', 'count'], data);
-  const countryId = R.pathOr('', ['country', 'id'], school);
-  const cityId = R.pathOr('', ['city', 'id'], school);
+  const schoolTypeSlug = R.pathOr('', ['schoolType', 'slug'], school);
+  const countrySlug = R.pathOr('', ['country', 'id'], school);
+  const countryName = R.pathOr('', ['country', 'name'], school);
+  const cityName = R.pathOr('', ['city', 'name'], school);
+  const citySlug = R.pathOr('', ['city', 'slug'], school);
   const subjects = R.pathOr([], ['subjects', 'objects'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
+  const subjectCount = R.pathOr(0, ['subjects', 'count'], data);
+  const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const initialCommentCount = R.prop('commentCount', school);
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const header = isTabletOrDesktop && schoolName; // School names are too long to be used as the header on mobile.
@@ -110,28 +110,28 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const addCourseHref = {
     pathname: urls.addCourse,
     query: {
-      school: schoolId,
+      school: slug,
     },
   };
 
   const schoolTypeLink = {
     ...searchUrl,
-    query: { ...searchUrl.query, schoolType: schoolTypeId },
+    query: { ...searchUrl.query, schoolType: schoolTypeSlug },
   };
 
   const countryLink = {
     ...searchUrl,
-    query: { ...searchUrl.query, country: countryId },
+    query: { ...searchUrl.query, country: countrySlug },
   };
 
   const cityLink = {
     ...searchUrl,
-    query: { ...searchUrl.query, city: cityId },
+    query: { ...searchUrl.query, city: citySlug },
   };
 
   const renderSchoolTypeLink = <TextLink href={schoolTypeLink}>{schoolTypeName}</TextLink>;
-  const renderCountryLink = <TextLink href={countryLink}>{country}</TextLink>;
-  const renderCityLink = <TextLink href={cityLink}>{city}</TextLink>;
+  const renderCountryLink = <TextLink href={countryLink}>{countryName}</TextLink>;
+  const renderCityLink = <TextLink href={cityLink}>{cityName}</TextLink>;
 
   const infoItems = [
     {
@@ -353,7 +353,7 @@ const namespaces = ['school', 'school-tooltips', 'discussion', 'discussion-toolt
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'school');
-  const variables = R.pick(['id'], params);
+  const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
 
   const { data } = await apolloClient.query({

@@ -24,7 +24,7 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
@@ -55,7 +55,6 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const {
     userMe,
     setUserMe,
-    userMeId: id,
     verified,
     username,
     email,
@@ -75,16 +74,12 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   } = useForm<UpdateProfileFormValues>();
 
   const onCompleted = ({ updateUser }: UpdateUserMutation): void => {
-    if (updateUser) {
-      if (!!updateUser.errors && !!updateUser.errors.length) {
-        handleMutationErrors(updateUser.errors);
-      } else if (!!updateUser.successMessage && !!updateUser.user) {
-        formRef.current?.setSubmitting(false);
-        toggleNotification(updateUser.successMessage);
-        setUserMe(updateUser.user);
-      } else {
-        setUnexpectedFormError();
-      }
+    if (updateUser?.errors?.length) {
+      handleMutationErrors(updateUser.errors);
+    } else if (!!updateUser?.successMessage && !!updateUser?.user) {
+      formRef.current?.setSubmitting(false);
+      toggleNotification(updateUser.successMessage);
+      setUserMe(updateUser.user);
     } else {
       setUnexpectedFormError();
     }
@@ -112,8 +107,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     });
   };
 
-  const initialValues = {
-    id,
+  const dynamicInitialValues = {
     title,
     username,
     email,
@@ -121,8 +115,10 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     avatar,
     school,
     subject,
-    general: '',
   };
+
+  // Only re-render when one of the dynamic values changes - the form values will reset every time.
+  const initialValues = useMemo(() => dynamicInitialValues, Object.values(dynamicInitialValues));
 
   const validationSchema = Yup.object().shape({
     title: Yup.string(),
@@ -231,6 +227,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
       innerRef={formRef}
+      enableReinitialize
     >
       {renderFormFields}
     </Formik>

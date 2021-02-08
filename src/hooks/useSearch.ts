@@ -29,7 +29,7 @@ export const useSearch = (): UseSearch => {
 
   const query = school
     ? {
-        school: school.id,
+        school: school.slug,
       }
     : {};
 

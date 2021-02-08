@@ -2,7 +2,7 @@ import {
   PaginatedActivityObjectType,
   SchoolObjectType,
   SubjectObjectType,
-  UserObjectType,
+  UserMeFieldsFragment,
 } from 'generated';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
@@ -38,6 +38,7 @@ export const useAuthContext = (): UseAuthContext => {
   const verified = R.propOr(null, 'verified', userMe);
   const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
   const userMeId = R.propOr('', 'id', userMe);
+  const slug = R.propOr('', 'slug', userMe);
   const username = R.propOr('', 'username', userMe);
   const email = R.propOr('', 'email', userMe);
   const title = R.propOr('', 'title', userMe);
@@ -51,7 +52,7 @@ export const useAuthContext = (): UseAuthContext => {
   const school = R.propOr(null, 'school', userMe);
   const subject = R.propOr(null, 'subject', userMe);
   const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
-  const profileUrl = urls.user(userMeId);
+  const profileUrl = urls.user(slug);
 
   const verificationRequiredTooltip: string | false =
     verified === false && t('common-tooltips:verificationRequired');
@@ -80,7 +81,7 @@ export const useAuthContext = (): UseAuthContext => {
 };
 
 export const AuthContextProvider: React.FC = ({ children }) => {
-  const [userMe, setUserMe] = useState<UserObjectType | null>(null);
+  const [userMe, setUserMe] = useState<UserMeFieldsFragment | null>(null);
   const [authNetworkError, setAuthNetworkError] = useState(false);
   const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
 

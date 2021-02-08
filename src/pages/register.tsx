@@ -24,7 +24,7 @@ import {
   SubjectObjectType,
   UpdateUserMutation,
   useRegisterMutation,
-  UserObjectType,
+  UserMeFieldsFragment,
   useUpdateUserMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
@@ -60,11 +60,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
-
-  const [registeredUser, setRegisteredUser] = useState<Pick<
-    UserObjectType,
-    'username' | 'email'
-  > | null>(null);
+  const [registeredUser, setRegisteredUser] = useState<UserMeFieldsFragment | null>(null);
 
   const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
@@ -87,7 +83,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     email: '',
     password: '',
     confirmPassword: '',
-    general: '',
   };
 
   const registerValidationSchema = Yup.object().shape({
@@ -104,7 +99,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const updateUserInitialValues = {
     school: null,
     subject: null,
-    general: '',
   };
 
   const updateUserValidationSchema = Yup.object().shape({
@@ -113,11 +107,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
-    if (!!register && !!register.errors && !!register.errors.length) {
+    if (register?.errors?.length) {
       handleRegisterMutationErrors(register.errors);
-    } else if (!!login && !!login.errors && !!login.errors.length) {
+    } else if (login?.errors?.length) {
       handleRegisterMutationErrors(login.errors);
-    } else if (!!login && !!login.user) {
+    } else if (login?.user) {
       registerFormRef.current?.resetForm();
       setRegisteredUser(login.user);
       setPhase(RegisterPhases.UPDATE_USER);
@@ -145,15 +139,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   const onUpdateUserCompleted = ({ updateUser }: UpdateUserMutation): void => {
-    if (updateUser) {
-      if (!!updateUser.errors && !!updateUser.errors.length) {
-        handleUpdateUserMutationErrors(updateUser.errors);
-      } else {
-        updateUserFormRef.current?.resetForm();
-        setPhase(RegisterPhases.REGISTER_COMPLETE);
-      }
+    if (updateUser?.errors?.length) {
+      handleUpdateUserMutationErrors(updateUser.errors);
     } else {
-      updateUserUnexpectedError();
+      updateUserFormRef.current?.resetForm();
+      setPhase(RegisterPhases.REGISTER_COMPLETE);
     }
   };
 

@@ -46,7 +46,7 @@ interface InfoDialogItem {
 export interface InfoDialogParams {
   header: JSX.Element | string;
   emoji?: string | false;
-  creator?: UserObjectType | null;
+  creator?: Partial<UserObjectType> | null;
   created?: string;
   infoItems: InfoDialogItem[];
 }

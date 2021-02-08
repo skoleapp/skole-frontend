@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   for (const page of DYNAMIC_PATHS) {
     for (const entry of data.sitemap[page]) {
       paths.push({
-        path: `/${page}/${entry.id}`,
+        path: `/${page}/${entry.slug}`,
         modified: laterDate(entry.modified, modified),
       });
     }

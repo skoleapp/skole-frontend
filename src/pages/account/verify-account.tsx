@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { ButtonLink, FormSubmitSection, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { Form, Formik, FormikProps } from 'formik';
+import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import {
   GraphQlResendVerificationEmailMutation,
   useGraphQlResendVerificationEmailMutation,
@@ -19,10 +19,6 @@ import React, { useEffect, useState } from 'react';
 import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 
-interface EmailFormValues {
-  general: string;
-}
-
 const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const {
     formRef,
@@ -30,7 +26,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     onError,
     setUnexpectedFormError,
     formatFormError,
-  } = useForm<EmailFormValues>();
+  } = useForm<FormikValues>();
 
   const { t } = useTranslation();
   const { query } = useRouter();
@@ -58,19 +54,15 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     setConfirmationError(t('validation:setUnexpectedFormError'));
 
   const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
-    if (verifyAccount) {
-      if (!!verifyAccount.errors && !!verifyAccount.errors.length) {
-        verifyAccount.errors.map((e) => {
-          if (e?.field === '__all__') {
-            setConfirmationError(!e ? null : formatFormError(e));
-          }
-        });
-      } else if (verifyAccount.successMessage) {
-        toggleNotification(verifyAccount.successMessage);
-        setVerified(true);
-      } else {
-        handleUnexpectedConfirmationError();
-      }
+    if (verifyAccount?.errors?.length) {
+      verifyAccount.errors.map((e) => {
+        if (e?.field === '__all__') {
+          setConfirmationError(!e ? null : formatFormError(e));
+        }
+      });
+    } else if (verifyAccount?.successMessage) {
+      toggleNotification(verifyAccount.successMessage);
+      setVerified(true);
     } else {
       handleUnexpectedConfirmationError();
     }
@@ -95,16 +87,12 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const onCompleted = ({
     resendVerificationEmail,
   }: GraphQlResendVerificationEmailMutation): void => {
-    if (resendVerificationEmail) {
-      if (!!resendVerificationEmail.errors && !!resendVerificationEmail.errors.length) {
-        handleMutationErrors(resendVerificationEmail.errors);
-      } else if (resendVerificationEmail.successMessage) {
-        formRef.current?.resetForm();
-        toggleNotification(resendVerificationEmail.successMessage);
-        setEmailSubmitted(true);
-      } else {
-        setUnexpectedFormError();
-      }
+    if (resendVerificationEmail?.errors?.length) {
+      handleMutationErrors(resendVerificationEmail.errors);
+    } else if (resendVerificationEmail?.successMessage) {
+      formRef.current?.resetForm();
+      toggleNotification(resendVerificationEmail.successMessage);
+      setEmailSubmitted(true);
     } else {
       setUnexpectedFormError();
     }
@@ -118,10 +106,6 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const handleSubmitEmail = async (): Promise<void> => {
     await resendVerificationEmail();
-  };
-
-  const initialValues = {
-    general: '',
   };
 
   const renderHomeButton = (
@@ -176,7 +160,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </FormControl>
   );
 
-  const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
+  const renderEmailFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
     <Form>
       <FormControl>
         <Typography variant="subtitle1" align="center">
@@ -197,7 +181,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // Render for unverified, authenticated users with no token.
   const renderEmailForm = verified === false && !token && !emailSubmitted && (
-    <Formik initialValues={initialValues} onSubmit={handleSubmitEmail} innerRef={formRef}>
+    <Formik initialValues={{}} onSubmit={handleSubmitEmail} innerRef={formRef}>
       {renderEmailFormFields}
     </Formik>
   );

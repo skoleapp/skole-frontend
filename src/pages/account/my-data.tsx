@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { ButtonLink, FormSubmitSection, LoginRequiredTemplate, SettingsTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { Form, Formik, FormikProps } from 'formik';
+import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -13,12 +13,14 @@ import React, { useState } from 'react';
 import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 
-interface FormValues {
-  general: string;
-}
-
 const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
-  const { formRef, handleMutationErrors, onError, setUnexpectedFormError } = useForm<FormValues>();
+  const {
+    formRef,
+    handleMutationErrors,
+    onError,
+    setUnexpectedFormError,
+  } = useForm<FormikValues>();
+
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
@@ -26,17 +28,13 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const context = useLanguageHeaderContext();
 
   const onCompleted = async ({ myData }: GraphQlMyDataMutation): Promise<void> => {
-    if (myData) {
-      if (!!myData.errors && !!myData.errors.length) {
-        handleMutationErrors(myData.errors);
-      } else if (myData.successMessage) {
-        formRef.current?.resetForm();
-        toggleNotification(myData.successMessage);
-        setSubmitted(true);
-        sa_event('request_data');
-      } else {
-        setUnexpectedFormError();
-      }
+    if (myData?.errors?.length) {
+      handleMutationErrors(myData.errors);
+    } else if (myData?.successMessage) {
+      formRef.current?.resetForm();
+      toggleNotification(myData.successMessage);
+      setSubmitted(true);
+      sa_event('request_data');
     } else {
       setUnexpectedFormError();
     }
@@ -52,11 +50,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await myData();
   };
 
-  const initialValues = {
-    general: '',
-  };
-
-  const renderFormFields = (props: FormikProps<FormValues>): JSX.Element => (
+  const renderFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
     <Form>
       <FormControl>
         <Typography variant="subtitle1" align="center">
@@ -68,7 +62,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderForm = !submitted && (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formRef}>
+    <Formik initialValues={{}} onSubmit={handleSubmit} innerRef={formRef}>
       {renderFormFields}
     </Formik>
   );

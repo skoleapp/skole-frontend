@@ -44,15 +44,11 @@ export const ActivityListItem: React.FC<Props> = ({
   const avatarThumbnail = R.propOr('', 'avatarThumbnail', targetUser);
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
-    if (markActivityAsRead) {
-      if (!!markActivityAsRead.errors && !!markActivityAsRead.errors.length) {
-        toggleUnexpectedErrorNotification();
-      } else if (!!markActivityAsRead.activity && markActivityAsRead.activity.read != null) {
-        // We use the abstract equality operator here on purpose to compare against both `null` and `undefined` values.
-        setRead(markActivityAsRead.activity.read);
-      } else {
-        toggleUnexpectedErrorNotification();
-      }
+    if (markActivityAsRead?.errors?.length) {
+      toggleUnexpectedErrorNotification();
+    } else if (markActivityAsRead?.activity?.read != null) {
+      // Use the abstract equality to compare against both `null` and `undefined` values.
+      setRead(markActivityAsRead.activity.read);
     } else {
       toggleUnexpectedErrorNotification();
     }
@@ -68,10 +64,10 @@ export const ActivityListItem: React.FC<Props> = ({
     let pathname;
     let query;
 
-    if (course) {
-      pathname = urls.course(course.id);
-    } else if (resource) {
-      pathname = urls.resource(resource.id);
+    if (course?.slug) {
+      pathname = urls.course(course.slug);
+    } else if (resource?.slug) {
+      pathname = urls.resource(resource.slug);
     }
 
     if (comment) {
@@ -91,7 +87,7 @@ export const ActivityListItem: React.FC<Props> = ({
   );
 
   const renderTargetUserLink = targetUser ? (
-    <TextLink href={urls.user(R.propOr('', 'id', targetUser))}>
+    <TextLink href={urls.user(R.propOr('', 'slug', targetUser))}>
       {R.propOr('', 'username', targetUser)}
     </TextLink>
   ) : (

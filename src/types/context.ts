@@ -1,13 +1,13 @@
 import { FormikProps } from 'formik';
-import { CommentObjectType, UserObjectType } from 'generated';
+import { CommentObjectType, UserMeFieldsFragment } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { Document } from 'react-pdf';
 
 import { ActionsDialogParams, InfoDialogParams, ShareDialogParams } from './dialogs';
 
 export interface AuthContextType {
-  userMe: UserObjectType | null;
-  setUserMe: Dispatch<SetStateAction<UserObjectType | null>>;
+  userMe: UserMeFieldsFragment | null;
+  setUserMe: Dispatch<SetStateAction<UserMeFieldsFragment | null>>;
   authNetworkError: boolean;
   setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }

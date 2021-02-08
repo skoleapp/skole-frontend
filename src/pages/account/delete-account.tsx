@@ -21,7 +21,6 @@ import * as Yup from 'yup';
 
 const initialValues = {
   password: '',
-  general: '',
 };
 
 export interface DeleteAccountFormValues {
@@ -43,18 +42,14 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
 
   const onCompleted = async ({ deleteUser }: DeleteUserMutation): Promise<void> => {
-    if (deleteUser) {
-      if (!!deleteUser.errors && !!deleteUser.errors.length) {
-        handleMutationErrors(deleteUser.errors);
-      } else if (deleteUser.successMessage) {
-        formRef.current?.resetForm();
-        toggleNotification(deleteUser.successMessage);
-        localStorage.removeItem('user');
-        await Router.push(urls.logout);
-        sa_event('delete_account');
-      } else {
-        setUnexpectedFormError();
-      }
+    if (deleteUser?.errors?.length) {
+      handleMutationErrors(deleteUser.errors);
+    } else if (deleteUser?.successMessage) {
+      formRef.current?.resetForm();
+      toggleNotification(deleteUser.successMessage);
+      localStorage.removeItem('user');
+      await Router.push(urls.logout);
+      sa_event('delete_account');
     } else {
       setUnexpectedFormError();
     }

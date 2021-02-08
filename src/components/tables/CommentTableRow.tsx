@@ -84,10 +84,10 @@ export const CommentTableRow: React.FC<Props> = ({
   const commentPreview = !!text && truncate(text, 50);
 
   const pathname =
-    (!!course && urls.course(course.id)) ||
-    (!!resource && urls.resource(resource.id)) ||
-    (!!comment && !!comment.course && urls.course(comment.course.id)) ||
-    (!!comment && !!comment.resource && urls.resource(comment.resource.id)) ||
+    (!!course?.slug && urls.course(course.slug)) ||
+    (!!resource?.slug && urls.resource(resource.slug)) ||
+    (!!comment && !!comment.course?.slug && urls.course(comment.course.slug)) ||
+    (!!comment && !!comment.resource?.slug && urls.resource(comment.resource.slug)) ||
     '';
 
   const href = {
@@ -101,8 +101,8 @@ export const CommentTableRow: React.FC<Props> = ({
   const renderCourseChip = !!course && <TableRowChip label={course.name} />;
   const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
 
-  const renderCommentCreator = user ? (
-    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
+  const renderCommentCreator = user?.slug ? (
+    <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
   ) : (
     t('common:communityUser')
   );

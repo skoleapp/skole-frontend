@@ -30,7 +30,7 @@ interface Props extends Omit<TableRowProps, 'dense'> {
 }
 
 export const SubjectTableRow: React.FC<Props> = ({
-  subject: { id, name, courseCount, resourceCount },
+  subject: { slug, name, courseCount, resourceCount },
   key,
 }) => {
   const { t } = useTranslation();
@@ -102,7 +102,7 @@ export const SubjectTableRow: React.FC<Props> = ({
   );
 
   return (
-    <Link href={urls.course(id)} key={key}>
+    <Link href={urls.course(slug || '')} key={key}>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>
