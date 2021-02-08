@@ -19,7 +19,7 @@
   "subject": "Subject",
   "subjectOptional": "Subject (optional)",
   "subjects": "Subjects",
-  "messageSubject": "Subject",
+  "messageSubjectOptional": "Subject (optional)",
   "schoolType": "School Type",
   "country": "Country",
   "city": "City",
@@ -45,5 +45,6 @@
   "contactLinkText": "PS. If you can't find the school or subject you're looking for, you can",
   "contactLinkLink": "contact us and we'll add them for you!",
   "discussion": "Discussion",
-  "alsoSendTo": "Also send to"
+  "alsoSendTo": "Also send to",
+  "emailOptional": "Email (optional)"
 }

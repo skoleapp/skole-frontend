@@ -1,3 +1,5 @@
+import '@fontsource/rubik';
+
 import { grey } from '@material-ui/core/colors';
 
 export const BORDER_RADIUS = '1.75rem';

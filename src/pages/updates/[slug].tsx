@@ -27,7 +27,9 @@ const UpdatePage: NextPage<MarkdownPageProps> = ({
     </Typography>
   );
 
-  const renderImage = <Image src={coverImage} layout="responsive" width={400} height={300} />;
+  const renderImage = (
+    <Image src={coverImage} layout="responsive" width={400} height={300} objectFit="contain" />
+  );
 
   const layoutProps = {
     seoProps,

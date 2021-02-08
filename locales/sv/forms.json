@@ -19,7 +19,7 @@
   "subject": "Ämne",
   "subjectOptional": "Ämne (frivillig)",
   "subjects": "Ämnen",
-  "messageSubject": "Subjekt",
+  "messageSubjectOptional": "Subjekt (frivillig)",
   "schoolType": "Skoltyp",
   "country": "Land",
   "city": "Stad",
@@ -45,5 +45,6 @@
   "contactLinkText": "PS. Om du inte hittar skolan eller ämnet du letar efter, du kan",
   "contactLinkLink": "kontakta oss så lägger vi till dem för dig!",
   "discussion": "Diskussion",
-  "alsoSendTo": "Skicka också till"
+  "alsoSendTo": "Skicka också till",
+  "emailOptional": "E-post (frivillig)"
 }

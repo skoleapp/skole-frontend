@@ -1,5 +1,5 @@
 import { FormSubmitSection, FormTemplate, TextFormField } from 'components';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
@@ -9,14 +9,6 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { SeoPageProps } from 'types';
 import * as Yup from 'yup';
-
-const initialValues = {
-  subject: '',
-  name: '',
-  email: '',
-  message: '',
-  general: '',
-};
 
 interface ContactFormValues {
   subject: string;
@@ -29,6 +21,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+  const { email } = useAuthContext();
 
   const {
     formRef,
@@ -38,9 +31,9 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   } = useForm<ContactFormValues>();
 
   const validationSchema = Yup.object().shape({
-    subject: Yup.string().required(t('validation:required')),
+    subject: Yup.string(),
     name: Yup.string(),
-    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
+    email: Yup.string().email(t('validation:invalidEmail')),
     message: Yup.string().required(t('validation:required')),
   });
 
@@ -78,11 +71,19 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createContactMessage({ variables });
   };
 
+  const initialValues = {
+    subject: '',
+    name: '',
+    email,
+    message: '',
+    general: '',
+  };
+
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form>
-      <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
+      <Field name="subject" component={TextFormField} label={t('forms:messageSubjectOptional')} />
       <Field name="name" component={TextFormField} label={t('forms:nameOptional')} />
-      <Field name="email" component={TextFormField} label={t('forms:email')} />
+      <Field name="email" component={TextFormField} label={t('forms:emailOptional')} />
       <Field
         name="message"
         component={TextFormField}
@@ -100,6 +101,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={formRef}
+      enableReinitialize
     >
       {renderFormFields}
     </Formik>

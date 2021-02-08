@@ -19,7 +19,7 @@
   "subject": "Oppiaine",
   "subjectOptional": "Oppiaine (valinnainen)",
   "subjects": "Oppiaineet",
-  "messageSubject": "Aihe",
+  "messageSubjectOptional": "Aihe (valinnainen)",
   "schoolType": "Koulutyyppi",
   "country": "Maa",
   "city": "Kaupunki",
@@ -45,5 +45,6 @@
   "contactLinkText": "PS. Jos et löydä etsimääsi koulua tai oppiainetta, voit",
   "contactLinkLink": "ottaa meihin yhteyttä niin lisäämme ne sinulle!",
   "discussion": "Keskustelu",
-  "alsoSendTo": "Lähetä myös keskusteluun"
+  "alsoSendTo": "Lähetä myös keskusteluun",
+  "emailOptional": "Sähköposti (valinnainen)"
 }
