@@ -113,8 +113,6 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
         rel="apple-touch-startup-image"
       />
       <link rel="manifest" href="/manifest.json" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" />
-      <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
     </>
   );
 
