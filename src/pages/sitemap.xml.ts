@@ -1,7 +1,6 @@
 import { readdirSync } from 'fs';
 import { SitemapDocument } from 'generated';
 import { initApolloClient } from 'lib';
-import { loadMarkdown } from 'markdown';
 import { GetServerSideProps } from 'next';
 import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
 
@@ -19,9 +18,6 @@ const toXhtmlLink = (path: string, langName: string, langPath: string): string =
 };
 
 const toUrl = (path: string, modified: string): string => {
-  // Slice just the date portion from the ISO datetime.
-  const lastmod = modified ? `<lastmod>${modified.slice(0, 10)}</lastmod>` : '';
-
   const languages = {
     en: '',
     fi: '/fi',
@@ -36,7 +32,7 @@ const toUrl = (path: string, modified: string): string => {
   return `
     <url>
       <loc>${process.env.FRONTEND_URL}${path}</loc>
-      ${lastmod}
+      <lastmod>${modified}</lastmod>
       ${xhtmlLinks}
     </url>`;
 };
@@ -51,8 +47,12 @@ const createSitemap = (routes: { path: string; modified: string }[]): string =>
       ${routes.map((route) => toUrl(route.path, route.modified)).join('')}
     </urlset>`;
 
+const laterDate = (date: string | undefined, other: string): string => {
+  return !date || other > date ? other : date;
+};
+
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
-  const modified = process.env.BUILD_DATE || new Date().toISOString();
+  const modified = process.env.BUILD_DATE || new Date().toISOString().slice(0, 10);
 
   const staticPaths = [
     '', // Don't want the index page to have a slash.
@@ -85,32 +85,22 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     for (const entry of data.sitemap[page]) {
       paths.push({
         path: `/${page}/${entry.id}`,
-        modified: entry.modified,
+        modified: laterDate(entry.modified, modified),
       });
     }
   }
 
-  const blogFileNames = readdirSync('markdown/en/blogs');
-
-  for (const fileName of blogFileNames) {
-    const path = urls.blog(fileName.replace(/\.md$/, ''));
-    const { date } = (await loadMarkdown(path)).data;
-
+  for (const fileName of readdirSync('markdown/en/blogs')) {
     paths.push({
-      path,
-      modified: date || modified,
+      path: urls.blog(fileName.replace(/\.md$/, '')),
+      modified,
     });
   }
 
-  const productUpdateFileNames = readdirSync('markdown/en/updates');
-
-  for (const fileName of productUpdateFileNames) {
-    const path = urls.update(fileName.replace(/\.md$/, ''));
-    const { date } = (await loadMarkdown(path)).data;
-
+  for (const fileName of readdirSync('markdown/en/updates')) {
     paths.push({
-      path,
-      modified: date || modified,
+      path: urls.update(fileName.replace(/\.md$/, '')),
+      modified,
     });
   }
 
