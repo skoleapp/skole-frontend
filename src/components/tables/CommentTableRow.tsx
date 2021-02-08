@@ -85,12 +85,12 @@ export const CommentTableRow: React.FC<Props> = ({
   const commentPreview = !!text && truncate(text, 50);
 
   const pathname =
-    (!!course && urls.course(course.id)) ||
-    (!!resource && urls.resource(resource.id)) ||
-    (!!school && urls.resource(school.id)) ||
-    (!!comment?.course && urls.course(comment.course.id)) ||
-    (!!comment?.resource && urls.resource(comment.resource.id)) ||
-    (!!comment?.school && urls.resource(comment.school.id)) ||
+    (!!course?.slug && urls.course(course.slug)) ||
+    (!!resource?.slug && urls.resource(resource.slug)) ||
+    (!!school?.slug && urls.resource(school.slug)) ||
+    (!!comment?.course?.slug && urls.course(comment.course.slug)) ||
+    (!!comment?.resource?.slug && urls.resource(comment.resource.slug)) ||
+    (!!comment?.school?.slug && urls.resource(comment.school.slug)) ||
     '';
 
   const href = {
