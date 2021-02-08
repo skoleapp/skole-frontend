@@ -1,5 +1,6 @@
 import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
+import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
 import { ListTemplate } from 'components';
@@ -16,25 +17,52 @@ import React from 'react';
 import { MarkdownPageData, SeoPageProps } from 'types';
 import { urls } from 'utils';
 
+const useStyles = makeStyles({
+  authorImage: {
+    borderRadius: '50%',
+    padding: '0.4rem !important',
+  },
+});
+
 interface Props extends SeoPageProps {
   blogs: MarkdownPageData[];
 }
 
 const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
+  const classes = useStyles();
   const { t } = useTranslation();
 
   const sortedBlogs: MarkdownPageData[] = R.sortBy(R.prop('date'), blogs).reverse();
 
+  const renderAuthorImage = (authorImage: string) => (
+    <Image
+      className={classes.authorImage}
+      src={authorImage}
+      layout="fixed"
+      width={50}
+      height={50}
+    />
+  );
+
   const mapBlogs = sortedBlogs.map(
-    ({ title, excerpt, coverImage = '', author, date, minutesToRead = 0, slug = '' }, i) => (
+    (
+      {
+        title,
+        excerpt,
+        coverImage = '',
+        author,
+        authorImage = '',
+        date,
+        minutesToRead = 0,
+        slug = '',
+      },
+      i,
+    ) => (
       <Link href={urls.blog(slug)}>
         <ListItem key={i} button>
           <Grid container spacing={4}>
             <Grid item xs={9}>
               <Grid container>
-                <Grid item xs={12}>
-                  <Typography variant="subtitle1">{author}</Typography>
-                </Grid>
                 <Grid item xs={12}>
                   <Typography variant="h5">{title}</Typography>
                   <Typography variant="body2" color="textSecondary" gutterBottom>
@@ -42,10 +70,14 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container>
-                <Typography variant="body2" color="textSecondary">
-                  {useDayjs(date).format('LL')} - {t('blogs:readTime', { minutesToRead })}
-                </Typography>
+              <Grid container alignItems="center" wrap="nowrap" spacing={2}>
+                <Grid item>{renderAuthorImage(authorImage)}</Grid>
+                <Grid item>
+                  <Typography variant="body2">{author}</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {useDayjs(date).format('LL')} - {t('blogs:readTime', { minutesToRead })}
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item xs={3} container justify="flex-end" alignItems="center">

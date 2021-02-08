@@ -43,25 +43,21 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
     />
   );
 
-  const renderAuthorText = <Typography variant="subtitle1">{author}</Typography>;
-
-  const renderBlogInfoText = (
-    <Typography variant="body2" color="textSecondary" gutterBottom>
-      {useDayjs(date).format('LL')} - {t('blogs:readTime', { minutesToRead })}
-    </Typography>
-  );
-
   const renderBlogAndAuthorInfo = (
-    <Grid container>
-      {renderAuthorImage}
+    <Grid container alignItems="center" wrap="nowrap" spacing={2}>
+      <Grid item>{renderAuthorImage}</Grid>
       <Grid item>
-        {renderAuthorText}
-        {renderBlogInfoText}
+        <Typography variant="body2">{author}</Typography>
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+          {useDayjs(date).format('LL')} - {t('blogs:readTime', { minutesToRead })}
+        </Typography>
       </Grid>
     </Grid>
   );
 
-  const renderCoverImage = <Image src={coverImage} layout="responsive" width={400} height={300} />;
+  const renderCoverImage = (
+    <Image src={coverImage} layout="responsive" width={400} height={300} objectFit="contain" />
+  );
 
   const layoutProps = {
     seoProps,
