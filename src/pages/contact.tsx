@@ -38,9 +38,9 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   } = useForm<ContactFormValues>();
 
   const validationSchema = Yup.object().shape({
-    subject: Yup.string().required(t('validation:required')),
+    subject: Yup.string(),
     name: Yup.string(),
-    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
+    email: Yup.string().email(t('validation:invalidEmail')),
     message: Yup.string().required(t('validation:required')),
   });
 
@@ -80,9 +80,9 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form>
-      <Field name="subject" component={TextFormField} label={t('forms:messageSubject')} />
+      <Field name="subject" component={TextFormField} label={t('forms:messageSubjectOptional')} />
       <Field name="name" component={TextFormField} label={t('forms:nameOptional')} />
-      <Field name="email" component={TextFormField} label={t('forms:email')} />
+      <Field name="email" component={TextFormField} label={t('forms:emailOptional')} />
       <Field
         name="message"
         component={TextFormField}
