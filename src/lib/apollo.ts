@@ -1,4 +1,10 @@
-import { ApolloClient, InMemoryCache, QueryOptions, WatchQueryOptions } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  QueryOptions,
+  WatchQueryOptions,
+} from '@apollo/client';
 import { NormalizedCacheObject } from '@apollo/client/cache';
 import { MutationBaseOptions } from '@apollo/client/core/watchQueryOptions';
 import { createUploadLink } from 'apollo-upload-client';
@@ -10,7 +16,8 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   const isBrowser = typeof window !== 'undefined';
   const uri = isBrowser ? process.env.API_URL : process.env.BACKEND_URL;
 
-  const httpLink = createUploadLink({
+  // @ts-ignore: `createUploadLink` returns type of `ApolloLink | RequestHandler` and the link-property expects a type of `ApolloLink`.
+  const link: ApolloLink = createUploadLink({
     uri: `${uri}/graphql/`,
     credentials: 'include',
   });
@@ -21,7 +28,7 @@ const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
 
   return new ApolloClient({
     ssrMode: isBrowser,
-    link: httpLink,
+    link,
     cache: new InMemoryCache(),
     defaultOptions: {
       query: fetchPolicyOptions as Partial<QueryOptions>,
