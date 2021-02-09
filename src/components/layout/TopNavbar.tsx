@@ -61,7 +61,6 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
     display: 'flex',
     justifyContent: 'center',
-    zIndex: 1,
     [breakpoints.up('md')]: {
       height: TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
       justifyContent: 'center',
@@ -80,7 +79,7 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
     },
   },
   activityPopper: {
-    zIndex: 2,
+    zIndex: 3, // Overlap top navbar.
   },
   activityPopperPaper: {
     borderRadius: `0 0 ${BORDER_RADIUS} ${BORDER_RADIUS}`,
@@ -126,7 +125,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   hideLoginButton,
   hideRegisterButton,
   hideGetStartedButton,
-  hideForTeachersButton,
   hideLanguageButton,
   hideDarkModeButton,
   hideLogo,
@@ -311,18 +309,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </ButtonLink>
   );
 
-  const renderForTeachersButton = !hideForTeachersButton && (
-    <ButtonLink href={urls.forTeachers} color="secondary" endIcon={<SchoolOutlined />}>
-      {t('common:forTeachers')}
-    </ButtonLink>
-  );
-
   const renderUnAuthenticatedButtons = !hideDynamicButtons && !authNetworkError && (
     <>
       {renderLoginButton}
       {renderRegisterButton}
       {renderGetStartedButton}
-      {renderForTeachersButton}
     </>
   );
 

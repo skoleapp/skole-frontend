@@ -18,7 +18,6 @@ export interface TopNavbarProps {
   hideLoginButton?: boolean; // Hide the `Login` button on desktop.
   hideRegisterButton?: boolean; // Hide the `Register` button on desktop.
   hideGetStartedButton?: boolean; // Hide the `Get Started` button on desktop.
-  hideForTeachersButton?: boolean; // Hide the `For Teachers` button on desktop.
   hideLanguageButton?: boolean; // Hide the language button on desktop.
   hideDarkModeButton?: boolean; // Hide dark mode button on desktop.
   renderHeaderLeft?: JSX.Element | false; // Custom element for either left-most slot or for second slot from the left, depending on whether the back button is rendered.
