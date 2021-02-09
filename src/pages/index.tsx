@@ -21,15 +21,12 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     padding: `${spacing(8)} ${spacing(2)}`,
   },
   ctaHeader: {
-    fontSize: '1.25rem',
-    [breakpoints.up('xs')]: {
-      fontSize: '1.5rem',
-    },
+    fontSize: '1.5rem',
     [breakpoints.up('sm')]: {
-      fontSize: '1.75rem',
+      fontSize: '2rem',
     },
     [breakpoints.up('md')]: {
-      fontSize: '2rem',
+      fontSize: '2.25rem',
     },
     [breakpoints.up('lg')]: {
       fontSize: '2.75rem',
@@ -104,6 +101,18 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
+  const renderCtaSubheader = (
+    <Grid item xs={12} sm={10} md={8} lg={4}>
+      <Typography variant="subtitle1" color="secondary" align="center">
+        {t('index:ctaSubheader1')}
+        <strong>{t('index:ctaSubheader2')}</strong>
+        {t('index:ctaSubheader3')}
+        <strong> {t('index:ctaSubheader4')}</strong>
+        {t('index:ctaSubheader5')}
+      </Typography>
+    </Grid>
+  );
+
   const renderCtaButton = (
     <ButtonLink
       className={classes.ctaButton}
@@ -139,6 +148,7 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       alignItems="center"
     >
       {renderCtaHeader}
+      {renderCtaSubheader}
       {renderCtaButton}
       {renderOr}
       {renderAuthLink}
