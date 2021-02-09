@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     paddingBottom: spacing(8),
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(4)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(4)})`,
-    zIndex: 1,
+    zIndex: 1, // Overlap main background.
   },
   header: {
     fontWeight: 'bold',
