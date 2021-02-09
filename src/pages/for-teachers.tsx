@@ -1,16 +1,23 @@
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+import InputBase from '@material-ui/core/InputBase';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
-import { ButtonLink, Emoji, LandingPageTemplate } from 'components';
+import { Emoji, LandingPageTemplate } from 'components';
+import { useNotificationsContext } from 'context';
+import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
+import { useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import React from 'react';
+import React, { SyntheticEvent, useState } from 'react';
+import { BORDER_RADIUS } from 'styles';
 import { SeoPageProps } from 'types';
-import { isNotNativeApp, urls } from 'utils';
+import { isNotNativeApp } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -18,23 +25,36 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     padding: `${spacing(8)} ${spacing(2)}`,
   },
   ctaHeader: {
-    fontSize: '1.25rem',
-    [breakpoints.up('xs')]: {
-      fontSize: '1.5rem',
-    },
+    fontSize: '1.5rem',
     [breakpoints.up('sm')]: {
-      fontSize: '1.75rem',
+      fontSize: '2rem',
     },
     [breakpoints.up('md')]: {
-      fontSize: '2rem',
+      fontSize: '2.25rem',
     },
     [breakpoints.up('lg')]: {
       fontSize: '2.75rem',
     },
   },
-  ctaButton: {
-    minWidth: '10rem',
+  searchForm: {
+    marginTop: spacing(8),
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  searchFieldBox: {
+    display: 'flex',
+    flexGrow: 1,
+    backgroundColor: palette.background.default,
+    border: `0.05rem solid ${
+      palette.type === 'dark' ? palette.secondary.main : palette.primary.main
+    }`,
+    borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
     padding: spacing(3),
+  },
+  searchButton: {
+    borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
+  },
+  emailSubmittedText: {
     marginTop: spacing(8),
   },
   pitchContainer: {
@@ -68,6 +88,51 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
 const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { toggleUnexpectedErrorNotification, toggleNotification } = useNotificationsContext();
+  const context = useLanguageHeaderContext();
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const onError = () => {
+    toggleUnexpectedErrorNotification();
+    setSubmitting(false);
+  };
+
+  const onCompleted = ({ createContactMessage }: CreateContactMessageMutation): void => {
+    if (createContactMessage?.errors?.length) {
+      onError();
+    } else if (createContactMessage?.successMessage) {
+      setSubmitting(false);
+      setEmailSubmitted(true);
+      toggleNotification(createContactMessage.successMessage);
+    } else {
+      onError();
+    }
+  };
+
+  const [createContactMessage] = useCreateContactMessageMutation({
+    onCompleted,
+    onError,
+    context,
+  });
+
+  const handleSubmitEmail = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    const variables = {
+      subject: 'Contact Request from Teacher',
+      name: '',
+      email: '',
+      message: 'New contact request submitted from teacher page.',
+    };
+
+    await createContactMessage({ variables });
+  };
+
+  const ctaHeader = t('for-teachers:ctaHeader');
+  const renderTeacherEmoji = <Emoji emoji="🧑‍🏫" />;
 
   const renderCtaHeader = (
     <Typography
@@ -77,26 +142,54 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       align="center"
       gutterBottom
     >
-      {t('for-teachers:ctaHeader')}
+      {ctaHeader}
+      {renderTeacherEmoji}
     </Typography>
   );
 
   const renderCtaSubheader = (
-    <Typography variant="body2" color="secondary" align="center">
-      {t('for-teachers:ctaSubheader')}
-    </Typography>
+    <Grid item xs={12} sm={10} md={8} lg={6}>
+      <Typography variant="subtitle1" color="secondary" align="center">
+        {t('for-teachers:ctaSubheader1')}
+        <strong>{t('for-teachers:ctaSubheader2')}</strong>
+        {t('for-teachers:ctaSubheader3')}
+        <strong> {t('for-teachers:ctaSubheader4')}</strong>
+        {t('for-teachers:ctaSubheader5')}
+      </Typography>
+    </Grid>
   );
 
-  const renderCtaButton = (
-    <ButtonLink
-      className={classes.ctaButton}
-      href={urls.contact}
-      color="primary"
-      variant="contained"
-      endIcon={<ArrowForwardOutlined />}
+  const renderEmailInput = (
+    <form className={classes.searchForm} onSubmit={handleSubmitEmail}>
+      <Box className={classes.searchFieldBox}>
+        <InputBase
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+          required
+          placeholder={t('forms:yourEmail')}
+        />
+      </Box>
+      <Button
+        className={classes.searchButton}
+        disabled={submitting}
+        type="submit"
+        variant="contained"
+      >
+        <ArrowForwardOutlined />
+      </Button>
+    </form>
+  );
+
+  const renderEmailSubmittedText = (
+    <Typography
+      className={classes.emailSubmittedText}
+      variant="subtitle1"
+      color="secondary"
+      align="center"
     >
-      {t('for-teachers:cta')}
-    </ButtonLink>
+      {t('for-teachers:emailSubmitted')}
+    </Typography>
   );
 
   const renderCta = (
@@ -109,7 +202,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     >
       {renderCtaHeader}
       {renderCtaSubheader}
-      {renderCtaButton}
+      {emailSubmitted ? renderEmailSubmittedText : renderEmailInput}
     </Grid>
   );
 
@@ -118,7 +211,6 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const infoPitchHeaderText = t('for-teachers:infoPitchHeader').toUpperCase();
 
   const renderStudentEmoji = <Emoji emoji="🧑‍🎓" />;
-  const renderTeacherEmoji = <Emoji emoji="🧑‍🏫" />;
   const renderInfoEmoji = <Emoji emoji="🧐" />;
   const renderHandsUpEmoji = <Emoji emoji="🙌" />;
 
@@ -230,7 +322,6 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     topNavbarProps: {
       hideNavigation: true,
       header: t('for-teachers:header'),
-      hideForTeachersButton: true,
     },
     footerProps: {
       hideAppStoreBadges: true,
