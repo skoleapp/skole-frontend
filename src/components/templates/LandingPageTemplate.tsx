@@ -43,13 +43,9 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     padding: spacing(4),
     paddingTop: spacing(8),
     paddingBottom: `calc(${spacing(8)} + env(safe-area-inset-bottom))`,
-    [breakpoints.up('md')]: {
+    [breakpoints.up('xl')]: {
       paddingTop: spacing(16),
       paddingBottom: `calc(${spacing(16)} + env(safe-area-inset-bottom))`,
-    },
-    [breakpoints.up('lg')]: {
-      paddingTop: spacing(24),
-      paddingBottom: `calc(${spacing(24)} + env(safe-area-inset-bottom))`,
     },
   },
   appStoreBadgeImageContainer: {
