@@ -14,9 +14,9 @@ bigger decision that a student faces during their studies is choosing a minor
 subject. A minor subject (or subjects) is studied in university to complement
 the student's major and to give a more balanced set of knowledge. Generally a
 different minor is chosen for the bachelor's and master's degrees. Choosing a
-minor can hard decision, and since the choice is a very personal one, there
+minor can be a hard decision, and since the choice is a very personal one, there
 isn't a one-size-fits-all solution for it. Nevertheless, this blog attempts to
-give some tips for the process, which could turn out helpful.
+give some tips for the process, which could turn out to be helpful.
 
 ### 1. Gather Your Options
 
@@ -78,7 +78,7 @@ the future is always smart.
 ### 4. Ask Around
 
 Before locking down your decision, a good final strategy is to ask some older
-students you know, who have studied the minor, and get them to tell what you
+students you know, who have studied the minor, and get them to tell you
 how it was like. Even though you should not choose your minor based on what
 others have chosen, nothing beats first-hand experience and hearing about the
 practicalities of the subject's courses can help clarify the decision and allow
