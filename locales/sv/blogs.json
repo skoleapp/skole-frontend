@@ -2,5 +2,5 @@
   "title": "Bloggar",
   "description": "Se våra bloggar på Skole.",
   "header": "Bloggar",
-  "readTime": "{{ minutesToRead }} minuter läst"
+  "readTime": "{{ minutesToRead }} minuters läsningstid"
 }

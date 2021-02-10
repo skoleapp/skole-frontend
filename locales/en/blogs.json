@@ -2,5 +2,5 @@
   "title": "Blogs",
   "description": "See our blogs at Skole.",
   "header": "Blogs",
-  "readTime": "{{ minutesToRead }} minutes read"
+  "readTime": "{{ minutesToRead }} minute read"
 }
