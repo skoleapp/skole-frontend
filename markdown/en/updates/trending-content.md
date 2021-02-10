@@ -6,11 +6,11 @@ date: '2021-01-28'
 slug: trending-content
 ---
 
-Trending content, improved discussion, see your comments in your profile and much more! We decided to completely re-implement the frontend part for our discussion system. We transitioned from a system where the top-level and reply comment threads were separated to a implementation where the replies are shown right under the comments. Now one is able to see all comments of courses and resources instantly. No more opening up threads!
+Trending content, improved discussion, see your comments in your profile and much more! We decided to completely re-implement the frontend part for our discussion system. We transitioned from a system where the top-level and reply comment threads were separated to a implementation where the replies are shown right under the comments. Now one is able to see all comments of courses and materials instantly. No more opening up threads!
 
 ### Trending Content 🔥
 
-We added a feature for showing trending content, including courses, resources and comments. You can have your content included there too by by adding comments, creating courses, or uploading recources. Make sure they're good though, our AI-powered algorithm is quite picky on the content it selects 😉
+We added a feature for showing trending content, including courses, materials and comments. You can have your content included there too by by adding comments, creating courses, or uploading material. Make sure they're good though, our AI-powered algorithm is quite picky on the content it selects 😉
 
 ### Improved Performance for Comments ⚡
 

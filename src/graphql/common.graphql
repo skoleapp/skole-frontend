@@ -394,20 +394,14 @@ query AutocompleteResourceTypes {
 }
 
 mutation CreateResource(
-  $resourceTitle: String!
+  $title: String!
   $resourceType: ID!
   $date: Date
   $course: ID!
   $file: String!
 ) {
   createResource(
-    input: {
-      title: $resourceTitle
-      resourceType: $resourceType
-      date: $date
-      course: $course
-      file: $file
-    }
+    input: { title: $title, resourceType: $resourceType, date: $date, course: $course, file: $file }
   ) {
     errors {
       field

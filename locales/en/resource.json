@@ -1,14 +1,14 @@
 {
-  "description": "View {{ resourceTitle }} - {{ resourceDate }} on Skole.",
-  "error": "Error loading resource.",
-  "noComments": "This resource has no comments. Add a comment below!",
+  "description": "View {{ title }} - {{ date }} on Skole.",
+  "error": "Error loading material.",
+  "noComments": "This material has no comments. Add a comment below!",
   "drawingMode": "Drawing Mode",
   "downloadPdf": "Download PDF",
   "printPdf": "Print PDF",
-  "shareHeader": "Share Resource",
-  "shareTitle": "{{ resourceTitle }} on Skole",
-  "shareText": "See {{ resourceTitle }} from {{ creatorUsername }} on Skole",
-  "share": "Share Resource",
-  "delete": "Delete Resource",
-  "confirmDelete": "Are you sure you want to delete this resource?"
+  "shareHeader": "Share Material",
+  "shareTitle": "{{ title }} on Skole",
+  "shareText": "See {{ title }} from {{ creatorUsername }} on Skole",
+  "share": "Share Material",
+  "delete": "Delete Material",
+  "confirmDelete": "Are you sure you want to delete this material?"
 }

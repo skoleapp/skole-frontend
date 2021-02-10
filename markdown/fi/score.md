@@ -2,9 +2,9 @@
 title: Pisteet
 ---
 
-Tärkeimmät Skole-toiminnot ovat kommenttien, kurssien ja resursseiksi kutsuttujen materiaalien lisääminen. Tiettyä määrää pisteitä ei tarvita mihinkään näistä toiminnoista, joten ne ovat kaikkien käytettävissä.
+Tärkeimmät Skole-toiminnot ovat kommenttien, kurssien ja materiaalien lisääminen. Tiettyä määrää pisteitä ei tarvita mihinkään näistä toiminnoista, joten ne ovat kaikkien käytettävissä.
 
-Skolen pisteet ovat karkea mittaus siitä, kuinka paljon muut opiskelijat luottavat sinun sisältösi ja pitävät siitä. Pisteitä ansaitaan saamalla ääniä kursseista, resursseista ja kommenteista. Mitä paremmat pisteet sinulla on, sitä enemmän muut käyttäjät luottavat sinuun ja lisäämääsi sisältöön. Lisäämällä pisteitäsi saat tiettyjä etuoikeuksia, kuten merkkejä, jotka annetaan vain käyttäjille, joilla on riittävän korkeat pisteet.
+Skolen pisteet ovat karkea mittaus siitä, kuinka paljon muut opiskelijat luottavat sinun sisältösi ja pitävät siitä. Pisteitä ansaitaan saamalla ääniä kursseista, materiaaleista ja kommenteista. Mitä paremmat pisteet sinulla on, sitä enemmän muut käyttäjät luottavat sinuun ja lisäämääsi sisältöön. Lisäämällä pisteitäsi saat tiettyjä etuoikeuksia, kuten merkkejä, jotka annetaan vain käyttäjille, joilla on riittävän korkeat pisteet.
 
 ### Kuinka voin lisätä pisteitäni? 🤔
 
@@ -12,13 +12,13 @@ Ensisijainen tapa lisätä pisteitä on lähettää hyviä kysymyksiä ja hyödy
 
 ### Saat pisteitä, kun:
 
-- Resurssisi saa ylös-äänen: +10
+- Materiaalisi saa ylös-äänen: +10
 - Kurssisi saa ylös-äänen: +5
 - Kommenttisi saa ylös-äänen: +1
 
 ### Menetät pisteitä, kun:
 
-- Resurssisi saa alas-äänen: -10
+- Materiaalisi saa alas-äänen: -10
 - Kurssisi saa alas-äänen: -5
 - Kommenttisi saa alas-äänen: -1
 

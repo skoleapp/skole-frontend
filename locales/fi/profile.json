@@ -2,15 +2,15 @@
   "description": "Katso käyttäjän {{ username }} Skole-profiili.",
   "score": "pistettä",
   "courses": "kurssia",
-  "resources": "resurssia",
+  "resources": "materiaalia",
   "rank": "Arvo",
   "badges": "Merkit",
   "editProfile": "Muokkaa profiilia",
   "viewStarred": "Näytä tähdellä merkityt",
   "ownProfileNoCourses": "Et ole lisännyt yhtään kurssia. Kaikki lisäämäsi kurssit ilmestyvät tänne.",
-  "ownProfileNoResources": "Et ole lisännyt yhtään resurssia. Kaikki lisäämäsi resurssit ilmestyvät tänne.",
+  "ownProfileNoResources": "Et ole lisännyt yhtään materiaalia. Kaikki lisäämäsi materiaalit ilmestyvät tänne.",
   "ownProfileNoComments": "Et ole lisännyt yhtään kommenttia. Kaikki lisäämäsi kommentit ilmestyvät tänne.",
   "noCourses": "Tämä käyttäjä ei ole lisännyt yhtään kurssia.",
-  "noResources": "Tämä käyttäjä ei ole lisännyt yhtään resurssia.",
+  "noResources": "Tämä käyttäjä ei ole lisännyt yhtään materiaalia.",
   "noComments": "Tämä käyttäjä ei ole lisännyt yhtään kommenttia."
 }

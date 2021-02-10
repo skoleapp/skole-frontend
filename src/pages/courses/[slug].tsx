@@ -117,8 +117,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
-  const courseName = R.propOr('', 'name', course);
-  const courseCode = R.propOr('-', 'code', course);
+  const name = R.propOr('', 'name', course);
+  const code = R.propOr('-', 'code', course);
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
   const schoolName = R.pathOr('', ['school', 'name'], course);
   const courseId = R.propOr('', 'id', course);
@@ -213,7 +213,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const infoItems = [
     {
       label: t('common:courseCode'),
-      value: courseCode,
+      value: code,
     },
     {
       label: t('common:subjects'),
@@ -239,8 +239,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('course:shareHeader'),
-    title: t('course:shareTitle', { courseName }),
-    text: t('course:shareText', { courseName, creatorUsername }),
+    title: t('course:shareTitle', { name }),
+    text: t('course:shareText', { name, creatorUsername }),
   };
 
   const renderShareButton = (
@@ -248,7 +248,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: courseName,
+    header: name,
     emoji,
     creator: courseCreator,
     created,
@@ -264,7 +264,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <ListItemIcon>
         <CloudUploadOutlined />
       </ListItemIcon>
-      <ListItemText>{t('common:uploadMaterial')}</ListItemText>
+      <ListItemText>{t('common:uploadResources')}</ListItemText>
     </MenuItem>
   );
 
@@ -363,7 +363,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           disabled={verified === false}
           endIcon={<CloudUploadOutlined />}
         >
-          {t('common:uploadMaterial')}
+          {t('common:uploadResources')}
         </ButtonLink>
       </Typography>
     </Tooltip>
@@ -373,7 +373,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderHeader = (
     <>
-      {courseName}
+      {name}
       {renderEmoji}
     </>
   );
@@ -483,12 +483,12 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const courseName = R.propOr('', 'name', course);
-  const courseCode = R.propOr('', 'code', course);
+  const name = R.propOr('', 'name', course);
+  const code = R.propOr('', 'code', course);
 
   const seoProps = {
-    title: `${courseName} - ${courseCode}`,
-    description: t('description', { courseName, courseCode }),
+    title: `${name} - ${code}`,
+    description: t('description', { name, code }),
   };
 
   return {

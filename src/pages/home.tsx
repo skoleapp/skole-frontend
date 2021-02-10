@@ -279,7 +279,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) =
       href: searchUrl,
     },
     {
-      text: 'common:uploadMaterial',
+      text: 'common:uploadResources',
       icon: CloudUploadOutlined,
       href: urls.uploadResource,
     },

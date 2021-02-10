@@ -110,15 +110,15 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useResourceQuery({ variables, context });
   const resource = R.prop('resource', data);
-  const resourceTitle = R.propOr('', 'title', resource);
-  const resourceDate = R.propOr('', 'date', resource);
+  const title = R.propOr('', 'title', resource);
+  const date = R.propOr('', 'date', resource);
   const resourceType = R.pathOr('-', ['resourceType', 'name'], resource);
   const courseName = R.pathOr('', ['course', 'name'], resource);
   const schoolName = R.pathOr('', ['school', 'name'], resource);
   const courseSlug = R.pathOr('', ['course', 'slug'], resource);
   const schoolSlug = R.pathOr('', ['school', 'slug'], resource);
   const creatorId = R.pathOr('', ['user', 'id'], resource);
-  const title = `${resourceTitle} - ${resourceDate}`;
+  const fullTitle = `${title} - ${date}`;
   const file = mediaUrl(R.propOr('', 'file', resource));
   const resourceId = R.propOr('', 'id', resource);
   const initialVote = R.propOr(null, 'vote', resource);
@@ -233,7 +233,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       const blob = await res.blob();
       const blobUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.download = title;
+      a.download = fullTitle;
       a.href = blobUrl;
       document.body.appendChild(a);
       a.click();
@@ -276,7 +276,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const infoItems = [
     {
       label: t('common:date'),
-      value: resourceDate,
+      value: date,
     },
     {
       label: t('common:resourceType'),
@@ -308,8 +308,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('resource:shareHeader'),
-    title: t('resource:shareTitle', { resourceTitle }),
-    text: t('resource:shareText', { resourceTitle, creatorUsername }),
+    title: t('resource:shareTitle', { title: fullTitle }),
+    text: t('resource:shareText', { title: fullTitle, creatorUsername }),
   };
 
   const renderShareButton = (
@@ -317,7 +317,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: title,
+    header: fullTitle,
     emoji,
     creator: resourceCreator,
     created,
@@ -406,7 +406,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const toolbarProps = {
-    title,
+    title: fullTitle,
     emoji,
     courseSlug,
     renderStarButton,
@@ -518,12 +518,12 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const resourceTitle = R.propOr('', 'title', resource);
-  const resourceDate = R.propOr('', 'date', resource);
+  const title = R.propOr('', 'title', resource);
+  const date = R.propOr('', 'date', resource);
 
   const seoProps = {
-    title: `${resourceTitle} - ${resourceDate}`,
-    description: t('description', { resourceTitle, resourceDate }),
+    title: `${title} - ${date}`,
+    description: t('description', { title, date }),
   };
 
   return {

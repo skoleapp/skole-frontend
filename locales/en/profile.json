@@ -2,15 +2,15 @@
   "description": "View Skole profile for user {{ username }}.",
   "score": "score",
   "courses": "courses",
-  "resources": "resources",
+  "resources": "materials",
   "rank": "Rank",
   "badges": "Badges",
   "editProfile": "Edit Profile",
   "viewStarred": "View Starred",
   "ownProfileNoCourses": "You have not added any courses. All courses that you add will show up here.",
-  "ownProfileNoResources": "You have not uploaded any resources. All resources that you upload will show up here.",
+  "ownProfileNoResources": "You have not uploaded any materials. All materials that you upload will show up here.",
   "ownProfileNoComments": "You have not added any comments. All comments that you add will show up here.",
   "noCourses": "This user has not added any courses.",
-  "noResources": "This user has not uploaded any resources.",
+  "noResources": "This user has not uploaded any materials.",
   "noComments": "This user has not added any comments."
 }

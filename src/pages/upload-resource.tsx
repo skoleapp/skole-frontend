@@ -39,7 +39,7 @@ import { urls } from 'utils';
 import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
-  resourceTitle: string;
+  title: string;
   resourceType: string | null;
   date: Date | null;
   school: SchoolObjectType | null;
@@ -105,7 +105,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const handleUpload = async ({
-    resourceTitle,
+    title,
     resourceType: _resourceType,
     date: _date,
     course: _course,
@@ -116,7 +116,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const course = R.propOr('', 'id', _course);
 
     const variables = {
-      resourceTitle,
+      title,
       resourceType,
       date,
       course,
@@ -132,7 +132,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
   const initialValues = useMemo(
     () => ({
-      resourceTitle: '',
+      title: '',
       resourceType: null,
       date: new Date(),
       school,
@@ -144,10 +144,10 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderResourceTitleField = (
     <Field
-      name="resourceTitle"
-      label={t('forms:resourceTitle')}
+      name="title"
+      label={t('forms:title')}
       component={TextFormField}
-      helperText={t('upload-resource:resourceTitleHelperText')}
+      helperText={t('upload-resource:titleHelperText')}
     />
   );
 

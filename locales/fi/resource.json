@@ -1,14 +1,14 @@
 {
-  "description": "Näytä {{ resourceTitle }} - {{ resourceDate }} Skolessa.",
-  "error": "Virhe ladattaessa resurssia.",
-  "noComments": "Tällä resurssilla ei ole kommentteja. Lisää kommentti alta!",
+  "description": "Näytä {{ title }} - {{ date }} Skolessa.",
+  "error": "Virhe ladattaessa materiaalia.",
+  "noComments": "Tällä materiaalilla ei ole kommentteja. Lisää kommentti alta!",
   "drawingMode": "Piirtotila",
   "downloadPdf": "Lataa PDF",
   "printPdf": "Tulosta PDF",
-  "shareHeader": "Jaa resurssi",
-  "shareTitle": "{{ resourceTitle }} Skolessa",
-  "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa",
-  "share": "Jaa resurssi",
-  "delete": "Poista resurssi",
-  "confirmDelete": "Haluatko varmasti poistaa tämän resurssin?"
+  "shareHeader": "Jaa materiaali",
+  "shareTitle": "{{ title }} Skolessa",
+  "shareText": "Katso {{ title }} käyttäjältä {{ creatorUsername }} Skolessa",
+  "share": "Jaa materiaali",
+  "delete": "Poista materiaali",
+  "confirmDelete": "Haluatko varmasti poistaa tämän materiaalin?"
 }
