@@ -55,7 +55,27 @@ ${url}`;
 
   const mailUrl = `mailto:?subject=${title}&body=${encodeURIComponent(emailBody)}`;
 
-  const shareEvent = (name: string) => sa_event(`click_${name}_share_link_from_${pathname}`);
+  const getPage = () => {
+    switch (pathname) {
+      case '/': {
+        return 'landing_page';
+      }
+
+      case '/courses/[slug]': {
+        return 'course_page';
+      }
+
+      case '/resources/[slug]': {
+        return 'resource_page';
+      }
+
+      case '/schools/[slug]': {
+        return 'school_page';
+      }
+    }
+  };
+
+  const shareEvent = (name: string) => sa_event(`click_${name}_share_link_from_${getPage()}`);
   const handleClickMenuItem = (name: string) => () => shareEvent(name);
 
   const handleClickCopyLink = () => {

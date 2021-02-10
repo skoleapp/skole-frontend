@@ -75,7 +75,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     formRef: updateUserFormRef,
     handleMutationErrors: handleUpdateUserMutationErrors,
     onError: onUpdateUserError,
-    setUnexpectedFormError: updateUserUnexpectedError,
   } = useForm<UpdateUserFormValues>();
 
   const registerInitialValues = {

@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { FooterProps } from 'types';
 import { isNotNativeApp, urls } from 'utils';
@@ -45,12 +44,10 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
 
 export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   const classes = useStyles();
-  const { pathname } = useRouter();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
 
-  const handleClickSocialMediaLink = (name: string) => () =>
-    sa_event(`click_${name}_footer_link_from_${pathname}`);
+  const handleClickSocialMediaLink = (name: string) => () => sa_event(`click_${name}_footer_link`);
 
   const renderProductHeader = (
     <Typography className={classes.header} variant="subtitle1" color="secondary">
