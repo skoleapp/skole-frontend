@@ -101,9 +101,20 @@ export const CommentTableRow: React.FC<Props> = ({
   };
 
   const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
-  const renderCourseChip = !!course && <TableRowChip label={course.name} />;
-  const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
-  const renderSchoolChip = !!school && <TableRowChip label={school.name} />;
+
+  const renderCourseChip = (!!course || comment?.course) && (
+    <TableRowChip label={course?.name || comment?.course?.name} />
+  );
+
+  const renderResourceChip = (!!resource || comment?.resource) && (
+    <TableRowChip label={resource?.title || comment?.resource?.title} />
+  );
+
+  const renderSchoolChip = (!!school || comment?.school) && (
+    <TableRowChip label={school?.name || comment?.school?.name} />
+  );
+
+  const renderReplyChip = !!comment && <TableRowChip label={t('common:reply')} />;
 
   const renderCommentCreator = user ? (
     <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
@@ -206,6 +217,7 @@ export const CommentTableRow: React.FC<Props> = ({
       {renderCourseChip}
       {renderResourceChip}
       {renderSchoolChip}
+      {renderReplyChip}
     </Grid>
   );
 
