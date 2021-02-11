@@ -26,6 +26,9 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
   ctaHeader: {
     fontSize: '1.5rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1.75rem',
+    },
     [breakpoints.up('sm')]: {
       fontSize: '2rem',
     },
@@ -148,7 +151,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderCtaSubheader = (
-    <Grid item xs={12} sm={10} md={8} lg={6}>
+    <Grid item xs={12} sm={8} md={6} lg={4}>
       <Typography variant="subtitle1" color="secondary" align="center">
         {t('for-teachers:ctaSubheader1')}
         <strong>{t('for-teachers:ctaSubheader2')}</strong>
