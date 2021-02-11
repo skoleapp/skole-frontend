@@ -563,6 +563,7 @@ fragment commentFields on CommentObjectType {
   replyCount
   user {
     id
+    slug
     username
     avatarThumbnail
   }
@@ -573,6 +574,10 @@ fragment commentFields on CommentObjectType {
   resource {
     slug
     title
+  }
+  school {
+    slug
+    name
   }
 }
 
@@ -609,9 +614,15 @@ query User($slug: String, $page: Int, $pageSize: Int) {
       comment {
         course {
           slug
+          name
         }
         resource {
           slug
+          title
+        }
+        school {
+          slug
+          name
         }
       }
     }

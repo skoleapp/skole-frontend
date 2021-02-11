@@ -10,12 +10,13 @@ import { CommentObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
 import { BORDER } from 'styles';
 import { ColSpan, TableRowProps } from 'types';
 import { mediaLoader, truncate, urls } from 'utils';
 
-import { Link, MarkdownContent, TextLink } from '../shared';
+import { MarkdownContent, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
@@ -68,6 +69,7 @@ export const CommentTableRow: React.FC<Props> = ({
     user,
     course,
     resource,
+    school,
     comment,
   },
   hideCommentChip,
@@ -83,10 +85,12 @@ export const CommentTableRow: React.FC<Props> = ({
   const commentPreview = !!text && truncate(text, 50);
 
   const pathname =
-    (!!course?.slug && urls.course(course.slug)) ||
-    (!!resource?.slug && urls.resource(resource.slug)) ||
-    (!!comment && !!comment.course?.slug && urls.course(comment.course.slug)) ||
-    (!!comment && !!comment.resource?.slug && urls.resource(comment.resource.slug)) ||
+    (!!course && urls.course(course.id)) ||
+    (!!resource && urls.resource(resource.id)) ||
+    (!!school && urls.resource(school.id)) ||
+    (!!comment?.course && urls.course(comment.course.id)) ||
+    (!!comment?.resource && urls.resource(comment.resource.id)) ||
+    (!!comment?.school && urls.resource(comment.school.id)) ||
     '';
 
   const href = {
@@ -99,9 +103,10 @@ export const CommentTableRow: React.FC<Props> = ({
   const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
   const renderCourseChip = !!course && <TableRowChip label={course.name} />;
   const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
+  const renderSchoolChip = !!school && <TableRowChip label={school.name} />;
 
-  const renderCommentCreator = user?.slug ? (
-    <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
+  const renderCommentCreator = user ? (
+    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
   ) : (
     t('common:communityUser')
   );
@@ -200,6 +205,7 @@ export const CommentTableRow: React.FC<Props> = ({
       {renderCommentChip}
       {renderCourseChip}
       {renderResourceChip}
+      {renderSchoolChip}
     </Grid>
   );
 
