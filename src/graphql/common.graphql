@@ -245,6 +245,7 @@ fragment paginatedResourceFields on PaginatedResourceObjectType {
 
 query Course($slug: String, $page: Int, $pageSize: Int) {
   course(slug: $slug) {
+    id
     slug
     name
     code
@@ -329,6 +330,7 @@ mutation DeleteCourse($id: ID) {
 
 query Resource($slug: String) {
   resource(slug: $slug) {
+    id
     slug
     title
     file

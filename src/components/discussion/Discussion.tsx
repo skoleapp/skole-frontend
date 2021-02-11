@@ -237,8 +237,7 @@ export const Discussion: React.FC<Props> = ({
   );
 
   const mapComments =
-    !!comments &&
-    !!comments.length &&
+    !!comments?.length &&
     comments.slice(0, visibleComments).map((tc, i) => (
       <>
         {renderTopComment(tc, i)}
