@@ -69,6 +69,7 @@ export const CommentTableRow: React.FC<Props> = ({
     user,
     course,
     resource,
+    school,
     comment,
   },
   hideCommentChip,
@@ -86,8 +87,10 @@ export const CommentTableRow: React.FC<Props> = ({
   const pathname =
     (!!course && urls.course(course.id)) ||
     (!!resource && urls.resource(resource.id)) ||
-    (!!comment && !!comment.course && urls.course(comment.course.id)) ||
-    (!!comment && !!comment.resource && urls.resource(comment.resource.id)) ||
+    (!!school && urls.school(school.id)) ||
+    (!!comment?.course && urls.course(comment.course.id)) ||
+    (!!comment?.resource && urls.resource(comment.resource.id)) ||
+    (!!comment?.school && urls.school(comment.school.id)) ||
     '';
 
   const href = {
@@ -100,6 +103,7 @@ export const CommentTableRow: React.FC<Props> = ({
   const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
   const renderCourseChip = !!course && <TableRowChip label={course.name} />;
   const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
+  const renderSchoolChip = !!school && <TableRowChip label={school.name} />;
 
   const renderCommentCreator = user ? (
     <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
@@ -201,6 +205,7 @@ export const CommentTableRow: React.FC<Props> = ({
       {renderCommentChip}
       {renderCourseChip}
       {renderResourceChip}
+      {renderSchoolChip}
     </Grid>
   );
 

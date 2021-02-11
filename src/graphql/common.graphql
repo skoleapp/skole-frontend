@@ -723,11 +723,21 @@ query User($id: ID, $page: Int, $pageSize: Int) {
         id
         title
       }
+      school {
+        id
+        name
+      }
       comment {
         course {
           id
+          name
         }
         resource {
+          id
+          title
+        }
+        school {
+          name
           id
         }
       }
@@ -981,6 +991,10 @@ query Suggestions {
         id
         title
       }
+      school {
+        id
+        name
+      }
     }
   }
 }
@@ -1039,6 +1053,10 @@ query SuggestionsPreview {
       resource {
         id
         title
+      }
+      school {
+        id
+        name
       }
     }
   }
