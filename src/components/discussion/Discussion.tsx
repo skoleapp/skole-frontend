@@ -247,10 +247,7 @@ export const Discussion: React.FC<Props> = ({
       </>
     ));
 
-  const renderLoading = ((!!loading && (!comments || !comments.length)) || !mapComments) && (
-    <LoadingBox />
-  );
-
+  const renderLoading = loading && <LoadingBox />;
   const renderError = !!error && <ErrorBox />;
   const renderCommentsNotFound = !!noCommentsText && <NotFoundBox text={noCommentsText} />;
   const renderComments = renderError || mapComments || renderLoading || renderCommentsNotFound;
