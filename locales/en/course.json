@@ -1,11 +1,11 @@
 {
-  "description": "View {{ courseName }} - {{ courseCode }} on Skole.",
+  "description": "View {{ name }} - {{ courseCode }} on Skole.",
   "noResources": "This course has no materials.",
   "noResourcesLink": "Add material here!",
   "noComments": "This course has no comments. Add a comment below!",
   "shareHeader": "Share Course",
-  "shareTitle": "{{ courseName }} on Skole",
-  "shareText": "View {{ courseName }} by {{ creatorUsername }} on Skole",
+  "shareTitle": "{{ name }} on Skole",
+  "shareText": "View {{ name }} by {{ creatorUsername }} on Skole",
   "share": "Share Course",
   "delete": "Delete Course",
   "confirmDelete": "Are you sure you want to delete this course?"

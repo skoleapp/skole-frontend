@@ -104,13 +104,11 @@ export const useVotes = ({
       : _downvoteTooltip);
 
   const onCompleted = ({ vote }: VoteMutation): void => {
-    if (vote) {
-      if (!!vote.errors && !!vote.errors.length) {
-        onError();
-      } else {
-        setCurrentVote(vote.vote as VoteObjectType);
-        setScore(String(vote.targetScore));
-      }
+    if (vote?.errors?.length) {
+      onError();
+    } else if (vote?.vote && vote.targetScore) {
+      setCurrentVote(vote.vote);
+      setScore(String(vote.targetScore));
     }
   };
 

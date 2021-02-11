@@ -1,51 +1,43 @@
+fragment activityFields on ActivityObjectType {
+  id
+  description
+  read
+  targetUser {
+    slug
+    username
+    avatarThumbnail
+  }
+  course {
+    slug
+  }
+  resource {
+    slug
+  }
+  comment {
+    id
+  }
+}
+
+fragment paginatedActivityFields on PaginatedActivityObjectType {
+  page
+  pages
+  hasNext
+  hasPrev
+  count
+  objects {
+    ...activityFields
+  }
+}
+
 query Activities($page: Int, $pageSize: Int) {
   activities(page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      description
-      read
-      targetUser {
-        id
-        username
-        avatarThumbnail
-      }
-      course {
-        id
-      }
-      resource {
-        id
-      }
-      comment {
-        id
-      }
-    }
+    ...paginatedActivityFields
   }
 }
 
 query ActivityPreview {
   activityPreview {
-    id
-    description
-    read
-    targetUser {
-      id
-      username
-      avatarThumbnail
-    }
-    course {
-      id
-    }
-    resource {
-      id
-    }
-    comment {
-      id
-    }
+    ...activityFields
   }
 }
 
@@ -56,23 +48,7 @@ mutation MarkActivityAsRead($id: ID, $read: Boolean) {
       messages
     }
     activity {
-      id
-      description
-      read
-      targetUser {
-        id
-        username
-        avatarThumbnail
-      }
-      course {
-        id
-      }
-      resource {
-        id
-      }
-      comment {
-        id
-      }
+      ...activityFields
     }
   }
 }
@@ -85,37 +61,14 @@ mutation GraphQLMarkAllActivitiesAsRead {
       messages
     }
     activities {
-      page
-      pages
-      hasNext
-      hasPrev
-      count
-      objects {
-        id
-        description
-        read
-        targetUser {
-          id
-          username
-          avatarThumbnail
-        }
-        course {
-          id
-        }
-        resource {
-          id
-        }
-        comment {
-          id
-        }
-      }
+      ...paginatedActivityFields
     }
   }
 }
 
 query AutocompleteCities {
   autocompleteCities {
-    id
+    slug
     name
   }
 }
@@ -141,21 +94,21 @@ mutation CreateComment(
     }
   ) {
     successMessage
-    comment {
-      id
-      course {
-        id
-      }
-      resource {
-        id
-      }
-      school {
-        id
-      }
-    }
     errors {
       field
       messages
+    }
+    comment {
+      id
+      course {
+        slug
+      }
+      resource {
+        slug
+      }
+      school {
+        slug
+      }
     }
   }
 }
@@ -170,12 +123,7 @@ mutation DeleteComment($id: ID) {
   }
 }
 
-mutation CreateContactMessage(
-  $subject: String!
-  $name: String
-  $email: String!
-  $message: String!
-) {
+mutation CreateContactMessage($subject: String, $name: String, $email: String, $message: String!) {
   createContactMessage(
     input: { subject: $subject, name: $name, email: $email, message: $message }
   ) {
@@ -189,18 +137,44 @@ mutation CreateContactMessage(
 
 query AutocompleteCountries {
   autocompleteCountries {
-    id
+    slug
     name
+  }
+}
+
+fragment courseFields on CourseObjectType {
+  slug
+  name
+  code
+  score
+  starCount
+  resourceCount
+  commentCount
+  created
+  user {
+    slug
+    username
+  }
+}
+
+fragment paginatedCourseFields on PaginatedCourseObjectType {
+  page
+  pages
+  hasPrev
+  hasNext
+  count
+  objects {
+    ...courseFields
   }
 }
 
 query Courses(
   $searchTerm: String
-  $school: ID
-  $subject: ID
-  $schoolType: ID
-  $country: ID
-  $city: ID
+  $school: String
+  $subject: String
+  $schoolType: String
+  $country: String
+  $city: String
   $ordering: String
   $page: Int
   $pageSize: Int
@@ -216,51 +190,62 @@ query Courses(
     page: $page
     pageSize: $pageSize
   ) {
-    page
-    pages
-    hasPrev
-    hasNext
-    count
-    objects {
-      id
-      name
-      code
-      score
-      starCount
-      resourceCount
-      commentCount
-      created
-      user {
-        id
-        username
-      }
-    }
+    ...paginatedCourseFields
   }
-  school(id: $school) {
-    id
+  school(slug: $school) {
+    slug
     name
   }
-  subject(id: $subject) {
-    id
+  subject(slug: $subject) {
+    slug
     name
   }
-  schoolType(id: $schoolType) {
-    id
+  schoolType(slug: $schoolType) {
+    slug
     name
   }
-  country(id: $country) {
-    id
+  country(slug: $country) {
+    slug
     name
   }
-  city(id: $city) {
-    id
+  city(slug: $city) {
+    slug
     name
   }
 }
 
-query Course($id: ID, $page: Int, $pageSize: Int) {
-  course(id: $id) {
-    id
+fragment resourceFields on ResourceObjectType {
+  slug
+  title
+  score
+  date
+  starCount
+  commentCount
+  downloads
+  created
+  resourceType {
+    name
+  }
+  user {
+    slug
+    username
+  }
+}
+
+fragment paginatedResourceFields on PaginatedResourceObjectType {
+  page
+  pages
+  hasNext
+  hasPrev
+  count
+  objects {
+    ...resourceFields
+  }
+}
+
+query Course($slug: String, $page: Int, $pageSize: Int) {
+  course(slug: $slug) {
+    slug
     name
     code
     modified
@@ -274,61 +259,44 @@ query Course($id: ID, $page: Int, $pageSize: Int) {
       status
     }
     subjects {
-      id
+      slug
       name
     }
     school {
       id
+      slug
       name
     }
     user {
       id
+      slug
       username
     }
   }
-  resources(course: $id, page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      title
-      score
-      date
-      starCount
-      commentCount
-      downloads
-      created
-      resourceType {
-        name
-      }
-      user {
-        id
-        username
-      }
-    }
+  resources(course: $slug, page: $page, pageSize: $pageSize) {
+    ...paginatedResourceFields
   }
 }
 
-query CourseSeoProps($id: ID) {
-  course(id: $id) {
+query CourseSeoProps($slug: String) {
+  course(slug: $slug) {
     name
     code
   }
 }
 
-query CreateCourseAutocompleteData($school: ID) {
-  school(id: $school) {
+query CreateCourseAutocompleteData($school: String) {
+  school(slug: $school) {
     id
+    slug
     name
   }
 }
 
-query AutocompleteCourses($school: ID, $name: String) {
+query AutocompleteCourses($school: String, $name: String) {
   autocompleteCourses(school: $school, name: $name) {
     id
+    slug
     name
     code
   }
@@ -339,12 +307,12 @@ mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID]
     input: { name: $courseName, code: $courseCode, subjects: $subjects, school: $school }
   ) {
     successMessage
-    course {
-      id
-    }
     errors {
       field
       messages
+    }
+    course {
+      slug
     }
   }
 }
@@ -359,9 +327,9 @@ mutation DeleteCourse($id: ID) {
   }
 }
 
-query Resource($id: ID) {
-  resource(id: $id) {
-    id
+query Resource($slug: String) {
+  resource(slug: $slug) {
+    slug
     title
     file
     date
@@ -373,19 +341,21 @@ query Resource($id: ID) {
     downloads
     commentCount
     resourceType {
-      id
+      slug
       name
     }
     school {
-      id
+      slug
       name
     }
     course {
       id
+      slug
       name
     }
     user {
       id
+      slug
       username
     }
     vote {
@@ -395,20 +365,21 @@ query Resource($id: ID) {
   }
 }
 
-query ResourceSeoProps($id: ID) {
-  resource(id: $id) {
+query ResourceSeoProps($slug: String) {
+  resource(slug: $slug) {
     title
     date
   }
 }
 
-query CreateResourceAutocompleteData($school: ID, $course: ID) {
-  school(id: $school) {
-    id
+query CreateResourceAutocompleteData($school: String, $course: String) {
+  school(slug: $school) {
+    slug
     name
   }
-  course(id: $course) {
+  course(slug: $course) {
     id
+    slug
     name
     code
   }
@@ -417,33 +388,28 @@ query CreateResourceAutocompleteData($school: ID, $course: ID) {
 query AutocompleteResourceTypes {
   autocompleteResourceTypes {
     id
+    slug
     name
   }
 }
 
 mutation CreateResource(
-  $resourceTitle: String!
+  $title: String!
   $resourceType: ID!
   $date: Date
   $course: ID!
   $file: String!
 ) {
   createResource(
-    input: {
-      title: $resourceTitle
-      resourceType: $resourceType
-      date: $date
-      course: $course
-      file: $file
-    }
+    input: { title: $title, resourceType: $resourceType, date: $date, course: $course, file: $file }
   ) {
-    successMessage
-    resource {
-      id
-    }
     errors {
       field
       messages
+    }
+    successMessage
+    resource {
+      slug
     }
   }
 }
@@ -460,71 +426,58 @@ mutation DeleteResource($id: ID) {
 
 mutation DownloadResource($id: ID) {
   downloadResource(input: { id: $id }) {
-    resource {
-      downloads
-    }
     errors {
       field
       messages
     }
+    resource {
+      downloads
+    }
   }
 }
 
-query School($id: ID, $page: Int, $pageSize: Int) {
-  school(id: $id) {
-    id
+fragment paginatedSubjectFields on PaginatedSubjectObjectType {
+  page
+  pages
+  hasNext
+  hasPrev
+  count
+  objects {
+    slug
+    name
+    courseCount
+    resourceCount
+  }
+}
+
+query School($slug: String, $page: Int, $pageSize: Int) {
+  school(slug: $slug) {
+    slug
     name
     commentCount
     city {
-      id
+      slug
       name
     }
     country {
-      id
+      slug
       name
     }
     schoolType {
-      id
+      slug
       name
     }
   }
-  subjects(school: $id, page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      name
-      courseCount
-      resourceCount
-    }
+  subjects(school: $slug, page: $page, pageSize: $pageSize) {
+    ...paginatedSubjectFields
   }
-  courses(school: $id, page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      name
-      code
-      score
-      starCount
-      resourceCount
-      commentCount
-      user {
-        id
-        username
-      }
-    }
+  courses(school: $slug, page: $page, pageSize: $pageSize) {
+    ...paginatedCourseFields
   }
 }
 
-query SchoolSeoProps($id: ID) {
-  school(id: $id) {
+query SchoolSeoProps($slug: String) {
+  school(slug: $slug) {
     name
   }
 }
@@ -532,60 +485,24 @@ query SchoolSeoProps($id: ID) {
 query AutocompleteSchools($name: String) {
   autocompleteSchools(name: $name) {
     id
+    slug
     name
   }
 }
 
 query AutocompleteSchoolTypes {
   autocompleteSchoolTypes {
-    id
+    slug
     name
   }
 }
 
 query Starred($page: Int, $pageSize: Int) {
   starredCourses(page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      name
-      code
-      score
-      starCount
-      resourceCount
-      commentCount
-      user {
-        id
-        username
-      }
-    }
+    ...paginatedCourseFields
   }
   starredResources {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      title
-      score
-      date
-      starCount
-      commentCount
-      course {
-        name
-        code
-      }
-      downloads
-      resourceType {
-        name
-      }
-    }
+    ...paginatedResourceFields
   }
 }
 
@@ -602,37 +519,65 @@ mutation Star($course: ID, $resource: ID) {
 query AutocompleteSubjects($name: String) {
   autocompleteSubjects(name: $name) {
     id
+    slug
+    name
+  }
+}
+
+fragment userMeFields on UserObjectType {
+  id
+  slug
+  username
+  email
+  title
+  bio
+  avatar
+  avatarThumbnail
+  score
+  created
+  verified
+  unreadActivityCount
+  rank
+  school {
+    slug
+    name
+  }
+  subject {
+    slug
     name
   }
 }
 
 query UserMe {
   userMe {
-    id
-    username
-    email
-    title
-    bio
-    avatar
-    avatarThumbnail
-    score
-    created
-    verified
-    unreadActivityCount
-    rank
-    school {
-      id
-      name
-    }
-    subject {
-      id
-      name
-    }
+    ...userMeFields
   }
 }
 
-query User($id: ID, $page: Int, $pageSize: Int) {
-  user(id: $id) {
+fragment commentFields on CommentObjectType {
+  id
+  text
+  attachment
+  created
+  score
+  replyCount
+  user {
+    id
+    username
+    avatarThumbnail
+  }
+  course {
+    slug
+    name
+  }
+  resource {
+    slug
+    title
+  }
+}
+
+query User($slug: String, $page: Int, $pageSize: Int) {
+  user(slug: $slug) {
     id
     username
     title
@@ -643,100 +588,38 @@ query User($id: ID, $page: Int, $pageSize: Int) {
     verified
     rank
     badges {
-      id
       name
       description
     }
   }
-  courses(user: $id, page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      name
-      code
-      score
-      starCount
-      resourceCount
-      commentCount
-      created
-      user {
-        id
-        username
-      }
-    }
+  courses(user: $slug, page: $page, pageSize: $pageSize) {
+    ...paginatedCourseFields
   }
-  resources(user: $id, page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      id
-      title
-      score
-      date
-      starCount
-      commentCount
-      downloads
-      created
-      course {
-        name
-        code
-      }
-      resourceType {
-        name
-      }
-      user {
-        id
-        username
-      }
-    }
+  resources(user: $slug, page: $page, pageSize: $pageSize) {
+    ...paginatedResourceFields
   }
-  comments(user: $id, page: $page, pageSize: $pageSize) {
+  comments(user: $slug, page: $page, pageSize: $pageSize) {
     page
     pages
     hasNext
     hasPrev
     count
     objects {
-      id
-      text
-      attachment
-      created
-      score
-      replyCount
-      user {
-        id
-        username
-        avatarThumbnail
-      }
-      course {
-        id
-        name
-      }
-      resource {
-        id
-        title
-      }
+      ...commentFields
       comment {
         course {
-          id
+          slug
         }
         resource {
-          id
+          slug
         }
       }
     }
   }
 }
 
-query UserSeoProps($id: ID) {
-  user(id: $id) {
+query UserSeoProps($slug: String) {
+  user(slug: $slug) {
     username
   }
 }
@@ -749,13 +632,12 @@ mutation Register($username: String!, $email: String!, $password: String!) {
     }
   }
   login(input: { usernameOrEmail: $username, password: $password }) {
-    user {
-      username
-      email
-    }
     errors {
       field
       messages
+    }
+    user {
+      ...userMeFields
     }
   }
 }
@@ -850,16 +732,7 @@ mutation UpdateUser(
   ) {
     successMessage
     user {
-      id
-      username
-      avatar
-      avatarThumbnail
-      email
-      title
-      bio
-      avatar
-      score
-      created
+      ...userMeFields
     }
     errors {
       field
@@ -890,14 +763,14 @@ mutation DeleteUser($password: String!) {
 
 mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
   vote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
-    vote {
-      id
-      status
-    }
-    targetScore
     errors {
       field
       messages
+    }
+    targetScore
+    vote {
+      id
+      status
     }
   }
 }
@@ -905,142 +778,50 @@ mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
 query Sitemap {
   sitemap {
     courses {
-      id
+      slug
       modified
     }
     resources {
-      id
+      slug
       modified
     }
     schools {
-      id
+      slug
       modified
     }
     users {
-      id
+      slug
       modified
+    }
+  }
+}
+
+fragment suggestionFields on SuggestionsUnion {
+  ... on CourseObjectType {
+    ...courseFields
+  }
+  ... on ResourceObjectType {
+    ...resourceFields
+  }
+  ... on CommentObjectType {
+    ...commentFields
+    # Need to use an alias: https://stackoverflow.com/a/56695847/9835872
+    commentCourse: course {
+      slug
+      name
     }
   }
 }
 
 query Suggestions {
   suggestions {
-    ... on CourseObjectType {
-      id
-      name
-      code
-      score
-      starCount
-      resourceCount
-      commentCount
-      created
-      user {
-        id
-        username
-      }
-    }
-    ... on ResourceObjectType {
-      id
-      title
-      score
-      date
-      starCount
-      commentCount
-      downloads
-      created
-      resourceType {
-        name
-      }
-      user {
-        id
-        username
-      }
-      course {
-        name
-        code
-      }
-    }
-    ... on CommentObjectType {
-      id
-      text
-      attachmentThumbnail
-      created
-      score
-      replyCount
-      user {
-        id
-        username
-        avatarThumbnail
-      }
-      # Need to use an alias: https://stackoverflow.com/a/56695847/9835872
-      commentCourse: course {
-        id
-        name
-      }
-      resource {
-        id
-        title
-      }
-    }
+    ...suggestionFields
   }
 }
 
 query SuggestionsPreview {
   suggestionsPreview {
-    ... on CourseObjectType {
-      id
-      name
-      code
-      score
-      starCount
-      resourceCount
-      commentCount
-      created
-      user {
-        id
-        username
-      }
-    }
-    ... on ResourceObjectType {
-      id
-      title
-      score
-      starCount
-      commentCount
-      downloads
-      created
-      resourceType {
-        name
-      }
-      course {
-        name
-        code
-      }
-      user {
-        id
-        username
-      }
-    }
-    ... on CommentObjectType {
-      id
-      text
-      attachmentThumbnail
-      created
-      score
-      replyCount
-      user {
-        id
-        username
-      }
-      commentCourse: course {
-        id
-        name
-      }
-      resource {
-        id
-        title
-      }
-    }
+    ...suggestionFields
   }
 }
 
@@ -1053,7 +834,7 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
     created
     score
     user {
-      id
+      slug
       username
       avatarThumbnail
     }
@@ -1062,15 +843,15 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
       status
     }
     course {
-      id
+      slug
       name
     }
     resource {
-      id
+      slug
       title
     }
     school {
-      id
+      slug
       name
     }
     replyComments {
@@ -1081,7 +862,7 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
       created
       score
       user {
-        id
+        slug
         username
         avatarThumbnail
       }
@@ -1096,26 +877,26 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
 query DiscussionSuggestions {
   discussionSuggestions {
     ... on CourseObjectType {
-      id
+      slug
       courseName: name
       code
       __typename
       school {
-        id
+        slug
         name
       }
     }
     ... on ResourceObjectType {
-      id
+      slug
       title
       __typename
       course {
-        id
+        slug
         name
       }
     }
     ... on SchoolObjectType {
-      id
+      slug
       name
       __typename
     }

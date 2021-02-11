@@ -1,11 +1,9 @@
 import Typography from '@material-ui/core/Typography';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import React from 'react';
 
 export const GooglePlayBadge: React.FC = () => {
-  const { pathname } = useRouter();
-  const handleClick = () => sa_event(`click_link_to_google_play_from_${pathname}`);
+  const handleClick = () => sa_event('click_link_to_google_play');
 
   return (
     <Typography

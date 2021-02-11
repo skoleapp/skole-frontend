@@ -1,7 +1,6 @@
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { IconButtonProps } from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
 import { TextFieldProps } from '@material-ui/core/TextField';
 import { KeyboardDatePicker } from '@material-ui/pickers/DatePicker';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'; // eslint-disable-line no-restricted-imports
@@ -9,15 +8,6 @@ import { FieldAttributes, FormikProps, FormikValues } from 'formik';
 import { useTranslation } from 'lib';
 import React from 'react';
 import { DATE_PICKER_FORMAT } from 'utils';
-
-const useStyles = makeStyles(({ spacing, palette }) => ({
-  arrowButton: {
-    margin: spacing(3),
-  },
-  blackLabel: {
-    color: palette.common.black,
-  },
-}));
 
 interface Props {
   field: FieldAttributes<TextFieldProps>;
@@ -35,14 +25,12 @@ export const DatePickerFormField: React.FC<Props> = ({
   ...props
 }) => {
   const { t } = useTranslation();
-  const classes = useStyles();
 
   const arrowButtonProps: Partial<IconButtonProps> = {
     size: 'small',
   };
 
   const handleChange = (value: MaterialUiPickersDate | null) => setFieldValue(name, value);
-  const renderBlackLabel = (label: string) => <span className={classes.blackLabel}>{label}</span>;
 
   return (
     <FormControl>
@@ -56,8 +44,8 @@ export const DatePickerFormField: React.FC<Props> = ({
         minDateMessage={t('validation:minDate')}
         maxDateMessage={t('validation:maxDate')}
         okLabel={t('common:confirm')}
-        cancelLabel={renderBlackLabel(t('common:cancel'))}
-        clearLabel={renderBlackLabel(t('common:clear'))}
+        cancelLabel={t('common:cancel')}
+        clearLabel={t('common:clear')}
         disableFuture
         clearable
         {...props}

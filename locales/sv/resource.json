@@ -1,14 +1,14 @@
 {
-  "description": "Visa {{ resourceTitle }} - {{ resourceDate }} på Skole.",
-  "error": "Fel vid inläsning av resurs.",
-  "noComments": "Den här resursen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
+  "description": "Visa {{ title }} - {{ date }} på Skole.",
+  "error": "Fel vid inläsning av material.",
+  "noComments": "Den här materialen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
   "drawingMode": "Ritningsläge",
   "downloadPdf": "Ladda ner PDF",
   "printPdf": "Skriva ut PDF",
-  "shareHeader": "Dela resurs",
-  "shareTitle": "{{ resourceTitle }} på Skole",
-  "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole",
-  "share": "Dela resurs",
-  "delete": "Radera resurs",
-  "confirmDelete": "Är du säker på att du vill ta bort den här resursen?"
+  "shareHeader": "Dela material",
+  "shareTitle": "{{ title }} på Skole",
+  "shareText": "Se {{ title }} av {{ creatorUsername }} på Skole",
+  "share": "Dela material",
+  "delete": "Radera material",
+  "confirmDelete": "Är du säker på att du vill ta bort den här materialen?"
 }

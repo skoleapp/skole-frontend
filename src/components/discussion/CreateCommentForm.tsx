@@ -21,12 +21,12 @@ import {
   ResourceObjectType,
   SchoolObjectType,
   useCreateCommentMutation,
-  UserObjectType,
+  UserMeFieldsFragment,
 } from 'generated';
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { dataUriToFile, useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useMemo } from 'react';
 import { SecondaryDiscussion } from 'types';
 import { urls } from 'utils';
 
@@ -75,7 +75,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 interface CreateCommentFormValues {
-  user: UserObjectType | null;
+  user: UserMeFieldsFragment | null;
   text: string;
   attachment: string | null;
   course: CourseObjectType | null;
@@ -134,16 +134,12 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   };
 
   const onCompleted = ({ createComment }: CreateCommentMutation): void => {
-    if (createComment) {
-      if (!!createComment.errors && !!createComment.errors.length) {
-        toggleUnexpectedErrorNotification();
-      } else if (createComment.successMessage) {
-        toggleNotification(createComment.successMessage);
-        onCommentCreated();
-        sa_event('create_comment');
-      } else {
-        toggleUnexpectedErrorNotification();
-      }
+    if (createComment?.errors?.length) {
+      toggleUnexpectedErrorNotification();
+    } else if (createComment?.successMessage) {
+      toggleNotification(createComment.successMessage);
+      onCommentCreated();
+      sa_event('create_comment');
     } else {
       toggleUnexpectedErrorNotification();
     }
@@ -198,16 +194,20 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     }
   };
 
-  const initialValues = {
-    user: userMe,
-    text: '',
-    attachment: null,
-    course,
-    resource,
-    school,
-    comment,
-    secondaryDiscussion: null,
-  };
+  // Only re-render when one of the dynamic values changes - the form values will reset every time.
+  const initialValues = useMemo(
+    () => ({
+      user: userMe,
+      text: '',
+      attachment: null,
+      course,
+      resource,
+      school,
+      comment,
+      secondaryDiscussion: null,
+    }),
+    [userMe, course, resource, school, comment],
+  );
 
   const renderDialogTextFieldToolbar = <CommentTextFieldToolbar />;
   const renderAttachmentButton = <CommentAttachmentButton />;
@@ -230,10 +230,10 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     formRef.current?.setFieldValue('secondaryDiscussion', val);
   };
 
-  const secondaryDiscussionLinkHref = resource?.course
-    ? urls.course(resource.course.id)
-    : course?.school
-    ? urls.school(course.school.id)
+  const secondaryDiscussionLinkHref = resource?.course.slug
+    ? urls.course(resource.course.slug)
+    : course?.school.slug
+    ? urls.school(course.school.slug)
     : '#';
 
   const renderSecondaryDiscussionLink = (

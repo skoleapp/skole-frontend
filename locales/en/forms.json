@@ -27,8 +27,8 @@
   "searchTerm": "Course Name or Code",
   "message": "Message",
   "sendMessage": "Send Message",
-  "resourceTitle": "Resource Title",
-  "resourceType": "Resource Type",
+  "title": "Title",
+  "resourceType": "Material Type",
   "dateOptional": "Date (optional)",
   "course": "Course",
   "ordering": "Ordering",
@@ -46,5 +46,6 @@
   "contactLinkLink": "contact us and we'll add them for you!",
   "discussion": "Discussion",
   "alsoSendTo": "Also send to",
-  "emailOptional": "Email (optional)"
+  "emailOptional": "Email (optional)",
+  "yourEmail": "Your email..."
 }

@@ -9,7 +9,7 @@ const useStyles = makeStyles({
     position: 'fixed',
     height: '100vh',
     width: '100vw',
-    zIndex: 0,
+    zIndex: 0, // Underlap footer.
   },
 });
 

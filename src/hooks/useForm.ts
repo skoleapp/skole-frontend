@@ -3,7 +3,11 @@ import { FormikProps, FormikValues } from 'formik';
 import { ErrorType } from 'generated';
 import { useTranslation } from 'lib';
 import { useRef } from 'react';
-import { GeneralFormValues, MutationErrors, UseForm } from 'types';
+import { MutationErrors, UseForm } from 'types';
+
+type GeneralFormValues = FormikValues & {
+  general: string;
+};
 
 const snakeCaseToCamelCase = (str: string): string =>
   str.replace(/([-_][a-z])/g, (group) => group.toUpperCase().replace('-', '').replace('_', ''));

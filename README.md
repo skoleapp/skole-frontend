@@ -83,3 +83,5 @@ A quick look at the top-level files and directories excluding Git ignored locati
 - Whenever you add a new page that Google should index, make sure to add that entry to the [`sitemap.xml.ts`](src/pages/sitemap.xml.ts) files `staticPaths` array.
 - Whenever you add a new page that Google should not index, make sure to add that entry to the [`robots.txt.ts`](src/pages/robots.txt.ts) files `paths` array.
 - Make sure not to update `@date-io/dayjs` beyond major version 1, later versions are currently not supported by MUI date pickers.
+- For forms that use dynamic initial values, use the `enableReinitialize` prop together with the `useMemo` hook for the initial values.
+- When settings `z-index` CSS values, document the use case so it's clear on which elements that value affects.

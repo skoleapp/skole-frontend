@@ -21,13 +21,11 @@ import * as Yup from 'yup';
 
 const emailFormInitialValues = {
   email: '',
-  general: '',
 };
 
 const passwordFormInitialValues = {
   newPassword: '',
   confirmNewPassword: '',
-  general: '',
 };
 
 interface EmailFormValues {
@@ -78,32 +76,28 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const onEmailFormCompleted = ({
     sendPasswordResetEmail,
   }: SendPasswordResetEmailMutation): void => {
-    if (sendPasswordResetEmail) {
-      if (sendPasswordResetEmail.errors && !!sendPasswordResetEmail.errors.length) {
-        handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
-      } else if (sendPasswordResetEmail.successMessage) {
-        emailFormRef.current?.resetForm();
-        toggleNotification(sendPasswordResetEmail.successMessage);
-        setEmailSubmitted(true);
-      } else {
-        emailFormUnexpectedError();
-      }
+    if (sendPasswordResetEmail?.errors?.length) {
+      handleEmailFormMutationErrors(sendPasswordResetEmail.errors);
+    } else if (sendPasswordResetEmail?.successMessage) {
+      emailFormRef.current?.resetForm();
+      toggleNotification(sendPasswordResetEmail.successMessage);
+      setEmailSubmitted(true);
+    } else {
+      emailFormUnexpectedError();
     }
   };
 
   const onPasswordFormCompleted = async ({
     resetPassword,
   }: ResetPasswordMutation): Promise<void> => {
-    if (resetPassword) {
-      if (!!resetPassword.errors && !!resetPassword.errors.length) {
-        handlePasswordFormMutationErrors(resetPassword.errors);
-      } else if (resetPassword.successMessage) {
-        passwordFormRef.current?.resetForm();
-        toggleNotification(resetPassword.successMessage);
-        await Router.push(urls.logout);
-      } else {
-        passwordFormUnexpectedError();
-      }
+    if (resetPassword?.errors?.length) {
+      handlePasswordFormMutationErrors(resetPassword.errors);
+    } else if (resetPassword?.successMessage) {
+      passwordFormRef.current?.resetForm();
+      toggleNotification(resetPassword.successMessage);
+      await Router.push(urls.logout);
+    } else {
+      passwordFormUnexpectedError();
     }
   };
 

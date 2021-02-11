@@ -14,7 +14,7 @@ import { mediaLoader } from 'utils';
 const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
   root: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
-    zIndex: 9999,
+    zIndex: 3, // Overlap top and bottom navbars.
   },
   container: {
     position: 'absolute',

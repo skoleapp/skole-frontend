@@ -33,13 +33,13 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
 interface UploadResourceFormValues {
-  resourceTitle: string;
+  title: string;
   resourceType: string | null;
   date: Date | null;
   school: SchoolObjectType | null;
@@ -76,11 +76,6 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const school = R.propOr(_school, 'school', data);
   const course = R.propOr(null, 'course', data);
 
-  useEffect(() => {
-    formRef.current?.setFieldValue('school', school);
-    formRef.current?.setFieldValue('course', course);
-  }, [school, course]);
-
   const validationSchema = Yup.object().shape({
     resourceTitle: Yup.string().required(t('validation:required')),
     resourceType: Yup.object().nullable().required(t('validation:required')),
@@ -91,21 +86,13 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const onCompleted = async ({ createResource }: CreateResourceMutation): Promise<void> => {
-    if (createResource) {
-      if (!!createResource.errors && !!createResource.errors.length) {
-        handleMutationErrors(createResource.errors);
-      } else if (
-        !!createResource.resource &&
-        !!createResource.resource.id &&
-        !!createResource.successMessage
-      ) {
-        formRef.current?.resetForm();
-        toggleNotification(createResource.successMessage);
-        await Router.push(urls.resource(createResource.resource.id));
-        sa_event('upload_resource');
-      } else {
-        setUnexpectedFormError();
-      }
+    if (createResource?.errors?.length) {
+      handleMutationErrors(createResource.errors);
+    } else if (!!createResource?.resource?.slug && !!createResource.successMessage) {
+      formRef.current?.resetForm();
+      toggleNotification(createResource.successMessage);
+      await Router.push(urls.resource(createResource.resource.slug));
+      sa_event('upload_resource');
     } else {
       setUnexpectedFormError();
     }
@@ -118,7 +105,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const handleUpload = async ({
-    resourceTitle,
+    title,
     resourceType: _resourceType,
     date: _date,
     course: _course,
@@ -129,7 +116,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const course = R.propOr('', 'id', _course);
 
     const variables = {
-      resourceTitle,
+      title,
       resourceType,
       date,
       course,
@@ -142,22 +129,25 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createResource({ variables });
   };
 
-  const initialValues = {
-    resourceTitle: '',
-    resourceType: null,
-    date: new Date(),
-    school,
-    course,
-    file: null,
-    general: '',
-  };
+  // Only re-render when one of the dynamic values changes - the form values will reset every time.
+  const initialValues = useMemo(
+    () => ({
+      title: '',
+      resourceType: null,
+      date: new Date(),
+      school,
+      course,
+      file: null,
+    }),
+    [school, course],
+  );
 
   const renderResourceTitleField = (
     <Field
-      name="resourceTitle"
-      label={t('forms:resourceTitle')}
+      name="title"
+      label={t('forms:title')}
       component={TextFormField}
-      helperText={t('upload-resource:resourceTitleHelperText')}
+      helperText={t('upload-resource:titleHelperText')}
     />
   );
 
@@ -219,7 +209,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
         document={AutocompleteCoursesDocument}
         component={AutocompleteField}
         variables={{
-          school: R.path(['values', 'school', 'id'], props), // Filter courses based on selected school.
+          school: R.path(['values', 'school', 'slug'], props), // Filter courses based on selected school.
         }}
         helperText={renderCourseHelperText}
       />
@@ -265,6 +255,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={formRef}
+      enableReinitialize
     >
       {renderFormFields}
     </Formik>

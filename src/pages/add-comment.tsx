@@ -1,4 +1,4 @@
-import { DiscussionsUnion } from '__generated__/src/graphql/common.graphql';
+import { DiscussionsUnion, UserMeFieldsFragment } from '__generated__/src/graphql/common.graphql';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -25,7 +25,6 @@ import {
   CreateCommentMutation,
   useCreateCommentMutation,
   useDiscussionSuggestionsLazyQuery,
-  UserObjectType,
 } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -33,7 +32,7 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useMemo } from 'react';
 import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
@@ -45,7 +44,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 interface AddCommentFormValues {
-  user: UserObjectType | null;
+  user: UserMeFieldsFragment | null;
   text: string;
   attachment: string | null;
   discussion: DiscussionsUnion | null;
@@ -71,26 +70,26 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   }, [userMe]);
 
   const onCompleted = async ({ createComment }: CreateCommentMutation): Promise<void> => {
-    const errors = R.prop('errors', createComment);
-    const successMessage = R.prop('successMessage', createComment);
-    const course = R.path(['comment', 'course', 'id'], createComment);
-    const resource = R.path(['comment', 'resource', 'id'], createComment);
-    const school = R.path(['comment', 'school', 'id'], createComment);
-    const comment = R.path(['comment', 'id'], createComment);
-
-    if (errors.length) {
+    if (createComment?.errors?.length) {
       toggleUnexpectedErrorNotification();
-    } else if (!!successMessage && (!!course || !!resource || !!school)) {
+    } else if (
+      !!createComment?.successMessage &&
+      (!!createComment.comment?.course ||
+        !!createComment.comment?.resource ||
+        !!createComment.comment?.school)
+    ) {
+      const { id: comment, course, resource, school } = createComment.comment;
+
       formRef.current?.resetForm();
       setCommentAttachment(null);
-      toggleNotification(successMessage);
+      toggleNotification(createComment.successMessage);
 
       const pathname = resource
-        ? urls.resource(resource)
+        ? urls.resource(resource.slug || '')
         : course
-        ? urls.course(course)
+        ? urls.course(course.slug || '')
         : school
-        ? urls.school(school)
+        ? urls.school(school.slug || '')
         : '#';
 
       await Router.push({
@@ -123,9 +122,9 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     let school = null;
 
     if (userMe) {
-      course = discussion?.__typename === 'CourseObjectType' ? discussion.id : null;
-      resource = discussion?.__typename === 'ResourceObjectType' ? discussion.id : null;
-      school = discussion?.__typename === 'SchoolObjectType' ? discussion.id : null;
+      course = discussion?.__typename === 'CourseObjectType' ? discussion.slug : null;
+      resource = discussion?.__typename === 'ResourceObjectType' ? discussion.slug : null;
+      school = discussion?.__typename === 'SchoolObjectType' ? discussion.slug : null;
     } else {
       school = R.prop('id', discussion);
     }
@@ -138,12 +137,16 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     formRef.current?.setSubmitting(false);
   };
 
-  const initialValues = {
-    user: userMe,
-    discussion: null,
-    attachment: null,
-    text: '',
-  };
+  // Only re-render when one of the dynamic values changes - the form values will reset every time.
+  const initialValues = useMemo(
+    () => ({
+      user: userMe,
+      discussion: null,
+      attachment: null,
+      text: '',
+    }),
+    [userMe],
+  );
 
   const validationSchema = Yup.object().shape({
     discussion: Yup.mixed().required(t('validation:required')),
@@ -158,7 +161,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const discussionAttrs = value.split('-');
 
     const discussion = discussionSuggestions.find(
-      (s) => s.__typename === discussionAttrs[0] && s.id === discussionAttrs[1],
+      (s) => s.__typename === discussionAttrs[0] && s.slug === discussionAttrs[1],
     );
 
     formRef.current?.setFieldValue('discussion', discussion);
@@ -197,7 +200,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const mapDiscussionSuggestions = discussionSuggestions.map((d, i) => (
     <FormControlLabel
-      value={`${d.__typename}-${d.id}`} // Radio values must be string.
+      value={`${d.__typename}-${d.slug}`} // Radio values must be string.
       control={<Radio />}
       label={renderDiscussionSuggestionLabel(d)}
       key={i}

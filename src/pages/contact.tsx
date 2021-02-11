@@ -6,7 +6,7 @@ import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { SeoPageProps } from 'types';
 import * as Yup from 'yup';
 
@@ -38,15 +38,11 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const onCompleted = ({ createContactMessage }: CreateContactMessageMutation): void => {
-    if (createContactMessage) {
-      if (!!createContactMessage.errors && !!createContactMessage.errors.length) {
-        handleMutationErrors(createContactMessage.errors);
-      } else if (createContactMessage.successMessage) {
-        formRef.current?.resetForm();
-        toggleNotification(createContactMessage.successMessage);
-      } else {
-        setUnexpectedFormError();
-      }
+    if (createContactMessage?.errors?.length) {
+      handleMutationErrors(createContactMessage.errors);
+    } else if (createContactMessage?.successMessage) {
+      formRef.current?.resetForm();
+      toggleNotification(createContactMessage.successMessage);
     } else {
       setUnexpectedFormError();
     }
@@ -71,13 +67,16 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createContactMessage({ variables });
   };
 
-  const initialValues = {
-    subject: '',
-    name: '',
-    email,
-    message: '',
-    general: '',
-  };
+  // Only re-render when one of the dynamic values changes - the form values will reset every time.
+  const initialValues = useMemo(
+    () => ({
+      subject: '',
+      name: '',
+      email,
+      message: '',
+    }),
+    [email],
+  );
 
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form>

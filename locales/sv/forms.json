@@ -27,8 +27,8 @@
   "searchTerm": "Kursnamn eller kod",
   "message": "Meddelande",
   "sendMessage": "Skicka meddelande",
-  "resourceTitle": "Resursens titel",
-  "resourceType": "Resurstyp",
+  "title": "Titel",
+  "resourceType": "Materialtyp",
   "dateOptional": "Datum (optional)",
   "course": "Kurs",
   "ordering": "Ordning",
@@ -46,5 +46,6 @@
   "contactLinkLink": "kontakta oss så lägger vi till dem för dig!",
   "discussion": "Diskussion",
   "alsoSendTo": "Skicka också till",
-  "emailOptional": "E-post (frivillig)"
+  "emailOptional": "E-post (frivillig)",
+  "yourEmail": "Din e-post..."
 }

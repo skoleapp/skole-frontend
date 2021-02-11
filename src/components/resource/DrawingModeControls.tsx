@@ -1,6 +1,7 @@
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
@@ -12,7 +13,14 @@ import React from 'react';
 
 import { Emoji } from '../shared';
 
+const useStyles = makeStyles(({ spacing }) => ({
+  continueButton: {
+    padding: `${spacing(2)} ${spacing(4)}`,
+  },
+}));
+
 export const DrawingModeControls: React.FC = () => {
+  const classes = useStyles();
   const { t } = useTranslation();
   const { isTabletOrDesktop } = useMediaQueries();
   const { setDrawingMode, screenshot, setScreenshot } = usePdfViewerContext();
@@ -50,10 +58,10 @@ export const DrawingModeControls: React.FC = () => {
   const renderContinueButton = (
     <Grid item xs={6} md={2} container justify="flex-end">
       <Button
+        className={classes.continueButton}
         onClick={handleContinueButtonClick}
         endIcon={<ArrowForwardOutlined />}
         disabled={!screenshot}
-        size="small"
       >
         {t('common:continue')}
       </Button>

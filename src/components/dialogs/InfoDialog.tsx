@@ -27,7 +27,7 @@ export const InfoDialog: React.FC = () => {
 
   const { t } = useTranslation();
   const classes = useStyles();
-  const userId = R.prop('id', creator);
+  const slug = R.prop('slug', creator);
   const communityUser = t('common:communityUser');
   const createdBy = t('common:createdBy');
 
@@ -53,7 +53,7 @@ export const InfoDialog: React.FC = () => {
   ));
 
   const renderCreatorLink = !!creator && (
-    <TextLink href={urls.user(userId)}>{creator.username}</TextLink>
+    <TextLink href={urls.user(slug)}>{creator.username}</TextLink>
   );
 
   const renderCreator = creator ? renderCreatorLink : communityUser;

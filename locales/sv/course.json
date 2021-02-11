@@ -1,11 +1,11 @@
 {
-  "description": "Visa {{ resourceTitle }} - {{ courseCode }} på Skole.",
+  "description": "Visa {{ name }} - {{ code }} på Skole.",
   "noResources": "Denna kurs har inga materialer.",
   "noResourcesLink": "Lägg till material här!",
   "noComments": "Denna kurs har inga kommentarer. Lägg till en kommentar nedan!",
   "shareHeader": "Dela kurs",
-  "shareTitle": "{{ courseName }} på Skole",
-  "shareText": "Se {{ courseName }} av {{ creatorUsername }} på Skole",
+  "shareTitle": "{{ name }} på Skole",
+  "shareText": "Se {{ name }} av {{ creatorUsername }} på Skole",
   "share": "Dela kurs",
   "delete": "Radera kurs",
   "confirmDelete": "Är du säker på att du vill ta bort den här kursen?"

@@ -107,18 +107,18 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe, verified } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { query } = useRouter();
-  const variables = R.pick(['id', 'page', 'pageSize'], query);
+  const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useResourceQuery({ variables, context });
   const resource = R.prop('resource', data);
-  const resourceTitle = R.propOr('', 'title', resource);
-  const resourceDate = R.propOr('', 'date', resource);
+  const title = R.propOr('', 'title', resource);
+  const date = R.propOr('', 'date', resource);
   const resourceType = R.pathOr('-', ['resourceType', 'name'], resource);
   const courseName = R.pathOr('', ['course', 'name'], resource);
   const schoolName = R.pathOr('', ['school', 'name'], resource);
-  const courseId = R.pathOr('', ['course', 'id'], resource);
-  const schoolId = R.pathOr('', ['school', 'id'], resource);
+  const courseSlug = R.pathOr('', ['course', 'slug'], resource);
+  const schoolSlug = R.pathOr('', ['school', 'slug'], resource);
   const creatorId = R.pathOr('', ['user', 'id'], resource);
-  const title = `${resourceTitle} - ${resourceDate}`;
+  const fullTitle = `${title} - ${date}`;
   const file = mediaUrl(R.propOr('', 'file', resource));
   const resourceId = R.propOr('', 'id', resource);
   const initialVote = R.propOr(null, 'vote', resource);
@@ -178,16 +178,12 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const deleteResourceCompleted = async ({
     deleteResource,
   }: DeleteResourceMutation): Promise<void> => {
-    if (deleteResource) {
-      if (!!deleteResource.errors && !!deleteResource.errors.length) {
-        deleteResourceError();
-      } else if (deleteResource.successMessage) {
-        toggleNotification(deleteResource.successMessage);
-        await Router.push(urls.course(courseId));
-        sa_event('delete_resource');
-      } else {
-        deleteResourceError();
-      }
+    if (deleteResource?.errors?.length) {
+      deleteResourceError();
+    } else if (deleteResource?.successMessage) {
+      toggleNotification(deleteResource?.successMessage);
+      await Router.push(urls.course(courseSlug));
+      sa_event('delete_resource');
     } else {
       deleteResourceError();
     }
@@ -213,7 +209,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   const onDownloadResourceCompleted = ({ downloadResource }: DownloadResourceMutation): void => {
-    if (downloadResource && downloadResource.resource) {
+    if (downloadResource?.resource) {
       const downloads = String(downloadResource.resource.downloads);
       setDownloads(downloads);
     }
@@ -237,7 +233,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       const blob = await res.blob();
       const blobUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.download = title;
+      a.download = fullTitle;
       a.href = blobUrl;
       document.body.appendChild(a);
       a.click();
@@ -269,18 +265,18 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   };
 
-  const renderCourseLink = !!courseId && (
-    <TextLink href={urls.course(courseId)}>{courseName}</TextLink>
+  const renderCourseLink = !!courseSlug && (
+    <TextLink href={urls.course(courseSlug)}>{courseName}</TextLink>
   );
 
-  const renderSchoolLink = !!schoolId && (
-    <TextLink href={urls.school(schoolId)}>{schoolName}</TextLink>
+  const renderSchoolLink = !!schoolSlug && (
+    <TextLink href={urls.school(schoolSlug)}>{schoolName}</TextLink>
   );
 
   const infoItems = [
     {
       label: t('common:date'),
-      value: resourceDate,
+      value: date,
     },
     {
       label: t('common:resourceType'),
@@ -312,8 +308,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('resource:shareHeader'),
-    title: t('resource:shareTitle', { resourceTitle }),
-    text: t('resource:shareText', { resourceTitle, creatorUsername }),
+    title: t('resource:shareTitle', { title: fullTitle }),
+    text: t('resource:shareText', { title: fullTitle, creatorUsername }),
   };
 
   const renderShareButton = (
@@ -321,7 +317,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: title,
+    header: fullTitle,
     emoji,
     creator: resourceCreator,
     created,
@@ -410,9 +406,9 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const toolbarProps = {
-    title,
+    title: fullTitle,
     emoji,
-    courseId,
+    courseSlug,
     renderStarButton,
     renderUpvoteButton,
     renderScore,
@@ -505,7 +501,7 @@ const namespaces = ['resource', 'resource-tooltips', 'discussion', 'discussion-t
 export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const apolloClient = initApolloClient();
   const t = await getT(locale, 'resource');
-  const variables = R.pick(['id'], params);
+  const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
 
   const { data } = await apolloClient.query({
@@ -522,12 +518,12 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const resourceTitle = R.propOr('', 'title', resource);
-  const resourceDate = R.propOr('', 'date', resource);
+  const title = R.propOr('', 'title', resource);
+  const date = R.propOr('', 'date', resource);
 
   const seoProps = {
-    title: `${resourceTitle} - ${resourceDate}`,
-    description: t('description', { resourceTitle, resourceDate }),
+    title: `${title} - ${date}`,
+    description: t('description', { title, date }),
   };
 
   return {

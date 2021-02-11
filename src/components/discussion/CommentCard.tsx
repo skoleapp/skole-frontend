@@ -146,13 +146,13 @@ export const CommentCard: React.FC<Props> = ({
   const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
   const initialVote = R.propOr(null, 'vote', comment);
   const initialScore = String(R.propOr(0, 'score', comment));
-  const creatorId = R.propOr('', 'id', comment.user);
-  const isOwner = !!userMe && userMe.id === creatorId;
+  const isOwner = !!userMe && !!comment.user && userMe.id === comment.user.id;
   const commentId = R.propOr('', 'id', comment);
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
   const { setAttachmentViewerValue } = useDiscussionContext();
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], comment);
+  const creatorSlug = R.propOr('', 'user', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
 
@@ -184,16 +184,12 @@ export const CommentCard: React.FC<Props> = ({
   const handleClickAttachment = (): void => setAttachmentViewerValue(comment.attachment);
 
   const deleteCommentCompleted = ({ deleteComment }: DeleteCommentMutation): void => {
-    if (deleteComment) {
-      if (!!deleteComment.errors && !!deleteComment.errors.length) {
-        toggleUnexpectedErrorNotification();
-      } else if (deleteComment.successMessage) {
-        onCommentDeleted();
-        toggleNotification(deleteComment.successMessage);
-        sa_event('delete_comment');
-      } else {
-        toggleUnexpectedErrorNotification();
-      }
+    if (deleteComment?.errors?.length) {
+      toggleUnexpectedErrorNotification();
+    } else if (deleteComment?.successMessage) {
+      onCommentDeleted();
+      toggleNotification(deleteComment.successMessage);
+      sa_event('delete_comment');
     } else {
       toggleUnexpectedErrorNotification();
     }
@@ -242,7 +238,7 @@ export const CommentCard: React.FC<Props> = ({
   };
 
   const renderCreator = comment.user ? (
-    <TextLink href={urls.user(comment.user.id)}>{comment.user.username}</TextLink>
+    <TextLink href={urls.user(creatorSlug)}>{creatorUsername}</TextLink>
   ) : (
     t('common:communityUser')
   );
@@ -265,14 +261,14 @@ export const CommentCard: React.FC<Props> = ({
 
   // Render dynamic path name depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
   const secondaryDiscussionPathname =
-    discussionType === DiscussionTypes.SCHOOL && !!comment.course
-      ? urls.course(comment.course.id)
-      : discussionType === DiscussionTypes.COURSE && !!comment.resource
-      ? urls.resource(comment.resource.id)
-      : discussionType === DiscussionTypes.COURSE && !!comment.school
-      ? urls.school(comment.school.id)
-      : discussionType === DiscussionTypes.RESOURCE && !!comment.course
-      ? urls.course(comment.course.id)
+    discussionType === DiscussionTypes.SCHOOL && !!comment.course?.slug
+      ? urls.course(comment.course.slug)
+      : discussionType === DiscussionTypes.COURSE && !!comment.resource?.slug
+      ? urls.resource(comment.resource.slug)
+      : discussionType === DiscussionTypes.COURSE && !!comment.school?.slug
+      ? urls.school(comment.school.slug)
+      : discussionType === DiscussionTypes.RESOURCE && !!comment.course?.slug
+      ? urls.course(comment.course.slug)
       : '#';
 
   const secondaryDiscussionLinkHref = {

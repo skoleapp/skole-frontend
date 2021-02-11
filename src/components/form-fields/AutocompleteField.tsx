@@ -131,7 +131,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   };
 
   const getOptionSelected = (option: Record<string, unknown>, value: Record<string, unknown>) =>
-    option.id === value?.id;
+    option.slug === value?.slug;
 
   const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
     <TextField

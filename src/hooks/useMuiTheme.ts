@@ -50,6 +50,8 @@ export const useMuiTheme = (): Theme => {
   const _palette = createPalette(palette);
   const _breakpoints = createBreakpoints(breakpoints);
 
+  const dynamicPrimaryColor = darkMode ? 'secondary' : 'primary';
+
   const props: ComponentsProps = {
     MuiContainer: {
       maxWidth: 'xl',
@@ -74,33 +76,37 @@ export const useMuiTheme = (): Theme => {
       margin: 'none',
     },
     MuiTabs: {
-      textColor: darkMode ? 'secondary' : 'primary',
+      textColor: dynamicPrimaryColor,
       variant: 'fullWidth',
-      indicatorColor: darkMode ? 'secondary' : 'primary',
+      indicatorColor: dynamicPrimaryColor,
     },
     MuiList: {
       disablePadding: true,
     },
     MuiCheckbox: {
-      color: darkMode ? 'secondary' : 'primary',
+      color: dynamicPrimaryColor,
     },
     MuiLink: {
-      color: darkMode ? 'secondary' : 'primary',
+      color: dynamicPrimaryColor,
     },
     MuiCircularProgress: {
-      color: darkMode ? 'secondary' : 'primary',
+      color: dynamicPrimaryColor,
       disableShrink: true,
     },
     MuiBadge: {
-      color: darkMode ? 'secondary' : 'primary',
+      color: dynamicPrimaryColor,
     },
     MuiRadio: {
-      color: darkMode ? 'secondary' : 'primary',
+      color: dynamicPrimaryColor,
     },
     MuiButton: {
-      color: darkMode ? 'secondary' : 'primary',
+      color: dynamicPrimaryColor,
     },
   };
+
+  // Only use with overrides.
+  const _dynamicPrimaryColor =
+    _palette.type === 'dark' ? _palette.secondary.main : _palette.primary.main;
 
   const overrides: Overrides = {
     MuiButton: {
@@ -187,7 +193,7 @@ export const useMuiTheme = (): Theme => {
         paddingBottom: 'env(safe-area-inset-bottom)',
         paddingLeft: 'env(safe-area-inset-left)',
         paddingRight: 'env(safe-area-inset-right)',
-        zIndex: 1,
+        zIndex: 2, // Overlap form labels.
       },
     },
     MuiBottomNavigationAction: {
@@ -196,7 +202,7 @@ export const useMuiTheme = (): Theme => {
         padding: spacing(1),
         '&.Mui-selected': {
           padding: spacing(1),
-          color: _palette.type === 'dark' ? _palette.secondary.main : _palette.primary.main,
+          color: _dynamicPrimaryColor,
         },
       },
       label: {
@@ -286,6 +292,7 @@ export const useMuiTheme = (): Theme => {
         paddingLeft: 'env(safe-area-inset-left)',
         paddingRight: 'env(safe-area-inset-right)',
         paddingTop: 'env(safe-area-inset-top)',
+        zIndex: 2, // Overlap form labels.
       },
     },
     MuiTabs: {
@@ -306,6 +313,11 @@ export const useMuiTheme = (): Theme => {
     MuiStepIcon: {
       completed: {
         color: `${_palette.success.main} !important`,
+      },
+    },
+    MuiFormLabel: {
+      root: {
+        zIndex: 1, // Underlap top and bottom navbars.
       },
     },
     MuiCssBaseline: {
@@ -345,7 +357,7 @@ export const useMuiTheme = (): Theme => {
         '#nprogress': {
           '& .bar': {
             height: '0.25rem',
-            zIndex: 1101,
+            zIndex: 3, // Overlap top navbar.
             top: 'env(safe-area-inset-top)',
           },
           '& .peg': {
@@ -354,18 +366,23 @@ export const useMuiTheme = (): Theme => {
           },
         },
         '.MuiPickersModal-dialogRoot': {
-          borderRadius: BORDER_RADIUS,
-        },
-        '.MuiPickersToolbarButton-toolbarBtn': {
-          borderRadius: 0,
-        },
-        '.MuiPickersCalendarHeader-switchHeader': {
-          margin: 0,
-          padding: spacing(4),
-        },
-        '.MuiPickersToolbar-toolbar': {
-          padding: `${spacing(4)} !important`,
-          position: 'static !important' as 'static',
+          borderRadius: `${BORDER_RADIUS} !important`,
+          '& .MuiPickersToolbarButton-toolbarBtn': {
+            borderRadius: '0.25rem !important',
+          },
+          '& .MuiPickersCalendarHeader-switchHeader': {
+            margin: '0 !important',
+            padding: spacing(4),
+          },
+          '& .MuiPickersToolbar-toolbar': {
+            padding: `${spacing(4)} !important`,
+            position: 'static !important' as 'static',
+          },
+          '& .MuiPickersModal-withAdditionalAction': {
+            '& .MuiButtonBase-root': {
+              color: _dynamicPrimaryColor,
+            },
+          },
         },
       },
     },

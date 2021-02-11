@@ -16,6 +16,7 @@ export const CommentAttachmentPreview: React.FC<FormControlProps> = (props) => {
         height={720}
         src={String(commentAttachment)}
         alt={t('discussion:attachmentAlt')}
+        objectFit="contain"
       />
     </FormControl>
   ) : null;

@@ -41,7 +41,7 @@ interface Props extends TableRowProps {
 
 export const CourseTableRow: React.FC<Props> = ({
   course: {
-    id,
+    slug,
     name,
     code,
     user,
@@ -67,8 +67,8 @@ export const CourseTableRow: React.FC<Props> = ({
   const renderCourseChip = !hideCourseChip && <TableRowChip label={t('common:course')} />;
   const renderCourseCodeChip = <TableRowChip label={code} />;
 
-  const renderCourseCreator = user ? (
-    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
+  const renderCourseCreator = user?.slug ? (
+    <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
   ) : (
     t('common:communityUser')
   );
@@ -226,7 +226,7 @@ export const CourseTableRow: React.FC<Props> = ({
   };
 
   return (
-    <Link href={urls.course(id)} key={key}>
+    <Link href={urls.course(slug || '')} key={key}>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>
