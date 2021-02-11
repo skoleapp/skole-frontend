@@ -249,7 +249,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) =
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
   const headerText = t('common:description');
-  const suggestionsHeaderText = t('home:suggestionsHeader');
+  const suggestionsHeaderText = t('common:suggestions');
   const nextStepsHeaderText = t('home:nextStepsHeader');
 
   const ShareDialogParams = {
