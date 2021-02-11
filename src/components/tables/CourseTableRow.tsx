@@ -9,7 +9,6 @@ import { CourseObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Link from 'next/link';
-import * as R from 'ramda';
 import React from 'react';
 import { BORDER } from 'styles';
 import { ColSpan, TableRowProps } from 'types';
