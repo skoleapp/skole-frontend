@@ -9,6 +9,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -32,6 +34,7 @@ import {
   LoadingTemplate,
   SettingsButton,
   SuggestionsTable,
+  TextLink,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
 import { readdirSync } from 'fs';
@@ -128,12 +131,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
   },
-  shortcut: {
-    padding: spacing(2),
-  },
-  card: {
-    flexGrow: 1,
+  shortcutCard: {
     display: 'flex',
+    margin: spacing(2),
   },
   cardActionArea: {
     flexGrow: 1,
@@ -145,35 +145,45 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  shortcutTextContainer: {
+    overflow: 'hidden',
+  },
+  blogContainer: {
+    padding: spacing(2),
+  },
   shortcutText: {
     fontSize: '1.25rem',
-    [breakpoints.down('md')]: {
-      marginLeft: spacing(4),
-    },
-    [breakpoints.up('md')]: {
-      marginTop: spacing(2),
-      fontSize: '1.5rem',
-    },
+    flexGrow: 1,
+    marginLeft: spacing(4),
   },
   shortcutArrow: {
     marginLeft: spacing(2),
+    color: palette.text.secondary,
   },
   avatar: {
     height: '2.5rem',
     width: '2.5rem',
     backgroundColor: palette.type === 'dark' ? palette.secondary.main : palette.primary.main,
-    [breakpoints.up('md')]: {
-      height: '3.5rem',
-      width: '3.5rem',
-    },
   },
   avatarIcon: {
     height: '1.5rem',
     width: '1.5rem',
-    [breakpoints.up('md')]: {
-      height: '2rem',
-      width: '2rem',
-    },
+  },
+  blogCard: {
+    margin: spacing(2),
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  blogCardContent: {
+    marginTop: 'auto',
+    padding: `${spacing(2)} !important`,
+  },
+  blogHeaderRoot: {
+    borderBottom: BORDER,
+  },
+  blogHeaderTitle: {
+    color: palette.text.secondary,
   },
   suggestionsPaper: {
     borderRadius: BORDER_RADIUS,
@@ -232,6 +242,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
 
 interface Props extends SeoPageProps {
   update: MarkdownPageData;
+  blogs: MarkdownPageData[];
 }
 
 interface Shortcut {
@@ -240,10 +251,10 @@ interface Shortcut {
   href: string | UrlObject;
 }
 
-const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) => {
+const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blogs }) => {
   const classes = useStyles();
+  const { isTabletOrDesktop } = useMediaQueries();
   const { userMe, verified, school, subject } = useAuthContext();
-  const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
   const { searchUrl, searchInputProps, handleSubmitSearch } = useSearch();
@@ -289,6 +300,14 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) =
       href: urls.addCourse,
     },
   ];
+
+  if (school?.name && school.slug) {
+    shortcuts.unshift({
+      text: school.name,
+      icon: ChatOutlined,
+      href: urls.school(school.slug),
+    });
+  }
 
   const renderLaunchIconButton = !userMe && (
     <Link href={urls.index}>
@@ -364,40 +383,67 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) =
     </Grid>
   );
 
-  const renderArrow = isMobile && <ArrowForwardOutlined className={classes.shortcutArrow} />;
-
-  const mapShortcuts = shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-    <Grid className={classes.shortcut} item xs={12} key={i} container>
-      <Link href={href}>
-        <Card className={clsx(classes.card)}>
-          <CardActionArea className={classes.cardActionArea}>
-            <CardContent className={classes.cardContent}>
-              <Grid container direction={isMobile ? 'row' : 'column'} alignItems="center">
-                <Avatar className={clsx(classes.avatar)}>
-                  <Icon className={classes.avatarIcon} />
-                </Avatar>
-                <Typography
-                  className={classes.shortcutText}
-                  variant="subtitle1"
-                  color="textSecondary"
-                  align="center"
-                >
-                  <Grid container alignItems="center">
-                    {t(text)} {renderArrow}
-                  </Grid>
-                </Typography>
-              </Grid>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </Link>
-    </Grid>
+  const renderShortcuts = shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
+    <Link href={href} key={i}>
+      <Card className={classes.shortcutCard}>
+        <CardActionArea className={classes.cardActionArea}>
+          <CardContent className={classes.cardContent}>
+            <Grid
+              className={classes.shortcutTextContainer}
+              container
+              alignItems="center"
+              wrap="nowrap"
+            >
+              <Avatar className={classes.avatar}>
+                <Icon className={classes.avatarIcon} />
+              </Avatar>
+              <Typography
+                className={clsx(classes.shortcutText, 'truncate-text')}
+                variant="subtitle1"
+                color="textSecondary"
+              >
+                {t(text)}
+              </Typography>
+              <ArrowForwardOutlined className={classes.shortcutArrow} />
+            </Grid>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </Link>
   ));
 
-  const renderShortcuts = (
-    <Grid item xs={12} md={4} lg={3} container>
-      {mapShortcuts}
-    </Grid>
+  const blogHeaderText = t('Skole Blog');
+  const renderBlogHeaderEmoji = <Emoji emoji="📃" />;
+
+  const renderBlogHeader = (
+    <>
+      {blogHeaderText}
+      {renderBlogHeaderEmoji}
+    </>
+  );
+
+  const renderBlog = isTabletOrDesktop && (
+    <Card className={classes.blogCard}>
+      <CardHeader
+        classes={{
+          root: classes.blogHeaderRoot,
+          title: classes.blogHeaderTitle,
+        }}
+        title={renderBlogHeader}
+      />
+      {blogs.map(({ slug = '', title }, i) => (
+        <ListItem key={i}>
+          <ListItemText>
+            <TextLink href={urls.blog(slug)}>{title}</TextLink>
+          </ListItemText>
+        </ListItem>
+      ))}
+      <CardContent className={classes.blogCardContent}>
+        <ButtonLink href={urls.blogs} endIcon={<ArrowForwardOutlined />} fullWidth>
+          {t('common:seeAll')}
+        </ButtonLink>
+      </CardContent>
+    </Card>
   );
 
   const renderSuggestionsTableFooter = (
@@ -416,24 +462,27 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title } }) =
   );
 
   const renderSuggestionsPreview = (
-    <Grid item xs={12} md={8} lg={9} container>
-      <Paper className={classes.suggestionsPaper}>
-        <CardHeader className={classes.suggestionsCardHeader} title={suggestionsHeader} />
-        <SuggestionsTable
-          suggestions={suggestions}
-          renderTableFooter={renderSuggestionsTableFooter}
-          tableContainerProps={{ className: classes.suggestionsTableContainer }}
-          dense
-        />
-      </Paper>
-    </Grid>
+    <Paper className={classes.suggestionsPaper}>
+      <CardHeader className={classes.suggestionsCardHeader} title={suggestionsHeader} />
+      <SuggestionsTable
+        suggestions={suggestions}
+        renderTableFooter={renderSuggestionsTableFooter}
+        tableContainerProps={{ className: classes.suggestionsTableContainer }}
+        dense
+      />
+    </Paper>
   );
 
   const renderMidSection = (
     <Grid className={classes.midSectionContainer} container justify="center">
       <Grid item xs={12} lg={10} xl={7} container justify="center">
-        {renderShortcuts}
-        {renderSuggestionsPreview}
+        <Grid item xs={12} md={4} lg={3} container direction="column">
+          {renderShortcuts}
+          {renderBlog}
+        </Grid>
+        <Grid item xs={12} md={8} lg={9} container>
+          {renderSuggestionsPreview}
+        </Grid>
       </Grid>
     </Grid>
   );
@@ -612,21 +661,34 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const tHome = await getT(locale, 'home');
   const tCommon = await getT(locale, 'common');
 
-  const fileNames = readdirSync('markdown/en/updates');
+  const updateFileNames = readdirSync('markdown/en/updates');
   const updates = [];
 
-  for (const fileName of fileNames) {
+  for (const fileName of updateFileNames) {
     const slug = fileName.replace(/\.md$/, '');
     const { data } = await loadMarkdown(`updates/${slug}`);
     updates.push(data);
   }
 
-  const mostRecentDate = updates
+  const mostRecentUpdate = updates
     .map(({ date }) => date)
     .sort()
     .reverse()[0];
 
-  const update = updates.find(({ date }) => date === mostRecentDate);
+  const update = updates.find(({ date }) => date === mostRecentUpdate);
+
+  const blogFileNames = readdirSync('markdown/en/blogs');
+  const _blogs: MarkdownPageData[] = [];
+
+  for (const fileName of blogFileNames) {
+    const slug = fileName.replace(/\.md$/, '');
+    const { data } = await loadMarkdown(`blogs/${slug}`);
+    _blogs.push(data);
+  }
+
+  const blogs = _blogs
+    .sort((a, b) => (Number(a.date) > Number(b.date) ? Number(a.date) : Number(b.date)))
+    .slice(0, 2);
 
   return {
     props: {
@@ -636,6 +698,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
         description: tCommon('description'),
       },
       update,
+      blogs,
     },
   };
 };
