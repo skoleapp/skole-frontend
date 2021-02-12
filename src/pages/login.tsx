@@ -15,7 +15,13 @@ import {
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
-import { LoginMutation, useLoginMutation } from 'generated';
+import {
+  LoginMutation,
+  useLoginMutation,
+  UserObjectType,
+  UserQuery,
+  useUserLazyQuery,
+} from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
@@ -54,7 +60,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
-  const [existingUser, setExistingUser] = useState(null);
+  const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
   const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
   const context = useLanguageHeaderContext();
 
@@ -72,9 +78,27 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const validExistingUser =
     !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
 
+  const handleExistingUser = (data: UserQuery) => {
+    if (data.user?.avatar && existingUser && existingUser?.avatar !== data.user.avatar) {
+      setExistingUser({ ...existingUser, avatar: data.user.avatar });
+    }
+  };
+
+  const [userQuery] = useUserLazyQuery({
+    onCompleted: handleExistingUser,
+    context,
+  });
+
   useEffect(() => {
-    const existingUser = JSON.parse(localStorage.getItem('user') || 'null');
-    setExistingUser(existingUser);
+    (async (): Promise<void> => {
+      try {
+        const existingUser = JSON.parse(localStorage.getItem('user') || 'null');
+        setExistingUser(existingUser);
+        await userQuery({ variables: { slug: existingUser?.slug } });
+      } catch {
+        // Something wrong with the LS value.
+      }
+    })();
   }, []);
 
   const validationSchema = Yup.object().shape({
