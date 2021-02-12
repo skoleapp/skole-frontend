@@ -11,12 +11,11 @@ import PrintOutlined from '@material-ui/icons/PrintOutlined';
 import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
-import Link from 'next/link';
 import React from 'react';
 import { BORDER } from 'styles';
 import { urls } from 'utils';
 
-import { Emoji } from '../shared';
+import { Emoji, Link } from '../shared';
 import { DrawingModeButton } from './DrawingModeButton';
 import { DrawingModeControls } from './DrawingModeControls';
 import { RotateButton } from './RotateButton';

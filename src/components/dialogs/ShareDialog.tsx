@@ -9,11 +9,10 @@ import LinkOutlined from '@material-ui/icons/LinkOutlined';
 import MailOutlined from '@material-ui/icons/MailOutlined';
 import { useNotificationsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { SocialMediaIcon } from '../shared';
+import { Link, SocialMediaIcon } from '../shared';
 import { ResponsiveDialog } from './ResponsiveDialog';
 
 const useStyles = makeStyles({

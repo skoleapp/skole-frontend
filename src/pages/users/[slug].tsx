@@ -20,6 +20,7 @@ import {
   CourseTableBody,
   Emoji,
   ErrorTemplate,
+  Link,
   LoadingTemplate,
   MainTemplate,
   NotFoundBox,
@@ -35,7 +36,6 @@ import { withUserMe } from 'hocs';
 import { useDayjs, useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useState } from 'react';

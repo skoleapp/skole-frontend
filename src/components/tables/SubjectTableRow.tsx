@@ -7,11 +7,12 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import Link from 'next/link';
 import React from 'react';
 import { BORDER } from 'styles';
 import { TableRowProps } from 'types';
 import { urls } from 'utils';
+
+import { Link } from '../shared';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {

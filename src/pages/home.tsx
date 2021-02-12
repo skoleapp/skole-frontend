@@ -28,6 +28,7 @@ import {
   Emoji,
   ErrorTemplate,
   LandingPageTemplate,
+  Link,
   LoadingTemplate,
   SettingsButton,
   SuggestionsTable,
@@ -40,7 +41,6 @@ import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
-import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';

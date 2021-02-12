@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 import { urls } from 'utils';
+
+import { Link } from './Link';
 
 const useStyles = makeStyles({
   root: {
