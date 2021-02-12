@@ -8,14 +8,13 @@ import clsx from 'clsx';
 import { ResourceObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER } from 'styles';
 import { ColSpan, TableRowProps } from 'types';
 import { urls } from 'utils';
 
-import { TextLink } from '../shared';
+import { Link, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({

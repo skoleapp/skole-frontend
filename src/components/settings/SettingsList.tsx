@@ -17,10 +17,11 @@ import {
 } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { SETTINGS_ITEMS, urls } from 'utils';
+
+import { Link } from '../shared';
 
 interface Props {
   dialog?: boolean;

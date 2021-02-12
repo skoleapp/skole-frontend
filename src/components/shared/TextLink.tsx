@@ -1,6 +1,8 @@
 import MaterialLink, { LinkProps as MaterialLinkProps } from '@material-ui/core/Link';
-import Link, { LinkProps } from 'next/link';
+import { LinkProps } from 'next/link';
 import React from 'react';
+
+import { Link } from './Link';
 
 type Props = LinkProps & Omit<MaterialLinkProps, 'href'>;
 

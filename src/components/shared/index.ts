@@ -11,6 +11,7 @@ export { IconButtonLink } from './IconButtonLink';
 export { InfoButton } from './InfoButton';
 export { LanguageButton } from './LanguageButton';
 export { LanguageFlag } from './LanguageFlag';
+export { Link } from './Link';
 export { LoadingBox } from './LoadingBox';
 export { Logo } from './Logo';
 export { MarkdownContent } from './MarkdownContent';

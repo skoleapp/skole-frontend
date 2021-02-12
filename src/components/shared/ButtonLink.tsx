@@ -1,6 +1,8 @@
 import Button, { ButtonProps } from '@material-ui/core/Button';
-import Link, { LinkProps } from 'next/link';
+import { LinkProps } from 'next/link';
 import React from 'react';
+
+import { Link } from './Link';
 
 type Props = LinkProps & Omit<ButtonProps, 'href'>;
 

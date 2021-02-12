@@ -33,7 +33,6 @@ import clsx from 'clsx';
 import { useAuthContext, useDarkModeContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { MouseEvent, useState } from 'react';
 import {
@@ -52,6 +51,7 @@ import {
   Emoji,
   IconButtonLink,
   LanguageButton,
+  Link,
   Logo,
   TopNavbarSearchWidget,
 } from '../shared';

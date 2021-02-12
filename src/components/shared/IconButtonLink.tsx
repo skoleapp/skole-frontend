@@ -1,7 +1,9 @@
 import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import Link, { LinkProps } from 'next/link';
+import { LinkProps } from 'next/link';
 import React, { forwardRef } from 'react';
+
+import { Link } from './Link';
 
 type SvgIconComponent = typeof SvgIcon;
 

@@ -9,11 +9,12 @@ import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import { useAuthContext } from 'context';
 import { useSearch } from 'hooks';
 import { useTranslation } from 'lib';
-import Link from 'next/link';
 import Router, { useRouter } from 'next/router';
 import React, { ChangeEvent, useState } from 'react';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
+
+import { Link } from '../shared';
 
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
