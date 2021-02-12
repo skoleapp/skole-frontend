@@ -12,7 +12,7 @@ export const ActivityTableBody: React.FC<Props> = ({ activities }) => (
   <TableBody>
     {activities.map((a, i) => (
       <ActivityListItem
-        key={`${a.id}_${i}`} // Ensure the key is always unique for different activities in different order.
+        key={`${a.id}_${i}_${a.read}`} // Ensure the key is always unique for different activities in different order.
         activity={a}
       />
     ))}
