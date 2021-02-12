@@ -1,9 +1,7 @@
 {
   "username": "Username",
   "usernameOrEmail": "Username or Email",
-  "usernameHelperText": "Your username will show to other users.",
   "email": "Email",
-  "emailHelperText": "Your email that we can use to identify you and notify you about important notices. Your email is visible only for you. We will not spam you.",
   "password": "Password",
   "oldPassword": "Old Password",
   "newPassword": "New Password",
@@ -37,8 +35,6 @@
   "scoreOrdering": "Score",
   "bestOrdering": "Best",
   "nameOptional": "Name (optional)",
-  "schoolHelpText": "Your preferred school. With this information we can automatically show you content based on it. This field is only visible for you.",
-  "subjectHelpText": "Your preferred subject. With this information we can automatically show you content based on it. This field is only visible for you.",
   "postTo": "Post to {{ target }}",
   "replyTo": "Reply to {{ username }}",
   "selectDiscussionToPost": "Select discussion to post",

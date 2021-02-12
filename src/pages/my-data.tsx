@@ -1,7 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ButtonLink, FormSubmitSection, LoginRequiredTemplate, SettingsTemplate } from 'components';
+import { ButtonLink, FormSubmitSection, FormTemplate, LoginRequiredTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
@@ -58,6 +58,11 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         </Typography>
       </FormControl>
       <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+      <FormControl>
+        <ButtonLink href={urls.accountSettings} variant="outlined">
+          {t('common:cancel')}
+        </ButtonLink>
+      </FormControl>
     </Form>
   );
 
@@ -82,7 +87,6 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         endIcon={<ArrowForwardOutlined />}
         color="primary"
         variant="contained"
-        fullWidth
       >
         {t('common:continue')}
       </ButtonLink>
@@ -109,10 +113,10 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   }
 
   return (
-    <SettingsTemplate {...layoutProps}>
+    <FormTemplate {...layoutProps}>
       {renderForm}
       {renderSubmitted}
-    </SettingsTemplate>
+    </FormTemplate>
   );
 };
 

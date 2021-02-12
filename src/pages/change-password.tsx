@@ -1,7 +1,9 @@
+import FormControl from '@material-ui/core/FormControl';
 import {
+  ButtonLink,
   FormSubmitSection,
+  FormTemplate,
   LoginRequiredTemplate,
-  SettingsTemplate,
   TextFormField,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
@@ -13,7 +15,7 @@ import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { SeoPageProps } from 'types';
-import { PASSWORD_MIN_LENGTH } from 'utils';
+import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
 const initialValues = {
@@ -96,6 +98,11 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         type="password"
       />
       <FormSubmitSection submitButtonText={t('common:save')} {...props} />
+      <FormControl>
+        <ButtonLink href={urls.accountSettings} variant="outlined">
+          {t('common:cancel')}
+        </ButtonLink>
+      </FormControl>
     </Form>
   );
 
@@ -122,7 +129,7 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     return <LoginRequiredTemplate {...layoutProps} />;
   }
 
-  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

@@ -2,8 +2,8 @@ import FormControl from '@material-ui/core/FormControl';
 import {
   ButtonLink,
   FormSubmitSection,
+  FormTemplate,
   LoginRequiredTemplate,
-  SettingsTemplate,
   TextFormField,
 } from 'components';
 import { useAuthContext, useConfirmContext, useNotificationsContext } from 'context';
@@ -93,7 +93,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderCancelButton = (
     <FormControl>
-      <ButtonLink href={urls.editProfile} variant="outlined">
+      <ButtonLink href={urls.accountSettings} variant="outlined">
         {t('common:cancel')}
       </ButtonLink>
     </FormControl>
@@ -130,7 +130,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     return <LoginRequiredTemplate {...layoutProps} />;
   }
 
-  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

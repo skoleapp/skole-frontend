@@ -7,7 +7,7 @@ import {
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { createContext, useContext, useState } from 'react';
-import { AuthContextType } from 'types';
+import { AuthContextType, EmailSettings } from 'types';
 import { mediaUrl, urls } from 'utils';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
@@ -27,6 +27,8 @@ interface UseAuthContext extends AuthContextType {
   score: string;
   school: SchoolObjectType | null;
   subject: SubjectObjectType | null;
+  productUpdateEmailPermission: boolean;
+  blogPostEmailPermission: boolean;
   loginRequiredTooltip: string | false;
   verificationRequiredTooltip: string | false;
   profileUrl: string;
@@ -51,6 +53,8 @@ export const useAuthContext = (): UseAuthContext => {
   const avatar = mediaUrl(_avatar);
   const school = R.propOr(null, 'school', userMe);
   const subject = R.propOr(null, 'subject', userMe);
+  const productUpdateEmailPermission = R.propOr(false, 'productUpdateEmailPermission', userMe);
+  const blogPostEmailPermission = R.propOr(false, 'blogPostEmailPermission', userMe);
   const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
   const profileUrl = urls.user(slug);
 
@@ -73,6 +77,8 @@ export const useAuthContext = (): UseAuthContext => {
     avatar,
     school,
     subject,
+    productUpdateEmailPermission,
+    blogPostEmailPermission,
     verificationRequiredTooltip,
     loginRequiredTooltip,
     profileUrl,

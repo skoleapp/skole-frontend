@@ -86,6 +86,9 @@ export const useMuiTheme = (): Theme => {
     MuiCheckbox: {
       color: dynamicPrimaryColor,
     },
+    MuiSwitch: {
+      color: dynamicPrimaryColor,
+    },
     MuiLink: {
       color: dynamicPrimaryColor,
     },

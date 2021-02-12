@@ -1,3 +1,4 @@
+import { useUpdateAccountSettingsMutation } from '__generated__/src/graphql/common.graphql';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -22,10 +23,8 @@ import {
   RegisterMutation,
   SchoolObjectType,
   SubjectObjectType,
-  UpdateUserMutation,
+  UpdateAccountSettingsMutation,
   useRegisterMutation,
-  UserMeFieldsFragment,
-  useUpdateUserMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -51,7 +50,7 @@ interface UpdateUserFormValues {
 
 enum RegisterPhases {
   REGISTER = 'register',
-  UPDATE_USER = 'update-user',
+  SET_SCHOOL_AND_SUBJECT = 'set-school-and-subject',
   REGISTER_COMPLETE = 'register-complete',
 }
 
@@ -59,8 +58,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
-  const { userMe } = useAuthContext();
-  const [registeredUser, setRegisteredUser] = useState<UserMeFieldsFragment | null>(null);
+  const { userMe, setUserMe } = useAuthContext();
 
   const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
@@ -112,8 +110,8 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       handleRegisterMutationErrors(login.errors);
     } else if (login?.user) {
       registerFormRef.current?.resetForm();
-      setRegisteredUser(login.user);
-      setPhase(RegisterPhases.UPDATE_USER);
+      setUserMe(login.user);
+      setPhase(RegisterPhases.SET_SCHOOL_AND_SUBJECT);
     } else {
       unexpectedRegisterError();
     }
@@ -137,32 +135,32 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     });
   };
 
-  const onUpdateUserCompleted = ({ updateUser }: UpdateUserMutation): void => {
-    if (updateUser?.errors?.length) {
-      handleUpdateUserMutationErrors(updateUser.errors);
+  const onUpdateUserCompleted = ({
+    updateAccountSettings,
+  }: UpdateAccountSettingsMutation): void => {
+    if (updateAccountSettings?.errors?.length) {
+      handleUpdateUserMutationErrors(updateAccountSettings.errors);
     } else {
       updateUserFormRef.current?.resetForm();
       setPhase(RegisterPhases.REGISTER_COMPLETE);
     }
   };
 
-  const [updateUserMutation] = useUpdateUserMutation({
+  const [updateAccountSettings] = useUpdateAccountSettingsMutation({
     onCompleted: onUpdateUserCompleted,
     onError: onUpdateUserError,
     context,
   });
 
-  const handleRegisterCompleteSubmit = async ({
+  const handleSubmitSetSchoolAndSubject = async ({
     school,
     subject,
   }: UpdateUserFormValues): Promise<void> => {
-    await updateUserMutation({
+    const variables = R.pick(['email', 'productUpdatePermission', 'blogPostEmailPermission']);
+
+    await updateAccountSettings({
       variables: {
-        username: R.propOr('', 'username', registeredUser),
-        email: R.propOr('', 'email', registeredUser),
-        title: '',
-        bio: '',
-        avatar: '',
+        ...variables,
         school: R.propOr('', 'id', school),
         subject: R.propOr('', 'id', subject),
       },
@@ -174,7 +172,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       label={t('forms:username')}
       name="username"
       component={TextFormField}
-      helperText={t('forms:usernameHelperText')}
+      helperText={t('register:usernameHelperText')}
     />
   );
 
@@ -183,7 +181,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       label={t('forms:email')}
       name="email"
       component={TextFormField}
-      helperText={t('forms:emailHelperText')}
+      helperText={t('register:emailHelperText')}
     />
   );
 
@@ -298,11 +296,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Form>
   );
 
-  const renderUpdateUserForm = phase === RegisterPhases.UPDATE_USER && (
+  const renderUpdateUserForm = phase === RegisterPhases.SET_SCHOOL_AND_SUBJECT && (
     <Formik
       initialValues={updateUserInitialValues}
       validationSchema={updateUserValidationSchema}
-      onSubmit={handleRegisterCompleteSubmit}
+      onSubmit={handleSubmitSetSchoolAndSubject}
       innerRef={updateUserFormRef}
     >
       {renderUpdateUserFormFields}
@@ -324,7 +322,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         endIcon={<ArrowForwardOutlined />}
         color="primary"
         variant="contained"
-        fullWidth
       >
         {t('common:continue')}
       </ButtonLink>

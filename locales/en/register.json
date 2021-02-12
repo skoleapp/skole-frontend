@@ -2,6 +2,8 @@
   "title": "Register",
   "description": "Register on Skole.",
   "header": "Register",
+  "emailHelperText": "Ditt e-postmeddelande som vi kan använda för att identifiera dig. Ditt e-postmeddelande är endast synligt för dig. Vi kommer inte att skräpposta dig.",
+  "usernameHelperText": "Your username will show to other users.",
   "termsHelpText": "By registering you agree to our",
   "updateUserText": "Almost done! By setting your school and subject we will be able to automatically show you content based on them. You can also add these later.",
   "registerCompleteText": "Done! Also, please check your email for a link that you can use to verify your account."
