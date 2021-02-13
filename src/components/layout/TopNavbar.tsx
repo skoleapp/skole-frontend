@@ -95,8 +95,9 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   tab: {
     borderBottom: 'none',
     color: palette.secondary.main,
-    minHeight: 'auto',
     minWidth: 'auto',
+    minHeight: 'auto',
+    height: '100%',
     padding: `${spacing(2)} ${spacing(3)}`,
   },
   selectedTab: {
