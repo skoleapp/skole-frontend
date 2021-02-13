@@ -29,6 +29,7 @@ import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
+import WhatshotOutlined from '@material-ui/icons/WhatshotOutlined';
 import clsx from 'clsx';
 import { useAuthContext, useDarkModeContext } from 'context';
 import { useMediaQueries } from 'hooks';
@@ -94,8 +95,9 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   tab: {
     borderBottom: 'none',
     color: palette.secondary.main,
-    minHeight: 'auto',
     minWidth: 'auto',
+    minHeight: 'auto',
+    height: '100%',
     padding: `${spacing(2)} ${spacing(3)}`,
   },
   selectedTab: {
@@ -366,6 +368,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       href: urls.uploadResource,
       label: t('common:uploadResources'),
       icon: CloudUploadOutlined,
+    },
+    {
+      href: urls.suggestions,
+      label: t('common:suggestions'),
+      icon: WhatshotOutlined,
     },
   ];
 

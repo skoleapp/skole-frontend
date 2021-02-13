@@ -22,6 +22,9 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
   ctaHeader: {
     fontSize: '1.5rem',
+    [breakpoints.up('xs')]: {
+      fontSize: '1.75rem',
+    },
     [breakpoints.up('sm')]: {
       fontSize: '2rem',
     },
@@ -102,15 +105,13 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderCtaSubheader = (
-    <Grid item xs={12} sm={10} md={8} lg={4}>
-      <Typography variant="subtitle1" color="secondary" align="center">
-        {t('index:ctaSubheader1')}
-        <strong>{t('index:ctaSubheader2')}</strong>
-        {t('index:ctaSubheader3')}
-        <strong> {t('index:ctaSubheader4')}</strong>
-        {t('index:ctaSubheader5')}
-      </Typography>
-    </Grid>
+    <Typography variant="subtitle1" color="secondary" align="center">
+      {t('index:ctaSubheader1')}
+      <strong>{t('index:ctaSubheader2')}</strong>
+      {t('index:ctaSubheader3')}
+      <strong> {t('index:ctaSubheader4')}</strong>
+      {t('index:ctaSubheader5')}
+    </Typography>
   );
 
   const renderCtaButton = (

@@ -50,6 +50,12 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     border: `0.1rem solid ${palette.primary.main} !important`,
     borderRadius: '0.5rem',
   },
+  creatorInfo: {
+    display: 'flex',
+  },
+  creator: {
+    margin: `0 ${spacing(1)}`,
+  },
 }));
 
 interface Props extends TableRowProps {
@@ -68,6 +74,7 @@ export const CommentTableRow: React.FC<Props> = ({
     user,
     course,
     resource,
+    school,
     comment,
   },
   hideCommentChip,
@@ -85,8 +92,10 @@ export const CommentTableRow: React.FC<Props> = ({
   const pathname =
     (!!course?.slug && urls.course(course.slug)) ||
     (!!resource?.slug && urls.resource(resource.slug)) ||
-    (!!comment && !!comment.course?.slug && urls.course(comment.course.slug)) ||
-    (!!comment && !!comment.resource?.slug && urls.resource(comment.resource.slug)) ||
+    (!!school?.slug && urls.resource(school.slug)) ||
+    (!!comment?.course?.slug && urls.course(comment.course.slug)) ||
+    (!!comment?.resource?.slug && urls.resource(comment.resource.slug)) ||
+    (!!comment?.school?.slug && urls.resource(comment.school.slug)) ||
     '';
 
   const href = {
@@ -97,13 +106,27 @@ export const CommentTableRow: React.FC<Props> = ({
   };
 
   const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
-  const renderCourseChip = !!course && <TableRowChip label={course.name} />;
-  const renderResourceChip = !!resource && <TableRowChip label={resource.title} />;
 
-  const renderCommentCreator = user?.slug ? (
+  const renderCourseChip = (!!course || comment?.course) && (
+    <TableRowChip label={course?.name || comment?.course?.name} />
+  );
+
+  const renderResourceChip = (!!resource || comment?.resource) && (
+    <TableRowChip label={resource?.title || comment?.resource?.title} />
+  );
+
+  const renderSchoolChip = (!!school || comment?.school) && (
+    <TableRowChip label={school?.name || comment?.school?.name} />
+  );
+
+  const renderReplyChip = !!comment && <TableRowChip label={t('common:reply')} />;
+
+  const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
-  ) : (
-    t('common:communityUser')
+  );
+
+  const renderCommentCreator = (
+    <span className={classes.creator}>{renderUserLink || t('common:communityUser')}</span>
   );
 
   const renderMobileCommentStats = isMobile && (
@@ -190,7 +213,7 @@ export const CommentTableRow: React.FC<Props> = ({
   );
 
   const renderCreatorInfo = (
-    <Typography variant="body2" color="textSecondary">
+    <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
       {t('common:postedBy')} {renderCommentCreator} {created}
     </Typography>
   );
@@ -200,6 +223,8 @@ export const CommentTableRow: React.FC<Props> = ({
       {renderCommentChip}
       {renderCourseChip}
       {renderResourceChip}
+      {renderSchoolChip}
+      {renderReplyChip}
     </Grid>
   );
 

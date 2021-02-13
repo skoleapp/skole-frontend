@@ -1,7 +1,6 @@
 {
   "title": "Hemsida",
   "subheader": "Försök att söka efter en kurs!",
-  "suggestionsHeader": "Tränding",
   "nextStepsHeader": "Nästa steg",
   "inviteHeader": "Skole handlar om samarbete med dina klasskamrater. Bjud in dina vänner!",
   "inviteText": "Bjud in vänner",
@@ -14,5 +13,6 @@
   "addSchoolAndSubjectHeader": "Lägg till din skola och ämne för att se mer relevant innehåll!",
   "addSchoolAndSubjectText": "Fyll i din profil",
   "uploadHeader": "Dela ditt studiematerial med andra användare och öka din poäng!",
-  "uploadText": "Ladda upp material"
+  "uploadText": "Ladda upp material",
+  "skoleBlog": "Skole Blogg"
 }

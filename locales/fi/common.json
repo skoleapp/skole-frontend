@@ -26,7 +26,7 @@
   "apply": "Käytä",
   "clear": "Tyhjennä",
   "cancel": "Peruuta",
-  "reply": "Vastaa",
+  "reply": "Vastaus",
   "courseCode": "Kurssikoodi",
   "country": "Maa",
   "city": "Kaupunki",
@@ -81,7 +81,6 @@
   "blog": "Blogi",
   "replies": "Vastaukset",
   "postedBy": "Lähettänyt",
-  "product": "Tuote",
   "updates": "Uutta",
   "unexpectedError": "Odottamaton virhe.",
   "addComment": "Lisää kommentti",
@@ -92,5 +91,6 @@
   "toggleDarkMode": "Vaihda tumma/vaalea teema",
   "feedbackHeader": "Oliko tästä sivusta apua?",
   "feedbackText": "Anna meille palautetta",
-  "feedback": "Palaute"
+  "feedback": "Palaute",
+  "suggestions": "Trendaavat"
 }

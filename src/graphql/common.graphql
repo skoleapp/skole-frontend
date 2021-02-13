@@ -245,6 +245,7 @@ fragment paginatedResourceFields on PaginatedResourceObjectType {
 
 query Course($slug: String, $page: Int, $pageSize: Int) {
   course(slug: $slug) {
+    id
     slug
     name
     code
@@ -329,6 +330,7 @@ mutation DeleteCourse($id: ID) {
 
 query Resource($slug: String) {
   resource(slug: $slug) {
+    id
     slug
     title
     file
@@ -563,6 +565,7 @@ fragment commentFields on CommentObjectType {
   replyCount
   user {
     id
+    slug
     username
     avatarThumbnail
   }
@@ -573,6 +576,10 @@ fragment commentFields on CommentObjectType {
   resource {
     slug
     title
+  }
+  school {
+    slug
+    name
   }
 }
 
@@ -609,9 +616,15 @@ query User($slug: String, $page: Int, $pageSize: Int) {
       comment {
         course {
           slug
+          name
         }
         resource {
           slug
+          title
+        }
+        school {
+          slug
+          name
         }
       }
     }

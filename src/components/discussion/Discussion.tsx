@@ -237,8 +237,7 @@ export const Discussion: React.FC<Props> = ({
   );
 
   const mapComments =
-    !!comments &&
-    !!comments.length &&
+    !!comments?.length &&
     comments.slice(0, visibleComments).map((tc, i) => (
       <>
         {renderTopComment(tc, i)}
@@ -247,10 +246,7 @@ export const Discussion: React.FC<Props> = ({
       </>
     ));
 
-  const renderLoading = ((!!loading && (!comments || !comments.length)) || !mapComments) && (
-    <LoadingBox />
-  );
-
+  const renderLoading = loading && <LoadingBox />;
   const renderError = !!error && <ErrorBox />;
   const renderCommentsNotFound = !!noCommentsText && <NotFoundBox text={noCommentsText} />;
   const renderComments = renderError || mapComments || renderLoading || renderCommentsNotFound;

@@ -11,6 +11,7 @@ export const GooglePlayBadge: React.FC = () => {
       component="a"
       href="https://play.google.com/store/apps/details?id=com.skole"
       target="_blank"
+      rel="noreferrer"
     >
       <Image
         layout="responsive"

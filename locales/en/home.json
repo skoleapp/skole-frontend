@@ -1,7 +1,6 @@
 {
   "title": "Home",
   "subheader": "Try searching for a course!",
-  "suggestionsHeader": "Trending",
   "nextStepsHeader": "Next Steps",
   "inviteHeader": "Skole is all about collaboration. Invite your friends!",
   "inviteText": "Invite Friends",
@@ -14,5 +13,6 @@
   "addSchoolAndSubjectHeader": "Add your school and subject to see more relevant content!",
   "addSchoolAndSubjectText": "Complete Your Profile",
   "uploadHeader": "Share your study materials with other users and increase your score!",
-  "uploadText": "Upload Material"
+  "uploadText": "Upload Material",
+  "skoleBlog": "Skole Blog"
 }

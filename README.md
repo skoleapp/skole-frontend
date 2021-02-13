@@ -85,3 +85,4 @@ A quick look at the top-level files and directories excluding Git ignored locati
 - Make sure not to update `@date-io/dayjs` beyond major version 1, later versions are currently not supported by MUI date pickers.
 - For forms that use dynamic initial values, use the `enableReinitialize` prop together with the `useMemo` hook for the initial values.
 - When settings `z-index` CSS values, document the use case so it's clear on which elements that value affects.
+- Do not use `next/link`, use our custom `Link`-component instead to make sure anchor tags are always rendered properly.
