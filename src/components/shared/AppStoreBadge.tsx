@@ -21,6 +21,7 @@ export const AppStoreBadge: React.FC = () => {
       component="a"
       href="https://apps.apple.com/app/skole-for-students/id1547995609"
       target="_blank"
+      rel="noreferrer"
     >
       <Image
         className={classes.image}
