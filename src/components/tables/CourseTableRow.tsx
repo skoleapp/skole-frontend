@@ -31,6 +31,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       justifyContent: 'flex-end',
     },
   },
+  creatorInfo: {
+    display: 'flex',
+  },
+  creator: {
+    margin: `0 ${spacing(1)}`,
+  },
 }));
 
 interface Props extends TableRowProps {
@@ -66,10 +72,12 @@ export const CourseTableRow: React.FC<Props> = ({
   const renderCourseChip = !hideCourseChip && <TableRowChip label={t('common:course')} />;
   const renderCourseCodeChip = <TableRowChip label={code} />;
 
-  const renderCourseCreator = user?.slug ? (
+  const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
-  ) : (
-    t('common:communityUser')
+  );
+
+  const renderCourseCreator = (
+    <span className={classes.creator}>{renderUserLink || t('common:communityUser')}</span>
   );
 
   const renderMobileCourseStats = isMobile && (
@@ -176,7 +184,7 @@ export const CourseTableRow: React.FC<Props> = ({
   );
 
   const renderCreatorInfo = (
-    <Typography variant="body2" color="textSecondary">
+    <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
       {t('common:createdBy')} {renderCourseCreator} {created}
     </Typography>
   );

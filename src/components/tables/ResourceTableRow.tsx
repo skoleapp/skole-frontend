@@ -32,6 +32,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       justifyContent: 'flex-end',
     },
   },
+  creatorInfo: {
+    display: 'flex',
+  },
+  creator: {
+    margin: `0 ${spacing(1)}`,
+  },
 }));
 
 interface Props extends TableRowProps {
@@ -76,10 +82,12 @@ export const ResourceTableRow: React.FC<Props> = ({
   const renderCourseChip = !!courseName && <TableRowChip label={courseName} />;
   const renderDateChip = !hideDateChip && <TableRowChip label={useDayjs(date).format('LL')} />;
 
-  const renderResourceCreator = user?.slug ? (
+  const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
-  ) : (
-    t('common:communityUser')
+  );
+
+  const renderResourceCreator = (
+    <span className={classes.creator}>{renderUserLink || t('common:communityUser')}</span>
   );
 
   const renderMobileResourceStats = isMobile && (
@@ -186,7 +194,7 @@ export const ResourceTableRow: React.FC<Props> = ({
   );
 
   const renderCreatorInfo = (
-    <Typography variant="body2" color="textSecondary">
+    <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
       {t('common:createdBy')} {renderResourceCreator} {created}
     </Typography>
   );

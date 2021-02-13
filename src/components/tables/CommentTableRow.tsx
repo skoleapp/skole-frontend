@@ -51,6 +51,12 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     border: `0.1rem solid ${palette.primary.main} !important`,
     borderRadius: '0.5rem',
   },
+  creatorInfo: {
+    display: 'flex',
+  },
+  creator: {
+    margin: `0 ${spacing(1)}`,
+  },
 }));
 
 interface Props extends TableRowProps {
@@ -116,10 +122,12 @@ export const CommentTableRow: React.FC<Props> = ({
 
   const renderReplyChip = !!comment && <TableRowChip label={t('common:reply')} />;
 
-  const renderCommentCreator = user ? (
-    <TextLink href={urls.user(user.id)}>{user.username}</TextLink>
-  ) : (
-    t('common:communityUser')
+  const renderUserLink = user?.slug && (
+    <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
+  );
+
+  const renderCommentCreator = (
+    <span className={classes.creator}>{renderUserLink || t('common:communityUser')}</span>
   );
 
   const renderMobileCommentStats = isMobile && (
@@ -206,7 +214,7 @@ export const CommentTableRow: React.FC<Props> = ({
   );
 
   const renderCreatorInfo = (
-    <Typography variant="body2" color="textSecondary">
+    <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
       {t('common:postedBy')} {renderCommentCreator} {created}
     </Typography>
   );
