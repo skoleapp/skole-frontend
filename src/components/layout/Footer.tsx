@@ -2,6 +2,7 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
@@ -16,8 +17,8 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     backgroundColor: palette.primary.main,
     paddingTop: spacing(8),
     paddingBottom: spacing(8),
-    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(4)})`,
-    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(4)})`,
+    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
+    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
     zIndex: 1, // Overlap main background.
   },
   header: {
@@ -40,6 +41,9 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   appStoreBadgeImageContainer: {
     maxWidth: '20rem',
   },
+  container: {
+    padding: `0 ${spacing(6)}`,
+  },
 }));
 
 export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
@@ -49,9 +53,9 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
 
   const handleClickSocialMediaLink = (name: string) => () => sa_event(`click_${name}_footer_link`);
 
-  const renderProductHeader = (
+  const renderSkoleHeader = (
     <Typography className={classes.header} variant="subtitle1" color="secondary">
-      {t('common:product').toUpperCase()}
+      SKOLE
     </Typography>
   );
 
@@ -85,9 +89,16 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     </TextLink>
   );
 
-  const renderProduct = (
-    <Grid item xs={4} container direction="column" alignItems="flex-start">
-      {renderProductHeader}
+  const renderSkole = (
+    <Grid
+      className={classes.container}
+      item
+      xs={4}
+      container
+      direction="column"
+      alignItems="flex-start"
+    >
+      {renderSkoleHeader}
       {renderGetStartedLink}
       {renderGuidelinesLink}
       {renderScoreLink}
@@ -127,7 +138,14 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   );
 
   const renderCompany = (
-    <Grid item xs={4} container direction="column" alignItems="flex-start">
+    <Grid
+      className={classes.container}
+      item
+      xs={4}
+      container
+      direction="column"
+      alignItems="flex-start"
+    >
       {renderCompanyHeader}
       {renderContactLink}
       {renderBlogLink}
@@ -173,7 +191,14 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   ));
 
   const renderSocialMediaLinks = (
-    <Grid item xs={4} container direction="column" alignItems="center">
+    <Grid
+      className={classes.container}
+      item
+      xs={4}
+      container
+      direction="column"
+      alignItems="center"
+    >
       <Typography className={classes.header} variant="subtitle1" color="secondary">
         #studyinskole
       </Typography>
@@ -182,7 +207,7 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   );
 
   const renderCopyright = (
-    <Grid container xs={4} alignItems="center">
+    <Grid className={classes.container} container xs={4} alignItems="center">
       <Typography variant="subtitle1" color="secondary">
         © {new Date().getFullYear()} Skole
       </Typography>
@@ -202,14 +227,20 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   );
 
   const renderLegal = (
-    <Grid item xs={4} container alignItems="center">
+    <Grid className={classes.container} item xs={4} container alignItems="center">
       {renderTermsLink}
       {renderPrivacyLink}
     </Grid>
   );
 
   const renderAppStoreBadges = isNotNativeApp && !hideAppStoreBadges && (
-    <Grid className={classes.appStoreBadgeContainer} item xs={4} container justify="center">
+    <Grid
+      className={clsx(classes.container, classes.appStoreBadgeContainer)}
+      item
+      xs={4}
+      container
+      justify="center"
+    >
       <Grid className={classes.appStoreBadgeImageContainer} container justify="center">
         <Grid item xs={6}>
           <AppStoreBadge />
@@ -223,9 +254,9 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
 
   return (
     <Grid container className={classes.root} justify="center">
-      <Grid item xs={12} lg={10} xl={7} container>
+      <Grid item xs={12} xl={8} container>
         <Grid item xs={12} container>
-          {renderProduct}
+          {renderSkole}
           {renderCompany}
           {renderSocialMediaLinks}
         </Grid>
