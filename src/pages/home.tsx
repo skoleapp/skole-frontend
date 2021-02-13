@@ -30,7 +30,6 @@ import {
   Emoji,
   ErrorTemplate,
   LandingPageTemplate,
-  Link,
   LoadingTemplate,
   SettingsButton,
   SuggestionsTable,
@@ -44,6 +43,7 @@ import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
+import Link from 'next/link';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
@@ -126,6 +126,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
   midSectionContainer: {
+    marginTop: spacing(2),
     paddingTop: spacing(4),
     paddingBottom: spacing(4),
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
@@ -326,26 +327,24 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
 
   const renderUpdate = (
     <Grid className={classes.topSectionContainer} container justify="center">
-      <Grid item xs={12} lg={10} xl={7} container justify="center">
-        <Link href={urls.update(slug)}>
-          <Card className={classes.updateCard}>
-            <CardActionArea>
-              <CardContent className={classes.updateCardContent}>
-                <Grid container alignItems="center" wrap="nowrap">
-                  <FiberNew className={classes.newIcon} color="primary" />
-                  <Typography
-                    className={clsx(classes.updateTitle, 'truncate-text')}
-                    variant="subtitle1"
-                  >
-                    {title}
-                  </Typography>
-                  <ArrowForwardOutlined />
-                </Grid>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        </Link>
-      </Grid>
+      <Link href={urls.update(slug)}>
+        <Card className={classes.updateCard}>
+          <CardActionArea>
+            <CardContent className={classes.updateCardContent}>
+              <Grid container alignItems="center" wrap="nowrap">
+                <FiberNew className={classes.newIcon} color="primary" />
+                <Typography
+                  className={clsx(classes.updateTitle, 'truncate-text')}
+                  variant="subtitle1"
+                >
+                  {title}
+                </Typography>
+                <ArrowForwardOutlined />
+              </Grid>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Link>
     </Grid>
   );
 
@@ -375,7 +374,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
 
   const renderSearch = (
     <Grid className={classes.topSectionContainer} container justify="center">
-      <Grid item xs={12} lg={10} xl={7}>
+      <Grid item xs={12} xl={8}>
         {renderHeader}
         {renderSubHeader}
         {renderSearchField}
@@ -412,7 +411,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </Link>
   ));
 
-  const blogHeaderText = t('Skole Blog');
+  const blogHeaderText = t('home:skoleBlog');
   const renderBlogHeaderEmoji = <Emoji emoji="📃" />;
 
   const renderBlogHeader = (
@@ -422,27 +421,37 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </>
   );
 
+  const renderBlogCardHeader = (
+    <CardHeader
+      classes={{
+        root: classes.blogHeaderRoot,
+        title: classes.blogHeaderTitle,
+      }}
+      title={renderBlogHeader}
+    />
+  );
+
+  const mapBlogs = blogs.map(({ slug = '', title }, i) => (
+    <ListItem key={i}>
+      <ListItemText>
+        <TextLink href={urls.blog(slug)}>{title}</TextLink>
+      </ListItemText>
+    </ListItem>
+  ));
+
+  const renderSeeAllBlogsButton = (
+    <CardContent className={classes.blogCardContent}>
+      <ButtonLink href={urls.blogs} endIcon={<ArrowForwardOutlined />} fullWidth>
+        {t('common:seeAll')}
+      </ButtonLink>
+    </CardContent>
+  );
+
   const renderBlog = isTabletOrDesktop && (
     <Card className={classes.blogCard}>
-      <CardHeader
-        classes={{
-          root: classes.blogHeaderRoot,
-          title: classes.blogHeaderTitle,
-        }}
-        title={renderBlogHeader}
-      />
-      {blogs.map(({ slug = '', title }, i) => (
-        <ListItem key={i}>
-          <ListItemText>
-            <TextLink href={urls.blog(slug)}>{title}</TextLink>
-          </ListItemText>
-        </ListItem>
-      ))}
-      <CardContent className={classes.blogCardContent}>
-        <ButtonLink href={urls.blogs} endIcon={<ArrowForwardOutlined />} fullWidth>
-          {t('common:seeAll')}
-        </ButtonLink>
-      </CardContent>
+      {renderBlogCardHeader}
+      {mapBlogs}
+      {renderSeeAllBlogsButton}
     </Card>
   );
 
@@ -475,7 +484,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
 
   const renderMidSection = (
     <Grid className={classes.midSectionContainer} container justify="center">
-      <Grid item xs={12} lg={10} xl={7} container justify="center">
+      <Grid item xs={12} xl={8} container justify="center">
         <Grid item xs={12} md={4} lg={3} container direction="column">
           {renderShortcuts}
           {renderBlog}
@@ -615,7 +624,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
         {nextStepsHeaderText}
         {renderNextStepsEmoji}
       </Typography>
-      <Grid className={classes.nextStepsContent} item xs={12} lg={10} xl={7} container spacing={4}>
+      <Grid className={classes.nextStepsContent} item xs={12} xl={8} container spacing={4}>
         {renderInviteStep}
         {renderDynamicStep}
         {renderContactStep}
