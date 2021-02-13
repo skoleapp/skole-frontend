@@ -1,4 +1,3 @@
-import { MenuItem } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button, { ButtonProps } from '@material-ui/core/Button';
@@ -10,8 +9,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import SvgIcon from '@material-ui/core/SvgIcon';
@@ -433,8 +432,8 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
   );
 
   const mapBlogs = blogs.map(({ slug = '', title, coverImage = '' }, i) => (
-    <Link href={urls.blog(slug)}>
-      <MenuItem key={i}>
+    <Link href={urls.blog(slug)} key={i}>
+      <MenuItem>
         <ListItemText>
           <Grid container alignItems="center">
             <Grid item xs={10}>
