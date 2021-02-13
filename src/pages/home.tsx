@@ -1,3 +1,4 @@
+import { MenuItem } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button, { ButtonProps } from '@material-ui/core/Button';
@@ -30,10 +31,10 @@ import {
   Emoji,
   ErrorTemplate,
   LandingPageTemplate,
+  Link,
   LoadingTemplate,
   SettingsButton,
   SuggestionsTable,
-  TextLink,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
 import { readdirSync } from 'fs';
@@ -43,7 +44,7 @@ import { useLanguageHeaderContext, useMediaQueries, useSearch } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
-import Link from 'next/link';
+import Image from 'next/image';
 import * as R from 'ramda';
 import React from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
@@ -431,12 +432,23 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     />
   );
 
-  const mapBlogs = blogs.map(({ slug = '', title }, i) => (
-    <ListItem key={i}>
-      <ListItemText>
-        <TextLink href={urls.blog(slug)}>{title}</TextLink>
-      </ListItemText>
-    </ListItem>
+  const mapBlogs = blogs.map(({ slug = '', title, coverImage = '' }, i) => (
+    <Link href={urls.blog(slug)}>
+      <MenuItem key={i}>
+        <ListItemText>
+          <Grid container alignItems="center">
+            <Grid item xs={10}>
+              <Typography variant="subtitle1" color="textSecondary">
+                {title}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Image src={coverImage} layout="responsive" width={16} height={12} />
+            </Grid>
+          </Grid>
+        </ListItemText>
+      </MenuItem>
+    </Link>
   ));
 
   const renderSeeAllBlogsButton = (
