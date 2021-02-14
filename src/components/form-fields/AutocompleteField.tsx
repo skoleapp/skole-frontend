@@ -84,11 +84,19 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
         context,
       });
 
+      let filteredOptions = [];
+
       // Filter out options that have already been chosen.
-      const filteredOptions = data[dataKey].filter(
-        (o: Record<string, unknown>) =>
-          !field.value?.some((v: Record<string, unknown>) => v.id === o.id),
-      );
+      if (multiple) {
+        filteredOptions = data[dataKey].filter(
+          (o: Record<string, unknown>) =>
+            !field.value?.some((v: Record<string, unknown>) => v.id === o.id),
+        );
+      } else {
+        filteredOptions = data[dataKey].filter(
+          (o: Record<string, unknown>) => !field.value?.id !== o.id,
+        );
+      }
 
       setOptions(filteredOptions);
     } catch {
