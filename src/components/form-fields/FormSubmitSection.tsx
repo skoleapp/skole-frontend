@@ -22,32 +22,35 @@ export const FormSubmitSection = <T extends FormikValues>({
 }: Props<T> & Pick<ButtonProps, 'variant' | 'endIcon'>): JSX.Element => {
   const loadingText = R.prop('general', values);
 
-  const renderTextContent = isSubmitting ? (
-    <LoadingBox text={loadingText} />
-  ) : (
-    <ErrorMessage name="general" component={FormErrorMessage} />
+  const renderLoading = isSubmitting && (
+    <FormControl>
+      <Grid container justify="center">
+        <LoadingBox text={loadingText} />
+      </Grid>
+    </FormControl>
   );
 
+  const renderGeneralFormError = <ErrorMessage name="general" component={FormErrorMessage} />;
+
   const renderSubmitButton = (
-    <Button
-      type="submit"
-      disabled={isSubmitting}
-      variant={variant || 'contained'}
-      endIcon={endIcon || <ArrowForwardOutlined />}
-      color="primary"
-    >
-      {submitButtonText}
-    </Button>
+    <FormControl>
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        variant={variant || 'contained'}
+        endIcon={endIcon || <ArrowForwardOutlined />}
+        color="primary"
+      >
+        {submitButtonText}
+      </Button>
+    </FormControl>
   );
 
   return (
     <Grid container direction="column" alignItems="center">
-      <FormControl>
-        <Grid container justify="center">
-          {renderTextContent}
-        </Grid>
-      </FormControl>
-      <FormControl fullWidth>{renderSubmitButton}</FormControl>
+      {renderLoading}
+      {renderGeneralFormError}
+      {renderSubmitButton}
     </Grid>
   );
 };

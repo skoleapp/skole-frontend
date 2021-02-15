@@ -49,7 +49,6 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         color="primary"
         variant="contained"
         endIcon={<ArrowForwardOutlined />}
-        fullWidth
       >
         {t('logout:logInAgain')}
       </ButtonLink>
@@ -58,7 +57,7 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderBackToHomeButton = (
     <FormControl>
-      <ButtonLink href={urls.home} variant="outlined" fullWidth>
+      <ButtonLink href={urls.home} variant="outlined">
         {t('common:backToHome')}
       </ButtonLink>
     </FormControl>

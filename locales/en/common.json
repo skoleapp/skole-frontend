@@ -92,5 +92,8 @@
   "feedbackHeader": "Was this page helpful?",
   "feedbackText": "Give us feedback",
   "feedback": "Feedback",
-  "suggestions": "Trending"
+  "accountSettings": "Account Settings",
+  "suggestions": "Trending",
+  "noOptions": "No options.",
+  "showOptions": "Show options."
 }

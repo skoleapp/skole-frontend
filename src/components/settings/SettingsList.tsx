@@ -44,7 +44,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   };
 
   const renderAccountMenuItems = SETTINGS_ITEMS.account.map(({ icon: Icon, href, text }, i) => (
-    <Link href={href} key={i}>
+    <Link href={href} key={i} fullWidth>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
         <ListItemIcon>
           <Icon />
@@ -55,7 +55,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   ));
 
   const renderVerifyAccountMenuItem = verified === false && (
-    <Link href={urls.verifyAccount}>
+    <Link href={urls.verifyAccount} fullWidth>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.verifyAccount)}>
         <ListItemIcon>
           <VerifiedUserOutlined />
@@ -67,7 +67,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
 
   const renderCommonAccountMenuItems = SETTINGS_ITEMS.commonAccount.map(
     ({ icon: Icon, href, text }, i) => (
-      <Link href={href} key={i}>
+      <Link href={href} key={i} fullWidth>
         <MenuItem onClick={handleMenuItemClick} selected={getSelected(href)}>
           <ListItemIcon>
             <Icon />
@@ -86,7 +86,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   );
 
   const renderAboutMenuItem = isMobile && (
-    <Link href={urls.about}>
+    <Link href={urls.about} fullWidth>
       <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.about)}>
         <ListItemIcon>
           <InfoOutlined />
@@ -106,7 +106,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   );
 
   const renderLoginMenuItem = (
-    <Link href={urls.login}>
+    <Link href={urls.login} fullWidth>
       <MenuItem onClick={handleMenuItemClick}>
         <ListItemIcon>
           <ExitToAppOutlined />
@@ -117,7 +117,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   );
 
   const renderLogoutMenuItem = (
-    <Link href={urls.logout}>
+    <Link href={urls.logout} fullWidth>
       <MenuItem onClick={handleMenuItemClick}>
         <ListItemIcon>
           <ExitToAppOutlined />

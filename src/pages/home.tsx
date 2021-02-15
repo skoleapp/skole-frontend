@@ -516,7 +516,6 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
   const nextStepButtonProps: ButtonProps = {
     className: classes.nextStepsButton,
     variant: 'outlined',
-    fullWidth: true,
     endIcon: <ArrowForwardOutlined />,
   };
 
@@ -527,7 +526,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
           <Typography {...nextStepsCardTextProps}>{t('home:inviteHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <Button {...nextStepButtonProps} onClick={handleClickShareButton}>
+          <Button {...nextStepButtonProps} onClick={handleClickShareButton} fullWidth>
             {t('home:inviteText')}
           </Button>
         </CardActions>
@@ -542,7 +541,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
           <Typography {...nextStepsCardTextProps}>{t('home:takeATourHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.index}>
+          <ButtonLink {...nextStepButtonProps} href={urls.index} fullWidth>
             {t('home:takeATourText')}
           </ButtonLink>
         </CardActions>
@@ -557,7 +556,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
           <Typography {...nextStepsCardTextProps}>{t('home:verifyAccountHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.verifyAccount}>
+          <ButtonLink {...nextStepButtonProps} href={urls.verifyAccount} fullWidth>
             {t('home:verifyAccountText')}
           </ButtonLink>
         </CardActions>
@@ -572,7 +571,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
           <Typography {...nextStepsCardTextProps}>{t('home:addSchoolAndSubjectHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.editProfile}>
+          <ButtonLink {...nextStepButtonProps} href={urls.editProfile} fullWidth>
             {t('home:addSchoolAndSubjectText')}
           </ButtonLink>
         </CardActions>
@@ -587,7 +586,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
           <Typography {...nextStepsCardTextProps}>{t('home:uploadHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.uploadResource}>
+          <ButtonLink {...nextStepButtonProps} href={urls.uploadResource} fullWidth>
             {t('home:uploadText')}
           </ButtonLink>
         </CardActions>
@@ -615,7 +614,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
           <Typography {...nextStepsCardTextProps}>{t('home:contactHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.contact}>
+          <ButtonLink {...nextStepButtonProps} href={urls.contact} fullWidth>
             {t('home:contactText')}
           </ButtonLink>
         </CardActions>

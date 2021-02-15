@@ -228,7 +228,7 @@ export const Discussion: React.FC<Props> = ({
 
   const renderReplyButton = (comment: CommentObjectType) => (
     <Box className={classes.replyButtonContainer}>
-      <Button onClick={handleClickReplyButton(comment)} variant="text" fullWidth>
+      <Button onClick={handleClickReplyButton(comment)} variant="text">
         {t('forms:replyTo', {
           username: comment.user?.username?.toString() || t('common:communityUser'),
         })}

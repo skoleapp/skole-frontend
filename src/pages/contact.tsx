@@ -28,6 +28,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     onError,
     handleMutationErrors,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<ContactFormValues>();
 
   const validationSchema = Yup.object().shape({
@@ -54,9 +55,12 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSubmit = async (values: ContactFormValues): Promise<void> => {
-    const { subject, name, email, message } = values;
-
+  const handleSubmit = async ({
+    subject,
+    name,
+    email,
+    message,
+  }: ContactFormValues): Promise<void> => {
     const variables = {
       subject,
       name,
@@ -70,6 +74,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
   const initialValues = useMemo(
     () => ({
+      ...generalFormValues,
       subject: '',
       name: '',
       email,

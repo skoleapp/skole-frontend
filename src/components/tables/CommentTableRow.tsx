@@ -202,7 +202,9 @@ export const CommentTableRow: React.FC<Props> = ({
   );
 
   const renderMarkdownContent = !!commentPreview && (
-    <MarkdownContent>{commentPreview}</MarkdownContent>
+    <Typography variant="subtitle1">
+      <MarkdownContent>{commentPreview}</MarkdownContent>
+    </Typography>
   );
 
   const renderCommentPreview = (
@@ -259,7 +261,7 @@ export const CommentTableRow: React.FC<Props> = ({
   };
 
   return (
-    <Link href={href} key={key}>
+    <Link href={href} key={key} fullWidth>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>

@@ -1,17 +1,15 @@
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import React from 'react';
 
 const useStyles = makeStyles({
   errorMessage: {
     whiteSpace: 'pre-line', // Break lines at '\n' characters.
-    // Use consistent margins with other form helper texts.
-    marginLeft: '14px',
-    marginRight: '14px',
   },
 });
 
 export const FormErrorMessage: React.FC = (props) => {
   const classes = useStyles();
-  return <FormHelperText className={classes.errorMessage} error {...props} />;
+  return <FormHelperText className={clsx(classes.errorMessage, 'form-text')} error {...props} />;
 };

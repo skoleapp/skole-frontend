@@ -65,6 +65,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     onError,
     handleMutationErrors,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<UploadResourceFormValues>();
 
   const { data, error } = useCreateResourceAutocompleteDataQuery({
@@ -132,6 +133,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
   const initialValues = useMemo(
     () => ({
+      ...generalFormValues,
       title: '',
       resourceType: null,
       date: new Date(),

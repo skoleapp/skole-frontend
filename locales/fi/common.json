@@ -92,5 +92,8 @@
   "feedbackHeader": "Oliko tästä sivusta apua?",
   "feedbackText": "Anna meille palautetta",
   "feedback": "Palaute",
-  "suggestions": "Trendaavat"
+  "accountSettings": "Tilin asetukset",
+  "suggestions": "Trendaavat",
+  "noOptions": "Ei vaihtoehtoja.",
+  "showOptions": "Näytä vaihtoehdot."
 }

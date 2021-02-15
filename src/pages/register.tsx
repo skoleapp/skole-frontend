@@ -1,3 +1,4 @@
+import { useUpdateAccountSettingsMutation } from '__generated__/src/graphql/common.graphql';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -22,10 +23,8 @@ import {
   RegisterMutation,
   SchoolObjectType,
   SubjectObjectType,
-  UpdateUserMutation,
+  UpdateAccountSettingsMutation,
   useRegisterMutation,
-  UserMeFieldsFragment,
-  useUpdateUserMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -51,16 +50,15 @@ interface UpdateUserFormValues {
 
 enum RegisterPhases {
   REGISTER = 'register',
-  UPDATE_USER = 'update-user',
+  UPDATE_ACCOUNT_SETTINGS = 'update-account-settings',
   REGISTER_COMPLETE = 'register-complete',
 }
 
 const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
-  const [phase, setPhase] = useState(RegisterPhases.REGISTER);
+  const [phase, setPhase] = useState(RegisterPhases.REGISTER_COMPLETE);
   const context = useLanguageHeaderContext();
-  const { userMe } = useAuthContext();
-  const [registeredUser, setRegisteredUser] = useState<UserMeFieldsFragment | null>(null);
+  const { userMe, setUserMe } = useAuthContext();
 
   const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
@@ -69,15 +67,18 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors: handleRegisterMutationErrors,
     onError: onRegisterError,
     setUnexpectedFormError: unexpectedRegisterError,
+    generalFormValues: generalRegisterFormValues,
   } = useForm<RegisterFormValues>();
 
   const {
-    formRef: updateUserFormRef,
-    handleMutationErrors: handleUpdateUserMutationErrors,
-    onError: onUpdateUserError,
+    formRef: updateAccountSettingsFormRef,
+    handleMutationErrors: handleUpdateAccountSettingsMutationErrors,
+    onError: onUpdateAccountSettingsError,
+    generalFormValues: generalUpdateAccountSettingsFormValues,
   } = useForm<UpdateUserFormValues>();
 
   const registerInitialValues = {
+    ...generalRegisterFormValues,
     username: '',
     email: '',
     password: '',
@@ -86,34 +87,24 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const registerValidationSchema = Yup.object().shape({
     username: Yup.string().required(t('validation:required')),
+    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     password: Yup.string()
       .min(PASSWORD_MIN_LENGTH, t('validation:passwordTooShort', { length: PASSWORD_MIN_LENGTH }))
       .required(t('validation:required')),
-    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), ''], t('validation:passwordsNotMatch'))
       .required(t('validation:required')),
-  });
-
-  const updateUserInitialValues = {
-    school: null,
-    subject: null,
-  };
-
-  const updateUserValidationSchema = Yup.object().shape({
-    school: Yup.object().nullable(),
-    subject: Yup.object().nullable(),
   });
 
   const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
     if (register?.errors?.length) {
       handleRegisterMutationErrors(register.errors);
     } else if (login?.errors?.length) {
-      handleRegisterMutationErrors(login.errors);
+      handleRegisterMutationErrors(login.errors); // Set the login errors on register form on purpose.
     } else if (login?.user) {
       registerFormRef.current?.resetForm();
-      setRegisteredUser(login.user);
-      setPhase(RegisterPhases.UPDATE_USER);
+      setUserMe(login.user);
+      setPhase(RegisterPhases.UPDATE_ACCOUNT_SETTINGS);
     } else {
       unexpectedRegisterError();
     }
@@ -125,9 +116,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleRegisterSubmit = async (values: RegisterFormValues): Promise<void> => {
-    const { username, email, password } = values;
-
+  const handleRegisterSubmit = async ({
+    username,
+    email,
+    password,
+  }: RegisterFormValues): Promise<void> => {
     await registerMutation({
       variables: {
         username,
@@ -137,32 +130,41 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     });
   };
 
-  const onUpdateUserCompleted = ({ updateUser }: UpdateUserMutation): void => {
-    if (updateUser?.errors?.length) {
-      handleUpdateUserMutationErrors(updateUser.errors);
+  const updateAccountSettingsInitialValues = {
+    ...generalUpdateAccountSettingsFormValues,
+    school: null,
+    subject: null,
+  };
+
+  const handleUpdateAccountSettingsCompleted = ({
+    updateAccountSettings,
+  }: UpdateAccountSettingsMutation): void => {
+    if (updateAccountSettings?.errors?.length) {
+      handleUpdateAccountSettingsMutationErrors(updateAccountSettings.errors);
     } else {
-      updateUserFormRef.current?.resetForm();
+      updateAccountSettingsFormRef.current?.resetForm();
       setPhase(RegisterPhases.REGISTER_COMPLETE);
     }
   };
 
-  const [updateUserMutation] = useUpdateUserMutation({
-    onCompleted: onUpdateUserCompleted,
-    onError: onUpdateUserError,
+  const [updateAccountSettings] = useUpdateAccountSettingsMutation({
+    onCompleted: handleUpdateAccountSettingsCompleted,
+    onError: onUpdateAccountSettingsError,
     context,
   });
 
-  const handleRegisterCompleteSubmit = async ({
+  const handleSubmitUpdateAccountSettings = async ({
     school,
     subject,
   }: UpdateUserFormValues): Promise<void> => {
-    await updateUserMutation({
+    const variables = R.pick(
+      ['email', 'productUpdatePermission', 'blogPostEmailPermission'],
+      userMe,
+    );
+
+    await updateAccountSettings({
       variables: {
-        username: R.propOr('', 'username', registeredUser),
-        email: R.propOr('', 'email', registeredUser),
-        title: '',
-        bio: '',
-        avatar: '',
+        ...variables,
         school: R.propOr('', 'id', school),
         subject: R.propOr('', 'id', subject),
       },
@@ -174,7 +176,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       label={t('forms:username')}
       name="username"
       component={TextFormField}
-      helperText={t('forms:usernameHelperText')}
+      helperText={t('register:usernameHelperText')}
     />
   );
 
@@ -183,7 +185,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       label={t('forms:email')}
       name="email"
       component={TextFormField}
-      helperText={t('forms:emailHelperText')}
+      helperText={t('register:emailHelperText')}
     />
   );
 
@@ -213,7 +215,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderLoginButton = (
     <FormControl>
-      <ButtonLink href={urls.login} variant="outlined">
+      <ButtonLink href={urls.login} variant="outlined" fullWidth>
         {t('common:login')}
       </ButtonLink>
     </FormControl>
@@ -243,10 +245,10 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderUpdateUserText = (
+  const renderUpdateAccountSettingsHelperText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t('register:updateUserText')}
+      <Typography className="form-text" variant="subtitle1">
+        {t('register:updateAccountSettingsHelperText')}
       </Typography>
     </FormControl>
   );
@@ -287,9 +289,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderContactUsLink = <ContactLink />;
 
-  const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
+  const renderUpdateAccountSettingsFormFields = (
+    props: FormikProps<UpdateUserFormValues>,
+  ): JSX.Element => (
     <Form>
-      {renderUpdateUserText}
+      {renderUpdateAccountSettingsHelperText}
       {renderSchoolField}
       {renderSubjectField}
       {renderUpdateUserFormSubmitSection(props)}
@@ -298,20 +302,19 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Form>
   );
 
-  const renderUpdateUserForm = phase === RegisterPhases.UPDATE_USER && (
+  const renderUpdateAccountSettingsForm = phase === RegisterPhases.UPDATE_ACCOUNT_SETTINGS && (
     <Formik
-      initialValues={updateUserInitialValues}
-      validationSchema={updateUserValidationSchema}
-      onSubmit={handleRegisterCompleteSubmit}
-      innerRef={updateUserFormRef}
+      initialValues={updateAccountSettingsInitialValues}
+      onSubmit={handleSubmitUpdateAccountSettings}
+      innerRef={updateAccountSettingsFormRef}
     >
-      {renderUpdateUserFormFields}
+      {renderUpdateAccountSettingsFormFields}
     </Formik>
   );
 
   const renderRegisterCompleteText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
+      <Typography className="form-text" variant="subtitle1">
         {t('register:registerCompleteText')}
       </Typography>
     </FormControl>
@@ -324,7 +327,6 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         endIcon={<ArrowForwardOutlined />}
         color="primary"
         variant="contained"
-        fullWidth
       >
         {t('common:continue')}
       </ButtonLink>
@@ -349,14 +351,14 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   };
 
-  if (userMe) {
+  if (userMe && phase === RegisterPhases.REGISTER) {
     return <LogoutRequiredTemplate {...layoutProps} />;
   }
 
   return (
     <FormTemplate {...layoutProps}>
       {renderRegisterForm}
-      {renderUpdateUserForm}
+      {renderUpdateAccountSettingsForm}
       {renderRegisterComplete}
     </FormTemplate>
   );

@@ -69,6 +69,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<LoginFormValues>();
 
   const existingUserGreeting = t('login:existingUserGreeting', {
@@ -96,7 +97,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         setExistingUser(existingUser);
         await userQuery({ variables: { slug: existingUser?.slug } });
       } catch {
-        // Something wrong with the LS value.
+        // Invalid user stored in LS.
       }
     })();
   }, []);
@@ -109,6 +110,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const initialValues = {
+    ...generalFormValues,
     usernameOrEmail: '',
     password: '',
   };

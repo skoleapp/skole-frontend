@@ -103,7 +103,7 @@ export const SubjectTableRow: React.FC<Props> = ({
   );
 
   return (
-    <Link href={urls.course(slug || '')} key={key}>
+    <Link href={urls.course(slug || '')} key={key} fullWidth>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>

@@ -92,5 +92,8 @@
   "feedbackHeader": "Hjälpte den här sidan?",
   "feedbackText": "Ge oss feedback",
   "feedback": "Feedback",
-  "suggestions": "Tränding"
+  "accountSettings": "Kontoinställningar",
+  "suggestions": "Tränding",
+  "noOptions": "Inga alternativ.",
+  "showOptions": "Visa alternativ."
 }

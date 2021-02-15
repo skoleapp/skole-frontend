@@ -2,8 +2,8 @@
   "title": "Lisää kurssi",
   "description": "Lisää uusi kurssi Skolessa.",
   "header": "Lisää kurssi",
-  "courseNameHelperText": "Kurssin nimi. Älä sisällytä kurssikoodia tähän kenttään.",
-  "courseCodeHelperText": "Kurssikoodi. Muut käyttäjät voivat käyttää tätä koodia kurssin löytämiseen.",
+  "nameHelperText": "Kurssin nimi. Älä sisällytä kurssikoodia tähän kenttään.",
+  "codeHelperText": "Kurssikoodi. Muut käyttäjät voivat käyttää tätä koodia kurssin löytämiseen.",
   "schoolHelperText": "Koulu, johon tämä kurssi kuuluu.",
   "subjectsHelperText": "Oppiaineet, joihin tämä kurssi kuuluu. Voit valita useita vaihtoehtoja.",
   "guidelinesInfo": "Varmista, että kurssi noudattaa"

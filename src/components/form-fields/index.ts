@@ -8,4 +8,5 @@ export { FormErrorMessage } from './FormErrorMessage';
 export { FormSubmitSection } from './FormSubmitSection';
 export { NativeSelectField } from './NativeSelectField';
 export { PasswordField } from './PasswordField';
+export { SwitchFormField } from './SwitchFormField';
 export { TextFormField } from './TextFormField';

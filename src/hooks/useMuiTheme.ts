@@ -86,6 +86,9 @@ export const useMuiTheme = (): Theme => {
     MuiCheckbox: {
       color: dynamicPrimaryColor,
     },
+    MuiSwitch: {
+      color: dynamicPrimaryColor,
+    },
     MuiLink: {
       color: dynamicPrimaryColor,
     },
@@ -383,6 +386,11 @@ export const useMuiTheme = (): Theme => {
               color: _dynamicPrimaryColor,
             },
           },
+        },
+        '.form-text': {
+          // Use consistent margins with form helper texts.
+          marginLeft: '14px !important',
+          marginRight: '14px !important',
         },
       },
     },

@@ -2,8 +2,8 @@ import FormControl from '@material-ui/core/FormControl';
 import {
   ButtonLink,
   FormSubmitSection,
+  FormTemplate,
   LoginRequiredTemplate,
-  SettingsTemplate,
   TextFormField,
 } from 'components';
 import { useAuthContext, useConfirmContext, useNotificationsContext } from 'context';
@@ -19,10 +19,6 @@ import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
-const initialValues = {
-  password: '',
-};
-
 export interface DeleteAccountFormValues {
   password: string;
 }
@@ -33,6 +29,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<DeleteAccountFormValues>();
 
   const { t } = useTranslation();
@@ -40,6 +37,11 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+
+  const initialValues = {
+    ...generalFormValues,
+    password: '',
+  };
 
   const onCompleted = async ({ deleteUser }: DeleteUserMutation): Promise<void> => {
     if (deleteUser?.errors?.length) {
@@ -93,7 +95,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderCancelButton = (
     <FormControl>
-      <ButtonLink href={urls.editProfile} variant="outlined">
+      <ButtonLink href={urls.accountSettings} variant="outlined">
         {t('common:cancel')}
       </ButtonLink>
     </FormControl>
@@ -130,7 +132,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     return <LoginRequiredTemplate {...layoutProps} />;
   }
 
-  return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
+  return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

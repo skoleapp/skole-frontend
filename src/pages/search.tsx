@@ -396,7 +396,6 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           variant="outlined"
           endIcon={<ClearAllOutlined />}
           disabled={props.isSubmitting}
-          fullWidth
         >
           {t('common:clear')}
         </Button>
@@ -560,7 +559,6 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
             onChange={onSearchChange}
             startAdornment={renderSearchNavbarStartAdornment}
             endAdornment={renderSearchNavbarEndAdornment}
-            fullWidth
           />
         </form>
       </Box>

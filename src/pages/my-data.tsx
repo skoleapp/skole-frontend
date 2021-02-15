@@ -1,7 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ButtonLink, FormSubmitSection, LoginRequiredTemplate, SettingsTemplate } from 'components';
+import { ButtonLink, FormSubmitSection, FormTemplate, LoginRequiredTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
@@ -19,6 +19,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<FormikValues>();
 
   const { t } = useTranslation();
@@ -53,23 +54,28 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
     <Form>
       <FormControl>
-        <Typography variant="subtitle1" align="center">
+        <Typography className="form-text" variant="subtitle1">
           {t('my-data:helpText')}
         </Typography>
       </FormControl>
       <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+      <FormControl>
+        <ButtonLink href={urls.accountSettings} variant="outlined">
+          {t('common:cancel')}
+        </ButtonLink>
+      </FormControl>
     </Form>
   );
 
   const renderForm = !submitted && (
-    <Formik initialValues={{}} onSubmit={handleSubmit} innerRef={formRef}>
+    <Formik initialValues={generalFormValues} onSubmit={handleSubmit} innerRef={formRef}>
       {renderFormFields}
     </Formik>
   );
 
   const renderSubmittedText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
+      <Typography className="form-text" variant="subtitle1">
         {t('my-data:submitted')}
       </Typography>
     </FormControl>
@@ -82,7 +88,6 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         endIcon={<ArrowForwardOutlined />}
         color="primary"
         variant="contained"
-        fullWidth
       >
         {t('common:continue')}
       </ButtonLink>
@@ -109,10 +114,10 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   }
 
   return (
-    <SettingsTemplate {...layoutProps}>
+    <FormTemplate {...layoutProps}>
       {renderForm}
       {renderSubmitted}
-    </SettingsTemplate>
+    </FormTemplate>
   );
 };
 

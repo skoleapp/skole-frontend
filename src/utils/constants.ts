@@ -1,3 +1,4 @@
+import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
 import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
 import DescriptionOutlined from '@material-ui/icons/DescriptionOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
@@ -5,7 +6,6 @@ import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import PolicyOutlined from '@material-ui/icons/PolicyOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import ScoreOutlined from '@material-ui/icons/ScoreOutlined';
-import StorageOutlined from '@material-ui/icons/StorageOutlined';
 import SubjectOutlined from '@material-ui/icons/SubjectOutlined';
 import UpdateOutlined from '@material-ui/icons/UpdateOutlined';
 import VpnKeyOutlined from '@material-ui/icons/VpnKeyOutlined';
@@ -36,15 +36,19 @@ export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
 export const MAX_REVALIDATION_INTERVAL = 1; // Seconds.
 
-// The trailing slash in /account/ means to disallow all subpages.
 export const DISALLOWED_PATHS = [
   '/404',
   urls.about,
   urls.activity,
+  urls.addCourse,
+  urls.changePassword,
+  urls.deleteAccount,
+  urls.editProfile,
   urls.logout,
+  urls.myData,
   urls.search,
   urls.starred,
-  '/account/',
+  urls.verifyAccount,
 ];
 
 export const DYNAMIC_PATHS = ['courses', 'resources', 'schools', 'users'];
@@ -84,14 +88,9 @@ export const SETTINGS_ITEMS = {
       href: urls.editProfile,
     },
     {
-      icon: VpnKeyOutlined,
-      text: 'common:changePassword',
-      href: urls.changePassword,
-    },
-    {
-      icon: StorageOutlined,
-      text: 'common:myData',
-      href: urls.myData,
+      icon: AccountCircleOutlined,
+      text: 'common:accountSettings',
+      href: urls.accountSettings,
     },
   ],
   commonAccount: [

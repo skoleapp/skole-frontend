@@ -19,15 +19,6 @@ import { SeoPageProps } from 'types';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
-const emailFormInitialValues = {
-  email: '',
-};
-
-const passwordFormInitialValues = {
-  newPassword: '',
-  confirmNewPassword: '',
-};
-
 interface EmailFormValues {
   email: string;
 }
@@ -43,6 +34,7 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors: handleEmailFormMutationErrors,
     onError: onEmailFormError,
     setUnexpectedFormError: emailFormUnexpectedError,
+    generalFormValues: generalEmailFormValues,
   } = useForm<EmailFormValues>();
 
   const {
@@ -50,6 +42,7 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors: handlePasswordFormMutationErrors,
     onError: onPasswordFormError,
     setUnexpectedFormError: passwordFormUnexpectedError,
+    generalFormValues: generalPasswordFormValues,
   } = useForm<PasswordFormValues>();
 
   const { query } = useRouter();
@@ -60,17 +53,13 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 
+  const emailFormInitialValues = {
+    ...generalEmailFormValues,
+    email: '',
+  };
+
   const emailValidationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
-  });
-
-  const passwordValidationSchema = Yup.object().shape({
-    newPassword: Yup.string()
-      .min(PASSWORD_MIN_LENGTH, t('validation:passwordTooShort', { length: PASSWORD_MIN_LENGTH }))
-      .required(t('validation:required')),
-    confirmNewPassword: Yup.string()
-      .oneOf([Yup.ref('newPassword'), ''], t('validation:passwordsNotMatch'))
-      .required(t('validation:required')),
   });
 
   const onEmailFormCompleted = ({
@@ -86,6 +75,21 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       emailFormUnexpectedError();
     }
   };
+
+  const passwordFormInitialValues = {
+    ...generalPasswordFormValues,
+    newPassword: '',
+    confirmNewPassword: '',
+  };
+
+  const passwordValidationSchema = Yup.object().shape({
+    newPassword: Yup.string()
+      .min(PASSWORD_MIN_LENGTH, t('validation:passwordTooShort', { length: PASSWORD_MIN_LENGTH }))
+      .required(t('validation:required')),
+    confirmNewPassword: Yup.string()
+      .oneOf([Yup.ref('newPassword'), ''], t('validation:passwordsNotMatch'))
+      .required(t('validation:required')),
+  });
 
   const onPasswordFormCompleted = async ({
     resetPassword,

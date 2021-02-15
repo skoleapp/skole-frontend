@@ -540,6 +540,8 @@ fragment userMeFields on UserObjectType {
   verified
   unreadActivityCount
   rank
+  productUpdateEmailPermission
+  blogPostEmailPermission
   school {
     slug
     name
@@ -723,24 +725,33 @@ mutation ResetPassword($token: String, $newPassword: String!) {
   }
 }
 
-mutation UpdateUser(
-  $username: String!
+mutation UpdateProfile($username: String!, $title: String, $bio: String, $avatar: String) {
+  updateProfile(input: { username: $username, title: $title, bio: $bio, avatar: $avatar }) {
+    successMessage
+    user {
+      ...userMeFields
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+mutation UpdateAccountSettings(
   $email: String!
-  $title: String
-  $bio: String
-  $avatar: String
   $school: ID
   $subject: ID
+  $productUpdateEmailPermission: Boolean
+  $blogPostEmailPermission: Boolean
 ) {
-  updateUser(
+  updateAccountSettings(
     input: {
-      username: $username
       email: $email
-      title: $title
-      bio: $bio
-      avatar: $avatar
       school: $school
       subject: $subject
+      productUpdateEmailPermission: $productUpdateEmailPermission
+      blogPostEmailPermission: $blogPostEmailPermission
     }
   ) {
     successMessage
@@ -847,6 +858,7 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
     created
     score
     user {
+      id
       slug
       username
       avatarThumbnail
@@ -875,6 +887,7 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
       created
       score
       user {
+        id
         slug
         username
         avatarThumbnail

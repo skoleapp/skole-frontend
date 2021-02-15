@@ -148,6 +148,7 @@ export const AvatarField = <T extends FormikValues>({
       open={dialogOpen}
       onClose={handleCloseDialog}
       dialogHeaderProps={dialogHeaderProps}
+      list
     >
       <List>
         {renderAddOrChangeAvatar}

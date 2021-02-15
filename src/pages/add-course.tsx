@@ -57,9 +57,10 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<CreateCourseFormValues>();
 
-  // Prefill user's own school, if one exists and no other school is provided as a query parameter.
+  // Pre-fill user's own school, if one exists and no other school is provided as a query parameter.
   const school = R.propOr(_school, 'school', data);
 
   const validationSchema = Yup.object().shape({
@@ -110,6 +111,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
   const initialValues = useMemo(
     () => ({
+      ...generalFormValues,
       courseName: '',
       courseCode: '',
       school,
@@ -120,19 +122,19 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderCourseNameField = (
     <Field
-      name="courseName"
-      label={t('forms:courseName')}
+      name="name"
+      label={t('forms:name')}
       component={TextFormField}
-      helperText={t('add-course:courseNameHelperText')}
+      helperText={t('add-course:nameHelperText')}
     />
   );
 
   const renderCourseCodeField = (
     <Field
-      name="courseCode"
-      label={t('forms:courseCodeOptional')}
+      name="code"
+      label={t('forms:codeOptional')}
       component={TextFormField}
-      helperText={t('add-course:courseCodeHelperText')}
+      helperText={t('add-course:codeHelperText')}
     />
   );
 

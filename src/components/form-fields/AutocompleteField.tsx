@@ -4,6 +4,7 @@ import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import Autocomplete, { AutocompleteRenderInputParams } from '@material-ui/lab/Autocomplete';
 import { FieldAttributes, FormikProps, FormikValues, getIn } from 'formik';
 import { useLanguageHeaderContext } from 'hooks';
+import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 
@@ -35,6 +36,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   ...textFieldProps
 }) => {
   const context = useLanguageHeaderContext();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const handleOpen = (): void => setOpen(true);
   const handleClose = (): void => setOpen(false);
@@ -84,11 +86,19 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
         context,
       });
 
+      let filteredOptions = [];
+
       // Filter out options that have already been chosen.
-      const filteredOptions = data[dataKey].filter(
-        (o: Record<string, unknown>) =>
-          !field.value?.some((v: Record<string, unknown>) => v.id === o.id),
-      );
+      if (multiple) {
+        filteredOptions = data[dataKey].filter(
+          (o: Record<string, unknown>) =>
+            !field.value?.some((v: Record<string, unknown>) => v.id === o.id),
+        );
+      } else {
+        filteredOptions = data[dataKey].filter(
+          (o: Record<string, unknown>) => !field.value?.id !== o.id,
+        );
+      }
 
       setOptions(filteredOptions);
     } catch {
@@ -123,15 +133,16 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
     handleClose();
   };
 
-  const handleAutocompleteChange = <T extends Record<symbol, unknown>>(
-    _e: ChangeEvent<T>,
-    val: T | T[] | null,
-  ): void => {
+  const handleAutocompleteChange = (_e: ChangeEvent<Record<string, unknown>>, val: unknown): void =>
     val ? form.setFieldValue(name, val) : handleClearSelection();
-  };
 
-  const getOptionSelected = (option: Record<string, unknown>, value: Record<string, unknown>) =>
-    option.slug === value?.slug;
+  const getOptionSelected = <T extends Record<string, unknown>>(option: T) => {
+    if (multiple) {
+      return field.value.some((v: T) => v.slug === option.slug);
+    }
+
+    return option.slug === field.value?.slug;
+  };
 
   const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
     <TextField
@@ -166,6 +177,8 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
       renderInput={renderInput}
       disabled={disabled !== undefined ? disabled : isSubmitting}
       multiple={multiple}
+      noOptionsText={t('common:noOptions')}
+      openText={t('common:showOptions')}
     />
   );
 };
