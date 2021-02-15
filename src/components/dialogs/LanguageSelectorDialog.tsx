@@ -44,6 +44,7 @@ export const LanguageSelectorDialog: React.FC = () => {
       open={languageSelectorOpen}
       onClose={handleCloseLanguageMenu}
       dialogHeaderProps={dialogHeaderProps}
+      list
     >
       <List>{renderLanguages}</List>
     </ResponsiveDialog>

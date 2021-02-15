@@ -50,13 +50,13 @@ interface UpdateUserFormValues {
 
 enum RegisterPhases {
   REGISTER = 'register',
-  SET_SCHOOL_AND_SUBJECT = 'set-school-and-subject',
+  UPDATE_ACCOUNT_SETTINGS = 'update-account-settings',
   REGISTER_COMPLETE = 'register-complete',
 }
 
 const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
-  const [phase, setPhase] = useState(RegisterPhases.REGISTER);
+  const [phase, setPhase] = useState(RegisterPhases.REGISTER_COMPLETE);
   const context = useLanguageHeaderContext();
   const { userMe, setUserMe } = useAuthContext();
 
@@ -67,15 +67,18 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors: handleRegisterMutationErrors,
     onError: onRegisterError,
     setUnexpectedFormError: unexpectedRegisterError,
+    generalFormValues: generalRegisterFormValues,
   } = useForm<RegisterFormValues>();
 
   const {
-    formRef: updateUserFormRef,
-    handleMutationErrors: handleUpdateUserMutationErrors,
-    onError: onUpdateUserError,
+    formRef: updateAccountSettingsFormRef,
+    handleMutationErrors: handleUpdateAccountSettingsMutationErrors,
+    onError: onUpdateAccountSettingsError,
+    generalFormValues: generalUpdateAccountSettingsFormValues,
   } = useForm<UpdateUserFormValues>();
 
   const registerInitialValues = {
+    ...generalRegisterFormValues,
     username: '',
     email: '',
     password: '',
@@ -84,34 +87,24 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const registerValidationSchema = Yup.object().shape({
     username: Yup.string().required(t('validation:required')),
+    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     password: Yup.string()
       .min(PASSWORD_MIN_LENGTH, t('validation:passwordTooShort', { length: PASSWORD_MIN_LENGTH }))
       .required(t('validation:required')),
-    email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), ''], t('validation:passwordsNotMatch'))
       .required(t('validation:required')),
-  });
-
-  const updateUserInitialValues = {
-    school: null,
-    subject: null,
-  };
-
-  const updateUserValidationSchema = Yup.object().shape({
-    school: Yup.object().nullable(),
-    subject: Yup.object().nullable(),
   });
 
   const onRegisterCompleted = async ({ register, login }: RegisterMutation): Promise<void> => {
     if (register?.errors?.length) {
       handleRegisterMutationErrors(register.errors);
     } else if (login?.errors?.length) {
-      handleRegisterMutationErrors(login.errors);
+      handleRegisterMutationErrors(login.errors); // Set the login errors on register form on purpose.
     } else if (login?.user) {
       registerFormRef.current?.resetForm();
       setUserMe(login.user);
-      setPhase(RegisterPhases.SET_SCHOOL_AND_SUBJECT);
+      setPhase(RegisterPhases.UPDATE_ACCOUNT_SETTINGS);
     } else {
       unexpectedRegisterError();
     }
@@ -123,9 +116,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleRegisterSubmit = async (values: RegisterFormValues): Promise<void> => {
-    const { username, email, password } = values;
-
+  const handleRegisterSubmit = async ({
+    username,
+    email,
+    password,
+  }: RegisterFormValues): Promise<void> => {
     await registerMutation({
       variables: {
         username,
@@ -135,28 +130,37 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     });
   };
 
-  const onUpdateUserCompleted = ({
+  const updateAccountSettingsInitialValues = {
+    ...generalUpdateAccountSettingsFormValues,
+    school: null,
+    subject: null,
+  };
+
+  const handleUpdateAccountSettingsCompleted = ({
     updateAccountSettings,
   }: UpdateAccountSettingsMutation): void => {
     if (updateAccountSettings?.errors?.length) {
-      handleUpdateUserMutationErrors(updateAccountSettings.errors);
+      handleUpdateAccountSettingsMutationErrors(updateAccountSettings.errors);
     } else {
-      updateUserFormRef.current?.resetForm();
+      updateAccountSettingsFormRef.current?.resetForm();
       setPhase(RegisterPhases.REGISTER_COMPLETE);
     }
   };
 
   const [updateAccountSettings] = useUpdateAccountSettingsMutation({
-    onCompleted: onUpdateUserCompleted,
-    onError: onUpdateUserError,
+    onCompleted: handleUpdateAccountSettingsCompleted,
+    onError: onUpdateAccountSettingsError,
     context,
   });
 
-  const handleSubmitSetSchoolAndSubject = async ({
+  const handleSubmitUpdateAccountSettings = async ({
     school,
     subject,
   }: UpdateUserFormValues): Promise<void> => {
-    const variables = R.pick(['email', 'productUpdatePermission', 'blogPostEmailPermission']);
+    const variables = R.pick(
+      ['email', 'productUpdatePermission', 'blogPostEmailPermission'],
+      userMe,
+    );
 
     await updateAccountSettings({
       variables: {
@@ -211,7 +215,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderLoginButton = (
     <FormControl>
-      <ButtonLink href={urls.login} variant="outlined">
+      <ButtonLink href={urls.login} variant="outlined" fullWidth>
         {t('common:login')}
       </ButtonLink>
     </FormControl>
@@ -241,10 +245,10 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const renderUpdateUserText = (
+  const renderUpdateAccountSettingsHelperText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t('register:updateUserText')}
+      <Typography className="form-text" variant="subtitle1">
+        {t('register:updateAccountSettingsHelperText')}
       </Typography>
     </FormControl>
   );
@@ -285,9 +289,11 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderContactUsLink = <ContactLink />;
 
-  const renderUpdateUserFormFields = (props: FormikProps<UpdateUserFormValues>): JSX.Element => (
+  const renderUpdateAccountSettingsFormFields = (
+    props: FormikProps<UpdateUserFormValues>,
+  ): JSX.Element => (
     <Form>
-      {renderUpdateUserText}
+      {renderUpdateAccountSettingsHelperText}
       {renderSchoolField}
       {renderSubjectField}
       {renderUpdateUserFormSubmitSection(props)}
@@ -296,20 +302,19 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Form>
   );
 
-  const renderUpdateUserForm = phase === RegisterPhases.SET_SCHOOL_AND_SUBJECT && (
+  const renderUpdateAccountSettingsForm = phase === RegisterPhases.UPDATE_ACCOUNT_SETTINGS && (
     <Formik
-      initialValues={updateUserInitialValues}
-      validationSchema={updateUserValidationSchema}
-      onSubmit={handleSubmitSetSchoolAndSubject}
-      innerRef={updateUserFormRef}
+      initialValues={updateAccountSettingsInitialValues}
+      onSubmit={handleSubmitUpdateAccountSettings}
+      innerRef={updateAccountSettingsFormRef}
     >
-      {renderUpdateUserFormFields}
+      {renderUpdateAccountSettingsFormFields}
     </Formik>
   );
 
   const renderRegisterCompleteText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
+      <Typography className="form-text" variant="subtitle1">
         {t('register:registerCompleteText')}
       </Typography>
     </FormControl>
@@ -346,14 +351,14 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   };
 
-  if (userMe) {
+  if (userMe && phase === RegisterPhases.REGISTER) {
     return <LogoutRequiredTemplate {...layoutProps} />;
   }
 
   return (
     <FormTemplate {...layoutProps}>
       {renderRegisterForm}
-      {renderUpdateUserForm}
+      {renderUpdateAccountSettingsForm}
       {renderRegisterComplete}
     </FormTemplate>
   );

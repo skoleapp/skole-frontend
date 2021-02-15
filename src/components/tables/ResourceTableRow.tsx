@@ -245,7 +245,7 @@ export const ResourceTableRow: React.FC<Props> = ({
   };
 
   return (
-    <Link href={urls.resource(slug || '')} key={key}>
+    <Link href={urls.resource(slug || '')} key={key} fullWidth>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>

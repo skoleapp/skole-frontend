@@ -147,7 +147,7 @@ ${url}`;
   ));
 
   const renderEmailMenuItem = (
-    <Link href={mailUrl}>
+    <Link href={mailUrl} fullWidth>
       <MenuItem onClick={handleClickMenuItem('twitter')}>
         <ListItemIcon>
           <MailOutlined />

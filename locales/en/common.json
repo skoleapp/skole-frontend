@@ -93,5 +93,7 @@
   "feedbackText": "Give us feedback",
   "feedback": "Feedback",
   "accountSettings": "Account Settings",
-  "suggestions": "Trending"
+  "suggestions": "Trending",
+  "noOptions": "No options.",
+  "showOptions": "Show options."
 }

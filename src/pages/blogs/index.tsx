@@ -57,7 +57,7 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
       },
       i,
     ) => (
-      <Link href={urls.blog(slug)}>
+      <Link href={urls.blog(slug)} fullWidth>
         <ListItem key={i} button>
           <Grid container spacing={4}>
             <Grid item xs={9}>

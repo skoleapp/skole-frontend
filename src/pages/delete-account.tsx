@@ -19,10 +19,6 @@ import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
-const initialValues = {
-  password: '',
-};
-
 export interface DeleteAccountFormValues {
   password: string;
 }
@@ -33,6 +29,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<DeleteAccountFormValues>();
 
   const { t } = useTranslation();
@@ -40,6 +37,11 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+
+  const initialValues = {
+    ...generalFormValues,
+    password: '',
+  };
 
   const onCompleted = async ({ deleteUser }: DeleteUserMutation): Promise<void> => {
     if (deleteUser?.errors?.length) {

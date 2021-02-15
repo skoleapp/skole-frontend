@@ -387,6 +387,11 @@ export const useMuiTheme = (): Theme => {
             },
           },
         },
+        '.form-text': {
+          // Use consistent margins with form helper texts.
+          marginLeft: '14px !important',
+          marginRight: '14px !important',
+        },
       },
     },
   };

@@ -77,6 +77,7 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<UpdateAccountSettingsFormValues>();
 
   const onCompleted = ({ updateAccountSettings }: UpdateAccountSettingsMutation): void => {
@@ -122,7 +123,13 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
-  const initialValues = useMemo(() => dynamicInitialValues, Object.values(dynamicInitialValues));
+  const initialValues = useMemo(
+    () => ({
+      ...generalFormValues,
+      ...dynamicInitialValues,
+    }),
+    Object.values(dynamicInitialValues),
+  );
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
@@ -176,12 +183,7 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderChangePasswordLink = (
     <FormControl>
-      <ButtonLink
-        href={urls.changePassword}
-        color="primary"
-        variant="outlined"
-        endIcon={<VpnKeyOutlined />}
-      >
+      <ButtonLink href={urls.changePassword} variant="outlined" endIcon={<VpnKeyOutlined />}>
         {t('common:changePassword')}
       </ButtonLink>
     </FormControl>
@@ -189,12 +191,7 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderMyDataLink = (
     <FormControl>
-      <ButtonLink
-        href={urls.myData}
-        color="primary"
-        variant="outlined"
-        endIcon={<StorageOutlined />}
-      >
+      <ButtonLink href={urls.myData} variant="outlined" endIcon={<StorageOutlined />}>
         {t('common:myData')}
       </ButtonLink>
     </FormControl>

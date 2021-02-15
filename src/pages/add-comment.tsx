@@ -38,6 +38,9 @@ import { urls } from 'utils';
 import * as Yup from 'yup';
 
 const useStyles = makeStyles(({ spacing }) => ({
+  discussionSuggestions: {
+    padding: spacing(4),
+  },
   discussionSuggestionsLabel: {
     marginBottom: spacing(2),
   },
@@ -209,7 +212,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // Render for authenticated users that have discussion suggestions.
   const renderDiscussionSuggestions = !!userMe && !!discussionSuggestions.length && (
-    <FormControl>
+    <FormControl className={classes.discussionSuggestions}>
       <FormLabel className={classes.discussionSuggestionsLabel}>
         {t('add-comment:selectDiscussion')}
       </FormLabel>

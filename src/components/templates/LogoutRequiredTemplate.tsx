@@ -42,7 +42,6 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
         color="primary"
         variant="contained"
         endIcon={<ArrowForwardOutlined />}
-        fullWidth
       >
         {t('common:logout')}
       </ButtonLink>
@@ -51,7 +50,7 @@ export const LogoutRequiredTemplate: React.FC<MainTemplateProps> = ({ children, 
 
   const renderCancelButton = (
     <FormControl>
-      <Button onClick={handleClickCancelButton} variant="outlined" fullWidth>
+      <Button onClick={handleClickCancelButton} variant="outlined">
         {t('common:cancel')}
       </Button>
     </FormControl>

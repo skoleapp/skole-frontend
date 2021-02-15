@@ -93,5 +93,7 @@
   "feedbackText": "Anna meille palautetta",
   "feedback": "Palaute",
   "accountSettings": "Tilin asetukset",
-  "suggestions": "Trendaavat"
+  "suggestions": "Trendaavat",
+  "noOptions": "Ei vaihtoehtoja.",
+  "showOptions": "Näytä vaihtoehdot."
 }

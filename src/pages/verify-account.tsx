@@ -26,6 +26,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     onError,
     setUnexpectedFormError,
     formatFormError,
+    generalFormValues,
   } = useForm<FormikValues>();
 
   const { t } = useTranslation();
@@ -108,14 +109,13 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await resendVerificationEmail();
   };
 
-  const renderHomeButton = (
+  const renderContinueButton = (
     <FormControl>
       <ButtonLink
         href={urls.home}
         endIcon={<ArrowForwardOutlined />}
         color="primary"
         variant="contained"
-        fullWidth
       >
         {t('common:continue')}
       </ButtonLink>
@@ -129,7 +129,6 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         endIcon={<ArrowForwardOutlined />}
         color="primary"
         variant="contained"
-        fullWidth
       >
         {t('common:login')}
       </ButtonLink>
@@ -138,7 +137,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderVerifiedText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
+      <Typography className="form-text" variant="subtitle1">
         {t('verify-account:verified')}
       </Typography>
     </FormControl>
@@ -146,7 +145,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderConfirmationErrorText = (
     <FormControl>
-      <Typography color="error" variant="subtitle1" align="center">
+      <Typography className="form-text" color="error" variant="subtitle1">
         {confirmationError}
       </Typography>
     </FormControl>
@@ -154,7 +153,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderLoginText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
+      <Typography className="form-text" variant="subtitle1">
         {t('verify-account:loginText')}
       </Typography>
     </FormControl>
@@ -163,7 +162,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderEmailFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
     <Form>
       <FormControl>
-        <Typography variant="subtitle1" align="center">
+        <Typography className="form-text" variant="subtitle1">
           {t('verify-account:emailHelpText')}
         </Typography>
       </FormControl>
@@ -181,25 +180,32 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // Render for unverified, authenticated users with no token.
   const renderEmailForm = verified === false && !token && !emailSubmitted && (
-    <Formik initialValues={{}} onSubmit={handleSubmitEmail} innerRef={formRef}>
+    <Formik initialValues={generalFormValues} onSubmit={handleSubmitEmail} innerRef={formRef}>
       {renderEmailFormFields}
     </Formik>
   );
 
-  // Render after email form has been submitted.
-  const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
+  const renderEmailSubmittedText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
+      <Typography className="form-text" variant="subtitle1">
         {t('verify-account:emailSubmitted')}
       </Typography>
     </FormControl>
+  );
+
+  // Render after email form has been submitted.
+  const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
+    <>
+      {renderEmailSubmittedText}
+      {renderContinueButton}
+    </>
   );
 
   // Render for authenticated, verified users.
   const renderVerified = !!verified && !confirmationError && (
     <>
       {renderVerifiedText}
-      {renderHomeButton}
+      {renderContinueButton}
     </>
   );
 
@@ -207,7 +213,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderConfirmationError = !!confirmationError && (
     <>
       {renderConfirmationErrorText}
-      {renderHomeButton}
+      {renderContinueButton}
     </>
   );
 

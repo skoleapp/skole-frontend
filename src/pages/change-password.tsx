@@ -18,12 +18,6 @@ import { SeoPageProps } from 'types';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
-const initialValues = {
-  oldPassword: '',
-  newPassword: '',
-  confirmNewPassword: '',
-};
-
 interface ChangePasswordFormValues {
   oldPassword: string;
   newPassword: string;
@@ -36,12 +30,20 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<ChangePasswordFormValues>();
 
   const { toggleNotification } = useNotificationsContext();
   const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
+
+  const initialValues = {
+    ...generalFormValues,
+    oldPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
+  };
 
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required(t('validation:required')),

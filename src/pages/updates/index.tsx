@@ -26,7 +26,7 @@ const UpdatesPage: NextPage<Props> = ({ seoProps, updates }) => {
 
   const mapUpdates = sortedUpdates.map(
     ({ title, excerpt, coverImage = '', date, slug = '' }, i) => (
-      <Link href={urls.update(slug)}>
+      <Link href={urls.update(slug)} fullWidth>
         <ListItem key={i} button>
           <Grid container spacing={4}>
             <Grid item xs={9}>

@@ -19,6 +19,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<FormikValues>();
 
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
     <Form>
       <FormControl>
-        <Typography variant="subtitle1" align="center">
+        <Typography className="form-text" variant="subtitle1">
           {t('my-data:helpText')}
         </Typography>
       </FormControl>
@@ -67,14 +68,14 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderForm = !submitted && (
-    <Formik initialValues={{}} onSubmit={handleSubmit} innerRef={formRef}>
+    <Formik initialValues={generalFormValues} onSubmit={handleSubmit} innerRef={formRef}>
       {renderFormFields}
     </Formik>
   );
 
   const renderSubmittedText = (
     <FormControl>
-      <Typography variant="subtitle1" align="center">
+      <Typography className="form-text" variant="subtitle1">
         {t('my-data:submitted')}
       </Typography>
     </FormControl>

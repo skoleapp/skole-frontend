@@ -7,7 +7,7 @@ import {
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { createContext, useContext, useState } from 'react';
-import { AuthContextType, EmailSettings } from 'types';
+import { AuthContextType } from 'types';
 import { mediaUrl, urls } from 'utils';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.

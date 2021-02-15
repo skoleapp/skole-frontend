@@ -288,7 +288,11 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderDiscussionHeader = (
-    <DiscussionHeader renderShareButton={renderShareButton} renderInfoButton={renderInfoButton} />
+    <DiscussionHeader
+      renderShareButton={renderShareButton}
+      renderInfoButton={renderInfoButton}
+      renderActionsButton={renderActionsButton}
+    />
   );
 
   const renderDiscussion = <Discussion course={course} noCommentsText={t('course:noComments')} />;

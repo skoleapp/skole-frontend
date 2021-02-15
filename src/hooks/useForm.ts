@@ -3,11 +3,7 @@ import { FormikProps, FormikValues } from 'formik';
 import { ErrorType } from 'generated';
 import { useTranslation } from 'lib';
 import { useRef } from 'react';
-import { MutationErrors, UseForm } from 'types';
-
-type GeneralFormValues = FormikValues & {
-  general: string;
-};
+import { GeneralFormValues, MutationErrors, UseForm } from 'types';
 
 const snakeCaseToCamelCase = (str: string): string =>
   str.replace(/([-_][a-z])/g, (group) => group.toUpperCase().replace('-', '').replace('_', ''));
@@ -17,7 +13,7 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
   const { t } = useTranslation();
   const formRef = useRef<FormikProps<T>>(null!);
 
-  const initialFormErrors: GeneralFormValues = {
+  const generalFormValues: GeneralFormValues = {
     general: '',
   };
 
@@ -30,7 +26,7 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
 
   // Set form errors either for specific fields or as general errors.
   const handleMutationErrors = (errors: MutationErrors): void => {
-    const formErrors = initialFormErrors;
+    const formErrors = generalFormValues;
 
     if (errors.length) {
       errors.map((e) => {
@@ -54,7 +50,7 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
 
   // Set general form error due to network error or any unexpected error.
   const onError = (err: ApolloError): void => {
-    const formErrors = initialFormErrors;
+    const formErrors = generalFormValues;
 
     if (err.networkError) {
       formErrors.general = t('validation:networkError');
@@ -72,5 +68,6 @@ export const useForm = <T extends FormikValues>(): UseForm<T> => {
     formatFormError,
     handleMutationErrors,
     onError,
+    generalFormValues,
   };
 };

@@ -7,6 +7,9 @@ const useStyles = makeStyles(() => ({
   link: {
     textDecoration: 'none',
     color: 'inherit',
+    display: 'inline-flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
   },
   fullWidth: {
     width: '100%',

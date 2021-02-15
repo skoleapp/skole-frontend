@@ -93,5 +93,7 @@
   "feedbackText": "Ge oss feedback",
   "feedback": "Feedback",
   "accountSettings": "Kontoinställningar",
-  "suggestions": "Tränding"
+  "suggestions": "Tränding",
+  "noOptions": "Inga alternativ.",
+  "showOptions": "Visa alternativ."
 }

@@ -102,7 +102,7 @@ export const FileField: React.FC<Props> = ({ form: { setFieldValue }, field: { n
     : t('upload-resource:uploadFileButtonText');
 
   const renderMobileUploadFileButton = isMobile && (
-    <Button onClick={handleFileInputClick} variant="outlined" fullWidth>
+    <Button onClick={handleFileInputClick} variant="outlined">
       {renderMobileFileUploadButtonText}
     </Button>
   );

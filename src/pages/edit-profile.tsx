@@ -46,6 +46,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleMutationErrors,
     onError,
     setUnexpectedFormError,
+    generalFormValues,
   } = useForm<UpdateProfileFormValues>();
 
   const onCompleted = ({ updateProfile }: UpdateProfileMutation): void => {
@@ -90,7 +91,13 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
-  const initialValues = useMemo(() => dynamicInitialValues, Object.values(dynamicInitialValues));
+  const initialValues = useMemo(
+    () => ({
+      ...generalFormValues,
+      ...dynamicInitialValues,
+    }),
+    Object.values(dynamicInitialValues),
+  );
 
   const validationSchema = Yup.object().shape({
     username: Yup.string().required(t('validation:required')),
