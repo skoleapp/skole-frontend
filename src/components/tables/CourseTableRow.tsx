@@ -48,7 +48,7 @@ export const CourseTableRow: React.FC<Props> = ({
   course: {
     slug,
     name,
-    code,
+    codes,
     user,
     score,
     starCount,
@@ -70,7 +70,7 @@ export const CourseTableRow: React.FC<Props> = ({
   const created = useDayjs(_created).startOf('day').fromNow();
 
   const renderCourseChip = !hideCourseChip && <TableRowChip label={t('common:course')} />;
-  const renderCourseCodeChip = <TableRowChip label={code} />;
+  const renderCourseCodesChip = <TableRowChip label={codes} />;
 
   const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
@@ -192,7 +192,7 @@ export const CourseTableRow: React.FC<Props> = ({
   const renderChips = (
     <Grid container>
       {renderCourseChip}
-      {renderCourseCodeChip}
+      {renderCourseCodesChip}
     </Grid>
   );
 

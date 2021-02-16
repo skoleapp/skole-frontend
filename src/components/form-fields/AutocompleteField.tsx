@@ -12,7 +12,7 @@ interface Props {
   field: FieldAttributes<FormikValues>;
   form: FormikProps<FormikValues>;
   labelKeys?: string[]; // Used to access the label on the object.
-  suffixKey?: string; // Key of value show after the label, e.g. a course code.
+  suffixKey?: string; // Key of value show after the label, e.g. course codes.
   searchKey: string; // Name of the variable that we use as the search key.
   dataKey: string; // Used to access the data after a successful query.
   document: DocumentNode; // GraphQL document the query is made with.

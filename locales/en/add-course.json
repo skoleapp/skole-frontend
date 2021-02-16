@@ -2,8 +2,8 @@
   "title": "Add Course",
   "description": "Add new course on Skole.",
   "header": "Add Course",
-  "nameHelperText": "The name of the course. Do not include the course code in this field.",
-  "codeHelperText": "The course code. Other users can use this code to find your course.",
+  "nameHelperText": "The name of the course. Do not include the course codes in this field.",
+  "codeHelperText": "The course codes that other users can use to find the course. You can add multiple codes by separating them with a comma.",
   "schoolHelperText": "The school to which this course belongs.",
   "subjectsHelperText": "The subjects to which this course belong. You can choose multiple options.",
   "guidelinesInfo": "Please make sure that the course complies with our"

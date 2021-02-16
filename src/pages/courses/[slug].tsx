@@ -118,7 +118,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
   const name = R.propOr('', 'name', course);
-  const code = R.propOr('-', 'code', course);
+  const codes = R.propOr('-', 'codes', course);
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
   const schoolName = R.pathOr('', ['school', 'name'], course);
   const courseId = R.propOr('', 'id', course);
@@ -212,8 +212,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const infoItems = [
     {
-      label: t('common:courseCode'),
-      value: code,
+      label: t('common:codes'),
+      value: codes,
     },
     {
       label: t('common:subjects'),
@@ -488,11 +488,12 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   }
 
   const name = R.propOr('', 'name', course);
-  const code = R.propOr('', 'code', course);
+  const codes = R.propOr('', 'codes', course);
+  const title = codes ? `${name} - ${codes}` : name;
 
   const seoProps = {
-    title: `${name} - ${code}`,
-    description: t('description', { name, code }),
+    title,
+    description: t('description', { name, codes }),
   };
 
   return {

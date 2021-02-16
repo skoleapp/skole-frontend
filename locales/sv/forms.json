@@ -10,7 +10,7 @@
   "titleOptional": "Titel (frivillig)",
   "bioOptional": "Bio (frivillig)",
   "name": "Namn",
-  "codeOptional": "Kod (frivillig)",
+  "codesOptional": "Koder (frivillig)",
   "school": "Skola",
   "schoolOptional": "Skola (frivillig)",
   "subject": "Ämne",

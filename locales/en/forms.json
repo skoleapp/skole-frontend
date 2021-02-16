@@ -10,7 +10,7 @@
   "titleOptional": "Title (optional)",
   "bioOptional": "Bio (optional)",
   "name": "Name",
-  "codeOptional": "Code (optional)",
+  "codesOptional": "Codes (optional)",
   "school": "School",
   "schoolOptional": "School (optional)",
   "subject": "Subject",

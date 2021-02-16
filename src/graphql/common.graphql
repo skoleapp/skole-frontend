@@ -145,7 +145,7 @@ query AutocompleteCountries {
 fragment courseFields on CourseObjectType {
   slug
   name
-  code
+  codes
   score
   starCount
   resourceCount
@@ -248,7 +248,7 @@ query Course($slug: String, $page: Int, $pageSize: Int) {
     id
     slug
     name
-    code
+    codes
     modified
     created
     score
@@ -282,7 +282,7 @@ query Course($slug: String, $page: Int, $pageSize: Int) {
 query CourseSeoProps($slug: String) {
   course(slug: $slug) {
     name
-    code
+    codes
   }
 }
 
@@ -299,14 +299,12 @@ query AutocompleteCourses($school: String, $name: String) {
     id
     slug
     name
-    code
+    codes
   }
 }
 
-mutation CreateCourse($courseName: String!, $courseCode: String, $subjects: [ID], $school: ID!) {
-  createCourse(
-    input: { name: $courseName, code: $courseCode, subjects: $subjects, school: $school }
-  ) {
+mutation CreateCourse($name: String!, $codes: String, $subjects: [ID], $school: ID!) {
+  createCourse(input: { name: $name, codes: $codes, subjects: $subjects, school: $school }) {
     successMessage
     errors {
       field
@@ -383,7 +381,7 @@ query CreateResourceAutocompleteData($school: String, $course: String) {
     id
     slug
     name
-    code
+    codes
   }
 }
 
@@ -543,6 +541,7 @@ fragment userMeFields on UserObjectType {
   productUpdateEmailPermission
   blogPostEmailPermission
   school {
+    id
     slug
     name
   }
@@ -905,7 +904,7 @@ query DiscussionSuggestions {
     ... on CourseObjectType {
       slug
       courseName: name
-      code
+      codes
       __typename
       school {
         slug
