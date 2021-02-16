@@ -1,7 +1,7 @@
 ---
 title: 'Trending Content, New Discussion and Much More!'
 excerpt: 'Trending content, improved discussion, see your comments in your profile and much more!'
-coverImage: '/images/updates/trending-content.png'
+coverImage: '/images/updates/trending-content.jpeg'
 date: '2021-01-28'
 slug: trending-content
 ---
