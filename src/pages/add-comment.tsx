@@ -125,9 +125,9 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     let school = null;
 
     if (userMe) {
-      course = discussion?.__typename === 'CourseObjectType' ? discussion.slug : null;
-      resource = discussion?.__typename === 'ResourceObjectType' ? discussion.slug : null;
-      school = discussion?.__typename === 'SchoolObjectType' ? discussion.slug : null;
+      course = discussion?.__typename === 'CourseObjectType' ? discussion.id : null;
+      resource = discussion?.__typename === 'ResourceObjectType' ? discussion.id : null;
+      school = discussion?.__typename === 'SchoolObjectType' ? discussion.id : null;
     } else {
       school = R.prop('id', discussion);
     }
@@ -164,7 +164,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const discussionAttrs = value.split('-');
 
     const discussion = discussionSuggestions.find(
-      (s) => s.__typename === discussionAttrs[0] && s.slug === discussionAttrs[1],
+      (s) => s.__typename === discussionAttrs[0] && s.id === discussionAttrs[1],
     );
 
     formRef.current?.setFieldValue('discussion', discussion);
@@ -203,7 +203,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const mapDiscussionSuggestions = discussionSuggestions.map((d, i) => (
     <FormControlLabel
-      value={`${d.__typename}-${d.slug}`} // Radio values must be string.
+      value={`${d.__typename}-${d.id}`} // Radio values must be string.
       control={<Radio />}
       label={renderDiscussionSuggestionLabel(d)}
       key={i}

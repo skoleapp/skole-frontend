@@ -902,25 +902,23 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
 query DiscussionSuggestions {
   discussionSuggestions {
     ... on CourseObjectType {
+      id
       slug
       courseName: name
       codes
       __typename
-      school {
-        slug
-        name
-      }
     }
     ... on ResourceObjectType {
+      id
       slug
       title
       __typename
       course {
-        slug
         name
       }
     }
     ... on SchoolObjectType {
+      id
       slug
       name
       __typename
