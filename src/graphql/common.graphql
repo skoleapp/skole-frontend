@@ -452,6 +452,7 @@ fragment paginatedSubjectFields on PaginatedSubjectObjectType {
 
 query School($slug: String, $page: Int, $pageSize: Int) {
   school(slug: $slug) {
+    id
     slug
     name
     commentCount
@@ -828,11 +829,6 @@ fragment suggestionFields on SuggestionsUnion {
   }
   ... on CommentObjectType {
     ...commentFields
-    # Need to use an alias: https://stackoverflow.com/a/56695847/9835872
-    commentCourse: course {
-      slug
-      name
-    }
   }
 }
 
@@ -902,25 +898,23 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
 query DiscussionSuggestions {
   discussionSuggestions {
     ... on CourseObjectType {
+      id
       slug
       courseName: name
       codes
       __typename
-      school {
-        slug
-        name
-      }
     }
     ... on ResourceObjectType {
+      id
       slug
       title
       __typename
       course {
-        slug
         name
       }
     }
     ... on SchoolObjectType {
+      id
       slug
       name
       __typename

@@ -60,7 +60,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const context = useLanguageHeaderContext();
   const { userMe, setUserMe } = useAuthContext();
 
-  const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
+  const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER);
 
   const {
     formRef: registerFormRef,

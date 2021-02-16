@@ -1,4 +1,3 @@
-import { SchoolObjectType, useSchoolQuery } from '__generated__/src/graphql/common.graphql';
 import Grid from '@material-ui/core/Grid';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -30,7 +29,7 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext, useDiscussionContext } from 'context';
-import { SchoolSeoPropsDocument } from 'generated';
+import { SchoolSeoPropsDocument, useSchoolQuery } from 'generated';
 import { withActions, withDiscussion, withInfo, withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useMediaQueries, useSearch, useTabs } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
@@ -89,7 +88,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const context = useLanguageHeaderContext();
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useSchoolQuery({ variables, context });
-  const school: SchoolObjectType = R.propOr(null, 'school', data);
+  const school = R.prop('school', data);
   const slug = R.propOr('', 'slug', school);
   const schoolName = R.propOr('', 'name', school);
   const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school);

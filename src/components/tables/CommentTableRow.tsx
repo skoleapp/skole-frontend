@@ -95,7 +95,7 @@ export const CommentTableRow: React.FC<Props> = ({
     (!!school?.slug && urls.resource(school.slug)) ||
     (!!comment?.course?.slug && urls.course(comment.course.slug)) ||
     (!!comment?.resource?.slug && urls.resource(comment.resource.slug)) ||
-    (!!comment?.school?.slug && urls.resource(comment.school.slug)) ||
+    (!!comment?.school?.slug && urls.school(comment.school.slug)) ||
     '';
 
   const href = {
