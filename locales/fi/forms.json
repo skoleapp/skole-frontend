@@ -9,7 +9,7 @@
   "titleOptional": "Otsikko (valinnainen)",
   "bioOptional": "Kuvaus (valinnainen)",
   "name": "Nimi",
-  "codeOptional": "Koodi (valinnainen)",
+  "codesOptional": "Koodit (valinnainen)",
   "school": "Koulu",
   "schoolOptional": "Koulu (valinnainen)",
   "subject": "Oppiaine",

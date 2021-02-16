@@ -33,8 +33,8 @@ import { urls } from 'utils';
 import * as Yup from 'yup';
 
 interface CreateCourseFormValues {
-  courseName: string;
-  courseCode: string;
+  name: string;
+  codes: string;
   subjects: SubjectObjectType[];
   school: SchoolObjectType | null;
 }
@@ -64,9 +64,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const school = R.propOr(_school, 'school', data);
 
   const validationSchema = Yup.object().shape({
-    courseName: Yup.string().required(t('validation:required')),
-    courseCode: Yup.string(),
-    subjects: Yup.mixed(),
+    name: Yup.string().required(t('validation:required')),
     school: Yup.object().nullable().required(t('validation:required')),
   });
 
@@ -90,8 +88,8 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   });
 
   const handleSubmit = async ({
-    courseName,
-    courseCode,
+    name,
+    codes,
     school: _school,
     subjects: _subjects,
   }: CreateCourseFormValues): Promise<void> => {
@@ -99,8 +97,8 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     const subjects = _subjects.map((s) => s.id);
 
     const variables = {
-      courseName,
-      courseCode,
+      name,
+      codes,
       school,
       subjects,
     };
@@ -112,8 +110,8 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const initialValues = useMemo(
     () => ({
       ...generalFormValues,
-      courseName: '',
-      courseCode: '',
+      name: '',
+      codes: '',
       school,
       subjects: [],
     }),
@@ -129,10 +127,10 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     />
   );
 
-  const renderCourseCodeField = (
+  const renderCodesField = (
     <Field
-      name="code"
-      label={t('forms:codeOptional')}
+      name="codes"
+      label={t('forms:codesOptional')}
       component={TextFormField}
       helperText={t('add-course:codeHelperText')}
     />
@@ -180,7 +178,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderFormFields = (props: FormikProps<CreateCourseFormValues>): JSX.Element => (
     <Form>
       {renderCourseNameField}
-      {renderCourseCodeField}
+      {renderCodesField}
       {renderSchoolField}
       {renderSubjectsField}
       {renderGuidelinesLink}

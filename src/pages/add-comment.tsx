@@ -177,7 +177,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       label={t('forms:discussion')}
       dataKey="autocompleteSchools"
       searchKey="name"
-      suffixKey="code"
+      suffixKey="codes"
       document={AutocompleteSchoolsDocument}
       component={AutocompleteField}
       helperText={t('add-comment:schoolHelperText')}
@@ -188,7 +188,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     switch (d.__typename) {
       case 'CourseObjectType': {
         // @ts-ignore: `courseName` has been renamed in the GraphQL query.
-        return d.code ? `${d.courseName} (${d.code})` : d.courseName;
+        return d.codes ? `${d.courseName} (${d.codes})` : d.courseName;
       }
 
       case 'ResourceObjectType': {
