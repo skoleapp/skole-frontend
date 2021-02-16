@@ -452,6 +452,7 @@ fragment paginatedSubjectFields on PaginatedSubjectObjectType {
 
 query School($slug: String, $page: Int, $pageSize: Int) {
   school(slug: $slug) {
+    id
     slug
     name
     commentCount
