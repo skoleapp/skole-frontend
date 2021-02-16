@@ -489,9 +489,10 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
 
   const name = R.propOr('', 'name', course);
   const codes = R.propOr('', 'codes', course);
+  const title = codes ? `${name} - ${codes}` : name;
 
   const seoProps = {
-    title: `${name} - ${codes}`,
+    title,
     description: t('description', { name, codes }),
   };
 
