@@ -541,6 +541,7 @@ fragment userMeFields on UserObjectType {
   productUpdateEmailPermission
   blogPostEmailPermission
   school {
+    id
     slug
     name
   }
