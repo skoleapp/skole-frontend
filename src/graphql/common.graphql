@@ -828,11 +828,6 @@ fragment suggestionFields on SuggestionsUnion {
   }
   ... on CommentObjectType {
     ...commentFields
-    # Need to use an alias: https://stackoverflow.com/a/56695847/9835872
-    commentCourse: course {
-      slug
-      name
-    }
   }
 }
 
