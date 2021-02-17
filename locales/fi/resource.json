@@ -1,13 +1,13 @@
 {
-  "description": "Näytä {{ title }} - {{ date }} Skolessa.",
+  "description": "Näytä {{ discussionName }} Skolessa.",
   "error": "Virhe ladattaessa materiaalia.",
   "noComments": "Tällä materiaalilla ei ole kommentteja. Lisää kommentti alta!",
   "drawingMode": "Piirtotila",
   "downloadPdf": "Lataa PDF",
   "printPdf": "Tulosta PDF",
   "shareHeader": "Jaa materiaali",
-  "shareTitle": "{{ title }} Skolessa",
-  "shareText": "Katso {{ title }} käyttäjältä {{ creatorUsername }} Skolessa",
+  "shareTitle": "{{ discussionName }} Skolessa",
+  "shareText": "Katso {{ discussionName }} käyttäjältä {{ creatorUsername }} Skolessa",
   "share": "Jaa materiaali",
   "delete": "Poista materiaali",
   "confirmDelete": "Haluatko varmasti poistaa tämän materiaalin?"

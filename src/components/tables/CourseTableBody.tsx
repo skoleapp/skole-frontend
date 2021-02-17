@@ -7,11 +7,18 @@ import { CourseTableRow } from './CourseTableRow';
 
 interface Props extends Omit<TableRowProps, 'key'> {
   courses: CourseObjectType[];
+  hideSchoolLink?: boolean;
 }
 
-export const CourseTableBody: React.FC<Props> = ({ courses, ...tableRowProps }) => {
+export const CourseTableBody: React.FC<Props> = ({ courses, hideSchoolLink, ...tableRowProps }) => {
   const mapCourses = courses.map((c, i) => (
-    <CourseTableRow course={c} hideCourseChip key={i} {...tableRowProps} />
+    <CourseTableRow
+      course={c}
+      hideCourseChip
+      hideSchoolLink={hideSchoolLink}
+      key={i}
+      {...tableRowProps}
+    />
   ));
 
   return <TableBody>{mapCourses}</TableBody>;

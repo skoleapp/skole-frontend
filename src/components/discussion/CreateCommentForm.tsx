@@ -238,7 +238,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const renderSecondaryDiscussionLink = (
     <TextLink href={secondaryDiscussionLinkHref}>
-      {resource?.course.name || course?.school.name}
+      #{resource?.course.slug || course?.school.slug}
     </TextLink>
   );
 
@@ -251,7 +251,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   const renderSecondaryDiscussionField = (!!course || !!resource) && !comment && (
     <Field
       name="secondaryDiscussion"
-      formControlProps={{ margin: 'none' }}
+      formControlProps={{ margin: 'none', className: 'form-text' }}
       component={CheckboxFormField}
       onChange={handleChange}
       label={renderLabel}

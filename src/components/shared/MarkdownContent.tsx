@@ -1,10 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
 const useStyles = makeStyles(({ palette, spacing }) => ({
-  markdown: {
+  root: {
     textAlign: 'left',
     '& a': {
       color: palette.type === 'dark' ? palette.secondary.main : palette.primary.main,
@@ -17,18 +18,24 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
       paddingLeft: spacing(6),
     },
   },
+  dense: {
+    '& *': {
+      margin: '0 !important',
+    },
+  },
 }));
 
 interface Props {
   children: string;
+  dense?: boolean;
 }
 
-export const MarkdownContent: React.FC<Props> = ({ children }) => {
+export const MarkdownContent: React.FC<Props> = ({ children, dense }) => {
   const classes = useStyles();
 
   return (
     <ReactMarkdown
-      className={classes.markdown}
+      className={clsx(classes.root, dense && classes.dense)}
       plugins={[gfm]}
       disallowedTypes={['image']} // Do not render images.
       linkTarget="_blank" // Open all links externally.

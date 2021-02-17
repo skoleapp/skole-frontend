@@ -435,9 +435,9 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     <Link href={urls.blog(slug)} key={i}>
       <MenuItem>
         <ListItemText>
-          <Grid container alignItems="center">
+          <Grid container alignItems="center" spacing={2}>
             <Grid item xs={10}>
-              <Typography variant="subtitle1" color="textSecondary">
+              <Typography className="truncate-text" variant="subtitle1" color="textSecondary">
                 {title}
               </Typography>
             </Grid>

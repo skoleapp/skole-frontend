@@ -33,7 +33,7 @@
   "scoreOrdering": "Pisteet",
   "bestOrdering": "Parhaat",
   "nameOptional": "Nimi (valinnainen)",
-  "postTo": "Lähetä keskusteluun {{ target }}",
+  "postTo": "Lähetä keskusteluun {{ discussionName }}",
   "replyTo": "Reply to {{ username }}",
   "selectDiscussionToPost": "Valitse keskustelu lähettääksesi",
   "contactLinkText": "PS. Jos et löydä etsimääsi koulua tai oppiainetta, voit",

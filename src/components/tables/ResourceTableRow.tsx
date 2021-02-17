@@ -4,11 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
 import { ResourceObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import * as R from 'ramda';
 import React from 'react';
 import { BORDER } from 'styles';
 import { ColSpan, TableRowProps } from 'types';
@@ -17,7 +15,7 @@ import { urls } from 'utils';
 import { Link, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   root: {
     borderBottom: BORDER,
     paddingLeft: '0.3rem',
@@ -27,29 +25,18 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     padding: spacing(1),
     display: 'flex',
   },
-  creatorInfoTableCell: {
-    [breakpoints.up('md')]: {
-      justifyContent: 'flex-end',
-    },
-  },
-  creatorInfo: {
-    display: 'flex',
-  },
-  creator: {
-    margin: `0 ${spacing(1)}`,
-  },
 }));
 
 interface Props extends TableRowProps {
   resource: ResourceObjectType;
   hideResourceChip?: boolean;
   hideDateChip?: boolean;
+  hideCourseLink?: boolean;
 }
 
 export const ResourceTableRow: React.FC<Props> = ({
   resource: {
     slug,
-    title,
     date,
     resourceType,
     user,
@@ -57,87 +44,50 @@ export const ResourceTableRow: React.FC<Props> = ({
     starCount,
     downloads,
     commentCount,
-    course,
+    // @ts-ignore: An alias has been set in GraphQL query.
+    resourceCourse,
     created: _created,
   },
   hideResourceChip,
   hideDateChip,
+  hideCourseLink,
   dense,
   key,
 }) => {
   const { t } = useTranslation();
   const { isMobile } = useMediaQueries();
   const classes = useStyles();
-  const _courseName = R.propOr('', 'name', course);
-  const courseCodes = R.propOr('', 'codes', course);
-  const courseName = courseCodes ? `${_courseName} - ${courseCodes}` : _courseName;
   const scoreLabel = t('common:score').toLowerCase();
   const commentsLabel = t('common:comments').toLowerCase();
   const starsLabel = t('common:stars').toLowerCase();
   const downloadsLabel = t('common:downloads').toLowerCase();
   const created = useDayjs(_created).startOf('day').fromNow();
+  const discussionName = `#${slug}`;
 
-  const renderResourceChip = !hideResourceChip && <TableRowChip label={t('common:resource')} />;
+  const renderResourceChip = !hideResourceChip && (
+    <TableRowChip label={`${t('common:resource')} 📚`} />
+  );
+
   const renderResourceTypeChip = !!resourceType && <TableRowChip label={resourceType.name} />;
-  const renderCourseChip = !!courseName && <TableRowChip label={courseName} />;
   const renderDateChip = !hideDateChip && <TableRowChip label={useDayjs(date).format('LL')} />;
 
   const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
   );
 
-  const renderResourceCreator = (
-    <span className={classes.creator}>{renderUserLink || t('common:communityUser')}</span>
+  const renderCourseLink = !!resourceCourse.slug && !hideCourseLink && (
+    <>
+      {' '}
+      @ <TextLink href={urls.course(resourceCourse.slug)}>{`#${resourceCourse.slug}`}</TextLink>
+    </>
   );
 
   const renderMobileResourceStats = isMobile && (
     <TableCell className={classes.tableCell}>
-      <Grid container>
-        <Grid item xs={12} container spacing={4}>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {scoreLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
-              <Typography variant="subtitle1">{score}</Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {commentsLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
-              <Typography variant="subtitle1">{commentCount}</Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} container spacing={4}>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {starsLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
-              <Typography variant="subtitle1">{starCount}</Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {downloadsLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
-              <Typography variant="subtitle1">{downloads}</Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      <Typography variant="body2" color="textSecondary">
+        {score} {scoreLabel} | {commentCount} {commentsLabel} | {starCount} {starsLabel} |{' '}
+        {downloads} {downloadsLabel}
+      </Typography>
     </TableCell>
   );
 
@@ -194,8 +144,9 @@ export const ResourceTableRow: React.FC<Props> = ({
   );
 
   const renderCreatorInfo = (
-    <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
-      {t('common:createdBy')} {renderResourceCreator} {created}
+    <Typography variant="body2" color="textSecondary">
+      {t('common:uploadedBy')} {renderUserLink || t('common:communityUser')} {created}
+      {renderCourseLink}
     </Typography>
   );
 
@@ -204,43 +155,31 @@ export const ResourceTableRow: React.FC<Props> = ({
       {renderResourceChip}
       {renderResourceTypeChip}
       {renderDateChip}
-      {renderCourseChip}
     </Grid>
   );
 
-  const renderResourceTitle = (
+  const renderDiscussionName = (
     <TableCell className={classes.tableCell}>
-      <Typography variant="subtitle1">{title}</Typography>
+      <Typography variant="subtitle1">{discussionName}</Typography>
     </TableCell>
   );
 
-  const resourceInfoColSpan: ColSpan = {
-    xs: 12,
-    md: dense ? 12 : 6,
-  };
-
   const renderResourceInfo = (
-    <Grid item xs={12} container alignItems="flex-end">
-      <Grid item {...resourceInfoColSpan}>
-        <TableCell className={clsx(classes.tableCell)}>{renderChips}</TableCell>
-      </Grid>
-      <Grid item {...resourceInfoColSpan} container>
-        <TableCell className={clsx(classes.tableCell, !dense && classes.creatorInfoTableCell)}>
-          {renderCreatorInfo}
-        </TableCell>
-      </Grid>
+    <Grid item xs={12} container direction="column">
+      <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+      <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
     </Grid>
   );
 
   const statsColSpan: ColSpan = {
     xs: 12,
-    md: dense ? 6 : 4,
+    md: 4,
     lg: dense ? 5 : 3,
   };
 
   const mainColSpan: ColSpan = {
     xs: 12,
-    md: dense ? 6 : 8,
+    md: 8,
     lg: dense ? 7 : 9,
   };
 
@@ -251,7 +190,7 @@ export const ResourceTableRow: React.FC<Props> = ({
           <Grid container>
             <Grid item xs={12} container>
               <Grid item {...mainColSpan} container>
-                {renderResourceTitle}
+                {renderDiscussionName}
                 {renderResourceInfo}
               </Grid>
               <Grid item {...statsColSpan} container>

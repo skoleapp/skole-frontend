@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
 import { CourseObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
@@ -16,7 +15,7 @@ import { urls } from 'utils';
 import { Link, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
-const useStyles = makeStyles(({ spacing, breakpoints }) => ({
+const useStyles = makeStyles(({ spacing }) => ({
   root: {
     borderBottom: BORDER,
     paddingLeft: '0.3rem',
@@ -26,28 +25,17 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     padding: spacing(1),
     display: 'flex',
   },
-  creatorInfoTableCell: {
-    [breakpoints.up('md')]: {
-      justifyContent: 'flex-end',
-    },
-  },
-  creatorInfo: {
-    display: 'flex',
-  },
-  creator: {
-    margin: `0 ${spacing(1)}`,
-  },
 }));
 
 interface Props extends TableRowProps {
   course: CourseObjectType;
   hideCourseChip?: boolean;
+  hideSchoolLink?: boolean;
 }
 
 export const CourseTableRow: React.FC<Props> = ({
   course: {
     slug,
-    name,
     codes,
     user,
     score,
@@ -55,8 +43,11 @@ export const CourseTableRow: React.FC<Props> = ({
     resourceCount,
     commentCount,
     created: _created,
+    // @ts-ignore: An alias has been set in GraphQL query.
+    courseSchool,
   },
   hideCourseChip,
+  hideSchoolLink,
   dense,
   key,
 }) => {
@@ -68,66 +59,55 @@ export const CourseTableRow: React.FC<Props> = ({
   const starsLabel = t('common:stars').toLowerCase();
   const resourcesLabel = t('common:resources').toLowerCase();
   const created = useDayjs(_created).startOf('day').fromNow();
+  const discussionName = `#${slug}`;
 
-  const renderCourseChip = !hideCourseChip && <TableRowChip label={t('common:course')} />;
+  const renderDiscussionName = (
+    <TableCell className={classes.tableCell}>
+      <Typography variant="subtitle1">{discussionName}</Typography>
+    </TableCell>
+  );
+
+  const renderCourseChip = !hideCourseChip && <TableRowChip label={`${t('common:course')} 🎓`} />;
   const renderCourseCodesChip = <TableRowChip label={codes} />;
+
+  const renderChips = (
+    <Grid container>
+      {renderCourseChip}
+      {renderCourseCodesChip}
+    </Grid>
+  );
 
   const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
   );
 
-  const renderCourseCreator = (
-    <span className={classes.creator}>{renderUserLink || t('common:communityUser')}</span>
+  const renderSchoolLink = !!courseSchool.slug && !hideSchoolLink && (
+    <>
+      {' '}
+      @ <TextLink href={urls.school(courseSchool.slug)}>{`#${courseSchool.slug}`}</TextLink>
+    </>
+  );
+
+  const renderCreatorInfo = (
+    <Typography variant="body2" color="textSecondary">
+      {t('common:createdBy')} {renderUserLink || t('common:communityUser')} {created}
+      {renderSchoolLink}
+    </Typography>
+  );
+
+  const renderCourseInfo = (
+    <Grid item xs={12} container direction="column">
+      <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+      <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
+    </Grid>
   );
 
   const renderMobileCourseStats = isMobile && (
     <TableCell className={classes.tableCell}>
-      <Grid container>
-        <Grid item xs={12} container spacing={4}>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {scoreLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center">
-              <Typography variant="subtitle1">{score}</Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {commentsLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center">
-              <Typography variant="subtitle1">{commentCount}</Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} container spacing={4}>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {starsLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center">
-              <Typography variant="subtitle1">{starCount}</Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={6} container>
-            <Grid item xs={8} sm={10} container alignItems="center">
-              <Typography variant="body2" color="textSecondary">
-                {resourcesLabel}
-              </Typography>
-            </Grid>
-            <Grid item xs={4} sm={2} container alignItems="center">
-              <Typography variant="subtitle1">{resourceCount}</Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      <Typography variant="body2" color="textSecondary">
+        {score} {scoreLabel} | {commentCount} {commentsLabel} | {starCount} {starsLabel} |{' '}
+        {resourceCount} {resourcesLabel}
+      </Typography>
     </TableCell>
   );
 
@@ -183,52 +163,15 @@ export const CourseTableRow: React.FC<Props> = ({
     </TableCell>
   );
 
-  const renderCreatorInfo = (
-    <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
-      {t('common:createdBy')} {renderCourseCreator} {created}
-    </Typography>
-  );
-
-  const renderChips = (
-    <Grid container>
-      {renderCourseChip}
-      {renderCourseCodesChip}
-    </Grid>
-  );
-
-  const renderCourseName = (
-    <TableCell className={classes.tableCell}>
-      <Typography variant="subtitle1">{name}</Typography>
-    </TableCell>
-  );
-
-  const courseInfoColSpan: ColSpan = {
-    xs: 12,
-    md: dense ? 12 : 6,
-  };
-
-  const renderCourseInfo = (
-    <Grid item xs={12} container alignItems="flex-end">
-      <Grid item {...courseInfoColSpan}>
-        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
-      </Grid>
-      <Grid item {...courseInfoColSpan}>
-        <TableCell className={clsx(classes.tableCell, !dense && classes.creatorInfoTableCell)}>
-          {renderCreatorInfo}
-        </TableCell>
-      </Grid>
-    </Grid>
-  );
-
   const statsColSpan: ColSpan = {
     xs: 12,
-    md: dense ? 6 : 4,
+    md: 4,
     lg: dense ? 5 : 3,
   };
 
   const mainColSpan: ColSpan = {
     xs: 12,
-    md: dense ? 6 : 8,
+    md: 8,
     lg: dense ? 7 : 9,
   };
 
@@ -239,7 +182,7 @@ export const CourseTableRow: React.FC<Props> = ({
           <Grid container>
             <Grid item xs={12} container>
               <Grid item {...mainColSpan} container>
-                {renderCourseName}
+                {renderDiscussionName}
                 {renderCourseInfo}
               </Grid>
               <Grid item {...statsColSpan} container>

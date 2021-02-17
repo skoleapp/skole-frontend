@@ -86,6 +86,8 @@ const PdfViewer: React.FC<PdfViewerProps> = ({ file }) => {
       renderTextLayer={false}
       renderAnnotationLayer={false}
       width={1080}
+      loading=""
+      noData=""
     />
   ));
 

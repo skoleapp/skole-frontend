@@ -28,9 +28,14 @@ export const getPaginationQuery = (query: ParsedUrlQueryInput): ParsedUrlQueryIn
   R.pick(['page', 'pageSize'], query);
 
 // Truncate strings to a given length.
+// If string contains line breaks, return only first line.
 export const truncate = (str: string, num: number): string => {
   if (str.length > num) {
     return `${str.slice(0, num)}...`;
+  }
+
+  if (str.split('\n').length > 1) {
+    return `${str.split('\n')[0]}...`;
   }
 
   return str;

@@ -1,10 +1,10 @@
 {
-  "description": "Visa {{ schoolName }} på Skole.",
+  "description": "Visa {{ discussionName }} på Skole.",
   "noSubjects": "Den här skolan har inga ämnen.",
   "noCourses": "Den här skolan har inga kurser.",
   "shareHeader": "Dela skolan",
-  "shareTitle": "{{ schoolName }} på Skole",
-  "shareText": "Visa {{ schoolName }} på Skole",
+  "shareTitle": "{{ discussionName }} på Skole",
+  "shareText": "Visa {{ discussionName }} på Skole",
   "share": "Dela skolan",
   "noComments": "Den här skolan har inga kommentarer. Lägg till en kommentar nedan!"
 }

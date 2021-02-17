@@ -1,13 +1,13 @@
 {
-  "description": "View {{ title }} - {{ date }} on Skole.",
+  "description": "View {{ discussionName }} on Skole.",
   "error": "Error loading material.",
   "noComments": "This material has no comments. Add a comment below!",
   "drawingMode": "Drawing Mode",
   "downloadPdf": "Download PDF",
   "printPdf": "Print PDF",
   "shareHeader": "Share Material",
-  "shareTitle": "{{ title }} on Skole",
-  "shareText": "See {{ title }} from {{ creatorUsername }} on Skole",
+  "shareTitle": "{{ discussionName }} on Skole",
+  "shareText": "See {{ discussionName }} from {{ creatorUsername }} on Skole",
   "share": "Share Material",
   "delete": "Delete Material",
   "confirmDelete": "Are you sure you want to delete this material?"

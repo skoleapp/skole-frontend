@@ -111,14 +111,12 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { data, loading, error } = useResourceQuery({ variables, context });
   const resource = R.prop('resource', data);
   const title = R.propOr('', 'title', resource);
+  const slug = R.propOr('', 'slug', resource);
   const date = R.propOr('', 'date', resource);
-  const resourceType = R.pathOr('-', ['resourceType', 'name'], resource);
-  const courseName = R.pathOr('', ['course', 'name'], resource);
-  const schoolName = R.pathOr('', ['school', 'name'], resource);
+  const resourceTypeName = R.pathOr('', ['resourceType', 'name'], resource);
   const courseSlug = R.pathOr('', ['course', 'slug'], resource);
   const schoolSlug = R.pathOr('', ['school', 'slug'], resource);
   const creatorId = R.pathOr('', ['user', 'id'], resource);
-  const fullTitle = `${title} - ${date}`;
   const file = mediaUrl(R.propOr('', 'file', resource));
   const resourceId = R.propOr('', 'id', resource);
   const initialVote = R.propOr(null, 'vote', resource);
@@ -137,6 +135,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { handleCloseActionsDialog } = useActionsContext();
   const { tabsProps, firstTabPanelProps, secondTabPanelProps, tabValue, setTabValue } = useTabs();
   const emoji = '📚';
+  const discussionName = `#${slug}`;
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -233,7 +232,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       const blob = await res.blob();
       const blobUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.download = fullTitle;
+      a.download = discussionName;
       a.href = blobUrl;
       document.body.appendChild(a);
       a.click();
@@ -266,21 +265,25 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   const renderCourseLink = !!courseSlug && (
-    <TextLink href={urls.course(courseSlug)}>{courseName}</TextLink>
+    <TextLink href={urls.course(courseSlug)}>#{courseSlug}</TextLink>
   );
 
   const renderSchoolLink = !!schoolSlug && (
-    <TextLink href={urls.school(schoolSlug)}>{schoolName}</TextLink>
+    <TextLink href={urls.school(schoolSlug)}>#{schoolSlug}</TextLink>
   );
 
   const infoItems = [
+    {
+      label: t('common:resource'),
+      value: title,
+    },
     {
       label: t('common:date'),
       value: date,
     },
     {
       label: t('common:resourceType'),
-      value: resourceType,
+      value: resourceTypeName,
     },
     {
       label: t('common:stars'),
@@ -308,8 +311,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('resource:shareHeader'),
-    title: t('resource:shareTitle', { title: fullTitle }),
-    text: t('resource:shareText', { title: fullTitle, creatorUsername }),
+    title: t('resource:shareTitle', { discussionName }),
+    text: t('resource:shareText', { discussionName, creatorUsername }),
   };
 
   const renderShareButton = (
@@ -317,7 +320,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: fullTitle,
+    header: discussionName,
     emoji,
     creator: resourceCreator,
     created,
@@ -406,7 +409,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const toolbarProps = {
-    title: fullTitle,
+    title: discussionName,
     emoji,
     courseSlug,
     renderStarButton,
@@ -518,12 +521,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const title = R.propOr('', 'title', resource);
-  const date = R.propOr('', 'date', resource);
+  const discussionName = `#${resource.slug}`;
 
   const seoProps = {
-    title: `${title} - ${date}`,
-    description: t('description', { title, date }),
+    title: discussionName,
+    description: t('description', { discussionName }),
   };
 
   return {
