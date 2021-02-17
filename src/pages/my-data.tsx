@@ -1,7 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ButtonLink, FormSubmitSection, FormTemplate, ActionRequiredTemplate } from 'components';
+import { ActionRequiredTemplate, ButtonLink, FormSubmitSection, FormTemplate } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';

@@ -70,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     urls.search,
     urls.suggestions,
     urls.terms,
-    urls.uploadResource,
+    urls.uploadMaterial,
     urls.values,
   ];
 

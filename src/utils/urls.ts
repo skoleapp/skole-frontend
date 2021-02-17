@@ -31,7 +31,7 @@ export const urls = {
   starred: '/starred',
   suggestions: '/suggestions',
   terms: '/terms',
-  uploadResource: '/upload-resource',
+  uploadMaterial: '/upload-material',
   values: '/values',
   verifyAccount: '/verify-account',
 };

@@ -5,10 +5,10 @@ import MaterialLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
+  ActionRequiredTemplate,
   ButtonLink,
   FormSubmitSection,
   FormTemplate,
-  ActionRequiredTemplate,
   PasswordField,
   TextFormField,
   TextLink,

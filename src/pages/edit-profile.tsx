@@ -1,9 +1,9 @@
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
 import {
+  ActionRequiredTemplate,
   AvatarField,
   FormSubmitSection,
-  ActionRequiredTemplate,
   SettingsTemplate,
   TextFormField,
   TextLink,

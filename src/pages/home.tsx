@@ -293,7 +293,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     {
       text: 'common:uploadResources',
       icon: CloudUploadOutlined,
-      href: urls.uploadResource,
+      href: urls.uploadMaterial,
     },
     {
       text: 'common:addCourses',
@@ -586,7 +586,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
           <Typography {...nextStepsCardTextProps}>{t('home:uploadHeader')}</Typography>
         </CardContent>
         <CardActions>
-          <ButtonLink {...nextStepButtonProps} href={urls.uploadResource} fullWidth>
+          <ButtonLink {...nextStepButtonProps} href={urls.uploadMaterial} fullWidth>
             {t('home:uploadText')}
           </ButtonLink>
         </CardActions>

@@ -30,7 +30,7 @@ export const BottomNavbar: React.FC = () => {
       case urls.search: {
         return 2;
       }
-      case urls.uploadResource: {
+      case urls.uploadMaterial: {
         return 3;
       }
       case urls.activity: {
@@ -91,7 +91,7 @@ export const BottomNavbar: React.FC = () => {
       value={3}
       label={t('common:upload')}
       showLabel
-      onClick={handleRedirect(urls.uploadResource)}
+      onClick={handleRedirect(urls.uploadMaterial)}
       icon={<CloudUploadOutlined />}
     />
   );

@@ -333,7 +333,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const uploadResourceHref = {
-    pathname: urls.uploadResource,
+    pathname: urls.uploadMaterial,
     query: {
       school: schoolSlug,
       course: courseSlug,

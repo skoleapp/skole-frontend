@@ -4,12 +4,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import CheckCircleOutlined from '@material-ui/icons/CheckCircleOutline';
 import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import {
+  ActionRequiredTemplate,
   ActionsButton,
   ActivityTableBody,
   ErrorTemplate,
   ListTemplate,
   LoadingBox,
-  ActionRequiredTemplate,
   NotFoundBox,
   PaginatedTable,
 } from 'components';
