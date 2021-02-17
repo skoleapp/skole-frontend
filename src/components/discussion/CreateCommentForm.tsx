@@ -238,7 +238,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const renderSecondaryDiscussionLink = (
     <TextLink href={secondaryDiscussionLinkHref}>
-      {resource?.course.name || course?.school.name}
+      #{resource?.course.slug || course?.school.slug}
     </TextLink>
   );
 

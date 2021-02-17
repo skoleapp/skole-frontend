@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import clsx from 'clsx';
 import { CommentObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
@@ -18,7 +17,7 @@ import { mediaLoader, truncate, urls } from 'utils';
 import { Link, MarkdownContent, TextLink } from '../shared';
 import { TableRowChip } from './TableRowChip';
 
-const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
+const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     borderBottom: BORDER,
     paddingLeft: '0.3rem',
@@ -37,11 +36,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
       textOverflow: 'ellipsis',
     },
   },
-  creatorInfoTableCell: {
-    [breakpoints.up('md')]: {
-      justifyContent: 'flex-end',
-    },
-  },
   attachmentPreviewContainer: {
     marginRight: spacing(3),
     display: 'flex',
@@ -49,12 +43,6 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   attachmentPreview: {
     border: `0.1rem solid ${palette.primary.main} !important`,
     borderRadius: '0.5rem',
-  },
-  creatorInfo: {
-    display: 'flex',
-  },
-  creator: {
-    margin: `0 ${spacing(1)}`,
   },
 }));
 
@@ -98,6 +86,15 @@ export const CommentTableRow: React.FC<Props> = ({
     (!!comment?.school?.slug && urls.school(comment.school.slug)) ||
     '';
 
+  const discussionName = `#${
+    course?.slug ||
+    comment?.course?.slug ||
+    resource?.slug ||
+    comment?.resource?.slug ||
+    school?.slug ||
+    comment?.school?.slug
+  }`;
+
   const href = {
     pathname,
     query: {
@@ -105,54 +102,70 @@ export const CommentTableRow: React.FC<Props> = ({
     },
   };
 
-  const renderCommentChip = !hideCommentChip && <TableRowChip label={t('common:comment')} />;
-
-  const renderCourseChip = (!!course || comment?.course) && (
-    <TableRowChip label={course?.name || comment?.course?.name} />
+  const renderCommentAttachmentThumbnail = !!attachmentThumbnail && (
+    <Box className={classes.attachmentPreviewContainer}>
+      <Image
+        className={classes.attachmentPreview}
+        loader={mediaLoader}
+        src={attachmentThumbnail}
+        layout="fixed"
+        width={40}
+        height={40}
+      />
+    </Box>
   );
 
-  const renderResourceChip = (!!resource || comment?.resource) && (
-    <TableRowChip label={resource?.title || comment?.resource?.title} />
+  const renderMarkdownContent = !!commentPreview && (
+    <Typography variant="subtitle1">
+      <MarkdownContent dense>{commentPreview}</MarkdownContent>
+    </Typography>
   );
 
-  const renderSchoolChip = (!!school || comment?.school) && (
-    <TableRowChip label={school?.name || comment?.school?.name} />
+  const renderCommentPreview = (
+    <TableCell className={classes.tableCell}>
+      {renderCommentAttachmentThumbnail}
+      {renderMarkdownContent}
+    </TableCell>
+  );
+
+  const renderCommentChip = !hideCommentChip && (
+    <TableRowChip label={`${t('common:comment')} 💬`} />
   );
 
   const renderReplyChip = !!comment && <TableRowChip label={t('common:reply')} />;
+
+  const renderChips = (
+    <Grid container>
+      {renderCommentChip}
+      {renderReplyChip}
+    </Grid>
+  );
 
   const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
   );
 
-  const renderCommentCreator = (
-    <span className={classes.creator}>{renderUserLink || t('common:communityUser')}</span>
+  const renderDiscussionLink = <TextLink href={href}>{discussionName}</TextLink>;
+
+  const renderCreatorInfo = (
+    <Typography variant="body2" color="textSecondary">
+      {t('common:postedBy')} {renderUserLink || t('common:communityUser')} {created} @{' '}
+      {renderDiscussionLink}
+    </Typography>
+  );
+
+  const renderCommentInfo = (
+    <Grid item xs={12} container direction="column">
+      <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+      <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
+    </Grid>
   );
 
   const renderMobileCommentStats = isMobile && (
     <TableCell className={classes.tableCell}>
-      <Grid container spacing={4}>
-        <Grid item xs={6} container>
-          <Grid item xs={8} sm={10} container alignItems="center">
-            <Typography variant="body2" color="textSecondary">
-              {scoreLabel}
-            </Typography>
-          </Grid>
-          <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
-            <Typography variant="subtitle1">{score}</Typography>
-          </Grid>
-        </Grid>
-        <Grid item xs={6} container>
-          <Grid item xs={8} sm={10} container alignItems="center">
-            <Typography variant="body2" color="textSecondary">
-              {repliesLabel}
-            </Typography>
-          </Grid>
-          <Grid item xs={4} sm={2} container alignItems="center" justify="flex-end">
-            <Typography variant="subtitle1">{replyCount}</Typography>
-          </Grid>
-        </Grid>
-      </Grid>
+      <Typography variant="body2" color="textSecondary">
+        {score} {scoreLabel} | {replyCount} {repliesLabel}
+      </Typography>
     </TableCell>
   );
 
@@ -188,75 +201,15 @@ export const CommentTableRow: React.FC<Props> = ({
     </TableCell>
   );
 
-  const renderCommentAttachmentThumbnail = !!attachmentThumbnail && (
-    <Box className={classes.attachmentPreviewContainer}>
-      <Image
-        className={classes.attachmentPreview}
-        loader={mediaLoader}
-        src={attachmentThumbnail}
-        layout="fixed"
-        width={40}
-        height={40}
-      />
-    </Box>
-  );
-
-  const renderMarkdownContent = !!commentPreview && (
-    <Typography variant="subtitle1">
-      <MarkdownContent>{commentPreview}</MarkdownContent>
-    </Typography>
-  );
-
-  const renderCommentPreview = (
-    <TableCell className={classes.tableCell}>
-      {renderCommentAttachmentThumbnail}
-      {renderMarkdownContent}
-    </TableCell>
-  );
-
-  const renderCreatorInfo = (
-    <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
-      {t('common:postedBy')} {renderCommentCreator} {created}
-    </Typography>
-  );
-
-  const renderChips = (
-    <Grid container>
-      {renderCommentChip}
-      {renderCourseChip}
-      {renderResourceChip}
-      {renderSchoolChip}
-      {renderReplyChip}
-    </Grid>
-  );
-
-  const commentInfoColSpan: ColSpan = {
-    xs: 12,
-    md: dense ? 12 : 6,
-  };
-
-  const renderCommentInfo = (
-    <Grid item xs={12} container alignItems="flex-end">
-      <Grid item {...commentInfoColSpan}>
-        <TableCell className={classes.tableCell}>{renderChips}</TableCell>
-      </Grid>
-      <Grid item {...commentInfoColSpan} container>
-        <TableCell className={clsx(classes.tableCell, !dense && classes.creatorInfoTableCell)}>
-          {renderCreatorInfo}
-        </TableCell>
-      </Grid>
-    </Grid>
-  );
-
   const statsColSpan: ColSpan = {
     xs: 12,
-    md: dense ? 6 : 4,
+    md: 4,
     lg: dense ? 5 : 3,
   };
 
   const mainColSpan: ColSpan = {
     xs: 12,
-    md: dense ? 6 : 8,
+    md: 8,
     lg: dense ? 7 : 9,
   };
 

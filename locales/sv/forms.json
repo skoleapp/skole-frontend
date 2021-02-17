@@ -34,7 +34,7 @@
   "scoreOrdering": "Poäng",
   "bestOrdering": "Bäst",
   "nameOptional": "Namn (frivillig)",
-  "postTo": "Skicka till {{ target }}",
+  "postTo": "Skicka till {{ discussionName }}",
   "replyTo": "Svara till {{ användarnamn }}",
   "selectDiscussionToPost": "Välj en diskussion at skicka",
   "contactLinkText": "PS. Om du inte hittar skolan eller ämnet du letar efter, du kan",

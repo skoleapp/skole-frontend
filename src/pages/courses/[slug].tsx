@@ -117,10 +117,9 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
-  const name = R.propOr('', 'name', course);
+  const courseName = R.propOr('', 'name', course);
   const codes = R.propOr('-', 'codes', course);
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
-  const schoolName = R.pathOr('', ['school', 'name'], course);
   const courseId = R.propOr('', 'id', course);
   const courseSlug = R.propOr('', 'slug', course);
   const schoolSlug = R.pathOr('', ['school', 'slug'], course);
@@ -138,6 +137,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { tabsProps, firstTabPanelProps, secondTabPanelProps } = useTabs();
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const emoji = '🎓';
+  const discussionName = `#${courseSlug}`;
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -190,7 +190,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   };
 
-  const renderSubjectLinks = subjects.map(({ id, name }, i) => (
+  const renderSubjectLinks = subjects.map(({ id, slug }, i) => (
     <Grid key={i} item xs={12}>
       <TextLink
         href={{
@@ -201,16 +201,20 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
           },
         }}
       >
-        {name}
+        #{slug}
       </TextLink>
     </Grid>
   ));
 
   const renderSchoolLink = !!schoolSlug && (
-    <TextLink href={urls.school(schoolSlug)}>{schoolName}</TextLink>
+    <TextLink href={urls.school(schoolSlug)}>#{schoolSlug}</TextLink>
   );
 
   const infoItems = [
+    {
+      label: t('common:course'),
+      value: courseName,
+    },
     {
       label: t('common:codes'),
       value: codes,
@@ -239,8 +243,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('course:shareHeader'),
-    title: t('course:shareTitle', { name }),
-    text: t('course:shareText', { name, creatorUsername }),
+    title: t('course:shareTitle', { discussionName }),
+    text: t('course:shareText', { discussionName, creatorUsername }),
   };
 
   const renderShareButton = (
@@ -248,7 +252,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: name,
+    header: discussionName,
     emoji,
     creator: courseCreator,
     created,
@@ -341,7 +345,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     text: t('course:noResourcesLink'),
   };
 
-  const renderResourceTableBody = <ResourceTableBody resources={resources} dense />;
+  const renderResourceTableBody = <ResourceTableBody resources={resources} hideCourseLink dense />;
 
   const renderResourceTable = (
     <PaginatedTable
@@ -377,7 +381,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderHeader = (
     <>
-      {name}
+      {discussionName}
       {renderEmoji}
     </>
   );
@@ -487,13 +491,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const name = R.propOr('', 'name', course);
-  const codes = R.propOr('', 'codes', course);
-  const title = codes ? `${name} - ${codes}` : name;
+  const discussionName = `#${course.slug}`;
 
   const seoProps = {
-    title,
-    description: t('description', { name, codes }),
+    title: discussionName,
+    description: t('description', { discussionName }),
   };
 
   return {

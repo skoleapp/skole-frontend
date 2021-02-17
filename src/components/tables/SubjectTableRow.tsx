@@ -31,7 +31,7 @@ interface Props extends Omit<TableRowProps, 'dense'> {
 }
 
 export const SubjectTableRow: React.FC<Props> = ({
-  subject: { slug, name, courseCount, resourceCount },
+  subject: { slug, courseCount, resourceCount },
   key,
 }) => {
   const { t } = useTranslation();
@@ -39,6 +39,14 @@ export const SubjectTableRow: React.FC<Props> = ({
   const classes = useStyles();
   const coursesLabel = t('common:courses').toLowerCase();
   const resourcesLabel = t('common:resources').toLowerCase();
+  const discussionName = `#${slug}`;
+
+  const href = {
+    pathname: urls.search,
+    query: {
+      subject: slug,
+    },
+  };
 
   const renderMobileSubjectStats = isMobile && (
     <TableCell className={classes.tableCell}>
@@ -96,20 +104,20 @@ export const SubjectTableRow: React.FC<Props> = ({
     </TableCell>
   );
 
-  const renderSubjectName = (
+  const renderDiscussionName = (
     <TableCell className={classes.tableCell}>
-      <Typography variant="subtitle1">{name}</Typography>
+      <Typography variant="subtitle1">{discussionName}</Typography>
     </TableCell>
   );
 
   return (
-    <Link href={urls.course(slug || '')} key={key} fullWidth>
+    <Link href={href} key={key} fullWidth>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>
             <Grid item xs={12} container alignItems="center">
               <Grid item xs={12} md={6} lg={7} container>
-                {renderSubjectName}
+                {renderDiscussionName}
               </Grid>
               <Grid item xs={12} md={6} lg={5} container>
                 {renderMobileSubjectStats || renderDesktopSubjectStats}

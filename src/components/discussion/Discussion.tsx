@@ -90,6 +90,7 @@ export const Discussion: React.FC<Props> = ({
   const [prevCommentCount, setPrevCommentCount] = useState(0);
   const [visibleComments, setVisibleComments] = useState(20);
   const [loadingMoreComments, setLoadingMoreComments] = useState(false);
+  const discussionName = `#${course?.slug || resource?.slug || school?.slug}`;
 
   const discussionType = course
     ? DiscussionTypes.COURSE
@@ -273,9 +274,7 @@ export const Discussion: React.FC<Props> = ({
   const placeholder =
     (!!comment &&
       t('forms:replyTo', { username: comment.user?.username || t('common:communityUser') })) ||
-    t('forms:postTo', {
-      target: course?.name || resource?.title || school?.name || '',
-    });
+    t('forms:postTo', { discussionName });
 
   const renderInputArea = (
     <CreateCommentForm

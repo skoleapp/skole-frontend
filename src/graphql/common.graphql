@@ -155,6 +155,9 @@ fragment courseFields on CourseObjectType {
     slug
     username
   }
+  courseSchool: school {
+    slug
+  }
 }
 
 fragment paginatedCourseFields on PaginatedCourseObjectType {
@@ -230,6 +233,9 @@ fragment resourceFields on ResourceObjectType {
     slug
     username
   }
+  resourceCourse: course {
+    slug
+  }
 }
 
 fragment paginatedResourceFields on PaginatedResourceObjectType {
@@ -261,12 +267,10 @@ query Course($slug: String, $page: Int, $pageSize: Int) {
     }
     subjects {
       slug
-      name
     }
     school {
       id
       slug
-      name
     }
     user {
       id
@@ -281,8 +285,7 @@ query Course($slug: String, $page: Int, $pageSize: Int) {
 
 query CourseSeoProps($slug: String) {
   course(slug: $slug) {
-    name
-    codes
+    slug
   }
 }
 
@@ -341,17 +344,14 @@ query Resource($slug: String) {
     downloads
     commentCount
     resourceType {
-      slug
       name
     }
     school {
       slug
-      name
     }
     course {
       id
       slug
-      name
     }
     user {
       id
@@ -367,8 +367,7 @@ query Resource($slug: String) {
 
 query ResourceSeoProps($slug: String) {
   resource(slug: $slug) {
-    title
-    date
+    slug
   }
 }
 
@@ -458,15 +457,12 @@ query School($slug: String, $page: Int, $pageSize: Int) {
     commentCount
     city {
       slug
-      name
     }
     country {
       slug
-      name
     }
     schoolType {
       slug
-      name
     }
   }
   subjects(school: $slug, page: $page, pageSize: $pageSize) {
@@ -479,7 +475,7 @@ query School($slug: String, $page: Int, $pageSize: Int) {
 
 query SchoolSeoProps($slug: String) {
   school(slug: $slug) {
-    name
+    slug
   }
 }
 

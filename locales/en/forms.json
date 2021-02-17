@@ -34,7 +34,7 @@
   "scoreOrdering": "Score",
   "bestOrdering": "Best",
   "nameOptional": "Name (optional)",
-  "postTo": "Post to {{ target }}",
+  "postTo": "Post to {{ discussionName }}",
   "replyTo": "Reply to {{ username }}",
   "selectDiscussionToPost": "Select discussion to post",
   "contactLinkText": "PS. If you can't find the school or subject you're looking for, you can",

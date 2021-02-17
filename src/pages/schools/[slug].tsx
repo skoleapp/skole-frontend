@@ -91,11 +91,9 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const school = R.prop('school', data);
   const slug = R.propOr('', 'slug', school);
   const schoolName = R.propOr('', 'name', school);
-  const schoolTypeName = R.pathOr('', ['schoolType', 'name'], school);
+  const schoolSlug = R.propOr('', 'slug', school);
   const schoolTypeSlug = R.pathOr('', ['schoolType', 'slug'], school);
-  const countrySlug = R.pathOr('', ['country', 'id'], school);
-  const countryName = R.pathOr('', ['country', 'name'], school);
-  const cityName = R.pathOr('', ['city', 'name'], school);
+  const countrySlug = R.pathOr('', ['country', 'slug'], school);
   const citySlug = R.pathOr('', ['city', 'slug'], school);
   const subjects = R.pathOr([], ['subjects', 'objects'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
@@ -103,7 +101,8 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const initialCommentCount = R.prop('commentCount', school);
   const { commentCount } = useDiscussionContext(initialCommentCount);
-  const header = isTabletOrDesktop && schoolName; // School names are too long to be used as the header on mobile.
+  const discussionName = `#${schoolSlug}`;
+  const header = isTabletOrDesktop && discussionName; // School names are too long to be used as the header on mobile.
   const emoji = '🏫';
 
   const addCourseHref = {
@@ -128,11 +127,15 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     query: { ...searchUrl.query, city: citySlug },
   };
 
-  const renderSchoolTypeLink = <TextLink href={schoolTypeLink}>{schoolTypeName}</TextLink>;
-  const renderCountryLink = <TextLink href={countryLink}>{countryName}</TextLink>;
-  const renderCityLink = <TextLink href={cityLink}>{cityName}</TextLink>;
+  const renderSchoolTypeLink = <TextLink href={schoolTypeLink}>#{schoolTypeSlug}</TextLink>;
+  const renderCountryLink = <TextLink href={countryLink}>#{countrySlug}</TextLink>;
+  const renderCityLink = <TextLink href={cityLink}>#{citySlug}</TextLink>;
 
   const infoItems = [
+    {
+      label: t('common:school'),
+      value: schoolName,
+    },
     {
       label: t('common:courses'),
       value: courseCount,
@@ -173,8 +176,8 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('school:shareHeader'),
-    title: t('school:shareTitle', { schoolName }),
-    text: t('school:shareText', { schoolName }),
+    title: t('school:shareTitle', { discussionName }),
+    text: t('school:shareText', { discussionName }),
   };
 
   const renderShareButton = (
@@ -182,7 +185,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: schoolName,
+    header: discussionName,
     emoji,
     infoItems,
   };
@@ -215,7 +218,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSubjectsTableBody = <SubjectTableBody subjects={subjects} />;
-  const renderCourseTableBody = <CourseTableBody courses={courses} dense />;
+  const renderCourseTableBody = <CourseTableBody courses={courses} hideSchoolLink dense />;
 
   const renderSubjectsTable = (
     <PaginatedTable
@@ -247,7 +250,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderHeader = (
     <>
-      {schoolName}
+      {discussionName}
       {renderEmoji}
     </>
   );
@@ -369,11 +372,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const schoolName = R.propOr('', 'name', school);
+  const discussionName = `#${school.slug}`;
 
   const seoProps = {
-    title: schoolName,
-    description: t('description', { schoolName }),
+    title: discussionName,
+    description: t('description', { discussionName }),
   };
 
   return {
