@@ -76,6 +76,7 @@
   "emailPlaceholder": "<your_email>",
   "guidelinesLink": "Guidelines",
   "loginRequired": "You need to log in to continue.",
+  "verificationRequired": "You need to verify your account to continue.",
   "logoutRequired": "You need to log out to continue.",
   "comment": "Comment",
   "about": "About",

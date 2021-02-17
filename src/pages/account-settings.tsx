@@ -5,10 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import StorageOutlined from '@material-ui/icons/StorageOutlined';
 import VpnKeyOutlined from '@material-ui/icons/VpnKeyOutlined';
 import {
+  ActionRequiredTemplate,
   AutocompleteField,
   ButtonLink,
   FormSubmitSection,
-  LoginRequiredTemplate,
   SettingsTemplate,
   SwitchFormField,
   TextFormField,
@@ -248,7 +248,7 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
   }
 
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;

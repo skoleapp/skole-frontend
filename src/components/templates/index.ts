@@ -1,10 +1,9 @@
+export { ActionRequiredTemplate } from './ActionRequiredTemplate';
 export { ErrorTemplate } from './ErrorTemplate';
 export { FormTemplate } from './FormTemplate';
 export { LandingPageTemplate } from './LandingPageTemplate';
 export { ListTemplate } from './ListTemplate';
 export { LoadingTemplate } from './LoadingTemplate';
-export { LoginRequiredTemplate } from './LoginRequiredTemplate';
-export { LogoutRequiredTemplate } from './LogoutRequiredTemplate';
 export { MainTemplate } from './MainTemplate';
 export { MarkdownTemplate } from './MarkdownTemplate';
 export { SettingsTemplate } from './SettingsTemplate';

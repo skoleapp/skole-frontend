@@ -9,7 +9,7 @@ import {
   ErrorTemplate,
   ListTemplate,
   LoadingBox,
-  LoginRequiredTemplate,
+  ActionRequiredTemplate,
   NotFoundBox,
   PaginatedTable,
 } from 'components';
@@ -131,7 +131,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
   }
 
   if (!!error && !!error.networkError) {

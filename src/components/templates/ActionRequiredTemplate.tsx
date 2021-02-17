@@ -11,14 +11,48 @@ import { urls } from 'utils';
 import { ButtonLink, Emoji } from '../shared';
 import { FormTemplate } from './FormTemplate';
 
-export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, ...props }) => {
+type ActionRequiredVariant = 'login' | 'verify-account' | 'logout';
+
+interface Props extends MainTemplateProps {
+  variant: ActionRequiredVariant;
+}
+
+const getProps = (variant: ActionRequiredVariant) => {
+  switch (variant) {
+    case 'login': {
+      return {
+        text: 'common:loginRequired',
+        buttonText: 'common:login',
+        pathname: urls.login,
+      };
+    }
+
+    case 'verify-account': {
+      return {
+        text: 'common:verificationRequired',
+        buttonText: 'common:verifyAccount',
+        pathname: urls.verifyAccount,
+      };
+    }
+
+    case 'logout': {
+      return {
+        text: 'common:logoutRequired',
+        buttonText: 'common:logout',
+        pathname: urls.logout,
+      };
+    }
+  }
+};
+
+export const ActionRequiredTemplate: React.FC<Props> = ({ children, variant, ...props }) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
-  const text = t('common:loginRequired');
   const handleClickCancelButton = (): void => Router.back();
+  const { text, buttonText, pathname } = getProps(variant);
 
-  const loginButtonHref = {
-    pathname: urls.login,
+  const buttonHref = {
+    pathname,
     query: {
       next: asPath,
     },
@@ -29,22 +63,22 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
   const renderText = (
     <FormControl>
       <Typography variant="subtitle1" align="center">
-        {text}
+        {t(text)}
         {renderEmoji}
       </Typography>
     </FormControl>
   );
 
-  const renderLoginButton = (
+  const renderButton = (
     <FormControl>
       <ButtonLink
-        href={loginButtonHref}
+        href={buttonHref}
         color="primary"
         variant="contained"
         endIcon={<ArrowForwardOutlined />}
         fullWidth
       >
-        {t('common:login')}
+        {t(buttonText)}
       </ButtonLink>
     </FormControl>
   );
@@ -60,7 +94,7 @@ export const LoginRequiredTemplate: React.FC<MainTemplateProps> = ({ children, .
   return (
     <FormTemplate {...props}>
       {renderText}
-      {renderLoginButton}
+      {renderButton}
       {renderCancelButton}
       {children}
     </FormTemplate>

@@ -5,12 +5,12 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import {
+  ActionRequiredTemplate,
   AutocompleteField,
   ButtonLink,
   ContactLink,
   FormSubmitSection,
   FormTemplate,
-  LogoutRequiredTemplate,
   PasswordField,
   TextFormField,
   TextLink,
@@ -352,7 +352,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (userMe && phase === RegisterPhases.REGISTER) {
-    return <LogoutRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="logout" {...layoutProps} />;
   }
 
   return (

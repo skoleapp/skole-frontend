@@ -8,7 +8,7 @@ import {
   ButtonLink,
   FormSubmitSection,
   FormTemplate,
-  LogoutRequiredTemplate,
+  ActionRequiredTemplate,
   PasswordField,
   TextFormField,
   TextLink,
@@ -237,7 +237,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (userMe) {
-    return <LogoutRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="logout" {...layoutProps} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
