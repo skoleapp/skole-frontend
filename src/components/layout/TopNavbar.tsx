@@ -232,6 +232,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 href={urls.activity}
                 variant="outlined"
                 endIcon={<ArrowForwardOutlined />}
+                fullWidth
               >
                 {t('common:seeAll')}
               </ButtonLink>
