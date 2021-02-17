@@ -2,6 +2,7 @@ import Collapse from '@material-ui/core/Collapse';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {
+  ActionRequiredTemplate,
   AutocompleteField,
   ContactDialog,
   DatePickerFormField,
@@ -10,7 +11,6 @@ import {
   FormSubmitSection,
   FormTemplate,
   GuidelinesLink,
-  LoginRequiredTemplate,
   TextFormField,
   TextLink,
 } from 'components';
@@ -53,7 +53,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school', 'course'], query);
-  const { userMe, username, email, school: _school } = useAuthContext();
+  const { userMe, verified, username, email, school: _school } = useAuthContext();
 
   const contactDialogProps = useOpen();
   const contactDialogEmailText = t('upload-resource:contactDialogEmailText');
@@ -303,9 +303,9 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
     </>
   );
 
-  const renderLoginRequiredContactDialogText = (
+  const renderActionRequiredContactDialogText = (
     <>
-      {renderCommonDialogEmailText} {t('upload-resource:loginRequiredContactDialogCreditText')}{' '}
+      {renderCommonDialogEmailText} {t('upload-resource:actionRequiredContactDialogCreditText')}{' '}
       {t('upload-resource:contactDialogAccountText')} {renderCommonMiscDialogText}
     </>
   );
@@ -320,14 +320,14 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
     <ContactDialog {...commonContactDialogProps} text={renderContactDialogText} />
   );
 
-  const renderLoginRequiredContactDialog = (
-    <ContactDialog {...commonContactDialogProps} text={renderLoginRequiredContactDialogText} />
+  const renderActionRequiredContactDialog = (
+    <ContactDialog {...commonContactDialogProps} text={renderActionRequiredContactDialogText} />
   );
 
-  const renderLoginRequiredText = (
+  const renderActionRequiredText = (
     <FormControl>
       <FormHelperText>
-        {t('upload-resource:loginRequiredText')} {renderContactLink}
+        {t('upload-resource:actionRequiredText')} {renderContactLink}
       </FormHelperText>
     </FormControl>
   );
@@ -342,10 +342,19 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
 
   if (!userMe) {
     return (
-      <LoginRequiredTemplate {...layoutProps}>
-        {renderLoginRequiredText}
-        {renderLoginRequiredContactDialog}
-      </LoginRequiredTemplate>
+      <ActionRequiredTemplate variant="login" {...layoutProps}>
+        {renderActionRequiredText}
+        {renderActionRequiredContactDialog}
+      </ActionRequiredTemplate>
+    );
+  }
+
+  if (!verified) {
+    return (
+      <ActionRequiredTemplate variant="verify-account" {...layoutProps}>
+        {renderActionRequiredText}
+        {renderActionRequiredContactDialog}
+      </ActionRequiredTemplate>
     );
   }
 

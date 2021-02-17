@@ -76,6 +76,7 @@
   "emailPlaceholder": "<din_e-post>",
   "guidelinesLink": "Riktlinjer",
   "loginRequired": "Du måste logga in för att fortsätta.",
+  "verificationRequired": "Du måste verifiera ditt konto för att fortsätta.",
   "logoutRequired": "Du måste logga ut för att fortsätta.",
   "comment": "Kommentar",
   "about": "Om oss",

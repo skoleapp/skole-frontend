@@ -1,9 +1,9 @@
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
 import {
+  ActionRequiredTemplate,
   AvatarField,
   FormSubmitSection,
-  LoginRequiredTemplate,
   SettingsTemplate,
   TextFormField,
   TextLink,
@@ -161,7 +161,7 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
   }
 
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;

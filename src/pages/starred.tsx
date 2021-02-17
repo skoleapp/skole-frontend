@@ -1,8 +1,8 @@
 import {
+  ActionRequiredTemplate,
   CourseTableBody,
   ErrorTemplate,
   LoadingBox,
-  LoginRequiredTemplate,
   NotFoundBox,
   PaginatedTable,
   ResourceTableBody,
@@ -72,7 +72,7 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
   }
 
   if (!!error && !!error.networkError) {

@@ -5,10 +5,10 @@ import MaterialLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
+  ActionRequiredTemplate,
   ButtonLink,
   FormSubmitSection,
   FormTemplate,
-  LogoutRequiredTemplate,
   PasswordField,
   TextFormField,
   TextLink,
@@ -237,7 +237,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (userMe) {
-    return <LogoutRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="logout" {...layoutProps} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;

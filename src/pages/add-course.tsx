@@ -1,13 +1,13 @@
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import {
+  ActionRequiredTemplate,
   AutocompleteField,
   ContactLink,
   ErrorTemplate,
   FormSubmitSection,
   FormTemplate,
   GuidelinesLink,
-  LoginRequiredTemplate,
   TextFormField,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
@@ -42,7 +42,7 @@ interface CreateCourseFormValues {
 const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
   const { t } = useTranslation();
-  const { userMe, school: _school } = useAuthContext();
+  const { userMe, verified, school: _school } = useAuthContext();
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['school'], query);
@@ -208,7 +208,11 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
+  }
+
+  if (!verified) {
+    return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
   if (!!error && !!error.networkError) {

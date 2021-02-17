@@ -364,7 +364,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       icon: SchoolOutlined,
     },
     {
-      href: urls.uploadResource,
+      href: urls.uploadMaterial,
       label: t('common:uploadResources'),
       icon: CloudUploadOutlined,
     },

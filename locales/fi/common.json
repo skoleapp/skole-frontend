@@ -76,6 +76,7 @@
   "emailPlaceholder": "<sähköpostiosoitteesi>",
   "guidelinesLink": "Ohjeitamme",
   "loginRequired": "Sinun pitää kirjatua sisään jatkaaksesi.",
+  "verificationRequired": "Sinun pitää vahvistaa tilisi jatkaaksesi.",
   "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi.",
   "comment": "Kommentti",
   "about": "Meistä",

@@ -4,12 +4,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import CheckCircleOutlined from '@material-ui/icons/CheckCircleOutline';
 import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import {
+  ActionRequiredTemplate,
   ActionsButton,
   ActivityTableBody,
   ErrorTemplate,
   ListTemplate,
   LoadingBox,
-  LoginRequiredTemplate,
   NotFoundBox,
   PaginatedTable,
 } from 'components';
@@ -131,7 +131,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
   }
 
   if (!!error && !!error.networkError) {

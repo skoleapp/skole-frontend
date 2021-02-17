@@ -171,8 +171,13 @@ export const Discussion: React.FC<Props> = ({
       comments.length > prevCommentCount && setVisibleComments(comments.length); // Automatically load all comments when a new comment is created.
     }
 
-    setCommentCount(String(comments.length));
-    setPrevCommentCount(comments.length);
+    const commentCount = comments.reduce(
+      (acc, comment) => acc + comment.replyComments.length + 1,
+      0,
+    );
+
+    setCommentCount(String(commentCount));
+    setPrevCommentCount(commentCount);
   }, [comments, isMobile]);
 
   // Scroll to bottom when all comments are loaded.

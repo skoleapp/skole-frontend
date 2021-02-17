@@ -1,9 +1,9 @@
 import FormControl from '@material-ui/core/FormControl';
 import {
+  ActionRequiredTemplate,
   ButtonLink,
   FormSubmitSection,
   FormTemplate,
-  LoginRequiredTemplate,
   TextFormField,
 } from 'components';
 import { useAuthContext, useConfirmContext, useNotificationsContext } from 'context';
@@ -129,7 +129,7 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!userMe) {
-    return <LoginRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
   }
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;

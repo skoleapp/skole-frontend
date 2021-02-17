@@ -1,6 +1,6 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-import { FormSubmitSection, FormTemplate, LogoutRequiredTemplate, TextFormField } from 'components';
+import { ActionRequiredTemplate, FormSubmitSection, FormTemplate, TextFormField } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -212,7 +212,7 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (userMe) {
-    return <LogoutRequiredTemplate {...layoutProps} />;
+    return <ActionRequiredTemplate variant="logout" {...layoutProps} />;
   }
 
   return (

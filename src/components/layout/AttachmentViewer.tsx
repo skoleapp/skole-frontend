@@ -50,6 +50,7 @@ export const AttachmentViewer: React.FC = () => {
       className={classes.toolbar}
       alignItems="center"
       justify="space-between"
+      wrap="nowrap"
     >
       <Typography className="truncate-text" variant="subtitle1" color="secondary">
         {attachmentName}
