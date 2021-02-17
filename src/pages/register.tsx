@@ -56,11 +56,11 @@ enum RegisterPhases {
 
 const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
-  const [phase, setPhase] = useState(RegisterPhases.REGISTER_COMPLETE);
+  const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe, setUserMe } = useAuthContext();
 
-  const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER);
+  const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
   const {
     formRef: registerFormRef,
