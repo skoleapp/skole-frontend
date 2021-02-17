@@ -152,7 +152,7 @@ export const CommentCard: React.FC<Props> = ({
   const replyCount = replyComments.length;
   const { setAttachmentViewerValue } = useDiscussionContext();
   const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], comment);
-  const creatorSlug = R.propOr('', 'user', comment);
+  const creatorSlug = R.propOr('', 'slug', comment.user);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
 
