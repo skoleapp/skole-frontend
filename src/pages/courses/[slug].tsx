@@ -117,11 +117,13 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
-  const courseName = R.propOr('', 'name', course);
-  const codes = R.propOr('-', 'codes', course);
+  const name = R.propOr('', 'name', course);
+  const _codes = R.propOr('', 'codes', course);
+  const courseName = _codes ? `${name} - ${_codes}` : name;
+  const codes = _codes || '-';
   const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
   const courseId = R.propOr('', 'id', course);
-  const courseSlug = R.propOr('', 'slug', course);
+  const slug = R.propOr('', 'slug', course);
   const schoolSlug = R.pathOr('', ['school', 'slug'], course);
   const initialScore = String(R.propOr(0, 'score', course));
   const initialStars = String(R.propOr(0, 'starCount', course));
@@ -137,7 +139,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { tabsProps, firstTabPanelProps, secondTabPanelProps } = useTabs();
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const emoji = '🎓';
-  const discussionName = `#${courseSlug}`;
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -213,7 +214,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const infoItems = [
     {
       label: t('common:course'),
-      value: courseName,
+      value: name,
     },
     {
       label: t('common:codes'),
@@ -243,8 +244,8 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('course:shareHeader'),
-    title: t('course:shareTitle', { discussionName }),
-    text: t('course:shareText', { discussionName, creatorUsername }),
+    title: t('course:shareTitle', { courseName }),
+    text: t('course:shareText', { courseName, creatorUsername }),
   };
 
   const renderShareButton = (
@@ -252,7 +253,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: discussionName,
+    header: courseName,
     emoji,
     creator: courseCreator,
     created,
@@ -336,7 +337,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     pathname: urls.uploadMaterial,
     query: {
       school: schoolSlug,
-      course: courseSlug,
+      course: slug,
     },
   };
 
@@ -381,7 +382,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderHeader = (
     <>
-      {discussionName}
+      {courseName}
       {renderEmoji}
     </>
   );
@@ -491,11 +492,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const discussionName = `#${course.slug}`;
+  const courseName = course.codes ? `${course.name} - ${course.codes}` : course.name;
 
   const seoProps = {
-    title: discussionName,
-    description: t('description', { discussionName }),
+    title: courseName,
+    description: t('description', { courseName }),
   };
 
   return {

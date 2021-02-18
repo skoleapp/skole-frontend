@@ -132,12 +132,17 @@ export const CommentTableRow: React.FC<Props> = ({
     <TableRowChip label={`${t('common:comment')} 💬`} />
   );
 
+  const renderAttachmentChip = !!attachmentThumbnail && (
+    <TableRowChip label={`${t('common:attachment')} 📎`} />
+  );
+
   const renderReplyChip = !!comment && <TableRowChip label={t('common:reply')} />;
 
   const renderChips = (
     <Grid container>
       {renderCommentChip}
       {renderReplyChip}
+      {renderAttachmentChip}
     </Grid>
   );
 

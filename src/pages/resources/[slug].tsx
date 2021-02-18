@@ -48,7 +48,14 @@ import {
   useResourceQuery,
 } from 'generated';
 import { withActions, withDiscussion, withInfo, withPdfViewer, withUserMe } from 'hocs';
-import { useLanguageHeaderContext, useMediaQueries, useStars, useTabs, useVotes } from 'hooks';
+import {
+  useDayjs,
+  useLanguageHeaderContext,
+  useMediaQueries,
+  useStars,
+  useTabs,
+  useVotes,
+} from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import dynamic from 'next/dynamic';
@@ -111,8 +118,9 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { data, loading, error } = useResourceQuery({ variables, context });
   const resource = R.prop('resource', data);
   const title = R.propOr('', 'title', resource);
-  const slug = R.propOr('', 'slug', resource);
-  const date = R.propOr('', 'date', resource);
+  const _date = R.propOr('', 'date', resource);
+  const resourceTitle = _date ? `${title} - ${_date}` : title;
+  const date = useDayjs(_date).format('LL');
   const resourceTypeName = R.pathOr('', ['resourceType', 'name'], resource);
   const courseSlug = R.pathOr('', ['course', 'slug'], resource);
   const schoolSlug = R.pathOr('', ['school', 'slug'], resource);
@@ -135,7 +143,6 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { handleCloseActionsDialog } = useActionsContext();
   const { tabsProps, firstTabPanelProps, secondTabPanelProps, tabValue, setTabValue } = useTabs();
   const emoji = '📚';
-  const discussionName = `#${slug}`;
 
   const { stars, renderStarButton } = useStars({
     starred,
@@ -232,7 +239,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       const blob = await res.blob();
       const blobUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.download = discussionName;
+      a.download = resourceTitle;
       a.href = blobUrl;
       document.body.appendChild(a);
       a.click();
@@ -311,8 +318,8 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('resource:shareHeader'),
-    title: t('resource:shareTitle', { discussionName }),
-    text: t('resource:shareText', { discussionName, creatorUsername }),
+    title: t('resource:shareTitle', { resourceTitle }),
+    text: t('resource:shareText', { resourceTitle, creatorUsername }),
   };
 
   const renderShareButton = (
@@ -320,7 +327,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: discussionName,
+    header: resourceTitle,
     emoji,
     creator: resourceCreator,
     created,
@@ -409,7 +416,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const toolbarProps = {
-    title: discussionName,
+    title: resourceTitle,
     emoji,
     courseSlug,
     renderStarButton,
@@ -521,11 +528,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const discussionName = `#${resource.slug}`;
+  const resourceTitle = resource.date ? `${resource.title} - ${resource.date}` : resource.title;
 
   const seoProps = {
-    title: discussionName,
-    description: t('description', { discussionName }),
+    title: resourceTitle,
+    description: t('description', { resourceTitle }),
   };
 
   return {

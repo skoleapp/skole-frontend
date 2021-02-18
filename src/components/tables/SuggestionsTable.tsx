@@ -28,7 +28,7 @@ export const SuggestionsTable: React.FC<Props> = ({
       }
 
       case 'ResourceObjectType': {
-        return <ResourceTableRow resource={suggestion} hideDateChip key={i} {...tableRowProps} />;
+        return <ResourceTableRow resource={suggestion} key={i} {...tableRowProps} />;
       }
 
       case 'CommentObjectType': {

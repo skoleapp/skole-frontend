@@ -285,7 +285,8 @@ query Course($slug: String, $page: Int, $pageSize: Int) {
 
 query CourseSeoProps($slug: String) {
   course(slug: $slug) {
-    slug
+    name
+    codes
   }
 }
 
@@ -350,7 +351,6 @@ query Resource($slug: String) {
       slug
     }
     course {
-      id
       slug
     }
     user {
@@ -367,7 +367,8 @@ query Resource($slug: String) {
 
 query ResourceSeoProps($slug: String) {
   resource(slug: $slug) {
-    slug
+    title
+    date
   }
 }
 
@@ -475,7 +476,7 @@ query School($slug: String, $page: Int, $pageSize: Int) {
 
 query SchoolSeoProps($slug: String) {
   school(slug: $slug) {
-    slug
+    name
   }
 }
 
@@ -558,6 +559,7 @@ fragment commentFields on CommentObjectType {
   id
   text
   attachment
+  attachmentThumbnail
   created
   score
   replyCount
