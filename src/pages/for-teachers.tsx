@@ -1,23 +1,25 @@
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
-import { Emoji, LandingPageTemplate } from 'components';
-import { useNotificationsContext } from 'context';
+import { Emoji, FormErrorMessage, LandingPageTemplate } from 'components';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
-import { useLanguageHeaderContext } from 'hooks';
+import { useForm, useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import React, { SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { BORDER_RADIUS } from 'styles';
-import { SeoPageProps } from 'types';
+import { ContactFormValues, SeoPageProps } from 'types';
 import { isNotNativeApp } from 'utils';
+import * as Yup from 'yup';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   ctaContainer: {
@@ -39,12 +41,15 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
       fontSize: '2.75rem',
     },
   },
-  searchForm: {
+  emailForm: {
     marginTop: spacing(8),
     display: 'flex',
     justifyContent: 'center',
+    flexDirection: 'column',
+    width: '100%',
+    maxWidth: '25rem',
   },
-  searchFieldBox: {
+  emailFieldBox: {
     display: 'flex',
     flexGrow: 1,
     backgroundColor: palette.background.default,
@@ -54,7 +59,10 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
     padding: spacing(3),
   },
-  searchButton: {
+  emailInput: {
+    width: '100%',
+  },
+  submitButton: {
     borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
   emailSubmittedText: {
@@ -88,29 +96,37 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
 }));
 
+const initialValues = {
+  subject: 'Contact Request from Teacher',
+  name: '',
+  email: '',
+  message: 'New contact request submitted from teacher page.',
+};
+
 const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { toggleUnexpectedErrorNotification, toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const [email, setEmail] = useState('');
-  const [submitting, setSubmitting] = useState(false);
 
-  const onError = () => {
-    toggleUnexpectedErrorNotification();
-    setSubmitting(false);
-  };
+  const {
+    formRef,
+    onError,
+    handleMutationErrors,
+    setUnexpectedFormError,
+  } = useForm<ContactFormValues>();
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email(t('validation:invalidEmail')),
+  });
 
   const onCompleted = ({ createContactMessage }: CreateContactMessageMutation): void => {
     if (createContactMessage?.errors?.length) {
-      onError();
+      handleMutationErrors(createContactMessage.errors);
     } else if (createContactMessage?.successMessage) {
-      setSubmitting(false);
       setEmailSubmitted(true);
-      toggleNotification(createContactMessage.successMessage);
     } else {
-      onError();
+      setUnexpectedFormError();
     }
   };
 
@@ -120,17 +136,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSubmitEmail = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    const variables = {
-      subject: 'Contact Request from Teacher',
-      name: '',
-      email: '',
-      message: 'New contact request submitted from teacher page.',
-    };
-
+  const handleSubmitEmail = async (variables: ContactFormValues) => {
     await createContactMessage({ variables });
   };
 
@@ -163,25 +169,30 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderEmailInput = (
-    <form className={classes.searchForm} onSubmit={handleSubmitEmail}>
-      <Box className={classes.searchFieldBox}>
-        <InputBase
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type="email"
-          required
-          placeholder={t('forms:yourEmail')}
-        />
-      </Box>
-      <Button
-        className={classes.searchButton}
-        disabled={submitting}
-        type="submit"
-        variant="contained"
-      >
-        <ArrowForwardOutlined />
-      </Button>
-    </form>
+    <Formik
+      onSubmit={handleSubmitEmail}
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      innerRef={formRef}
+    >
+      <Form className={classes.emailForm}>
+        <FormControl margin="none">
+          <Grid container>
+            <Box className={classes.emailFieldBox}>
+              <InputBase
+                className={classes.emailInput}
+                onChange={(e) => formRef.current?.setFieldValue('email', e.target.value)}
+                placeholder={t('forms:yourEmail')}
+              />
+            </Box>
+            <Button className={classes.submitButton} type="submit" variant="contained">
+              <ArrowForwardOutlined />
+            </Button>
+          </Grid>
+          <ErrorMessage name="email" component={FormErrorMessage} />
+        </FormControl>
+      </Form>
+    </Formik>
   );
 
   const renderEmailSubmittedText = (

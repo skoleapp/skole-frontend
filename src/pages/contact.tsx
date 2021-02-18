@@ -7,15 +7,8 @@ import { useForm, useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { useMemo } from 'react';
-import { SeoPageProps } from 'types';
+import { ContactFormValues, SeoPageProps } from 'types';
 import * as Yup from 'yup';
-
-interface ContactFormValues {
-  subject: string;
-  name: string;
-  email: string;
-  message: string;
-}
 
 const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();

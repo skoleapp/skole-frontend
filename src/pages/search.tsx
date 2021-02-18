@@ -92,7 +92,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  searchForm: {
+  emailForm: {
     flexGrow: 1,
   },
   searchInputBaseInput: {
@@ -551,7 +551,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const customTopNavbar = (
     <AppBar className={classes.topNavbar}>
       <Box className={classes.searchContainer}>
-        <form className={classes.searchForm} onSubmit={handleSubmitSearchInput}>
+        <form className={classes.emailForm} onSubmit={handleSubmitSearchInput}>
           <InputBase
             classes={{ input: classes.searchInputBaseInput }}
             placeholder={t('forms:searchCourses')}
