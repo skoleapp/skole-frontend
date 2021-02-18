@@ -34,7 +34,7 @@
   "bestOrdering": "Parhaat",
   "nameOptional": "Nimi (valinnainen)",
   "postTo": "Lähetä keskusteluun {{ discussionName }}",
-  "replyTo": "Reply to {{ username }}",
+  "replyTo": "Vastaa käyttäjälle {{ username }}",
   "selectDiscussionToPost": "Valitse keskustelu lähettääksesi",
   "contactLinkText": "PS. Jos et löydä etsimääsi koulua tai oppiainetta, voit",
   "contactLinkLink": "ottaa meihin yhteyttä niin lisäämme ne sinulle!",
