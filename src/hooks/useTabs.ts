@@ -19,7 +19,7 @@ interface UseTabs {
 }
 
 // Custom helper hook for views that contain tabs.
-export const useTabs = (): UseTabs => {
+export const useTabs = (discussionTabIndex = 1): UseTabs => {
   const { query } = useRouter();
   const { isMobile } = useMediaQueries();
   const [tabValue, setTabValue] = useState(0);
@@ -30,10 +30,10 @@ export const useTabs = (): UseTabs => {
 
   // If a comment has been provided as a query parameter, automatically switch to discussion tab on mobile.
   useEffect(() => {
-    if (query.comment && isMobile) {
-      setTabValue(1);
+    if (!!query.comment && isMobile) {
+      setTabValue(discussionTabIndex);
     }
-  }, [query]);
+  }, [query, isMobile]);
 
   const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
     setTabValue(val);
