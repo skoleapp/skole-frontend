@@ -78,7 +78,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const course = R.propOr(null, 'course', data);
 
   const validationSchema = Yup.object().shape({
-    resourceTitle: Yup.string().required(t('validation:required')),
+    title: Yup.string().required(t('validation:required')),
     resourceType: Yup.object().nullable().required(t('validation:required')),
     date: Yup.date().nullable(),
     school: Yup.object().nullable().required(t('validation:required')),
