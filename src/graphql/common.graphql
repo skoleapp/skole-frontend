@@ -558,6 +558,7 @@ fragment commentFields on CommentObjectType {
   id
   text
   attachment
+  attachmentThumbnail
   created
   score
   replyCount
