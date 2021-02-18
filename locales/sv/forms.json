@@ -35,7 +35,7 @@
   "bestOrdering": "Bäst",
   "nameOptional": "Namn (frivillig)",
   "postTo": "Skicka till {{ discussionName }}",
-  "replyTo": "Svara till {{ användarnamn }}",
+  "replyTo": "Svara till {{ username }}",
   "selectDiscussionToPost": "Välj en diskussion at skicka",
   "contactLinkText": "PS. Om du inte hittar skolan eller ämnet du letar efter, du kan",
   "contactLinkLink": "kontakta oss så lägger vi till dem för dig!",
