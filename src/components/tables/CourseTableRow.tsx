@@ -35,6 +35,7 @@ interface Props extends TableRowProps {
 
 export const CourseTableRow: React.FC<Props> = ({
   course: {
+    name,
     slug,
     codes,
     user,
@@ -59,11 +60,10 @@ export const CourseTableRow: React.FC<Props> = ({
   const starsLabel = t('common:stars').toLowerCase();
   const resourcesLabel = t('common:resources').toLowerCase();
   const created = useDayjs(_created).startOf('day').fromNow();
-  const discussionName = `#${slug}`;
 
   const renderDiscussionName = (
     <TableCell className={classes.tableCell}>
-      <Typography variant="subtitle1">{discussionName}</Typography>
+      <Typography variant="subtitle1">{name}</Typography>
     </TableCell>
   );
 

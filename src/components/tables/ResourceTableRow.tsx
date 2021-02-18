@@ -30,12 +30,12 @@ const useStyles = makeStyles(({ spacing }) => ({
 interface Props extends TableRowProps {
   resource: ResourceObjectType;
   hideResourceChip?: boolean;
-  hideDateChip?: boolean;
   hideCourseLink?: boolean;
 }
 
 export const ResourceTableRow: React.FC<Props> = ({
   resource: {
+    title,
     slug,
     date,
     resourceType,
@@ -49,7 +49,6 @@ export const ResourceTableRow: React.FC<Props> = ({
     created: _created,
   },
   hideResourceChip,
-  hideDateChip,
   hideCourseLink,
   dense,
   key,
@@ -62,14 +61,13 @@ export const ResourceTableRow: React.FC<Props> = ({
   const starsLabel = t('common:stars').toLowerCase();
   const downloadsLabel = t('common:downloads').toLowerCase();
   const created = useDayjs(_created).startOf('day').fromNow();
-  const discussionName = `#${slug}`;
 
   const renderResourceChip = !hideResourceChip && (
     <TableRowChip label={`${t('common:resource')} 📚`} />
   );
 
   const renderResourceTypeChip = !!resourceType && <TableRowChip label={resourceType.name} />;
-  const renderDateChip = !hideDateChip && <TableRowChip label={useDayjs(date).format('LL')} />;
+  const renderDateChip = <TableRowChip label={useDayjs(date).format('LL')} />;
 
   const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
@@ -160,7 +158,7 @@ export const ResourceTableRow: React.FC<Props> = ({
 
   const renderDiscussionName = (
     <TableCell className={classes.tableCell}>
-      <Typography variant="subtitle1">{discussionName}</Typography>
+      <Typography variant="subtitle1">{title}</Typography>
     </TableCell>
   );
 

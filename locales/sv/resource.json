@@ -1,13 +1,13 @@
 {
-  "description": "Visa {{ discussionName }} på Skole.",
+  "description": "Visa {{ resourceTitle }} på Skole.",
   "error": "Fel vid inläsning av material.",
   "noComments": "Den här materialen har inga kommentarer. Var den första att lägga till en kommentar nedan!",
   "drawingMode": "Ritningsläge",
   "downloadPdf": "Ladda ner PDF",
   "printPdf": "Skriva ut PDF",
   "shareHeader": "Dela material",
-  "shareTitle": "{{ discussionName }} på Skole",
-  "shareText": "Se {{ discussionName }} av {{ creatorUsername }} på Skole",
+  "shareTitle": "{{ resourceTitle }} på Skole",
+  "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole",
   "share": "Dela material",
   "delete": "Radera material",
   "confirmDelete": "Är du säker på att du vill ta bort den här materialen?"

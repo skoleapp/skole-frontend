@@ -90,8 +90,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { data, loading, error } = useSchoolQuery({ variables, context });
   const school = R.prop('school', data);
   const slug = R.propOr('', 'slug', school);
-  const schoolName = R.propOr('', 'name', school);
-  const schoolSlug = R.propOr('', 'slug', school);
+  const name = R.propOr('', 'name', school);
   const schoolTypeSlug = R.pathOr('', ['schoolType', 'slug'], school);
   const countrySlug = R.pathOr('', ['country', 'slug'], school);
   const citySlug = R.pathOr('', ['city', 'slug'], school);
@@ -101,8 +100,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const courseCount = R.pathOr(0, ['courses', 'count'], data);
   const initialCommentCount = R.prop('commentCount', school);
   const { commentCount } = useDiscussionContext(initialCommentCount);
-  const discussionName = `#${schoolSlug}`;
-  const header = isTabletOrDesktop && discussionName; // School names are too long to be used as the header on mobile.
+  const header = isTabletOrDesktop && name; // School names are too long to be used as the header on mobile.
   const emoji = '🏫';
 
   const addCourseHref = {
@@ -132,10 +130,6 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderCityLink = <TextLink href={cityLink}>#{citySlug}</TextLink>;
 
   const infoItems = [
-    {
-      label: t('common:school'),
-      value: schoolName,
-    },
     {
       label: t('common:courses'),
       value: courseCount,
@@ -176,8 +170,8 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const shareDialogParams = {
     header: t('school:shareHeader'),
-    title: t('school:shareTitle', { discussionName }),
-    text: t('school:shareText', { discussionName }),
+    title: t('school:shareTitle', { name }),
+    text: t('school:shareText', { name }),
   };
 
   const renderShareButton = (
@@ -185,7 +179,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const infoDialogParams = {
-    header: discussionName,
+    header: name,
     emoji,
     infoItems,
   };
@@ -250,7 +244,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderHeader = (
     <>
-      {discussionName}
+      {name}
       {renderEmoji}
     </>
   );
@@ -372,11 +366,11 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
     };
   }
 
-  const discussionName = `#${school.slug}`;
+  const { name } = school;
 
   const seoProps = {
-    title: discussionName,
-    description: t('description', { discussionName }),
+    title: name,
+    description: t('description', { name }),
   };
 
   return {

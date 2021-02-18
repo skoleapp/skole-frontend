@@ -31,7 +31,7 @@ interface Props extends Omit<TableRowProps, 'dense'> {
 }
 
 export const SubjectTableRow: React.FC<Props> = ({
-  subject: { slug, courseCount, resourceCount },
+  subject: { name, slug, courseCount, resourceCount },
   key,
 }) => {
   const { t } = useTranslation();
@@ -39,7 +39,6 @@ export const SubjectTableRow: React.FC<Props> = ({
   const classes = useStyles();
   const coursesLabel = t('common:courses').toLowerCase();
   const resourcesLabel = t('common:resources').toLowerCase();
-  const discussionName = `#${slug}`;
 
   const href = {
     pathname: urls.search,
@@ -106,7 +105,7 @@ export const SubjectTableRow: React.FC<Props> = ({
 
   const renderDiscussionName = (
     <TableCell className={classes.tableCell}>
-      <Typography variant="subtitle1">{discussionName}</Typography>
+      <Typography variant="subtitle1">{name}</Typography>
     </TableCell>
   );
 
