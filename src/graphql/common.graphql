@@ -860,15 +860,12 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
     }
     course {
       slug
-      name
     }
     resource {
       slug
-      title
     }
     school {
       slug
-      name
     }
     replyComments {
       id

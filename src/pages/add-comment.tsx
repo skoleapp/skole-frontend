@@ -237,7 +237,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const getPlaceholder = (discussion: AddCommentFormValues['discussion']) =>
     discussion
       ? t('forms:postTo', {
-          target:
+          discussionName:
             R.prop('name', discussion) ||
             R.prop('title', discussion) ||
             R.prop('courseName', discussion),

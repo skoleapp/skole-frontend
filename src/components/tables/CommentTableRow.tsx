@@ -80,7 +80,7 @@ export const CommentTableRow: React.FC<Props> = ({
   const pathname =
     (!!course?.slug && urls.course(course.slug)) ||
     (!!resource?.slug && urls.resource(resource.slug)) ||
-    (!!school?.slug && urls.resource(school.slug)) ||
+    (!!school?.slug && urls.school(school.slug)) ||
     (!!comment?.course?.slug && urls.course(comment.course.slug)) ||
     (!!comment?.resource?.slug && urls.resource(comment.resource.slug)) ||
     (!!comment?.school?.slug && urls.school(comment.school.slug)) ||

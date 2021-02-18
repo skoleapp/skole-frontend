@@ -171,13 +171,13 @@ export const Discussion: React.FC<Props> = ({
       comments.length > prevCommentCount && setVisibleComments(comments.length); // Automatically load all comments when a new comment is created.
     }
 
-    const commentCount = comments.reduce(
+    const commentCountWithReplies = comments.reduce(
       (acc, comment) => acc + comment.replyComments.length + 1,
       0,
     );
 
-    setCommentCount(String(commentCount));
-    setPrevCommentCount(commentCount);
+    setCommentCount(String(commentCountWithReplies));
+    setPrevCommentCount(comments.length);
   }, [comments, isMobile]);
 
   // Scroll to bottom when all comments are loaded.
@@ -185,9 +185,9 @@ export const Discussion: React.FC<Props> = ({
     !query.comment && comments.length === visibleComments && scrollToBottom();
   }, [comments, visibleComments, query]);
 
-  //   When loading more visibleComments, scroll to bottom.
+  // When loading more visibleComments, scroll to bottom.
   useEffect(() => {
-    !!loadingMoreComments && scrollToBottom();
+    loadingMoreComments && scrollToBottom();
   }, [loadingMoreComments, isMobile]);
 
   const handleClickCreateComment = () => setCreateCommentDialogOpen(true);
