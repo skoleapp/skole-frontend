@@ -245,12 +245,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const renderRankEmoji = <Emoji emoji="🎖️" />;
 
+  const renderScore = (
+    <Typography className={classes.score} variant="body2" color="textSecondary">
+      {score}
+    </Typography>
+  );
+
   const renderRankLabel = (
     <Grid container>
       {rank}
-      <Typography className={classes.score} variant="body2" color="textSecondary">
-        {score}
-      </Typography>
+      {renderScore}
       {renderRankEmoji}
     </Grid>
   );
@@ -269,7 +273,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       </Tooltip>
       <Link href={urls.score}>
         <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
-          <Chip label={renderRankLabel} />
+          <Chip className="rank-chip" label={renderRankLabel} />
         </Tooltip>
       </Link>
       <Tooltip title={t('common-tooltips:profile')}>

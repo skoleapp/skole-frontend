@@ -333,7 +333,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       </Typography>
       <Link href={urls.score}>
         <Tooltip title={rankTooltip}>
-          <Chip size="small" label={renderRankLabel} />
+          <Chip className="rank-chip" size="small" label={renderRankLabel} />
         </Tooltip>
       </Link>
     </Box>

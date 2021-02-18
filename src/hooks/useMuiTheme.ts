@@ -392,6 +392,9 @@ export const useMuiTheme = (): Theme => {
           marginLeft: '14px !important',
           marginRight: '14px !important',
         },
+        '.rank-chip': {
+          cursor: 'pointer !important',
+        },
       },
     },
   };
