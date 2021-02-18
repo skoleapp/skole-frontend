@@ -282,15 +282,15 @@ export const CommentCard: React.FC<Props> = ({
   const renderSecondaryDiscussionName =
     (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
     (discussionType === DiscussionTypes.RESOURCE && !!comment.course)
-      ? comment.course?.name
+      ? comment.course?.slug
       : discussionType === DiscussionTypes.COURSE && comment.resource
-      ? comment.resource?.title
+      ? comment.resource?.slug
       : discussionType === DiscussionTypes.COURSE && !!comment.school
-      ? comment.school?.name
+      ? comment.school?.slug
       : '';
 
   const renderSecondaryDiscussionLink = (
-    <TextLink href={secondaryDiscussionLinkHref}>{renderSecondaryDiscussionName}</TextLink>
+    <TextLink href={secondaryDiscussionLinkHref}>#{renderSecondaryDiscussionName}</TextLink>
   );
 
   const renderSecondaryDiscussion = (
