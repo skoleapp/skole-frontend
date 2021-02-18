@@ -101,13 +101,13 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
       fontSize: '1.25rem',
     },
   },
-  searchForm: {
+  emailForm: {
     marginTop: spacing(4),
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
   },
-  searchFieldBox: {
+  emailFieldBox: {
     display: 'flex',
     flexGrow: 1,
     backgroundColor: palette.background.default,
@@ -362,8 +362,8 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
   );
 
   const renderSearchField = (
-    <form className={classes.searchForm} onSubmit={handleSubmitSearch}>
-      <Box className={classes.searchFieldBox}>
+    <form className={classes.emailForm} onSubmit={handleSubmitSearch}>
+      <Box className={classes.emailFieldBox}>
         <InputBase {...searchInputProps} className={classes.searchFieldInput} />
       </Box>
       <Button className={classes.searchButton} type="submit" variant="contained">

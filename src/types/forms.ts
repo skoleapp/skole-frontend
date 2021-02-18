@@ -19,3 +19,10 @@ export interface UseForm<T> {
   onError: (err: ApolloError) => void;
   generalFormValues: GeneralFormValues;
 }
+
+export interface ContactFormValues {
+  subject: string;
+  name: string;
+  email: string;
+  message: string;
+}
