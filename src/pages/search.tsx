@@ -30,7 +30,6 @@ import {
   SkoleDialog,
   TextFormField,
 } from 'components';
-import { useDarkModeContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteCitiesDocument,
@@ -94,6 +93,9 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   emailForm: {
     flexGrow: 1,
+  },
+  searchInputBaseRoot: {
+    width: '100%',
   },
   searchInputBaseInput: {
     paddingLeft: spacing(2),
@@ -172,8 +174,6 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const filtersHeader = t('common:filters');
   const filtersEmoji = '🔎';
   const resultsHeader = t('common:searchResults');
-  const { darkMode } = useDarkModeContext();
-  const iconButtonColor = darkMode ? 'secondary' : 'primary';
 
   const {
     open: filtersOpen,
@@ -448,7 +448,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderResults = loading ? renderLoading : courses.length ? renderTable : renderNotFound;
 
   const renderClearFiltersButton = (
-    <IconButton onClick={handleClearFilters} size="small" color={iconButtonColor}>
+    <IconButton onClick={handleClearFilters} size="small">
       <ClearAllOutlined />
     </IconButton>
   );
@@ -533,17 +533,17 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderSearchNavbarStartAdornment = searchValue ? (
-    <IconButton onClick={handleClearSearchInput} color={iconButtonColor} size="small">
+    <IconButton onClick={handleClearSearchInput} size="small">
       <ArrowBackOutlined />
     </IconButton>
   ) : (
-    <IconButton onClick={handleSearchIconClick} color={iconButtonColor} size="small">
+    <IconButton onClick={handleSearchIconClick} size="small">
       <SearchOutlined />
     </IconButton>
   );
 
   const renderSearchNavbarEndAdornment = (
-    <IconButton onClick={handleOpenFilters} size="small" color={iconButtonColor}>
+    <IconButton onClick={handleOpenFilters} size="small">
       <FilterListOutlined />
     </IconButton>
   );
@@ -553,7 +553,7 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <Box className={classes.searchContainer}>
         <form className={classes.emailForm} onSubmit={handleSubmitSearchInput}>
           <InputBase
-            classes={{ input: classes.searchInputBaseInput }}
+            classes={{ root: classes.searchInputBaseRoot, input: classes.searchInputBaseInput }}
             placeholder={t('forms:searchCourses')}
             value={searchValue}
             onChange={onSearchChange}

@@ -84,7 +84,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { isTabletOrDesktop, isMobile } = useMediaQueries();
   const { searchUrl } = useSearch();
   const { query } = useRouter();
-  const { tabsProps, firstTabPanelProps, secondTabPanelProps, thirdTabPanelProps } = useTabs();
+  const { tabsProps, firstTabPanelProps, secondTabPanelProps, thirdTabPanelProps } = useTabs(2);
   const context = useLanguageHeaderContext();
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useSchoolQuery({ variables, context });
