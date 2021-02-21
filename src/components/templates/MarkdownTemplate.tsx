@@ -39,12 +39,16 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
 }));
 
 interface Props extends MainTemplateProps {
-  content: string;
+  customTopContent?: JSX.Element[];
+  markdownContent: string;
+  customBottomContent?: JSX.Element[];
   hideFeedback?: boolean;
 }
 
 export const MarkdownTemplate: React.FC<Props> = ({
-  content,
+  customTopContent,
+  markdownContent,
+  customBottomContent,
   topNavbarProps,
   children,
   hideFeedback,
@@ -75,14 +79,17 @@ export const MarkdownTemplate: React.FC<Props> = ({
     />
   );
 
-  const renderMarkdownContent = <MarkdownContent>{content}</MarkdownContent>;
+  const renderCustomTopContent = customTopContent?.map((t) => t);
+  const renderMarkdownContent = <MarkdownContent>{markdownContent}</MarkdownContent>;
+  const renderCustomBottomContent = customBottomContent?.map((t) => t);
 
   const renderCardContent = (
     <CardContent className={classes.cardContent}>
       <Grid container justify="center">
         <Grid item xs={12} sm={8} md={6} lg={5} xl={4}>
-          {children}
+          {renderCustomTopContent}
           {renderMarkdownContent}
+          {renderCustomBottomContent}
         </Grid>
       </Grid>
     </CardContent>

@@ -1,5 +1,7 @@
 {
   "title": "Uppdateringar",
   "description": "Visa uppdateringar av vår produkt på Skole.",
-  "header": "Uppdateringar"
+  "header": "Uppdateringar",
+  "requestFeatureText": "Har du en idé till en ny funktion?",
+  "requestFeatureLink": "Berätta för oss!"
 }

@@ -2,5 +2,7 @@
   "title": "Blogs",
   "description": "See our blogs at Skole.",
   "header": "Blogs",
-  "readTime": "{{ minutesToRead }} minute read"
+  "readTime": "{{ minutesToRead }} minute read",
+  "guestAuthorText": "Want to write a blog in Skole?",
+  "guestAuthorLink": "Contact us!"
 }

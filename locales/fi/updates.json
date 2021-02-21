@@ -1,5 +1,7 @@
 {
   "title": "Uutta",
   "description": "Katso, mitä uutta olemme lisänneet Skoleen.",
-  "header": "Uutta"
+  "header": "Uutta",
+  "requestFeatureText": "Onko sinulla idea uudelle ominaisuudelle?",
+  "requestFeatureLink": "Kerro se meille!"
 }

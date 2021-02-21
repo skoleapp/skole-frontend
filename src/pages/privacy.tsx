@@ -6,7 +6,11 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const PrivacyPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
+const PrivacyPage: NextPage<MarkdownPageProps> = ({
+  seoProps,
+  data: { title },
+  content: markdownContent,
+}) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
@@ -14,7 +18,7 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, c
       emoji: '🔒',
       hideLanguageButton: true,
     },
-    content,
+    markdownContent,
   };
 
   return <MarkdownTemplate {...layoutProps} />;

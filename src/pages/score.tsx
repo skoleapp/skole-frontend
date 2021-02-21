@@ -7,7 +7,11 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const ScorePage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
+const ScorePage: NextPage<MarkdownPageProps> = ({
+  seoProps,
+  data: { title },
+  content: markdownContent,
+}) => {
   const { isTabletOrDesktop } = useMediaQueries();
 
   // The emoji won't stand out from the top navbar on mobile.
@@ -19,7 +23,7 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, con
       header: title,
       emoji,
     },
-    content,
+    markdownContent,
   };
 
   return <MarkdownTemplate {...layoutProps} />;

@@ -1,7 +1,8 @@
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { MarkdownTemplate } from 'components';
+import { EmailSubscription, GuestAuthorLink, MarkdownTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
@@ -12,17 +13,23 @@ import Image from 'next/image';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(({ spacing }) => ({
   authorImage: {
     borderRadius: '50%',
     padding: '0.4rem !important',
   },
-});
+  coverImage: {
+    marginBottom: `${spacing(2)} !important`,
+  },
+  emailSubscription: {
+    marginTop: spacing(16),
+  },
+}));
 
 const BlogPostPage: NextPage<MarkdownPageProps> = ({
   seoProps,
   data: { title, excerpt, coverImage = '', author, authorImage, date, minutesToRead = 0 },
-  content,
+  content: markdownContent,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
@@ -43,7 +50,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
     />
   );
 
-  const renderBlogAndAuthorInfo = (
+  const renderBlogInfo = (
     <Grid container alignItems="center" wrap="nowrap" spacing={2}>
       <Grid item>{renderAuthorImage}</Grid>
       <Grid item>
@@ -56,8 +63,23 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
   );
 
   const renderCoverImage = (
-    <Image src={coverImage} layout="responsive" width={400} height={300} objectFit="contain" />
+    <Image
+      className={classes.coverImage}
+      src={coverImage}
+      layout="responsive"
+      width={400}
+      height={300}
+      objectFit="contain"
+    />
   );
+
+  const renderEmailSubscription = (
+    <Box className={classes.emailSubscription}>
+      <EmailSubscription />
+    </Box>
+  );
+
+  const renderGuestAuthorLink = <GuestAuthorLink />;
 
   const layoutProps = {
     seoProps,
@@ -65,17 +87,13 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
       header: title,
       hideLanguageButton: true,
     },
-    content,
+    customTopContent: [renderExcerpt, renderBlogInfo, renderCoverImage],
+    markdownContent,
+    customBottomContent: [renderEmailSubscription, renderGuestAuthorLink],
     hideFeedback: true,
   };
 
-  return (
-    <MarkdownTemplate {...layoutProps}>
-      {renderExcerpt}
-      {renderBlogAndAuthorInfo}
-      {renderCoverImage}
-    </MarkdownTemplate>
-  );
+  return <MarkdownTemplate {...layoutProps} />;
 };
 
 interface GetStaticPathsParams {

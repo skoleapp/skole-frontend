@@ -98,5 +98,6 @@
   "suggestions": "Tränding",
   "noOptions": "Inga alternativ.",
   "showOptions": "Visa alternativ.",
-  "attachment": "Anknytning"
+  "emailSubscriptionHeader": "Prenumerera på vårt nyhetsbrev genom att lämna din e-post nedan!",
+  "emailSubscriptionSubmitted": "Tack! Du kommer att få vårt nyhetsbrev i din e-post!"
 }

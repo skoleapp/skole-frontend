@@ -1,8 +1,11 @@
+import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-import { Link, ListTemplate } from 'components';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import { ButtonLink, EmailSubscription, Link, ListTemplate, RequestFeatureLink } from 'components';
+import { useAuthContext } from 'context';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
@@ -21,6 +24,7 @@ interface Props extends SeoPageProps {
 
 const UpdatesPage: NextPage<Props> = ({ seoProps, updates }) => {
   const { t } = useTranslation();
+  const { userMe, productUpdateEmailPermission } = useAuthContext();
 
   const sortedUpdates: MarkdownPageData[] = R.sortBy(R.prop('date'), updates).reverse();
 
@@ -53,6 +57,29 @@ const UpdatesPage: NextPage<Props> = ({ seoProps, updates }) => {
     ),
   );
 
+  const renderUpdates = <TableBody>{mapUpdates}</TableBody>;
+
+  const renderEmailSubscription = !userMe && (
+    <EmailSubscription header={t('updates:emailSubscriptionHeader')} />
+  );
+
+  const renderSubscribeButton = !!userMe && !productUpdateEmailPermission && (
+    <Grid container justify="center">
+      <ButtonLink variant="outlined" href={urls.accountSettings} endIcon={<ArrowForwardOutlined />}>
+        {t('updates:subscribeButtonText')}
+      </ButtonLink>
+    </Grid>
+  );
+
+  const renderRequestFeatureLink = <RequestFeatureLink />;
+
+  const renderBottomContent = (
+    <CardContent>
+      {renderEmailSubscription || renderSubscribeButton}
+      {renderRequestFeatureLink}
+    </CardContent>
+  );
+
   const layoutProps = {
     seoProps,
     topNavbarProps: {
@@ -63,7 +90,8 @@ const UpdatesPage: NextPage<Props> = ({ seoProps, updates }) => {
 
   return (
     <ListTemplate {...layoutProps}>
-      <TableBody>{mapUpdates}</TableBody>
+      {renderUpdates}
+      {renderBottomContent}
     </ListTemplate>
   );
 };

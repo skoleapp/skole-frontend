@@ -916,3 +916,13 @@ query DiscussionSuggestions {
     }
   }
 }
+
+mutation CreateEmailSubscription($email: String!) {
+  createEmailSubscription(input: { email: $email }) {
+    errors {
+      field
+      messages
+    }
+    successMessage
+  }
+}

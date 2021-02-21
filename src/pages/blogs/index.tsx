@@ -1,9 +1,10 @@
+import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-import { Link, ListTemplate } from 'components';
+import { EmailSubscription, GuestAuthorLink, Link, ListTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
@@ -88,6 +89,15 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
     ),
   );
 
+  const renderBlogs = <TableBody>{mapBlogs}</TableBody>;
+
+  const renderEmailSubscription = (
+    <CardContent>
+      <EmailSubscription />
+      <GuestAuthorLink />
+    </CardContent>
+  );
+
   const layoutProps = {
     seoProps,
     topNavbarProps: {
@@ -98,7 +108,8 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
 
   return (
     <ListTemplate {...layoutProps}>
-      <TableBody>{mapBlogs}</TableBody>
+      {renderBlogs}
+      {renderEmailSubscription}
     </ListTemplate>
   );
 };

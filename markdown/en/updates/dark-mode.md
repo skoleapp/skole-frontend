@@ -24,4 +24,4 @@ As we tried to make the messages on Skole easier to find, we added a feature for
 
 We wanted to make the process of sharing one's thoughts easier, thus we added a feature for posting a comment quickly on your favorite discussions. You can find it from the [home page](https://www.skoleapp.com/home).
 
-Quite cool stuff, huh? Like always, we are eager to hear what you think about these features and Skole in general. If there's a feature that you would like to see in Skole, you can [request](https://www.skoleapp.com/contact) it from us. If it's a good one, you'll most likely see it in one of our future product updates!
+Quite cool stuff, huh? Like always, we are eager to hear what you think about these features and Skole in general. Stay tuned!

@@ -1,5 +1,7 @@
+import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { MarkdownTemplate } from 'components';
+import { EmailSubscription, MarkdownTemplate } from 'components';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
@@ -8,13 +10,25 @@ import { loadMarkdown } from 'markdown';
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult, NextPage } from 'next';
 import Image from 'next/image';
 import React from 'react';
+import { RequestFeatureLink } from 'src/components/shared/RequestFeatureLink';
 import { MarkdownPageProps } from 'types';
+
+const useStyles = makeStyles(({ spacing }) => ({
+  coverImage: {
+    marginBottom: `${spacing(2)} !important`,
+  },
+  emailSubscription: {
+    marginTop: spacing(16),
+  },
+}));
 
 const UpdatePage: NextPage<MarkdownPageProps> = ({
   seoProps,
   data: { title, excerpt, coverImage = '', date },
-  content,
+  content: markdownContent,
 }) => {
+  const classes = useStyles();
+
   const renderExcerpt = (
     <Typography variant="h5" color="textSecondary" gutterBottom>
       {excerpt}
@@ -27,9 +41,24 @@ const UpdatePage: NextPage<MarkdownPageProps> = ({
     </Typography>
   );
 
-  const renderImage = (
-    <Image src={coverImage} layout="responsive" width={400} height={300} objectFit="contain" />
+  const renderCoverImage = (
+    <Image
+      className={classes.coverImage}
+      src={coverImage}
+      layout="responsive"
+      width={400}
+      height={300}
+      objectFit="contain"
+    />
   );
+
+  const renderEmailSubscription = (
+    <Box className={classes.emailSubscription}>
+      <EmailSubscription />
+    </Box>
+  );
+
+  const renderRequestFeatureLink = <RequestFeatureLink />;
 
   const layoutProps = {
     seoProps,
@@ -37,16 +66,13 @@ const UpdatePage: NextPage<MarkdownPageProps> = ({
       header: title,
       hideLanguageButton: true,
     },
-    content,
+    customTopContent: [renderExcerpt, renderUpdateInfo, renderCoverImage],
+    markdownContent,
+    customBottomContent: [renderEmailSubscription, renderRequestFeatureLink],
+    hideFeedback: true,
   };
 
-  return (
-    <MarkdownTemplate {...layoutProps}>
-      {renderExcerpt}
-      {renderUpdateInfo}
-      {renderImage}
-    </MarkdownTemplate>
-  );
+  return <MarkdownTemplate {...layoutProps} />;
 };
 
 interface GetStaticPathsParams {
