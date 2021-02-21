@@ -169,12 +169,12 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <FormGroup>
         <Field
           name="productUpdateEmailPermission"
-          label={t('account-settings:productUpdates')}
+          label={t('forms:productUpdates')}
           component={SwitchFormField}
         />
         <Field
           name="blogPostEmailPermission"
-          label={t('account-settings:blogPosts')}
+          label={t('forms:blogPosts')}
           component={SwitchFormField}
         />
       </FormGroup>

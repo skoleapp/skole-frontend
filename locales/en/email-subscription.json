@@ -1,0 +1,8 @@
+{
+  "title": "Email Subscription",
+  "header": "Email Subscription",
+  "label": "Update email subscription for {{ email }}",
+  "accountSettingsText": "To update the email settings for your account, visit the",
+  "accountSettingsLinkText": "account settings",
+  "unsubscribed": "No subscription found with the provided email address - you will not receive any emails from us. To subscribe to our product updates, blogs etc., leave your email below!"
+}

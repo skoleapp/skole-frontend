@@ -42,5 +42,7 @@
   "discussion": "Discussion",
   "alsoSendTo": "Also send to",
   "emailOptional": "Email (optional)",
-  "yourEmail": "Your email..."
+  "yourEmail": "Your email...",
+  "productUpdates": "New product updates.",
+  "blogPosts": "New blog posts."
 }

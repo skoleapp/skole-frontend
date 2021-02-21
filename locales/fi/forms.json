@@ -41,5 +41,7 @@
   "discussion": "Keskustelu",
   "alsoSendTo": "Lähetä myös keskusteluun",
   "emailOptional": "Sähköposti (valinnainen)",
-  "yourEmail": "Sähköpostisi..."
+  "yourEmail": "Sähköpostisi...",
+  "productUpdates": "Uudet ominaisuudet.",
+  "blogPosts": "Uudet blogipostaukset."
 }

@@ -926,3 +926,28 @@ mutation CreateEmailSubscription($email: String!) {
     successMessage
   }
 }
+
+query EmailSubscription($token: String!) {
+  emailSubscription(token: $token) {
+    email
+    productUpdates
+    blogPosts
+  }
+}
+
+mutation UpdateEmailSubscription($token: String, $productUpdates: Boolean, $blogPosts: Boolean) {
+  updateEmailSubscription(
+    input: { token: $token, productUpdates: $productUpdates, blogPosts: $blogPosts }
+  ) {
+    errors {
+      field
+      messages
+    }
+    successMessage
+    emailSubscription {
+      email
+      productUpdates
+      blogPosts
+    }
+  }
+}

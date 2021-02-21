@@ -98,6 +98,6 @@
   "suggestions": "Trending",
   "noOptions": "No options.",
   "showOptions": "Show options.",
-  "emailSubscriptionHeader": "Subscribe to our newsletter by leaving your email below!",
-  "emailSubscriptionSubmitted": "Thanks! You will receive our newsletter in your email!"
+  "attachment": "Attachment",
+  "emailSubscriptionSubmitted": "Thanks! Your email settings have been updated!"
 }

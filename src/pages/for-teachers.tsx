@@ -1,22 +1,16 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
-import InputBase from '@material-ui/core/InputBase';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import clsx from 'clsx';
-import { Emoji, FormErrorMessage, LandingPageTemplate } from 'components';
-import { ErrorMessage, Form, Formik } from 'formik';
+import { EmailInputFormField, Emoji, LandingPageTemplate } from 'components';
+import { Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { useState } from 'react';
-import { BORDER_RADIUS } from 'styles';
 import { ContactFormValues, SeoPageProps } from 'types';
 import { isNotNativeApp } from 'utils';
 import * as Yup from 'yup';
@@ -41,29 +35,10 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
       fontSize: '2.75rem',
     },
   },
-  emailForm: {
+  form: {
     marginTop: spacing(8),
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
     width: '100%',
     maxWidth: '25rem',
-  },
-  emailFieldBox: {
-    display: 'flex',
-    flexGrow: 1,
-    backgroundColor: palette.background.default,
-    border: `0.05rem solid ${
-      palette.type === 'dark' ? palette.secondary.main : palette.primary.main
-    }`,
-    borderRadius: `${BORDER_RADIUS} 0 0 ${BORDER_RADIUS}`,
-    padding: spacing(3),
-  },
-  emailInput: {
-    width: '100%',
-  },
-  submitButton: {
-    borderRadius: `0 ${BORDER_RADIUS} ${BORDER_RADIUS} 0`,
   },
   emailSubmittedText: {
     marginTop: spacing(8),
@@ -168,30 +143,20 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   );
 
-  const renderEmailInput = (
+  const renderFormFields = (props: FormikProps<ContactFormValues>) => (
+    <Form className={classes.form}>
+      <EmailInputFormField {...props} />
+    </Form>
+  );
+
+  const renderForm = (
     <Formik
       onSubmit={handleSubmitEmail}
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={formRef}
     >
-      <Form className={classes.emailForm}>
-        <FormControl margin="none">
-          <Grid container>
-            <Box className={classes.emailFieldBox}>
-              <InputBase
-                className={classes.emailInput}
-                onChange={(e) => formRef.current?.setFieldValue('email', e.target.value)}
-                placeholder={t('forms:yourEmail')}
-              />
-            </Box>
-            <Button className={classes.submitButton} type="submit" variant="contained">
-              <ArrowForwardOutlined />
-            </Button>
-          </Grid>
-          <ErrorMessage name="email" component={FormErrorMessage} />
-        </FormControl>
-      </Form>
+      {renderFormFields}
     </Formik>
   );
 
@@ -203,6 +168,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       align="center"
     >
       {t('for-teachers:emailSubmitted')}
+      <Emoji emoji="🎉" />
     </Typography>
   );
 
@@ -216,7 +182,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     >
       {renderCtaHeader}
       {renderCtaSubheader}
-      {emailSubmitted ? renderEmailSubmittedText : renderEmailInput}
+      {emailSubmitted ? renderEmailSubmittedText : renderForm}
     </Grid>
   );
 
