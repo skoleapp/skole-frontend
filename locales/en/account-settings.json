@@ -2,5 +2,6 @@
   "title": "Account Settings",
   "header": "Account Settings",
   "emailSettings": "Email Settings",
+  "emailNotifications": "Email Notifications",
   "backToProfile": "Back to profile"
 }

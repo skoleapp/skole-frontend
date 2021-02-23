@@ -44,5 +44,8 @@
   "emailOptional": "E-post (frivillig)",
   "yourEmail": "Din e-post...",
   "productUpdates": "Nya produktuppdateringar.",
-  "blogPosts": "Nya blogginlägg."
+  "blogPosts": "Nya blogginlägg.",
+  "commentReplies": "Svar på dina kommentarer.",
+  "courseComments": "Kommentarer till dina kurser.",
+  "resourceComments": "Kommentarer till ditt material."
 }

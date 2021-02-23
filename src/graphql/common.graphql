@@ -538,6 +538,9 @@ fragment userMeFields on UserObjectType {
   rank
   productUpdateEmailPermission
   blogPostEmailPermission
+  commentReplyEmailPermission
+  courseCommentEmailPermission
+  resourceCommentEmailPermission
   school {
     id
     slug
@@ -742,6 +745,9 @@ mutation UpdateAccountSettings(
   $subject: ID
   $productUpdateEmailPermission: Boolean
   $blogPostEmailPermission: Boolean
+  $commentReplyEmailPermission: Boolean
+  $courseCommentEmailPermission: Boolean
+  $resourceCommentEmailPermission: Boolean
 ) {
   updateAccountSettings(
     input: {
@@ -750,6 +756,9 @@ mutation UpdateAccountSettings(
       subject: $subject
       productUpdateEmailPermission: $productUpdateEmailPermission
       blogPostEmailPermission: $blogPostEmailPermission
+      commentReplyEmailPermission: $commentReplyEmailPermission
+      courseCommentEmailPermission: $courseCommentEmailPermission
+      resourceCommentEmailPermission: $resourceCommentEmailPermission
     }
   ) {
     successMessage
