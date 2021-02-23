@@ -1,12 +1,12 @@
 ---
-title: 'Benefits of being a part of student association'
+title: 'Benefits of being part of a student association'
 excerpt: 'Why it is worth to be active in student communities.'
 coverImage: '/images/blogs/benefits-of-being-part-of-student-association.jpg'
 author: 'Werneri Aarnio'
 authorImage: '/images/authors/werneri-aarnio.jpeg'
 date: '2021-02-23'
 minutesToRead: 3
-slug: benefits-of-being-part-of-student-association
+slug: benefits-of-being-part-of-a-student-association
 ---
 
 Student associations offer a great way to network with people, gain valuable soft skills and a change to influence your studies. In this blog post I'm going to go through the reasons why to join the student association. Although student association activities are voluntary work and do not derive financial benefits, the benefits gained through them are nonetheless valuable. 
