@@ -2,7 +2,6 @@
   "title": "Account Settings",
   "header": "Account Settings",
   "emailSettings": "Email Settings",
-  "productUpdates": "New product updates.",
-  "blogPosts": "New blog posts.",
+  "emailNotifications": "Email Notifications",
   "backToProfile": "Back to profile"
 }

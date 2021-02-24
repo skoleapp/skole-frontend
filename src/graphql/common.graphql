@@ -538,6 +538,9 @@ fragment userMeFields on UserObjectType {
   rank
   productUpdateEmailPermission
   blogPostEmailPermission
+  commentReplyEmailPermission
+  courseCommentEmailPermission
+  resourceCommentEmailPermission
   school {
     id
     slug
@@ -742,6 +745,9 @@ mutation UpdateAccountSettings(
   $subject: ID
   $productUpdateEmailPermission: Boolean
   $blogPostEmailPermission: Boolean
+  $commentReplyEmailPermission: Boolean
+  $courseCommentEmailPermission: Boolean
+  $resourceCommentEmailPermission: Boolean
 ) {
   updateAccountSettings(
     input: {
@@ -750,6 +756,9 @@ mutation UpdateAccountSettings(
       subject: $subject
       productUpdateEmailPermission: $productUpdateEmailPermission
       blogPostEmailPermission: $blogPostEmailPermission
+      commentReplyEmailPermission: $commentReplyEmailPermission
+      courseCommentEmailPermission: $courseCommentEmailPermission
+      resourceCommentEmailPermission: $resourceCommentEmailPermission
     }
   ) {
     successMessage
@@ -913,6 +922,41 @@ query DiscussionSuggestions {
       slug
       name
       __typename
+    }
+  }
+}
+
+mutation CreateEmailSubscription($email: String!) {
+  createEmailSubscription(input: { email: $email }) {
+    errors {
+      field
+      messages
+    }
+    successMessage
+  }
+}
+
+query EmailSubscription($token: String!) {
+  emailSubscription(token: $token) {
+    email
+    productUpdates
+    blogPosts
+  }
+}
+
+mutation UpdateEmailSubscription($token: String, $productUpdates: Boolean, $blogPosts: Boolean) {
+  updateEmailSubscription(
+    input: { token: $token, productUpdates: $productUpdates, blogPosts: $blogPosts }
+  ) {
+    errors {
+      field
+      messages
+    }
+    successMessage
+    emailSubscription {
+      email
+      productUpdates
+      blogPosts
     }
   }
 }

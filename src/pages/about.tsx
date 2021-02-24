@@ -14,7 +14,7 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
 
   const renderAboutMenuItems = ABOUT_ITEMS.map(({ icon: Icon, href, text }, i) => (
-    <Link href={href} key={i}>
+    <Link href={href} key={i} fullWidth>
       <MenuItem>
         <ListItemIcon>
           <Icon />

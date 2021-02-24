@@ -98,5 +98,6 @@
   "suggestions": "Trending",
   "noOptions": "No options.",
   "showOptions": "Show options.",
-  "attachment": "Attachment"
+  "attachment": "Attachment",
+  "emailSubscriptionSubmitted": "Thanks! Your email settings have been updated!"
 }

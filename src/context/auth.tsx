@@ -29,6 +29,9 @@ interface UseAuthContext extends AuthContextType {
   subject: SubjectObjectType | null;
   productUpdateEmailPermission: boolean;
   blogPostEmailPermission: boolean;
+  commentReplyEmailPermission: boolean;
+  courseCommentEmailPermission: boolean;
+  resourceCommentEmailPermission: boolean;
   loginRequiredTooltip: string | false;
   verificationRequiredTooltip: string | false;
   profileUrl: string;
@@ -55,6 +58,9 @@ export const useAuthContext = (): UseAuthContext => {
   const subject = R.propOr(null, 'subject', userMe);
   const productUpdateEmailPermission = R.propOr(false, 'productUpdateEmailPermission', userMe);
   const blogPostEmailPermission = R.propOr(false, 'blogPostEmailPermission', userMe);
+  const commentReplyEmailPermission = R.propOr(false, 'commentReplyEmailPermission', userMe);
+  const courseCommentEmailPermission = R.propOr(false, 'courseCommentEmailPermission', userMe);
+  const resourceCommentEmailPermission = R.propOr(false, 'resourceCommentEmailPermission', userMe);
   const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
   const profileUrl = urls.user(slug);
 
@@ -79,6 +85,9 @@ export const useAuthContext = (): UseAuthContext => {
     subject,
     productUpdateEmailPermission,
     blogPostEmailPermission,
+    commentReplyEmailPermission,
+    courseCommentEmailPermission,
+    resourceCommentEmailPermission,
     verificationRequiredTooltip,
     loginRequiredTooltip,
     profileUrl,

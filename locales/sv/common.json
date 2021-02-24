@@ -98,5 +98,6 @@
   "suggestions": "Tränding",
   "noOptions": "Inga alternativ.",
   "showOptions": "Visa alternativ.",
-  "attachment": "Anknytning"
+  "attachment": "Anknytning",
+  "emailSubscriptionSubmitted": "Tack! Dina e-postinställningar har uppdaterats!"
 }

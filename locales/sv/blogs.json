@@ -2,5 +2,9 @@
   "title": "Bloggar",
   "description": "Se våra bloggar på Skole.",
   "header": "Bloggar",
-  "readTime": "{{ minutesToRead }} minuters läsningstid"
+  "readTime": "{{ minutesToRead }} minuters läsningstid",
+  "emailSubscriptionHeader": "Prenumerera på våra blogginlägg genom att lämna din e-post nedan!",
+  "subscribeButtonText": "Prenumerera på bloggar",
+  "guestAuthorText": "Vill du skriva en blogg i Skole?",
+  "guestAuthorLink": "Kontakta oss!"
 }

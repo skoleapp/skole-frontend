@@ -13,6 +13,15 @@ const useStyles = makeStyles(({ breakpoints }) => ({
     [breakpoints.down('sm')]: {
       marginBottom: BOTTOM_NAVBAR_HEIGHT, // Prevent showing notifications on top of bottom navbar.
     },
+    '& .MuiSnackbarContent-root': {
+      borderRadius: '1rem',
+      flexWrap: 'nowrap',
+      overflow: 'hidden',
+      '& .MuiSnackbarContent-message': {
+        overflow: 'hidden',
+        display: 'flex',
+      },
+    },
   },
 }));
 
@@ -36,7 +45,11 @@ export const Notifications: React.FC = () => {
     'aria-describedby': 'message-id',
   };
 
-  const renderMessage = <Typography component="span">{notification}</Typography>;
+  const renderMessage = (
+    <Typography className="truncate-text" component="span">
+      {notification}
+    </Typography>
+  );
 
   const renderAction = [
     <IconButton key="close" color="inherit" onClick={handleClose}>

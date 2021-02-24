@@ -2,5 +2,9 @@
   "title": "Blogit",
   "description": "Katso blogimme Skolessa.",
   "header": "Blogit",
-  "readTime": "{{ minutesToRead }} minuutin lukuaika"
+  "readTime": "{{ minutesToRead }} minuutin lukuaika",
+  "emailSubscriptionHeader": "Tilaa blogimme jättämällä sähköpostisi alle!",
+  "subscribeButtonText": "Tilaa blogimme",
+  "guestAuthorText": "Haluatko kirjoittaa blogin Skoleen?",
+  "guestAuthorLink": "Ota meihin yhteyttä!"
 }

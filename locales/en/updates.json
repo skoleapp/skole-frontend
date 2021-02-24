@@ -1,5 +1,9 @@
 {
   "title": "Updates",
   "description": "View updates to our product at Skole.",
-  "header": "Updates"
+  "header": "Updates",
+  "emailSubscriptionHeader": "Subscribe to our product updates by leaving your email below!",
+  "subscribeButtonText": "Subscribe to updates",
+  "requestFeatureText": "Have an idea for new feature?",
+  "requestFeatureLink": "Tell it to us!"
 }

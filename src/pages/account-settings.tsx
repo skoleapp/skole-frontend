@@ -70,6 +70,9 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     subject,
     productUpdateEmailPermission,
     blogPostEmailPermission,
+    commentReplyEmailPermission,
+    courseCommentEmailPermission,
+    resourceCommentEmailPermission,
   } = useAuthContext();
 
   const {
@@ -120,6 +123,9 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     subject,
     productUpdateEmailPermission,
     blogPostEmailPermission,
+    commentReplyEmailPermission,
+    courseCommentEmailPermission,
+    resourceCommentEmailPermission,
   };
 
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
@@ -169,12 +175,37 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <FormGroup>
         <Field
           name="productUpdateEmailPermission"
-          label={t('account-settings:productUpdates')}
+          label={t('forms:productUpdates')}
           component={SwitchFormField}
         />
         <Field
           name="blogPostEmailPermission"
-          label={t('account-settings:blogPosts')}
+          label={t('forms:blogPosts')}
+          component={SwitchFormField}
+        />
+      </FormGroup>
+    </FormControl>
+  );
+
+  const renderEmailNotifications = (
+    <FormControl className={classes.emailSettings}>
+      <FormLabel className={classes.emailSettingsLabel}>
+        {t('account-settings:emailNotifications')}
+      </FormLabel>
+      <FormGroup>
+        <Field
+          name="commentReplyEmailPermission"
+          label={t('forms:commentReplies')}
+          component={SwitchFormField}
+        />
+        <Field
+          name="courseCommentEmailPermission"
+          label={t('forms:courseComments')}
+          component={SwitchFormField}
+        />
+        <Field
+          name="resourceCommentEmailPermission"
+          label={t('forms:resourceComments')}
           component={SwitchFormField}
         />
       </FormGroup>
@@ -219,6 +250,7 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       {renderSchoolField}
       {renderSubjectField}
       {renderEmailSettings}
+      {renderEmailNotifications}
       {renderChangePasswordLink}
       {renderMyDataLink}
       {renderFormSubmitSection(props)}

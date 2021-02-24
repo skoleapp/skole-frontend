@@ -6,14 +6,18 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const ValuesPage: NextPage<MarkdownPageProps> = ({ seoProps, data: { title }, content }) => {
+const ValuesPage: NextPage<MarkdownPageProps> = ({
+  seoProps,
+  data: { title },
+  content: markdownContent,
+}) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
       header: title,
       emoji: '💂',
     },
-    content,
+    markdownContent,
   };
 
   return <MarkdownTemplate {...layoutProps} />;
