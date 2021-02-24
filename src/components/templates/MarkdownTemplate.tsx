@@ -39,9 +39,9 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
 }));
 
 interface Props extends MainTemplateProps {
-  customTopContent?: JSX.Element[];
+  customTopContent?: (JSX.Element | false)[];
   markdownContent: string;
-  customBottomContent?: JSX.Element[];
+  customBottomContent?: (JSX.Element | false)[];
   hideFeedback?: boolean;
 }
 

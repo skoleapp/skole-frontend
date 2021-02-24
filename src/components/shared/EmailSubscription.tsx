@@ -4,11 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import { Form, Formik, FormikProps } from 'formik';
 import { CreateEmailSubscriptionMutation, useCreateEmailSubscriptionMutation } from 'generated';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import useTranslation from 'next-translate/useTranslation';
+import { useTranslation } from 'lib';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 
-import { EmailInputFormField } from '../form-fields';
+import { EmailInputFormField } from '../form-fields/EmailInputFormField'; // Imported like this on purpose to avoid a circular import.
 import { Emoji } from './Emoji';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -22,14 +22,14 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 interface Props {
-  text?: string;
+  header: string;
 }
 
 interface EmailSubscriptionFormValues {
   email: string;
 }
 
-export const EmailSubscription: React.FC<Props> = ({ text }) => {
+export const EmailSubscription: React.FC<Props> = ({ header }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
@@ -64,7 +64,7 @@ export const EmailSubscription: React.FC<Props> = ({ text }) => {
 
   const renderHeader = (
     <Typography className={classes.header} variant="subtitle1" align="center">
-      {text || t('common:emailSubscriptionHeader')}
+      {header}
     </Typography>
   );
 

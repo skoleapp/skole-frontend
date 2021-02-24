@@ -4,7 +4,9 @@ import ListItem from '@material-ui/core/ListItem';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-import { EmailSubscription, GuestAuthorLink, Link, ListTemplate } from 'components';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import { ButtonLink, EmailSubscription, GuestAuthorLink, Link, ListTemplate } from 'components';
+import { useAuthContext } from 'context';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
@@ -31,6 +33,7 @@ interface Props extends SeoPageProps {
 const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { userMe, blogPostEmailPermission } = useAuthContext();
 
   const sortedBlogs: MarkdownPageData[] = R.sortBy(R.prop('date'), blogs).reverse();
 
@@ -91,10 +94,24 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
 
   const renderBlogs = <TableBody>{mapBlogs}</TableBody>;
 
-  const renderEmailSubscription = (
+  const renderEmailSubscription = !userMe && (
+    <EmailSubscription header={t('blogs:emailSubscriptionHeader')} />
+  );
+
+  const renderSubscribeButton = !!userMe && !blogPostEmailPermission && (
+    <Grid container justify="center">
+      <ButtonLink variant="outlined" href={urls.accountSettings} endIcon={<ArrowForwardOutlined />}>
+        {t('blogs:subscribeButtonText')}
+      </ButtonLink>
+    </Grid>
+  );
+
+  const renderGuestAuthorLink = <GuestAuthorLink />;
+
+  const renderBottomContent = (
     <CardContent>
-      <EmailSubscription />
-      <GuestAuthorLink />
+      {renderEmailSubscription || renderSubscribeButton}
+      {renderGuestAuthorLink}
     </CardContent>
   );
 
@@ -109,7 +126,7 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   return (
     <ListTemplate {...layoutProps}>
       {renderBlogs}
-      {renderEmailSubscription}
+      {renderBottomContent}
     </ListTemplate>
   );
 };

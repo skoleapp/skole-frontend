@@ -2,7 +2,9 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { EmailSubscription, GuestAuthorLink, MarkdownTemplate } from 'components';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import { ButtonLink, EmailSubscription, GuestAuthorLink, MarkdownTemplate } from 'components';
+import { useAuthContext } from 'context';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
@@ -12,6 +14,7 @@ import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult, Next
 import Image from 'next/image';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
+import { urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing }) => ({
   authorImage: {
@@ -33,6 +36,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { userMe, blogPostEmailPermission } = useAuthContext();
 
   const renderExcerpt = (
     <Typography variant="h5" color="textSecondary" gutterBottom>
@@ -73,10 +77,18 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
     />
   );
 
-  const renderEmailSubscription = (
+  const renderEmailSubscription = !userMe && (
     <Box className={classes.emailSubscription}>
-      <EmailSubscription />
+      <EmailSubscription header={t('blogs:emailSubscriptionHeader')} />
     </Box>
+  );
+
+  const renderSubscribeButton = !!userMe && !blogPostEmailPermission && (
+    <Grid container justify="center">
+      <ButtonLink variant="outlined" href={urls.accountSettings} endIcon={<ArrowForwardOutlined />}>
+        {t('blogs:subscribeButtonText')}
+      </ButtonLink>
+    </Grid>
   );
 
   const renderGuestAuthorLink = <GuestAuthorLink />;
@@ -89,7 +101,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
     },
     customTopContent: [renderExcerpt, renderBlogInfo, renderCoverImage],
     markdownContent,
-    customBottomContent: [renderEmailSubscription, renderGuestAuthorLink],
+    customBottomContent: [renderEmailSubscription || renderSubscribeButton, renderGuestAuthorLink],
     hideFeedback: true,
   };
 

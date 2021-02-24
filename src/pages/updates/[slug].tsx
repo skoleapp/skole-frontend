@@ -1,17 +1,20 @@
 import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { EmailSubscription, MarkdownTemplate } from 'components';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import { ButtonLink, EmailSubscription, MarkdownTemplate, RequestFeatureLink } from 'components';
+import { useAuthContext } from 'context';
 import { readdirSync } from 'fs';
 import { withUserMe } from 'hocs';
 import { useDayjs } from 'hooks';
-import { loadNamespaces } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticPathsResult, GetStaticPropsContext, GetStaticPropsResult, NextPage } from 'next';
 import Image from 'next/image';
 import React from 'react';
-import { RequestFeatureLink } from 'src/components/shared/RequestFeatureLink';
 import { MarkdownPageProps } from 'types';
+import { urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing }) => ({
   coverImage: {
@@ -28,6 +31,8 @@ const UpdatePage: NextPage<MarkdownPageProps> = ({
   content: markdownContent,
 }) => {
   const classes = useStyles();
+  const { t } = useTranslation();
+  const { userMe, productUpdateEmailPermission } = useAuthContext();
 
   const renderExcerpt = (
     <Typography variant="h5" color="textSecondary" gutterBottom>
@@ -52,10 +57,18 @@ const UpdatePage: NextPage<MarkdownPageProps> = ({
     />
   );
 
-  const renderEmailSubscription = (
+  const renderEmailSubscription = !userMe && (
     <Box className={classes.emailSubscription}>
-      <EmailSubscription />
+      <EmailSubscription header={t('updates:emailSubscriptionHeader')} />
     </Box>
+  );
+
+  const renderSubscribeButton = !!userMe && !productUpdateEmailPermission && (
+    <Grid container justify="center">
+      <ButtonLink variant="outlined" href={urls.accountSettings} endIcon={<ArrowForwardOutlined />}>
+        {t('updates:subscribeButtonText')}
+      </ButtonLink>
+    </Grid>
   );
 
   const renderRequestFeatureLink = <RequestFeatureLink />;
@@ -68,7 +81,10 @@ const UpdatePage: NextPage<MarkdownPageProps> = ({
     },
     customTopContent: [renderExcerpt, renderUpdateInfo, renderCoverImage],
     markdownContent,
-    customBottomContent: [renderEmailSubscription, renderRequestFeatureLink],
+    customBottomContent: [
+      renderEmailSubscription || renderSubscribeButton,
+      renderRequestFeatureLink,
+    ],
     hideFeedback: true,
   };
 

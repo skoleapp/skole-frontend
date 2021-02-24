@@ -2,6 +2,8 @@
   "title": "Uppdateringar",
   "description": "Visa uppdateringar av vår produkt på Skole.",
   "header": "Uppdateringar",
+  "emailSubscriptionHeader": "Prenumerera på våra produktuppdateringar genom att lämna din e-postadress nedan!",
+  "subscribeButtonText": "Prenumerera på uppdateringar",
   "requestFeatureText": "Har du en idé till en ny funktion?",
   "requestFeatureLink": "Berätta för oss!"
 }

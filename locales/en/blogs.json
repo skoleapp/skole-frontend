@@ -3,6 +3,8 @@
   "description": "See our blogs at Skole.",
   "header": "Blogs",
   "readTime": "{{ minutesToRead }} minute read",
+  "emailSubscriptionHeader": "Subscribe to our blog posts by leaving your email below!",
+  "subscribeButtonText": "Subscribe to blogs",
   "guestAuthorText": "Want to write a blog in Skole?",
   "guestAuthorLink": "Contact us!"
 }
