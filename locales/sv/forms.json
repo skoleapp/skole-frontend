@@ -15,7 +15,7 @@
   "schoolOptional": "Skola (frivillig)",
   "subject": "Ämne",
   "subjectOptional": "Ämne (frivillig)",
-  "subjects": "Ämnen",
+  "subjectsOptional": "Ämnen (frivillig)",
   "messageSubjectOptional": "Subjekt (frivillig)",
   "schoolType": "Skoltyp",
   "country": "Land",

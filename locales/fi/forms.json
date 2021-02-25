@@ -14,7 +14,7 @@
   "schoolOptional": "Koulu (valinnainen)",
   "subject": "Oppiaine",
   "subjectOptional": "Oppiaine (valinnainen)",
-  "subjects": "Oppiaineet",
+  "subjectsOptional": "Oppiaineet (valinnainen)",
   "messageSubjectOptional": "Aihe (valinnainen)",
   "schoolType": "Koulutyyppi",
   "country": "Maa",
