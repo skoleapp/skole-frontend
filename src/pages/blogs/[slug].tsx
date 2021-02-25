@@ -84,7 +84,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
   );
 
   const renderSubscribeButton = !!userMe && !blogPostEmailPermission && (
-    <Grid container justify="center">
+    <Grid className={classes.emailSubscription} container justify="center">
       <ButtonLink variant="outlined" href={urls.accountSettings} endIcon={<ArrowForwardOutlined />}>
         {t('blogs:subscribeButtonText')}
       </ButtonLink>
