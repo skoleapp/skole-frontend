@@ -4,7 +4,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
 import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useAuthContext, useDarkModeContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
 
@@ -56,6 +56,7 @@ export const useVotes = ({
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
+  const { dynamicPrimaryColor } = useDarkModeContext();
   const context = useLanguageHeaderContext();
 
   useEffect(() => {
@@ -124,13 +125,13 @@ export const useVotes = ({
   const upvoteButtonProps: IconButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(1),
-    color: !!currentVote && currentVote.status === 1 ? 'primary' : 'default',
+    color: !!currentVote && currentVote.status === 1 ? dynamicPrimaryColor : 'default',
   };
 
   const downvoteButtonProps: IconButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(-1),
-    color: !!currentVote && currentVote.status === -1 ? 'primary' : 'default',
+    color: !!currentVote && currentVote.status === -1 ? dynamicPrimaryColor : 'default',
   };
 
   // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.

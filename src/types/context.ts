@@ -107,4 +107,5 @@ export interface HistoryContextType {
 export interface DarkModeContextType {
   darkMode: boolean;
   toggleDarkMode: () => void;
+  dynamicPrimaryColor: 'primary' | 'secondary';
 }

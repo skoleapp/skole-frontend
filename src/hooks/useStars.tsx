@@ -34,11 +34,11 @@ export const useStars = ({
 }: UseStarsParams): UseStars => {
   const { isTabletOrDesktop } = useMediaQueries();
   const { verified, userMe, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
-  const { darkMode } = useDarkModeContext();
+  const { dynamicPrimaryColor } = useDarkModeContext();
   const [stars, setStars] = useState('0');
   const [starred, setStarred] = useState(false);
-  const iconColor = starred ? (darkMode ? 'secondary' : 'primary') : 'disabled';
-  const textColor = starred ? (darkMode ? 'secondary' : 'primary') : 'textSecondary';
+  const iconColor = starred ? dynamicPrimaryColor : 'disabled';
+  const textColor = starred ? dynamicPrimaryColor : 'textSecondary';
   const context = useLanguageHeaderContext();
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
 
