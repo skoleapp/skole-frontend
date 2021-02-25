@@ -1,4 +1,4 @@
-import IconButton from '@material-ui/core/IconButton';
+import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import { Size } from '@material-ui/core/TableCell';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -7,7 +7,6 @@ import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { MuiColor } from 'types';
 
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 import { useMediaQueries } from './useMediaQueries';
@@ -30,18 +29,12 @@ interface UseVotesParams {
   ownContentTooltip: string;
 }
 
-interface VoteButtonProps {
-  color: MuiColor;
-  disabled: boolean;
-  size: Size;
-}
-
 interface UseVotes {
   score: string;
   renderUpvoteButton: JSX.Element | false;
   renderDownvoteButton: JSX.Element | false;
-  upvoteButtonProps: VoteButtonProps;
-  downvoteButtonProps: VoteButtonProps;
+  upvoteButtonProps: Partial<IconButtonProps>;
+  downvoteButtonProps: Partial<IconButtonProps>;
   upvoteTooltip: string;
   downvoteTooltip: string;
 }
@@ -106,8 +99,8 @@ export const useVotes = ({
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote?.errors?.length) {
       onError();
-    } else if (vote?.vote && vote.targetScore) {
-      setCurrentVote(vote.vote);
+    } else if (vote?.targetScore !== undefined) {
+      setCurrentVote(vote.vote || null);
       setScore(String(vote.targetScore));
     }
   };
@@ -128,16 +121,16 @@ export const useVotes = ({
     disabled: voteSubmitting || !userMe || isOwner || verified === false,
   };
 
-  const upvoteButtonProps = {
+  const upvoteButtonProps: IconButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(1),
-    color: !!currentVote && currentVote.status === 1 ? 'primary' : ('default' as MuiColor),
+    color: !!currentVote && currentVote.status === 1 ? 'primary' : 'default',
   };
 
-  const downvoteButtonProps = {
+  const downvoteButtonProps: IconButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(-1),
-    color: !!currentVote && currentVote.status === -1 ? 'primary' : ('default' as MuiColor),
+    color: !!currentVote && currentVote.status === -1 ? 'primary' : 'default',
   };
 
   // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.

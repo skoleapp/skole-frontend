@@ -1,7 +1,6 @@
 import Box from '@material-ui/core/Box';
-import Fab from '@material-ui/core/Fab';
+import Fab, { FabProps } from '@material-ui/core/Fab';
 import { makeStyles } from '@material-ui/core/styles';
-import { Size } from '@material-ui/core/TableCell';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddOutlined from '@material-ui/icons/AddOutlined';
@@ -11,7 +10,7 @@ import RemoveOutlined from '@material-ui/icons/RemoveOutlined';
 import { usePdfViewerContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { Dispatch, SetStateAction } from 'react';
-import { MuiColor, PdfTranslation } from 'types';
+import { PdfTranslation } from 'types';
 import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION, PDF_MAX_SCALE, PDF_MIN_SCALE } from 'utils';
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -76,10 +75,10 @@ export const MapControls: React.FC<Props> = ({ setTranslation, scale, setScale }
   const handleScaleDownButtonClick = (): Promise<void> =>
     handleScale(scale > PDF_MIN_SCALE ? scale - 0.05 : scale); // Scale down by 5% if over minimum limit
 
-  const commonButtonProps = {
+  const commonButtonProps: Partial<FabProps> = {
     className: classes.button,
-    size: 'small' as Size,
-    color: 'secondary' as MuiColor,
+    size: 'small',
+    color: 'secondary',
     disabled: controlsDisabled,
   };
 
