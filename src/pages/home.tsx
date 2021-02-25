@@ -22,6 +22,7 @@ import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import FiberNew from '@material-ui/icons/FiberNew';
+import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import clsx from 'clsx';
@@ -281,9 +282,9 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
 
   const shortcuts = [
     {
-      text: 'common:startDiscussion',
-      icon: ChatOutlined,
-      href: urls.addComment,
+      text: 'common:askQuestion',
+      icon: HelpOutlineOutlined,
+      href: urls.askQuestion,
     },
     {
       text: 'common:findContent',

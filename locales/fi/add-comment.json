@@ -1,7 +1,7 @@
 {
-  "title": "Lisää kommentti",
-  "description": "Lisää uusi kommentti.",
-  "header": "Lisää kommentti",
+  "title": "Kysy kysymys",
+  "description": "Kysy kysymys yhteisöltä.",
+  "header": "Kysy kysymys",
   "schoolHelperText": "Kommenttisi näkyy valitsemasi keskustelun alla.",
-  "selectDiscussion": "Valitse keskustelu"
+  "myDiscussions": "Keskusteluni"
 }

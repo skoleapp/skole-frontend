@@ -1,7 +1,7 @@
 {
-  "title": "Lägg till kommentar",
-  "description": "Lägg till en ny kommentar.",
-  "header": "Lägg till kommentar",
+  "title": "Ställ fråga",
+  "description": "Ställ en fråga från gruppen.",
+  "header": "Ställ fråga",
   "schoolHelperText": "Din kommentar kommer att visas under diskussionen du väljer.",
-  "selectDiscussion": "Väljä diskussion"
+  "myDiscussions": "Mina diskussioner"
 }

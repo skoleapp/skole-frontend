@@ -215,7 +215,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderDiscussionSuggestions = !!userMe && !!discussionSuggestions.length && (
     <FormControl className={classes.discussionSuggestions}>
       <FormLabel className={classes.discussionSuggestionsLabel}>
-        {t('add-comment:selectDiscussion')}
+        {t('add-comment:myDiscussions')}
       </FormLabel>
       <RadioGroup value={formRef.current?.values.discussion} onChange={handleRadioGroupChange}>
         {mapDiscussionSuggestions}
@@ -238,10 +238,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const getPlaceholder = (discussion: AddCommentFormValues['discussion']) =>
     discussion
       ? t('forms:postTo', {
-          discussionName:
-            R.prop('name', discussion) ||
-            R.prop('title', discussion) ||
-            R.prop('courseName', discussion),
+          discussionName: `#${discussion.slug}`,
         })
       : t('forms:selectDiscussionToPost');
 
@@ -282,7 +279,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     seoProps,
     topNavbarProps: {
       header: t('add-comment:header'),
-      emoji: '💬',
+      emoji: '🤔',
     },
   };
 
