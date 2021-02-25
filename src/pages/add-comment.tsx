@@ -102,7 +102,8 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         },
       });
 
-      sa_event('create_comment');
+      const discussionType = resource ? 'resource' : course ? 'course' : school ? 'school' : '';
+      sa_event(`create_quick_comment_to_${discussionType}`);
     } else {
       toggleUnexpectedErrorNotification();
     }

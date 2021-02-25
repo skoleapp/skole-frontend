@@ -151,7 +151,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderSubjectsField = (
     <Field
       name="subjects"
-      label={t('forms:subjects')}
+      label={t('forms:subjectsOptional')}
       searchKey="name"
       dataKey="autocompleteSubjects"
       document={AutocompleteSubjectsDocument}

@@ -191,14 +191,14 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   };
 
-  const renderSubjectLinks = subjects.map(({ id, slug }, i) => (
+  const renderSubjectLinks = subjects.map(({ slug }, i) => (
     <Grid key={i} item xs={12}>
       <TextLink
         href={{
           ...searchUrl,
           query: {
             ...searchUrl.query,
-            subject: Number(id),
+            subject: slug,
           },
         }}
       >
