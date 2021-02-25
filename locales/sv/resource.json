@@ -10,5 +10,6 @@
   "shareText": "Se {{ resourceTitle }} av {{ creatorUsername }} på Skole",
   "share": "Dela material",
   "delete": "Radera material",
-  "confirmDelete": "Är du säker på att du vill ta bort den här materialen?"
+  "confirmDelete": "Är du säker på att du vill ta bort den här materialen?",
+  "pdfViewerHelperText": "CTRL + bläddra för att zooma in/ut."
 }

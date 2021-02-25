@@ -1,8 +1,10 @@
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { usePdfViewerContext } from 'context';
+import useTranslation from 'next-translate/useTranslation';
 import * as R from 'ramda';
 import React, { ChangeEvent } from 'react';
 import { BORDER } from 'styles';
@@ -23,6 +25,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 export const ResourceBottomToolbar: React.FC = () => {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const {
     setPageNumber,
@@ -46,6 +49,8 @@ export const ResourceBottomToolbar: React.FC = () => {
         inline: 'start',
       });
   };
+
+  const renderHelperText = <FormHelperText>{t('resource:pdfViewerHelperText')}</FormHelperText>;
 
   const renderPageNumberInput = (
     <TextField
@@ -71,8 +76,14 @@ export const ResourceBottomToolbar: React.FC = () => {
   );
 
   return (
-    <Grid className={classes.root} container justify="center" alignItems="center">
-      {renderPageNumberInput} {renderNumPages}
+    <Grid className={classes.root} container alignItems="center">
+      <Grid item xs={4}>
+        {renderHelperText}
+      </Grid>
+      <Grid item xs={4} container justify="center" alignItems="center">
+        {renderPageNumberInput} {renderNumPages}
+      </Grid>
+      <Grid item xs={4} />
     </Grid>
   );
 };

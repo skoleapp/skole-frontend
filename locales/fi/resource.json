@@ -10,5 +10,6 @@
   "shareText": "Katso {{ resourceTitle }} käyttäjältä {{ creatorUsername }} Skolessa",
   "share": "Jaa materiaali",
   "delete": "Poista materiaali",
-  "confirmDelete": "Haluatko varmasti poistaa tämän materiaalin?"
+  "confirmDelete": "Haluatko varmasti poistaa tämän materiaalin?",
+  "pdfViewerHelperText": "CTRL + scroll zoomataksesi sisään/ulos."
 }
