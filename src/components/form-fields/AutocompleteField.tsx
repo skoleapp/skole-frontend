@@ -50,7 +50,7 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
   const showError = getIn(touched, name) && !!fieldError;
 
   const getOptionLabel = (option: Record<string, string>): string => {
-    const suffix = R.propOr('', suffixKey, option);
+    const suffix = R.prop(suffixKey, option);
     let label = '';
 
     labelKeys.forEach((l) => {
@@ -120,23 +120,31 @@ export const AutocompleteField: React.FC<Props & TextFieldProps> = ({
     return (): void => {
       setOptions([]);
     };
-  }, [open]);
+
+    // Ignore: `fetchOptions` must be omitted from the dependency array to avoid an infinite loop.
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // For fields that perform filtering in the backend with the search variables, refetch the data on every key stroke.
   useEffect(() => {
-    !!searchKey && fetchOptions();
-  }, [inputValue]);
+    if (searchKey) {
+      fetchOptions();
+    }
+
+    // Ignore: `fetchOptions` must be omitted from the dependency array to avoid an infinite loop.
+  }, [inputValue, searchKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close the options when clearing the value.
-  const handleClearSelection = () => {
+  const handleClearSelection = (): void => {
     form.setFieldValue(name, null);
     handleClose();
   };
 
-  const handleAutocompleteChange = (_e: ChangeEvent<Record<string, unknown>>, val: unknown): void =>
-    val ? form.setFieldValue(name, val) : handleClearSelection();
+  const handleAutocompleteChange = (
+    _e: ChangeEvent<Record<string, unknown>>,
+    val: unknown,
+  ): boolean | void => (val ? form.setFieldValue(name, val) : handleClearSelection());
 
-  const getOptionSelected = <T extends Record<string, unknown>>(option: T) => {
+  const getOptionSelected = <T extends Record<string, unknown>>(option: T): boolean => {
     if (multiple) {
       return field.value.some((v: T) => v.slug === option.slug);
     }

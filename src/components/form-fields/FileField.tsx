@@ -52,7 +52,7 @@ export const FileField: React.FC<Props> = ({ form: { setFieldValue }, field: { n
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
   const preventDefaultDragBehavior = (e: DragEvent<HTMLElement>): void => e.preventDefault();
 
-  const validateAndSetFile = (file: File | Blob) => {
+  const validateAndSetFile = (file: File | Blob): void => {
     if (file.size > MAX_RESOURCE_FILE_SIZE) {
       toggleNotification(t('validation:fileSizeError'));
     } else {

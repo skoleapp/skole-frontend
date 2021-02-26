@@ -12,7 +12,8 @@ export const HistoryContextProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     setHistory([...history, process.env.FRONTEND_URL + asPath]);
-  }, [asPath]);
+    // Ignore: `history` and `setHistory` must be omitted from the dependency array to avoid an infinite loop.
+  }, [asPath]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <HistoryContext.Provider value={{ history }}>{children}</HistoryContext.Provider>;
 };

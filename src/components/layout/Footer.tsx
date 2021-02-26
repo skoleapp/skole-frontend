@@ -51,7 +51,8 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
 
-  const handleClickSocialMediaLink = (name: string) => () => sa_event(`click_${name}_footer_link`);
+  const handleClickSocialMediaLink = (name: string) => (): void =>
+    sa_event(`click_${name}_footer_link`);
 
   const renderSkoleHeader = (
     <Typography className={classes.header} variant="subtitle1" color="secondary">

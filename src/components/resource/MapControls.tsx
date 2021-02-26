@@ -64,7 +64,13 @@ export const MapControls: React.FC<Props> = ({ setTranslation, scale, setScale }
 
   const handleScale = async (newScale: number): Promise<void> => {
     setFullscreen(false);
-    newScale == PDF_DEFAULT_SCALE && setFullscreen(true);
+
+    // Ignore: The condition will only work with double equal.
+    // eslint-disable-next-line eqeqeq
+    if (newScale == PDF_DEFAULT_SCALE) {
+      setFullscreen(true);
+    }
+
     await setScale(newScale); // Wait until new scale has been applied and center horizontal scroll only after that to avoid lagginess.
     centerHorizontalScroll();
   };

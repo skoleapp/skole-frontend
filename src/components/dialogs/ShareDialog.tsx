@@ -54,7 +54,7 @@ ${url}`;
 
   const mailUrl = `mailto:?subject=${title}&body=${encodeURIComponent(emailBody)}`;
 
-  const getPage = () => {
+  const getPage = (): string | void => {
     switch (pathname) {
       case '/': {
         return 'landing_page';
@@ -71,13 +71,17 @@ ${url}`;
       case '/schools/[slug]': {
         return 'school_page';
       }
+
+      default: {
+        break;
+      }
     }
   };
 
-  const shareEvent = (name: string) => sa_event(`click_${name}_share_link_from_${getPage()}`);
-  const handleClickMenuItem = (name: string) => () => shareEvent(name);
+  const shareEvent = (name: string): void => sa_event(`click_${name}_share_link_from_${getPage()}`);
+  const handleClickMenuItem = (name: string) => (): void => shareEvent(name);
 
-  const handleClickCopyLink = () => {
+  const handleClickCopyLink = (): void => {
     toggleNotification(t('notifications:linkCopied'));
     navigator.clipboard.writeText(url);
     handleCloseShareDialog();

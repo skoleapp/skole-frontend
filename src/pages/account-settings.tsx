@@ -107,8 +107,8 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     ...values
   }: UpdateAccountSettingsFormValues): Promise<void> => {
     const variables = {
-      school: R.propOr(null, 'id', school),
-      subject: R.propOr(null, 'id', subject),
+      school: R.prop('id', school),
+      subject: R.prop('id', subject),
       ...values,
     };
 
@@ -134,7 +134,8 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       ...generalFormValues,
       ...dynamicInitialValues,
     }),
-    Object.values(dynamicInitialValues),
+    // Ignore: ESLint cannot infer the values in the dependency array.
+    Object.values(dynamicInitialValues), // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const validationSchema = Yup.object().shape({

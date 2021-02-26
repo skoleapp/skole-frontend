@@ -15,7 +15,7 @@ export const ActionsButton: React.FC<Props> = ({ tooltip, actionsDialogParams })
   const { handleOpenActionsDialog } = useActionsContext();
   const { isMobile } = useMediaQueries();
   const color = isMobile ? 'secondary' : 'default';
-  const handleClick = () => handleOpenActionsDialog(actionsDialogParams);
+  const handleClick = (): void => handleOpenActionsDialog(actionsDialogParams);
 
   return (
     <Tooltip title={tooltip}>

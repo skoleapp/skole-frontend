@@ -1,5 +1,4 @@
 import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
-import { Size } from '@material-ui/core/TableCell';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
@@ -76,11 +75,9 @@ export const useVotes = ({
   const upvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
-    (isOwner
-      ? ownContentTooltip
-      : currentVote?.status === 1
-      ? removeUpvoteTooltip
-      : _upvoteTooltip);
+    (isOwner && ownContentTooltip) ||
+    (currentVote?.status === 1 && removeUpvoteTooltip) ||
+    _upvoteTooltip;
 
   // Show different tooltip for each of these cases:
   // - User is not logged in.
@@ -91,11 +88,9 @@ export const useVotes = ({
   const downvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
-    (isOwner
-      ? ownContentTooltip
-      : currentVote?.status === -1
-      ? removeDownvoteTooltip
-      : _downvoteTooltip);
+    (isOwner && ownContentTooltip) ||
+    (currentVote?.status === -1 && removeDownvoteTooltip) ||
+    _downvoteTooltip;
 
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote?.errors?.length) {
@@ -117,8 +112,8 @@ export const useVotes = ({
     await vote({ variables: { status, ...variables } });
   };
 
-  const commonVoteButtonProps = {
-    size: 'small' as Size,
+  const commonVoteButtonProps: IconButtonProps = {
+    size: 'small',
     disabled: voteSubmitting || !userMe || isOwner || verified === false,
   };
 

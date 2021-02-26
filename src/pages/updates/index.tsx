@@ -25,11 +25,10 @@ interface Props extends SeoPageProps {
 const UpdatesPage: NextPage<Props> = ({ seoProps, updates }) => {
   const { t } = useTranslation();
   const { userMe, productUpdateEmailPermission } = useAuthContext();
-
   const sortedUpdates: MarkdownPageData[] = R.sortBy(R.prop('date'), updates).reverse();
 
   const mapUpdates = sortedUpdates.map(
-    ({ title, excerpt, coverImage = '', date, slug = '' }, i) => (
+    ({ title, excerpt, coverImage = '', date = '', slug = '' }, i) => (
       <Link href={urls.update(slug)} fullWidth>
         <ListItem key={i} button>
           <Grid container spacing={4}>

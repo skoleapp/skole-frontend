@@ -407,6 +407,7 @@ export const useMuiTheme = (): Theme => {
         props,
         overrides,
       }),
-    [darkMode],
+    // Ignore: The `darkMode` must be included in the dependency array to re-calculate the theme when toggling the dark theme.
+    [darkMode, palette, typography, spacing, breakpoints, props, overrides], // eslint-disable-line react-hooks/exhaustive-deps
   );
 };

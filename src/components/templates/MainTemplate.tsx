@@ -94,7 +94,10 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
 
   const renderContainer = (
-    <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>
+    <Container
+      {...R.omit(['fullWidth', 'dense', 'hideNavigation'], containerProps)}
+      className={containerClasses}
+    >
       {children}
     </Container>
   );

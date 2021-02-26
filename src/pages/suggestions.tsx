@@ -23,7 +23,7 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useSuggestionsQuery({ context });
-  const suggestions = R.propOr([], 'suggestions', data);
+  const suggestions = R.prop('suggestions', data);
 
   const renderLoading = <LoadingBox />;
   const renderNotFound = <NotFoundBox text={t('suggestions:noSuggestions')} />;
@@ -33,11 +33,8 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <SuggestionsTable suggestions={suggestions} renderTableFooter={renderTableFooter} />
   );
 
-  const renderSuggestions = loading
-    ? renderLoading
-    : suggestions.length
-    ? renderTable
-    : renderNotFound;
+  const renderSuggestions =
+    (loading && renderLoading) || (suggestions.length && renderTable) || renderNotFound;
 
   const layoutProps = {
     seoProps,

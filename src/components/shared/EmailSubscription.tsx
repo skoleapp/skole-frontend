@@ -50,7 +50,7 @@ export const EmailSubscription: React.FC<Props> = ({ header }) => {
     context,
   });
 
-  const handleSubmit = async ({ email }: EmailSubscriptionFormValues) => {
+  const handleSubmit = async ({ email }: EmailSubscriptionFormValues): Promise<void> => {
     await createEmailSubscription({ variables: { email } });
   };
 
@@ -68,7 +68,7 @@ export const EmailSubscription: React.FC<Props> = ({ header }) => {
     </Typography>
   );
 
-  const renderFormFields = (props: FormikProps<EmailSubscriptionFormValues>) => (
+  const renderFormFields = (props: FormikProps<EmailSubscriptionFormValues>): JSX.Element => (
     <Form className={classes.form}>
       <EmailInputFormField {...props} />
     </Form>

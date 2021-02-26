@@ -4,7 +4,7 @@ import { usePdfViewerContext } from 'context';
 import { useMediaQueries, useStateRef } from 'hooks';
 import { getClampedScale, getCoordChange, getMidPoint, getTouchDistance, getTouchPoint } from 'lib';
 import throttle from 'lodash.throttle';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { PdfTranslation } from 'types';
 import { PDF_DEFAULT_SCALE, PDF_DEFAULT_TRANSLATION } from 'utils';
 
@@ -80,137 +80,162 @@ export const MapInteraction: React.FC<Props> = ({
   };
 
   // Set mutable ref state to keep track of pointer state.
-  const setPointerState = (pointers: TouchList): void => {
-    if (pointers.length) {
-      setStartPointersInfo({
-        pointers,
-        scale,
-        translation,
-      });
-    }
-  };
+  const setPointerState = useCallback(
+    (pointers: TouchList): void => {
+      if (pointers.length) {
+        setStartPointersInfo({
+          pointers,
+          scale,
+          translation,
+        });
+      }
+    },
+    [scale, setStartPointersInfo, translation],
+  );
 
-  const getMapContainerBoundingClientRect = (): DOMRect | ClientRect =>
-    getMapContainerNode().getBoundingClientRect();
+  const getMapContainerBoundingClientRect = useCallback(
+    (): DOMRect | ClientRect => getMapContainerNode().getBoundingClientRect(),
+    [getMapContainerNode],
+  );
 
   // Return calculated translation from page.
-  const getTranslatedOrigin = (translation: PdfTranslation): PdfTranslation => {
-    const clientOffset = getMapContainerBoundingClientRect();
+  const getTranslatedOrigin = useCallback(
+    (translation: PdfTranslation): PdfTranslation => {
+      const clientOffset = getMapContainerBoundingClientRect();
 
-    return {
-      x: clientOffset.left + translation.x,
-      y: clientOffset.top + translation.y,
-    };
-  };
+      return {
+        x: clientOffset.left + translation.x,
+        y: clientOffset.top + translation.y,
+      };
+    },
+    [getMapContainerBoundingClientRect],
+  );
 
   // From a given screen point return it as a point in the coordinate system of the map interaction component.
-  const getClientPosToTranslatedPos = (
-    { x, y }: PdfTranslation,
-    _translation: PdfTranslation = translation,
-  ): PdfTranslation => {
-    const origin = getTranslatedOrigin(_translation);
+  const getClientPosToTranslatedPos = useCallback(
+    ({ x, y }: PdfTranslation, _translation: PdfTranslation = translation): PdfTranslation => {
+      const origin = getTranslatedOrigin(_translation);
 
-    return {
-      x: x - origin.x,
-      y: y - origin.y,
-    };
-  };
+      return {
+        x: x - origin.x,
+        y: y - origin.y,
+      };
+    },
+    [getTranslatedOrigin, translation],
+  );
 
   // Given the start touches and new e.touches, scale and translation such that the initial midpoint remains as the new midpoint.
   // This is to achieve the effect of keeping the content that was directly in the middle of the two fingers as the focal point throughout the zoom.
-  const scaleFromMultiTouch = (e: TouchEvent): void => {
-    // Ignore: This function is only called when the start pointers info exists.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const {
-      pointers: startTouches,
-      scale: startScale,
-      translation: startTranslation,
-    } = startPointersInfo.current!;
+  const scaleFromMultiTouch = useCallback(
+    (e: TouchEvent): void => {
+      // Ignore: This function is only called when the start pointers info exists.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const {
+        pointers: startTouches,
+        scale: startScale,
+        translation: startTranslation,
+      } = startPointersInfo.current!;
 
-    const newTouches = e.touches;
+      const newTouches = e.touches;
 
-    // Calculate new scale.
-    const dist0 = getTouchDistance(startTouches[0], startTouches[1]);
-    const dist1 = getTouchDistance(newTouches[0], newTouches[1]);
-    const scaleChange = dist1 / dist0;
-    const targetScale = startScale + (scaleChange - 1) * startScale;
-    const newScale = getClampedScale(targetScale);
-    const scaleRatio = newScale / startScale;
+      // Calculate new scale.
+      const dist0 = getTouchDistance(startTouches[0], startTouches[1]);
+      const dist1 = getTouchDistance(newTouches[0], newTouches[1]);
+      const scaleChange = dist1 / dist0;
+      const targetScale = startScale + (scaleChange - 1) * startScale;
+      const newScale = getClampedScale(targetScale);
+      const scaleRatio = newScale / startScale;
 
-    // Calculate mid points.
-    const startMidpoint = getMidPoint(
-      getTouchPoint(startTouches[0]),
-      getTouchPoint(startTouches[1]),
-    );
-    const newMidPoint = getMidPoint(getTouchPoint(newTouches[0]), getTouchPoint(newTouches[1]));
+      // Calculate mid points.
+      const startMidpoint = getMidPoint(
+        getTouchPoint(startTouches[0]),
+        getTouchPoint(startTouches[1]),
+      );
+      const newMidPoint = getMidPoint(getTouchPoint(newTouches[0]), getTouchPoint(newTouches[1]));
 
-    // The amount we need to translate by in order for the mid point to stay in the middle (before thinking about scaling factor).
-    const dragDelta = {
-      x: newMidPoint.x - startMidpoint.x,
-      y: newMidPoint.y - startMidpoint.y,
-    };
+      // The amount we need to translate by in order for the mid point to stay in the middle (before thinking about scaling factor).
+      const dragDelta = {
+        x: newMidPoint.x - startMidpoint.x,
+        y: newMidPoint.y - startMidpoint.y,
+      };
 
-    // The point originally in the middle of the fingers on the initial zoom start.
-    const focalPoint = getClientPosToTranslatedPos(startMidpoint, startTranslation);
-    const { scrollTop } = getMapContainerNode();
+      // The point originally in the middle of the fingers on the initial zoom start.
+      const focalPoint = getClientPosToTranslatedPos(startMidpoint, startTranslation);
+      const { scrollTop } = getMapContainerNode();
 
-    // The amount that the middle point has changed from this scaling.
-    const focalPtDelta = {
-      x: getCoordChange(focalPoint.x, scaleRatio),
-      y: getCoordChange(focalPoint.y + scrollTop, scaleRatio),
-    };
+      // The amount that the middle point has changed from this scaling.
+      const focalPtDelta = {
+        x: getCoordChange(focalPoint.x, scaleRatio),
+        y: getCoordChange(focalPoint.y + scrollTop, scaleRatio),
+      };
 
-    // Translation is the original translation, plus the amount we dragged, minus what the scaling will do to the focal point.
-    // Subtracting the scaling factor keeps the midpoint in the middle of the touch points.
-    const newTranslation = {
-      x: startTranslation.x - focalPtDelta.x + dragDelta.x,
-      y: startTranslation.y - focalPtDelta.y + dragDelta.y,
-    };
+      // Translation is the original translation, plus the amount we dragged, minus what the scaling will do to the focal point.
+      // Subtracting the scaling factor keeps the midpoint in the middle of the touch points.
+      const newTranslation = {
+        x: startTranslation.x - focalPtDelta.x + dragDelta.x,
+        y: startTranslation.y - focalPtDelta.y + dragDelta.y,
+      };
 
-    setScale(newScale);
-    setTranslation(newTranslation);
-  };
+      setScale(newScale);
+      setTranslation(newTranslation);
+    },
+    [getClientPosToTranslatedPos, getMapContainerNode, setScale, setTranslation, startPointersInfo],
+  );
 
   // Change translation based on drag event.
-  const onDrag = (pointer: Touch): void => {
-    // Ignore: This function is only called when the start pointers info exists.
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const { pointers: startTouches, translation: startTranslation } = startPointersInfo.current!;
-    const startPointer = startTouches[0];
-    const dragX = pointer.clientX - startPointer.clientX;
-    const dragY = pointer.clientY - startPointer.clientY;
+  const onDrag = useCallback(
+    (pointer: Touch): void => {
+      // Ignore: This function is only called when the start pointers info exists.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const { pointers: startTouches, translation: startTranslation } = startPointersInfo.current!;
+      const startPointer = startTouches[0];
+      const dragX = pointer.clientX - startPointer.clientX;
+      const dragY = pointer.clientY - startPointer.clientY;
 
-    const newTranslation = {
-      x: startTranslation.x + dragX,
-      y: startTranslation.y + dragY,
-    };
+      const newTranslation = {
+        x: startTranslation.x + dragX,
+        y: startTranslation.y + dragY,
+      };
 
-    setTranslation(newTranslation);
-  };
+      setTranslation(newTranslation);
+    },
+    [setTranslation, startPointersInfo],
+  );
 
   // Update document scale based on mouse wheel events.
   // TODO: Set Y-axis scroll position based on mouse position to we can zoom in to a point using mouse position.
-  const onWheel = (e: WheelEvent): void => {
-    if (e.ctrlKey) {
-      setFullscreen(false);
-      e.preventDefault(); // Prevent scrolling.
-      const scaleChange = 2 ** (e.deltaY * 0.002);
-      const newScale = getClampedScale(scale + (1 - scaleChange));
-      setScale(newScale);
-      centerHorizontalScroll();
-    }
-  };
+  const onWheel = useCallback(
+    (e: WheelEvent): void => {
+      if (e.ctrlKey) {
+        setFullscreen(false);
+        e.preventDefault(); // Prevent scrolling.
+        const scaleChange = 2 ** (e.deltaY * 0.002);
+        const newScale = getClampedScale(scale + (1 - scaleChange));
+        setScale(newScale);
+        centerHorizontalScroll();
+      }
+    },
+    [centerHorizontalScroll, scale, setFullscreen, setScale],
+  );
 
-  const elementInViewport = (el: Element): boolean => {
-    const { bottom, right, top, left } = el.getBoundingClientRect();
-    const { width: mapContainerWidth, top: mapContainerTop } = getMapContainerBoundingClientRect();
-    return bottom >= 0 && right >= 0 && top <= mapContainerTop && left <= mapContainerWidth;
-  };
+  const elementInViewport = useCallback(
+    (el: Element): boolean => {
+      const { bottom, right, top, left } = el.getBoundingClientRect();
+
+      const {
+        width: mapContainerWidth,
+        top: mapContainerTop,
+      } = getMapContainerBoundingClientRect();
+
+      return bottom >= 0 && right >= 0 && top <= mapContainerTop && left <= mapContainerWidth;
+    },
+    [getMapContainerBoundingClientRect],
+  );
 
   // Find current page from viewport and set page number according to it when page number input is not active.
   // This listener is so expensive to use that we throttle it to execute every 100 ms only.
   // TODO: Using intersection observers would probably lead to better performance: https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
-  const pageListener = (): void => {
+  const pageListener = useCallback((): void => {
     if (document.activeElement !== pageNumberInputRef.current) {
       const page = Array.from(document.querySelectorAll('.react-pdf__Page')).find(
         elementInViewport,
@@ -218,37 +243,47 @@ export const MapInteraction: React.FC<Props> = ({
       const newPageNumber = page && page.getAttribute('data-page-number');
       setPageNumber(Number(newPageNumber));
     }
-  };
+  }, [elementInViewport, pageNumberInputRef, setPageNumber]);
 
-  const onTouchStart = (e: TouchEvent): void => {
-    setTransformContainerClasses('');
-    setPointerState(e.touches);
-  };
+  const onTouchStart = useCallback(
+    (e: TouchEvent): void => {
+      setTransformContainerClasses('');
+      setPointerState(e.touches);
+    },
+    [setPointerState],
+  );
 
-  const onTouchMove = (e: TouchEvent): void => {
-    if (startPointersInfo.current) {
-      const isPinchAction = e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
+  const onTouchMove = useCallback(
+    (e: TouchEvent): void => {
+      if (startPointersInfo.current) {
+        const isPinchAction =
+          e.touches.length === 2 && startPointersInfo.current.pointers.length > 1;
 
-      if (isPinchAction) {
-        e.preventDefault(); // Prevent scrolling.
-        scaleFromMultiTouch(e);
-      } else if (e.touches.length === 1 && scale > PDF_DEFAULT_SCALE) {
-        e.preventDefault(); // Prevent scrolling.
-        onDrag(e.touches[0]);
+        if (isPinchAction) {
+          e.preventDefault(); // Prevent scrolling.
+          scaleFromMultiTouch(e);
+        } else if (e.touches.length === 1 && scale > PDF_DEFAULT_SCALE) {
+          e.preventDefault(); // Prevent scrolling.
+          onDrag(e.touches[0]);
+        }
       }
-    }
-  };
+    },
+    [onDrag, scale, scaleFromMultiTouch, startPointersInfo],
+  );
 
-  const onTouchEnd = (e: TouchEvent): void => {
-    setPointerState(e.touches);
+  const onTouchEnd = useCallback(
+    (e: TouchEvent): void => {
+      setPointerState(e.touches);
 
-    // Reset original scale/translation if pinched out.
-    if (scale < PDF_DEFAULT_SCALE) {
-      setScale(PDF_DEFAULT_SCALE);
-      setTranslation(PDF_DEFAULT_TRANSLATION);
-      setTransformContainerClasses(classes.bounceBack);
-    }
-  };
+      // Reset original scale/translation if pinched out.
+      if (scale < PDF_DEFAULT_SCALE) {
+        setScale(PDF_DEFAULT_SCALE);
+        setTranslation(PDF_DEFAULT_TRANSLATION);
+        setTransformContainerClasses(classes.bounceBack);
+      }
+    },
+    [classes.bounceBack, scale, setPointerState, setScale, setTranslation],
+  );
 
   // Listen fot mouse and touch events to perform required CSS transforms for map interaction functions.
   // Some listeners are not passive on purpose as we want to manually prevent some default behavior such as scrolling.
@@ -271,7 +306,17 @@ export const MapInteraction: React.FC<Props> = ({
       mapContainerNode.removeEventListener('touchend', onTouchEnd);
       mapContainerNode.removeEventListener('wheel', onWheel);
     };
-  }, [scale, translation, drawingMode, controlsDisabled]);
+  }, [
+    scale,
+    translation,
+    drawingMode,
+    controlsDisabled,
+    getMapContainerNode,
+    onTouchEnd,
+    onTouchMove,
+    onTouchStart,
+    onWheel,
+  ]);
 
   // Listen for key presses in order to show different cursor when CTRL key is pressed.
   // Also listen for scroll and resize events to update the page number automatically.
@@ -297,7 +342,7 @@ export const MapInteraction: React.FC<Props> = ({
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('keyup', onKeyUp);
     };
-  }, [drawingMode, controlsDisabled]);
+  }, [drawingMode, controlsDisabled, getMapContainerNode, pageListener]);
 
   // When entering drawing mode, reset scale/translation.
   useEffect(() => {
@@ -307,7 +352,7 @@ export const MapInteraction: React.FC<Props> = ({
       setRotate(0);
       setFullscreen(true);
     }
-  }, [drawingMode]);
+  }, [drawingMode, setFullscreen, setRotate, setScale, setTranslation]);
 
   const cursor = !drawingMode && ctrlKey ? 'all-scroll' : 'default'; // On desktop show different cursor when CTRL key is pressed.
   const overflow = drawingMode && isMobileOrTablet ? 'hidden' : 'auto'; // Disable scrolling when drawing mode is on on mobile.

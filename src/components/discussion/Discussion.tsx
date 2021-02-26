@@ -16,7 +16,7 @@ import {
 import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BORDER, BOTTOM_NAVBAR_HEIGHT } from 'styles';
 import { DiscussionTypes } from 'types';
 
@@ -92,13 +92,11 @@ export const Discussion: React.FC<Props> = ({
   const [loadingMoreComments, setLoadingMoreComments] = useState(false);
   const discussionName = `#${course?.slug || resource?.slug || school?.slug}`;
 
-  const discussionType = course
-    ? DiscussionTypes.COURSE
-    : resource
-    ? DiscussionTypes.RESOURCE
-    : school
-    ? DiscussionTypes.SCHOOL
-    : null;
+  const discussionType =
+    (course && DiscussionTypes.COURSE) ||
+    (resource && DiscussionTypes.RESOURCE) ||
+    (school && DiscussionTypes.SCHOOL) ||
+    null;
 
   const {
     comments,
@@ -107,7 +105,7 @@ export const Discussion: React.FC<Props> = ({
     setCreateCommentDialogOpen,
   } = useDiscussionContext();
 
-  const onCompleted = ({ discussion }: DiscussionQuery) =>
+  const onCompleted = ({ discussion }: DiscussionQuery): void =>
     setComments(discussion as CommentObjectType[]);
 
   const variables = {
@@ -122,7 +120,7 @@ export const Discussion: React.FC<Props> = ({
     onCompleted,
   });
 
-  const loadMoreComments = () => {
+  const loadMoreComments = useCallback((): void => {
     if (visibleComments < comments.length) {
       setLoadingMoreComments(true);
 
@@ -131,44 +129,44 @@ export const Discussion: React.FC<Props> = ({
         setVisibleComments(visibleComments + 20);
       }, 400);
     }
-  };
+  }, [comments.length, visibleComments]);
 
-  const mobileScrollListener = () => {
+  const mobileScrollListener = useCallback((): void => {
     if (isMobile && window.scrollY + window.innerHeight >= document.body.scrollHeight - 20) {
       loadMoreComments();
     }
-  };
+  }, [isMobile, loadMoreComments]);
 
   useEffect(() => {
     discussionQuery();
-  }, []);
+  }, [discussionQuery]);
 
   // If a comment has been provided as a query parameter, load all comments.
   useEffect(() => {
     if (!prevCommentCount && query.comment && !!comments && !!comments.length) {
       setVisibleComments(comments.length);
     }
-  }, [comments, query]);
+  }, [comments, query, prevCommentCount]);
 
   useEffect(() => {
     window.addEventListener('scroll', mobileScrollListener);
 
-    return () => {
+    return (): void => {
       window.removeEventListener('scroll', mobileScrollListener);
     };
-  }, [visibleComments, isMobile, comments]);
+  }, [visibleComments, isMobile, comments, mobileScrollListener]);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback((): void => {
     if (isMobile) {
       window.scrollTo(0, document.body.scrollHeight);
     } else if (messageAreaRef.current) {
       messageAreaRef.current.scrollTop = messageAreaRef.current.scrollHeight;
     }
-  };
+  }, [isMobile]);
 
   useEffect(() => {
-    if (prevCommentCount) {
-      comments.length > prevCommentCount && setVisibleComments(comments.length); // Automatically load all comments when a new comment is created.
+    if (prevCommentCount && comments.length > prevCommentCount) {
+      setVisibleComments(comments.length); // Automatically load all comments when a new comment is created.
     }
 
     const commentCountWithReplies = comments.reduce(
@@ -178,27 +176,31 @@ export const Discussion: React.FC<Props> = ({
 
     setCommentCount(String(commentCountWithReplies));
     setPrevCommentCount(comments.length);
-  }, [comments, isMobile]);
+  }, [comments, isMobile, prevCommentCount, setCommentCount]);
 
   // Scroll to bottom when all comments are loaded.
   useEffect(() => {
-    !query.comment && comments.length === visibleComments && scrollToBottom();
-  }, [comments, visibleComments, query]);
+    if (!query.comment && comments.length === visibleComments) {
+      scrollToBottom();
+    }
+  }, [comments, visibleComments, query, scrollToBottom]);
 
   // When loading more visibleComments, scroll to bottom.
   useEffect(() => {
-    loadingMoreComments && scrollToBottom();
-  }, [loadingMoreComments, isMobile]);
+    if (loadingMoreComments) {
+      scrollToBottom();
+    }
+  }, [loadingMoreComments, isMobile, scrollToBottom]);
 
-  const handleClickCreateComment = () => setCreateCommentDialogOpen(true);
-  const handleResetCommentTarget = () => setComment(null);
+  const handleClickCreateComment = (): void => setCreateCommentDialogOpen(true);
+  const handleResetCommentTarget = (): void => setComment(null);
 
-  const handleClickReplyButton = (comment: CommentObjectType) => () => {
+  const handleClickReplyButton = (comment: CommentObjectType) => (): void => {
     setCreateCommentDialogOpen(true);
     setComment(comment);
   };
 
-  const handleDesktopMessageAreaScroll = () => {
+  const handleDesktopMessageAreaScroll = (): void => {
     if (
       isTabletOrDesktop &&
       messageAreaRef.current &&
@@ -209,7 +211,7 @@ export const Discussion: React.FC<Props> = ({
     }
   };
 
-  const renderTopComment = (comment: CommentObjectType, i: number) => (
+  const renderTopComment = (comment: CommentObjectType, i: number): JSX.Element => (
     <CommentCard
       comment={comment}
       onCommentDeleted={discussionQuery}
@@ -219,10 +221,10 @@ export const Discussion: React.FC<Props> = ({
     />
   );
 
-  const getLastReply = (tc: CommentObjectType, rc: CommentObjectType) =>
+  const getLastReply = (tc: CommentObjectType, rc: CommentObjectType): boolean =>
     !!tc.replyComments.length && rc.id === tc.replyComments[tc.replyComments.length - 1].id;
 
-  const mapReplyComments = (tc: CommentObjectType, i: number) =>
+  const mapReplyComments = (tc: CommentObjectType, i: number): JSX.Element[] =>
     tc.replyComments.map((rc) => (
       <CommentCard
         comment={rc}
@@ -232,7 +234,7 @@ export const Discussion: React.FC<Props> = ({
       />
     ));
 
-  const renderReplyButton = (comment: CommentObjectType) => (
+  const renderReplyButton = (comment: CommentObjectType): JSX.Element => (
     <Box className={classes.replyButtonContainer}>
       <Button onClick={handleClickReplyButton(comment)} variant="text" fullWidth>
         {t('forms:replyTo', {

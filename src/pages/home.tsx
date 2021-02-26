@@ -272,7 +272,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     customLink: process.env.FRONTEND_URL,
   };
 
-  const handleClickShareButton = () => handleOpenShareDialog(ShareDialogParams);
+  const handleClickShareButton = (): void => handleOpenShareDialog(ShareDialogParams);
 
   const { data, loading, error } = useSuggestionsPreviewQuery({
     context,
@@ -535,7 +535,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </Grid>
   );
 
-  const renderTakeATourStep = (
+  const renderTakeATourStep = !userMe && (
     <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
@@ -550,7 +550,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </Grid>
   );
 
-  const renderVerifyStep = (
+  const renderVerifyStep = verified === false && (
     <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
@@ -565,7 +565,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </Grid>
   );
 
-  const renderAddSchoolAndSubjectStep = (
+  const renderAddSchoolAndSubjectStep = (!school || !subject) && (
     <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
@@ -600,13 +600,8 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
   // - User is authenticated by not verified -> link to account verification.
   // - User is verified but not filled school or subject -> link to edit profile page.
   // - User has completed all other steps -> link to upload resource page.
-  const renderDynamicStep = !userMe
-    ? renderTakeATourStep
-    : verified === false
-    ? renderVerifyStep
-    : !school || !subject
-    ? renderAddSchoolAndSubjectStep
-    : renderUploadStep;
+  const renderDynamicStep =
+    renderTakeATourStep || renderVerifyStep || renderAddSchoolAndSubjectStep || renderUploadStep;
 
   const renderContactStep = (
     <Grid item xs={12} md={4}>

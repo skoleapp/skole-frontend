@@ -31,7 +31,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 const BlogPostPage: NextPage<MarkdownPageProps> = ({
   seoProps,
-  data: { title, excerpt, coverImage = '', author, authorImage, date, minutesToRead = 0 },
+  data: { title, excerpt, coverImage = '', author, authorImage, date = '', minutesToRead = 0 },
   content: markdownContent,
 }) => {
   const classes = useStyles();

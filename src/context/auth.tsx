@@ -16,7 +16,6 @@ const AuthContext = createContext<AuthContextType>({});
 interface UseAuthContext extends AuthContextType {
   verified: boolean | null;
   unreadActivityCount: number;
-  userMeId: string;
   username: string;
   email: string;
   title: string;
@@ -40,27 +39,24 @@ interface UseAuthContext extends AuthContextType {
 export const useAuthContext = (): UseAuthContext => {
   const { t } = useTranslation();
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
-  const verified = R.propOr(null, 'verified', userMe);
-  const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
-  const userMeId = R.propOr('', 'id', userMe);
-  const slug = R.propOr('', 'slug', userMe);
-  const username = R.propOr('', 'username', userMe);
-  const email = R.propOr('', 'email', userMe);
-  const title = R.propOr('', 'title', userMe);
-  const bio = R.propOr('', 'bio', userMe);
-  const rank = R.propOr('', 'rank', userMe);
-  const score = R.propOr('', 'score', userMe);
-  const _avatarThumbnail = R.propOr('', 'avatarThumbnail', userMe);
-  const avatarThumbnail = mediaUrl(_avatarThumbnail);
-  const _avatar = R.propOr('', 'avatar', userMe);
-  const avatar = mediaUrl(_avatar);
-  const school = R.propOr(null, 'school', userMe);
-  const subject = R.propOr(null, 'subject', userMe);
-  const productUpdateEmailPermission = R.propOr(false, 'productUpdateEmailPermission', userMe);
-  const blogPostEmailPermission = R.propOr(false, 'blogPostEmailPermission', userMe);
-  const commentReplyEmailPermission = R.propOr(false, 'commentReplyEmailPermission', userMe);
-  const courseCommentEmailPermission = R.propOr(false, 'courseCommentEmailPermission', userMe);
-  const resourceCommentEmailPermission = R.propOr(false, 'resourceCommentEmailPermission', userMe);
+  const verified = R.prop('verified', userMe);
+  const unreadActivityCount = R.prop('unreadActivityCount', userMe);
+  const slug = R.prop('slug', userMe);
+  const username = R.prop('username', userMe);
+  const email = R.prop('email', userMe);
+  const title = R.prop('title', userMe);
+  const bio = R.prop('bio', userMe);
+  const rank = R.prop('rank', userMe);
+  const score = R.prop('score', userMe);
+  const avatarThumbnail = mediaUrl(R.prop('avatarThumbnail', userMe));
+  const avatar = mediaUrl(R.prop('avatar', userMe));
+  const school = R.prop('school', userMe);
+  const subject = R.prop('subject', userMe);
+  const productUpdateEmailPermission = R.prop('productUpdateEmailPermission', userMe);
+  const blogPostEmailPermission = R.prop('blogPostEmailPermission', userMe);
+  const commentReplyEmailPermission = R.prop('commentReplyEmailPermission', userMe);
+  const courseCommentEmailPermission = R.prop('courseCommentEmailPermission', userMe);
+  const resourceCommentEmailPermission = R.prop('resourceCommentEmailPermission', userMe);
   const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
   const profileUrl = urls.user(slug);
 
@@ -72,7 +68,6 @@ export const useAuthContext = (): UseAuthContext => {
     setUserMe,
     verified,
     unreadActivityCount,
-    userMeId,
     username,
     email,
     title,

@@ -117,27 +117,25 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useResourceQuery({ variables, context });
   const resource = R.prop('resource', data);
-  const title = R.propOr('', 'title', resource);
-  const _date = R.propOr('', 'date', resource);
-  const resourceTitle = _date ? `${title} - ${_date}` : title;
-  const date = useDayjs(_date).format('LL');
-  const resourceTypeName = R.pathOr('', ['resourceType', 'name'], resource);
-  const courseSlug = R.pathOr('', ['course', 'slug'], resource);
-  const schoolSlug = R.pathOr('', ['school', 'slug'], resource);
-  const creatorId = R.pathOr('', ['user', 'id'], resource);
-  const file = mediaUrl(R.propOr('', 'file', resource));
-  const resourceId = R.propOr('', 'id', resource);
-  const initialVote = R.propOr(null, 'vote', resource);
-  const initialScore = String(R.propOr(0, 'score', resource));
-  const initialStars = String(R.propOr(0, 'starCount', resource));
-  const initialDownloads = String(R.propOr(0, 'downloads', resource));
+  const title = R.prop('title', resource);
+  const date = !!resource?.date && useDayjs(resource?.date).format('LL');
+  const resourceTitle = date ? `${resource.title} - ${date}` : title;
+  const resourceId = R.prop('id', resource);
+  const initialVote = R.prop('vote', resource);
+  const initialScore = R.prop('score', resource);
+  const initialStars = R.prop('starCount', resource);
+  const initialDownloads = R.prop('downloads', resource);
   const initialCommentCount = R.prop('commentCount', resource);
-  const [downloads, setDownloads] = useState('0');
-  const starred = !!R.prop('starred', resource);
-  const isOwner = !!userMe && userMe.id === creatorId;
-  const resourceCreator = R.prop('user', resource);
-  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], resource);
+  const starred = R.prop('starred', resource);
+  const file = mediaUrl(R.prop('file', resource));
+  const courseSlug = R.path(['course', 'slug'], resource);
+  const schoolSlug = R.path(['school', 'slug'], resource);
+  const resourceTypeName = R.path(['resourceType', 'name'], resource);
+  const creator = R.prop('user', resource);
+  const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
   const created = R.prop('created', resource);
+  const isOwner = !!creator && userMe?.id === creator.id;
+  const [downloads, setDownloads] = useState('0');
   const { commentCount, createCommentDialogOpen } = useDiscussionContext(initialCommentCount);
   const { drawingMode, setDrawingMode } = usePdfViewerContext();
   const { handleCloseActionsDialog } = useActionsContext();
@@ -147,7 +145,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { stars, renderStarButton } = useStars({
     starred,
     initialStars,
-    resource: resourceId,
+    resource: resource?.id,
     starTooltip: t('resource-tooltips:star'),
     unstarTooltip: t('resource-tooltips:unstar'),
   });
@@ -166,13 +164,17 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // If comment dialog is opened in main tab, automatically switch to discussion tab.
   useEffect(() => {
-    createCommentDialogOpen && tabValue === 0 && setTabValue(1);
-  }, [createCommentDialogOpen, tabValue]);
+    if (createCommentDialogOpen && tabValue === 0) {
+      setTabValue(1);
+    }
+  }, [createCommentDialogOpen, tabValue, setTabValue]);
 
   // If drawing mode is on and user changes to discussion tab on mobile, toggle drawing mode off.
   useEffect(() => {
-    isMobile && drawingMode && tabValue === 1 && setDrawingMode(false);
-  }, [drawingMode, tabValue]);
+    if (isMobile && drawingMode && tabValue === 1) {
+      setDrawingMode(false);
+    }
+  }, [drawingMode, tabValue, isMobile, setDrawingMode]);
 
   useEffect(() => {
     setDownloads(initialDownloads);
@@ -329,7 +331,7 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const infoDialogParams = {
     header: resourceTitle,
     emoji,
-    creator: resourceCreator,
+    creator,
     created,
     infoItems,
   };

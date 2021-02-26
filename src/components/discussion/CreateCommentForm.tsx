@@ -123,14 +123,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       const screenShotFile = dataUriToFile(screenshot);
       formRef.current?.setFieldValue('attachment', screenShotFile);
     }
-  }, [screenshot, drawingMode]);
+  }, [screenshot, drawingMode, formRef, setCommentAttachment]);
 
   const handleCloseCreateCommentDialog = (): void => {
     formRef.current?.setFieldValue('attachment', null);
     setCreateCommentDialogOpen(false);
     setCommentAttachment(null);
     resetCommentTarget();
-    !!setScreenshot && setScreenshot(null); // Not defined when in course page.
+
+    if (setScreenshot) {
+      setScreenshot(null); // Not defined when in course page.
+    }
   };
 
   const onCompleted = ({ createComment }: CreateCommentMutation): void => {
@@ -218,23 +221,24 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     <CommentAttachmentPreview className={classes.attachmentPreview} />
   );
 
-  const renderAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
-    !!userMe && <AuthorSelection {...props} />;
+  const renderAuthorSelection = (
+    props: FormikProps<CreateCommentFormValues>,
+  ): JSX.Element | false => !!userMe && <AuthorSelection {...props} />;
 
-  const renderDialogAuthorSelection = (props: FormikProps<CreateCommentFormValues>) =>
-    !!userMe && <FormControl>{renderAuthorSelection(props)}</FormControl>;
+  const renderDialogAuthorSelection = (
+    props: FormikProps<CreateCommentFormValues>,
+  ): JSX.Element | false => !!userMe && <FormControl>{renderAuthorSelection(props)}</FormControl>;
 
-  const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+  const handleChange = (_: ChangeEvent<HTMLInputElement>, checked: boolean): void => {
     const secondaryDiscussion = course?.school || resource?.course;
     const val = checked ? secondaryDiscussion : null;
     formRef.current?.setFieldValue('secondaryDiscussion', val);
   };
 
-  const secondaryDiscussionLinkHref = resource?.course.slug
-    ? urls.course(resource.course.slug)
-    : course?.school.slug
-    ? urls.school(course.school.slug)
-    : '#';
+  const secondaryDiscussionLinkHref =
+    (resource?.course.slug && urls.course(resource.course.slug)) ||
+    (course?.school.slug && urls.school(course.school.slug)) ||
+    '#';
 
   const renderSecondaryDiscussionLink = (
     <TextLink href={secondaryDiscussionLinkHref}>
@@ -258,7 +262,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     />
   );
 
-  const renderDesktopTextField = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderDesktopTextField = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <CommentTextField
       placeholder={placeholder}
       value={createCommentDialogOpen ? '' : props.values.text}
@@ -267,7 +271,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     />
   );
 
-  const renderDialogTextField = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderDialogTextField = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <CommentTextField
       placeholder={placeholder}
       className={classes.dialogTextField}
@@ -294,7 +298,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     </Tooltip>
   );
 
-  const renderDialogInputArea = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderDialogInputArea = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <FormControl>
       <Grid container alignItems="center" wrap="nowrap">
         {renderDialogTextField(props)}
@@ -305,7 +309,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const renderDesktopSendButton = ({
     values: { text, attachment },
-  }: FormikProps<CreateCommentFormValues>) => (
+  }: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <Tooltip title={t('discussion-tooltips:sendMessage')}>
       <Typography className={classes.desktopSendButtonSpan} component="span">
         <Button
@@ -322,7 +326,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     </Tooltip>
   );
 
-  const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderDesktopTopToolbar = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <Grid container alignItems="center" spacing={2}>
       <Grid item xs={6}>
         {renderAuthorSelection(props)}
@@ -333,7 +337,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     </Grid>
   );
 
-  const renderDesktopBottomToolbar = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderDesktopBottomToolbar = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <Grid container alignItems="center" wrap="nowrap">
       {renderAttachmentButton}
       {renderSecondaryDiscussionField}
@@ -341,7 +345,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     </Grid>
   );
 
-  const renderDesktopInputArea = (props: FormikProps<CreateCommentFormValues>) =>
+  const renderDesktopInputArea = (
+    props: FormikProps<CreateCommentFormValues>,
+  ): JSX.Element | false =>
     isTabletOrDesktop && (
       <>
         {renderDesktopTopToolbar(props)}
@@ -358,7 +364,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     />
   );
 
-  const renderDialogContent = (props: FormikProps<CreateCommentFormValues>) => (
+  const renderDialogContent = (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <DialogContent className={classes.dialogContent}>
       <Grid container direction="column" justify="flex-end" wrap="nowrap">
         {renderAttachmentPreview}
@@ -377,7 +383,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     </SkoleDialog>
   );
 
-  const renderLoadingDialog = ({ isSubmitting }: FormikProps<CreateCommentFormValues>) => (
+  const renderLoadingDialog = ({
+    isSubmitting,
+  }: FormikProps<CreateCommentFormValues>): JSX.Element => (
     <SkoleDialog open={isSubmitting} fullScreen={false} fullWidth>
       <DialogContent className={classes.loadingDialogContent}>
         <LoadingBox text={t('discussion:postingComment')} />

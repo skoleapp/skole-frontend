@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 
 export const AppStoreBadge: React.FC = () => {
   const classes = useStyles();
-  const handleClick = () => sa_event('click_link_to_app_store');
+  const handleClick = (): void => sa_event('click_link_to_app_store');
 
   return (
     <Typography

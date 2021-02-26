@@ -34,10 +34,9 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { userMe, blogPostEmailPermission } = useAuthContext();
-
   const sortedBlogs: MarkdownPageData[] = R.sortBy(R.prop('date'), blogs).reverse();
 
-  const renderAuthorImage = (authorImage: string) => (
+  const renderAuthorImage = (authorImage: string): JSX.Element => (
     <Image
       className={classes.authorImage}
       src={authorImage}
@@ -55,7 +54,7 @@ const BlogsPage: NextPage<Props> = ({ seoProps, blogs }) => {
         coverImage = '',
         author,
         authorImage = '',
-        date,
+        date = '',
         minutesToRead = 0,
         slug = '',
       },

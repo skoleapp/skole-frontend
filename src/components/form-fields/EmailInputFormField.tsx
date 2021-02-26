@@ -38,7 +38,9 @@ export const EmailInputFormField = <T extends FormikValues>({
 }: FormikProps<T>): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => setFieldValue('email', e.target.value);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void =>
+    setFieldValue('email', e.target.value);
 
   return (
     <FormControl margin="none">

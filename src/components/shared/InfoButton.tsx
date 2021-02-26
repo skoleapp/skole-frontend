@@ -15,7 +15,7 @@ export const InfoButton: React.FC<Props> = ({ tooltip, infoDialogParams }) => {
   const { handleOpenInfoDialog } = useInfoContext();
   const { isMobile } = useMediaQueries();
   const color = isMobile ? 'secondary' : 'default';
-  const handleClick = () => handleOpenInfoDialog(infoDialogParams);
+  const handleClick = (): void => handleOpenInfoDialog(infoDialogParams);
 
   return (
     <Tooltip title={tooltip}>

@@ -1,4 +1,3 @@
-import { DiscussionsUnion, UserMeFieldsFragment } from '__generated__/src/graphql/common.graphql';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -23,8 +22,10 @@ import { ErrorMessage, Field, Form, Formik, FormikProps } from 'formik';
 import {
   AutocompleteSchoolsDocument,
   CreateCommentMutation,
+  DiscussionsUnion,
   useCreateCommentMutation,
   useDiscussionSuggestionsLazyQuery,
+  UserMeFieldsFragment,
 } from 'generated';
 import { withDiscussion, withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -69,8 +70,10 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const discussionSuggestions: DiscussionsUnion[] = R.propOr([], 'discussionSuggestions', data);
 
   useEffect(() => {
-    !!userMe && discussionSuggestionsQuery();
-  }, [userMe]);
+    if (userMe) {
+      discussionSuggestionsQuery();
+    }
+  }, [userMe, discussionSuggestionsQuery]);
 
   const onCompleted = async ({ createComment }: CreateCommentMutation): Promise<void> => {
     if (createComment?.errors?.length) {
@@ -87,13 +90,11 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       setCommentAttachment(null);
       toggleNotification(createComment.successMessage);
 
-      const pathname = resource
-        ? urls.resource(resource.slug || '')
-        : course
-        ? urls.course(course.slug || '')
-        : school
-        ? urls.school(school.slug || '')
-        : '#';
+      const pathname =
+        (!!resource && urls.resource(resource.slug || '')) ||
+        (!!course && urls.course(course.slug || '')) ||
+        (!!school && urls.school(school.slug || '')) ||
+        '#';
 
       await Router.push({
         pathname,
@@ -102,7 +103,8 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         },
       });
 
-      const discussionType = resource ? 'resource' : course ? 'course' : school ? 'school' : '';
+      const discussionType =
+        (!!resource && 'resource') || (!!course && 'course') || (!!school && 'school');
       sa_event(`create_quick_comment_to_${discussionType}`);
     } else {
       toggleUnexpectedErrorNotification();
@@ -161,7 +163,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }),
   });
 
-  const handleRadioGroupChange = (_e: ChangeEvent<HTMLInputElement>, value: string) => {
+  const handleRadioGroupChange = (_e: ChangeEvent<HTMLInputElement>, value: string): void => {
     const discussionAttrs = value.split('-');
 
     const discussion = discussionSuggestions.find(
@@ -185,7 +187,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     />
   );
 
-  const renderDiscussionSuggestionLabel = (d: DiscussionsUnion) => {
+  const renderDiscussionSuggestionLabel = (d: DiscussionsUnion): string | void => {
     switch (d.__typename) {
       case 'CourseObjectType': {
         // @ts-ignore: `courseName` has been renamed in the GraphQL query.
@@ -197,7 +199,11 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       }
 
       case 'SchoolObjectType': {
-        return d.name;
+        return R.prop('name', d);
+      }
+
+      default: {
+        break;
       }
     }
   };
@@ -206,7 +212,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <FormControlLabel
       value={`${d.__typename}-${d.id}`} // Radio values must be string.
       control={<Radio />}
-      label={renderDiscussionSuggestionLabel(d)}
+      label={renderDiscussionSuggestionLabel(d) || ''}
       key={i}
     />
   ));
@@ -224,7 +230,7 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </FormControl>
   );
 
-  const renderAuthorSelection = (props: FormikProps<AddCommentFormValues>) =>
+  const renderAuthorSelection = (props: FormikProps<AddCommentFormValues>): JSX.Element | false =>
     !!userMe && (
       <FormControl>
         <AuthorSelection {...props} />
@@ -235,22 +241,22 @@ const AddCommentPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderAttachmentPreview = <CommentAttachmentPreview />;
   const renderAttachmentInput = <CommentAttachmentInput />;
 
-  const getPlaceholder = (discussion: AddCommentFormValues['discussion']) =>
+  const getPlaceholder = (discussion: AddCommentFormValues['discussion']): string =>
     discussion
       ? t('forms:postTo', {
           discussionName: `#${discussion.slug}`,
         })
       : t('forms:selectDiscussionToPost');
 
-  const renderTextField = (props: FormikProps<AddCommentFormValues>) => (
+  const renderTextField = (props: FormikProps<AddCommentFormValues>): JSX.Element => (
     <CommentTextField {...props} placeholder={getPlaceholder(props.values.discussion)} />
   );
 
-  const renderFormSubmitSection = (props: FormikProps<AddCommentFormValues>) => (
+  const renderFormSubmitSection = (props: FormikProps<AddCommentFormValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:send')} {...props} />
   );
 
-  const renderFormFields = (props: FormikProps<AddCommentFormValues>) => (
+  const renderFormFields = (props: FormikProps<AddCommentFormValues>): JSX.Element => (
     <Form>
       {renderDiscussionField}
       {renderDiscussionSuggestions}

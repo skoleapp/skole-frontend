@@ -41,7 +41,7 @@ export const ActivityListItem: React.FC<Props> = ({
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
-  const avatarThumbnail = R.propOr('', 'avatarThumbnail', targetUser);
+  const avatarThumbnail = R.prop('avatarThumbnail', targetUser);
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead?.errors?.length) {
@@ -77,9 +77,10 @@ export const ActivityListItem: React.FC<Props> = ({
     }
 
     await markSingleActivityRead({ variables: { id, read: true } });
-    // The activities should always have a pathname but technically it's possible that the pathname is undefined.
-    // In that case we do nothing besides marking the activity as read.
-    !!pathname && (await Router.push({ pathname, query }));
+
+    if (pathname) {
+      await Router.push({ pathname, query });
+    }
   };
 
   const renderAvatar = (
@@ -89,8 +90,8 @@ export const ActivityListItem: React.FC<Props> = ({
   );
 
   const renderTargetUserLink = targetUser ? (
-    <TextLink href={urls.user(R.propOr('', 'slug', targetUser))}>
-      {R.propOr('', 'username', targetUser)}
+    <TextLink href={urls.user(R.prop('slug', targetUser))}>
+      {R.prop('username', targetUser)}
     </TextLink>
   ) : (
     <Typography variant="body2" color="textSecondary">
