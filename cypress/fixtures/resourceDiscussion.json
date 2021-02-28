@@ -1,0 +1,88 @@
+{
+  "data": {
+    "discussion": [
+      {
+        "id": "1",
+        "text": "Comment 1 to a resource.",
+        "attachment": "/media/uploads/attachments/test_attachment.png",
+        "attachmentThumbnail": "/media/CACHE/images/uploads/attachments/test_attachment/e0ce41586f7b280a182bb7319bb539df.jpg",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 1,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": {
+          "id": "1",
+          "status": 1
+        },
+        "course": null,
+        "resource": {
+          "slug": "sample-exam-1-2012-12-12"
+        },
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "2",
+        "text": "Comment 2 to a resource.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "3",
+          "slug": "testuser3",
+          "username": "testuser3",
+          "avatarThumbnail": ""
+        },
+        "vote": null,
+        "course": null,
+        "resource": {
+          "slug": "sample-exam-1-2012-12-12"
+        },
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "3",
+        "text": "Comment 3 to a resource.",
+        "attachment": "/media/uploads/attachments/test_attachment.png",
+        "attachmentThumbnail": "/media/CACHE/images/uploads/attachments/test_attachment/e0ce41586f7b280a182bb7319bb539df.jpg",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "9",
+          "slug": "testuser9",
+          "username": "testuser9",
+          "avatarThumbnail": ""
+        },
+        "vote": null,
+        "course": null,
+        "resource": {
+          "slug": "sample-exam-1-2012-12-12"
+        },
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "22",
+        "text": "An anonymous comment to a resource.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": null,
+        "vote": null,
+        "course": null,
+        "resource": {
+          "slug": "sample-exam-1-2012-12-12"
+        },
+        "school": null,
+        "replyComments": []
+      }
+    ]
+  }
+}

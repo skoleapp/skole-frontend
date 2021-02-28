@@ -3,3 +3,5 @@ build
 *.graphql.d.ts
 __generated__
 public/saEvents.js
+coverage
+.nyc_output

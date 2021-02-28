@@ -1,0 +1,62 @@
+{
+  "data": {
+    "activities": {
+      "page": 1,
+      "pages": 1,
+      "hasNext": false,
+      "hasPrev": false,
+      "count": 3,
+      "objects": [
+        {
+          "id": "3",
+          "description": "commented on your resource",
+          "read": false,
+          "targetUser": {
+            "slug": "testuser5",
+            "username": "testuser5",
+            "avatarThumbnail": ""
+          },
+          "course": null,
+          "resource": {
+            "slug": "sample-exam-1-2012-12-12"
+          },
+          "comment": null
+        },
+        {
+          "id": "2",
+          "description": "commented on your course",
+          "read": false,
+          "targetUser": {
+            "slug": "testuser3",
+            "username": "testuser3",
+            "avatarThumbnail": ""
+          },
+          "course": {
+            "slug": "test-engineering-course-1-test0001"
+          },
+          "resource": null,
+          "comment": {
+            "id": "1"
+          }
+        },
+        {
+          "id": "1",
+          "description": "replied to your comment",
+          "read": false,
+          "targetUser": {
+            "slug": "testuser3",
+            "username": "testuser3",
+            "avatarThumbnail": ""
+          },
+          "course": {
+            "slug": "test-engineering-course-1-test0001"
+          },
+          "resource": null,
+          "comment": {
+            "id": "4"
+          }
+        }
+      ]
+    }
+  }
+}

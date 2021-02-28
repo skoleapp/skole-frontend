@@ -8,6 +8,9 @@
   "[typescriptreact]": {
     "editor.formatOnSave": false
   },
+  "[yaml]": {
+    "editor.formatOnSave": false
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   }

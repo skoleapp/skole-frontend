@@ -1,0 +1,325 @@
+{
+  "data": {
+    "discussion": [
+      {
+        "id": "4",
+        "text": "Comment 1 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": [
+          {
+            "id": "12",
+            "text": "Reply 1 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "3",
+              "slug": "testuser3",
+              "username": "testuser3",
+              "avatarThumbnail": ""
+            },
+            "vote": null
+          },
+          {
+            "id": "13",
+            "text": "Reply 2 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "14",
+            "text": "Reply 3 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "15",
+            "text": "Reply 4 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "16",
+            "text": "Reply 5 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "17",
+            "text": "Reply 6 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "18",
+            "text": "Reply 7 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "19",
+            "text": "Reply 8 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "20",
+            "text": "Reply 9 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          },
+          {
+            "id": "21",
+            "text": "Reply 10 to a comment.",
+            "attachment": "",
+            "attachmentThumbnail": "",
+            "created": "2020-01-01T12:00:00+00:00",
+            "score": 0,
+            "user": {
+              "id": "2",
+              "slug": "testuser2",
+              "username": "testuser2",
+              "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+            },
+            "vote": null
+          }
+        ]
+      },
+      {
+        "id": "5",
+        "text": "Comment 2 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "6",
+        "text": "Comment 3 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "7",
+        "text": "Comment 4 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "8",
+        "text": "Comment 5 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "9",
+        "text": "Comment 6 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "3",
+          "slug": "testuser3",
+          "username": "testuser3",
+          "avatarThumbnail": ""
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "10",
+        "text": "Comment 7 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": []
+      },
+      {
+        "id": "11",
+        "text": "Comment 8 to a course.",
+        "attachment": "",
+        "attachmentThumbnail": "",
+        "created": "2020-01-01T12:00:00+00:00",
+        "score": 0,
+        "user": {
+          "id": "2",
+          "slug": "testuser2",
+          "username": "testuser2",
+          "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg"
+        },
+        "vote": null,
+        "course": {
+          "slug": "test-engineering-course-1-test0001"
+        },
+        "resource": null,
+        "school": null,
+        "replyComments": []
+      }
+    ]
+  }
+}

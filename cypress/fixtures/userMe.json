@@ -1,0 +1,23 @@
+{
+  "data": {
+    "userMe": {
+      "id": "2",
+      "username": "testuser2",
+      "email": "testuser2@test.com",
+      "title": "",
+      "bio": "",
+      "avatar": "",
+      "score": 0,
+      "created": "2020-01-01T12:00:00+00:00",
+      "verified": true,
+      "school": {
+        "id": "1",
+        "name": "University of Turku"
+      },
+      "subject": {
+        "id": "1",
+        "name": "Computer Engineering"
+      }
+    }
+  }
+}
