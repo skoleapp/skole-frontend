@@ -469,7 +469,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
 
   const renderSuggestionsTableFooter = (
     <TableFooter className={classes.suggestionsTableFooter}>
-      <ButtonLink href={urls.suggestions} endIcon={<ArrowForwardOutlined />} fullWidth>
+      <ButtonLink href={urls.trending} endIcon={<ArrowForwardOutlined />} fullWidth>
         {t('common:seeAll')}
       </ButtonLink>
     </TableFooter>

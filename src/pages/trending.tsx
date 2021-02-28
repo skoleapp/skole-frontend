@@ -18,7 +18,7 @@ const useStyles = makeStyles(({ breakpoints }) => ({
   },
 }));
 
-const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const TrendingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
@@ -26,7 +26,7 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const suggestions = R.prop('suggestions', data);
 
   const renderLoading = <LoadingBox />;
-  const renderNotFound = <NotFoundBox text={t('suggestions:noSuggestions')} />;
+  const renderNotFound = <NotFoundBox text={t('trending:noSuggestions')} />;
   const renderTableFooter = <TableFooter className={classes.tableFooter} />;
 
   const renderTable = (
@@ -39,7 +39,7 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const layoutProps = {
     seoProps,
     topNavbarProps: {
-      header: t('suggestions:header'),
+      header: t('trending:header'),
       emoji: '🔥',
     },
   };
@@ -56,11 +56,11 @@ const SuggestionsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'suggestions');
+  const t = await getT(locale, 'trending');
 
   return {
     props: {
-      _ns: await loadNamespaces(['suggestions'], locale),
+      _ns: await loadNamespaces(['trending'], locale),
       seoProps: {
         title: t('title'),
       },
@@ -68,4 +68,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default withUserMe(SuggestionsPage);
+export default withUserMe(TrendingPage);

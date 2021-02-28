@@ -374,7 +374,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       icon: CloudUploadOutlined,
     },
     {
-      href: urls.suggestions,
+      href: urls.trending,
       label: t('common:suggestions'),
       icon: WhatshotOutlined,
     },
