@@ -703,7 +703,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 
   const blogs = _blogs
     .sort((a, b) => (Number(a.date) > Number(b.date) ? Number(a.date) : Number(b.date)))
-    .slice(0, 2);
+    .slice(0, 3);
 
   return {
     props: {
