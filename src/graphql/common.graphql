@@ -74,7 +74,7 @@ query AutocompleteCities {
 }
 
 mutation CreateComment(
-  $user: String
+  $user: ID
   $text: String!
   $attachment: String
   $course: ID
