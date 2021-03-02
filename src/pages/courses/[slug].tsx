@@ -476,27 +476,32 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const t = await getT(locale, 'course');
   const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
+  let seoProps = {};
 
-  const { data } = await apolloClient.query({
-    query: CourseSeoPropsDocument,
-    variables,
-    context,
-  });
+  try {
+    const { data } = await apolloClient.query({
+      query: CourseSeoPropsDocument,
+      variables,
+      context,
+    });
 
-  const course = R.prop('course', data);
+    const course = R.prop('course', data);
 
-  if (!course) {
-    return {
-      notFound: true,
+    if (!course) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const courseName = course.codes ? `${course.name} - ${course.codes}` : course.name;
+
+    seoProps = {
+      title: courseName,
+      description: t('description', { courseName }),
     };
+  } catch {
+    // Network error.
   }
-
-  const courseName = course.codes ? `${course.name} - ${course.codes}` : course.name;
-
-  const seoProps = {
-    title: courseName,
-    description: t('description', { courseName }),
-  };
 
   return {
     props: {

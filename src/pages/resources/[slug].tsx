@@ -515,27 +515,32 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const t = await getT(locale, 'resource');
   const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
+  let seoProps = {};
 
-  const { data } = await apolloClient.query({
-    query: ResourceSeoPropsDocument,
-    variables,
-    context,
-  });
+  try {
+    const { data } = await apolloClient.query({
+      query: ResourceSeoPropsDocument,
+      variables,
+      context,
+    });
 
-  const resource = R.prop('resource', data);
+    const resource = R.prop('resource', data);
 
-  if (!resource) {
-    return {
-      notFound: true,
+    if (!resource) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const resourceTitle = resource.date ? `${resource.title} - ${resource.date}` : resource.title;
+
+    seoProps = {
+      title: resourceTitle,
+      description: t('description', { resourceTitle }),
     };
+  } catch {
+    // Network error.
   }
-
-  const resourceTitle = resource.date ? `${resource.title} - ${resource.date}` : resource.title;
-
-  const seoProps = {
-    title: resourceTitle,
-    description: t('description', { resourceTitle }),
-  };
 
   return {
     props: {
