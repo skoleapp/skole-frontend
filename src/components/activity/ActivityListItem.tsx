@@ -34,7 +34,7 @@ interface Props {
 }
 
 export const ActivityListItem: React.FC<Props> = ({
-  activity: { id, targetUser, course, resource, comment, read: initialRead, description },
+  activity: { id, targetUser, course, resource, school, comment, read: initialRead, description },
 }) => {
   const classes = useStyles();
   const [read, setRead] = useState(initialRead);
@@ -68,6 +68,8 @@ export const ActivityListItem: React.FC<Props> = ({
       pathname = urls.course(course.slug);
     } else if (resource?.slug) {
       pathname = urls.resource(resource.slug);
+    } else if (school?.slug) {
+      pathname = urls.school(school.slug);
     }
 
     if (comment) {
