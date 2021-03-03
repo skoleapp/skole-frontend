@@ -53,7 +53,9 @@ CMD yarn lint \
     && yarn type-check \
     && yarn build \
     && yarn start & yarn wait-on http://localhost:3001 \
-    && yarn cypress:run --record --key=${CYPRESS_RECORD_KEY} --parallel --ci-build-id=${CIRCLE_BUILD_NUM}
+    # TODO: Enable recording and parallelism on Apr 1, 2021
+    # && yarn cypress:run --record --parallel --ci-build-id=${CIRCLE_BUILD_NUM}
+    && yarn cypress:run
 
 FROM circleci as build
 
