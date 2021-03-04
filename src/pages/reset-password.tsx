@@ -147,7 +147,7 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderFormSubmitSection = <T extends PasswordFormValues | EmailFormValues>(
     props: FormikProps<T>,
-  ) => <FormSubmitSection submitButtonText={t('common:submit')} {...props} />;
+  ): JSX.Element => <FormSubmitSection submitButtonText={t('common:submit')} {...props} />;
 
   const renderPasswordFormFields = (props: FormikProps<PasswordFormValues>): JSX.Element => (
     <Form>

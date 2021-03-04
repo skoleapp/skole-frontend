@@ -139,30 +139,31 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
-  const { userMeId, school, subject, verified } = useAuthContext();
+  const { userMe, school, subject, verified } = useAuthContext();
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useUserQuery({ variables, context });
   const user = R.prop('user', data);
-  const rank = R.propOr('', 'rank', user);
-  const username = R.propOr('-', 'username', user);
-  const avatar = R.propOr('', 'avatar', user);
-  const title = R.propOr('', 'title', user);
-  const bio = R.propOr('', 'bio', user);
-  const score = R.propOr('0', 'score')(user);
-  const isOwnProfile = R.propOr('', 'id', user) === userMeId;
-  const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
-  const courseCount = R.pathOr(0, ['courses', 'count'], data);
-  const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-  const commentCount = R.pathOr(0, ['comments', 'count'], data);
+  const rank = R.prop('rank', user);
+  const username = R.prop('username', user);
+  const avatar = R.prop('avatar', user);
+  const title = R.prop('title', user);
+  const bio = R.prop('bio', user);
+  const score = R.prop('score', user);
+  const isOwnProfile = !!user?.id && userMe?.id === user.id;
+  const badges: Pick<BadgeObjectType, 'name' | 'description'>[] = R.propOr([], 'badges', user);
+  const courseCount = R.path(['courses', 'count'], data);
+  const resourceCount = R.path(['resources', 'count'], data);
+  const commentCount = R.path(['comments', 'count'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
   const resources = R.pathOr([], ['resources', 'objects'], data);
   const comments = R.pathOr([], ['comments', 'objects'], data);
   const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
   const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
   const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
-  const joined = useDayjs(R.propOr('', 'created', user)).startOf('m').fromNow();
+  const _created = R.prop('created', user);
+  const joined = useDayjs(_created).startOf('m').fromNow();
 
   const rankTooltip = isOwnProfile
     ? t('common-tooltips:ownRank', { rank, score })
@@ -182,7 +183,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
     {
       label: t('profile-strength:step3'),
-      href: urls.editProfile,
+      href: urls.accountSettings,
       completed: !!school && !!subject,
     },
   ].sort((prev) => (prev.completed ? -1 : 1));
@@ -368,7 +369,11 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
-  const renderProfileStrengthStepLabel = ({ label, href, completed }: ProfileStrengthStep) =>
+  const renderProfileStrengthStepLabel = ({
+    label,
+    href,
+    completed,
+  }: ProfileStrengthStep): JSX.Element =>
     !completed ? (
       <TextLink href={href}>{label}</TextLink>
     ) : (
@@ -592,27 +597,32 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const t = await getT(locale, 'profile');
   const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
+  let seoProps = {};
 
-  const { data } = await apolloClient.query({
-    query: UserSeoPropsDocument,
-    variables,
-    context,
-  });
+  try {
+    const { data } = await apolloClient.query({
+      query: UserSeoPropsDocument,
+      variables,
+      context,
+    });
 
-  const user = R.prop('user', data);
+    const user = R.prop('user', data);
 
-  if (!user) {
-    return {
-      notFound: true,
+    if (!user) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const username = R.prop('username', user);
+
+    seoProps = {
+      title: username,
+      description: t('description', { username }),
     };
+  } catch {
+    // Network error.
   }
-
-  const username = R.propOr('', 'username', user);
-
-  const seoProps = {
-    title: username,
-    description: t('description', { username }),
-  };
 
   return {
     props: {

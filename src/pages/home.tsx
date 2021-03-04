@@ -22,6 +22,7 @@ import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import FiberNew from '@material-ui/icons/FiberNew';
+import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
 import clsx from 'clsx';
@@ -271,7 +272,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     customLink: process.env.FRONTEND_URL,
   };
 
-  const handleClickShareButton = () => handleOpenShareDialog(ShareDialogParams);
+  const handleClickShareButton = (): void => handleOpenShareDialog(ShareDialogParams);
 
   const { data, loading, error } = useSuggestionsPreviewQuery({
     context,
@@ -281,9 +282,9 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
 
   const shortcuts = [
     {
-      text: 'common:startDiscussion',
-      icon: ChatOutlined,
-      href: urls.addComment,
+      text: 'common:askQuestion',
+      icon: HelpOutlineOutlined,
+      href: urls.askQuestion,
     },
     {
       text: 'common:findContent',
@@ -468,7 +469,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
 
   const renderSuggestionsTableFooter = (
     <TableFooter className={classes.suggestionsTableFooter}>
-      <ButtonLink href={urls.suggestions} endIcon={<ArrowForwardOutlined />} fullWidth>
+      <ButtonLink href={urls.trending} endIcon={<ArrowForwardOutlined />} fullWidth>
         {t('common:seeAll')}
       </ButtonLink>
     </TableFooter>
@@ -534,7 +535,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </Grid>
   );
 
-  const renderTakeATourStep = (
+  const renderTakeATourStep = !userMe && (
     <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
@@ -549,7 +550,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </Grid>
   );
 
-  const renderVerifyStep = (
+  const renderVerifyStep = verified === false && (
     <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
@@ -564,7 +565,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
     </Grid>
   );
 
-  const renderAddSchoolAndSubjectStep = (
+  const renderAddSchoolAndSubjectStep = (!school || !subject) && (
     <Grid item xs={12} md={4}>
       <Card className={classes.nextStepsCard}>
         <CardContent className={classes.nextStepsCardContent}>
@@ -599,13 +600,8 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
   // - User is authenticated by not verified -> link to account verification.
   // - User is verified but not filled school or subject -> link to edit profile page.
   // - User has completed all other steps -> link to upload resource page.
-  const renderDynamicStep = !userMe
-    ? renderTakeATourStep
-    : verified === false
-    ? renderVerifyStep
-    : !school || !subject
-    ? renderAddSchoolAndSubjectStep
-    : renderUploadStep;
+  const renderDynamicStep =
+    renderTakeATourStep || renderVerifyStep || renderAddSchoolAndSubjectStep || renderUploadStep;
 
   const renderContactStep = (
     <Grid item xs={12} md={4}>
@@ -707,7 +703,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
 
   const blogs = _blogs
     .sort((a, b) => (Number(a.date) > Number(b.date) ? Number(a.date) : Number(b.date)))
-    .slice(0, 2);
+    .slice(0, 3);
 
   return {
     props: {

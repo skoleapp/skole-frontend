@@ -83,7 +83,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     if (!!token && !verified && !initialVerified) {
       handleVerifyAccount();
     }
-  }, [token]);
+  }, [token, verified, initialVerified, verifyAccount]);
 
   const onCompleted = ({
     resendVerificationEmail,

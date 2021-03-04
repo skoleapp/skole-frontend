@@ -11,7 +11,7 @@ export const getTouchPoint = (t: Touch): PdfTranslation => ({
 export const getDistance = (p1: PdfTranslation, p2: PdfTranslation): number => {
   const dx = p1.x - p2.x;
   const dy = p1.y - p2.y;
-  return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+  return Math.sqrt(dx ** 2 + dy ** 2);
 };
 
 // Get distance between fingers.
@@ -64,11 +64,11 @@ export const getPageFromElement = (target: HTMLElement): PageFromElement | null 
 export const dataUriToFile = (dataURI: string): File => {
   const base64Marker = ';base64,';
   const mime = dataURI.split(base64Marker)[0].split(':')[1];
-  const filename = `${'screenshot' + '.'}${mime.split('/')[1]}`;
+  const filename = `screenshot.${mime.split('/')[1]}`;
   const bytes = atob(dataURI.split(base64Marker)[1]);
   const writer = new Uint8Array(new ArrayBuffer(bytes.length));
 
-  for (let i = 0; i < bytes.length; i++) {
+  for (let i = 0; i < bytes.length; i += 1) {
     writer[i] = bytes.charCodeAt(i);
   }
 

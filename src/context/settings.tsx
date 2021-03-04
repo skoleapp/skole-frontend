@@ -8,8 +8,8 @@ export const useSettingsContext = (): SettingsContextType => useContext(Settings
 
 export const SettingsContextProvider: React.FC = ({ children }) => {
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
-  const handleOpenSettingsDialog = () => setSettingsDialogOpen(true);
-  const handleCloseSettingsDialog = () => setSettingsDialogOpen(false);
+  const handleOpenSettingsDialog = (): void => setSettingsDialogOpen(true);
+  const handleCloseSettingsDialog = (): void => setSettingsDialogOpen(false);
 
   const value = {
     settingsDialogOpen,

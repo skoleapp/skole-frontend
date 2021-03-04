@@ -13,7 +13,7 @@ export const CommentTextField = <T extends FormikValues>(
   const { formRef } = useDiscussionContext();
 
   // On desktop, submit form from enter key and add new line from Shift + Enter.
-  const handleKeydown = (e: KeyboardEvent) => {
+  const handleKeydown = (e: KeyboardEvent): void => {
     if (isTabletOrDesktop && e.code === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       formRef.current?.submitForm();

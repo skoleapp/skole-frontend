@@ -28,8 +28,8 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe } = useAuthContext();
   const courses = R.pathOr([], ['starredCourses', 'objects'], data);
   const resources = R.pathOr([], ['starredResources', 'objects'], data);
-  const courseCount = R.pathOr(0, ['starredCourses', 'count'], data);
-  const resourceCount = R.pathOr(0, ['starredResources', 'count'], data);
+  const courseCount = R.path(['starredCourses', 'count'], data);
+  const resourceCount = R.path(['starredResources', 'count'], data);
 
   const renderLoading = <LoadingBox />;
   const renderResourceTableBody = <ResourceTableBody resources={resources} />;
@@ -45,17 +45,13 @@ const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <PaginatedTable renderTableBody={renderResourceTableBody} count={resourceCount} />
   );
 
-  const renderLeftTabContent = loading
-    ? renderLoading
-    : courses.length
-    ? renderCourseTable
-    : renderCoursesNotFound;
+  const renderLeftTabContent =
+    (loading && renderLoading) || (courses.length && renderCourseTable) || renderCoursesNotFound;
 
-  const renderRightTabContent = loading
-    ? renderLoading
-    : resources.length
-    ? renderResourceTable
-    : renderResourcesNotFound;
+  const renderRightTabContent =
+    (loading && renderLoading) ||
+    (resources.length && renderResourceTable) ||
+    renderResourcesNotFound;
 
   const layoutProps = {
     seoProps,

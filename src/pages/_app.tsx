@@ -20,7 +20,7 @@ Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeError', () => NProgress.done());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 
-const SkoleApp = ({ Component, pageProps }: AppProps) => {
+const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   const { locale } = useRouter();
   const apolloClient = useApollo(pageProps.initialApolloState);
   const theme = useMuiTheme();

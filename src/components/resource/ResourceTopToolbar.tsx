@@ -1,8 +1,7 @@
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-import { Size } from '@material-ui/core/TableCell';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ArrowBackOutlined from '@material-ui/icons/ArrowBackOutlined';
@@ -75,8 +74,8 @@ export const ResourceTopToolbar: React.FC<Props> = ({
     </Link>
   );
 
-  const toolbarButtonProps = {
-    size: 'small' as Size,
+  const toolbarButtonProps: Partial<IconButtonProps> = {
+    size: 'small',
     disabled: controlsDisabled,
   };
 

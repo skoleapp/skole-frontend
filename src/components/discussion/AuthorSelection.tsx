@@ -44,12 +44,12 @@ export const AuthorSelection = <T extends FormikValues>({
     handleClose: handleCloseAuthorSelection,
   } = useOpen();
 
-  const handleAuthenticatedMenuItemClick = () => {
+  const handleAuthenticatedMenuItemClick = (): void => {
     setFieldValue('user', userMe);
     handleCloseAuthorSelection();
   };
 
-  const handleAnonymousMenuItemClick = () => {
+  const handleAnonymousMenuItemClick = (): void => {
     setFieldValue('user', null);
     handleCloseAuthorSelection();
   };

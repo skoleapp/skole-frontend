@@ -18,12 +18,12 @@ export const InfoContextProvider: React.FC = ({ children }) => {
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const [infoDialogParams, setInfoDialogParams] = useState(initialInfoDialogParams);
 
-  const handleOpenInfoDialog = (newInfoDialogParams: InfoDialogParams) => {
+  const handleOpenInfoDialog = (newInfoDialogParams: InfoDialogParams): void => {
     setInfoDialogParams({ ...infoDialogParams, ...newInfoDialogParams });
     setInfoDialogOpen(true);
   };
 
-  const handleCloseInfoDialog = () => {
+  const handleCloseInfoDialog = (): void => {
     setInfoDialogParams(initialInfoDialogParams);
     setInfoDialogOpen(false);
   };

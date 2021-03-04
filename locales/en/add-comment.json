@@ -1,7 +1,7 @@
 {
-  "title": "Add Comment",
-  "description": "Add a new comment.",
-  "header": "Add Comment",
+  "title": "Ask Question",
+  "description": "Ask a question from the community.",
+  "header": "Ask Question",
   "schoolHelperText": "Your comment will show under the discussion you select.",
-  "selectDiscussion": "Select Discussion"
+  "myDiscussions": "My Discussions"
 }

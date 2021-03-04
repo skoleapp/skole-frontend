@@ -31,7 +31,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 const BlogPostPage: NextPage<MarkdownPageProps> = ({
   seoProps,
-  data: { title, excerpt, coverImage = '', author, authorImage, date, minutesToRead = 0 },
+  data: { title, excerpt, coverImage = '', author, authorImage, date = '', minutesToRead = 0 },
   content: markdownContent,
 }) => {
   const classes = useStyles();
@@ -84,7 +84,7 @@ const BlogPostPage: NextPage<MarkdownPageProps> = ({
   );
 
   const renderSubscribeButton = !!userMe && !blogPostEmailPermission && (
-    <Grid container justify="center">
+    <Grid className={classes.emailSubscription} container justify="center">
       <ButtonLink variant="outlined" href={urls.accountSettings} endIcon={<ArrowForwardOutlined />}>
         {t('blogs:subscribeButtonText')}
       </ButtonLink>

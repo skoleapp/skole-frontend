@@ -1,13 +1,11 @@
-import IconButton from '@material-ui/core/IconButton';
-import { Size } from '@material-ui/core/TableCell';
+import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
 import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useAuthContext, useDarkModeContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { MuiColor } from 'types';
 
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 import { useMediaQueries } from './useMediaQueries';
@@ -30,18 +28,12 @@ interface UseVotesParams {
   ownContentTooltip: string;
 }
 
-interface VoteButtonProps {
-  color: MuiColor;
-  disabled: boolean;
-  size: Size;
-}
-
 interface UseVotes {
   score: string;
   renderUpvoteButton: JSX.Element | false;
   renderDownvoteButton: JSX.Element | false;
-  upvoteButtonProps: VoteButtonProps;
-  downvoteButtonProps: VoteButtonProps;
+  upvoteButtonProps: Partial<IconButtonProps>;
+  downvoteButtonProps: Partial<IconButtonProps>;
   upvoteTooltip: string;
   downvoteTooltip: string;
 }
@@ -63,6 +55,7 @@ export const useVotes = ({
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
+  const { dynamicPrimaryColor } = useDarkModeContext();
   const context = useLanguageHeaderContext();
 
   useEffect(() => {
@@ -82,11 +75,9 @@ export const useVotes = ({
   const upvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
-    (isOwner
-      ? ownContentTooltip
-      : currentVote?.status === 1
-      ? removeUpvoteTooltip
-      : _upvoteTooltip);
+    (isOwner && ownContentTooltip) ||
+    (currentVote?.status === 1 && removeUpvoteTooltip) ||
+    _upvoteTooltip;
 
   // Show different tooltip for each of these cases:
   // - User is not logged in.
@@ -97,17 +88,15 @@ export const useVotes = ({
   const downvoteTooltip =
     loginRequiredTooltip ||
     verificationRequiredTooltip ||
-    (isOwner
-      ? ownContentTooltip
-      : currentVote?.status === -1
-      ? removeDownvoteTooltip
-      : _downvoteTooltip);
+    (isOwner && ownContentTooltip) ||
+    (currentVote?.status === -1 && removeDownvoteTooltip) ||
+    _downvoteTooltip;
 
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote?.errors?.length) {
       onError();
-    } else if (vote?.vote && vote.targetScore) {
-      setCurrentVote(vote.vote);
+    } else if (vote?.targetScore !== undefined) {
+      setCurrentVote(vote.vote || null);
       setScore(String(vote.targetScore));
     }
   };
@@ -123,21 +112,21 @@ export const useVotes = ({
     await vote({ variables: { status, ...variables } });
   };
 
-  const commonVoteButtonProps = {
-    size: 'small' as Size,
+  const commonVoteButtonProps: IconButtonProps = {
+    size: 'small',
     disabled: voteSubmitting || !userMe || isOwner || verified === false,
   };
 
-  const upvoteButtonProps = {
+  const upvoteButtonProps: IconButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(1),
-    color: !!currentVote && currentVote.status === 1 ? 'primary' : ('default' as MuiColor),
+    color: !!currentVote && currentVote.status === 1 ? dynamicPrimaryColor : 'default',
   };
 
-  const downvoteButtonProps = {
+  const downvoteButtonProps: IconButtonProps = {
     ...commonVoteButtonProps,
     onClick: handleVote(-1),
-    color: !!currentVote && currentVote.status === -1 ? 'primary' : ('default' as MuiColor),
+    color: !!currentVote && currentVote.status === -1 ? dynamicPrimaryColor : 'default',
   };
 
   // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.

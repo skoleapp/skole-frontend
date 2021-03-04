@@ -60,7 +60,7 @@ export const AvatarField = <T extends FormikValues>({
     onCancel: handleCloseDialog,
   };
 
-  const setAvatar = (file: File | Blob) => {
+  const setAvatar = (file: File | Blob): void => {
     setFieldValue('avatar', file);
     handleCloseDialog();
 

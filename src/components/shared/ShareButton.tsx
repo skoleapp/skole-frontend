@@ -15,7 +15,7 @@ export const ShareButton: React.FC<Props> = ({ tooltip, shareDialogParams }) => 
   const { isMobile } = useMediaQueries();
   const { handleOpenShareDialog } = useShareContext();
   const color = isMobile ? 'secondary' : 'default';
-  const handleClick = () => handleOpenShareDialog(shareDialogParams);
+  const handleClick = (): void => handleOpenShareDialog(shareDialogParams);
 
   return (
     <Tooltip title={tooltip}>

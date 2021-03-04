@@ -30,7 +30,7 @@ export const DatePickerFormField: React.FC<Props> = ({
     size: 'small',
   };
 
-  const handleChange = (value: MaterialUiPickersDate | null) => setFieldValue(name, value);
+  const handleChange = (value: MaterialUiPickersDate | null): void => setFieldValue(name, value);
 
   return (
     <FormControl>

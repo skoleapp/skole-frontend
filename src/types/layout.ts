@@ -28,6 +28,7 @@ export interface TopNavbarProps {
 interface CustomContainerProps extends Omit<ContainerProps, 'children'> {
   fullWidth?: boolean; // Custom props for stretching container to full screen width for landing pages etc.
   dense?: boolean; // Hide paddings.
+  hideNavigation?: boolean; // Hide navigation on desktop.
 }
 
 export interface FooterProps {

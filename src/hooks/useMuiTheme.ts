@@ -15,7 +15,7 @@ import {
 } from 'styles';
 
 export const useMuiTheme = (): Theme => {
-  const { darkMode } = useDarkModeContext();
+  const { darkMode, dynamicPrimaryColor } = useDarkModeContext();
 
   const palette: PaletteOptions = {
     primary: {
@@ -49,8 +49,6 @@ export const useMuiTheme = (): Theme => {
 
   const _palette = createPalette(palette);
   const _breakpoints = createBreakpoints(breakpoints);
-
-  const dynamicPrimaryColor = darkMode ? 'secondary' : 'primary';
 
   const props: ComponentsProps = {
     MuiContainer: {
@@ -409,6 +407,7 @@ export const useMuiTheme = (): Theme => {
         props,
         overrides,
       }),
-    [darkMode],
+    // Ignore: The `darkMode` must be included in the dependency array to re-calculate the theme when toggling the dark theme.
+    [darkMode, palette, typography, spacing, breakpoints, props, overrides], // eslint-disable-line react-hooks/exhaustive-deps
   );
 };

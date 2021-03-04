@@ -9,8 +9,8 @@ import React from 'react';
 export const SettingsButton: React.FC<IconButtonProps> = (props) => {
   const { isMobile } = useMediaQueries();
   const { t } = useTranslation();
-  const { darkMode } = useDarkModeContext();
-  const color = isMobile ? 'secondary' : darkMode ? 'secondary' : 'primary';
+  const { dynamicPrimaryColor } = useDarkModeContext();
+  const color = isMobile ? 'secondary' : dynamicPrimaryColor;
   const size = isMobile ? 'small' : 'medium';
   const { handleOpenSettingsDialog } = useSettingsContext();
 

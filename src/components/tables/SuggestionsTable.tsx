@@ -21,7 +21,7 @@ export const SuggestionsTable: React.FC<Props> = ({
   tableContainerProps,
   ...tableRowProps
 }) => {
-  const renderSuggestion = (suggestion: SuggestionsUnion, i: number) => {
+  const renderSuggestion = (suggestion: SuggestionsUnion, i: number): JSX.Element | void => {
     switch (suggestion.__typename) {
       case 'CourseObjectType': {
         return <CourseTableRow course={suggestion} key={i} {...tableRowProps} />;
@@ -38,6 +38,10 @@ export const SuggestionsTable: React.FC<Props> = ({
         const { commentCourse: course, ...rest } = suggestion;
         const commentSuggestion = { course, ...rest };
         return <CommentTableRow comment={commentSuggestion} key={i} {...tableRowProps} />;
+      }
+
+      default: {
+        break;
       }
     }
   };

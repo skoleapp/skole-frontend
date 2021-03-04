@@ -93,7 +93,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     school: _school,
     subjects: _subjects,
   }: CreateCourseFormValues): Promise<void> => {
-    const school = R.propOr('', 'id', _school);
+    const school = R.prop('id', _school);
     const subjects = _subjects.map((s) => s.id);
 
     const variables = {
@@ -115,7 +115,7 @@ const AddCoursePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       school,
       subjects: [],
     }),
-    [school],
+    [school, generalFormValues],
   );
 
   const renderCourseNameField = (

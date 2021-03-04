@@ -84,10 +84,12 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // Redirect authenticated users to home page.
   useEffect(() => {
-    !!userMe && Router.replace(urls.home);
+    if (userMe) {
+      Router.replace(urls.home);
+    }
   }, [userMe]);
 
-  const handleSkipLogin = () => sa_event('click_skip_login');
+  const handleSkipLogin = (): void => sa_event('click_skip_login');
 
   const renderHeaderEmoji = <Emoji emoji="🎓" />;
 

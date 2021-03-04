@@ -73,7 +73,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       email,
       message: '',
     }),
-    [email],
+    [email, generalFormValues],
   );
 
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (

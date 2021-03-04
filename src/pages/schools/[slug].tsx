@@ -89,15 +89,15 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useSchoolQuery({ variables, context });
   const school = R.prop('school', data);
-  const slug = R.propOr('', 'slug', school);
-  const name = R.propOr('', 'name', school);
-  const schoolTypeSlug = R.pathOr('', ['schoolType', 'slug'], school);
-  const countrySlug = R.pathOr('', ['country', 'slug'], school);
-  const citySlug = R.pathOr('', ['city', 'slug'], school);
+  const slug = R.prop('slug', school);
+  const name = R.prop('name', school);
+  const schoolTypeSlug = R.path(['schoolType', 'slug'], school);
+  const countrySlug = R.path(['country', 'slug'], school);
+  const citySlug = R.path(['city', 'slug'], school);
   const subjects = R.pathOr([], ['subjects', 'objects'], data);
   const courses = R.pathOr([], ['courses', 'objects'], data);
-  const subjectCount = R.pathOr(0, ['subjects', 'count'], data);
-  const courseCount = R.pathOr(0, ['courses', 'count'], data);
+  const subjectCount = R.path(['subjects', 'count'], data);
+  const courseCount = R.path(['courses', 'count'], data);
   const initialCommentCount = R.prop('commentCount', school);
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const header = isTabletOrDesktop && name; // School names are too long to be used as the header on mobile.
@@ -351,27 +351,32 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const t = await getT(locale, 'school');
   const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
+  let seoProps = {};
 
-  const { data } = await apolloClient.query({
-    query: SchoolSeoPropsDocument,
-    variables,
-    context,
-  });
+  try {
+    const { data } = await apolloClient.query({
+      query: SchoolSeoPropsDocument,
+      variables,
+      context,
+    });
 
-  const school = R.prop('school', data);
+    const school = R.prop('school', data);
 
-  if (!school) {
-    return {
-      notFound: true,
+    if (!school) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const { name } = school;
+
+    seoProps = {
+      title: name,
+      description: t('description', { name }),
     };
+  } catch {
+    // Network error.
   }
-
-  const { name } = school;
-
-  const seoProps = {
-    title: name,
-    description: t('description', { name }),
-  };
 
   return {
     props: {

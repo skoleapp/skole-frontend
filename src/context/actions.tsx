@@ -20,12 +20,12 @@ export const ActionsContextProvider: React.FC = ({ children }) => {
   const [actionsDialogOpen, setActionsDialogOpen] = useState(false);
   const [actionsDialogParams, setActionsDialogParams] = useState(initialActionsDialogParams);
 
-  const handleOpenActionsDialog = (newActionsDialogParams: ActionsDialogParams) => {
+  const handleOpenActionsDialog = (newActionsDialogParams: ActionsDialogParams): void => {
     setActionsDialogParams(newActionsDialogParams);
     setActionsDialogOpen(true);
   };
 
-  const handleCloseActionsDialog = () => {
+  const handleCloseActionsDialog = (): void => {
     setActionsDialogParams(initialActionsDialogParams);
     setActionsDialogOpen(false);
   };

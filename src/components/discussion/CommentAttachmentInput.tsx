@@ -25,9 +25,12 @@ export const CommentAttachmentInput: React.FC<Props> = ({ dialog }) => {
   const { userMe } = useAuthContext();
   const { toggleNotification } = useNotificationsContext();
 
-  const setAttachment = (file: File | Blob) => {
+  const setAttachment = (file: File | Blob): void => {
     formRef.current?.setFieldValue('attachment', file);
-    dialog && setCreateCommentDialogOpen(true);
+
+    if (dialog) {
+      setCreateCommentDialogOpen(true);
+    }
 
     const reader = new FileReader();
     reader.readAsDataURL(file);

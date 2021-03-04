@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
+import * as R from 'ramda';
 import React from 'react';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
@@ -17,7 +18,7 @@ interface Props extends MainTemplateProps {
   variant: ActionRequiredVariant;
 }
 
-const getProps = (variant: ActionRequiredVariant) => {
+const getProps = (variant: ActionRequiredVariant): Record<string, unknown> | void => {
   switch (variant) {
     case 'login': {
       return {
@@ -42,6 +43,10 @@ const getProps = (variant: ActionRequiredVariant) => {
         pathname: urls.logout,
       };
     }
+
+    default: {
+      break;
+    }
   }
 };
 
@@ -49,7 +54,11 @@ export const ActionRequiredTemplate: React.FC<Props> = ({ children, variant, ...
   const { t } = useTranslation();
   const { asPath } = useRouter();
   const handleClickCancelButton = (): void => Router.back();
-  const { text, buttonText, pathname } = getProps(variant);
+
+  const { text, buttonText, pathname } = R.pick(
+    ['text', 'buttonText', 'pathname'],
+    getProps(variant),
+  );
 
   const buttonHref = {
     pathname,

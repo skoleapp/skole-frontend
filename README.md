@@ -1,6 +1,7 @@
 # Skole Frontend 🎓
 
 [![circleci status](https://circleci.com/gh/skoleapp/skole-frontend.svg?style=shield&circle-token=e15c5fba3e4d8011364889043a709e2eaafccb2d)](https://circleci.com/gh/skoleapp/skole-frontend)
+[![codecov](https://codecov.io/gh/skoleapp/skole-frontend/branch/develop/graph/badge.svg?token=MTHoRbYw89)](https://codecov.io/gh/skoleapp/skole-frontend)
 [![typescript](https://badgen.net/badge/icon/typescript?icon=typescript&label&color=007acc)](https://www.typescriptlang.org)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
@@ -15,6 +16,7 @@ Other useful documentation:
 - [Next.js docs](https://nextjs.org/docs)
 - [Material UI docs](https://material-ui.com/)
 - [React docs](https://reactjs.org/docs/getting-started.html)
+- [Cypress docs](https://docs.cypress.io)
 
 ## What's inside? 🧐
 
@@ -86,3 +88,4 @@ A quick look at the top-level files and directories excluding Git ignored locati
 - For forms that use dynamic initial values, use the `enableReinitialize` prop together with the `useMemo` hook for the initial values.
 - When settings `z-index` CSS values, document the use case so it's clear on which elements that value affects.
 - Do not use `next/link`, use our custom `Link`-component instead to make sure anchor tags are always rendered properly.
+- Generate Cypress fixtures easily by copying the request from `common.graphql` and using e.g. [Insomnia](https://insomnia.rest) to get the backend response as JSON.

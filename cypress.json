@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost:3001",
+  "projectId": "umnz7g",
+  "env": {
+    "codeCoverage": {
+      "url": "/api/__coverage__"
+    }
+  }
+}

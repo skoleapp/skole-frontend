@@ -22,7 +22,7 @@ export const InfoDialog: React.FC = () => {
   const {
     infoDialogOpen,
     handleCloseInfoDialog,
-    infoDialogParams: { header, emoji, creator, created, infoItems },
+    infoDialogParams: { header, emoji, creator, created = '', infoItems },
   } = useInfoContext();
 
   const { t } = useTranslation();

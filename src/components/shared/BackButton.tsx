@@ -14,7 +14,7 @@ export const BackButton: React.FC<IconButtonProps> = (props) => {
 
   // If the visitor comes via an external link, redirect to landing page.
   // Otherwise trigger the back button of the browser.
-  const handleClick = () => {
+  const handleClick = (): void => {
     if (
       !!FRONTEND_URL &&
       history.length > 1 &&

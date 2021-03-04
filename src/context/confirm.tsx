@@ -10,7 +10,7 @@ export const ConfirmContextProvider: React.FC = ({ children }) => {
   const [resolveReject, setResolveReject] = useState<(() => void)[]>([]);
   const dialogOpen = resolveReject.length === 2;
   const [resolve, reject] = resolveReject;
-  const handleClose = () => setResolveReject([]);
+  const handleClose = (): void => setResolveReject([]);
 
   const confirm = (confirmOptions: ConfirmOptions): Promise<void> =>
     new Promise((resolve, reject) => {
@@ -18,11 +18,11 @@ export const ConfirmContextProvider: React.FC = ({ children }) => {
       setConfirmOptions(confirmOptions);
     });
 
-  const handleConfirm = () => {
+  const handleConfirm = (): void => {
     resolve();
     handleClose();
   };
-  const handleCancel = () => {
+  const handleCancel = (): void => {
     reject();
     handleClose();
   };

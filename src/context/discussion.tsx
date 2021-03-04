@@ -12,8 +12,10 @@ export const useDiscussionContext = <T extends FormikValues>(
   const discussionContext = useContext(DiscussionContext);
 
   useEffect(() => {
-    !!initialCommentCount && discussionContext.setCommentCount(initialCommentCount);
-  }, [initialCommentCount]);
+    if (initialCommentCount) {
+      discussionContext.setCommentCount(initialCommentCount);
+    }
+  }, [initialCommentCount, discussionContext]);
 
   return discussionContext;
 };

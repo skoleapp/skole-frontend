@@ -1,4 +1,3 @@
-import { useCourseQuery } from '__generated__/src/graphql/common.graphql';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Grid from '@material-ui/core/Grid';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -41,6 +40,7 @@ import {
   CourseSeoPropsDocument,
   DeleteCourseMutation,
   SubjectObjectType,
+  useCourseQuery,
   useDeleteCourseMutation,
 } from 'generated';
 import { withActions, withDiscussion, withInfo, withUserMe } from 'hocs';
@@ -117,25 +117,24 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useCourseQuery({ variables, context });
   const course = R.prop('course', data);
-  const name = R.propOr('', 'name', course);
-  const _codes = R.propOr('', 'codes', course);
-  const courseName = _codes ? `${name} - ${_codes}` : name;
-  const codes = _codes || '-';
-  const subjects: SubjectObjectType[] = R.propOr([], 'subjects', course);
-  const courseId = R.propOr('', 'id', course);
-  const slug = R.propOr('', 'slug', course);
-  const schoolSlug = R.pathOr('', ['school', 'slug'], course);
-  const initialScore = String(R.propOr(0, 'score', course));
-  const initialStars = String(R.propOr(0, 'starCount', course));
-  const resourceCount = R.pathOr(0, ['resources', 'count'], data);
-  const initialCommentCount = R.prop('commentCount', course);
-  const initialVote = R.propOr(null, 'vote', course);
-  const starred = !!R.prop('starred', course);
-  const isOwner = !!course?.user && userMe?.id === course.user.id;
-  const courseCreator = R.prop('user', course);
-  const created = R.prop('created', course);
+  const name = R.prop('name', course);
+  const codes = R.prop('codes', course);
+  const courseName = codes ? `${name} - ${codes}` : name;
+  const subjects: Pick<SubjectObjectType, 'slug'>[] = R.propOr([], 'subjects', course);
+  const courseId = R.prop('id', course);
+  const slug = R.prop('slug', course);
+  const schoolSlug = R.path(['school', 'slug'], course);
+  const initialScore = R.prop('score', course);
+  const initialStars = R.prop('starCount', course);
   const resources = R.pathOr([], ['resources', 'objects'], data);
-  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], course);
+  const resourceCount = R.path(['resources', 'count'], data);
+  const initialCommentCount = R.prop('commentCount', course);
+  const initialVote = R.prop('vote', course);
+  const starred = R.prop('starred', course);
+  const creator = R.prop('user', course);
+  const isOwner = !!creator && userMe?.id === creator.id;
+  const created = R.prop('created', course);
+  const creatorUsername = R.propOr(t('common:communityUser'), 'username', course);
   const { tabsProps, firstTabPanelProps, secondTabPanelProps } = useTabs();
   const { commentCount } = useDiscussionContext(initialCommentCount);
   const emoji = '🎓';
@@ -255,7 +254,7 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const infoDialogParams = {
     header: courseName,
     emoji,
-    creator: courseCreator,
+    creator,
     created,
     infoItems,
   };
@@ -477,27 +476,32 @@ export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const t = await getT(locale, 'course');
   const variables = R.pick(['slug'], params);
   const context = getLanguageHeaderContext(locale);
+  let seoProps = {};
 
-  const { data } = await apolloClient.query({
-    query: CourseSeoPropsDocument,
-    variables,
-    context,
-  });
+  try {
+    const { data } = await apolloClient.query({
+      query: CourseSeoPropsDocument,
+      variables,
+      context,
+    });
 
-  const course = R.prop('course', data);
+    const course = R.prop('course', data);
 
-  if (!course) {
-    return {
-      notFound: true,
+    if (!course) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const courseName = course.codes ? `${course.name} - ${course.codes}` : course.name;
+
+    seoProps = {
+      title: courseName,
+      description: t('description', { courseName }),
     };
+  } catch {
+    // Network error.
   }
-
-  const courseName = course.codes ? `${course.name} - ${course.codes}` : course.name;
-
-  const seoProps = {
-    title: courseName,
-    description: t('description', { courseName }),
-  };
 
   return {
     props: {

@@ -116,7 +116,7 @@ const EmailSubscriptionPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       productUpdates: R.prop('productUpdates', emailSubscription),
       blogPosts: R.prop('blogPosts', emailSubscription),
     }),
-    [emailSubscription],
+    [emailSubscription, generalFormValues],
   );
 
   const renderFormLabel = !!email && (

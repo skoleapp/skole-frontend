@@ -9,8 +9,9 @@ export const useDarkModeContext = (): DarkModeContextType => useContext(DarkMode
 export const DarkModeContextProvider: React.FC = ({ children }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [darkMode, setDarkMode] = useState(prefersDarkMode);
+  const dynamicPrimaryColor: 'primary' | 'secondary' = darkMode ? 'secondary' : 'primary';
 
-  const toggleDarkMode = () => {
+  const toggleDarkMode = (): void => {
     setDarkMode(!darkMode);
     localStorage.removeItem('dark-mode');
     localStorage.setItem('dark-mode', String(!darkMode));
@@ -20,13 +21,14 @@ export const DarkModeContextProvider: React.FC = ({ children }) => {
     const savedDarkMode = localStorage.getItem('dark-mode');
 
     setDarkMode(
-      savedDarkMode === 'false' ? false : savedDarkMode === 'true' ? true : prefersDarkMode,
+      (savedDarkMode === 'false' && false) || (savedDarkMode === 'true' && true) || prefersDarkMode,
     );
   }, [prefersDarkMode]);
 
   const value = {
     darkMode,
     toggleDarkMode,
+    dynamicPrimaryColor,
   };
 
   return <DarkModeContext.Provider value={value}>{children}</DarkModeContext.Provider>;

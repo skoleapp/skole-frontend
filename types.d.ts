@@ -2,6 +2,7 @@ declare module 'print-js';
 declare module 'lodash.throttle';
 declare module 'ramda';
 declare module 'markdown/*';
+declare module '@cypress/code-coverage/*';
 
 declare namespace window {
   interface ShareData {
@@ -20,3 +21,14 @@ declare namespace window {
 }
 
 declare function sa_event(name: string): void;
+
+interface GraphQlMockParams {
+  operationName: string;
+  fixture: string;
+}
+
+declare namespace Cypress {
+  interface Chainable {
+    graphQlMock(params: GraphQlMockParams): Chainable;
+  }
+}

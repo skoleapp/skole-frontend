@@ -21,8 +21,8 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
 import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
-import ChatOutlined from '@material-ui/icons/ChatOutlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
+import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
@@ -354,9 +354,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       icon: HomeOutlined,
     },
     {
-      href: urls.addComment,
-      label: t('common:startDiscussion'),
-      icon: ChatOutlined,
+      href: urls.askQuestion,
+      label: t('common:askQuestion'),
+      icon: HelpOutlineOutlined,
     },
     {
       href: urls.search,
@@ -374,7 +374,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       icon: CloudUploadOutlined,
     },
     {
-      href: urls.suggestions,
+      href: urls.trending,
       label: t('common:suggestions'),
       icon: WhatshotOutlined,
     },

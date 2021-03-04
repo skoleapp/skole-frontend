@@ -1,0 +1,191 @@
+{
+  "data": {
+    "courses": {
+      "page": 1,
+      "pages": 3,
+      "hasPrev": false,
+      "hasNext": true,
+      "count": 22,
+      "objects": [
+        {
+          "slug": "test-engineering-course-1-test0001",
+          "name": "Test Engineering Course 1",
+          "codes": "TEST0001",
+          "score": 0,
+          "starCount": 1,
+          "resourceCount": 15,
+          "commentCount": 18,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser2",
+            "username": "testuser2"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-2-test0002",
+          "name": "Test Engineering Course 2",
+          "codes": "TEST0002",
+          "score": 1,
+          "starCount": 1,
+          "resourceCount": 0,
+          "commentCount": 1,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser3",
+            "username": "testuser3"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-3-test0003",
+          "name": "Test Engineering Course 3",
+          "codes": "TEST0003, TEST0033, TEST0333",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 1,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser4",
+            "username": "testuser4"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-4-test0004",
+          "name": "Test Engineering Course 4",
+          "codes": "TEST0004",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 1,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser2",
+            "username": "testuser2"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-5-test0005",
+          "name": "Test Engineering Course 5",
+          "codes": "TEST0005",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 1,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser3",
+            "username": "testuser3"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-6-test0006",
+          "name": "Test Engineering Course 6",
+          "codes": "TEST0006",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 1,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser4",
+            "username": "testuser4"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-7-test0007",
+          "name": "Test Engineering Course 7",
+          "codes": "TEST0007",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 1,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser2",
+            "username": "testuser2"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-10-test00010",
+          "name": "Test Engineering Course 10",
+          "codes": "TEST00010",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 0,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser4",
+            "username": "testuser4"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-11-test00011",
+          "name": "Test Engineering Course 11",
+          "codes": "TEST00011",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 0,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser3",
+            "username": "testuser3"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        },
+        {
+          "slug": "test-engineering-course-12-test00012",
+          "name": "Test Engineering Course 12",
+          "codes": "TEST00012",
+          "score": 0,
+          "starCount": 0,
+          "resourceCount": 0,
+          "commentCount": 0,
+          "created": "2020-01-01T12:00:00+00:00",
+          "user": {
+            "slug": "testuser4",
+            "username": "testuser4"
+          },
+          "courseSchool": {
+            "slug": "university-of-turku"
+          }
+        }
+      ]
+    },
+    "school": {
+      "slug": "university-of-turku",
+      "name": "University of Turku"
+    },
+    "subject": null,
+    "schoolType": null,
+    "country": null,
+    "city": null
+  }
+}

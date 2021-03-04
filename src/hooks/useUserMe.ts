@@ -19,8 +19,8 @@ export const useUserMe = (): UseUserMeQuery => {
   });
 
   const { setUserMe, setAuthNetworkError } = useAuthContext();
-  const userMe = R.propOr(null, 'userMe', data);
-  const authNetworkError = !!R.propOr(false, 'networkError', error); // We only care about about network error.
+  const userMe = R.prop('userMe', data);
+  const authNetworkError = R.prop('networkError', error); // We only care about about network error.
 
   useEffect(() => {
     setUserMe(userMe);
@@ -30,7 +30,7 @@ export const useUserMe = (): UseUserMeQuery => {
     } else if (authNetworkError) {
       setAuthNetworkError(true);
     }
-  }, [userMe, error]);
+  }, [userMe, error, authNetworkError, setAuthNetworkError, setUserMe]);
 
   return { userMe, authLoading, authNetworkError, ...result };
 };

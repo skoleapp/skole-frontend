@@ -25,14 +25,17 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await apolloClient.clearStore();
     setUserMe(null);
     localStorage.setItem(LS_LOGOUT_KEY, String(Date.now()));
-    !!query.next && (await Router.push(String(query.next))); // Automatically redirect to the next page if one has been provided as a query parameter.
+
+    if (query.next) {
+      await Router.push(String(query.next)); // Automatically redirect to the next page if one has been provided as a query parameter.
+    }
   };
 
   const [logout, { loading, error }] = useGraphQlLogoutMutation({ context, onCompleted });
 
   useEffect(() => {
     logout();
-  }, []);
+  }, [logout]);
 
   const renderLoggedOutText = (
     <FormControl>

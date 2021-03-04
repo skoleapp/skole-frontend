@@ -33,7 +33,7 @@ export const useTabs = (discussionTabIndex = 1): UseTabs => {
     if (!!query.comment && isMobile) {
       setTabValue(discussionTabIndex);
     }
-  }, [query, isMobile]);
+  }, [query, isMobile, setTabValue, discussionTabIndex]);
 
   const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
     setTabValue(val);

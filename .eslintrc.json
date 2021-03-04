@@ -37,7 +37,8 @@
           "@material-ui/core",
           "@material-ui/icons",
           "@material-ui/lab",
-          "@material-ui/pickers"
+          "@material-ui/pickers",
+          "__generated__/src/graphql/common.graphql"
         ],
         "patterns": [
           // https://material-ui.com/guides/minimizing-bundle-size/#option-1
@@ -46,30 +47,25 @@
         ]
       }
     ],
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error", // Require imports to be ordered correctly.
+    "simple-import-sort/exports": "error", // Require exports to be ordered correctly.
+    "no-underscore-dangle": "off", // Ignore underscores in e.g. GraphQL type names etc.
+    "react/jsx-props-no-spreading": "off", // Allow prop spreading.
+    "@typescript-eslint/naming-convention": "off", // Allows usage of e.g. underscores in variable names.
+    "react-hooks/rules-of-hooks": "off", // Allow calling e.g. `useDayjs` within JSX.
     // TODO: Under this comment, remove all rule overrides and make the necessary refactors to fix the linting errors.
-    "import/no-mutable-exports": "off",
-    "react/jsx-props-no-spreading": "off",
     "react/no-array-index-key": "off",
-    "react/jsx-no-duplicate-props": "off",
-    "react/no-danger": "off",
-    "react/require-default-props": "off",
-    "react-hooks/rules-of-hooks": "off",
-    "react-hooks/exhaustive-deps": "off",
-    "default-case": "off",
-    "no-nested-ternary": "off",
-    "no-underscore-dangle": "off",
     "no-restricted-globals": "off",
-    "no-plusplus": "off",
-    "no-useless-concat": "off",
-    "no-restricted-properties": "off",
     "no-restricted-syntax": "off",
     "no-await-in-loop": "off",
-    "radix": "off",
-    "eqeqeq": "off",
-    "@typescript-eslint/no-shadow": "off",
-    "@typescript-eslint/no-unused-expressions": "off",
-    "@typescript-eslint/naming-convention": "off"
-  }
+    "@typescript-eslint/no-shadow": "off"
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": ["error"] // Require return types for all functions.
+      }
+    }
+  ]
 }

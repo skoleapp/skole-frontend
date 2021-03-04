@@ -36,7 +36,10 @@ export const ActionsDialog: React.FC = () => {
 
   const handleClickDelete = (): void => {
     handleCloseActionsDialog();
-    !!deleteActionParams?.callback && deleteActionParams.callback();
+
+    if (deleteActionParams?.callback) {
+      deleteActionParams.callback();
+    }
   };
 
   const actionsDialogHeaderProps = {

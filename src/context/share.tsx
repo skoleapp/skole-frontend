@@ -19,12 +19,12 @@ export const ShareContextProvider: React.FC = ({ children }) => {
     initialShareDialogParams,
   );
 
-  const handleOpenShareDialog = (newShareDialogParams: ShareDialogParams) => {
+  const handleOpenShareDialog = (newShareDialogParams: ShareDialogParams): void => {
     setShareDialogParams({ ...shareDialogParams, ...newShareDialogParams });
     setShareDialogOpen(true);
   };
 
-  const handleCloseShareDialog = () => {
+  const handleCloseShareDialog = (): void => {
     setShareDialogParams(initialShareDialogParams);
     setShareDialogOpen(false);
   };

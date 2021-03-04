@@ -61,7 +61,10 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
   const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
-  const existingUserAvatar = mediaUrl(R.propOr('', 'avatar', existingUser));
+  const username = R.prop('username', existingUser);
+  const email = R.prop('email', existingUser);
+  const validExistingUser = !!username && !!email;
+  const existingUserAvatar = mediaUrl(R.prop('avatar', existingUser));
   const context = useLanguageHeaderContext();
 
   const {
@@ -73,13 +76,10 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   } = useForm<LoginFormValues>();
 
   const existingUserGreeting = t('login:existingUserGreeting', {
-    username: R.propOr('-', 'username', existingUser),
+    username,
   });
 
-  const validExistingUser =
-    !!R.propOr(false, 'username', existingUser) && !!R.propOr(false, 'email', existingUser);
-
-  const handleExistingUser = (data: UserQuery) => {
+  const handleExistingUser = (data: UserQuery): void => {
     if (data.user?.avatar && existingUser && existingUser?.avatar !== data.user.avatar) {
       setExistingUser({ ...existingUser, avatar: data.user.avatar });
     }
@@ -100,7 +100,7 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         // Invalid user stored in LS.
       }
     })();
-  }, []);
+  }, [userQuery]);
 
   const validationSchema = Yup.object().shape({
     usernameOrEmail: !validExistingUser
@@ -136,7 +136,6 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const handleSubmit = async (values: LoginFormValues): Promise<void> => {
     const { usernameOrEmail: _usernameOrEmail, password } = values;
-
     const usernameOrEmail = R.propOr(_usernameOrEmail, 'email', existingUser);
 
     await loginMutation({

@@ -10,7 +10,7 @@ import Document, {
 } from 'next/document';
 import React from 'react';
 
-const SAScript = () =>
+const SAScript = (): JSX.Element | null =>
   process.env.SA_URL ? (
     <>
       <script async defer src={`${process.env.SA_URL}/latest.js`} />

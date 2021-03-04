@@ -111,7 +111,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSubmitEmail = async (variables: ContactFormValues) => {
+  const handleSubmitEmail = async (variables: ContactFormValues): Promise<void> => {
     await createContactMessage({ variables });
   };
 
@@ -143,7 +143,7 @@ const ForTeachersPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   );
 
-  const renderFormFields = (props: FormikProps<ContactFormValues>) => (
+  const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form className={classes.form}>
       <EmailInputFormField {...props} />
     </Form>

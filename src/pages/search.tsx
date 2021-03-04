@@ -157,14 +157,14 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { data, loading, error } = useCoursesQuery({ variables, context });
   const { formRef } = useForm<SearchFormValues>();
   const courses = R.pathOr([], ['courses', 'objects'], data);
-  const school = R.propOr(null, 'school', data);
-  const subject = R.propOr(null, 'subject', data);
-  const schoolType = R.propOr(null, 'schoolType', data);
-  const country = R.propOr(null, 'country', data);
-  const city = R.propOr(null, 'city', data);
-  const count = R.pathOr(0, ['courses', 'count'], data);
-  const searchTerm = R.propOr('', 'searchTerm', query);
-  const ordering = R.propOr('', 'ordering', query);
+  const school = R.prop('school', data);
+  const subject = R.prop('subject', data);
+  const schoolType = R.prop('schoolType', data);
+  const country = R.prop('country', data);
+  const city = R.prop('city', data);
+  const count = R.path(['courses', 'count'], data);
+  const searchTerm = R.prop('searchTerm', query);
+  const ordering = R.prop('ordering', query);
   const [searchValue, setSearchValue] = useState(searchTerm);
   const schoolName = R.prop('name', school);
   const subjectName = R.prop('name', subject);
@@ -192,7 +192,8 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
-  const initialValues = useMemo(() => dynamicInitialValues, Object.values(dynamicInitialValues));
+  // Ignore: ESLint cannot infer the values in the dependency array.
+  const initialValues = useMemo(() => dynamicInitialValues, Object.values(dynamicInitialValues)); // eslint-disable-line react-hooks/exhaustive-deps
 
   const paginationQuery = getPaginationQuery(query); // Query that holds only pagination.
 
@@ -252,7 +253,10 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const handleSearchIconClick = (): void => {
     const input = document.getElementById('search-navbar-input-base');
-    !!input && input.focus();
+
+    if (input) {
+      input.focus();
+    }
   };
 
   const handleClearSearchInput = async (): Promise<void> => {
@@ -277,11 +281,11 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     city: _city,
     ordering,
   }: SearchFormValues): Promise<void> => {
-    const school = R.propOr('', 'slug', _school);
-    const subject = R.propOr('', 'slug', _subject);
-    const schoolType = R.propOr('', 'slug', _schoolType);
-    const country = R.propOr('', 'slug', _country);
-    const city = R.propOr('', 'slug', _city);
+    const school = R.prop('slug', _school);
+    const subject = R.prop('slug', _subject);
+    const schoolType = R.prop('slug', _schoolType);
+    const country = R.prop('slug', _country);
+    const city = R.prop('slug', _city);
 
     const filteredValues = {
       ...queryWithPagination, // Define this first to override the values.
@@ -300,7 +304,10 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
     const query = R.pickBy((_: string, key: string) => key !== filterName, queryWithPagination);
 
-    filterName === 'searchTerm' && (await handleClearSearchInput());
+    if (filterName === 'searchTerm') {
+      await handleClearSearchInput();
+    }
+
     await Router.push({ pathname, query });
   };
 
@@ -445,7 +452,9 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderNotFound = <NotFoundBox text={t('search:noCourses')} linkProps={notFoundLinkProps} />;
-  const renderResults = loading ? renderLoading : courses.length ? renderTable : renderNotFound;
+
+  const renderResults =
+    (loading && renderLoading) || (courses.length && renderTable) || renderNotFound;
 
   const renderClearFiltersButton = (
     <IconButton onClick={handleClearFilters} size="small">

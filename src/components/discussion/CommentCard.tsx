@@ -143,16 +143,17 @@ export const CommentCard: React.FC<Props> = ({
   const { userMe } = useAuthContext();
   const { confirm } = useConfirmContext();
   const { handleOpenActionsDialog } = useActionsContext();
-  const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
-  const initialVote = R.propOr(null, 'vote', comment);
-  const initialScore = String(R.propOr(0, 'score', comment));
-  const isOwner = !!userMe && !!comment.user && userMe.id === comment.user.id;
-  const commentId = R.propOr('', 'id', comment);
+  const avatarThumbnail = R.prop('avatarThumbnail', comment.user);
+  const initialVote = R.prop('vote', comment);
+  const initialScore = R.prop('score', comment);
+  const commentId = R.prop('id', comment);
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
   const { setAttachmentViewerValue } = useDiscussionContext();
-  const creatorUsername = R.pathOr(t('common:communityUser'), ['user', 'username'], comment);
-  const creatorSlug = R.propOr('', 'slug', comment.user);
+  const creator = R.prop('user', comment);
+  const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
+  const creatorSlug = R.prop('slug', creator);
+  const isOwner = !!creator && userMe?.id === creator.id;
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
 
@@ -179,7 +180,7 @@ export const CommentCard: React.FC<Props> = ({
     if (query.comment === comment.id) {
       commentRef.current?.scrollIntoView({ block: 'center' });
     }
-  }, [query]);
+  }, [query, comment.id]);
 
   const handleClickAttachment = (): void => setAttachmentViewerValue(comment.attachment);
 
@@ -214,7 +215,7 @@ export const CommentCard: React.FC<Props> = ({
     }
   };
 
-  const handleClickActionsButton = (e: SyntheticEvent) => {
+  const handleClickActionsButton = (e: SyntheticEvent): void => {
     e.stopPropagation(); // Prevent opening comment thread for top-level comments.
 
     const shareDialogParams = {
@@ -252,24 +253,28 @@ export const CommentCard: React.FC<Props> = ({
   // Render dynamic label depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
   const renderSecondaryDiscussionLabel =
     (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
-    (discussionType === DiscussionTypes.COURSE && !!comment.resource)
-      ? t('discussion:postedIn')
-      : (discussionType === DiscussionTypes.COURSE && !!comment.school) ||
-        (discussionType === DiscussionTypes.RESOURCE && !!comment.course)
-      ? t('discussion:alsoSentTo')
-      : '';
+    (discussionType === DiscussionTypes.COURSE && !!comment.resource && t('discussion:postedIn')) ||
+    (discussionType === DiscussionTypes.COURSE && !!comment.school) ||
+    (discussionType === DiscussionTypes.RESOURCE &&
+      !!comment.course &&
+      t('discussion:alsoSentTo')) ||
+    '';
 
   // Render dynamic path name depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
   const secondaryDiscussionPathname =
-    discussionType === DiscussionTypes.SCHOOL && !!comment.course?.slug
-      ? urls.course(comment.course.slug)
-      : discussionType === DiscussionTypes.COURSE && !!comment.resource?.slug
-      ? urls.resource(comment.resource.slug)
-      : discussionType === DiscussionTypes.COURSE && !!comment.school?.slug
-      ? urls.school(comment.school.slug)
-      : discussionType === DiscussionTypes.RESOURCE && !!comment.course?.slug
-      ? urls.course(comment.course.slug)
-      : '#';
+    (discussionType === DiscussionTypes.SCHOOL &&
+      !!comment.course?.slug &&
+      urls.course(comment.course.slug)) ||
+    (discussionType === DiscussionTypes.COURSE &&
+      !!comment.resource?.slug &&
+      urls.resource(comment.resource.slug)) ||
+    (discussionType === DiscussionTypes.COURSE &&
+      !!comment.school?.slug &&
+      urls.school(comment.school.slug)) ||
+    (discussionType === DiscussionTypes.RESOURCE &&
+      !!comment.course?.slug &&
+      urls.course(comment.course.slug)) ||
+    '#';
 
   const secondaryDiscussionLinkHref = {
     pathname: secondaryDiscussionPathname,
@@ -281,13 +286,10 @@ export const CommentCard: React.FC<Props> = ({
   // Render dynamic name depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
   const renderSecondaryDiscussionName =
     (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
-    (discussionType === DiscussionTypes.RESOURCE && !!comment.course)
-      ? comment.course?.slug
-      : discussionType === DiscussionTypes.COURSE && comment.resource
-      ? comment.resource?.slug
-      : discussionType === DiscussionTypes.COURSE && !!comment.school
-      ? comment.school?.slug
-      : '';
+    (discussionType === DiscussionTypes.RESOURCE && !!comment.course && comment.course?.slug) ||
+    (discussionType === DiscussionTypes.COURSE && comment.resource && comment.resource?.slug) ||
+    (discussionType === DiscussionTypes.COURSE && !!comment.school && comment.school?.slug) ||
+    '';
 
   const renderSecondaryDiscussionLink = (
     <TextLink href={secondaryDiscussionLinkHref}>#{renderSecondaryDiscussionName}</TextLink>

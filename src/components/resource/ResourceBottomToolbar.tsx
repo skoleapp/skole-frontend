@@ -40,14 +40,20 @@ export const ResourceBottomToolbar: React.FC = () => {
   // FIXME: Providing a custom value in the input won't work atm.
   const handleChangePage = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     const val = Number(e.target.value);
-    !!val && setPageNumber(val);
+
+    if (val) {
+      setPageNumber(val);
+    }
+
     const page: HTMLDivElement | undefined = R.path(['current', 'pages', val - 1], documentRef);
-    !!page &&
+
+    if (page) {
       page.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
         inline: 'start',
       });
+    }
   };
 
   const renderHelperText = <FormHelperText>{t('resource:pdfViewerHelperText')}</FormHelperText>;

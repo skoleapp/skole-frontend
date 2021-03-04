@@ -73,9 +73,9 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  // Prefill user's own school, if one exists and no other school is provided as a query parameter.
+  // Pre-fill user's own school, if one exists and no other school is provided as a query parameter.
   const school = R.propOr(_school, 'school', data);
-  const course = R.propOr(null, 'course', data);
+  const course = R.prop('course', data);
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required(t('validation:required')),
@@ -112,9 +112,9 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     course: _course,
     file,
   }: UploadResourceFormValues): Promise<void> => {
-    const resourceType = R.propOr('', 'id', _resourceType);
+    const resourceType = R.prop('id', _resourceType);
     const date = _date ? dayjs(_date).format('YYYY-MM-DD') : null; // Only eligible format for GraphQL `Date` scalar.
-    const course = R.propOr('', 'id', _course);
+    const course = R.prop('id', _course);
 
     const variables = {
       title,
@@ -141,7 +141,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       course,
       file: null,
     }),
-    [school, course],
+    [school, course, generalFormValues],
   );
 
   const renderResourceTitleField = (
@@ -200,7 +200,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   // Only collapse this field in once the school has been selected.
-  const renderCourseField = (props: FormikProps<UploadResourceFormValues>) => (
+  const renderCourseField = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
     <Collapse in={!!props.values.school}>
       <Field
         name="course"
@@ -220,7 +220,7 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderFileField = <Field name="file" component={FileField} />;
 
-  const renderFormSubmitSection = (props: FormikProps<UploadResourceFormValues>) => (
+  const renderFormSubmitSection = (props: FormikProps<UploadResourceFormValues>): JSX.Element => (
     <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
   );
 

@@ -10,10 +10,12 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | Dependency                                                                           | Reason                                                                                        |
 | :----------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------- |
 | [@apollo/client](https://www.npmjs.com/package/@apollo/client)                       | Client library for executing GraphQL operations.                                              |
+| [@cypress/code-coverage](https://www.npmjs.com/package/@cypress/code-coverage)       | Code coverage for Cypress.                                                                    |
 | [@material-ui/core](https://www.npmjs.com/package/@material-ui/core)                 | Core package for Material UI components.                                                      |
 | [@material-ui/icons](https://www.npmjs.com/package/@material-ui/icons)               | Library for using [Material Icons](https://material.io/resources/icons/).                     |
 | [@material-ui/lab](https://www.npmjs.com/package/@material-ui/lab)                   | Material UI extension for more experimental components.                                       |
 | [apollo-upload-client](https://www.npmjs.com/package/apollo-upload-client)           | Allows file uploads with GraphQL mutations.                                                   |
+| [babel-plugin-istanbul](https://www.npmjs.com/package/babel-plugin-istanbul)         | Babel plugin for instrumenting code for code coverage.                                        |
 | [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) | Used for resizing uploaded images.                                                            |
 | [clsx](https://www.npmjs.com/package/clsx)                                           | A minimalistic library to connect Material UI classes.                                        |
 | [dayjs](https://www.npmjs.com/package/days)                                          | Immutable date library.                                                                       |
@@ -30,6 +32,7 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [react](https://www.npmjs.com/package/react)                                         | Duh.                                                                                          |
 | [react-dom](https://www.npmjs.com/package/react-dom)                                 | Duh.                                                                                          |
 | [react-pdf](https://www.npmjs.com/package/react-pdf)                                 | Render PDF files.                                                                             |
+| [remark-gfc](https://www.npmjs.com/package/remark-gfm)                               | Remark plugin to render additional Markdown elements.                                         |
 | [yup](https://www.npmjs.com/package/yup)                                             | Object schema validation (used together with [Formik](https://www.npmjs.com/package/formik)). |
 
 ### Dev requirements (excluding plugins and TypeScript typings)
@@ -38,6 +41,7 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | :------------------------------------------------------------------------- | :---------------------------------------------------------- |
 | [@graphql-codegen/cli](https://www.npmjs.com/package/@graphql-codegen/cli) | Generate API functions from GraphQL code.                   |
 | [dpdm](https://www.npmjs.com/package/dpdm)                                 | A tool that we use to check for circular dependencies.      |
+| [cypress](https://www.npmjs.com/package/cypress)                           | Browser testing tool.                                       |
 | [eslint](https://www.npmjs.com/package/eslint)                             | Linter.                                                     |
 | [graphql-let](https://www.npmjs.com/package/graphql-let)                   | GraphQL Code Generator wrapper to automate code generation. |
 | [prettier](https://www.npmjs.com/package/prettier)                         | Formatter.                                                  |

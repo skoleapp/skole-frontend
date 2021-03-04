@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { usePdfViewerContext } from 'context';
 import { useStateRef } from 'hooks';
 import { getBoundingRect, getPageFromElement } from 'lib';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { LTWH, PdfTranslation } from 'types';
 
 const useStyles = makeStyles({
@@ -70,24 +70,27 @@ export const AreaSelection: React.FC = () => {
     return null;
   };
 
-  const onSelection = (startTarget: HTMLElement, boundingRect: LTWH): void => {
-    const page = getPageFromElement(startTarget);
-    const canvas = startTarget.closest('canvas');
+  const onSelection = useCallback(
+    (startTarget: HTMLElement, boundingRect: LTWH): void => {
+      const page = getPageFromElement(startTarget);
+      const canvas = startTarget.closest('canvas');
 
-    if (!!page && !!canvas) {
-      const pageBoundingRect = {
-        ...boundingRect,
-        top: boundingRect.top - page.node.offsetTop,
-        left: boundingRect.left - page.node.offsetLeft,
-      };
+      if (!!page && !!canvas) {
+        const pageBoundingRect = {
+          ...boundingRect,
+          top: boundingRect.top - page.node.offsetTop,
+          left: boundingRect.left - page.node.offsetLeft,
+        };
 
-      const screenshot = getScreenshot(canvas, pageBoundingRect);
-      setScreenshot(screenshot);
-    }
-  };
+        const screenshot = getScreenshot(canvas, pageBoundingRect);
+        setScreenshot(screenshot);
+      }
+    },
+    [setScreenshot],
+  );
 
   // Get coordinates on document node.
-  const getDocumentCoords = (pageX: number, pageY: number): PdfTranslation => {
+  const getDocumentCoords = useCallback((pageX: number, pageY: number): PdfTranslation => {
     const documentNode = getDocumentNode();
     const { left, top } = documentNode.getBoundingClientRect();
 
@@ -95,129 +98,145 @@ export const AreaSelection: React.FC = () => {
       x: pageX - left + documentNode.scrollLeft,
       y: pageY - top + documentNode.scrollTop,
     };
-  };
+  }, []);
 
   // Update mutable state when mouse moves (desktop).
-  const onMouseMove = (e: MouseEvent): void => {
-    const { start, locked } = stateRef.current;
+  const onMouseMove = useCallback(
+    (e: MouseEvent): void => {
+      const { start, locked } = stateRef.current;
 
-    if (!!start && !locked) {
-      setState({
-        ...stateRef.current,
-        end: getDocumentCoords(e.pageX, e.pageY),
-      });
-    }
-  };
+      if (!!start && !locked) {
+        setState({
+          ...stateRef.current,
+          end: getDocumentCoords(e.pageX, e.pageY),
+        });
+      }
+    },
+    [getDocumentCoords, setState, stateRef],
+  );
 
   // Call selection function when a valid rectangle is drawn (desktop).
-  const onMouseDown = (e: MouseEvent): (() => void) | void => {
-    const startTarget = e.target;
-    const documentNode = getDocumentNode();
+  const onMouseDown = useCallback(
+    (e: MouseEvent): (() => void) | void => {
+      const startTarget = e.target;
+      const documentNode = getDocumentNode();
 
-    const onMouseUp = (e: MouseEvent): void => {
-      const { start } = stateRef.current;
-      const { currentTarget } = e;
+      const onMouseUp = (e: MouseEvent): void => {
+        const { start } = stateRef.current;
+        const { currentTarget } = e;
 
-      // Emulate listen once.
-      !!currentTarget && currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
+        // Emulate listen once.
+        if (currentTarget) {
+          currentTarget.removeEventListener('mouseup', onMouseUp as EventListener);
+        }
 
-      if (start) {
-        const end = getDocumentCoords(e.pageX, e.pageY);
-        const boundingRect = getBoundingRect(start, end);
+        if (start) {
+          const end = getDocumentCoords(e.pageX, e.pageY);
+          const boundingRect = getBoundingRect(start, end);
 
-        if (documentNode.contains(e.target as Node)) {
-          // Lock state.
-          setState({
-            ...stateRef.current,
-            end,
-            locked: true,
-          });
+          if (documentNode.contains(e.target as Node)) {
+            // Lock state.
+            setState({
+              ...stateRef.current,
+              end,
+              locked: true,
+            });
 
-          if (end) {
-            onSelection(startTarget as HTMLElement, boundingRect);
+            if (end) {
+              onSelection(startTarget as HTMLElement, boundingRect);
+            }
+          } else {
+            setState(initialState);
           }
         } else {
           setState(initialState);
         }
-      } else {
-        setState(initialState);
-      }
-    };
+      };
 
-    setState({
-      start: getDocumentCoords(e.pageX, e.pageY),
-      end: null,
-      locked: false,
-    });
+      setState({
+        start: getDocumentCoords(e.pageX, e.pageY),
+        end: null,
+        locked: false,
+      });
 
-    document.body.addEventListener('mouseup', onMouseUp);
+      document.body.addEventListener('mouseup', onMouseUp);
 
-    return (): void => {
-      document.body.removeEventListener('mouseup', onMouseUp);
-    };
-  };
+      return (): void => {
+        document.body.removeEventListener('mouseup', onMouseUp);
+      };
+    },
+    [getDocumentCoords, onSelection, setState, stateRef],
+  );
 
   // Update mutable state when touch moves (mobile).
-  const onTouchMove = (e: TouchEvent): void => {
-    e.preventDefault(); // Prevent reloading page when panning down.
-    const { start, locked } = stateRef.current;
+  const onTouchMove = useCallback(
+    (e: TouchEvent): void => {
+      e.preventDefault(); // Prevent reloading page when panning down.
+      const { start, locked } = stateRef.current;
 
-    if (!!start && !locked) {
-      setState({
-        ...stateRef.current,
-        end: getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
-      });
-    }
-  };
+      if (!!start && !locked) {
+        setState({
+          ...stateRef.current,
+          end: getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY),
+        });
+      }
+    },
+    [getDocumentCoords, setState, stateRef],
+  );
 
   // Call selection function when a valid rectangle is drawn (mobile).
-  const onTouchStart = (e: TouchEvent): (() => void) | void => {
-    e.preventDefault(); // Prevent screen flashing when starting to draw rectangle.
-    const documentNode = getDocumentNode();
-    const startTarget = e.target;
+  const onTouchStart = useCallback(
+    (e: TouchEvent): (() => void) | void => {
+      e.preventDefault(); // Prevent screen flashing when starting to draw rectangle.
+      const documentNode = getDocumentNode();
+      const startTarget = e.target;
 
-    const onTouchUp = (e: TouchEvent): void => {
-      const { start } = stateRef.current;
-      const { currentTarget } = e;
+      const onTouchUp = (e: TouchEvent): void => {
+        const { start } = stateRef.current;
+        const { currentTarget } = e;
 
-      // Emulate listen once.
-      !!currentTarget && currentTarget.removeEventListener('mouseup', onTouchUp as EventListener);
+        // Emulate listen once.
+        if (currentTarget) {
+          currentTarget.removeEventListener('mouseup', onTouchUp as EventListener);
+        }
 
-      if (start) {
-        const end = getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
-        const boundingRect = getBoundingRect(start, end);
+        if (start) {
+          const end = getDocumentCoords(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+          const boundingRect = getBoundingRect(start, end);
 
-        if (documentNode.contains(e.target as Node)) {
-          // Lock state.
-          setState({
-            ...stateRef.current,
-            end,
-            locked: true,
-          });
+          if (documentNode.contains(e.target as Node)) {
+            // Lock state.
+            setState({
+              ...stateRef.current,
+              end,
+              locked: true,
+            });
 
-          if (end) {
-            onSelection(startTarget as HTMLElement, boundingRect);
+            if (end) {
+              onSelection(startTarget as HTMLElement, boundingRect);
+            }
+          } else {
+            setState(initialState);
           }
         } else {
           setState(initialState);
         }
-      } else {
-        setState(initialState);
-      }
-    };
+      };
 
-    setState({
-      start: getDocumentCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
-      end: null,
-      locked: false,
-    });
+      setState({
+        start: getDocumentCoords(e.targetTouches[0].pageX, e.targetTouches[0].pageY),
+        end: null,
+        locked: false,
+      });
 
-    document.body.addEventListener('touchend', onTouchUp as EventListener);
+      document.body.addEventListener('touchend', onTouchUp as EventListener);
 
-    return (): void => {
-      document.body.removeEventListener('touchend', onTouchUp as EventListener);
-    };
-  };
+      return (): void => {
+        document.body.removeEventListener('touchend', onTouchUp as EventListener);
+      };
+    },
+    [getDocumentCoords, onSelection, setState, stateRef],
+  );
 
   useEffect(() => {
     const documentNode = getDocumentNode();
@@ -245,7 +264,7 @@ export const AreaSelection: React.FC = () => {
       documentNode.removeEventListener('mousemove', onMouseMove as EventListener);
       documentNode.removeEventListener('mousedown', onMouseDown as EventListener);
     };
-  }, [drawingMode]);
+  }, [drawingMode, onMouseDown, onMouseMove, onTouchMove, onTouchStart, setState]);
 
   return drawingMode && !!start && !!end ? (
     <Box className={clsx('screenshot-border', classes.root)} style={getBoundingRect(start, end)} />

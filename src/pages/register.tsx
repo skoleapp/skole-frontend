@@ -1,4 +1,3 @@
-import { useUpdateAccountSettingsMutation } from '__generated__/src/graphql/common.graphql';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -25,6 +24,7 @@ import {
   SubjectObjectType,
   UpdateAccountSettingsMutation,
   useRegisterMutation,
+  useUpdateAccountSettingsMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -165,8 +165,8 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await updateAccountSettings({
       variables: {
         ...variables,
-        school: R.propOr('', 'id', school),
-        subject: R.propOr('', 'id', subject),
+        school: R.prop('id', school),
+        subject: R.prop('id', subject),
       },
     });
   };

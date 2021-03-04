@@ -37,7 +37,7 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
   const [activities, setActivities] = useState([]);
-  const activityCount = R.pathOr(0, ['activities', 'count'], data);
+  const activityCount = R.path(['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
   const { handleCloseActionsDialog } = useActionsContext();
 
@@ -112,11 +112,8 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
   );
 
-  const renderActivities = loading
-    ? renderLoading
-    : activities.length
-    ? renderTable
-    : renderNotFound;
+  const renderActivities =
+    (loading && renderLoading) || (activities.length && renderTable) || renderNotFound;
 
   const layoutProps = {
     seoProps,

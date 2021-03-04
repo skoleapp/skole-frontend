@@ -96,7 +96,8 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
       ...generalFormValues,
       ...dynamicInitialValues,
     }),
-    Object.values(dynamicInitialValues),
+    // Ignore: ESLint cannot infer the values in the dependency array.
+    Object.values(dynamicInitialValues), // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const validationSchema = Yup.object().shape({

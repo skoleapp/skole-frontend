@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 
 export const GooglePlayBadge: React.FC = () => {
-  const handleClick = () => sa_event('click_link_to_google_play');
+  const handleClick = (): void => sa_event('click_link_to_google_play');
 
   return (
     <Typography
