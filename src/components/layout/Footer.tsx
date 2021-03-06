@@ -174,13 +174,14 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     },
   ];
 
-  const mapSocialMediaLinks = socialMediaLinks.map(({ href, name }) => (
+  const mapSocialMediaLinks = socialMediaLinks.map(({ href, name }, i) => (
     <Typography
       component="a"
       target="_blank"
       rel="noreferrer"
       href={href}
       onClick={handleClickSocialMediaLink(name)}
+      key={i}
     >
       <Image
         className={classes.socialMediaIcon}
@@ -208,7 +209,7 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   );
 
   const renderCopyright = (
-    <Grid className={classes.container} container xs={4} alignItems="center">
+    <Grid className={classes.container} item xs={4} container alignItems="center">
       <Typography variant="subtitle1" color="secondary">
         © {new Date().getFullYear()} Skole
       </Typography>

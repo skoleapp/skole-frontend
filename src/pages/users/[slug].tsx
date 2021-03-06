@@ -264,11 +264,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </ButtonLink>
   );
 
-  const renderDesktopSettingsButton = (
-    <Tooltip title={t('common-tooltips:settings')}>
-      <SettingsButton className={classes.button} />
-    </Tooltip>
-  );
+  const renderDesktopSettingsButton = <SettingsButton className={classes.button} />;
 
   const renderScoreTitle = (
     <Typography variant="body2" color="textSecondary">
