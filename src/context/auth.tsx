@@ -1,4 +1,5 @@
 import {
+  BadgeProgressObjectType,
   PaginatedActivityObjectType,
   SchoolObjectType,
   SubjectObjectType,
@@ -26,6 +27,8 @@ interface UseAuthContext extends AuthContextType {
   score: string;
   school: SchoolObjectType | null;
   subject: SubjectObjectType | null;
+  badgeProgresses: BadgeProgressObjectType[];
+  selectedBadgeProgress: BadgeProgressObjectType | null;
   productUpdateEmailPermission: boolean;
   blogPostEmailPermission: boolean;
   commentReplyEmailPermission: boolean;
@@ -52,6 +55,8 @@ export const useAuthContext = (): UseAuthContext => {
   const avatar = mediaUrl(R.prop('avatar', userMe));
   const school = R.prop('school', userMe);
   const subject = R.prop('subject', userMe);
+  const badgeProgresses = R.prop('badgeProgresses', userMe);
+  const selectedBadgeProgress = R.prop('selectedBadgeProgress', userMe);
   const productUpdateEmailPermission = R.prop('productUpdateEmailPermission', userMe);
   const blogPostEmailPermission = R.prop('blogPostEmailPermission', userMe);
   const commentReplyEmailPermission = R.prop('commentReplyEmailPermission', userMe);
@@ -78,6 +83,8 @@ export const useAuthContext = (): UseAuthContext => {
     avatar,
     school,
     subject,
+    badgeProgresses,
+    selectedBadgeProgress,
     productUpdateEmailPermission,
     blogPostEmailPermission,
     commentReplyEmailPermission,

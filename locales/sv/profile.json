@@ -7,6 +7,8 @@
   "badges": "Märken",
   "editProfile": "Redigera Profil",
   "viewStarred": "Visa stjärnmärkta",
+  "selectBadgeTooltip": "Välj märket vilken framsteg du följer.",
+  "selectBadgeDialogTitle": "Välj ett märke",
   "ownProfileNoCourses": "Du har inte lagt till några kurser. Alla kurser som du tillagt kommer att visas här.",
   "ownProfileNoResources": "Du har inte laddat upp några materialer. Alla materialer som du laddar upp visas här.",
   "ownProfileNoComments": "Du har inte lagt till några kommentarer. Alla kommentarer som du tillagt kommer att visas här.",

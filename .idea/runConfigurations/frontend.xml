@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="frontend" type="NodeJSConfigurationType" path-to-node="docker-compose://[$PROJECT_DIR$/../docker-compose.yml]:frontend/node" working-dir="$PROJECT_DIR$">
-    <method v="2" />
-  </configuration>
-</component>

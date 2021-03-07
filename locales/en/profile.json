@@ -7,6 +7,8 @@
   "badges": "Badges",
   "editProfile": "Edit Profile",
   "viewStarred": "View Starred",
+  "selectBadgeTooltip": "Change the badge that you're tracking",
+  "selectBadgeDialogTitle": "Select a Badge",
   "ownProfileNoCourses": "You have not added any courses. All courses that you add will show up here.",
   "ownProfileNoResources": "You have not uploaded any materials. All materials that you upload will show up here.",
   "ownProfileNoComments": "You have not added any comments. All comments that you add will show up here.",
