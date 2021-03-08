@@ -5,7 +5,7 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 
 ## NPM
 
-### Prod requirements
+### Prod Requirements
 
 | Dependency                                                                           | Reason                                                                                        |
 | :----------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------- |
@@ -35,7 +35,7 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [remark-gfc](https://www.npmjs.com/package/remark-gfm)                               | Remark plugin to render additional Markdown elements.                                         |
 | [yup](https://www.npmjs.com/package/yup)                                             | Object schema validation (used together with [Formik](https://www.npmjs.com/package/formik)). |
 
-### Dev requirements (excluding plugins and TypeScript typings)
+### Dev Requirements (excluding plugins and TypeScript typings)
 
 | Dependency                                                                 | Reason                                                      |
 | :------------------------------------------------------------------------- | :---------------------------------------------------------- |
@@ -47,3 +47,19 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [prettier](https://www.npmjs.com/package/prettier)                         | Formatter.                                                  |
 | [raw-loader](https://www.npmjs.com/package/raw-loader)                     | Needed for parsing Markdown files.                          |
 | [typescript](https://www.npmjs.com/package/typescript)                     | Duh.                                                        |
+
+## Debian Packages
+
+| Dependency                                                        | Reason                         |
+| :---------------------------------------------------------------- | :----------------------------- |
+| [libgtk2.0-0](https://packages.debian.org/buster/libgtk2.0-0)     | Use Cypress for browser tests. |
+| [libgtk-3-0](https://packages.debian.org/buster/libgtk-3-0)       | Use Cypress for browser tests. |
+| [libnotify-dev](https://packages.debian.org/buster/libnotify-dev) | Use Cypress for browser tests. |
+| [libgconf-2-4](https://packages.debian.org/buster/libgconf-2-4)   | Use Cypress for browser tests. |
+| [libgbm-dev](https://packages.debian.org/buster/libgbm-dev)       | Use Cypress for browser tests. |
+| [libxss3](https://packages.debian.org/buster/libxss3)             | Use Cypress for browser tests. |
+| [libxss1](https://packages.debian.org/buster/libxss1)             | Use Cypress for browser tests. |
+| [libasound2](https://packages.debian.org/buster/libasound2)       | Use Cypress for browser tests. |
+| [libxtst6](https://packages.debian.org/buster/libxtst6)           | Use Cypress for browser tests. |
+| [xauth](https://packages.debian.org/buster/xauth)                 | Use Cypress for browser tests. |
+| [xvfb](https://packages.debian.org/buster/xvfb)                   | Use Cypress for browser tests. |
