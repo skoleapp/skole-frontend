@@ -44,14 +44,11 @@ ARG CYPRESS_RECORD_KEY
 ENV CIRCLE_BUILD_NUM ${CIRCLE_BUILD_NUM}
 ENV CYPRESS_RECORD_KEY ${CYPRESS_RECORD_KEY}
 
-# Needed for Apollo client to work on Cypress tests.
-ENV API_URL=http://localhost:8000
-
 COPY --chown=user:user . .
 
 CMD yarn lint \
     && yarn type-check \
-    && yarn build \
+    && API_URL=http://localhost:8000 yarn build \
     && yarn start & yarn wait-on http://localhost:3001 \
     # TODO: Enable recording and parallelism on Apr 1, 2021
     # && yarn cypress:run --record --parallel --ci-build-id=${CIRCLE_BUILD_NUM}
