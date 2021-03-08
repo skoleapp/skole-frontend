@@ -171,8 +171,13 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     height: '1.5rem',
     width: '1.5rem',
   },
+  blogCardContainer: {
+    width: '100%',
+    padding: spacing(2),
+    flexGrow: 1,
+    display: 'flex',
+  },
   blogCard: {
-    margin: spacing(2),
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -384,7 +389,7 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
   );
 
   const renderShortcuts = shortcuts.map(({ href, text, icon: Icon }: Shortcut, i: number) => (
-    <Link href={href} key={i}>
+    <Link href={href} key={i} fullWidth>
       <Card className={classes.shortcutCard}>
         <CardActionArea className={classes.cardActionArea}>
           <CardContent className={classes.cardContent}>
@@ -460,11 +465,13 @@ const HomePage: NextPage<Props> = ({ seoProps, update: { slug = '', title }, blo
   );
 
   const renderBlog = isTabletOrDesktop && (
-    <Card className={classes.blogCard}>
-      {renderBlogCardHeader}
-      {mapBlogs}
-      {renderSeeAllBlogsButton}
-    </Card>
+    <Box className={classes.blogCardContainer}>
+      <Card className={classes.blogCard}>
+        {renderBlogCardHeader}
+        {mapBlogs}
+        {renderSeeAllBlogsButton}
+      </Card>
+    </Box>
   );
 
   const renderSuggestionsTableFooter = (

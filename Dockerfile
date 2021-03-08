@@ -1,7 +1,7 @@
 FROM node:15.10.0-buster-slim@sha256:2a351dd6e7236d277f51f00266cc1807791b217837392cfd39fa64c01cb6c094 AS base
 
 RUN apt-get update && \
-  apt-get install --no-install-recommends -y \
+  apt-get install --no-install-recommends --assume-yes \
   libgtk2.0-0 \
   libgtk-3-0 \
   libnotify-dev \
