@@ -99,7 +99,7 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     } else if (resetPassword?.successMessage) {
       passwordFormRef.current?.resetForm();
       toggleNotification(resetPassword.successMessage);
-      await Router.push(urls.logout);
+      await Router.push(urls.login);
     } else {
       passwordFormUnexpectedError();
     }
