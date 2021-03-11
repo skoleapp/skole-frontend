@@ -69,7 +69,7 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   };
 
-  const [verifyAccount, { loading }] = useVerifyAccountMutation({
+  const [verifyAccount, { loading, called }] = useVerifyAccountMutation({
     onCompleted: onConfirmationFormCompleted,
     onError: handleUnexpectedConfirmationError,
     context,
@@ -80,10 +80,10 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       await verifyAccount({ variables: { token } });
     };
 
-    if (!!token && !verified && !initialVerified) {
+    if (!!token && !verified && !initialVerified && !called) {
       handleVerifyAccount();
     }
-  }, [token, verified, initialVerified, verifyAccount]);
+  }, [token, verified, initialVerified, verifyAccount, called]);
 
   const onCompleted = ({
     resendVerificationEmail,
