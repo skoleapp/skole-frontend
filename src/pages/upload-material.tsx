@@ -263,8 +263,6 @@ const UploadResourcePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Formik>
   );
 
-  const { EMAIL_ADDRESS } = process.env;
-
   const authenticatedEmailBody = `
 ${t('upload-resource:materialEmailInfo')}
 ${t('common:username')}: ${username}
@@ -277,11 +275,11 @@ ${t('common:email')}: ${t('common:emailPlaceholder')}`;
 
   const emailBody = userMe ? authenticatedEmailBody : anonymousEmailBody;
 
-  const emailHref = `mailto:${EMAIL_ADDRESS}?subject=${t(
+  const emailHref = `mailto:${process.env.EMAIL_ADDRESS}?subject=${t(
     'upload-resource:materialEmailSubject',
   )}&body=${encodeURIComponent(emailBody)}`;
 
-  const renderEmailLink = <TextLink href={emailHref}>{EMAIL_ADDRESS}</TextLink>;
+  const renderEmailLink = <TextLink href={emailHref}>{process.env.EMAIL_ADDRESS}</TextLink>;
   const renderGuidelinesLink = <GuidelinesLink />;
 
   const renderCommonDialogEmailText = (
