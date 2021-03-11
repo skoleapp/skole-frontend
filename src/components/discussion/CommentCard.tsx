@@ -252,11 +252,11 @@ export const CommentCard: React.FC<Props> = ({
 
   // Render dynamic label depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
   const renderSecondaryDiscussionLabel =
-    (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
-    (discussionType === DiscussionTypes.COURSE && !!comment.resource && t('discussion:postedIn')) ||
-    (discussionType === DiscussionTypes.COURSE && !!comment.school) ||
-    (discussionType === DiscussionTypes.RESOURCE &&
-      !!comment.course &&
+    (((discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
+      (discussionType === DiscussionTypes.COURSE && !!comment.resource)) &&
+      t('discussion:postedIn')) ||
+    (((discussionType === DiscussionTypes.COURSE && !!comment.school) ||
+      (discussionType === DiscussionTypes.RESOURCE && !!comment.course)) &&
       t('discussion:alsoSentTo')) ||
     '';
 
@@ -285,10 +285,10 @@ export const CommentCard: React.FC<Props> = ({
 
   // Render dynamic name depending on whether the comment has been included to current discussion from another discussion or included to another discussion from the current discussion.
   const renderSecondaryDiscussionName =
-    (discussionType === DiscussionTypes.SCHOOL && !!comment.course) ||
-    (discussionType === DiscussionTypes.RESOURCE && !!comment.course && comment.course?.slug) ||
-    (discussionType === DiscussionTypes.COURSE && comment.resource && comment.resource?.slug) ||
-    (discussionType === DiscussionTypes.COURSE && !!comment.school && comment.school?.slug) ||
+    (discussionType === DiscussionTypes.SCHOOL && comment.course?.slug) ||
+    (discussionType === DiscussionTypes.RESOURCE && comment.course?.slug) ||
+    (discussionType === DiscussionTypes.COURSE &&
+      (comment.resource?.slug || comment.school?.slug)) ||
     '';
 
   const renderSecondaryDiscussionLink = (
