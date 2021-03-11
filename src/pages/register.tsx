@@ -200,7 +200,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderTermsLink = (
     <FormControl>
       <FormHelperText>
-        {t('register:termsHelpText')}{' '}
+        {t('register:termsHelperText')}{' '}
         <TextLink href={urls.terms} target="_blank">
           {t('common:terms')}
         </TextLink>
