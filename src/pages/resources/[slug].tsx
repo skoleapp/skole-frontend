@@ -391,11 +391,11 @@ const ResourceDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderDefaultCustomBottomNavbarContent = (
     <Grid container>
-      <Grid item xs={6} container justify="flex-start">
+      <Grid item xs={4} container justify="flex-start" alignItems="center">
         {renderRotateButton}
         {renderDrawingModeButton}
       </Grid>
-      <Grid item xs={6} container justify="flex-end" alignItems="center">
+      <Grid item xs={8} container justify="flex-end" alignItems="center">
         {renderStarButton}
         {renderUpvoteButton}
         {renderScoreIcon}
