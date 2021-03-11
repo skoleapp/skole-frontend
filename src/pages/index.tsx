@@ -271,15 +271,14 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const tIndex = await getT(locale, 'index');
-  const tCommon = await getT(locale, 'common');
+  const t = await getT(locale, 'index');
 
   return {
     props: {
       _ns: await loadNamespaces(['index'], locale),
       seoProps: {
-        title: tIndex('title'),
-        description: tCommon('description'),
+        title: t('title'),
+        description: t('description'),
       },
     },
   };

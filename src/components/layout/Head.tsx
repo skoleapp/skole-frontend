@@ -1,11 +1,17 @@
 import { useTheme } from '@material-ui/core/styles';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { SeoProps } from 'types';
+import { urls } from 'utils';
 
 export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }) => {
   const { palette } = useTheme();
+  const { pathname } = useRouter();
   const title = _title ? `Skole | ${_title}` : 'Skole';
+
+  // Temporary solution to nuke all other pages that the landing page.
+  const renderNoIndex = pathname !== urls.index && <meta name="robots" content="NONE,NOARCHIVE" />;
 
   const renderCommonMetaTags = (
     <>
@@ -127,6 +133,7 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
       {renderTwitterMetaTags}
       {renderLinkTags}
       {renderSaEventsScript}
+      {renderNoIndex}
     </Head>
   );
 };
