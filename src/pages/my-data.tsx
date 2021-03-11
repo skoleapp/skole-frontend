@@ -61,7 +61,7 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
       <FormControl>
         <ButtonLink href={urls.accountSettings} variant="outlined">
-          {t('common:cancel')}
+          {t('my-data:backToAccountSettings')}
         </ButtonLink>
       </FormControl>
     </Form>

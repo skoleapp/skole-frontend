@@ -4,6 +4,7 @@ import {
   ButtonLink,
   FormSubmitSection,
   FormTemplate,
+  PasswordField,
   TextFormField,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
@@ -81,18 +82,8 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderFormFields = (props: FormikProps<ChangePasswordFormValues>): JSX.Element => (
     <Form>
-      <Field
-        name="oldPassword"
-        component={TextFormField}
-        label={t('forms:oldPassword')}
-        type="password"
-      />
-      <Field
-        name="newPassword"
-        component={TextFormField}
-        label={t('forms:newPassword')}
-        type="password"
-      />
+      <PasswordField name="oldPassword" label={t('forms:oldPassword')} {...props} />
+      <PasswordField name="newPassword" label={t('forms:newPassword')} {...props} />
       <Field
         name="confirmNewPassword"
         component={TextFormField}
@@ -102,7 +93,7 @@ const ChangePasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       <FormSubmitSection submitButtonText={t('common:save')} {...props} />
       <FormControl>
         <ButtonLink href={urls.accountSettings} variant="outlined">
-          {t('common:cancel')}
+          {t('change-password:backToAccountSettings')}
         </ButtonLink>
       </FormControl>
     </Form>
