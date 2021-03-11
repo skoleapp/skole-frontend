@@ -36,21 +36,6 @@ export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
 export const MAX_REVALIDATION_INTERVAL = 1; // Seconds.
 
-export const DISALLOWED_PATHS = [
-  '/404',
-  urls.about,
-  urls.activity,
-  urls.addCourse,
-  urls.changePassword,
-  urls.deleteAccount,
-  urls.editProfile,
-  urls.logout,
-  urls.myData,
-  urls.search,
-  urls.starred,
-  urls.verifyAccount,
-];
-
 export const DYNAMIC_PATHS = ['courses', 'resources', 'schools', 'users'];
 export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
