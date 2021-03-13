@@ -39,7 +39,9 @@ export const AttachmentViewer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { attachmentViewerValue, setAttachmentViewerValue } = useDiscussionContext();
-  const attachmentName = attachmentViewerValue && attachmentViewerValue.split('/').pop();
+  const attachmentName =
+    attachmentViewerValue && attachmentViewerValue.split('?')[0].split('/').pop();
+
   const handleClose = (): void => setAttachmentViewerValue(null);
 
   const renderToolbar = (
@@ -53,7 +55,7 @@ export const AttachmentViewer: React.FC = () => {
       wrap="nowrap"
     >
       <Typography className="truncate-text" variant="subtitle1" color="secondary">
-        {attachmentName}
+        {attachmentName || ''}
       </Typography>
       <IconButton size="small" onClick={handleClose} color="secondary">
         <CloseOutlined />
