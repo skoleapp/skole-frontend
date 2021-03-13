@@ -211,7 +211,7 @@ const SchoolDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     />
   );
 
-  const renderSubjectsTableBody = <SubjectTableBody subjects={subjects} />;
+  const renderSubjectsTableBody = <SubjectTableBody school={school} subjects={subjects} />;
   const renderCourseTableBody = <CourseTableBody courses={courses} hideSchoolLink dense />;
 
   const renderSubjectsTable = (
