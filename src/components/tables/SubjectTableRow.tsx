@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { SubjectObjectType } from 'generated';
+import { SchoolObjectType, SubjectObjectType } from 'generated';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
@@ -28,10 +28,12 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 interface Props extends Omit<TableRowProps, 'dense'> {
   subject: SubjectObjectType;
+  school: SchoolObjectType;
 }
 
 export const SubjectTableRow: React.FC<Props> = ({
-  subject: { name, slug, courseCount, resourceCount },
+  subject: { name, slug: subjectSlug, courseCount, resourceCount },
+  school: { slug: schoolSlug },
   key,
 }) => {
   const { t } = useTranslation();
@@ -43,7 +45,8 @@ export const SubjectTableRow: React.FC<Props> = ({
   const href = {
     pathname: urls.search,
     query: {
-      subject: slug,
+      subject: subjectSlug,
+      school: schoolSlug,
     },
   };
 

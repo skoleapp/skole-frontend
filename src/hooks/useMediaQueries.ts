@@ -15,14 +15,15 @@ export const useMediaQueries = (): UseMediaQueries => {
   const isXsMobile = useMediaQuery(breakpoints.down('xs'));
   const isMobile = useMediaQuery(breakpoints.down('sm'));
   const isMobileOrTablet = useMediaQuery(breakpoints.down('md'));
+  const isDesktop = useMediaQuery(breakpoints.up('lg'));
   const isXlDesktop = useMediaQuery(breakpoints.up('xl'));
 
   return {
     isXsMobile,
     isMobile,
     isMobileOrTablet,
-    isTabletOrDesktop: !isMobile,
-    isDesktop: !isMobileOrTablet,
+    isTabletOrDesktop: (!isMobile && isMobileOrTablet) || isDesktop,
+    isDesktop,
     isXlDesktop,
   };
 };
