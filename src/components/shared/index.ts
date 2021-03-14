@@ -1,6 +1,7 @@
 export { ActionsButton } from './ActionsButton';
 export { AppStoreBadge } from './AppStoreBadge';
 export { BackButton } from './BackButton';
+export { Badge } from './Badge';
 export { ButtonLink } from './ButtonLink';
 export { CustomBottomNavbarContainer } from './CustomBottomNavbarContainer';
 export { EmailSubscription } from './EmailSubscription';

@@ -50,7 +50,6 @@ export const CourseTableRow: React.FC<Props> = ({
   hideCourseChip,
   hideSchoolLink,
   dense,
-  key,
 }) => {
   const { t } = useTranslation();
   const { isMobile } = useMediaQueries();
@@ -176,7 +175,7 @@ export const CourseTableRow: React.FC<Props> = ({
   };
 
   return (
-    <Link href={urls.course(slug || '')} key={key} fullWidth>
+    <Link href={urls.course(slug || '')} fullWidth>
       <CardActionArea className={classes.root}>
         <TableRow>
           <Grid container>

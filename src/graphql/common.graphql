@@ -525,6 +525,17 @@ query AutocompleteSubjects($name: String) {
   }
 }
 
+fragment badgeProgressFields on BadgeProgressObjectType {
+  badge {
+    id
+    name
+    description
+    tier
+  }
+  progress
+  steps
+}
+
 fragment userMeFields on UserObjectType {
   id
   slug
@@ -552,6 +563,12 @@ fragment userMeFields on UserObjectType {
   subject {
     slug
     name
+  }
+  badgeProgresses {
+    ...badgeProgressFields
+  }
+  selectedBadgeProgress {
+    ...badgeProgressFields
   }
 }
 
@@ -603,6 +620,7 @@ query User($slug: String, $page: Int, $pageSize: Int) {
     badges {
       name
       description
+      tier
     }
   }
   courses(user: $slug, page: $page, pageSize: $pageSize) {
@@ -960,6 +978,20 @@ mutation UpdateEmailSubscription($token: String, $productUpdates: Boolean, $blog
       email
       productUpdates
       blogPosts
+    }
+  }
+}
+
+mutation UpdateSelectedBadge($id: ID) {
+  updateSelectedBadge(input: { id: $id }) {
+    errors {
+      field
+      messages
+
+    }
+    successMessage
+    badgeProgress {
+      ...badgeProgressFields
     }
   }
 }

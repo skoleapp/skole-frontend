@@ -380,8 +380,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     },
   ];
 
-  const mapTabs = tabs.map(({ href, label, icon: Icon }) => (
-    <Link href={href}>
+  const mapTabs = tabs.map(({ href, label, icon: Icon }, i) => (
+    <Link href={href} key={i}>
       <Tab
         classes={{
           root: clsx(classes.tab, pathname === href && classes.selectedTab),

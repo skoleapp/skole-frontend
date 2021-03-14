@@ -1,7 +1,9 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -11,10 +13,12 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import EditOutlined from '@material-ui/icons/EditOutlined';
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
+import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
 import {
+  Badge,
   ButtonLink,
   CommentTableBody,
   CourseTableBody,
@@ -26,19 +30,26 @@ import {
   NotFoundBox,
   PaginatedTable,
   ResourceTableBody,
+  ResponsiveDialog,
   SettingsButton,
   TabPanel,
   TextLink,
 } from 'components';
-import { useAuthContext } from 'context';
-import { BadgeObjectType, UserSeoPropsDocument, useUserQuery } from 'generated';
+import { useAuthContext, useNotificationsContext } from 'context';
+import {
+  BadgeObjectType,
+  UpdateSelectedBadgeMutation,
+  UserSeoPropsDocument,
+  useUpdateSelectedBadgeMutation,
+  useUserQuery,
+} from 'generated';
 import { withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useMediaQueries } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
 import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { BORDER_RADIUS } from 'styles';
 import { SeoPageProps } from 'types';
 import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
@@ -101,11 +112,14 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   badgeContainer: {
     marginTop: spacing(4),
   },
-  badgeChipContainer: {
-    margin: spacing(-1),
+  changeSelectedBadgeIconButton: {
+    marginTop: '-0.40rem',
+    width: '1rem',
+    height: '1rem',
   },
-  badge: {
-    margin: spacing(1),
+  changeSelectedBadgeIcon: {
+    width: '1rem',
+    height: '1rem',
   },
   verifyAccount: {
     marginTop: spacing(4),
@@ -126,6 +140,15 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       marginLeft: spacing(2),
     },
   },
+  badgeCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: `${spacing(4)} 0`,
+    margin: `0 ${spacing(-2)}`,
+    borderRadius: BORDER_RADIUS,
+  },
 }));
 
 interface ProfileStrengthStep {
@@ -139,11 +162,25 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { isMobile, isTabletOrDesktop } = useMediaQueries();
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
-  const { userMe, school, subject, verified } = useAuthContext();
+  const { toggleUnexpectedErrorNotification } = useNotificationsContext();
+  const {
+    userMe,
+    school,
+    subject,
+    badgeProgresses,
+    selectedBadgeProgress: initialSelectedBadgeProgress,
+    verified,
+  } = useAuthContext();
+  const [selectedBadgeProgress, setSelectedBadgeProgress] = useState(initialSelectedBadgeProgress);
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
   const { data, loading, error } = useUserQuery({ variables, context });
+  const {
+    open: selectBadgeDialogOpen,
+    handleOpen: handleOpenSelectBadgeDialog,
+    handleClose: handleCloseSelectBadgeDialog,
+  } = useOpen();
   const user = R.prop('user', data);
   const rank = R.prop('rank', user);
   const username = R.prop('username', user);
@@ -152,7 +189,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const bio = R.prop('bio', user);
   const score = R.prop('score', user);
   const isOwnProfile = !!user?.id && userMe?.id === user.id;
-  const badges: Pick<BadgeObjectType, 'name' | 'description'>[] = R.propOr([], 'badges', user);
+  const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const courseCount = R.path(['courses', 'count'], data);
   const resourceCount = R.path(['resources', 'count'], data);
   const commentCount = R.path(['comments', 'count'], data);
@@ -164,6 +201,10 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
   const _created = R.prop('created', user);
   const joined = useDayjs(_created).startOf('m').fromNow();
+
+  useEffect(() => {
+    setSelectedBadgeProgress(initialSelectedBadgeProgress);
+  }, [initialSelectedBadgeProgress]);
 
   const rankTooltip = isOwnProfile
     ? t('common-tooltips:ownRank', { rank, score })
@@ -245,7 +286,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       className={classes.button}
       href={urls.editProfile}
       variant="outlined"
-      endIcon={<EditOutlined />}
+      endIcon={<EditOutlinedIcon />}
       fullWidth={isMobile}
     >
       {t('profile:editProfile')}
@@ -264,11 +305,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </ButtonLink>
   );
 
-  const renderDesktopSettingsButton = (
-    <Tooltip title={t('common-tooltips:settings')}>
-      <SettingsButton className={classes.button} />
-    </Tooltip>
-  );
+  const renderDesktopSettingsButton = <SettingsButton className={classes.button} />;
 
   const renderScoreTitle = (
     <Typography variant="body2" color="textSecondary">
@@ -341,21 +378,113 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderBadges = !!badges.length && (
-    <Box className={classes.badgeContainer}>
-      <Typography variant="body2" color="textSecondary" gutterBottom>
-        {t('profile:badges')}
-      </Typography>
-      <Grid className={classes.badgeChipContainer} container>
-        {badges.map(({ name, description }, i) => (
-          <Box key={i}>
-            <Tooltip title={description || ''}>
-              <Chip className={classes.badge} size="small" label={name} />
-            </Tooltip>
-          </Box>
-        ))}
+    <Grid className={classes.badgeContainer} container>
+      <Grid item justify="space-between">
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+          {t('profile:badges')}
+        </Typography>
       </Grid>
-    </Box>
+      {badges.map((badge, i) => (
+        <Grid container item>
+          <Badge badge={badge} key={i} />
+        </Grid>
+      ))}
+    </Grid>
   );
+
+  const onUpdateSelectedBadgeCompleted = ({
+    updateSelectedBadge,
+  }: UpdateSelectedBadgeMutation): void => {
+    if (updateSelectedBadge?.errors?.length) {
+      toggleUnexpectedErrorNotification();
+    } else if (updateSelectedBadge?.badgeProgress) {
+      handleCloseSelectBadgeDialog();
+      setSelectedBadgeProgress(updateSelectedBadge.badgeProgress);
+    } else {
+      toggleUnexpectedErrorNotification();
+    }
+  };
+
+  const [updateSelectedBadge] = useUpdateSelectedBadgeMutation({
+    onCompleted: onUpdateSelectedBadgeCompleted,
+    onError: toggleUnexpectedErrorNotification,
+    context,
+  });
+
+  const handleSelectBadge = (badge: BadgeObjectType) => async (): Promise<void> => {
+    const variables = {
+      id: badge.id,
+    };
+    await updateSelectedBadge({ variables });
+  };
+
+  const badgeDialogProps = {
+    text: t('profile:selectBadgeDialogTitle'),
+    onCancel: handleCloseSelectBadgeDialog,
+  };
+
+  const renderSelectBadgeDialog = !!badgeProgresses && (
+    <ResponsiveDialog
+      open={selectBadgeDialogOpen}
+      onClose={handleCloseSelectBadgeDialog}
+      dialogHeaderProps={badgeDialogProps}
+    >
+      <Grid container direction="row">
+        {badgeProgresses.map(
+          ({ badge, progress, steps }, i) =>
+            typeof steps === 'number' && (
+              <Grid item xs={12} md={6}>
+                <CardActionArea onClick={handleSelectBadge(badge)} className={classes.badgeCard}>
+                  <Badge
+                    badge={badge}
+                    key={i}
+                    noTooltip
+                    hoverable
+                    progress={progress}
+                    steps={steps}
+                  />
+                  <Typography variant="body2" color="textSecondary" gutterBottom>
+                    {badge.description}
+                  </Typography>
+                </CardActionArea>
+              </Grid>
+            ),
+        )}
+      </Grid>
+    </ResponsiveDialog>
+  );
+
+  const renderChangeSelectedBadge = (
+    <Tooltip title={t('profile:selectBadgeTooltip')}>
+      <IconButton
+        onClick={handleOpenSelectBadgeDialog}
+        className={classes.changeSelectedBadgeIconButton}
+      >
+        <SettingsOutlined className={classes.changeSelectedBadgeIcon} />
+      </IconButton>
+    </Tooltip>
+  );
+
+  const renderSelectedBadgeProgress = isOwnProfile &&
+    !!selectedBadgeProgress &&
+    typeof selectedBadgeProgress.steps === 'number' && (
+      <Grid className={classes.badgeContainer} container>
+        <Grid container item>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            Next badge
+          </Typography>
+          {renderChangeSelectedBadge}
+          {renderSelectBadgeDialog}
+        </Grid>
+        <Grid container item>
+          <Badge
+            badge={selectedBadgeProgress.badge}
+            progress={selectedBadgeProgress.progress}
+            steps={selectedBadgeProgress.steps}
+          />
+        </Grid>
+      </Grid>
+    );
 
   const renderVerifyAccountLink = isOwnProfile && verified === false && (
     <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
@@ -440,6 +569,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       {renderBio}
       {renderRank}
       {renderBadges}
+      {renderSelectedBadgeProgress}
       {renderVerifyAccountLink}
       {renderProfileStrength}
       {renderJoined}
@@ -482,6 +612,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       {renderBio}
       {renderRank}
       {renderBadges}
+      {renderSelectedBadgeProgress}
       {renderVerifyAccountLink}
       {renderJoined}
     </Grid>
