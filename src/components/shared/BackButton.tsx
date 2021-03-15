@@ -10,15 +10,14 @@ export const BackButton: React.FC<IconButtonProps> = (props) => {
   const { isMobile } = useMediaQueries();
   const { history } = useHistoryContext();
   const color = isMobile ? 'secondary' : 'default';
-  const { FRONTEND_URL } = process.env;
 
   // If the visitor comes via an external link, redirect to landing page.
   // Otherwise trigger the back button of the browser.
   const handleClick = (): void => {
     if (
-      !!FRONTEND_URL &&
+      !!process.env.FRONTEND_URL &&
       history.length > 1 &&
-      history[history.length - 1].includes(FRONTEND_URL)
+      history[history.length - 1].includes(process.env.FRONTEND_URL)
     ) {
       Router.back();
     } else {
