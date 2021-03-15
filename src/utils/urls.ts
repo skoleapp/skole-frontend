@@ -12,6 +12,7 @@ export const urls = {
   activity: '/activity',
   addCourse: '/add-course',
   askQuestion: '/ask-question',
+  badges: '/badges',
   changePassword: '/change-password',
   contact: '/contact',
   deleteAccount: '/delete-account',

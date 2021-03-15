@@ -78,6 +78,12 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     </TextLink>
   );
 
+  const renderBadgesLink = (
+    <TextLink href={urls.badges} color="secondary">
+      {t('common:badges')}
+    </TextLink>
+  );
+
   const renderUpdatesLink = (
     <TextLink href={urls.updates} color="secondary">
       {t('common:updates')}
@@ -103,6 +109,7 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
       {renderGetStartedLink}
       {renderGuidelinesLink}
       {renderScoreLink}
+      {renderBadgesLink}
       {renderUpdatesLink}
       {renderFeedbackLink}
     </Grid>
