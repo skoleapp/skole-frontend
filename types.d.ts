@@ -32,3 +32,13 @@ declare namespace Cypress {
     graphQlMock(params: GraphQlMockParams): Chainable;
   }
 }
+
+interface Window {
+  ReactNativeWebView: {
+    postMessage(data: string): void;
+  };
+}
+
+declare interface WebViewMessage {
+  data: string;
+}

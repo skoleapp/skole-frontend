@@ -49,3 +49,6 @@ export const getLanguageHeaderContext = (locale?: string): OperationVariables =>
 
 export const isNotNativeApp =
   typeof window !== 'undefined' && navigator.userAgent !== 'skole-native-app';
+
+export const postMessageWebView = (data: string): void =>
+  window.ReactNativeWebView?.postMessage(data);

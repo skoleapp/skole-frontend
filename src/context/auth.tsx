@@ -17,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({});
 interface UseAuthContext extends AuthContextType {
   verified: boolean | null;
   unreadActivityCount: number;
+  fcmToken: string;
   username: string;
   email: string;
   title: string;
@@ -34,6 +35,9 @@ interface UseAuthContext extends AuthContextType {
   commentReplyEmailPermission: boolean;
   courseCommentEmailPermission: boolean;
   resourceCommentEmailPermission: boolean;
+  commentReplyPushPermission: boolean;
+  courseCommentPushPermission: boolean;
+  resourceCommentPushPermission: boolean;
   loginRequiredTooltip: string | false;
   verificationRequiredTooltip: string | false;
   profileUrl: string;
@@ -45,6 +49,7 @@ export const useAuthContext = (): UseAuthContext => {
   const verified = R.prop('verified', userMe);
   const unreadActivityCount = R.prop('unreadActivityCount', userMe);
   const slug = R.prop('slug', userMe);
+  const fcmToken = R.prop('fcmToken', userMe);
   const username = R.prop('username', userMe);
   const email = R.prop('email', userMe);
   const title = R.prop('title', userMe);
@@ -62,6 +67,9 @@ export const useAuthContext = (): UseAuthContext => {
   const commentReplyEmailPermission = R.prop('commentReplyEmailPermission', userMe);
   const courseCommentEmailPermission = R.prop('courseCommentEmailPermission', userMe);
   const resourceCommentEmailPermission = R.prop('resourceCommentEmailPermission', userMe);
+  const commentReplyPushPermission = R.prop('commentReplyPushPermission', userMe);
+  const courseCommentPushPermission = R.prop('courseCommentPushPermission', userMe);
+  const resourceCommentPushPermission = R.prop('resourceCommentPushPermission', userMe);
   const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
   const profileUrl = urls.user(slug);
 
@@ -73,6 +81,7 @@ export const useAuthContext = (): UseAuthContext => {
     setUserMe,
     verified,
     unreadActivityCount,
+    fcmToken,
     username,
     email,
     title,
@@ -90,6 +99,9 @@ export const useAuthContext = (): UseAuthContext => {
     commentReplyEmailPermission,
     courseCommentEmailPermission,
     resourceCommentEmailPermission,
+    commentReplyPushPermission,
+    courseCommentPushPermission,
+    resourceCommentPushPermission,
     verificationRequiredTooltip,
     loginRequiredTooltip,
     profileUrl,

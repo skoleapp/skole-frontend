@@ -40,13 +40,19 @@ interface UpdateAccountSettingsFormValues {
   subject: SubjectObjectType | null;
   productUpdateEmailPermission: boolean;
   blogPostEmailPermission: boolean;
+  commentReplyEmailPermission: boolean;
+  courseCommentEmailPermission: boolean;
+  resourceCommentEmailPermission: boolean;
+  commentReplyPushPermission: boolean;
+  courseCommentPushPermission: boolean;
+  resourceCommentPushPermission: boolean;
 }
 
 const useStyles = makeStyles(({ spacing }) => ({
-  emailSettings: {
+  notificationSettings: {
     padding: spacing(4),
   },
-  emailSettingsLabel: {
+  notificationSettingsLabel: {
     marginBottom: spacing(2),
   },
   link: {
@@ -73,6 +79,9 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     commentReplyEmailPermission,
     courseCommentEmailPermission,
     resourceCommentEmailPermission,
+    commentReplyPushPermission,
+    courseCommentPushPermission,
+    resourceCommentPushPermission,
   } = useAuthContext();
 
   const {
@@ -126,6 +135,9 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     commentReplyEmailPermission,
     courseCommentEmailPermission,
     resourceCommentEmailPermission,
+    commentReplyPushPermission,
+    courseCommentPushPermission,
+    resourceCommentPushPermission,
   };
 
   // Only re-render when one of the dynamic values changes - the form values will reset every time.
@@ -169,8 +181,8 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderEmailSettings = (
-    <FormControl className={classes.emailSettings}>
-      <FormLabel className={classes.emailSettingsLabel}>
+    <FormControl className={classes.notificationSettings}>
+      <FormLabel className={classes.notificationSettingsLabel}>
         {t('account-settings:emailSettings')}
       </FormLabel>
       <FormGroup>
@@ -189,8 +201,8 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderEmailNotifications = (
-    <FormControl className={classes.emailSettings}>
-      <FormLabel className={classes.emailSettingsLabel}>
+    <FormControl className={classes.notificationSettings}>
+      <FormLabel className={classes.notificationSettingsLabel}>
         {t('account-settings:emailNotifications')}
       </FormLabel>
       <FormGroup>
@@ -206,6 +218,31 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         />
         <Field
           name="resourceCommentEmailPermission"
+          label={t('forms:resourceComments')}
+          component={SwitchFormField}
+        />
+      </FormGroup>
+    </FormControl>
+  );
+
+  const renderPushNotifications = (
+    <FormControl className={classes.notificationSettings}>
+      <FormLabel className={classes.notificationSettingsLabel}>
+        {t('account-settings:pushNotifications')}
+      </FormLabel>
+      <FormGroup>
+        <Field
+          name="commentReplyPushPermission"
+          label={t('forms:commentReplies')}
+          component={SwitchFormField}
+        />
+        <Field
+          name="courseCommentPushPermission"
+          label={t('forms:courseComments')}
+          component={SwitchFormField}
+        />
+        <Field
+          name="resourceCommentPushPermission"
           label={t('forms:resourceComments')}
           component={SwitchFormField}
         />
@@ -252,6 +289,7 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       {renderSubjectField}
       {renderEmailSettings}
       {renderEmailNotifications}
+      {renderPushNotifications}
       {renderChangePasswordLink}
       {renderMyDataLink}
       {renderFormSubmitSection(props)}

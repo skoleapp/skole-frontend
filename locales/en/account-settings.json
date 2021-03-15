@@ -3,5 +3,6 @@
   "header": "Account Settings",
   "emailSettings": "Email Settings",
   "emailNotifications": "Email Notifications",
+  "pushNotifications": "Push Notifications",
   "backToProfile": "Back to profile"
 }
