@@ -7,17 +7,17 @@ fragment activityFields on ActivityObjectType {
     username
     avatarThumbnail
   }
-  resource {
-    slug
-  }
-  course {
-    slug
-  }
-  school {
-    slug
-  }
   comment {
     id
+    resource {
+      slug
+    }
+    course {
+      slug
+    }
+    school {
+      slug
+    }
   }
 }
 
