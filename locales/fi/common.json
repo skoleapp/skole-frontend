@@ -99,5 +99,6 @@
   "noOptions": "Ei vaihtoehtoja.",
   "showOptions": "Näytä vaihtoehdot.",
   "attachment": "Liite",
-  "emailSubscriptionSubmitted": "Kiitos! Sähköpostiasetuksesi on päivitetty!"
+  "emailSubscriptionSubmitted": "Kiitos! Sähköpostiasetuksesi on päivitetty!",
+  "badges": "Merkit"
 }

@@ -987,11 +987,18 @@ mutation UpdateSelectedBadge($id: ID) {
     errors {
       field
       messages
-
     }
     successMessage
     badgeProgress {
       ...badgeProgressFields
     }
+  }
+}
+
+query Badges {
+  badges {
+    name
+    description
+    tier
   }
 }

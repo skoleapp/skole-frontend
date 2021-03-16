@@ -34,18 +34,28 @@ export const Badge: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
 
-  const renderBadgeTier = (tier: BadgeTier): JSX.Element => {
-    // TODO: Change the emoji's to better looking SVG icons.
+  // TODO: Change the emoji's to better looking SVG icons.
+  const renderBadgeTier = (tier: BadgeTier): JSX.Element | void => {
     switch (tier) {
-      case BadgeTier.Diamond:
+      case BadgeTier.Diamond: {
         return <Emoji emoji="💎" noSpace />;
-      case BadgeTier.Gold:
+      }
+
+      case BadgeTier.Gold: {
         return <Emoji emoji="🟡" noSpace />;
-      case BadgeTier.Silver:
+      }
+
+      case BadgeTier.Silver: {
         return <Emoji emoji="⚪" noSpace />;
-      case BadgeTier.Bronze:
+      }
+
+      case BadgeTier.Bronze: {
         return <Emoji emoji="🟤" noSpace />;
-      // no default
+      }
+
+      default: {
+        break;
+      }
     }
   };
   const progressText =

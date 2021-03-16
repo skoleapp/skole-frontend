@@ -55,7 +55,7 @@ export const useAuthContext = (): UseAuthContext => {
   const avatar = mediaUrl(R.prop('avatar', userMe));
   const school = R.prop('school', userMe);
   const subject = R.prop('subject', userMe);
-  const badgeProgresses = R.prop('badgeProgresses', userMe);
+  const badgeProgresses = R.propOr([], 'badgeProgresses', userMe);
   const selectedBadgeProgress = R.prop('selectedBadgeProgress', userMe);
   const productUpdateEmailPermission = R.prop('productUpdateEmailPermission', userMe);
   const blogPostEmailPermission = R.prop('blogPostEmailPermission', userMe);

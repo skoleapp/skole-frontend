@@ -99,5 +99,6 @@
   "noOptions": "No options.",
   "showOptions": "Show options.",
   "attachment": "Attachment",
-  "emailSubscriptionSubmitted": "Thanks! Your email settings have been updated!"
+  "emailSubscriptionSubmitted": "Thanks! Your email settings have been updated!",
+  "badges": "Badges"
 }
