@@ -196,7 +196,6 @@ const CourseDetailPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         href={{
           ...searchUrl,
           query: {
-            ...searchUrl.query,
             subject: slug,
           },
         }}

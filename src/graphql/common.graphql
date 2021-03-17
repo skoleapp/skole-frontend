@@ -549,12 +549,16 @@ fragment userMeFields on UserObjectType {
   created
   verified
   unreadActivityCount
+  fcmToken
   rank
   productUpdateEmailPermission
   blogPostEmailPermission
   commentReplyEmailPermission
   courseCommentEmailPermission
   resourceCommentEmailPermission
+  commentReplyPushPermission
+  courseCommentPushPermission
+  resourceCommentPushPermission
   school {
     id
     slug
@@ -769,6 +773,9 @@ mutation UpdateAccountSettings(
   $commentReplyEmailPermission: Boolean
   $courseCommentEmailPermission: Boolean
   $resourceCommentEmailPermission: Boolean
+  $commentReplyPushPermission: Boolean
+  $courseCommentPushPermission: Boolean
+  $resourceCommentPushPermission: Boolean
 ) {
   updateAccountSettings(
     input: {
@@ -780,6 +787,9 @@ mutation UpdateAccountSettings(
       commentReplyEmailPermission: $commentReplyEmailPermission
       courseCommentEmailPermission: $courseCommentEmailPermission
       resourceCommentEmailPermission: $resourceCommentEmailPermission
+      commentReplyPushPermission: $commentReplyPushPermission
+      courseCommentPushPermission: $courseCommentPushPermission
+      resourceCommentPushPermission: $resourceCommentPushPermission
     }
   ) {
     successMessage
@@ -1000,5 +1010,15 @@ query Badges {
     name
     description
     tier
+  }
+}
+
+mutation RegisterFCMToken($token: String) {
+  registerFcmToken(input: { token: $token }) {
+    errors {
+      field
+      messages
+    }
+    successMessage
   }
 }

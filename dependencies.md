@@ -1,7 +1,6 @@
 # Skole Frontend Dependencies
 
 This document explains the need for every top level dependency the project has.
-All `@types/*` are ignored as they are only used to provide TypeScript typings for their dedicated library code.
 
 ## NPM
 
@@ -12,7 +11,7 @@ All `@types/*` are ignored as they are only used to provide TypeScript typings f
 | [@apollo/client](https://www.npmjs.com/package/@apollo/client)                       | Client library for executing GraphQL operations.                                              |
 | [@cypress/code-coverage](https://www.npmjs.com/package/@cypress/code-coverage)       | Code coverage for Cypress.                                                                    |
 | [@material-ui/core](https://www.npmjs.com/package/@material-ui/core)                 | Core package for Material UI components.                                                      |
-| [@material-ui/icons](https://www.npmjs.com/package/@material-ui/icons)               | Library for using [Material Icons](https://material.io/resources/icons/).                     |
+| [@material-ui/icons](https://www.npmjs.com/package/@material-ui/icons)               | Library for using [Material Icons](https://fonts.google.com/icons).                           |
 | [@material-ui/lab](https://www.npmjs.com/package/@material-ui/lab)                   | Material UI extension for more experimental components.                                       |
 | [apollo-upload-client](https://www.npmjs.com/package/apollo-upload-client)           | Allows file uploads with GraphQL mutations.                                                   |
 | [babel-plugin-istanbul](https://www.npmjs.com/package/babel-plugin-istanbul)         | Babel plugin for instrumenting code for code coverage.                                        |

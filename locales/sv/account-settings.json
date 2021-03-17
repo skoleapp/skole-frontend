@@ -3,5 +3,6 @@
   "header": "Kontoinställningar",
   "emailSettings": "E-postinställningar",
   "emailNotifications": "E-postaviseringar",
+  "pushNotifications": "Pushnotifikationer",
   "backToProfile": "Tillbaka till profilen"
 }
