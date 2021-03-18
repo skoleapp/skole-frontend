@@ -29,7 +29,7 @@ export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): 
             const { token } = json;
 
             if (token !== fcmToken) {
-              registerFcmToken({ variables: { token } });
+              await registerFcmToken({ variables: { token } });
             }
 
             break;
@@ -78,6 +78,11 @@ export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): 
     useEffect(() => {
       window.addEventListener('message', messageHandler); // iOS.
       document.addEventListener('message', (messageHandler as unknown) as EventListener); // Android
+
+      return (): void => {
+        window.removeEventListener('message', messageHandler);
+        document.removeEventListener('message', (messageHandler as unknown) as EventListener);
+      };
     }, [messageHandler]);
 
     const syncLogout = (e: StorageEvent): false | Promise<boolean> =>
