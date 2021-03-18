@@ -456,7 +456,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const renderChangeSelectedBadgeButton = (
-    <Tooltip title={t('profile:selectBadgeTooltip')}>
+    <Tooltip title={t('profile-tooltips:selectBadge')}>
       <IconButton
         onClick={handleOpenSelectBadgeDialog}
         className={classes.changeSelectedBadgeButton}
