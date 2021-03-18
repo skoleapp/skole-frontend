@@ -36,12 +36,12 @@ RUN mkdir .next
 CMD ["yarn", "dev"]
 
 
-FROM dev AS circleci
+FROM dev AS ci
 
 # https://stackoverflow.com/a/35562189/10504286
-ARG CIRCLE_BUILD_NUM
+ARG GITHUB_RUN_NUMBER
 ARG CYPRESS_RECORD_KEY
-ENV CIRCLE_BUILD_NUM ${CIRCLE_BUILD_NUM}
+ENV GITHUB_RUN_NUMBER ${GITHUB_RUN_NUMBER}
 ENV CYPRESS_RECORD_KEY ${CYPRESS_RECORD_KEY}
 
 COPY --chown=user:user . .
@@ -51,10 +51,10 @@ CMD yarn lint \
     && API_URL=http://localhost:8000 yarn build \
     && yarn start & yarn wait-on http://localhost:3001 \
     # TODO: Enable recording and parallelism on Apr 1, 2021
-    # && yarn cypress:run --record --parallel --ci-build-id=${CIRCLE_BUILD_NUM}
+    # && yarn cypress:run --record --parallel --ci-build-id=${GITHUB_RUN_NUMBER}
     && yarn cypress:run
 
-FROM circleci as build
+FROM ci as build
 
 ARG API_URL
 ARG FRONTEND_URL
