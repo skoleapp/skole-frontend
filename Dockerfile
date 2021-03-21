@@ -14,7 +14,8 @@ RUN apt-get update && \
   xauth \
   xvfb
 
-RUN adduser --disabled-password user
+RUN groupadd --gid=10001 user \
+    && useradd --gid=user --uid=10000 --create-home user
 WORKDIR /home/user/app
 RUN chown user:user /home/user/app
 
