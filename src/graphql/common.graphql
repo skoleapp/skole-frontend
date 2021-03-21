@@ -2,7 +2,7 @@ fragment activityFields on ActivityObjectType {
   id
   description
   read
-  targetUser {
+  causingUser {
     slug
     username
     avatarThumbnail
@@ -17,6 +17,14 @@ fragment activityFields on ActivityObjectType {
     }
     school {
       slug
+    }
+  }
+  badgeProgress {
+    user {
+      slug
+    }
+    badge {
+      name
     }
   }
 }

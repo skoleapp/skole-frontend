@@ -34,14 +34,14 @@ interface Props {
 }
 
 export const ActivityListItem: React.FC<Props> = ({
-  activity: { id, targetUser, comment, read: initialRead, description },
+  activity: { id, causingUser, comment, badgeProgress, read: initialRead, description },
 }) => {
   const classes = useStyles();
   const [read, setRead] = useState(initialRead);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
-  const avatarThumbnail = R.prop('avatarThumbnail', targetUser);
+  const avatarThumbnail = R.prop('avatarThumbnail', causingUser);
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead?.errors?.length) {
@@ -76,6 +76,8 @@ export const ActivityListItem: React.FC<Props> = ({
       }
 
       query = { comment: comment.id };
+    } else if (badgeProgress && badgeProgress.user.slug) {
+      pathname = urls.user(badgeProgress.user.slug);
     }
 
     await markSingleActivityRead({ variables: { id, read: true } });
@@ -85,21 +87,26 @@ export const ActivityListItem: React.FC<Props> = ({
     }
   };
 
-  const renderAvatar = (
+  const renderAvatar = comment && (
     <ListItemAvatar>
       <Avatar src={mediaUrl(avatarThumbnail)} />
     </ListItemAvatar>
   );
 
-  const renderTargetUserLink = targetUser ? (
-    <TextLink href={urls.user(R.prop('slug', targetUser))}>
-      {R.prop('username', targetUser)}
-    </TextLink>
-  ) : (
-    <Typography variant="body2" color="textSecondary">
-      {t('common:communityUser')}
-    </Typography>
-  );
+  let renderTargetUserLink = null;
+  if (causingUser) {
+    renderTargetUserLink = (
+      <TextLink href={urls.user(R.prop('slug', causingUser))}>
+        {R.prop('username', causingUser)}
+      </TextLink>
+    );
+  } else if (comment) {
+    renderTargetUserLink = (
+      <Typography variant="body2" color="textSecondary">
+        {t('common:communityUser')}
+      </Typography>
+    );
+  } // else: activity had `badgeProgress`
 
   const renderListItemText = (
     <ListItemText primary={renderTargetUserLink} secondary={description} />

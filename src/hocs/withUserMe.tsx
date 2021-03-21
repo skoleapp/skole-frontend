@@ -38,7 +38,7 @@ export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): 
           // Set activity as read and navigate to the correct page.
           case 'NOTIFICATION_OPENED': {
             const {
-              data: { activity: id, course, resource, school, comment },
+              data: { activity: id, course, resource, school, comment, user },
             } = json;
 
             let pathname;
@@ -50,6 +50,8 @@ export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): 
               pathname = urls.resource(resource);
             } else if (school) {
               pathname = urls.school(school);
+            } else if (user) {
+              pathname = urls.user(user);
             }
 
             if (comment) {

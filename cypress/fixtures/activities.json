@@ -11,7 +11,7 @@
           "id": "3",
           "description": "commented on your resource",
           "read": false,
-          "targetUser": {
+          "causingUser": {
             "slug": "testuser5",
             "username": "testuser5",
             "avatarThumbnail": ""
@@ -26,7 +26,7 @@
           "id": "2",
           "description": "commented on your course",
           "read": false,
-          "targetUser": {
+          "causingUser": {
             "slug": "testuser3",
             "username": "testuser3",
             "avatarThumbnail": ""
@@ -43,7 +43,7 @@
           "id": "1",
           "description": "replied to your comment",
           "read": false,
-          "targetUser": {
+          "causingUser": {
             "slug": "testuser3",
             "username": "testuser3",
             "avatarThumbnail": ""

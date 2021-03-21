@@ -40,6 +40,7 @@ import {
 import { useAuthContext, useNotificationsContext } from 'context';
 import {
   BadgeObjectType,
+  BadgeProgressFieldsFragment,
   UpdateSelectedBadgeMutation,
   UserSeoPropsDocument,
   useUpdateSelectedBadgeMutation,
@@ -172,7 +173,10 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     verified,
   } = useAuthContext();
 
-  const [selectedBadgeProgress, setSelectedBadgeProgress] = useState(initialSelectedBadgeProgress);
+  const [
+    selectedBadgeProgress,
+    setSelectedBadgeProgress,
+  ] = useState<BadgeProgressFieldsFragment | null>(initialSelectedBadgeProgress);
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['slug', 'page', 'pageSize'], query);

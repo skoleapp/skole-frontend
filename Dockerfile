@@ -14,7 +14,8 @@ RUN apt-get update && \
   xauth \
   xvfb
 
-RUN adduser --disabled-password user
+RUN groupadd --gid=10001 user \
+    && useradd --gid=user --uid=10000 --create-home user
 WORKDIR /home/user/app
 RUN chown user:user /home/user/app
 
@@ -49,10 +50,10 @@ COPY --chown=user:user . .
 CMD yarn lint \
     && yarn type-check \
     && API_URL=http://localhost:8000 yarn build \
-    && yarn start & yarn wait-on http://localhost:3001 \
-    # TODO: Enable recording and parallelism on Apr 1, 2021
-    # && yarn cypress:run --record --parallel --ci-build-id=${GITHUB_RUN_NUMBER}
-    && yarn cypress:run
+    && { yarn start & yarn wait-on --timeout=30000 http://localhost:3001 \
+        # TODO: Enable recording and parallelism on Apr 1, 2021
+        # && yarn cypress:run --record --parallel --ci-build-id=${GITHUB_RUN_NUMBER}; }
+        && yarn cypress:run; }
 
 FROM ci as build
 
