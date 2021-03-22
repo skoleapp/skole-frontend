@@ -1,4 +1,3 @@
-import { readdirSync } from 'fs';
 import { SitemapDocument } from 'generated';
 import { initApolloClient } from 'lib';
 import { GetServerSideProps } from 'next';
@@ -57,9 +56,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const staticPaths = [
     '', // Don't want the index page to have a slash.
     urls.addCourse,
-    urls.blogs,
     urls.contact,
-    urls.forTeachers,
     urls.guidelines,
     urls.home,
     urls.login,
@@ -68,7 +65,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     urls.resetPassword,
     urls.score,
     urls.search,
-    urls.trending,
     urls.terms,
     urls.uploadMaterial,
     urls.values,
@@ -88,20 +84,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
         modified: laterDate(entry.modified, modified),
       });
     }
-  }
-
-  for (const fileName of readdirSync('markdown/en/blogs')) {
-    paths.push({
-      path: urls.blog(fileName.replace(/\.md$/, '')),
-      modified,
-    });
-  }
-
-  for (const fileName of readdirSync('markdown/en/updates')) {
-    paths.push({
-      path: urls.update(fileName.replace(/\.md$/, '')),
-      modified,
-    });
   }
 
   const translatedPaths = [];

@@ -67,7 +67,6 @@
   "send": "Skicka",
   "stars": "Stjärnor",
   "getStarted": "Komma igång",
-  "forTeachers": "För lärare",
   "company": "Företag",
   "guidelines": "Riktlinje",
   "values": "Värden",
@@ -80,13 +79,10 @@
   "logoutRequired": "Du måste logga ut för att fortsätta.",
   "comment": "Kommentar",
   "about": "Om oss",
-  "blog": "Blogg",
   "replies": "Svarar",
   "postedBy": "Postat av",
-  "updates": "Updates",
   "unexpectedError": "Oväntat fel.",
   "addComment": "Lägg till kommentar",
-  "askQuestion": "Ställ Fråga",
   "findContent": "Hitta innehåll",
   "uploadResources": "Ladda upp material",
   "addCourses": "Lägg till kurser",
@@ -99,6 +95,5 @@
   "noOptions": "Inga alternativ.",
   "showOptions": "Visa alternativ.",
   "attachment": "Anknytning",
-  "emailSubscriptionSubmitted": "Tack! Dina e-postinställningar har uppdaterats!",
   "badges": "Märken"
 }
