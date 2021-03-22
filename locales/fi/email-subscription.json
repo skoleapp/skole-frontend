@@ -1,6 +1,0 @@
-{
-  "title": "Sähköpostilaus",
-  "header": "Sähköpostilaus",
-  "label": "Päivitä sähköpostitilaus sähköpostille {{ email }}",
-  "unsubscribed": "Tilausta ei löytynyt antamallasi sähköpostiosoitteella - et saa meiltä sähköposteja. Tilataksesi uusimmat päivityksemme, blogimme yms., jätä sähköpostisi alle!"
-}

@@ -22,14 +22,12 @@ import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
 import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
 import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
-import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
-import WhatshotOutlined from '@material-ui/icons/WhatshotOutlined';
 import clsx from 'clsx';
 import { useAuthContext, useDarkModeContext } from 'context';
 import { useMediaQueries } from 'hooks';
@@ -354,11 +352,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       icon: HomeOutlined,
     },
     {
-      href: urls.askQuestion,
-      label: t('common:askQuestion'),
-      icon: HelpOutlineOutlined,
-    },
-    {
       href: urls.search,
       label: t('common:findContent'),
       icon: AssignmentOutlined,
@@ -372,11 +365,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       href: urls.uploadMaterial,
       label: t('common:uploadResources'),
       icon: CloudUploadOutlined,
-    },
-    {
-      href: urls.trending,
-      label: t('common:suggestions'),
-      icon: WhatshotOutlined,
     },
   ];
 

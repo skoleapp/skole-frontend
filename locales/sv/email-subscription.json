@@ -1,8 +1,0 @@
-{
-  "title": "E-postprenumeration",
-  "header": "E-postprenumeration",
-  "label": "Uppdatera e-postprenumeration för {{ email }}",
-  "accountSettingsText": "För att uppdatera e-postinställningarna för ditt konto, besök",
-  "accountSettingsLinkText": "kontoinställningar",
-  "unsubscribed": "Ingen prenumeration hittades med den angivna e-postadressen - du kommer inte att få några e-postmeddelanden från oss. För att prenumerera på våra produktuppdateringar, bloggar osv., lämna din e-postadress nedan!"
-}

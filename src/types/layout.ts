@@ -14,7 +14,7 @@ export interface TopNavbarProps {
   hideNavigation?: boolean; // Hide navigation tabs on desktop.
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.
-  hideDynamicButtons?: boolean; // Hide all dynamic buttons (Login, Register, Get Started, For Teachers/Activity, Starred, Profile) on desktop.
+  hideDynamicButtons?: boolean; // Hide all dynamic buttons (Login, Register, Get Started, Activity, Starred, Profile) on desktop.
   hideLoginButton?: boolean; // Hide the `Login` button on desktop.
   hideRegisterButton?: boolean; // Hide the `Register` button on desktop.
   hideGetStartedButton?: boolean; // Hide the `Get Started` button on desktop.

@@ -67,7 +67,6 @@
   "send": "Send",
   "stars": "Stars",
   "getStarted": "Get Started",
-  "forTeachers": "For Teachers",
   "company": "Company",
   "guidelines": "Guidelines",
   "values": "Values",
@@ -80,13 +79,10 @@
   "logoutRequired": "You need to log out to continue.",
   "comment": "Comment",
   "about": "About",
-  "blog": "Blog",
   "replies": "Replies",
   "postedBy": "Posted by",
-  "updates": "Updates",
   "unexpectedError": "Unexpected error.",
   "addComment": "Add Comment",
-  "askQuestion": "Ask Question",
   "findContent": "Find Content",
   "addCourses": "Add Courses",
   "uploadResources": "Upload Material",
@@ -99,6 +95,5 @@
   "noOptions": "No options.",
   "showOptions": "Show options.",
   "attachment": "Attachment",
-  "emailSubscriptionSubmitted": "Thanks! Your email settings have been updated!",
   "badges": "Badges"
 }

@@ -67,7 +67,6 @@
   "send": "Lähetä",
   "stars": "Tähdet",
   "getStarted": "Aloita",
-  "forTeachers": "Opettajille",
   "company": "Yritys",
   "guidelines": "Ohjeet",
   "values": "Arvot",
@@ -80,13 +79,10 @@
   "logoutRequired": "Sinun pitää kirjautua ulos jatkaaksesi.",
   "comment": "Kommentti",
   "about": "Meistä",
-  "blog": "Blogi",
   "replies": "Vastaukset",
   "postedBy": "Lähettänyt",
-  "updates": "Uutta",
   "unexpectedError": "Odottamaton virhe.",
   "addComment": "Lisää kommentti",
-  "askQuestion": "Kysy kysymys",
   "findContent": "Löydä sisältöä",
   "uploadResources": "Lisää materiaalia",
   "addCourses": "Lisää kursseja",
@@ -99,6 +95,5 @@
   "noOptions": "Ei vaihtoehtoja.",
   "showOptions": "Näytä vaihtoehdot.",
   "attachment": "Liite",
-  "emailSubscriptionSubmitted": "Kiitos! Sähköpostiasetuksesi on päivitetty!",
   "badges": "Merkit"
 }

@@ -3,7 +3,6 @@ export { AvatarField } from './AvatarField';
 export { CheckboxFormField } from './CheckboxFormField';
 export { ContactLink } from './ContactLink';
 export { DatePickerFormField } from './DatePickerFormField';
-export { EmailInputFormField } from './EmailInputFormField';
 export { FileField } from './FileField';
 export { FormErrorMessage } from './FormErrorMessage';
 export { FormSubmitSection } from './FormSubmitSection';
