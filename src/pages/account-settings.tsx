@@ -38,8 +38,6 @@ interface UpdateAccountSettingsFormValues {
   email: string;
   school: SchoolObjectType | null;
   subject: SubjectObjectType | null;
-  productUpdateEmailPermission: boolean;
-  blogPostEmailPermission: boolean;
   commentReplyEmailPermission: boolean;
   courseCommentEmailPermission: boolean;
   resourceCommentEmailPermission: boolean;
@@ -74,8 +72,6 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     email,
     school,
     subject,
-    productUpdateEmailPermission,
-    blogPostEmailPermission,
     commentReplyEmailPermission,
     courseCommentEmailPermission,
     resourceCommentEmailPermission,
@@ -130,8 +126,6 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     email,
     school,
     subject,
-    productUpdateEmailPermission,
-    blogPostEmailPermission,
     commentReplyEmailPermission,
     courseCommentEmailPermission,
     resourceCommentEmailPermission,
@@ -178,26 +172,6 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       document={AutocompleteSubjectsDocument}
       component={AutocompleteField}
     />
-  );
-
-  const renderEmailSettings = (
-    <FormControl className={classes.notificationSettings}>
-      <FormLabel className={classes.notificationSettingsLabel}>
-        {t('account-settings:emailSettings')}
-      </FormLabel>
-      <FormGroup>
-        <Field
-          name="productUpdateEmailPermission"
-          label={t('forms:productUpdates')}
-          component={SwitchFormField}
-        />
-        <Field
-          name="blogPostEmailPermission"
-          label={t('forms:blogPosts')}
-          component={SwitchFormField}
-        />
-      </FormGroup>
-    </FormControl>
   );
 
   const renderEmailNotifications = (
@@ -287,7 +261,6 @@ const AccountSettingsPage: NextPage<SeoPageProps> = ({ seoProps }) => {
       {renderEmailField}
       {renderSchoolField}
       {renderSubjectField}
-      {renderEmailSettings}
       {renderEmailNotifications}
       {renderPushNotifications}
       {renderChangePasswordLink}

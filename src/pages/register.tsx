@@ -158,7 +158,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     subject,
   }: UpdateUserFormValues): Promise<void> => {
     const variables = R.pick(
-      ['email', 'productUpdatePermission', 'blogPostEmailPermission'],
+      ['email'],
       userMe,
     );
 
