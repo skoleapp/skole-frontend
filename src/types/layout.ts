@@ -11,7 +11,6 @@ export interface TopNavbarProps {
   header?: JSX.Element | string | false; // Header shown on mobile.
   emoji?: string | false; // Emoji shown after the header on mobile.
   hideBackButton?: boolean; // Hide the back button on mobile.
-  hideNavigation?: boolean; // Hide navigation tabs on desktop.
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.
   hideDynamicButtons?: boolean; // Hide all dynamic buttons (Login, Register, Get Started, Activity, Starred, Profile) on desktop.
@@ -28,7 +27,6 @@ export interface TopNavbarProps {
 interface CustomContainerProps extends Omit<ContainerProps, 'children'> {
   fullWidth?: boolean; // Custom props for stretching container to full screen width for landing pages etc.
   dense?: boolean; // Hide paddings.
-  hideNavigation?: boolean; // Hide navigation on desktop.
 }
 
 export interface FooterProps {

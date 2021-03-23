@@ -249,7 +249,6 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     topNavbarProps: {
       hideBackButton: true,
       hideLogo: isMobile,
-      hideNavigation: true,
       hideGetStartedButton: true,
     },
     footerProps: {
