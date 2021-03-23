@@ -29,7 +29,6 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 interface Props extends TableRowProps {
   course: CourseObjectType;
-  hideCourseChip?: boolean;
   hideSchoolLink?: boolean;
 }
 
@@ -47,7 +46,6 @@ export const CourseTableRow: React.FC<Props> = ({
     // @ts-ignore: An alias has been set in GraphQL query.
     courseSchool,
   },
-  hideCourseChip,
   hideSchoolLink,
   dense,
 }) => {
@@ -66,15 +64,7 @@ export const CourseTableRow: React.FC<Props> = ({
     </TableCell>
   );
 
-  const renderCourseChip = !hideCourseChip && <TableRowChip label={`${t('common:course')} 🎓`} />;
   const renderCourseCodesChip = <TableRowChip label={codes} />;
-
-  const renderChips = (
-    <Grid container>
-      {renderCourseChip}
-      {renderCourseCodesChip}
-    </Grid>
-  );
 
   const renderUserLink = user?.slug && (
     <TextLink href={urls.user(user.slug)}>{user.username}</TextLink>
@@ -96,7 +86,7 @@ export const CourseTableRow: React.FC<Props> = ({
 
   const renderCourseInfo = (
     <Grid item xs={12} container direction="column">
-      <TableCell className={classes.tableCell}>{renderChips}</TableCell>
+      <TableCell className={classes.tableCell}>{renderCourseCodesChip}</TableCell>
       <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
     </Grid>
   );
