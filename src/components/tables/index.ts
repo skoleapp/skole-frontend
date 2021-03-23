@@ -10,5 +10,5 @@ export { ResourceTableBody } from './ResourceTableBody';
 export { ResourceTableRow } from './ResourceTableRow';
 export { SubjectTableBody } from './SubjectTableBody';
 export { SubjectTableRow } from './SubjectTableRow';
-export { SuggestionsTable } from './SuggestionsTable';
 export { TableRowChip } from './TableRowChip';
+export { TrendingTable } from './TrendingTable';

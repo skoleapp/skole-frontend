@@ -181,7 +181,7 @@ export const CommentTableRow: React.FC<Props> = ({
 
   const renderDesktopCommentStats = (
     <TableCell className={classes.tableCell}>
-      <Grid container alignItems="center">
+      <Grid container alignItems="center" justify="flex-end">
         <Grid item {...desktopStatsColSpan} container>
           <Grid item md={12} container justify="center">
             <Typography variant="subtitle1">{score}</Typography>

@@ -872,21 +872,9 @@ query Sitemap {
   }
 }
 
-fragment suggestionFields on SuggestionsUnion {
-  ... on CourseObjectType {
-    ...courseFields
-  }
-  ... on ResourceObjectType {
-    ...resourceFields
-  }
-  ... on CommentObjectType {
+query TrendingComments {
+  trendingComments {
     ...commentFields
-  }
-}
-
-query SuggestionsPreview {
-  suggestionsPreview {
-    ...suggestionFields
   }
 }
 
