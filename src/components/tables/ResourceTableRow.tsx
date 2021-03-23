@@ -29,7 +29,6 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 interface Props extends TableRowProps {
   resource: ResourceObjectType;
-  hideResourceChip?: boolean;
   hideCourseLink?: boolean;
 }
 
@@ -48,7 +47,6 @@ export const ResourceTableRow: React.FC<Props> = ({
     resourceCourse,
     created: _created,
   },
-  hideResourceChip,
   hideCourseLink,
   dense,
   key,
@@ -61,10 +59,6 @@ export const ResourceTableRow: React.FC<Props> = ({
   const starsLabel = t('common:stars').toLowerCase();
   const downloadsLabel = t('common:downloads').toLowerCase();
   const created = useDayjs(_created).startOf('day').fromNow();
-
-  const renderResourceChip = !hideResourceChip && (
-    <TableRowChip label={`${t('common:resource')} 📚`} />
-  );
 
   const renderResourceTypeChip = !!resourceType && <TableRowChip label={resourceType.name} />;
   const renderDateChip = <TableRowChip label={useDayjs(date).format('LL')} />;
@@ -150,7 +144,6 @@ export const ResourceTableRow: React.FC<Props> = ({
 
   const renderChips = (
     <Grid container>
-      {renderResourceChip}
       {renderResourceTypeChip}
       {renderDateChip}
     </Grid>

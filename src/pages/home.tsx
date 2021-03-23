@@ -22,10 +22,10 @@ import {
   Link,
   LoadingTemplate,
   SettingsButton,
-  SuggestionsTable,
+  TrendingTable,
 } from 'components';
 import { useAuthContext, useShareContext } from 'context';
-import { useSuggestionsPreviewQuery } from 'generated';
+import { useTrendingCommentsQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext, useSearch } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
@@ -101,7 +101,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
   },
-  suggestionsPaper: {
+  trendingPaper: {
     borderRadius: BORDER_RADIUS,
     overflow: 'hidden',
     margin: spacing(2),
@@ -109,15 +109,15 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
   },
-  suggestionsTableContainer: {
+  trendingTableContainer: {
     flexGrow: 1,
   },
-  suggestionsCardHeader: {
+  trendingCardHeader: {
     borderBottom: BORDER,
     color: palette.text.secondary,
   },
-  suggestionsTableFooter: {
-    height: "3rem"
+  trendingTableFooter: {
+    height: '3rem',
   },
   nextStepsContainer: {
     flexGrow: 1,
@@ -159,10 +159,10 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { userMe, verified, school, subject } = useAuthContext();
   const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
-  const {  searchInputProps, handleSubmitSearch } = useSearch();
+  const { searchInputProps, handleSubmitSearch } = useSearch();
   const context = useLanguageHeaderContext();
   const headerText = t('common:description');
-  const suggestionsHeaderText = t('common:suggestions');
+  const trendingHeaderText = t('common:trending');
   const nextStepsHeaderText = t('home:nextStepsHeader');
 
   const ShareDialogParams = {
@@ -174,11 +174,11 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const handleClickShareButton = (): void => handleOpenShareDialog(ShareDialogParams);
 
-  const { data, loading, error } = useSuggestionsPreviewQuery({
+  const { data, loading, error } = useTrendingCommentsQuery({
     context,
   });
 
-  const suggestions = R.propOr([], 'suggestionsPreview', data);
+  const trendingComments = R.propOr([], 'trendingComments', data);
 
   const renderLaunchIconButton = !userMe && (
     <Link href={urls.index}>
@@ -192,7 +192,7 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderSettingsButton = !userMe && <SettingsButton />;
   const renderHeaderEmoji = <Emoji emoji="🎓" />;
-  const renderSuggestionsEmoji = <Emoji emoji="🔥" />;
+  const renderTrendingEmoji = <Emoji emoji="🔥" />;
   const renderNextStepsEmoji = <Emoji emoji="🚀" />;
 
   const renderHeader = (
@@ -229,32 +229,26 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Grid>
   );
 
-  const renderSuggestionsTableFooter =
-    <TableFooter className={classes.suggestionsTableFooter} />
+  const renderTrendingTableFooter = <TableFooter className={classes.trendingTableFooter} />;
 
-  const suggestionsHeader = (
+  const trendingHeader = (
     <>
-      {suggestionsHeaderText}
-      {renderSuggestionsEmoji}
+      {trendingHeaderText}
+      {renderTrendingEmoji}
     </>
-  );
-
-  const renderSuggestionsPreview = (
-    <Paper className={classes.suggestionsPaper}>
-      <CardHeader className={classes.suggestionsCardHeader} title={suggestionsHeader} />
-      <SuggestionsTable
-        suggestions={suggestions}
-        renderTableFooter={renderSuggestionsTableFooter}
-        tableContainerProps={{ className: classes.suggestionsTableContainer }}
-        dense
-      />
-    </Paper>
   );
 
   const renderMidSection = (
     <Grid className={classes.midSectionContainer} container justify="center">
       <Grid item xs={12} xl={8} container justify="center">
-          {renderSuggestionsPreview}
+        <Paper className={classes.trendingPaper}>
+          <CardHeader className={classes.trendingCardHeader} title={trendingHeader} />
+          <TrendingTable
+            trendingComments={trendingComments}
+            renderTableFooter={renderTrendingTableFooter}
+            tableContainerProps={{ className: classes.trendingTableContainer }}
+          />
+        </Paper>
       </Grid>
     </Grid>
   );

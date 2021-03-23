@@ -157,10 +157,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     school,
     subject,
   }: UpdateUserFormValues): Promise<void> => {
-    const variables = R.pick(
-      ['email'],
-      userMe,
-    );
+    const variables = R.pick(['email'], userMe);
 
     await updateAccountSettings({
       variables: {
