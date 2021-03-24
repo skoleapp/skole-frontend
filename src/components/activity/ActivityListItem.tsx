@@ -65,17 +65,26 @@ export const ActivityListItem: React.FC<Props> = ({
     let query;
 
     if (comment) {
-      const { course, resource, school } = comment;
+      const { course, resource, school, comment: innerComment } = comment;
 
-      if (course?.slug) {
+      query = { comment: comment.id };
+
+      if (innerComment?.id) {
+        if (innerComment?.course?.slug) {
+          pathname = urls.course(innerComment.course.slug);
+        } else if (innerComment?.resource?.slug) {
+          pathname = urls.resource(innerComment.resource.slug);
+        } else if (innerComment?.school?.slug) {
+          pathname = urls.school(innerComment.school.slug);
+        }
+        query = { comment: innerComment.id };
+      } else if (course?.slug) {
         pathname = urls.course(course.slug);
       } else if (resource?.slug) {
         pathname = urls.resource(resource.slug);
       } else if (school?.slug) {
         pathname = urls.school(school.slug);
       }
-
-      query = { comment: comment.id };
     } else if (badgeProgress && badgeProgress.user.slug) {
       pathname = urls.user(badgeProgress.user.slug);
     }

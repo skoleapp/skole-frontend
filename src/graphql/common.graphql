@@ -9,6 +9,18 @@ fragment activityFields on ActivityObjectType {
   }
   comment {
     id
+    comment {
+      id
+      resource {
+        slug
+      }
+      course {
+        slug
+      }
+      school {
+        slug
+      }
+    }
     resource {
       slug
     }
