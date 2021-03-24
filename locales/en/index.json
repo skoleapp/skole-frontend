@@ -1,22 +1,6 @@
 {
   "title": "Get Started",
   "description": "Discuss your studies anonymously. Skole can help you to succeed in your studies by giving you access to the best knowledge in the community.",
-  "ctaSubheader1": "We can help you to ",
-  "ctaSubheader2": "succeed in your studies ",
-  "ctaSubheader3": "by giving you access to the ",
-  "ctaSubheader4": "best knowledge ",
-  "ctaSubheader5": "in the community.",
-  "cta": "Get Started!",
-  "or": "or",
-  "skipLogin": "Skip login",
-  "materialsPitchHeader": "Study materials",
-  "discussionPitchHeader": "Discussions",
-  "materialsBullet1": "• Access materials from your courses easily.",
-  "materialsBullet2": "• Add new content and share it with your friends.",
-  "materialsBullet3": "• See materials from previous course instances.",
-  "materialsBullet4": "• Increase your score and earn bragging rights.",
-  "discussionBullet1": "• Discuss courses and study materials with ease.",
-  "discussionBullet2": "• Appear anonymously or with your username.",
-  "discussionBullet3": "• See discussions from previous course instances.",
-  "discussionBullet4": "• Ask for help from other students and be a step ahead."
+  "infoText": "Anyone studying in the included universities can join with an invite from an existing user. Register to reserve your username now!",
+  "cta": "Get Started!"
 }
