@@ -83,12 +83,6 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     </TextLink>
   );
 
-  const renderFeedbackLink = (
-    <TextLink href={urls.contact} color="secondary">
-      {t('common:feedback')}
-    </TextLink>
-  );
-
   const renderSkole = (
     <Grid
       className={classes.container}
@@ -103,7 +97,6 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
       {renderGuidelinesLink}
       {renderScoreLink}
       {renderBadgesLink}
-      {renderFeedbackLink}
     </Grid>
   );
 
