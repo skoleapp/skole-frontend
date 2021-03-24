@@ -116,3 +116,62 @@ export const ABOUT_ITEMS = [
     href: urls.privacy,
   },
 ];
+
+export const SCHOOL_LOGOS = [
+  {
+    name: 'utu.png',
+    alt: 'University of Turku',
+  },
+  {
+    name: 'abo-akademi.png',
+    alt: 'Abo Akademi',
+  },
+  {
+    name: 'aalto-uni.png',
+    alt: 'Aalto University',
+  },
+  {
+    name: 'helsinki-uni.png',
+    alt: 'University of Helsinki',
+  },
+  {
+    name: 'tampere-uni.png',
+    alt: 'Tampere University',
+  },
+  {
+    name: 'lut-uni.png',
+    alt: 'LUT University',
+  },
+  {
+    name: 'jyu.png',
+    alt: 'University of Jyväskylä',
+  },
+  {
+    name: 'hanken.png',
+    alt: 'Hanken Svenska handelshögskolan',
+  },
+  {
+    name: 'oulu-uni.png',
+    alt: 'University of Oulu',
+  },
+  {
+    name: 'vaasa-uni.png',
+    alt: 'University of Vaasa',
+  },
+  {
+    name: 'eastern-finland-uni.png',
+    alt: 'University of Eastern Finland',
+  },
+  {
+    name: 'lapland-uni.png',
+    alt: 'University of Lapland',
+  },
+  {
+    name: 'mpkk.png',
+    alt: 'Maanpuolustuskorkeakoulu',
+  },
+  {
+    name: 'uniarts.png',
+    alt: 'Uniarts Helsinki',
+  },
+];

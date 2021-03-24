@@ -1,22 +1,6 @@
 {
   "title": "Komma igång",
   "description": "Diskutera dina studier anonymt. Skole kan hjälpa dig att lyckas med dina studier genom att ge dig tillgång till de bästa kunskaperna i samhället.",
-  "ctaSubheader1": "Vi kan hjälpa dig att ",
-  "ctaSubheader2": "lyckas med dina studier",
-  "ctaSubheader3": " genom att ge dig tillgång till ",
-  "ctaSubheader4": "de bästa kunskaperna",
-  "ctaSubheader5": " i samhället.",
-  "cta": "Komma igång!",
-  "or": "eller",
-  "skipLogin": "Hoppa över inloggning",
-  "materialsPitchHeader": "Studiematerial",
-  "discussionPitchHeader": "Diskussioner",
-  "materialsBullet1": "• Få åtkomst till material från dina kurser enkelt.",
-  "materialsBullet2": "• Lägg till nytt innehåll och dela det med dina vänner.",
-  "materialsBullet3": "• Se material från tidigare kursinstanser.",
-  "materialsBullet4": "• Öka din poäng och tjäna skryta.",
-  "discussionBullet1": "• Diskutera kurser och studiematerial med lätthet.",
-  "discussionBullet2": "• Visas anonymt eller med ditt användarnamn.",
-  "discussionBullet3": "• Se diskussioner från tidigare kursinstanser.",
-  "discussionBullet4": "• Be om hjälp från andra studenter och vara ett steg före."
+  "infoText": "Alla som studerar vid de inkluderade universiteten kan gå med en inbjudan från en befintlig användare. Registrera dig för att reservera ditt användarnamn nu!",
+  "cta": "Komma igång!"
 }

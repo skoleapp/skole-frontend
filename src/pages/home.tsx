@@ -196,14 +196,14 @@ const HomePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const renderNextStepsEmoji = <Emoji emoji="🚀" />;
 
   const renderHeader = (
-    <Typography className={classes.header} variant="h1" color="secondary" gutterBottom>
+    <Typography className={classes.header} variant="h1" gutterBottom>
       {headerText}
       {renderHeaderEmoji}
     </Typography>
   );
 
   const renderSubHeader = (
-    <Typography className={classes.subheader} variant="subtitle1" color="secondary">
+    <Typography className={classes.subheader} variant="subtitle1" color="textSecondary">
       {t('home:subheader')}
     </Typography>
   );
