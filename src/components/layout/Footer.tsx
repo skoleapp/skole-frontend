@@ -84,12 +84,6 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     </TextLink>
   );
 
-  const renderUpdatesLink = (
-    <TextLink href={urls.updates} color="secondary">
-      {t('common:updates')}
-    </TextLink>
-  );
-
   const renderFeedbackLink = (
     <TextLink href={urls.contact} color="secondary">
       {t('common:feedback')}
@@ -110,7 +104,6 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
       {renderGuidelinesLink}
       {renderScoreLink}
       {renderBadgesLink}
-      {renderUpdatesLink}
       {renderFeedbackLink}
     </Grid>
   );
@@ -127,21 +120,9 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     </TextLink>
   );
 
-  const renderBlogLink = (
-    <TextLink href={urls.blogs} color="secondary">
-      {t('common:blog')}
-    </TextLink>
-  );
-
   const renderValuesLink = (
     <TextLink href={urls.values} color="secondary">
       {t('common:values')}
-    </TextLink>
-  );
-
-  const renderForTeachersLink = (
-    <TextLink href={urls.forTeachers} color="secondary">
-      {t('common:forTeachers')}
     </TextLink>
   );
 
@@ -156,9 +137,7 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     >
       {renderCompanyHeader}
       {renderContactLink}
-      {renderBlogLink}
       {renderValuesLink}
-      {renderForTeachersLink}
     </Grid>
   );
 

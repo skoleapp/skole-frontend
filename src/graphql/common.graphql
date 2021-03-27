@@ -571,8 +571,6 @@ fragment userMeFields on UserObjectType {
   unreadActivityCount
   fcmToken
   rank
-  productUpdateEmailPermission
-  blogPostEmailPermission
   commentReplyEmailPermission
   courseCommentEmailPermission
   resourceCommentEmailPermission
@@ -788,8 +786,6 @@ mutation UpdateAccountSettings(
   $email: String!
   $school: ID
   $subject: ID
-  $productUpdateEmailPermission: Boolean
-  $blogPostEmailPermission: Boolean
   $commentReplyEmailPermission: Boolean
   $courseCommentEmailPermission: Boolean
   $resourceCommentEmailPermission: Boolean
@@ -802,8 +798,6 @@ mutation UpdateAccountSettings(
       email: $email
       school: $school
       subject: $subject
-      productUpdateEmailPermission: $productUpdateEmailPermission
-      blogPostEmailPermission: $blogPostEmailPermission
       commentReplyEmailPermission: $commentReplyEmailPermission
       courseCommentEmailPermission: $courseCommentEmailPermission
       resourceCommentEmailPermission: $resourceCommentEmailPermission
@@ -878,27 +872,9 @@ query Sitemap {
   }
 }
 
-fragment suggestionFields on SuggestionsUnion {
-  ... on CourseObjectType {
-    ...courseFields
-  }
-  ... on ResourceObjectType {
-    ...resourceFields
-  }
-  ... on CommentObjectType {
+query TrendingComments {
+  trendingComments {
     ...commentFields
-  }
-}
-
-query Suggestions {
-  suggestions {
-    ...suggestionFields
-  }
-}
-
-query SuggestionsPreview {
-  suggestionsPreview {
-    ...suggestionFields
   }
 }
 
@@ -946,68 +922,6 @@ query Discussion($course: ID, $resource: ID, $school: ID) {
         id
         status
       }
-    }
-  }
-}
-
-query DiscussionSuggestions {
-  discussionSuggestions {
-    ... on CourseObjectType {
-      id
-      slug
-      courseName: name
-      codes
-      __typename
-    }
-    ... on ResourceObjectType {
-      id
-      slug
-      title
-      __typename
-      course {
-        name
-      }
-    }
-    ... on SchoolObjectType {
-      id
-      slug
-      name
-      __typename
-    }
-  }
-}
-
-mutation CreateEmailSubscription($email: String!) {
-  createEmailSubscription(input: { email: $email }) {
-    errors {
-      field
-      messages
-    }
-    successMessage
-  }
-}
-
-query EmailSubscription($token: String!) {
-  emailSubscription(token: $token) {
-    email
-    productUpdates
-    blogPosts
-  }
-}
-
-mutation UpdateEmailSubscription($token: String, $productUpdates: Boolean, $blogPosts: Boolean) {
-  updateEmailSubscription(
-    input: { token: $token, productUpdates: $productUpdates, blogPosts: $blogPosts }
-  ) {
-    errors {
-      field
-      messages
-    }
-    successMessage
-    emailSubscription {
-      email
-      productUpdates
-      blogPosts
     }
   }
 }

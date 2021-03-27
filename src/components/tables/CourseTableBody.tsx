@@ -12,13 +12,7 @@ interface Props extends Omit<TableRowProps, 'key'> {
 
 export const CourseTableBody: React.FC<Props> = ({ courses, hideSchoolLink, ...tableRowProps }) => {
   const mapCourses = courses.map((c, i) => (
-    <CourseTableRow
-      course={c}
-      hideCourseChip
-      hideSchoolLink={hideSchoolLink}
-      key={i}
-      {...tableRowProps}
-    />
+    <CourseTableRow course={c} hideSchoolLink={hideSchoolLink} key={i} {...tableRowProps} />
   ));
 
   return <TableBody>{mapCourses}</TableBody>;

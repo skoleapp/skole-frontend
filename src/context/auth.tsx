@@ -30,8 +30,6 @@ interface UseAuthContext extends AuthContextType {
   subject: SubjectObjectType | null;
   badgeProgresses: BadgeProgressObjectType[];
   selectedBadgeProgress: BadgeProgressObjectType | null;
-  productUpdateEmailPermission: boolean;
-  blogPostEmailPermission: boolean;
   commentReplyEmailPermission: boolean;
   courseCommentEmailPermission: boolean;
   resourceCommentEmailPermission: boolean;
@@ -62,8 +60,6 @@ export const useAuthContext = (): UseAuthContext => {
   const subject = R.prop('subject', userMe);
   const badgeProgresses = R.propOr([], 'badgeProgresses', userMe);
   const selectedBadgeProgress = R.prop('selectedBadgeProgress', userMe);
-  const productUpdateEmailPermission = R.prop('productUpdateEmailPermission', userMe);
-  const blogPostEmailPermission = R.prop('blogPostEmailPermission', userMe);
   const commentReplyEmailPermission = R.prop('commentReplyEmailPermission', userMe);
   const courseCommentEmailPermission = R.prop('courseCommentEmailPermission', userMe);
   const resourceCommentEmailPermission = R.prop('resourceCommentEmailPermission', userMe);
@@ -94,8 +90,6 @@ export const useAuthContext = (): UseAuthContext => {
     subject,
     badgeProgresses,
     selectedBadgeProgress,
-    productUpdateEmailPermission,
-    blogPostEmailPermission,
     commentReplyEmailPermission,
     courseCommentEmailPermission,
     resourceCommentEmailPermission,
