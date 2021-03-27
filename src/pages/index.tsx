@@ -1,39 +1,59 @@
-import Divider from '@material-ui/core/Divider';
+import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import clsx from 'clsx';
-import { ButtonLink, Emoji, LandingPageTemplate, LoadingTemplate, TextLink } from 'components';
-import { useAuthContext } from 'context';
+import {
+  AppStoreBadge,
+  ButtonLink,
+  Emoji,
+  GooglePlayBadge,
+  LandingPageTemplate,
+  LoadingTemplate,
+} from 'components';
+import { useAuthContext, useDarkModeContext } from 'context';
 import { withUserMe } from 'hocs';
 import { useMediaQueries } from 'hooks';
 import { getT, loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import Image from 'next/image';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { SeoPageProps } from 'types';
-import { isNotNativeApp, urls } from 'utils';
+import { SCHOOL_LOGOS, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
-  ctaContainer: {
+  container: {
     flexGrow: 1,
-    padding: `${spacing(8)} ${spacing(2)}`,
+    padding: spacing(2),
   },
-  ctaHeader: {
-    fontSize: '1.5rem',
-    [breakpoints.up('xs')]: {
-      fontSize: '1.75rem',
+  logoContainer: {
+    position: 'relative',
+    textAlign: 'center',
+    padding: `${spacing(8)} ${spacing(2)}`,
+    [breakpoints.up('md')]: {
+      marginTop: spacing(8),
     },
+  },
+  logo: {
+    width: '10rem',
+    height: '3rem',
+    position: 'relative',
     [breakpoints.up('sm')]: {
-      fontSize: '2rem',
+      width: '12rem',
+      height: '5rem',
     },
     [breakpoints.up('md')]: {
-      fontSize: '2.25rem',
+      width: '14rem',
+      height: '6rem',
     },
-    [breakpoints.up('lg')]: {
-      fontSize: '2.75rem',
-    },
+  },
+  description: {
+    fontSize: '1.25rem',
+  },
+  info: {
+    marginTop: spacing(6),
+    fontSize: '1rem',
   },
   ctaButton: {
     minWidth: '10rem',
@@ -47,31 +67,15 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   authLink: {
     marginTop: spacing(4),
   },
-  pitchContainer: {
-    overflow: 'hidden',
+  appStoreBadgeContainer: {
+    padding: `${spacing(8)} ${spacing(2)}`,
   },
-  pitchBoxContainer: {
-    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.grey[300],
-    padding: `${spacing(4)} ${spacing(2)}`,
-    [breakpoints.up('md')]: {
-      padding: spacing(6),
-    },
+  appStoreBadgeImageContainer: {
+    maxWidth: '25rem',
   },
-  nativeAppPitchBoxContainer: {
-    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
-    [breakpoints.up('md')]: {
-      paddingBottom: `calc(${spacing(6)} + env(safe-area-inset-bottom))`,
-    },
-  },
-  pitchHeader: {
-    fontSize: '1.25rem',
-    fontWeight: 'bold',
-  },
-  pitchHeaderDivider: {
-    height: '0.25rem',
-    backgroundColor: palette.primary.main,
-    marginBottom: spacing(2),
-    borderRadius: '0.5rem',
+  schools: {
+    backgroundColor: palette.grey[300],
+    padding: `${spacing(4)} 0`,
   },
 }));
 
@@ -80,7 +84,9 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
   const { isMobile } = useMediaQueries();
-  const headerText = t('common:description');
+  const { darkMode } = useDarkModeContext();
+  const headerText = 'Next-gen study forum.';
+  const infoText = t('index:infoText');
 
   // Redirect authenticated users to home page.
   useEffect(() => {
@@ -89,15 +95,22 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   }, [userMe]);
 
-  const handleSkipLogin = (): void => sa_event('click_skip_login');
-
   const renderHeaderEmoji = <Emoji emoji="🎓" />;
+  const renderInfoTextEmoji = <Emoji emoji="👇" />;
 
-  const renderCtaHeader = (
+  const renderHeader = (
+    <Box className={classes.logoContainer}>
+      <Box className={classes.logo}>
+        <Image layout="fill" src={`/images/icons/skole-icon-text${!darkMode ? '-red' : ''}.svg`} />
+      </Box>
+    </Box>
+  );
+
+  const renderDescription = (
     <Typography
-      className={classes.ctaHeader}
+      className={classes.description}
       variant="subtitle1"
-      color="secondary"
+      color={darkMode ? 'secondary' : 'initial'}
       align="center"
       gutterBottom
     >
@@ -106,17 +119,16 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </Typography>
   );
 
-  const renderCtaSubheader = (
-    <Typography variant="subtitle1" color="secondary" align="center">
-      {t('index:ctaSubheader1')}
-      <strong>{t('index:ctaSubheader2')}</strong>
-      {t('index:ctaSubheader3')}
-      <strong> {t('index:ctaSubheader4')}</strong>
-      {t('index:ctaSubheader5')}
-    </Typography>
+  const renderInfo = (
+    <Grid item xs={12} md={3}>
+      <Typography className={classes.info} variant="body2" align="center" color="textSecondary">
+        {infoText}
+        {renderInfoTextEmoji}
+      </Typography>
+    </Grid>
   );
 
-  const renderCtaButton = (
+  const renderCta = (
     <ButtonLink
       className={classes.ctaButton}
       href={urls.register}
@@ -128,121 +140,31 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     </ButtonLink>
   );
 
-  const renderOr = (
-    <Typography className={classes.or} variant="body2" color="secondary">
-      {t('index:or').toUpperCase()}
-    </Typography>
-  );
-
-  const renderAuthLink = (
-    <Typography className={classes.authLink}>
-      <TextLink onClick={handleSkipLogin} href={urls.home} color="secondary">
-        {t('index:skipLogin')}
-      </TextLink>
-    </Typography>
-  );
-
-  const renderCta = (
-    <Grid
-      className={classes.ctaContainer}
-      container
-      direction="column"
-      justify="center"
-      alignItems="center"
-    >
-      {renderCtaHeader}
-      {renderCtaSubheader}
-      {renderCtaButton}
-      {renderOr}
-      {renderAuthLink}
-    </Grid>
-  );
-
-  const materialsPitchHeader = t('index:materialsPitchHeader').toUpperCase();
-  const discussionPitchHeader = t('index:discussionPitchHeader').toUpperCase();
-
-  const renderMaterialsEmoji = <Emoji emoji="📚" />;
-  const renderGrinningEmoji = <Emoji emoji="😁" />;
-  const renderDiscussionEmoji = <Emoji emoji="💬" />;
-  const renderNerdEmoji = <Emoji emoji="🤓" />;
-
-  const materialBullets = {
-    1: t('index:materialsBullet1'),
-    2: t('index:materialsBullet2'),
-    3: t('index:materialsBullet3'),
-    4: t('index:materialsBullet4'),
-  };
-
-  const discussionBullets = {
-    1: t('index:discussionBullet1'),
-    2: t('index:discussionBullet2'),
-    3: t('index:discussionBullet3'),
-    4: t('index:discussionBullet4'),
-  };
-
-  const renderPitchItems = (
-    <>
-      <Grid item xs={12} md={6}>
-        <Typography className={classes.pitchHeader} variant="subtitle1">
-          {materialsPitchHeader}
-          {renderMaterialsEmoji}
-        </Typography>
-        <Divider className={classes.pitchHeaderDivider} />
-        <Typography variant="body2" color="textSecondary">
-          {materialBullets[1]}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {materialBullets[2]}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {materialBullets[3]}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {materialBullets[4]}
-          {renderGrinningEmoji}
-        </Typography>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Typography className={classes.pitchHeader} variant="subtitle1">
-          {discussionPitchHeader}
-          {renderDiscussionEmoji}
-        </Typography>
-        <Divider className={classes.pitchHeaderDivider} />
-        <Typography variant="body2" color="textSecondary">
-          {discussionBullets[1]}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {discussionBullets[2]}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {discussionBullets[3]}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {discussionBullets[4]}
-          {renderNerdEmoji}
-        </Typography>
-      </Grid>
-    </>
-  );
-
-  const renderPitch = (
-    <Grid container justify="center" className={classes.pitchContainer}>
-      <Grid
-        container
-        item
-        xs={12}
-        lg={8}
-        xl={6}
-        className={clsx(
-          classes.pitchBoxContainer,
-          isNotNativeApp && classes.nativeAppPitchBoxContainer,
-        )}
-        spacing={8}
-      >
-        {renderPitchItems}
+  const renderAppStoreBadges = (
+    <Grid className={classes.appStoreBadgeContainer} container justify="center" alignItems="center">
+      <Grid className={classes.appStoreBadgeImageContainer} container justify="center" spacing={4}>
+        <Grid item xs={6}>
+          <AppStoreBadge />
+        </Grid>
+        <Grid item xs={6}>
+          <GooglePlayBadge />
+        </Grid>
       </Grid>
     </Grid>
   );
+
+  const renderSchoolLogos = SCHOOL_LOGOS.map(({ name, alt }) => (
+    <Grid item>
+      <Image
+        width={125}
+        height={125}
+        layout="intrinsic"
+        objectFit="contain"
+        src={`/images/school-logos/${name}`}
+        alt={alt}
+      />
+    </Grid>
+  ));
 
   const layoutProps = {
     seoProps,
@@ -263,8 +185,24 @@ const LandingPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   return (
     <LandingPageTemplate {...layoutProps}>
-      {renderCta}
-      {renderPitch}
+      <Grid
+        className={classes.container}
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+      >
+        {renderHeader}
+        {renderDescription}
+        {renderInfo}
+        {renderCta}
+        {renderAppStoreBadges}
+      </Grid>
+      <Grid className={classes.schools} container justify="center">
+        <Grid item container xs={12} lg={9} xl={6} spacing={8} justify="center" alignItems="center">
+          {renderSchoolLogos}
+        </Grid>
+      </Grid>
     </LandingPageTemplate>
   );
 };
