@@ -11,37 +11,23 @@ import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import AssignmentOutlined from '@material-ui/icons/AssignmentOutlined';
 import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
 import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
-import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
-import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
-import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
-import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
-import WhatshotOutlined from '@material-ui/icons/WhatshotOutlined';
-import clsx from 'clsx';
 import { useAuthContext, useDarkModeContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { MouseEvent, useState } from 'react';
-import {
-  BORDER_RADIUS,
-  TOP_NAVBAR_HEIGHT_DESKTOP,
-  TOP_NAVBAR_HEIGHT_MOBILE,
-  TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
-} from 'styles';
+import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
@@ -57,17 +43,11 @@ import {
   TopNavbarSearchWidget,
 } from '../shared';
 
-const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   root: {
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
     display: 'flex',
     justifyContent: 'center',
-    [breakpoints.up('md')]: {
-      height: TOP_NAVBAR_HEIGHT_WITH_DESKTOP_NAVIGATION,
-      justifyContent: 'center',
-    },
-  },
-  hideNavigation: {
     [breakpoints.up('md')]: {
       height: TOP_NAVBAR_HEIGHT_DESKTOP,
     },
@@ -89,29 +69,6 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   seeAllButton: {
     marginTop: spacing(2),
   },
-  tabs: {
-    backgroundColor: palette.type === 'dark' ? palette.background.default : palette.primary.dark,
-  },
-  tab: {
-    borderBottom: 'none',
-    color: palette.secondary.main,
-    minWidth: 'auto',
-    minHeight: 'auto',
-    height: '100%',
-    padding: `${spacing(2)} ${spacing(3)}`,
-  },
-  selectedTab: {
-    borderBottom: `0.1rem solid ${palette.secondary.main}`,
-  },
-  tabWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-  },
-  tabLabelIcon: {
-    marginRight: '0.3rem',
-    marginBottom: '0.2rem !important',
-  },
   score: {
     marginLeft: spacing(1),
   },
@@ -121,7 +78,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   header,
   emoji,
   hideBackButton,
-  hideNavigation,
   hideSearch,
   hideDynamicButtons,
   hideLoginButton,
@@ -139,7 +95,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
-  const { pathname } = useRouter();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
@@ -347,63 +302,5 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </Toolbar>
   );
 
-  const tabs = [
-    {
-      href: urls.home,
-      label: t('common:home'),
-      icon: HomeOutlined,
-    },
-    {
-      href: urls.askQuestion,
-      label: t('common:askQuestion'),
-      icon: HelpOutlineOutlined,
-    },
-    {
-      href: urls.search,
-      label: t('common:findContent'),
-      icon: AssignmentOutlined,
-    },
-    {
-      href: urls.addCourse,
-      label: t('common:addCourses'),
-      icon: SchoolOutlined,
-    },
-    {
-      href: urls.uploadMaterial,
-      label: t('common:uploadResources'),
-      icon: CloudUploadOutlined,
-    },
-    {
-      href: urls.trending,
-      label: t('common:suggestions'),
-      icon: WhatshotOutlined,
-    },
-  ];
-
-  const mapTabs = tabs.map(({ href, label, icon: Icon }, i) => (
-    <Link href={href} key={i}>
-      <Tab
-        classes={{
-          root: clsx(classes.tab, pathname === href && classes.selectedTab),
-          wrapper: classes.tabWrapper,
-        }}
-        label={label}
-        icon={<Icon className={classes.tabLabelIcon} />}
-        selected={pathname === href}
-      />
-    </Link>
-  ));
-
-  const renderNavigation = isTabletOrDesktop && !hideNavigation && (
-    <Tabs className={classes.tabs} variant="standard" textColor="secondary">
-      {mapTabs}
-    </Tabs>
-  );
-
-  return (
-    <AppBar className={clsx(classes.root, hideNavigation && classes.hideNavigation)}>
-      {renderToolbar}
-      {renderNavigation}
-    </AppBar>
-  );
+  return <AppBar className={classes.root}>{renderToolbar}</AppBar>;
 };

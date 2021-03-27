@@ -4,10 +4,7 @@ import DescriptionOutlined from '@material-ui/icons/DescriptionOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import PolicyOutlined from '@material-ui/icons/PolicyOutlined';
-import SchoolOutlined from '@material-ui/icons/SchoolOutlined';
 import ScoreOutlined from '@material-ui/icons/ScoreOutlined';
-import SubjectOutlined from '@material-ui/icons/SubjectOutlined';
-import UpdateOutlined from '@material-ui/icons/UpdateOutlined';
 import VpnKeyOutlined from '@material-ui/icons/VpnKeyOutlined';
 
 import { urls } from './urls';
@@ -89,11 +86,6 @@ export const SETTINGS_ITEMS = {
 
 export const ABOUT_ITEMS = [
   {
-    icon: SchoolOutlined,
-    text: 'common:forTeachers',
-    href: urls.forTeachers,
-  },
-  {
     icon: ContactSupportOutlined,
     text: 'common:contact',
     href: urls.contact,
@@ -112,16 +104,6 @@ export const ABOUT_ITEMS = [
     icon: DescriptionOutlined,
     text: 'common:values',
     href: urls.values,
-  },
-  {
-    icon: SubjectOutlined,
-    text: 'common:blog',
-    href: urls.blogs,
-  },
-  {
-    icon: UpdateOutlined,
-    text: 'common:updates',
-    href: urls.updates,
   },
   {
     icon: PolicyOutlined,

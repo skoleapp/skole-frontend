@@ -16,13 +16,7 @@ export const ResourceTableBody: React.FC<Props> = ({
   ...tableRowProps
 }) => {
   const mapResources = resources.map((c, i) => (
-    <ResourceTableRow
-      resource={c}
-      hideResourceChip
-      hideCourseLink={hideCourseLink}
-      key={i}
-      {...tableRowProps}
-    />
+    <ResourceTableRow resource={c} hideCourseLink={hideCourseLink} key={i} {...tableRowProps} />
   ));
 
   return <TableBody>{mapResources}</TableBody>;
