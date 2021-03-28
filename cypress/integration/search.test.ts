@@ -2,7 +2,7 @@ import { urls } from 'utils';
 
 describe('Search Page Test Suite', () => {
   beforeEach(() => {
-    cy.graphQlMock({ operationName: 'UserMe', fixture: 'userMeAnonymous' }).as('userMe');
+    cy.graphQlMock({ operationName: 'UserMe', fixture: 'userMe' }).as('userMe');
     cy.graphQlMock({ operationName: 'Threads', fixture: 'threads' }).as('threads');
   });
 
