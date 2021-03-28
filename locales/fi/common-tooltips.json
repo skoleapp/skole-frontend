@@ -6,8 +6,6 @@
   "previousPage": "Siirry edelliselle sivulle.",
   "firstPage": "Siirry ensimmäiselle sivulle.",
   "language": "Vaihda kieltä.",
-  "loginRequired": "Kirjaudu sisään käyttääksesi tätä ominaisuutta.",
-  "verificationRequired": "Vahvista tilisi käyttääksesi tätä ominaisuutta.",
   "openSettings": "Avaa asetukset.",
   "rank": "Tämän käyttäjän arvo on {{ rank }} pisteillä {{ score }}.",
   "ownRank": "Arvosi on {{ rank }} pisteillä {{ score }}.",

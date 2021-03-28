@@ -2,21 +2,66 @@
   "data": {
     "userMe": {
       "id": "2",
+      "slug": "testuser2",
       "username": "testuser2",
-      "email": "testuser2@test.com",
+      "email": "testuser2@test.test",
       "title": "",
       "bio": "",
-      "avatar": "",
-      "score": 0,
+      "avatar": "/media/uploads/avatars/test_avatar.jpg",
+      "avatarThumbnail": "/media/CACHE/images/uploads/avatars/test_avatar/091ab966bf90f3c02d97ebcb85d69145.jpg",
+      "score": 9,
       "created": "2020-01-01T12:00:00+00:00",
       "verified": true,
-      "school": {
-        "id": "1",
-        "name": "University of Turku"
-      },
-      "subject": {
-        "id": "1",
-        "name": "Computer Engineering"
+      "unreadActivityCount": 3,
+      "fcmToken": null,
+      "rank": "Freshman",
+      "commentReplyEmailPermission": false,
+      "threadCommentEmailPermission": false,
+      "newBadgeEmailPermission": false,
+      "commentReplyPushPermission": true,
+      "threadCommentPushPermission": true,
+      "newBadgePushPermission": true,
+      "badgeProgresses": [
+        {
+          "badge": {
+            "id": "4",
+            "name": "First Thread",
+            "description": "Create your first thread.",
+            "tier": "BRONZE"
+          },
+          "progress": 0,
+          "steps": 1
+        },
+        {
+          "badge": {
+            "id": "5",
+            "name": "First Upvote",
+            "description": "Upvote something.",
+            "tier": "BRONZE"
+          },
+          "progress": 0,
+          "steps": 1
+        },
+        {
+          "badge": {
+            "id": "6",
+            "name": "First Downvote",
+            "description": "Downvote something.",
+            "tier": "BRONZE"
+          },
+          "progress": 0,
+          "steps": 1
+        }
+      ],
+      "selectedBadgeProgress": {
+        "badge": {
+          "id": "5",
+          "name": "First Upvote",
+          "description": "Upvote something.",
+          "tier": "BRONZE"
+        },
+        "progress": 0,
+        "steps": 1
       }
     }
   }

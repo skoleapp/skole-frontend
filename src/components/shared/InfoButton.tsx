@@ -13,8 +13,8 @@ interface Props {
 
 export const InfoButton: React.FC<Props> = ({ tooltip, infoDialogParams }) => {
   const { handleOpenInfoDialog } = useInfoContext();
-  const { isMobile } = useMediaQueries();
-  const color = isMobile ? 'secondary' : 'default';
+  const { smDown } = useMediaQueries();
+  const color = smDown ? 'secondary' : 'default';
   const handleClick = (): void => handleOpenInfoDialog(infoDialogParams);
 
   return (

@@ -4,11 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { MainTemplateProps } from 'types';
 
-import { BottomNavbar, Footer, Head, TopNavbar } from '../layout';
+import { BottomNavbar, Footer, HeadComponent as Head, TopNavbar } from '../layout';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   root: {
@@ -61,30 +61,43 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueries();
   const containerFullWidth = R.propOr(false, 'fullWidth', containerProps);
   const containerDense = R.propOr(false, 'dense', containerProps);
 
   const containerClasses = clsx(
     classes.container,
-    (hideBottomNavbar || isTabletOrDesktop) && classes.disableMarginBottom,
+    (hideBottomNavbar || mdUp) && classes.disableMarginBottom,
     containerFullWidth && classes.containerFullWidth,
     containerDense && classes.containerDense,
   );
 
-  const renderHead = <Head {...seoProps} />;
-  const renderTopNavbar = (isMobile && customTopNavbar) || <TopNavbar {...topNavbarProps} />;
+  const renderHead = useMemo(() => <Head {...seoProps} />, [seoProps]);
 
-  const renderContainer = (
-    <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>
-      {children}
-    </Container>
+  const renderTopNavbar = useMemo(
+    () => (smDown && customTopNavbar) || <TopNavbar {...topNavbarProps} />,
+    [customTopNavbar, smDown, topNavbarProps],
   );
 
-  const renderBottomNavbar =
-    isMobile && !hideBottomNavbar && (customBottomNavbar || <BottomNavbar />);
+  const renderContainer = useMemo(
+    () => (
+      <Container {...R.omit(['fullWidth', 'dense'], containerProps)} className={containerClasses}>
+        {children}
+      </Container>
+    ),
+    [children, containerClasses, containerProps],
+  );
 
-  const renderFooter = isTabletOrDesktop && !hideFooter && <Footer {...footerProps} />;
+  const renderBottomNavbar = useMemo(
+    () => smDown && !hideBottomNavbar && (customBottomNavbar || <BottomNavbar />),
+    [customBottomNavbar, hideBottomNavbar, smDown],
+  );
+
+  const renderFooter = useMemo(() => mdUp && !hideFooter && <Footer {...footerProps} />, [
+    footerProps,
+    hideFooter,
+    mdUp,
+  ]);
 
   return (
     <Grid container direction="column" className={classes.root} {...props}>

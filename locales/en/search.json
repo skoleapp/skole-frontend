@@ -1,6 +1,6 @@
 {
   "title": "Search",
-  "coursesSubHeader": "Courses",
-  "noCourses": "No courses were found with the provided search criteria. You can add the course if it does not yet exist.",
-  "noCoursesLink": "Add a course here!"
+  "resultsInfo": "Results for '{{ searchTerm }}'.",
+  "noThreads": "No threads found with '{{ searchTerm }}'.",
+  "create": "Create '{{ searchTerm }}'"
 }

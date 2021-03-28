@@ -1,10 +1,8 @@
 import 'nprogress/nprogress.css';
 
 import { ApolloProvider } from '@apollo/client';
-import DayJsUtils from '@date-io/dayjs';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
-import MuiPickersUtilsProvider from '@material-ui/pickers/MuiPickersUtilsProvider';
 import { HistoryContextProvider } from 'context';
 import { withDarkMode } from 'hocs';
 import { useMuiTheme } from 'hooks';
@@ -37,12 +35,10 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     <HistoryContextProvider>
       <I18nProvider lang={locale || ''} namespaces={pageProps._ns}>
         <ApolloProvider client={apolloClient}>
-          <MuiPickersUtilsProvider utils={DayJsUtils}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </MuiPickersUtilsProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
         </ApolloProvider>
       </I18nProvider>
     </HistoryContextProvider>
