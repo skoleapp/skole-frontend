@@ -1,3 +1,4 @@
 *.graphql.d.ts linguist-generated=true
 *.graphql.tsx linguist-generated=true
 yarn.lock linguist-generated=true
+**/fixtures/*.json linguist-generated=true

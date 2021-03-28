@@ -2,7 +2,7 @@ import { useSettingsContext } from 'context';
 import { useTranslation } from 'lib';
 import React from 'react';
 
-import { SettingsList } from '../settings';
+import { SettingsList } from '../shared';
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
 

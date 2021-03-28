@@ -1,0 +1,23 @@
+{
+  "starThread": "Merkitse lanka tähdellä.",
+  "unstarThread": "Poista tähti langalta.",
+  "upvoteThread": "Anna langalle ylös-ääni.",
+  "removeThreadUpvote": "Poista ylös-ääni langalta.",
+  "downvoteThread": "Anna langalla alas-ääni.",
+  "removeThreadDownvote": "Poista alas-ääni langalta.",
+  "shareThread": "Jaa lanka.",
+  "threadInfo": "Näytä langan tiedot.",
+  "threadActions": "Näytä langan valikko.",
+  "threadImage": "Näytä langan kuva.",
+  "upvoteComment": "Anna kommentille ylös-ääni.",
+  "removeCommentUpvote": "Poista ylös-ääni kommentilta.",
+  "downvoteComment": "Anna kommentille alas-ääni.",
+  "removeCommentDownvote": "Poista alas-ääni kommentilta.",
+  "shareComment": "Jaa kommentti.",
+  "commentActions": "Näytä kommentin valikko.",
+  "commentImage": "Näytä kommentin kuva.",
+  "addCommentImage": "Lisää kuva.",
+  "clearCommentImage": "Tyhjennä kuva.",
+  "commentReplies": "{{ replyCount }} vastausta.",
+  "sendMessage": "Lähetä viesti."
+}

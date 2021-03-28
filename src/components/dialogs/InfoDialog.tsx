@@ -6,7 +6,7 @@ import { useInfoContext } from 'context';
 import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { urls } from 'utils';
 
 import { TextLink } from '../shared';
@@ -37,32 +37,46 @@ export const InfoDialog: React.FC = () => {
     onCancel: handleCloseInfoDialog,
   };
 
-  const renderInfoItems = infoItems.map(({ label, value }, i) => (
-    <Grid key={i} container>
-      <Grid item xs={6}>
-        <Typography variant="body2" color="textSecondary">
-          {label}
-        </Typography>
-      </Grid>
-      <Grid item xs={6}>
-        <Typography className="truncate-text" variant="body2">
-          {value}
-        </Typography>
-      </Grid>
-    </Grid>
-  ));
-
-  const renderCreatorLink = !!creator && (
-    <TextLink href={urls.user(slug)}>{creator.username}</TextLink>
+  const renderInfoItems = useMemo(
+    () =>
+      infoItems.map(({ label, value }, i) => (
+        <Grid key={i} container>
+          <Grid item xs={6}>
+            <Typography variant="body2" color="textSecondary">
+              {label}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography className="truncate-text" variant="body2">
+              {value}
+            </Typography>
+          </Grid>
+        </Grid>
+      )),
+    [infoItems],
   );
 
-  const renderCreator = creator ? renderCreatorLink : communityUser;
+  const renderCreatorLink = useMemo(
+    () => !!creator && <TextLink href={urls.user(slug)}>{creator.username}</TextLink>,
+    [creator, slug],
+  );
+
+  const renderCreator = useMemo(() => (creator ? renderCreatorLink : communityUser), [
+    communityUser,
+    creator,
+    renderCreatorLink,
+  ]);
+
   const renderCreationTime = useDayjs(created).startOf('day').fromNow();
 
-  const renderCreated = !!created && (
-    <Typography className={classes.created} variant="body2" color="textSecondary">
-      {createdBy} {renderCreator} {renderCreationTime}
-    </Typography>
+  const renderCreated = useMemo(
+    () =>
+      !!created && (
+        <Typography className={classes.created} variant="body2" color="textSecondary">
+          {createdBy} {renderCreator} {renderCreationTime}
+        </Typography>
+      ),
+    [classes.created, created, createdBy, renderCreationTime, renderCreator],
   );
 
   return (

@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 
@@ -32,37 +32,47 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { isTabletOrDesktop } = useMediaQueries();
+  const { smUp } = useMediaQueries();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
-  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+  const renderEmoji = useMemo(() => !!emoji && <Emoji emoji={emoji} />, [emoji]);
 
-  const renderHeaderTitle = (
-    <>
-      {header}
-      {renderEmoji}
-    </>
+  const renderHeaderTitle = useMemo(
+    () => (
+      <>
+        {header}
+        {renderEmoji}
+      </>
+    ),
+    [header, renderEmoji],
   );
 
-  const renderHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
-      }}
-      title={renderHeaderTitle}
-    />
+  const renderHeader = useMemo(
+    () =>
+      smUp && (
+        <CardHeader
+          classes={{
+            root: classes.cardHeaderRoot,
+            title: classes.cardHeaderTitle,
+          }}
+          title={renderHeaderTitle}
+        />
+      ),
+    [classes.cardHeaderRoot, classes.cardHeaderTitle, renderHeaderTitle, smUp],
   );
 
-  const renderForm = (
-    <CardContent>
-      <Grid container justify="center">
-        <Grid item xs={12} sm={8} md={6} lg={4} xl={3}>
-          {children}
+  const renderForm = useMemo(
+    () => (
+      <CardContent>
+        <Grid container justify="center">
+          <Grid item xs={12} sm={10} md={6}>
+            {children}
+          </Grid>
         </Grid>
-      </Grid>
-    </CardContent>
+      </CardContent>
+    ),
+    [children],
   );
 
   const layoutProps = {

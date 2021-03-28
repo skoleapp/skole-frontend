@@ -6,8 +6,6 @@
   "previousPage": "Gå till föregoende sida.",
   "firstPage": "Gå till första sidan.",
   "language": "Ändra språk.",
-  "loginRequired": "Logga in för att aktivera den här funktionen.",
-  "verificationRequired": "Verifiera ditt konto för att aktivera den här funktionen.",
   "openSettings": "Öppna inställningar.",
   "rank": "Denna användares rankning är {{ rank }} med {{ score }} poäng.",
   "ownRank": "Din rankning är {{ rank }} med {{ score }} poäng.",

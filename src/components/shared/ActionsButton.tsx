@@ -13,8 +13,8 @@ interface Props {
 
 export const ActionsButton: React.FC<Props> = ({ tooltip, actionsDialogParams }) => {
   const { handleOpenActionsDialog } = useActionsContext();
-  const { isMobile } = useMediaQueries();
-  const color = isMobile ? 'secondary' : 'default';
+  const { smDown } = useMediaQueries();
+  const color = smDown ? 'secondary' : 'default';
   const handleClick = (): void => handleOpenActionsDialog(actionsDialogParams);
 
   return (

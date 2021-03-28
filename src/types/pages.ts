@@ -1,11 +1,6 @@
-import { SeoProps } from './layout';
 import { MarkdownPageData } from './markdown';
 
-export interface SeoPageProps extends Record<string, unknown> {
-  seoProps: SeoProps;
-}
-
-export interface MarkdownPageProps extends SeoPageProps {
+export interface MarkdownPageProps extends Record<string, unknown> {
   data: MarkdownPageData;
   content: string;
 }

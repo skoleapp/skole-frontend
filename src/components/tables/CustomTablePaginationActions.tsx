@@ -8,7 +8,7 @@ import KeyboardArrowLeftOutlined from '@material-ui/icons/KeyboardArrowLeftOutli
 import KeyboardArrowRightOutlined from '@material-ui/icons/KeyboardArrowRightOutlined';
 import LastPageOutlined from '@material-ui/icons/LastPageOutlined';
 import { useTranslation } from 'lib';
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, useCallback, useMemo } from 'react';
 
 const useStyles = makeStyles({
   root: {
@@ -32,64 +32,86 @@ export const CustomTablePaginationActions: React.FC<Props> = ({
   const classes = useStyles();
   const { t } = useTranslation();
 
-  const handleFirstPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0);
-
-  const handleBackButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
-    onChangePage(e, page - 1);
-
-  const handleNextButtonClick = (e: MouseEvent<HTMLButtonElement>): void =>
-    onChangePage(e, page + 1);
-
-  const handleLastPageButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
-    onChangePage(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  const renderFirstPageButton = (
-    <Tooltip title={t('common-tooltips:firstPage')}>
-      <Typography component="span">
-        <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
-          <FirstPageOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
+  const handleFirstPageButtonClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, 0),
+    [onChangePage],
   );
 
-  const renderPreviousPageButton = (
-    <Tooltip title={t('common-tooltips:previousPage')}>
-      <Typography component="span">
-        <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
-          <KeyboardArrowLeftOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
+  const handleBackButtonClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page - 1),
+    [onChangePage, page],
   );
 
-  const renderNextPageButton = (
-    <Tooltip title={t('common-tooltips:nextPage')}>
-      <Typography component="span">
-        <IconButton
-          onClick={handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          size="small"
-        >
-          <KeyboardArrowRightOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
+  const handleNextButtonClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>): void => onChangePage(e, page + 1),
+    [onChangePage, page],
   );
 
-  const renderLastPageButton = (
-    <Tooltip title={t('common-tooltips:lastPage')}>
-      <Typography component="span">
-        <IconButton
-          onClick={handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          size="small"
-        >
-          <LastPageOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
+  const handleLastPageButtonClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>): void => {
+      onChangePage(e, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    },
+    [count, onChangePage, rowsPerPage],
+  );
+
+  const renderFirstPageButton = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:firstPage')}>
+        <Typography component="span">
+          <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} size="small">
+            <FirstPageOutlined />
+          </IconButton>
+        </Typography>
+      </Tooltip>
+    ),
+    [handleFirstPageButtonClick, page, t],
+  );
+
+  const renderPreviousPageButton = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:previousPage')}>
+        <Typography component="span">
+          <IconButton onClick={handleBackButtonClick} disabled={page === 0} size="small">
+            <KeyboardArrowLeftOutlined />
+          </IconButton>
+        </Typography>
+      </Tooltip>
+    ),
+    [handleBackButtonClick, page, t],
+  );
+
+  const renderNextPageButton = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:nextPage')}>
+        <Typography component="span">
+          <IconButton
+            onClick={handleNextButtonClick}
+            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+            size="small"
+          >
+            <KeyboardArrowRightOutlined />
+          </IconButton>
+        </Typography>
+      </Tooltip>
+    ),
+    [count, handleNextButtonClick, page, rowsPerPage, t],
+  );
+
+  const renderLastPageButton = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:lastPage')}>
+        <Typography component="span">
+          <IconButton
+            onClick={handleLastPageButtonClick}
+            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+            size="small"
+          >
+            <LastPageOutlined />
+          </IconButton>
+        </Typography>
+      </Tooltip>
+    ),
+    [count, handleLastPageButtonClick, page, rowsPerPage, t],
   );
 
   return (

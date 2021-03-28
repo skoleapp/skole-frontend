@@ -1,17 +1,3 @@
 {
-  "title": "Koti",
-  "subheader": "Koita etsiä kurssia!",
-  "nextStepsHeader": "Seuraavat vaiheet",
-  "inviteHeader": "Skolessa on kyse yhteistyöstä opiskelukavereidesi kanssa. Kutsu kaverisi!",
-  "inviteText": "Kutsu kavereita",
-  "contactHeader": "Eikö koulusi tai oppiaineesi ole vielä listattuna. Ota meihin yhteyttä niin lisäämme ne!",
-  "contactText": "Ota yhteyttä",
-  "takeATourHeader": "Opi, mistä Skolessa on kyse. Kirjautumalla sisään saat kaiken irti siitä!",
-  "takeATourText": "Käy kierroksella",
-  "verifyAccountHeader": "Vahvistamalla tilisi, saat käyttöösi kaikki ominaisuudet ja nautit parhaasta mahdollisesta kokemuksesta!",
-  "verifyAccountText": "Vahvista tili",
-  "addSchoolAndSubjectHeader": "Lisää koulusi ja oppaineesi nähdäksesi ajankohtaisempaa sisältöä!",
-  "addSchoolAndSubjectText": "Viimeistele profiilisi",
-  "uploadHeader": "Jaa opiskelumateriaalisi muiden käyttäjien kanssa ja kasvata pisteitäsi!",
-  "uploadText": "Lisää materiaalia"
+  "title": "Koti"
 }

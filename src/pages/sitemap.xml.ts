@@ -1,7 +1,5 @@
-import { SitemapDocument } from 'generated';
-import { initApolloClient } from 'lib';
 import { GetServerSideProps } from 'next';
-import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
+import { LOCALE_PATHS, urls } from 'utils';
 
 const toXhtmlLink = (path: string, langName: string, langPath: string): string => {
   // If the `path` is '/sv/foo' and `langPath` is '/fi', the `hrefPath` will become '/fi/foo'.
@@ -46,47 +44,23 @@ const createSitemap = (routes: { path: string; modified: string }[]): string =>
       ${routes.map((route) => toUrl(route.path, route.modified)).join('')}
     </urlset>`;
 
-const laterDate = (date: string | undefined, other: string): string => {
-  return !date || other > date ? other : date;
-};
-
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const modified = process.env.BUILD_DATE || new Date().toISOString().slice(0, 10);
 
   const staticPaths = [
     '', // Don't want the index page to have a slash.
-    urls.addCourse,
     urls.contact,
-    urls.guidelines,
-    urls.home,
     urls.login,
     urls.privacy,
     urls.register,
     urls.resetPassword,
-    urls.score,
-    urls.search,
     urls.terms,
-    urls.uploadMaterial,
     urls.values,
   ];
 
   const paths = staticPaths.map((path) => ({ path, modified }));
-
-  const apolloClient = initApolloClient();
-  const { data } = await apolloClient.query({
-    query: SitemapDocument,
-  });
-
-  for (const page of DYNAMIC_PATHS) {
-    for (const entry of data.sitemap[page]) {
-      paths.push({
-        path: `/${page}/${entry.slug}`,
-        modified: laterDate(entry.modified, modified),
-      });
-    }
-  }
-
   const translatedPaths = [];
+
   for (const lang of LOCALE_PATHS) {
     for (const path of paths) {
       translatedPaths.push({

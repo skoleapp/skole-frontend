@@ -1,13 +1,10 @@
-import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import {
   ActionRequiredTemplate,
-  AutocompleteField,
   ButtonLink,
-  ContactLink,
   FormSubmitSection,
   FormTemplate,
   PasswordField,
@@ -16,23 +13,12 @@ import {
 } from 'components';
 import { useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import {
-  AutocompleteSchoolsDocument,
-  AutocompleteSubjectsDocument,
-  RegisterMutation,
-  SchoolObjectType,
-  SubjectObjectType,
-  UpdateAccountSettingsMutation,
-  useRegisterMutation,
-  useUpdateAccountSettingsMutation,
-} from 'generated';
+import { RegisterMutation, useRegisterMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import * as R from 'ramda';
-import React, { useState } from 'react';
-import { SeoPageProps } from 'types';
+import React, { useCallback, useMemo, useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -43,24 +29,16 @@ interface RegisterFormValues {
   confirmPassword: string;
 }
 
-interface UpdateUserFormValues {
-  school: SchoolObjectType | null;
-  subject: SubjectObjectType | null;
-}
-
 enum RegisterPhases {
   REGISTER = 'register',
-  UPDATE_ACCOUNT_SETTINGS = 'update-account-settings',
   REGISTER_COMPLETE = 'register-complete',
 }
 
-const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const RegisterPage: NextPage = () => {
   const { t } = useTranslation();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe, setUserMe } = useAuthContext();
-
-  const handleSkipUpdateProfile = (): void => setPhase(RegisterPhases.REGISTER_COMPLETE);
 
   const {
     formRef: registerFormRef,
@@ -70,20 +48,16 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     generalFormValues: generalRegisterFormValues,
   } = useForm<RegisterFormValues>();
 
-  const {
-    formRef: updateAccountSettingsFormRef,
-    handleMutationErrors: handleUpdateAccountSettingsMutationErrors,
-    onError: onUpdateAccountSettingsError,
-    generalFormValues: generalUpdateAccountSettingsFormValues,
-  } = useForm<UpdateUserFormValues>();
-
-  const registerInitialValues = {
-    ...generalRegisterFormValues,
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  };
+  const registerInitialValues = useMemo(
+    () => ({
+      ...generalRegisterFormValues,
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    }),
+    [generalRegisterFormValues],
+  );
 
   const registerValidationSchema = Yup.object().shape({
     username: Yup.string().required(t('validation:required')),
@@ -104,7 +78,7 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     } else if (login?.user) {
       registerFormRef.current?.resetForm();
       setUserMe(login.user);
-      setPhase(RegisterPhases.UPDATE_ACCOUNT_SETTINGS);
+      setPhase(RegisterPhases.REGISTER_COMPLETE);
     } else {
       unexpectedRegisterError();
     }
@@ -116,229 +90,176 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleRegisterSubmit = async ({
-    username,
-    email,
-    password,
-  }: RegisterFormValues): Promise<void> => {
-    await registerMutation({
-      variables: {
-        username,
-        email,
-        password,
-      },
-    });
-  };
-
-  const updateAccountSettingsInitialValues = {
-    ...generalUpdateAccountSettingsFormValues,
-    school: null,
-    subject: null,
-  };
-
-  const handleUpdateAccountSettingsCompleted = ({
-    updateAccountSettings,
-  }: UpdateAccountSettingsMutation): void => {
-    if (updateAccountSettings?.errors?.length) {
-      handleUpdateAccountSettingsMutationErrors(updateAccountSettings.errors);
-    } else {
-      updateAccountSettingsFormRef.current?.resetForm();
-      setPhase(RegisterPhases.REGISTER_COMPLETE);
-    }
-  };
-
-  const [updateAccountSettings] = useUpdateAccountSettingsMutation({
-    onCompleted: handleUpdateAccountSettingsCompleted,
-    onError: onUpdateAccountSettingsError,
-    context,
-  });
-
-  const handleSubmitUpdateAccountSettings = async ({
-    school,
-    subject,
-  }: UpdateUserFormValues): Promise<void> => {
-    const variables = R.pick(['email'], userMe);
-
-    await updateAccountSettings({
-      variables: {
-        ...variables,
-        school: R.prop('id', school),
-        subject: R.prop('id', subject),
-      },
-    });
-  };
-
-  const renderUsernameField = (
-    <Field
-      label={t('forms:username')}
-      name="username"
-      component={TextFormField}
-      helperText={t('register:usernameHelperText')}
-    />
+  const handleRegisterSubmit = useCallback(
+    async ({ username, email, password }: RegisterFormValues): Promise<void> => {
+      await registerMutation({
+        variables: {
+          username,
+          email,
+          password,
+        },
+      });
+    },
+    [registerMutation],
   );
 
-  const renderEmailField = (
-    <Field
-      label={t('forms:email')}
-      name="email"
-      component={TextFormField}
-      helperText={t('register:emailHelperText')}
-    />
+  const renderUsernameField = useMemo(
+    () => (
+      <Field
+        label={t('forms:username')}
+        name="username"
+        component={TextFormField}
+        helperText={t('register:usernameHelperText')}
+      />
+    ),
+    [t],
   );
 
-  const renderPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => (
-    <PasswordField {...props} />
+  const renderEmailField = useMemo(
+    () => (
+      <Field
+        label={t('forms:email')}
+        name="email"
+        component={TextFormField}
+        helperText={t('register:emailHelperText')}
+      />
+    ),
+    [t],
   );
 
-  const renderConfirmPasswordField = (props: FormikProps<RegisterFormValues>): JSX.Element => (
-    <PasswordField label={t('forms:confirmPassword')} name="confirmPassword" {...props} />
+  const renderPasswordField = useCallback(
+    (props: FormikProps<RegisterFormValues>): JSX.Element => <PasswordField {...props} />,
+    [],
   );
 
-  const renderTermsLink = (
-    <FormControl>
-      <FormHelperText>
-        {t('register:termsHelperText')}{' '}
-        <TextLink href={urls.terms} target="_blank">
-          {t('common:terms')}
-        </TextLink>
-        .
-      </FormHelperText>
-    </FormControl>
+  const renderConfirmPasswordField = useCallback(
+    (props: FormikProps<RegisterFormValues>): JSX.Element => (
+      <PasswordField label={t('forms:confirmPassword')} name="confirmPassword" {...props} />
+    ),
+    [t],
   );
 
-  const renderRegisterFormSubmitSection = (props: FormikProps<RegisterFormValues>): JSX.Element => (
-    <FormSubmitSection submitButtonText={t('common:register')} {...props} />
+  const renderTermsLink = useMemo(
+    () => (
+      <FormControl>
+        <FormHelperText>
+          {t('register:termsHelperText')}{' '}
+          <TextLink href={urls.terms} target="_blank">
+            {t('common:terms')}
+          </TextLink>
+          .
+        </FormHelperText>
+      </FormControl>
+    ),
+    [t],
   );
 
-  const renderLoginButton = (
-    <FormControl>
-      <ButtonLink href={urls.login} variant="outlined" fullWidth>
-        {t('common:login')}
-      </ButtonLink>
-    </FormControl>
+  const renderRegisterFormSubmitSection = useCallback(
+    (props: FormikProps<RegisterFormValues>): JSX.Element => (
+      <FormSubmitSection submitButtonText={t('common:register')} {...props} />
+    ),
+    [t],
   );
 
-  const renderRegisterFormFields = (props: FormikProps<RegisterFormValues>): JSX.Element => (
-    <Form>
-      {renderUsernameField}
-      {renderEmailField}
-      {renderPasswordField(props)}
-      {renderConfirmPasswordField(props)}
-      {renderConfirmPasswordField}
-      {renderTermsLink}
-      {renderRegisterFormSubmitSection(props)}
-      {renderLoginButton}
-    </Form>
+  const renderLoginButton = useMemo(
+    () => (
+      <FormControl>
+        <ButtonLink href={urls.login} variant="outlined" fullWidth>
+          {t('common:login')}
+        </ButtonLink>
+      </FormControl>
+    ),
+    [t],
   );
 
-  const renderRegisterForm = phase === RegisterPhases.REGISTER && (
-    <Formik
-      initialValues={registerInitialValues}
-      validationSchema={registerValidationSchema}
-      onSubmit={handleRegisterSubmit}
-      innerRef={registerFormRef}
-    >
-      {renderRegisterFormFields}
-    </Formik>
+  const renderRegisterFormFields = useCallback(
+    (props: FormikProps<RegisterFormValues>): JSX.Element => (
+      <Form>
+        {renderUsernameField}
+        {renderEmailField}
+        {renderPasswordField(props)}
+        {renderConfirmPasswordField(props)}
+        {renderConfirmPasswordField}
+        {renderTermsLink}
+        {renderRegisterFormSubmitSection(props)}
+        {renderLoginButton}
+      </Form>
+    ),
+    [
+      renderConfirmPasswordField,
+      renderEmailField,
+      renderLoginButton,
+      renderRegisterFormSubmitSection,
+      renderTermsLink,
+      renderUsernameField,
+      renderPasswordField,
+    ],
   );
 
-  const renderUpdateAccountSettingsHelperText = (
-    <FormControl>
-      <Typography className="form-text" variant="subtitle1">
-        {t('register:updateAccountSettingsHelperText')}
-      </Typography>
-    </FormControl>
+  const renderRegisterForm = useMemo(
+    () =>
+      phase === RegisterPhases.REGISTER && (
+        <Formik
+          initialValues={registerInitialValues}
+          validationSchema={registerValidationSchema}
+          onSubmit={handleRegisterSubmit}
+          innerRef={registerFormRef}
+        >
+          {renderRegisterFormFields}
+        </Formik>
+      ),
+    [
+      handleRegisterSubmit,
+      phase,
+      registerFormRef,
+      registerInitialValues,
+      registerValidationSchema,
+      renderRegisterFormFields,
+    ],
   );
 
-  const renderSchoolField = (
-    <Field
-      name="school"
-      label={t('forms:schoolOptional')}
-      dataKey="autocompleteSchools"
-      searchKey="name"
-      document={AutocompleteSchoolsDocument}
-      component={AutocompleteField}
-    />
+  const renderRegisterCompleteText = useMemo(
+    () => (
+      <FormControl>
+        <Typography className="form-text" variant="subtitle1">
+          {t('register:registerCompleteText')}
+        </Typography>
+      </FormControl>
+    ),
+    [t],
   );
 
-  const renderSubjectField = (
-    <Field
-      name="subject"
-      label={t('forms:subjectOptional')}
-      dataKey="autocompleteSubjects"
-      searchKey="name"
-      document={AutocompleteSubjectsDocument}
-      component={AutocompleteField}
-    />
+  const renderContinueButton = useMemo(
+    () => (
+      <FormControl>
+        <ButtonLink
+          href={urls.home}
+          endIcon={<ArrowForwardOutlined />}
+          color="primary"
+          variant="contained"
+        >
+          {t('common:continue')}
+        </ButtonLink>
+      </FormControl>
+    ),
+    [t],
   );
 
-  const renderUpdateUserFormSubmitSection = (
-    props: FormikProps<UpdateUserFormValues>,
-  ): JSX.Element => <FormSubmitSection submitButtonText={t('common:save')} {...props} />;
-
-  const renderSkipButton = (
-    <FormControl>
-      <Button variant="outlined" onClick={handleSkipUpdateProfile}>
-        {t('common:setupLater')}
-      </Button>
-    </FormControl>
-  );
-
-  const renderContactUsLink = <ContactLink />;
-
-  const renderUpdateAccountSettingsFormFields = (
-    props: FormikProps<UpdateUserFormValues>,
-  ): JSX.Element => (
-    <Form>
-      {renderUpdateAccountSettingsHelperText}
-      {renderSchoolField}
-      {renderSubjectField}
-      {renderUpdateUserFormSubmitSection(props)}
-      {renderSkipButton}
-      {renderContactUsLink}
-    </Form>
-  );
-
-  const renderUpdateAccountSettingsForm = phase === RegisterPhases.UPDATE_ACCOUNT_SETTINGS && (
-    <Formik
-      initialValues={updateAccountSettingsInitialValues}
-      onSubmit={handleSubmitUpdateAccountSettings}
-      innerRef={updateAccountSettingsFormRef}
-    >
-      {renderUpdateAccountSettingsFormFields}
-    </Formik>
-  );
-
-  const renderRegisterCompleteText = (
-    <FormControl>
-      <Typography className="form-text" variant="subtitle1">
-        {t('register:registerCompleteText')}
-      </Typography>
-    </FormControl>
-  );
-
-  const renderContinueButton = (
-    <FormControl>
-      <ButtonLink
-        href={urls.home}
-        endIcon={<ArrowForwardOutlined />}
-        color="primary"
-        variant="contained"
-      >
-        {t('common:continue')}
-      </ButtonLink>
-    </FormControl>
-  );
-
-  const renderRegisterComplete = phase === RegisterPhases.REGISTER_COMPLETE && (
-    <>
-      {renderRegisterCompleteText}
-      {renderContinueButton}
-    </>
+  const renderRegisterComplete = useMemo(
+    () =>
+      phase === RegisterPhases.REGISTER_COMPLETE && (
+        <>
+          {renderRegisterCompleteText}
+          {renderContinueButton}
+        </>
+      ),
+    [phase, renderContinueButton, renderRegisterCompleteText],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('register:title'),
+    },
     topNavbarProps: {
       header: t('register:header'),
       emoji: '👋',
@@ -355,24 +276,15 @@ const RegisterPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   return (
     <FormTemplate {...layoutProps}>
       {renderRegisterForm}
-      {renderUpdateAccountSettingsForm}
       {renderRegisterComplete}
     </FormTemplate>
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'register');
-
-  return {
-    props: {
-      _ns: await loadNamespaces(['register'], locale),
-      seoProps: {
-        title: t('title'),
-        description: t('description'),
-      },
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['register'], locale),
+  },
+});
 
 export default withUserMe(RegisterPage);

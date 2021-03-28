@@ -11,51 +11,54 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
+import TableBody from '@material-ui/core/TableBody';
 import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
-import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
 import {
+  ActionRequiredTemplate,
   Badge,
   ButtonLink,
-  CommentTableBody,
-  CourseTableBody,
+  CommentTableRow,
   DialogHeader,
   Emoji,
   ErrorTemplate,
   Link,
+  LoadingBox,
   LoadingTemplate,
+  LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
-  ResourceTableBody,
   SettingsButton,
   SkoleDialog,
   TabPanel,
   TextLink,
+  ThreadTableBody,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import {
   BadgeObjectType,
   BadgeProgressFieldsFragment,
+  CommentObjectType,
   UpdateSelectedBadgeMutation,
-  UserSeoPropsDocument,
   useUpdateSelectedBadgeMutation,
+  useUserCommentsQuery,
   useUserQuery,
+  useUserThreadsQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useDayjs, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
-import { getT, initApolloClient, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { BORDER_RADIUS } from 'styles';
-import { SeoPageProps } from 'types';
-import { getLanguageHeaderContext, MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
+import { MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   paper: {
@@ -123,6 +126,15 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     width: '1.25rem',
     height: '1.25rem',
   },
+  badgeDialogPaper: {
+    overflow: 'hidden',
+    [breakpoints.up('md')]: {
+      paddingBottom: '3rem',
+    },
+  },
+  badgeDialogCardContent: {
+    overflowY: 'auto',
+  },
   verifyAccount: {
     marginTop: spacing(4),
   },
@@ -157,17 +169,15 @@ interface ProfileStrengthStep {
   completed: boolean;
 }
 
-const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const ProfilePage: NextPage = () => {
   const classes = useStyles();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueries();
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
 
   const {
     userMe,
-    school,
-    subject,
     badgeProgresses,
     selectedBadgeProgress: initialSelectedBadgeProgress,
     verified,
@@ -177,10 +187,33 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     selectedBadgeProgress,
     setSelectedBadgeProgress,
   ] = useState<BadgeProgressFieldsFragment | null>(initialSelectedBadgeProgress);
+
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
-  const { data, loading, error } = useUserQuery({ variables, context });
+
+  const { data: userData, loading: userLoading, error: userError } = useUserQuery({
+    variables,
+    context,
+  });
+
+  const { data: threadsData, loading: threadsLoading, error: threadsError } = useUserThreadsQuery({
+    variables,
+    context,
+    skip: !verified, // `true` for anonymous and unverified users.
+  });
+
+  const {
+    data: commentsData,
+    loading: commentsLoading,
+    error: commentsError,
+  } = useUserCommentsQuery({
+    variables,
+    context,
+    skip: !verified, // `true` for anonymous and unverified users.
+  });
+
+  const error = userError || threadsError || commentsError;
 
   const {
     open: selectBadgeDialogOpen,
@@ -188,7 +221,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     handleClose: handleCloseSelectBadgeDialog,
   } = useOpen();
 
-  const user = R.prop('user', data);
+  const user = R.prop('user', userData);
   const rank = R.prop('rank', user);
   const username = R.prop('username', user);
   const avatar = R.prop('avatar', user);
@@ -197,14 +230,11 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const score = R.prop('score', user);
   const isOwnProfile = !!user?.id && userMe?.id === user.id;
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
-  const courseCount = R.path(['courses', 'count'], data);
-  const resourceCount = R.path(['resources', 'count'], data);
-  const commentCount = R.path(['comments', 'count'], data);
-  const courses = R.pathOr([], ['courses', 'objects'], data);
-  const resources = R.pathOr([], ['resources', 'objects'], data);
-  const comments = R.pathOr([], ['comments', 'objects'], data);
-  const noCourses = isOwnProfile ? t('profile:ownProfileNoCourses') : t('profile:noCourses');
-  const noResources = isOwnProfile ? t('profile:ownProfileNoResources') : t('profile:noResources');
+  const threadCount = R.prop('threadCount', user);
+  const commentCount = R.prop('commentCount', user);
+  const threads = R.pathOr([], ['threads', 'objects'], threadsData);
+  const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
+  const noThreads = isOwnProfile ? t('profile:ownProfileNoThreads') : t('profile:noThreads');
   const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
   const _created = R.prop('created', user);
   const joined = useDayjs(_created).startOf('m').fromNow();
@@ -231,8 +261,8 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
     {
       label: t('profile-strength:step3'),
-      href: urls.accountSettings,
-      completed: !!school && !!subject,
+      href: '#', // TODO: Implement invite logic here.
+      completed: false,
     },
   ].sort((prev) => (prev.completed ? -1 : 1));
 
@@ -244,7 +274,7 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const allStepsCompleted = !profileStrengthSteps.some((s) => !s.completed);
 
   // Get label for profile strength score.
-  const getProfileStrengthText = (): string => {
+  const getProfileStrengthText = useCallback((): string => {
     switch (profileStrengthScore) {
       case 0: {
         return t('profile-strength:poor');
@@ -266,135 +296,16 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
         return '-';
       }
     }
-  };
+  }, [profileStrengthScore, t]);
 
   const handleTabChange = (_e: ChangeEvent<Record<symbol, unknown>>, val: number): void =>
     setTabValue(val);
 
-  const tabValueProps = {
-    value: tabValue,
-  };
-
-  const renderHeaderRight = isOwnProfile && <SettingsButton />;
-  const renderAvatar = <Avatar className={classes.avatar} src={mediaUrl(avatar)} />;
-  const renderUsername = <Typography variant="subtitle2">{username}</Typography>;
-
-  const renderTitle = !!title && (
-    <Typography variant="subtitle2" color="textSecondary">
-      {title}
-    </Typography>
-  );
-
-  const renderDesktopUsername = isTabletOrDesktop && renderUsername;
-  const renderDesktopTitle = isTabletOrDesktop && renderTitle;
-
-  const renderEditProfileButton = (
-    <ButtonLink
-      className={classes.button}
-      href={urls.editProfile}
-      variant="outlined"
-      endIcon={<EditOutlinedIcon />}
-      fullWidth={isMobile}
-    >
-      {t('profile:editProfile')}
-    </ButtonLink>
-  );
-
-  const renderStarredButton = (
-    <ButtonLink
-      className={classes.button}
-      href={urls.starred}
-      variant="outlined"
-      endIcon={<StarBorderOutlined />}
-      fullWidth={isMobile}
-    >
-      {t('profile:viewStarred')}
-    </ButtonLink>
-  );
-
-  const renderDesktopSettingsButton = <SettingsButton className={classes.button} />;
-
-  const renderScoreTitle = (
-    <Typography variant="body2" color="textSecondary">
-      {t('profile:score')}
-    </Typography>
-  );
-
-  const renderCourseCountTitle = (
-    <Typography variant="body2" color="textSecondary">
-      {t('profile:courses')}
-    </Typography>
-  );
-
-  const renderResourceCountTitle = (
-    <Typography variant="body2" color="textSecondary">
-      {t('profile:resources')}
-    </Typography>
-  );
-
-  const renderScoreValue = (
-    <Typography variant="subtitle2" className={classes.statValue}>
-      {score}
-    </Typography>
-  );
-
-  const renderCourseCountValue = (
-    <Typography variant="subtitle2" className={classes.statValue}>
-      {courseCount}
-    </Typography>
-  );
-
-  const renderResourceCountValue = (
-    <Typography variant="subtitle2" className={classes.statValue}>
-      {resourceCount}
-    </Typography>
-  );
-
-  const renderBio = !!bio && (
-    <Typography className={classes.bio} variant="body2">
-      {bio}
-    </Typography>
-  );
-
-  const renderJoined = (
-    <Typography className={classes.joined} variant="body2" color="textSecondary">
-      {t('common:joined')} {joined}
-    </Typography>
-  );
-
-  const renderRankEmoji = <Emoji emoji="🎖️" />;
-
-  const renderRankLabel = (
-    <>
-      {rank}
-      {renderRankEmoji}
-    </>
-  );
-
-  const renderRank = !!rank && (
-    <Box className={classes.rankContainer}>
-      <Typography variant="body2" color="textSecondary" gutterBottom>
-        {t('profile:rank')}
-      </Typography>
-      <Link href={urls.score}>
-        <Tooltip title={rankTooltip}>
-          <Chip className="rank-chip" size="small" label={renderRankLabel} />
-        </Tooltip>
-      </Link>
-    </Box>
-  );
-
-  const renderBadges = !!badges.length && (
-    <Box className={classes.badgeContainer}>
-      <Typography variant="body2" color="textSecondary" gutterBottom>
-        {t('profile:badges')}
-      </Typography>
-      <Grid container>
-        {badges.map((badge, i) => (
-          <Badge badge={badge} key={i} />
-        ))}
-      </Grid>
-    </Box>
+  const tabValueProps = useMemo(
+    () => ({
+      value: tabValue,
+    }),
+    [tabValue],
   );
 
   const onUpdateSelectedBadgeCompleted = ({
@@ -416,94 +327,302 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSelectBadge = ({ id }: BadgeObjectType) => async (): Promise<void> => {
-    updateSelectedBadge({ variables: { id } });
-  };
+  const handleSelectBadge = useCallback(
+    ({ id }: BadgeObjectType) => async (): Promise<void> => {
+      updateSelectedBadge({ variables: { id } });
+    },
+    [updateSelectedBadge],
+  );
 
-  const badgeDialogHeaderProps = {
-    text: t('profile:nextBadge'),
-    emoji: '👀',
-    onCancel: handleCloseSelectBadgeDialog,
-  };
+  const renderHeaderRight = useMemo(() => isOwnProfile && !!verified && <SettingsButton />, [
+    isOwnProfile,
+    verified,
+  ]);
 
-  const mapBadgeProgresses = badgeProgresses.map(
-    ({ badge, progress, steps }, i) =>
-      typeof steps === 'number' && (
-        <Grid item xs={12} md={6}>
-          <CardActionArea
-            onClick={handleSelectBadge(badge)}
-            className={classes.badgeCardActionArea}
-          >
-            <Badge badge={badge} key={i} noTooltip hoverable progress={progress} steps={steps} />
-            <Typography
-              className={classes.badgeDescription}
-              variant="body2"
-              color="textSecondary"
-              gutterBottom
-            >
-              {badge.description}
-            </Typography>
-          </CardActionArea>
-        </Grid>
+  const renderAvatar = useMemo(() => <Avatar className={classes.avatar} src={mediaUrl(avatar)} />, [
+    avatar,
+    classes.avatar,
+  ]);
+
+  const renderUsername = useMemo(() => <Typography variant="subtitle2">{username}</Typography>, [
+    username,
+  ]);
+
+  const renderTitle = useMemo(
+    () =>
+      !!title && (
+        <Typography variant="subtitle2" color="textSecondary">
+          {title}
+        </Typography>
       ),
+    [title],
   );
 
-  const renderSelectBadgeDialog = (
-    <SkoleDialog open={selectBadgeDialogOpen} onClose={handleCloseSelectBadgeDialog}>
-      <DialogHeader {...badgeDialogHeaderProps} />
-      <CardContent>
-        <Grid container spacing={4}>
-          {mapBadgeProgresses}
-        </Grid>
-      </CardContent>
-    </SkoleDialog>
-  );
+  const renderDesktopUsername = useMemo(() => mdUp && renderUsername, [mdUp, renderUsername]);
+  const renderDesktopTitle = useMemo(() => mdUp && renderTitle, [mdUp, renderTitle]);
 
-  const renderChangeSelectedBadgeButton = (
-    <Tooltip title={t('profile-tooltips:selectBadge')}>
-      <IconButton
-        onClick={handleOpenSelectBadgeDialog}
-        className={classes.changeSelectedBadgeButton}
+  const renderEditProfileButton = useMemo(
+    () => (
+      <ButtonLink
+        className={classes.button}
+        href={urls.editProfile}
+        variant="outlined"
+        endIcon={<EditOutlinedIcon />}
+        fullWidth={smDown}
       >
-        <SettingsOutlined className={classes.changeSelectedBadgeIcon} />
-      </IconButton>
-    </Tooltip>
+        {t('profile:editProfile')}
+      </ButtonLink>
+    ),
+    [classes.button, smDown, t],
   );
 
-  const renderNextBadgeLabel = (
-    <Typography variant="body2" color="textSecondary" gutterBottom>
-      <Grid container alignItems="center">
-        {t('profile:nextBadge')} {renderChangeSelectedBadgeButton}
-      </Grid>
-    </Typography>
+  const renderDesktopSettingsButton = useMemo(() => <SettingsButton className={classes.button} />, [
+    classes.button,
+  ]);
+
+  const renderScoreTitle = useMemo(
+    () => (
+      <Typography variant="body2" color="textSecondary">
+        {t('profile:score')}
+      </Typography>
+    ),
+    [t],
   );
 
-  const renderNextBadge = !!selectedBadgeProgress &&
-    typeof selectedBadgeProgress.steps === 'number' && (
-      <Badge
-        badge={selectedBadgeProgress.badge}
-        progress={selectedBadgeProgress.progress}
-        steps={selectedBadgeProgress.steps}
-      />
-    );
-
-  const renderBadgeTracking = isOwnProfile && (
-    <Box className={classes.badgeContainer}>
-      {renderNextBadgeLabel}
-      {renderNextBadge}
-    </Box>
+  const renderThreadCountTitle = useMemo(
+    () => (
+      <Typography variant="body2" color="textSecondary">
+        {t('profile:threads')}
+      </Typography>
+    ),
+    [t],
   );
 
-  const renderVerifyAccountLink = isOwnProfile && verified === false && (
-    <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
-      {t('common:verifyAccount')}
-    </TextLink>
+  const renderScoreValue = useMemo(
+    () => (
+      <Typography variant="subtitle2" className={classes.statValue}>
+        {score}
+      </Typography>
+    ),
+    [classes.statValue, score],
   );
 
-  const renderProfileStrengthHeader = (
-    <Typography variant="body2" color="textSecondary">
-      {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
-    </Typography>
+  const renderThreadCountValue = useMemo(
+    () => (
+      <Typography variant="subtitle2" className={classes.statValue}>
+        {threadCount}
+      </Typography>
+    ),
+    [classes.statValue, threadCount],
+  );
+
+  const renderBio = useMemo(
+    () =>
+      !!bio && (
+        <Typography className={classes.bio} variant="body2">
+          {bio}
+        </Typography>
+      ),
+    [bio, classes.bio],
+  );
+
+  const renderJoined = useMemo(
+    () => (
+      <Typography className={classes.joined} variant="body2" color="textSecondary">
+        {t('common:joined')} {joined}
+      </Typography>
+    ),
+    [classes.joined, joined, t],
+  );
+
+  const renderRankEmoji = useMemo(() => <Emoji emoji="🎖️" />, []);
+
+  const renderRankLabel = useMemo(
+    () => (
+      <>
+        {rank}
+        {renderRankEmoji}
+      </>
+    ),
+    [rank, renderRankEmoji],
+  );
+
+  const renderRank = useMemo(
+    () =>
+      !!rank && (
+        <Box className={classes.rankContainer}>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            {t('profile:rank')}
+          </Typography>
+          <Link href={urls.score}>
+            <Tooltip title={rankTooltip}>
+              <Chip className="rank-chip" size="small" label={renderRankLabel} />
+            </Tooltip>
+          </Link>
+        </Box>
+      ),
+    [classes.rankContainer, rank, rankTooltip, renderRankLabel, t],
+  );
+
+  const renderBadges = useMemo(
+    () =>
+      !!badges.length && (
+        <Box className={classes.badgeContainer}>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            {t('profile:badges')}
+          </Typography>
+          <Grid container>
+            {badges.map((badge, i) => (
+              <Badge badge={badge} key={i} />
+            ))}
+          </Grid>
+        </Box>
+      ),
+    [badges, classes.badgeContainer, t],
+  );
+
+  const mapBadgeProgresses = useMemo(
+    () =>
+      badgeProgresses.map(
+        ({ badge, progress, steps }, i) =>
+          typeof steps === 'number' && (
+            <Grid item xs={12} md={6}>
+              <CardActionArea
+                onClick={handleSelectBadge(badge)}
+                className={classes.badgeCardActionArea}
+              >
+                <Badge
+                  badge={badge}
+                  key={i}
+                  noTooltip
+                  hoverable
+                  progress={progress}
+                  steps={steps}
+                />
+                <Typography
+                  className={classes.badgeDescription}
+                  variant="body2"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {badge.description}
+                </Typography>
+              </CardActionArea>
+            </Grid>
+          ),
+      ),
+    [badgeProgresses, classes.badgeCardActionArea, classes.badgeDescription, handleSelectBadge],
+  );
+
+  const badgeDialogHeaderProps = useMemo(
+    () => ({
+      text: t('profile:nextBadge'),
+      emoji: '👀',
+      onCancel: handleCloseSelectBadgeDialog,
+    }),
+    [handleCloseSelectBadgeDialog, t],
+  );
+
+  const renderSelectBadgeDialog = useMemo(
+    () =>
+      !!selectedBadgeProgress && (
+        <SkoleDialog
+          open={selectBadgeDialogOpen}
+          onClose={handleCloseSelectBadgeDialog}
+          paperClasses={classes.badgeDialogPaper}
+        >
+          <DialogHeader {...badgeDialogHeaderProps} />
+          <CardContent className={classes.badgeDialogCardContent}>
+            <Grid container spacing={4}>
+              {mapBadgeProgresses}
+            </Grid>
+          </CardContent>
+        </SkoleDialog>
+      ),
+    [
+      badgeDialogHeaderProps,
+      handleCloseSelectBadgeDialog,
+      mapBadgeProgresses,
+      selectBadgeDialogOpen,
+      selectedBadgeProgress,
+      classes.badgeDialogCardContent,
+      classes.badgeDialogPaper,
+    ],
+  );
+
+  const renderChangeSelectedBadgeButton = useMemo(
+    () => (
+      <Tooltip title={t('profile-tooltips:selectBadge')}>
+        <IconButton
+          onClick={handleOpenSelectBadgeDialog}
+          className={classes.changeSelectedBadgeButton}
+        >
+          <SettingsOutlined className={classes.changeSelectedBadgeIcon} />
+        </IconButton>
+      </Tooltip>
+    ),
+    [
+      classes.changeSelectedBadgeButton,
+      classes.changeSelectedBadgeIcon,
+      handleOpenSelectBadgeDialog,
+      t,
+    ],
+  );
+
+  const renderNextBadgeLabel = useMemo(
+    () =>
+      !!selectedBadgeProgress && (
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+          <Grid container alignItems="center">
+            {t('profile:nextBadge')} {renderChangeSelectedBadgeButton}
+          </Grid>
+        </Typography>
+      ),
+    [renderChangeSelectedBadgeButton, t, selectedBadgeProgress],
+  );
+
+  const renderNextBadge = useMemo(
+    () =>
+      !!selectedBadgeProgress &&
+      typeof selectedBadgeProgress.steps === 'number' && (
+        <Badge
+          badge={selectedBadgeProgress.badge}
+          progress={selectedBadgeProgress.progress}
+          steps={selectedBadgeProgress.steps}
+        />
+      ),
+    [selectedBadgeProgress],
+  );
+
+  const renderBadgeTracking = useMemo(
+    () =>
+      isOwnProfile && (
+        <Box className={classes.badgeContainer}>
+          {renderNextBadgeLabel}
+          {renderNextBadge}
+        </Box>
+      ),
+    [classes.badgeContainer, isOwnProfile, renderNextBadge, renderNextBadgeLabel],
+  );
+
+  const renderVerifyAccountLink = useMemo(
+    () =>
+      isOwnProfile &&
+      verified === false && (
+        <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
+          {t('common:verifyAccount')}
+        </TextLink>
+      ),
+    [classes.verifyAccount, isOwnProfile, t, verified],
+  );
+
+  const renderProfileStrengthHeader = useMemo(
+    () => (
+      <Typography variant="body2" color="textSecondary">
+        {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
+      </Typography>
+    ),
+    [getProfileStrengthText, t],
   );
 
   const renderProfileStrengthStepLabel = ({
@@ -511,213 +630,332 @@ const UserPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     href,
     completed,
   }: ProfileStrengthStep): JSX.Element =>
-    !completed ? (
-      <TextLink href={href}>{label}</TextLink>
-    ) : (
-      <Typography variant="body2" color="textSecondary">
-        {label}
-      </Typography>
+    useMemo(
+      () =>
+        !completed ? (
+          <TextLink href={href}>{label}</TextLink>
+        ) : (
+          <Typography variant="body2" color="textSecondary">
+            {label}
+          </Typography>
+        ),
+      [completed, href, label],
     );
 
   // Render uncompleted items as links and completed ones as regular text.
-  const renderProfileStrengthSteps = profileStrengthSteps.map((step, i) => (
-    <Step
-      className={classes.step}
-      key={i}
-      completed={profileStrengthSteps[i].completed}
-      active={false}
-    >
-      <StepLabel>{renderProfileStrengthStepLabel(step)}</StepLabel>
-    </Step>
-  ));
+  const renderProfileStrengthSteps = useMemo(
+    () =>
+      profileStrengthSteps.map((step, i) => (
+        <Step
+          className={classes.step}
+          key={i}
+          completed={profileStrengthSteps[i].completed}
+          active={false}
+        >
+          <StepLabel>{renderProfileStrengthStepLabel(step)}</StepLabel>
+        </Step>
+      )),
+    [classes.step, profileStrengthSteps],
+  );
 
   // Hide stepper if all steps have been completed.
-  const renderProfileStrengthStepper = !allStepsCompleted && (
-    <Stepper className={classes.stepper} alternativeLabel={isMobile}>
-      {renderProfileStrengthSteps}
-    </Stepper>
+  const renderProfileStrengthStepper = useMemo(
+    () =>
+      !allStepsCompleted && (
+        <Stepper className={classes.stepper} alternativeLabel={smDown}>
+          {renderProfileStrengthSteps}
+        </Stepper>
+      ),
+    [allStepsCompleted, classes.stepper, renderProfileStrengthSteps, smDown],
   );
 
-  const renderProfileStrength = isOwnProfile && (
-    <Box className={classes.profileStrengthContainer}>
-      {renderProfileStrengthHeader}
-      {renderProfileStrengthStepper}
-    </Box>
+  const renderProfileStrength = useMemo(
+    () =>
+      isOwnProfile && (
+        <Box className={classes.profileStrengthContainer}>
+          {renderProfileStrengthHeader}
+          {renderProfileStrengthStepper}
+        </Box>
+      ),
+    [
+      classes.profileStrengthContainer,
+      isOwnProfile,
+      renderProfileStrengthHeader,
+      renderProfileStrengthStepper,
+    ],
   );
 
-  const renderDesktopActions = isTabletOrDesktop && isOwnProfile && (
-    <Grid item xs={12} container alignItems="center" spacing={4}>
-      {renderEditProfileButton}
-      {renderStarredButton}
-      {renderDesktopSettingsButton}
-    </Grid>
+  const renderDesktopActions = useMemo(
+    () =>
+      mdUp &&
+      isOwnProfile && (
+        <Grid item xs={12} container alignItems="center" spacing={4}>
+          {renderEditProfileButton}
+          {renderDesktopSettingsButton}
+        </Grid>
+      ),
+    [isOwnProfile, renderDesktopSettingsButton, renderEditProfileButton, mdUp],
   );
 
-  const statsDirection = isMobile ? 'column' : 'row';
+  const statsDirection = smDown ? 'column' : 'row';
 
-  const renderStats = (
-    <Grid item container xs={12} sm={8} md={5} spacing={2} className={classes.statsContainer}>
-      <Grid item xs={4} container direction={statsDirection}>
-        {renderScoreValue}
-        {renderScoreTitle}
+  const renderStats = useMemo(
+    () => (
+      <Grid item container xs={12} sm={8} md={5} spacing={2} className={classes.statsContainer}>
+        <Grid item xs={6} container direction={statsDirection}>
+          {renderScoreValue}
+          {renderScoreTitle}
+        </Grid>
+        <Grid item xs={6} container direction={statsDirection}>
+          {renderThreadCountValue}
+          {renderThreadCountTitle}
+        </Grid>
       </Grid>
-      <Grid item xs={4} container direction={statsDirection}>
-        {renderCourseCountValue}
-        {renderCourseCountTitle}
+    ),
+    [
+      classes.statsContainer,
+      renderScoreTitle,
+      renderScoreValue,
+      renderThreadCountTitle,
+      renderThreadCountValue,
+      statsDirection,
+    ],
+  );
+
+  const renderDesktopInfo = useMemo(
+    () =>
+      mdUp && (
+        <>
+          {renderBio}
+          {renderRank}
+          {renderBadges}
+          {renderBadgeTracking}
+          {renderVerifyAccountLink}
+          {renderProfileStrength}
+          {renderJoined}
+        </>
+      ),
+    [
+      renderBadgeTracking,
+      renderBadges,
+      renderBio,
+      renderJoined,
+      renderProfileStrength,
+      renderRank,
+      renderVerifyAccountLink,
+      mdUp,
+    ],
+  );
+
+  const renderResponsiveInfo = useMemo(
+    () => (
+      <Grid container>
+        <Grid
+          item
+          xs={4}
+          container
+          direction="column"
+          justify="center"
+          alignItems={smDown ? 'flex-start' : 'center'}
+        >
+          {renderAvatar}
+          {renderDesktopUsername}
+          {renderDesktopTitle}
+        </Grid>
+        <Grid
+          item
+          xs={8}
+          container
+          direction="column"
+          wrap="nowrap"
+          alignItems={smDown ? 'center' : 'flex-start'}
+        >
+          {renderDesktopActions}
+          {renderStats}
+          {renderDesktopInfo}
+        </Grid>
       </Grid>
-      <Grid item xs={4} container direction={statsDirection}>
-        {renderResourceCountValue}
-        {renderResourceCountTitle}
-      </Grid>
-    </Grid>
+    ),
+    [
+      renderAvatar,
+      renderDesktopActions,
+      renderDesktopInfo,
+      renderDesktopTitle,
+      renderDesktopUsername,
+      renderStats,
+      smDown,
+    ],
   );
 
-  const renderDesktopInfo = isTabletOrDesktop && (
-    <>
-      {renderBio}
-      {renderRank}
-      {renderBadges}
-      {renderBadgeTracking}
-      {renderVerifyAccountLink}
-      {renderProfileStrength}
-      {renderJoined}
-    </>
+  const renderMobileInfo = useMemo(
+    () =>
+      smDown && (
+        <Grid container direction="column">
+          {renderUsername}
+          {renderTitle}
+          {renderBio}
+          {renderRank}
+          {renderBadges}
+          {renderBadgeTracking}
+          {renderVerifyAccountLink}
+          {renderJoined}
+        </Grid>
+      ),
+    [
+      renderBadgeTracking,
+      renderBadges,
+      renderBio,
+      renderJoined,
+      renderRank,
+      renderTitle,
+      renderUsername,
+      renderVerifyAccountLink,
+      smDown,
+    ],
   );
 
-  const renderResponsiveInfo = (
-    <Grid container>
-      <Grid
-        item
-        xs={4}
-        container
-        direction="column"
-        justify="center"
-        alignItems={isMobile ? 'flex-start' : 'center'}
-      >
-        {renderAvatar}
-        {renderDesktopUsername}
-        {renderDesktopTitle}
-      </Grid>
-      <Grid
-        item
-        xs={8}
-        container
-        direction="column"
-        wrap="nowrap"
-        alignItems={isMobile ? 'center' : 'flex-start'}
-      >
-        {renderDesktopActions}
-        {renderStats}
-        {renderDesktopInfo}
-      </Grid>
-    </Grid>
+  const renderPublicUserInfo = useMemo(
+    () => (
+      <Paper className={classes.paper}>
+        {renderResponsiveInfo}
+        {renderMobileInfo}
+      </Paper>
+    ),
+    [classes.paper, renderMobileInfo, renderResponsiveInfo],
   );
 
-  const renderMobileInfo = isMobile && (
-    <Grid container direction="column">
-      {renderUsername}
-      {renderTitle}
-      {renderBio}
-      {renderRank}
-      {renderBadges}
-      {renderBadgeTracking}
-      {renderVerifyAccountLink}
-      {renderJoined}
-    </Grid>
+  const renderMobileActionsCard = useMemo(
+    () =>
+      smDown &&
+      isOwnProfile && (
+        <Paper className={clsx(classes.paper, classes.mobileActionsCard)}>
+          {renderProfileStrength}
+          {renderEditProfileButton}
+        </Paper>
+      ),
+    [
+      classes.mobileActionsCard,
+      classes.paper,
+      isOwnProfile,
+      renderEditProfileButton,
+      renderProfileStrength,
+      smDown,
+    ],
   );
 
-  const renderResponsiveContent = (
-    <Paper className={classes.paper}>
-      {renderResponsiveInfo}
-      {renderMobileInfo}
-    </Paper>
+  const renderThreadsLoading = useMemo(() => !!threadsLoading && <LoadingBox />, [threadsLoading]);
+
+  const renderCommentsLoading = useMemo(() => !!commentsLoading && <LoadingBox />, [
+    commentsLoading,
+  ]);
+
+  const renderThreadTableBody = useMemo(() => <ThreadTableBody threads={threads} />, [threads]);
+
+  const mapComments = useMemo(
+    () => comments.map((c, i) => <CommentTableRow comment={c} key={i} />),
+    [comments],
   );
 
-  const renderMobileActionsCard = isMobile && isOwnProfile && (
-    <Paper className={clsx(classes.paper, classes.mobileActionsCard)}>
-      {renderProfileStrength}
-      {renderEditProfileButton}
-      {renderStarredButton}
-    </Paper>
+  const renderCommentTableBody = useMemo(() => <TableBody>{mapComments}</TableBody>, [mapComments]);
+
+  const renderThreadTable = useMemo(
+    () =>
+      threads.length && (
+        <PaginatedTable
+          renderTableBody={renderThreadTableBody}
+          count={threadCount}
+          extraFilters={variables}
+        />
+      ),
+    [variables, renderThreadTableBody, threadCount, threads.length],
   );
 
-  const renderCourseTableBody = <CourseTableBody courses={courses} />;
-  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
-  const renderCommentTableBody = <CommentTableBody comments={comments} />;
-
-  const renderCourseTable = (
-    <PaginatedTable
-      renderTableBody={renderCourseTableBody}
-      count={courseCount}
-      extraFilters={variables}
-    />
+  const renderCommentTable = useMemo(
+    () =>
+      comments.length && (
+        <PaginatedTable
+          renderTableBody={renderCommentTableBody}
+          count={commentCount}
+          extraFilters={variables}
+        />
+      ),
+    [commentCount, renderCommentTableBody, variables, comments.length],
   );
 
-  const renderResourceTable = (
-    <PaginatedTable
-      renderTableBody={renderResourceTableBody}
-      count={resourceCount}
-      extraFilters={variables}
-    />
+  const renderThreadsNotFound = useMemo(() => <NotFoundBox text={noThreads} />, [noThreads]);
+  const renderCommentsNotFound = useMemo(() => <NotFoundBox text={noComments} />, [noComments]);
+
+  const renderCreatedThreads = useMemo(
+    () => renderThreadsLoading || renderThreadTable || renderThreadsNotFound,
+    [renderThreadsLoading, renderThreadTable, renderThreadsNotFound],
   );
 
-  const renderCommentTable = (
-    <PaginatedTable
-      renderTableBody={renderCommentTableBody}
-      count={commentCount}
-      extraFilters={variables}
-    />
+  const renderCreatedComments = useMemo(
+    () => renderCommentsLoading || renderCommentTable || renderCommentsNotFound,
+    [renderCommentsLoading, renderCommentTable, renderCommentsNotFound],
   );
 
-  const renderCoursesNotFound = <NotFoundBox text={noCourses} />;
-  const renderResourcesNotFound = <NotFoundBox text={noResources} />;
-  const renderCommentsNotFound = <NotFoundBox text={noComments} />;
-  const renderCreatedCourses = courses.length ? renderCourseTable : renderCoursesNotFound;
-  const renderCreatedResources = resources.length ? renderResourceTable : renderResourcesNotFound;
-  const renderCreatedComments = comments.length ? renderCommentTable : renderCommentsNotFound;
-
-  const renderCreatedContent = (
-    <Paper className={classes.createdContent}>
-      <Tabs {...tabValueProps} onChange={handleTabChange}>
-        <Tab label={`${t('common:courses')} (${courseCount})`} wrapped />
-        <Tab label={`${t('common:resources')} (${resourceCount})`} wrapped />
-        <Tab label={`${t('common:comments')} (${commentCount})`} wrapped />
-      </Tabs>
-      <TabPanel {...tabValueProps} index={0}>
-        {renderCreatedCourses}
-      </TabPanel>
-      <TabPanel {...tabValueProps} index={1}>
-        {renderCreatedResources}
-      </TabPanel>
-      <TabPanel {...tabValueProps} index={2}>
-        {renderCreatedComments}
-      </TabPanel>
-    </Paper>
+  const renderCreatedContent = useMemo(
+    () =>
+      !!userMe && (
+        <Paper className={classes.createdContent}>
+          <Tabs {...tabValueProps} onChange={handleTabChange}>
+            <Tab label={`${t('common:threads')} (${threadCount})`} />
+            <Tab label={`${t('common:comments')} (${commentCount})`} />
+          </Tabs>
+          <TabPanel {...tabValueProps} index={0}>
+            {renderCreatedThreads}
+          </TabPanel>
+          <TabPanel {...tabValueProps} index={1}>
+            {renderCreatedComments}
+          </TabPanel>
+        </Paper>
+      ),
+    [
+      classes.createdContent,
+      commentCount,
+      renderCreatedComments,
+      renderCreatedThreads,
+      t,
+      tabValueProps,
+      threadCount,
+      userMe,
+    ],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: username,
+    },
     topNavbarProps: {
       header: username,
       renderHeaderRight,
     },
   };
 
-  if (loading) {
-    return <LoadingTemplate seoProps={seoProps} />;
+  if (userLoading) {
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" seoProps={seoProps} />;
+    return <ErrorTemplate variant="error" />;
+  }
+
+  if (!userMe) {
+    return <LoginRequiredTemplate {...layoutProps}>{renderPublicUserInfo}</LoginRequiredTemplate>;
+  }
+
+  if (!verified) {
+    return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
   return (
     <MainTemplate {...layoutProps}>
-      {renderResponsiveContent}
+      {renderPublicUserInfo}
       {renderMobileActionsCard}
       {renderCreatedContent}
       {renderSelectBadgeDialog}
@@ -732,46 +970,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
-  const apolloClient = initApolloClient();
-  const t = await getT(locale, 'profile');
-  const variables = R.pick(['slug'], params);
-  const context = getLanguageHeaderContext(locale);
-  let seoProps = {};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['profile', 'profile-strength', 'profile-tooltips'], locale),
+  },
+  revalidate: MAX_REVALIDATION_INTERVAL,
+});
 
-  try {
-    const { data } = await apolloClient.query({
-      query: UserSeoPropsDocument,
-      variables,
-      context,
-    });
-
-    const user = R.prop('user', data);
-
-    if (!user) {
-      return {
-        notFound: true,
-      };
-    }
-
-    const username = R.prop('username', user);
-
-    seoProps = {
-      title: username,
-      description: t('description', { username }),
-    };
-  } catch {
-    // Network error.
-  }
-
-  return {
-    props: {
-      initialApolloState: apolloClient.cache.extract(),
-      _ns: await loadNamespaces(['profile', 'profile-strength', 'profile-tooltips'], locale),
-      seoProps,
-    },
-    revalidate: MAX_REVALIDATION_INTERVAL,
-  };
-};
-
-export default withUserMe(UserPage);
+export default withUserMe(ProfilePage);

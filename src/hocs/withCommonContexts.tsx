@@ -10,6 +10,7 @@ import {
   ConfirmContextProvider,
   LanguageContextProvider,
   NotificationsContextProvider,
+  OrderingContextProvider,
   SettingsContextProvider,
   ShareContextProvider,
 } from 'context';
@@ -26,12 +27,14 @@ export const withCommonContexts = <T extends Record<string, unknown>>(
           <SettingsContextProvider>
             <ConfirmContextProvider>
               <ShareContextProvider>
-                <PageComponent {...pageProps} />
-                <ConfirmationDialog />
-                <SettingsDialog />
-                <LanguageSelectorDialog />
-                <ShareDialog />
-                <Notifications />
+                <OrderingContextProvider>
+                  <PageComponent {...pageProps} />
+                  <ConfirmationDialog />
+                  <SettingsDialog />
+                  <LanguageSelectorDialog />
+                  <ShareDialog />
+                  <Notifications />
+                </OrderingContextProvider>
               </ShareContextProvider>
             </ConfirmContextProvider>
           </SettingsContextProvider>

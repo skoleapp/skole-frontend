@@ -7,9 +7,9 @@ import React from 'react';
 import { urls } from 'utils';
 
 export const BackButton: React.FC<IconButtonProps> = (props) => {
-  const { isMobile } = useMediaQueries();
+  const { smDown } = useMediaQueries();
   const { history } = useHistoryContext();
-  const color = isMobile ? 'secondary' : 'default';
+  const color = smDown ? 'secondary' : 'default';
 
   // If the visitor comes via an external link, redirect to landing page.
   // Otherwise trigger the back button of the browser.

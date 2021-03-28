@@ -1,64 +1,48 @@
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import DialogContent from '@material-ui/core/DialogContent';
-import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import ArrowBackOutlined from '@material-ui/icons/ArrowBackOutlined';
-import ClearAllOutlined from '@material-ui/icons/ClearAllOutlined';
-import FilterListOutlined from '@material-ui/icons/FilterListOutlined';
+import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import ClearOutlined from '@material-ui/icons/ClearOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
+import clsx from 'clsx';
 import {
-  AutocompleteField,
-  ContactLink,
-  CourseTableBody,
-  DialogHeader,
-  Emoji,
+  ActionRequiredTemplate,
   ErrorTemplate,
-  FormSubmitSection,
   LoadingBox,
   MainTemplate,
-  NativeSelectField,
   NotFoundBox,
   PaginatedTable,
-  SkoleDialog,
-  TextFormField,
+  ThreadTableBody,
 } from 'components';
-import { Field, Form, Formik, FormikProps } from 'formik';
-import {
-  AutocompleteCitiesDocument,
-  AutocompleteCountriesDocument,
-  AutocompleteSchoolsDocument,
-  AutocompleteSchoolTypesDocument,
-  AutocompleteSubjectsDocument,
-  CityObjectType,
-  CountryObjectType,
-  SchoolObjectType,
-  SchoolTypeObjectType,
-  SubjectObjectType,
-  useCoursesQuery,
-} from 'generated';
-import { withUserMe } from 'hocs';
-import { useForm, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { useAuthContext, useThreadFormContext } from 'context';
+import { useThreadsQuery } from 'generated';
+import { withAuthRequired } from 'hocs';
+import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { ChangeEvent, SyntheticEvent, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { withThreadForm } from 'src/hocs/withThreadForm';
 import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
-import { SeoPageProps } from 'types';
-import { getPaginationQuery, getQueryWithPagination, urls } from 'utils';
+import { getPaginationQuery, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
-  rootContainer: {
-    flexGrow: 1,
-  },
   container: {
     flexGrow: 1,
     display: 'flex',
@@ -78,504 +62,238 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     boxShadow: 'none',
     borderBottom: BORDER,
   },
-  cardHeaderRoot: {
-    borderBottom: BORDER,
-  },
-  cardHeaderTitle: {
-    color: palette.text.secondary,
-  },
-  searchContainer: {
+  topNavbarSearchContainer: {
     padding: spacing(1),
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
     backgroundColor: palette.background.paper,
     display: 'flex',
     alignItems: 'center',
   },
-  emailForm: {
+  topNavbarSearchForm: {
     flexGrow: 1,
   },
-  searchInputBaseRoot: {
+  topNavbarSearchInputBase: {
     width: '100%',
-  },
-  searchInputBaseInput: {
     paddingLeft: spacing(2),
   },
-  filterNames: {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    padding: spacing(2),
+  topNavbarSearchBackButton: {
+    padding: spacing(1),
+    marginLeft: spacing(-1),
   },
-  chip: {
-    margin: spacing(1),
+  cardHeader: {
+    padding: spacing(2),
+    borderBottom: BORDER,
+  },
+  searchForm: {
+    width: '100%',
+  },
+  searchInputBase: {
+    borderRadius: BORDER_RADIUS,
+    padding: spacing(3),
+    border: BORDER,
+  },
+  resultsInfo: {
+    padding: spacing(2),
   },
   tableContainer: {
     flexGrow: 1,
     display: 'flex',
   },
-  dialogContent: {
-    padding: spacing(2),
+  createThreadButton: {
+    marginTop: spacing(4),
   },
 }));
 
-interface SearchFormValues {
-  searchTerm: string;
-  school: SchoolObjectType | null;
-  subject: SubjectObjectType | null;
-  schoolType: SchoolTypeObjectType | null;
-  country: CountryObjectType | null;
-  city: CityObjectType | null;
-  ordering: string;
-}
-
-interface ValidFilter {
-  name: string;
-  value: string;
-}
-
-const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const SearchPage: NextPage = () => {
   const classes = useStyles();
-  const { isMobile, isTabletOrDesktop, isXlDesktop } = useMediaQueries();
+  const { smUp } = useMediaQueries();
   const { t } = useTranslation();
   const { pathname, query } = useRouter();
-
-  const variables = R.pick(
-    [
-      'searchTerm',
-      'school',
-      'subject',
-      'schoolType',
-      'country',
-      'city',
-      'ordering',
-      'page',
-      'pageSize',
-    ],
-    query,
-  );
-
+  const variables = R.pick(['searchTerm', 'page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
-  const { data, loading, error } = useCoursesQuery({ variables, context });
-  const { formRef } = useForm<SearchFormValues>();
-  const courses = R.pathOr([], ['courses', 'objects'], data);
-  const school = R.prop('school', data);
-  const subject = R.prop('subject', data);
-  const schoolType = R.prop('schoolType', data);
-  const country = R.prop('country', data);
-  const city = R.prop('city', data);
-  const count = R.path(['courses', 'count'], data);
+  const { verified } = useAuthContext();
+  const { data, loading, error } = useThreadsQuery({ variables, context });
+  const threads = R.pathOr([], ['threads', 'objects'], data);
+  const count = R.path(['threads', 'count'], data);
   const searchTerm = R.prop('searchTerm', query);
-  const ordering = R.prop('ordering', query);
-  const [searchValue, setSearchValue] = useState(searchTerm);
-  const schoolName = R.prop('name', school);
-  const subjectName = R.prop('name', subject);
-  const schoolTypeName = R.prop('name', schoolType);
-  const countryName = R.prop('name', country);
-  const cityName = R.prop('name', city);
-  const filtersHeader = t('common:filters');
-  const filtersEmoji = '🔎';
-  const resultsHeader = t('common:searchResults');
-
-  const {
-    open: filtersOpen,
-    handleOpen: handleOpenFilters,
-    handleClose: handleCloseFilters,
-  } = useOpen();
-
-  const dynamicInitialValues = {
-    searchTerm,
-    school,
-    subject,
-    schoolType,
-    country,
-    city,
-    ordering,
-  };
-
-  // Only re-render when one of the dynamic values changes - the form values will reset every time.
-  // Ignore: ESLint cannot infer the values in the dependency array.
-  const initialValues = useMemo(() => dynamicInitialValues, Object.values(dynamicInitialValues)); // eslint-disable-line react-hooks/exhaustive-deps
-
+  const [searchInputValue, setSearchInputValue] = useState('');
+  const { handleOpenThreadForm } = useThreadFormContext();
   const paginationQuery = getPaginationQuery(query); // Query that holds only pagination.
 
-  // Query that holds pagination plus all search params.
-  const queryWithPagination = getQueryWithPagination({
-    query,
-    extraFilters: initialValues,
-  });
+  useEffect(() => {
+    setSearchInputValue(searchTerm);
+  }, [searchTerm]);
 
-  const onSearchChange = (e: ChangeEvent<HTMLInputElement>): void => setSearchValue(e.target.value);
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>): void =>
+    setSearchInputValue(e.target.value);
 
-  // Pick non-empty values and reload the page with new query params.
-  const handleSubmitFilters = async (filteredValues: Record<symbol, unknown>): Promise<void> => {
-    const validQuery = R.pickBy((val: string): boolean => !!val, filteredValues);
-    formRef.current?.resetForm();
-    handleCloseFilters();
-    await Router.push({ pathname, query: validQuery });
-  };
+  const handleSubmitSearch = useCallback(
+    async (e: SyntheticEvent): Promise<void> => {
+      e.preventDefault();
+      setSearchInputValue('');
+      await Router.push({ pathname: urls.search, query: { searchTerm: searchInputValue } });
+      sa_event('submit_thread_search');
+    },
+    [searchInputValue],
+  );
 
-  // Clear the query params and reset form.
-  const handleClearFilters = async (): Promise<void> => {
-    const paginationQuery = getPaginationQuery(query);
-    formRef.current?.resetForm();
-    setSearchValue('');
-    handleCloseFilters();
+  const handleClearSearchInput = useCallback(async (): Promise<void> => {
+    setSearchInputValue('');
     await Router.push({ pathname, query: paginationQuery });
-  };
+  }, [paginationQuery, pathname]);
 
-  const filtersArr = [
-    {
-      name: 'searchTerm',
-      value: searchTerm,
-    },
-    {
-      name: 'school',
-      value: schoolName,
-    },
-    {
-      name: 'subject',
-      value: subjectName,
-    },
-    {
-      name: 'schoolType',
-      value: schoolTypeName,
-    },
-    {
-      name: 'country',
-      value: countryName,
-    },
-    {
-      name: 'city',
-      value: cityName,
-    },
-  ];
-
-  const validFilters: ValidFilter[] = filtersArr.filter((f) => !!f.value);
-
-  const handleSearchIconClick = (): void => {
-    const input = document.getElementById('search-navbar-input-base');
-
-    if (input) {
-      input.focus();
-    }
-  };
-
-  const handleClearSearchInput = async (): Promise<void> => {
-    setSearchValue('');
-    await Router.push({ pathname, query: { ...paginationQuery } });
-  };
-
-  const handleSubmitSearchInput = async (e: SyntheticEvent): Promise<void> => {
-    e.preventDefault();
-    await Router.push({
-      pathname,
-      query: { ...queryWithPagination, searchTerm: searchValue },
-    });
-  };
-
-  const handlePreSubmit = async ({
-    searchTerm,
-    school: _school,
-    subject: _subject,
-    schoolType: _schoolType,
-    country: _country,
-    city: _city,
-    ordering,
-  }: SearchFormValues): Promise<void> => {
-    const school = R.prop('slug', _school);
-    const subject = R.prop('slug', _subject);
-    const schoolType = R.prop('slug', _schoolType);
-    const country = R.prop('slug', _country);
-    const city = R.prop('slug', _city);
-
-    const filteredValues = {
-      ...queryWithPagination, // Define this first to override the values.
-      searchTerm,
-      school,
-      subject,
-      schoolType,
-      country,
-      city,
-      ordering,
-    };
-
-    await handleSubmitFilters(filteredValues);
-  };
-
-  const handleDeleteFilter = (filterName: string) => async (): Promise<void> => {
-    const query = R.pickBy((_: string, key: string) => key !== filterName, queryWithPagination);
-
-    if (filterName === 'searchTerm') {
-      await handleClearSearchInput();
-    }
-
-    await Router.push({ pathname, query });
-  };
-
-  const renderFilterNames = !!validFilters.length && (
-    <Box className={classes.filterNames}>
-      {validFilters.map(({ name, value }, i) => (
-        <Chip className={classes.chip} key={i} label={value} onDelete={handleDeleteFilter(name)} />
-      ))}
-    </Box>
+  const renderResultsInfo = useMemo(
+    () =>
+      !!searchTerm && (
+        <Box className={classes.resultsInfo}>
+          <Typography variant="body2" color="textSecondary">
+            {t('search:resultsInfo', { searchTerm })}
+          </Typography>
+        </Box>
+      ),
+    [searchTerm, classes.resultsInfo, t],
   );
 
-  const renderCourseSearchTermField = isTabletOrDesktop && (
-    <Field name="searchTerm" label={t('forms:searchTerm')} component={TextFormField} />
-  );
+  const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
+  const renderThreads = useMemo(() => <ThreadTableBody threads={threads} />, [threads]);
 
-  const renderSubjectField = (
-    <Field
-      name="subject"
-      label={t('forms:subject')}
-      dataKey="autocompleteSubjects"
-      searchKey="name"
-      document={AutocompleteSubjectsDocument}
-      component={AutocompleteField}
-    />
-  );
-
-  const renderSchoolField = (
-    <Field
-      name="school"
-      label={t('forms:school')}
-      dataKey="autocompleteSchools"
-      searchKey="name"
-      document={AutocompleteSchoolsDocument}
-      component={AutocompleteField}
-    />
-  );
-
-  const renderSchoolTypeField = (
-    <Field
-      name="schoolType"
-      label={t('forms:schoolType')}
-      dataKey="autocompleteSchoolTypes"
-      document={AutocompleteSchoolTypesDocument}
-      component={AutocompleteField}
-    />
-  );
-
-  const renderCityField = (
-    <Field
-      name="city"
-      label={t('forms:city')}
-      dataKey="autocompleteCities"
-      document={AutocompleteCitiesDocument}
-      component={AutocompleteField}
-    />
-  );
-
-  const renderCountryField = (
-    <Field
-      name="country"
-      label={t('forms:country')}
-      dataKey="autocompleteCountries"
-      document={AutocompleteCountriesDocument}
-      component={AutocompleteField}
-    />
-  );
-
-  const renderOrderingField = (
-    <Field
-      name="ordering"
-      label={t('forms:ordering')}
-      component={NativeSelectField}
-      className="Mui-InputLabel-shrink" // We want the label to be always shrunk.
-    >
-      <option value="best">{t('forms:bestOrdering')}</option>
-      <option value="score">{t('forms:scoreOrdering')}</option>
-      <option value="name">{t('forms:nameOrdering')}</option>
-      <option value="-name">{t('forms:nameOrderingReverse')}</option>
-    </Field>
-  );
-
-  const renderContactUsLink = <ContactLink />;
-
-  const renderFormSubmitSection = (props: FormikProps<SearchFormValues>): JSX.Element => (
-    <FormSubmitSection submitButtonText={t('common:apply')} {...props} />
-  );
-
-  const renderClearButton = (props: FormikProps<SearchFormValues>): JSX.Element | false =>
-    isTabletOrDesktop && (
-      <FormControl>
-        <Button
-          onClick={handleClearFilters}
-          variant="outlined"
-          endIcon={<ClearAllOutlined />}
-          disabled={props.isSubmitting}
-        >
-          {t('common:clear')}
-        </Button>
-      </FormControl>
-    );
-
-  const renderSearchFormFields = (props: FormikProps<SearchFormValues>): JSX.Element => (
-    <Form>
-      {renderCourseSearchTermField}
-      {renderSubjectField}
-      {renderSchoolField}
-      {renderSchoolTypeField}
-      {renderCityField}
-      {renderCountryField}
-      {renderOrderingField}
-      {renderContactUsLink}
-      {renderFormSubmitSection(props)}
-      {renderClearButton(props)}
-    </Form>
-  );
-
-  const renderFilterResultsForm = (
-    <DialogContent className={classes.dialogContent}>
-      <Formik
-        onSubmit={handlePreSubmit}
-        initialValues={initialValues}
-        innerRef={formRef}
-        enableReinitialize
-      >
-        {renderSearchFormFields}
-      </Formik>
-    </DialogContent>
-  );
-
-  const notFoundLinkProps = {
-    href: urls.addCourse,
-    text: t('search:noCoursesLink'),
-  };
-
-  const renderLoading = <LoadingBox />;
-  const renderCourses = <CourseTableBody courses={courses} dense={!isXlDesktop} />;
-
-  const renderTable = (
-    <Box className={classes.tableContainer}>
-      <PaginatedTable count={count} renderTableBody={renderCourses} extraFilters={initialValues} />
-    </Box>
-  );
-
-  const renderNotFound = <NotFoundBox text={t('search:noCourses')} linkProps={notFoundLinkProps} />;
-
-  const renderResults =
-    (loading && renderLoading) || (courses.length && renderTable) || renderNotFound;
-
-  const renderClearFiltersButton = (
-    <IconButton onClick={handleClearFilters} size="small">
-      <ClearAllOutlined />
-    </IconButton>
-  );
-
-  const renderDialogHeader = (
-    <DialogHeader
-      onCancel={handleCloseFilters}
-      text={filtersHeader}
-      emoji={filtersEmoji}
-      renderHeaderLeft={renderClearFiltersButton}
-    />
-  );
-
-  const renderFilterResultsDrawer = (
-    <SkoleDialog open={filtersOpen} onClose={handleCloseFilters}>
-      {renderDialogHeader}
-      {renderFilterResultsForm}
-    </SkoleDialog>
-  );
-
-  const renderMobileContent = isMobile && (
-    <Paper className={classes.container}>
-      {renderFilterNames}
-      {renderResults}
-      {renderFilterResultsDrawer}
-    </Paper>
-  );
-
-  const renderFiltersEmoji = <Emoji emoji={filtersEmoji} />;
-  const renderResultsEmoji = <Emoji emoji="🎓" />;
-
-  const renderFiltersHeaderTitle = (
-    <>
-      {filtersHeader}
-      {renderFiltersEmoji}
-    </>
-  );
-
-  const renderFilterResultsHeader = (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
-      }}
-      title={renderFiltersHeaderTitle}
-    />
-  );
-
-  const renderResultsHeaderTitle = (
-    <>
-      {resultsHeader}
-      {renderResultsEmoji}
-    </>
-  );
-
-  const renderResultsHeader = (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
-      }}
-      title={renderResultsHeaderTitle}
-    />
-  );
-
-  const renderDesktopContent = isTabletOrDesktop && (
-    <Grid container spacing={2} className={classes.rootContainer}>
-      <Grid item container xs={12} md={4} lg={3}>
-        <Paper className={classes.container}>
-          {renderFilterResultsHeader}
-          {renderFilterResultsForm}
-        </Paper>
-      </Grid>
-      <Grid item container xs={12} md={8} lg={9}>
-        <Paper className={classes.container}>
-          {renderResultsHeader}
-          {renderFilterNames}
-          {renderResults}
-        </Paper>
-      </Grid>
-    </Grid>
-  );
-
-  const renderSearchNavbarStartAdornment = searchValue ? (
-    <IconButton onClick={handleClearSearchInput} size="small">
-      <ArrowBackOutlined />
-    </IconButton>
-  ) : (
-    <IconButton onClick={handleSearchIconClick} size="small">
-      <SearchOutlined />
-    </IconButton>
-  );
-
-  const renderSearchNavbarEndAdornment = (
-    <IconButton onClick={handleOpenFilters} size="small">
-      <FilterListOutlined />
-    </IconButton>
-  );
-
-  const customTopNavbar = (
-    <AppBar className={classes.topNavbar}>
-      <Box className={classes.searchContainer}>
-        <form className={classes.emailForm} onSubmit={handleSubmitSearchInput}>
-          <InputBase
-            classes={{ root: classes.searchInputBaseRoot, input: classes.searchInputBaseInput }}
-            placeholder={t('forms:searchCourses')}
-            value={searchValue}
-            onChange={onSearchChange}
-            startAdornment={renderSearchNavbarStartAdornment}
-            endAdornment={renderSearchNavbarEndAdornment}
+  const renderTable = useMemo(
+    () =>
+      threads.length && (
+        <Box className={classes.tableContainer}>
+          <PaginatedTable
+            count={count}
+            renderTableBody={renderThreads}
+            extraFilters={{ searchTerm }}
           />
-        </form>
-      </Box>
-    </AppBar>
+        </Box>
+      ),
+    [threads, classes.tableContainer, count, renderThreads, searchTerm],
+  );
+
+  const renderNotFound = useMemo(
+    () => (
+      <NotFoundBox text={t('search:noThreads', { searchTerm })}>
+        <Button
+          onClick={(): void => handleOpenThreadForm({ title: searchTerm })}
+          className={classes.createThreadButton}
+          variant="contained"
+          endIcon={<ArrowForwardOutlined />}
+        >
+          {t('search:create', { searchTerm })}
+        </Button>
+      </NotFoundBox>
+    ),
+    [searchTerm, t, classes.createThreadButton, handleOpenThreadForm],
+  );
+
+  const renderResults = renderLoading || renderTable || renderNotFound;
+
+  const renderSearchInputStartAdornment = useMemo(
+    () => (
+      <InputAdornment position="start">
+        <SearchOutlined color="disabled" />
+      </InputAdornment>
+    ),
+    [],
+  );
+
+  const renderSearchInputEndAdornment = useMemo(
+    () =>
+      searchInputValue && (
+        <InputAdornment position="end">
+          <IconButton onClick={handleClearSearchInput} size="small">
+            <ClearOutlined />
+          </IconButton>
+        </InputAdornment>
+      ),
+    [searchInputValue, handleClearSearchInput],
+  );
+
+  const renderHeader = useMemo(
+    () =>
+      smUp && (
+        <Grid className={clsx('MuiCardHeader-root', classes.cardHeader)} container>
+          <form className={classes.searchForm} onSubmit={handleSubmitSearch}>
+            <InputBase
+              value={searchInputValue}
+              placeholder={t('forms:threadSearch')}
+              autoComplete="off"
+              onChange={handleSearchInputChange}
+              className={classes.searchInputBase}
+              fullWidth
+              startAdornment={renderSearchInputStartAdornment}
+              endAdornment={renderSearchInputEndAdornment}
+            />
+            <input type="submit" value="Submit" />
+          </form>
+        </Grid>
+      ),
+    [
+      classes.cardHeader,
+      classes.searchForm,
+      classes.searchInputBase,
+      handleSubmitSearch,
+      smUp,
+      searchInputValue,
+      t,
+      renderSearchInputEndAdornment,
+      renderSearchInputStartAdornment,
+    ],
+  );
+
+  const renderTopNavbarSearchInputStartAdornment = useMemo(
+    () =>
+      searchInputValue ? (
+        <InputAdornment position="start">
+          <IconButton
+            className={classes.topNavbarSearchBackButton}
+            onClick={handleClearSearchInput}
+            size="small"
+          >
+            <ArrowBackOutlined />
+          </IconButton>
+        </InputAdornment>
+      ) : (
+        <InputAdornment position="start">
+          <SearchOutlined color="disabled" />
+        </InputAdornment>
+      ),
+    [searchInputValue, classes.topNavbarSearchBackButton, handleClearSearchInput],
+  );
+
+  const customTopNavbar = useMemo(
+    () => (
+      <AppBar className={classes.topNavbar}>
+        <Box className={classes.topNavbarSearchContainer}>
+          <form className={classes.topNavbarSearchForm} onSubmit={handleSubmitSearch}>
+            <InputBase
+              className={classes.topNavbarSearchInputBase}
+              placeholder={t('forms:threadSearch')}
+              value={searchInputValue}
+              onChange={handleSearchInputChange}
+              startAdornment={renderTopNavbarSearchInputStartAdornment}
+            />
+          </form>
+        </Box>
+      </AppBar>
+    ),
+    [
+      classes.topNavbar,
+      classes.topNavbarSearchContainer,
+      classes.topNavbarSearchForm,
+      classes.topNavbarSearchInputBase,
+      handleSubmitSearch,
+      searchInputValue,
+      t,
+      renderTopNavbarSearchInputStartAdornment,
+    ],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('search:title'),
+    },
     customTopNavbar,
     topNavbarProps: {
       hideSearch: true,
@@ -583,32 +301,34 @@ const SearchPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" seoProps={seoProps} />;
+    return <ErrorTemplate variant="error" />;
+  }
+
+  if (!verified) {
+    return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
   return (
     <MainTemplate {...layoutProps}>
-      {renderMobileContent}
-      {renderDesktopContent}
+      <Paper className={classes.container}>
+        {renderHeader}
+        {renderResultsInfo}
+        {renderResults}
+      </Paper>
     </MainTemplate>
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'search');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['search'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['search'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
+const withWrappers = R.compose(withAuthRequired, withThreadForm);
 
-export default withUserMe(SearchPage);
+export default withWrappers(SearchPage);
