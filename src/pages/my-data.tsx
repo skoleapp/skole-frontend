@@ -1,19 +1,18 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { ActionRequiredTemplate, ButtonLink, FormSubmitSection, FormTemplate } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { ButtonLink, FormSubmitSection, FormTemplate } from 'components';
+import { useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import { GraphQlMyDataMutation, useGraphQlMyDataMutation } from 'generated';
-import { withUserMe } from 'hocs';
+import { withAuthRequired } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import React, { useState } from 'react';
-import { SeoPageProps } from 'types';
+import React, { useCallback, useMemo, useState } from 'react';
 import { urls } from 'utils';
 
-const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const MyDataPage: NextPage = () => {
   const {
     formRef,
     handleMutationErrors,
@@ -25,7 +24,6 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
   const { toggleNotification } = useNotificationsContext();
-  const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
 
   const onCompleted = async ({ myData }: GraphQlMyDataMutation): Promise<void> => {
@@ -47,71 +45,81 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSubmit = async (): Promise<void> => {
+  const handleSubmit = useCallback(async (): Promise<void> => {
     await myData();
-  };
+  }, [myData]);
 
-  const renderFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
-    <Form>
+  const renderFormFields = useCallback(
+    (props: FormikProps<FormikValues>): JSX.Element => (
+      <Form>
+        <FormControl>
+          <Typography className="form-text" variant="subtitle1">
+            {t('my-data:helpText')}
+          </Typography>
+        </FormControl>
+        <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+      </Form>
+    ),
+    [t],
+  );
+
+  const renderForm = useMemo(
+    () =>
+      !submitted && (
+        <Formik initialValues={generalFormValues} onSubmit={handleSubmit} innerRef={formRef}>
+          {renderFormFields}
+        </Formik>
+      ),
+    [formRef, generalFormValues, handleSubmit, renderFormFields, submitted],
+  );
+
+  const renderSubmittedText = useMemo(
+    () => (
       <FormControl>
         <Typography className="form-text" variant="subtitle1">
-          {t('my-data:helpText')}
+          {t('my-data:submitted')}
         </Typography>
       </FormControl>
-      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+    ),
+    [t],
+  );
+
+  const renderHomeButton = useMemo(
+    () => (
       <FormControl>
-        <ButtonLink href={urls.accountSettings} variant="outlined">
-          {t('my-data:backToAccountSettings')}
+        <ButtonLink
+          href={urls.home}
+          endIcon={<ArrowForwardOutlined />}
+          color="primary"
+          variant="contained"
+        >
+          {t('common:continue')}
         </ButtonLink>
       </FormControl>
-    </Form>
+    ),
+    [t],
   );
 
-  const renderForm = !submitted && (
-    <Formik initialValues={generalFormValues} onSubmit={handleSubmit} innerRef={formRef}>
-      {renderFormFields}
-    </Formik>
-  );
-
-  const renderSubmittedText = (
-    <FormControl>
-      <Typography className="form-text" variant="subtitle1">
-        {t('my-data:submitted')}
-      </Typography>
-    </FormControl>
-  );
-
-  const renderHomeButton = (
-    <FormControl>
-      <ButtonLink
-        href={urls.home}
-        endIcon={<ArrowForwardOutlined />}
-        color="primary"
-        variant="contained"
-      >
-        {t('common:continue')}
-      </ButtonLink>
-    </FormControl>
-  );
-
-  const renderSubmitted = submitted && (
-    <>
-      {renderSubmittedText}
-      {renderHomeButton}
-    </>
+  const renderSubmitted = useMemo(
+    () =>
+      submitted && (
+        <>
+          {renderSubmittedText}
+          {renderHomeButton}
+        </>
+      ),
+    [renderHomeButton, renderSubmittedText, submitted],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('my-data:title'),
+    },
     topNavbarProps: {
       header: t('my-data:header'),
       emoji: '💾',
     },
   };
-
-  if (!userMe) {
-    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
-  }
 
   return (
     <FormTemplate {...layoutProps}>
@@ -121,17 +129,10 @@ const MyDataPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'my-data');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['my-data'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['my-data'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
-
-export default withUserMe(MyDataPage);
+export default withAuthRequired(MyDataPage);

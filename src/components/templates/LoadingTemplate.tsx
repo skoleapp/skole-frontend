@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useDarkModeContext } from 'context';
 import Image from 'next/image';
 import React from 'react';
-import { SeoPageProps } from 'types';
 
 import { MainTemplate } from './MainTemplate';
 
@@ -32,7 +31,7 @@ const useStyles = makeStyles(({ palette }) => ({
   },
 }));
 
-export const LoadingTemplate: React.FC<SeoPageProps> = ({ seoProps }) => {
+export const LoadingTemplate: React.FC = () => {
   const classes = useStyles();
   const { darkMode } = useDarkModeContext();
 
@@ -41,7 +40,7 @@ export const LoadingTemplate: React.FC<SeoPageProps> = ({ seoProps }) => {
     : '/images/icons/skole-icon-text-red.svg';
 
   const layoutProps = {
-    seoProps,
+    seoProps: {},
     hideBottomNavbar: true,
     hideFooter: true,
     topNavbarProps: {

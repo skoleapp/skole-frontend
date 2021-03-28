@@ -7,7 +7,7 @@ import FlagOutlined from '@material-ui/icons/FlagOutlined';
 import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import { useActionsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { ResponsiveDialog } from './ResponsiveDialog';
 
@@ -29,48 +29,60 @@ export const ActionsDialog: React.FC = () => {
     },
   } = useActionsContext();
 
-  const handleClickShare = (): void => {
+  const handleClickShare = useCallback((): void => {
     handleCloseActionsDialog();
     handleOpenShareDialog(shareDialogParams);
-  };
+  }, [handleCloseActionsDialog, handleOpenShareDialog, shareDialogParams]);
 
-  const handleClickDelete = (): void => {
+  const handleClickDelete = useCallback((): void => {
     handleCloseActionsDialog();
 
     if (deleteActionParams?.callback) {
       deleteActionParams.callback();
     }
-  };
+  }, [deleteActionParams, handleCloseActionsDialog]);
 
   const actionsDialogHeaderProps = {
     onCancel: handleCloseActionsDialog,
   };
 
-  const renderShareAction = !hideShareAction && (
-    <MenuItem onClick={handleClickShare}>
-      <ListItemIcon>
-        <ShareOutlined />
-      </ListItemIcon>
-      <ListItemText>{shareText}</ListItemText>
-    </MenuItem>
+  const renderShareAction = useMemo(
+    () =>
+      !hideShareAction && (
+        <MenuItem onClick={handleClickShare}>
+          <ListItemIcon>
+            <ShareOutlined />
+          </ListItemIcon>
+          <ListItemText>{shareText}</ListItemText>
+        </MenuItem>
+      ),
+    [handleClickShare, hideShareAction, shareText],
   );
 
-  const renderDeleteAction = !hideDeleteAction && (
-    <MenuItem onClick={handleClickDelete} disabled={deleteActionParams?.disabled}>
-      <ListItemIcon>
-        <DeleteForeverOutlined />
-      </ListItemIcon>
-      <ListItemText>{deleteActionParams?.text}</ListItemText>
-    </MenuItem>
+  const renderDeleteAction = useMemo(
+    () =>
+      !hideDeleteAction && (
+        <MenuItem onClick={handleClickDelete} disabled={deleteActionParams?.disabled}>
+          <ListItemIcon>
+            <DeleteForeverOutlined />
+          </ListItemIcon>
+          <ListItemText>{deleteActionParams?.text}</ListItemText>
+        </MenuItem>
+      ),
+    [deleteActionParams?.disabled, deleteActionParams?.text, handleClickDelete, hideDeleteAction],
   );
 
-  const renderReportAction = !hideReportAction && (
-    <MenuItem disabled>
-      <ListItemIcon>
-        <FlagOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('common:reportAbuse')}</ListItemText>
-    </MenuItem>
+  const renderReportAction = useMemo(
+    () =>
+      !hideReportAction && (
+        <MenuItem disabled>
+          <ListItemIcon>
+            <FlagOutlined />
+          </ListItemIcon>
+          <ListItemText>{t('common:reportAbuse')}</ListItemText>
+        </MenuItem>
+      ),
+    [hideReportAction, t],
   );
 
   return (

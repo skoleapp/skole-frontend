@@ -4,28 +4,33 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Link, ListTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import React from 'react';
-import { SeoPageProps } from 'types';
+import React, { useMemo } from 'react';
 import { ABOUT_ITEMS } from 'utils';
 
-export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+export const AboutPage: NextPage = () => {
   const { t } = useTranslation();
 
-  const renderAboutMenuItems = ABOUT_ITEMS.map(({ icon: Icon, href, text }, i) => (
-    <Link href={href} key={i} fullWidth>
-      <MenuItem>
-        <ListItemIcon>
-          <Icon />
-        </ListItemIcon>
-        <ListItemText>{t(text)}</ListItemText>
-      </MenuItem>
-    </Link>
-  ));
+  const renderAboutMenuItems = useMemo(
+    () =>
+      ABOUT_ITEMS.map(({ icon: Icon, href, text }, i) => (
+        <Link href={href} key={i} fullWidth>
+          <MenuItem>
+            <ListItemIcon>
+              <Icon />
+            </ListItemIcon>
+            <ListItemText>{t(text)}</ListItemText>
+          </MenuItem>
+        </Link>
+      )),
+    [t],
+  );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('about:title'),
+    },
     topNavbarProps: {
       header: t('about:header'),
       emoji: 'ℹ️',
@@ -39,17 +44,10 @@ export const AboutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'about');
-
-  return {
-    props: {
-      _ns: await loadNamespaces(['about'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['about'], locale),
+  },
+});
 
 export default withUserMe(AboutPage);

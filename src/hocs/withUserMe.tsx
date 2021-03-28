@@ -5,12 +5,13 @@ import { useLanguageHeaderContext, useUserMe } from 'hooks';
 import { NextPage } from 'next';
 import Router from 'next/router';
 import React, { useCallback, useEffect } from 'react';
-import { SeoPageProps } from 'types';
 import { LS_LOGOUT_KEY, postMessageWebView, urls } from 'utils';
 
 import { withCommonContexts } from './withCommonContexts';
 
-export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): NextPage<T> => {
+export const withUserMe = <T extends Record<string, unknown>>(
+  PageComponent: NextPage<T>,
+): NextPage<T> => {
   const WithUserMe: NextPage<T> = (pageProps: T) => {
     const { authLoading, authNetworkError } = useUserMe();
     const { fcmToken } = useAuthContext();
@@ -38,18 +39,14 @@ export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): 
           // Set activity as read and navigate to the correct page.
           case 'NOTIFICATION_OPENED': {
             const {
-              data: { activity: id, course, resource, school, comment, user },
+              data: { activity: id, thread, comment, user },
             } = json;
 
             let pathname;
             let query;
 
-            if (course) {
-              pathname = urls.course(course);
-            } else if (resource) {
-              pathname = urls.resource(resource);
-            } else if (school) {
-              pathname = urls.school(school);
+            if (thread) {
+              pathname = urls.thread(thread);
             } else if (user) {
               pathname = urls.user(user);
             }
@@ -101,14 +98,14 @@ export const withUserMe = <T extends SeoPageProps>(PageComponent: NextPage<T>): 
     }, []);
 
     if (authNetworkError) {
-      return <ErrorTemplate variant="offline" seoProps={pageProps.seoProps} />;
+      return <ErrorTemplate variant="offline" />;
     }
 
     if (!authLoading && !authNetworkError) {
       return <PageComponent {...pageProps} />;
     }
 
-    return <LoadingTemplate seoProps={pageProps.seoProps} />;
+    return <LoadingTemplate />;
   };
 
   return withCommonContexts(WithUserMe);

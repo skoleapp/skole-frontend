@@ -15,25 +15,17 @@ export const LANGUAGES = [
   { label: 'languages:swedish', value: 'sv' },
 ];
 
-export const PDF_DEFAULT_TRANSLATION = { x: 0, y: 0 };
-export const PDF_DEFAULT_SCALE = 1.0;
-export const PDF_MIN_SCALE = 0.75;
-export const PDF_MAX_SCALE = 5;
-export const ACCEPTED_ATTACHMENT_FILES = ['image/*'];
+export const ACCEPTED_COMMENT_IMAGE_FILES = ['image/*'];
 export const ACCEPTED_AVATAR_FILES = ['image/*'];
-export const MAX_RESOURCE_FILE_SIZE = 10000000; // 10 MB.
-export const MAX_RESOURCE_IMAGE_WIDTH_HEIGHT = 1200; // Pixels.
-export const MAX_AVATAR_FILE_SIZE = 3500000; // 3.5 MB.
 export const MAX_AVATAR_WIDTH_HEIGHT = 200; // Pixels.
-export const MAX_COMMENT_ATTACHMENT_FILE_SIZE = 3500000; // 3.5 MB.
-export const MAX_COMMENT_ATTACHMENT_WIDTH_HEIGHT = 1200; // Pixels.
-export const RESULTS_PER_PAGE_OPTIONS = [10, 25, 50, 75, 100];
+export const MAX_IMAGE_FILE_SIZE = 3500000; // 3.5 MB.
+export const MAX_IMAGE_WIDTH_HEIGHT = 1200; // Pixels.
+export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
 export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
 export const MAX_REVALIDATION_INTERVAL = 1; // Seconds.
 
-export const DYNAMIC_PATHS = ['courses', 'resources', 'schools', 'users'];
 export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
 export const DEFAULT_NAMESPACES = [
@@ -43,11 +35,11 @@ export const DEFAULT_NAMESPACES = [
   'languages',
   'forms',
   'validation',
-  'notifications',
   'common-tooltips',
   'activity',
   'offline',
   'sharing',
+  'alt-texts',
 ];
 
 export const IMAGE_TYPES = [

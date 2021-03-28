@@ -1,21 +1,14 @@
 import FormControl from '@material-ui/core/FormControl';
-import {
-  ActionRequiredTemplate,
-  ButtonLink,
-  FormSubmitSection,
-  FormTemplate,
-  TextFormField,
-} from 'components';
-import { useAuthContext, useConfirmContext, useNotificationsContext } from 'context';
+import { ButtonLink, FormSubmitSection, FormTemplate, TextFormField } from 'components';
+import { useConfirmContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { DeleteUserMutation, useDeleteUserMutation } from 'generated';
-import { withUserMe } from 'hocs';
+import { withAuthRequired } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import React from 'react';
-import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -23,7 +16,7 @@ export interface DeleteAccountFormValues {
   password: string;
 }
 
-export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+export const DeleteAccountPage: NextPage = () => {
   const {
     formRef,
     handleMutationErrors,
@@ -34,7 +27,6 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const { t } = useTranslation();
   const { confirm } = useConfirmContext();
-  const { userMe } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
 
@@ -121,31 +113,22 @@ export const DeleteAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('delete-account:title'),
+    },
     topNavbarProps: {
       header: t('delete-account:header'),
       emoji: '⚠️',
     },
   };
 
-  if (!userMe) {
-    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
-  }
-
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'delete-account');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['delete-account'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['delete-account'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
-
-export default withUserMe(DeleteAccountPage);
+export default withAuthRequired(DeleteAccountPage);

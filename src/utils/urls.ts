@@ -1,12 +1,9 @@
 export const urls = {
-  course: (slug: string): string => `/courses/${slug}`,
-  resource: (slug: string): string => `/resources/${slug}`,
-  school: (slug: string): string => `/schools/${slug}`,
+  thread: (slug: string): string => `/threads/${slug}`,
   user: (slug: string): string => `/users/${slug}`,
   about: '/about',
   accountSettings: '/account-settings',
   activity: '/activity',
-  addCourse: '/add-course',
   badges: '/badges',
   changePassword: '/change-password',
   contact: '/contact',
@@ -25,7 +22,7 @@ export const urls = {
   search: '/search',
   starred: '/starred',
   terms: '/terms',
-  uploadMaterial: '/upload-material',
+  threads: '/threads',
   values: '/values',
   verifyAccount: '/verify-account',
 };

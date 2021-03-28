@@ -1,17 +1,3 @@
 {
-  "title": "Hemsida",
-  "subheader": "Försök att söka efter en kurs!",
-  "nextStepsHeader": "Nästa steg",
-  "inviteHeader": "Skole handlar om samarbete med dina klasskamrater. Bjud in dina vänner!",
-  "inviteText": "Bjud in vänner",
-  "contactHeader": "Är din skola eller ditt ämne ännu inte listat? Kontakta oss så lägger vi till dem!",
-  "contactText": "Kontakta oss",
-  "takeATourHeader": "Lär dig vad Skole handlar om. Genom att logga in får du ut det mesta!",
-  "takeATourText": "Ta en rundtur",
-  "verifyAccountHeader": "Genom att verifiera ditt konto låser du upp alla funktioner och får bästa möjliga upplevelse!",
-  "verifyAccountText": "Verifiera konto",
-  "addSchoolAndSubjectHeader": "Lägg till din skola och ämne för att se mer relevant innehåll!",
-  "addSchoolAndSubjectText": "Fyll i din profil",
-  "uploadHeader": "Dela ditt studiematerial med andra användare och öka din poäng!",
-  "uploadText": "Ladda upp material"
+  "title": "Hemsida"
 }

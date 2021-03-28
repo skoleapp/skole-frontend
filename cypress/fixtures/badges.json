@@ -1,0 +1,36 @@
+{
+  "data": {
+    "badges": [
+      {
+        "name": "Staff",
+        "description": "Skole staff.",
+        "tier": "DIAMOND"
+      },
+      {
+        "name": "Moderator",
+        "description": "Moderator.",
+        "tier": "DIAMOND"
+      },
+      {
+        "name": "First Comment",
+        "description": "Write your first comment.",
+        "tier": "BRONZE"
+      },
+      {
+        "name": "First Thread",
+        "description": "Create your first thread.",
+        "tier": "BRONZE"
+      },
+      {
+        "name": "First Upvote",
+        "description": "Upvote something.",
+        "tier": "BRONZE"
+      },
+      {
+        "name": "First Downvote",
+        "description": "Downvote something.",
+        "tier": "BRONZE"
+      }
+    ]
+  }
+}

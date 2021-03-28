@@ -1,6 +1,5 @@
 {
   "title": "Offline",
-  "description": "Det gick inte att ansluta till servern.",
   "header": "Offline",
   "text": "Se till att du har en internetanslutning och försök igen om ett ögonblick."
 }

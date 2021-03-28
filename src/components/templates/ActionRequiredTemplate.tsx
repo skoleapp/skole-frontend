@@ -1,18 +1,17 @@
-import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useTranslation } from 'lib';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
 import { ButtonLink, Emoji } from '../shared';
 import { FormTemplate } from './FormTemplate';
 
-type ActionRequiredVariant = 'login' | 'verify-account' | 'logout';
+type ActionRequiredVariant = 'verify-account' | 'logout';
 
 interface Props extends MainTemplateProps {
   variant: ActionRequiredVariant;
@@ -20,14 +19,6 @@ interface Props extends MainTemplateProps {
 
 const getProps = (variant: ActionRequiredVariant): Record<string, unknown> | void => {
   switch (variant) {
-    case 'login': {
-      return {
-        text: 'common:loginRequired',
-        buttonText: 'common:login',
-        pathname: urls.login,
-      };
-    }
-
     case 'verify-account': {
       return {
         text: 'common:verificationRequired',
@@ -50,61 +41,83 @@ const getProps = (variant: ActionRequiredVariant): Record<string, unknown> | voi
   }
 };
 
-export const ActionRequiredTemplate: React.FC<Props> = ({ children, variant, ...props }) => {
+export const ActionRequiredTemplate: React.FC<Props> = ({
+  children,
+  variant,
+  topNavbarProps,
+  ...props
+}) => {
   const { t } = useTranslation();
   const { asPath } = useRouter();
-  const handleClickCancelButton = (): void => Router.back();
+  const header = t('common:actionRequiredHeader');
 
   const { text, buttonText, pathname } = R.pick(
     ['text', 'buttonText', 'pathname'],
     getProps(variant),
   );
 
-  const buttonHref = {
-    pathname,
-    query: {
-      next: asPath,
+  const buttonHref = useMemo(
+    () => ({
+      pathname,
+      query: {
+        next: asPath,
+      },
+    }),
+    [asPath, pathname],
+  );
+
+  const renderEmoji = useMemo(() => <Emoji emoji="🙃" />, []);
+
+  const renderHeader = useMemo(
+    () => (
+      <>
+        {header}
+        {renderEmoji}
+      </>
+    ),
+    [header, renderEmoji],
+  );
+
+  const renderText = useMemo(
+    () => (
+      <FormControl>
+        <Typography variant="subtitle1" align="center">
+          {t(text)}
+        </Typography>
+      </FormControl>
+    ),
+    [t, text],
+  );
+
+  const renderButton = useMemo(
+    () => (
+      <FormControl>
+        <ButtonLink
+          href={buttonHref}
+          color="primary"
+          variant="contained"
+          endIcon={<ArrowForwardOutlined />}
+          fullWidth
+        >
+          {t(buttonText)}
+        </ButtonLink>
+      </FormControl>
+    ),
+    [buttonText, t, buttonHref],
+  );
+
+  const layoutProps = {
+    topNavbarProps: {
+      ...topNavbarProps,
+      header: renderHeader,
     },
+    ...props,
   };
 
-  const renderEmoji = <Emoji emoji="🙃" />;
-
-  const renderText = (
-    <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t(text)}
-        {renderEmoji}
-      </Typography>
-    </FormControl>
-  );
-
-  const renderButton = (
-    <FormControl>
-      <ButtonLink
-        href={buttonHref}
-        color="primary"
-        variant="contained"
-        endIcon={<ArrowForwardOutlined />}
-        fullWidth
-      >
-        {t(buttonText)}
-      </ButtonLink>
-    </FormControl>
-  );
-
-  const renderCancelButton = (
-    <FormControl>
-      <Button onClick={handleClickCancelButton} variant="outlined" fullWidth>
-        {t('common:cancel')}
-      </Button>
-    </FormControl>
-  );
-
   return (
-    <FormTemplate {...props}>
+    <FormTemplate {...layoutProps}>
       {renderText}
       {renderButton}
-      {renderCancelButton}
       {children}
     </FormTemplate>
   );

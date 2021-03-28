@@ -3,7 +3,7 @@ import { loadNamespaces } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 
-const NotFoundPage: NextPage = () => <ErrorTemplate variant="not-found" seoProps={{}} />;
+const NotFoundPage: NextPage = () => <ErrorTemplate variant="not-found" />;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {

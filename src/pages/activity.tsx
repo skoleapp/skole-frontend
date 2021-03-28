@@ -1,13 +1,15 @@
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import TableBody from '@material-ui/core/TableBody';
 import CheckCircleOutlined from '@material-ui/icons/CheckCircleOutline';
 import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
 import {
   ActionRequiredTemplate,
   ActionsButton,
-  ActivityTableBody,
+  ActivityListItem,
   ErrorTemplate,
+  Link,
   ListTemplate,
   LoadingBox,
   NotFoundBox,
@@ -15,28 +17,29 @@ import {
 } from 'components';
 import { useActionsContext, useAuthContext, useNotificationsContext } from 'context';
 import {
+  ActivityObjectType,
   GraphQlMarkAllActivitiesAsReadMutation,
   useActivitiesQuery,
   useGraphQlMarkAllActivitiesAsReadMutation,
 } from 'generated';
-import { withActions, withUserMe } from 'hocs';
+import { withActions, withAuthRequired } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect, useState } from 'react';
-import { SeoPageProps } from 'types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { urls } from 'utils';
 
-const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const ActivityPage: NextPage = () => {
   const { t } = useTranslation();
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
-  const { userMe } = useAuthContext();
+  const { userMe, verified } = useAuthContext();
   const { query } = useRouter();
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
-  const [activities, setActivities] = useState([]);
+  const [activities, setActivities] = useState<ActivityObjectType[]>([]);
   const activityCount = R.path(['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
   const { handleCloseActionsDialog } = useActionsContext();
@@ -66,57 +69,94 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleClickMarkAllActivitiesAsReadButton = async (): Promise<void> => {
+  const handleClickMarkAllActivitiesAsReadButton = useCallback(async (): Promise<void> => {
     await markAllActivitiesAsRead();
     handleCloseActionsDialog();
-  };
+  }, [handleCloseActionsDialog, markAllActivitiesAsRead]);
 
-  const renderLoading = <LoadingBox />;
-  const renderNotFound = <NotFoundBox text={t('activity:noActivity')} />;
-  const renderActivityTableBody = <ActivityTableBody activities={activities} />;
+  const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
+  const renderNotFound = useMemo(() => <NotFoundBox text={t('activity:noActivity')} />, [t]);
+
+  const mapActivities = useMemo(
+    () =>
+      activities.map((a, i) => (
+        <ActivityListItem
+          key={`${a.id}_${i}_${a.read}`} // Ensure the key is always unique for different activities in different order.
+          activity={a}
+        />
+      )),
+    [activities],
+  );
+
+  const renderActivityTableBody = useMemo(() => <TableBody>{mapActivities}</TableBody>, [
+    mapActivities,
+  ]);
 
   // Disable this action if user has no activities.
-  const renderMarkAllAsReadAction = (
-    <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton} disabled={markAllAsReadDisabled}>
-      <ListItemIcon>
-        <CheckCircleOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('activity:markAllAsRead')}</ListItemText>
-    </MenuItem>
+  const renderMarkAllAsReadAction = useMemo(
+    () => (
+      <MenuItem onClick={handleClickMarkAllActivitiesAsReadButton} disabled={markAllAsReadDisabled}>
+        <ListItemIcon>
+          <CheckCircleOutlined />
+        </ListItemIcon>
+        <ListItemText>{t('activity:markAllAsRead')}</ListItemText>
+      </MenuItem>
+    ),
+    [handleClickMarkAllActivitiesAsReadButton, markAllAsReadDisabled, t],
   );
 
-  const renderNotificationSettingsAction = (
-    <MenuItem disabled>
-      <ListItemIcon>
-        <SettingsOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('activity:notificationSettings')}</ListItemText>
-    </MenuItem>
+  const renderNotificationSettingsAction = useMemo(
+    () => (
+      <Link href={urls.accountSettings} fullWidth>
+        <MenuItem>
+          <ListItemIcon onClick={handleCloseActionsDialog}>
+            <SettingsOutlined />
+          </ListItemIcon>
+          <ListItemText>{t('activity:notificationSettings')}</ListItemText>
+        </MenuItem>
+      </Link>
+    ),
+    [t, handleCloseActionsDialog],
   );
 
-  const actionsDialogParams = {
-    renderCustomActions: [renderMarkAllAsReadAction, renderNotificationSettingsAction],
-    hideShareAction: true,
-    hideDeleteAction: true,
-    hideReportAction: true,
-  };
-
-  const renderActionsButton = (
-    <ActionsButton
-      tooltip={t('activity-tooltips:actions')}
-      actionsDialogParams={actionsDialogParams}
-    />
+  const actionsDialogParams = useMemo(
+    () => ({
+      renderCustomActions: [renderMarkAllAsReadAction, renderNotificationSettingsAction],
+      hideShareAction: true,
+      hideDeleteAction: true,
+      hideReportAction: true,
+    }),
+    [renderMarkAllAsReadAction, renderNotificationSettingsAction],
   );
 
-  const renderTable = (
-    <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
+  const renderActionsButton = useMemo(
+    () => (
+      <ActionsButton
+        tooltip={t('activity-tooltips:actions')}
+        actionsDialogParams={actionsDialogParams}
+      />
+    ),
+    [actionsDialogParams, t],
   );
 
-  const renderActivities =
-    (loading && renderLoading) || (activities.length && renderTable) || renderNotFound;
+  const renderTable = useMemo(
+    () =>
+      activities.length && (
+        <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
+      ),
+    [activities.length, activityCount, renderActivityTableBody],
+  );
+
+  const renderActivities = useMemo(() => renderLoading || renderTable || renderNotFound, [
+    renderLoading,
+    renderNotFound,
+    renderTable,
+  ]);
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('activity:title'),
+    },
     topNavbarProps: {
       header: t('activity:header'),
       emoji: '🔔',
@@ -127,34 +167,27 @@ const ActivityPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     },
   };
 
-  if (!userMe) {
-    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
-  }
-
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" seoProps={seoProps} />;
+    return <ErrorTemplate variant="error" />;
+  }
+
+  if (!verified) {
+    return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
   return <ListTemplate {...layoutProps}>{renderActivities}</ListTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'activity');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['activity-tooltips'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['activity-tooltips'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
-
-const withWrappers = R.compose(withUserMe, withActions);
+const withWrappers = R.compose(withAuthRequired, withActions);
 
 export default withWrappers(ActivityPage);

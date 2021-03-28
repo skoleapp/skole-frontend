@@ -1,0 +1,24 @@
+{
+  "data": {
+    "thread": {
+      "id": "1",
+      "slug": "test-thread-1",
+      "title": "Test Thread 1",
+      "text": "Test thread 1 text.",
+      "image": "/media/uploads/attachments/test_image.png",
+      "imageThumbnail": "/media/CACHE/images/uploads/attachments/test_image/5015cd33f3fb226758e9dd72309fb84f.jpg",
+      "modified": "2020-01-01T12:00:00+00:00",
+      "created": "2020-01-01T12:00:00+00:00",
+      "score": 0,
+      "starred": true,
+      "starCount": 1,
+      "commentCount": 26,
+      "vote": null,
+      "user": {
+        "id": "2",
+        "slug": "testuser2",
+        "username": "testuser2"
+      }
+    }
+  }
+}

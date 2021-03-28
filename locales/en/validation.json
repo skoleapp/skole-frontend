@@ -5,8 +5,5 @@
   "required": "This field is required.",
   "networkError": "Network error.",
   "fileSizeError": "File is too large!",
-  "invalidDate": "Invalid date!",
-  "minDate": "Date is too early!",
-  "maxDate": "Date is too late!",
-  "textOrAttachmentRequired": "Either text or attachment is required."
+  "textOrImageRequired": "Either text or an image is required."
 }

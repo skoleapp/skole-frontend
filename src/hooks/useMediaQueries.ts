@@ -2,28 +2,26 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 interface UseMediaQueries {
-  isXsMobile: boolean;
-  isMobile: boolean;
-  isMobileOrTablet: boolean;
-  isTabletOrDesktop: boolean;
-  isDesktop: boolean;
-  isXlDesktop: boolean;
+  smDown: boolean;
+  smUp: boolean;
+  mdDown: boolean;
+  mdUp: boolean;
+  lgUp: boolean;
 }
 
 export const useMediaQueries = (): UseMediaQueries => {
   const { breakpoints } = useTheme();
-  const isXsMobile = useMediaQuery(breakpoints.down('xs'));
-  const isMobile = useMediaQuery(breakpoints.down('sm'));
-  const isMobileOrTablet = useMediaQuery(breakpoints.down('md'));
-  const isDesktop = useMediaQuery(breakpoints.up('lg'));
-  const isXlDesktop = useMediaQuery(breakpoints.up('xl'));
+  const smDown = useMediaQuery(breakpoints.down('sm'));
+  const smUp = useMediaQuery(breakpoints.up('sm'));
+  const mdDown = useMediaQuery(breakpoints.down('md'));
+  const mdUp = useMediaQuery(breakpoints.up('md'));
+  const lgUp = useMediaQuery(breakpoints.up('lg'));
 
   return {
-    isXsMobile,
-    isMobile,
-    isMobileOrTablet,
-    isTabletOrDesktop: (!isMobile && isMobileOrTablet) || isDesktop,
-    isDesktop,
-    isXlDesktop,
+    smDown,
+    smUp,
+    mdDown,
+    mdUp,
+    lgUp,
   };
 };

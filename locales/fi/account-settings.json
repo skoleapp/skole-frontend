@@ -3,6 +3,5 @@
   "header": "Tilin asetukset",
   "emailSettings": "Sähköpostiasetukset",
   "emailNotifications": "Sähköposti-ilmoitukset",
-  "pushNotifications": "Push-ilmoitukset",
-  "backToProfile": "Takaisin profiiliin"
+  "pushNotifications": "Push-ilmoitukset"
 }
