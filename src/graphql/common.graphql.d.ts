@@ -188,7 +188,7 @@ export declare type CommentObjectType = {
  * Models one user on the platform.
  *
  * The following fields are private, meaning they are returned only if the user is
- * querying one's own profile: `email`, `backup_email`, `verified`, `badge_progresses`,
+ * querying one's own profile: `email`, `verified`, `badge_progresses`,
  * `selected_badge_progress`, `referral_codes`, and all `permission` fields.
  *
  * For instances that are not the user's own user profile, these fields will return a
