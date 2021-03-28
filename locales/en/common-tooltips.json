@@ -6,8 +6,6 @@
   "previousPage": "Move to the previous page.",
   "firstPage": "Move to the first page.",
   "language": "Change language.",
-  "loginRequired": "Please log in to enable this feature.",
-  "verificationRequired": "Please verify your account to enable this feature.",
   "openSettings": "Open settings.",
   "rank": "This user's rank is {{ rank }} with a score of {{ score }}.",
   "ownRank": "Your rank is {{ rank }} with a score of {{ score }}.",

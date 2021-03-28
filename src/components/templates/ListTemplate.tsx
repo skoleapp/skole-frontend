@@ -2,7 +2,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 
@@ -36,7 +36,7 @@ const useStyles = makeStyles(({ breakpoints, spacing, palette }) => ({
   },
 }));
 
-interface Props extends Omit<MainTemplateProps, 'children'> {
+interface Props extends MainTemplateProps {
   listTemplateProps?: {
     renderAction?: JSX.Element;
   };
@@ -49,29 +49,43 @@ export const ListTemplate: React.FC<Props> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { isTabletOrDesktop } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
-  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+  const renderEmoji = useMemo(() => !!emoji && <Emoji emoji={emoji} />, [emoji]);
 
-  const renderHeaderTitle = (
-    <>
-      {header}
-      {renderEmoji}
-    </>
+  const renderHeaderTitle = useMemo(
+    () => (
+      <>
+        {header}
+        {renderEmoji}
+      </>
+    ),
+    [header, renderEmoji],
   );
 
-  const renderHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
-        action: classes.cardHeaderAction,
-      }}
-      title={renderHeaderTitle}
-      action={listTemplateProps?.renderAction}
-    />
+  const renderHeader = useMemo(
+    () =>
+      mdUp && (
+        <CardHeader
+          classes={{
+            root: classes.cardHeaderRoot,
+            title: classes.cardHeaderTitle,
+            action: classes.cardHeaderAction,
+          }}
+          title={renderHeaderTitle}
+          action={listTemplateProps?.renderAction}
+        />
+      ),
+    [
+      mdUp,
+      classes.cardHeaderAction,
+      classes.cardHeaderRoot,
+      classes.cardHeaderTitle,
+      listTemplateProps?.renderAction,
+      renderHeaderTitle,
+    ],
   );
 
   const layoutProps = {

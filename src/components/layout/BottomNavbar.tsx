@@ -2,15 +2,14 @@ import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import CloudUploadOutlined from '@material-ui/icons/CloudUploadOutlined';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
+import StarOutlineOutlined from '@material-ui/icons/StarOutlineOutlined';
 import { useAuthContext } from 'context';
-import { useSearch } from 'hooks';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { UrlObject } from 'url';
 import { urls } from 'utils';
 
@@ -19,7 +18,6 @@ import { Link } from '../shared';
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
   const { userMe, avatarThumbnail, unreadActivityCount, profileUrl } = useAuthContext();
-  const { searchUrl } = useSearch();
   const { pathname, query } = useRouter();
 
   const getNavbarValue = (): void | number | null => {
@@ -27,15 +25,19 @@ export const BottomNavbar: React.FC = () => {
       case urls.home: {
         return 1;
       }
+
       case urls.search: {
         return 2;
       }
-      case urls.uploadMaterial: {
+
+      case urls.starred: {
         return 3;
       }
+
       case urls.activity: {
         return 4;
       }
+
       case '/users/[id]': {
         if (!!userMe && query.id === userMe.id) {
           return 5;
@@ -58,75 +60,99 @@ export const BottomNavbar: React.FC = () => {
   const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
   const profileLabel = userMe ? t('common:profile') : t('common:login');
   const authUrl = userMe ? profileUrl : urls.login;
-  const handleProfileActionClick = (): Promise<boolean> => Router.push(authUrl);
 
-  const renderAvatar = (
-    <Link href={authUrl}>
-      <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
-    </Link>
+  const handleProfileActionClick = useCallback((): Promise<boolean> => Router.push(authUrl), [
+    authUrl,
+  ]);
+
+  const renderAvatar = useMemo(
+    () => (
+      <Link href={authUrl}>
+        <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
+      </Link>
+    ),
+    [authUrl, avatarThumbnail],
   );
 
-  const renderHomeAction = (
-    <BottomNavigationAction
-      value={1}
-      label={t('common:home')}
-      showLabel
-      onClick={handleRedirect(urls.home)}
-      icon={<HomeOutlined />}
-    />
+  const renderHomeAction = useMemo(
+    () => (
+      <BottomNavigationAction
+        value={1}
+        label={t('common:home')}
+        showLabel
+        onClick={handleRedirect(urls.home)}
+        icon={<HomeOutlined />}
+      />
+    ),
+    [t],
   );
 
-  const renderSearchAction = (
-    <BottomNavigationAction
-      value={2}
-      label={t('common:search')}
-      showLabel
-      onClick={handleRedirect(searchUrl)}
-      icon={<SearchOutlined />}
-    />
+  const renderSearchAction = useMemo(
+    () => (
+      <BottomNavigationAction
+        value={2}
+        label={t('common:search')}
+        showLabel
+        onClick={handleRedirect(urls.search)}
+        icon={<SearchOutlined />}
+      />
+    ),
+    [t],
   );
 
-  const renderUploadAction = (
-    <BottomNavigationAction
-      value={3}
-      label={t('common:upload')}
-      showLabel
-      onClick={handleRedirect(urls.uploadMaterial)}
-      icon={<CloudUploadOutlined />}
-    />
+  const renderStarredAction = useMemo(
+    () => (
+      <BottomNavigationAction
+        value={3}
+        label={t('common:starred')}
+        showLabel
+        onClick={handleRedirect(urls.starred)}
+        icon={<StarOutlineOutlined />}
+      />
+    ),
+    [t],
   );
 
-  const renderActivityIcon = (
-    <Badge badgeContent={unreadActivityCount} variant="dot">
-      <NotificationsOutlined />
-    </Badge>
+  const renderActivityIcon = useMemo(
+    () => (
+      <Badge badgeContent={unreadActivityCount} variant="dot">
+        <NotificationsOutlined />
+      </Badge>
+    ),
+    [unreadActivityCount],
   );
 
-  const renderActivityAction = (
-    <BottomNavigationAction
-      value={4}
-      label={t('common:activity')}
-      showLabel
-      onClick={handleRedirect(urls.activity)}
-      icon={renderActivityIcon}
-    />
+  const renderActivityAction = useMemo(
+    () => (
+      <BottomNavigationAction
+        value={4}
+        label={t('common:activity')}
+        showLabel
+        onClick={handleRedirect(urls.activity)}
+        icon={renderActivityIcon}
+      />
+    ),
+    [renderActivityIcon, t],
   );
 
-  const renderProfileAction = (
-    <BottomNavigationAction
-      value={5}
-      label={profileLabel}
-      showLabel
-      onClick={handleProfileActionClick}
-      icon={renderAvatar}
-    />
+  const renderProfileAction = useMemo(
+    () => (
+      <BottomNavigationAction
+        value={5}
+        label={profileLabel}
+        showLabel
+        onClick={handleProfileActionClick}
+        icon={renderAvatar}
+      />
+    ),
+    [handleProfileActionClick, profileLabel, renderAvatar],
   );
 
   return (
     <BottomNavigation value={value} onChange={handleChange}>
       {renderHomeAction}
       {renderSearchAction}
-      {renderUploadAction}
+      {renderStarredAction}
       {renderActivityAction}
       {renderProfileAction}
     </BottomNavigation>

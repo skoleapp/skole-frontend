@@ -4,13 +4,13 @@ import { Field, Form, Formik, FormikProps } from 'formik';
 import { CreateContactMessageMutation, useCreateContactMessageMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { useMemo } from 'react';
-import { ContactFormValues, SeoPageProps } from 'types';
+import { ContactFormValues } from 'types';
 import * as Yup from 'yup';
 
-const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const ContactPage: NextPage = () => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
@@ -64,7 +64,6 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     await createContactMessage({ variables });
   };
 
-  // Only re-render when one of the dynamic values changes - the form values will reset every time.
   const initialValues = useMemo(
     () => ({
       ...generalFormValues,
@@ -78,7 +77,7 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const renderFormFields = (props: FormikProps<ContactFormValues>): JSX.Element => (
     <Form>
-      <Field name="subject" component={TextFormField} label={t('forms:messageSubjectOptional')} />
+      <Field name="subject" component={TextFormField} label={t('forms:subjectOptional')} />
       <Field name="name" component={TextFormField} label={t('forms:nameOptional')} />
       <Field name="email" component={TextFormField} label={t('forms:emailOptional')} />
       <Field
@@ -105,7 +104,9 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('contact:title'),
+    },
     topNavbarProps: {
       header: t('contact:header'),
       emoji: '🗣️',
@@ -115,18 +116,10 @@ const ContactPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'contact');
-
-  return {
-    props: {
-      _ns: await loadNamespaces(['contact'], locale),
-      seoProps: {
-        title: t('title'),
-        description: t('description'),
-      },
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['contact'], locale),
+  },
+});
 
 export default withUserMe(ContactPage);

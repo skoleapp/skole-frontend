@@ -52,7 +52,7 @@ export const useMuiTheme = (): Theme => {
 
   const props: ComponentsProps = {
     MuiContainer: {
-      maxWidth: 'xl',
+      maxWidth: 'md',
     },
     MuiFormControl: {
       margin: 'dense',
@@ -103,6 +103,9 @@ export const useMuiTheme = (): Theme => {
     MuiButton: {
       color: dynamicPrimaryColor,
     },
+    MuiPaper: {
+      square: true,
+    },
   };
 
   // Only use with overrides.
@@ -151,12 +154,6 @@ export const useMuiTheme = (): Theme => {
         paddingLeft: spacing(1),
         paddingRight: spacing(1),
         backgroundColor: _palette.background.paper,
-      },
-    },
-    MuiListItemAvatar: {
-      root: {
-        width: '2rem',
-        height: '2rem',
       },
     },
     MuiSvgIcon: {
@@ -352,9 +349,6 @@ export const useMuiTheme = (): Theme => {
         "input[type='submit']": {
           display: 'none',
         },
-        '.screenshot-border': {
-          border: `0.05rem dashed ${COLORS.black}`,
-        },
         '#nprogress': {
           '& .bar': {
             height: '0.25rem',
@@ -364,25 +358,6 @@ export const useMuiTheme = (): Theme => {
           '& .peg': {
             boxShadow: 'none',
             transform: 'none',
-          },
-        },
-        '.MuiPickersModal-dialogRoot': {
-          borderRadius: `${BORDER_RADIUS} !important`,
-          '& .MuiPickersToolbarButton-toolbarBtn': {
-            borderRadius: '0.25rem !important',
-          },
-          '& .MuiPickersCalendarHeader-switchHeader': {
-            margin: '0 !important',
-            padding: spacing(4),
-          },
-          '& .MuiPickersToolbar-toolbar': {
-            padding: `${spacing(4)} !important`,
-            position: 'static !important' as 'static',
-          },
-          '& .MuiPickersModal-withAdditionalAction': {
-            '& .MuiButtonBase-root': {
-              color: _dynamicPrimaryColor,
-            },
           },
         },
         '.form-text': {

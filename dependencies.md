@@ -26,7 +26,6 @@ This document explains the need for every top level dependency the project has.
 | [next-offline](https://www.npmjs.com/package/next-offline)                           | Offline support for [Next.js](https://www.npmjs.com/package/next).                            |
 | [next-translate](https://www.npmjs.com/package/next-translate)                       | I18n support for [Next.js](https://www.npmjs.com/package/next).                               |
 | [nprogress](https://www.npmjs.com/package/nprogress)                                 | Provides the loading bar.                                                                     |
-| [print-js](https://www.npmjs.com/package/print-js)                                   | Used for printing single resources.                                                           |
 | [ramda](https://www.npmjs.com/package/ramda)                                         | Our go-to utility library.                                                                    |
 | [react](https://www.npmjs.com/package/react)                                         | Duh.                                                                                          |
 | [react-dom](https://www.npmjs.com/package/react-dom)                                 | Duh.                                                                                          |

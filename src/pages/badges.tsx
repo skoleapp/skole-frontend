@@ -3,39 +3,43 @@ import { Badge, ErrorTemplate, LoadingTemplate, MarkdownTemplate } from 'compone
 import { BadgeObjectType, useBadgesQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { MarkdownPageProps } from 'types';
 
-const BadgesPage: NextPage<MarkdownPageProps> = ({
-  seoProps,
-  data: { title },
-  content: markdownContent,
-}) => {
+const BadgesPage: NextPage<MarkdownPageProps> = ({ data: { title }, content: markdownContent }) => {
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
   const { data, loading, error } = useBadgesQuery({ context });
   const badges: BadgeObjectType[] = R.propOr([], 'badges', data);
 
-  const renderBadgesHeader = (
-    <Typography variant="body2" gutterBottom>
-      {t('common:badges')}
-    </Typography>
+  const renderBadgesHeader = useMemo(
+    () => (
+      <Typography variant="body2" gutterBottom>
+        {t('common:badges')}
+      </Typography>
+    ),
+    [t],
   );
 
-  const renderBadges = (
-    <>
-      {badges.map((b) => (
-        <Badge badge={b} />
-      ))}
-    </>
+  const renderBadges = useMemo(
+    () => (
+      <>
+        {badges.map((b) => (
+          <Badge badge={b} />
+        ))}
+      </>
+    ),
+    [badges],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('badges:title'),
+    },
     topNavbarProps: {
       header: title,
       emoji: '👀',
@@ -45,15 +49,15 @@ const BadgesPage: NextPage<MarkdownPageProps> = ({
   };
 
   if (loading) {
-    return <LoadingTemplate seoProps={seoProps} />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" seoProps={seoProps} />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return <MarkdownTemplate {...layoutProps} />;
@@ -61,19 +65,11 @@ const BadgesPage: NextPage<MarkdownPageProps> = ({
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const _ns = await loadNamespaces(['badges'], locale);
-  const t = await getT(locale, 'badges');
-
-  const seoProps = {
-    title: t('title'),
-    description: t('description'),
-  };
-
   const { data, content } = await loadMarkdown('badges', locale);
 
   return {
     props: {
       _ns,
-      seoProps,
       data,
       content,
     },

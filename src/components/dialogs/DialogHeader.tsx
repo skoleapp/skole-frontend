@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseOutlined from '@material-ui/icons/CloseOutlined';
 import clsx from 'clsx';
 import { useTranslation } from 'lib';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { DialogHeaderProps } from 'types';
 
@@ -33,21 +33,30 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const renderCloseButton = (
-    <Tooltip title={t('common-tooltips:closeMenu')}>
-      <IconButton onClick={onCancel} size="small">
-        <CloseOutlined />
-      </IconButton>
-    </Tooltip>
+  const renderCloseButton = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:closeMenu')}>
+        <IconButton onClick={onCancel} size="small">
+          <CloseOutlined />
+        </IconButton>
+      </Tooltip>
+    ),
+    [onCancel, t],
   );
 
-  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+  const renderEmoji = useMemo(() => !!emoji && <Emoji emoji={emoji} />, [emoji]);
 
-  const renderHeaderText = (
-    <Typography className={clsx('MuiCardHeader-title', classes.text, 'truncate-text')} variant="h6">
-      {text}
-      {renderEmoji}
-    </Typography>
+  const renderHeaderText = useMemo(
+    () => (
+      <Typography
+        className={clsx('MuiCardHeader-title', classes.text, 'truncate-text')}
+        variant="h6"
+      >
+        {text}
+        {renderEmoji}
+      </Typography>
+    ),
+    [classes.text, renderEmoji, text],
   );
 
   return (

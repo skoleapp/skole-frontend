@@ -10,16 +10,15 @@ import {
   useVerifyAccountMutation,
   VerifyAccountMutation,
 } from 'generated';
-import { withUserMe } from 'hocs';
+import { withAuthRequired } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { SeoPageProps } from 'types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { urls } from 'utils';
 
-const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const VerifyAccountPage: NextPage = () => {
   const {
     formRef,
     handleMutationErrors,
@@ -39,12 +38,15 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 
-  const loginButtonHref = {
-    pathname: urls.login,
-    query: {
-      next: urls.verifyAccount,
-    },
-  };
+  const loginButtonHref = useMemo(
+    () => ({
+      pathname: urls.login,
+      query: {
+        next: urls.verifyAccount,
+      },
+    }),
+    [],
+  );
 
   // Update state whenever context value changes.
   useEffect(() => {
@@ -105,127 +107,193 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSubmitEmail = async (): Promise<void> => {
+  const handleSubmitEmail = useCallback(async (): Promise<void> => {
     await resendVerificationEmail();
-  };
+  }, [resendVerificationEmail]);
 
-  const renderContinueButton = (
-    <FormControl>
-      <ButtonLink
-        href={urls.home}
-        endIcon={<ArrowForwardOutlined />}
-        color="primary"
-        variant="contained"
-      >
-        {t('common:continue')}
-      </ButtonLink>
-    </FormControl>
+  const renderContinueButton = useMemo(
+    () => (
+      <FormControl>
+        <ButtonLink
+          href={urls.home}
+          endIcon={<ArrowForwardOutlined />}
+          color="primary"
+          variant="contained"
+        >
+          {t('common:continue')}
+        </ButtonLink>
+      </FormControl>
+    ),
+    [t],
   );
 
-  const renderLoginButton = (
-    <FormControl>
-      <ButtonLink
-        href={loginButtonHref}
-        endIcon={<ArrowForwardOutlined />}
-        color="primary"
-        variant="contained"
-      >
-        {t('common:login')}
-      </ButtonLink>
-    </FormControl>
+  const renderLoginButton = useMemo(
+    () => (
+      <FormControl>
+        <ButtonLink
+          href={loginButtonHref}
+          endIcon={<ArrowForwardOutlined />}
+          color="primary"
+          variant="contained"
+        >
+          {t('common:login')}
+        </ButtonLink>
+      </FormControl>
+    ),
+    [loginButtonHref, t],
   );
 
-  const renderVerifiedText = (
-    <FormControl>
-      <Typography className="form-text" variant="subtitle1">
-        {t('verify-account:verified')}
-      </Typography>
-    </FormControl>
-  );
-
-  const renderConfirmationErrorText = (
-    <FormControl>
-      <Typography className="form-text" color="error" variant="subtitle1">
-        {confirmationError}
-      </Typography>
-    </FormControl>
-  );
-
-  const renderLoginText = (
-    <FormControl>
-      <Typography className="form-text" variant="subtitle1">
-        {t('verify-account:loginText')}
-      </Typography>
-    </FormControl>
-  );
-
-  const renderEmailFormFields = (props: FormikProps<FormikValues>): JSX.Element => (
-    <Form>
+  const renderVerifiedText = useMemo(
+    () => (
       <FormControl>
         <Typography className="form-text" variant="subtitle1">
-          {t('verify-account:emailHelpText')}
+          {t('verify-account:verified')}
         </Typography>
       </FormControl>
-      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
-    </Form>
+    ),
+    [t],
+  );
+
+  const renderConfirmationErrorText = useMemo(
+    () => (
+      <FormControl>
+        <Typography className="form-text" color="error" variant="subtitle1">
+          {confirmationError}
+        </Typography>
+      </FormControl>
+    ),
+    [confirmationError],
+  );
+
+  const renderLoginText = useMemo(
+    () => (
+      <FormControl>
+        <Typography className="form-text" variant="subtitle1">
+          {t('verify-account:loginText')}
+        </Typography>
+      </FormControl>
+    ),
+    [t],
+  );
+
+  const renderEmailFormFields = useCallback(
+    (props: FormikProps<FormikValues>): JSX.Element => (
+      <Form>
+        <FormControl>
+          <Typography className="form-text" variant="subtitle1">
+            {t('verify-account:emailHelpText')}
+          </Typography>
+        </FormControl>
+        <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+      </Form>
+    ),
+    [t],
   );
 
   // Render for unauthenticated users with no token.
-  const renderLoginError = !userMe && !token && (
-    <>
-      {renderLoginText}
-      {renderLoginButton}
-    </>
+  const renderLoginError = useMemo(
+    () =>
+      !userMe &&
+      !token && (
+        <>
+          {renderLoginText}
+          {renderLoginButton}
+        </>
+      ),
+    [renderLoginButton, renderLoginText, token, userMe],
   );
 
   // Render for unverified, authenticated users with no token.
-  const renderEmailForm = verified === false && !token && !emailSubmitted && (
-    <Formik initialValues={generalFormValues} onSubmit={handleSubmitEmail} innerRef={formRef}>
-      {renderEmailFormFields}
-    </Formik>
+  const renderEmailForm = useMemo(
+    () =>
+      verified === false &&
+      !token &&
+      !emailSubmitted && (
+        <Formik initialValues={generalFormValues} onSubmit={handleSubmitEmail} innerRef={formRef}>
+          {renderEmailFormFields}
+        </Formik>
+      ),
+    [
+      emailSubmitted,
+      formRef,
+      generalFormValues,
+      handleSubmitEmail,
+      renderEmailFormFields,
+      token,
+      verified,
+    ],
   );
 
-  const renderEmailSubmittedText = (
-    <FormControl>
-      <Typography className="form-text" variant="subtitle1">
-        {t('verify-account:emailSubmitted')}
-      </Typography>
-    </FormControl>
+  const renderEmailSubmittedText = useMemo(
+    () => (
+      <FormControl>
+        <Typography className="form-text" variant="subtitle1">
+          {t('verify-account:emailSubmitted')}
+        </Typography>
+      </FormControl>
+    ),
+    [t],
   );
 
   // Render after email form has been submitted.
-  const renderEmailSubmitted = verified === false && !token && emailSubmitted && (
-    <>
-      {renderEmailSubmittedText}
-      {renderContinueButton}
-    </>
+  const renderEmailSubmitted = useMemo(
+    () =>
+      verified === false &&
+      !token &&
+      emailSubmitted && (
+        <>
+          {renderEmailSubmittedText}
+          {renderContinueButton}
+        </>
+      ),
+    [emailSubmitted, renderContinueButton, renderEmailSubmittedText, token, verified],
   );
 
   // Render for authenticated, verified users.
-  const renderVerified = !!verified && !confirmationError && (
-    <>
-      {renderVerifiedText}
-      {renderContinueButton}
-    </>
+  const renderVerified = useMemo(
+    () =>
+      !!verified &&
+      !confirmationError && (
+        <>
+          {renderVerifiedText}
+          {renderContinueButton}
+        </>
+      ),
+    [confirmationError, renderContinueButton, renderVerifiedText, verified],
   );
 
   // Render in case an error occurs during the verification.
-  const renderConfirmationError = !!confirmationError && (
-    <>
-      {renderConfirmationErrorText}
-      {renderContinueButton}
-    </>
+  const renderConfirmationError = useMemo(
+    () =>
+      !!confirmationError && (
+        <>
+          {renderConfirmationErrorText}
+          {renderContinueButton}
+        </>
+      ),
+    [confirmationError, renderConfirmationErrorText, renderContinueButton],
   );
 
-  const renderContent =
-    renderLoginError ||
-    renderEmailForm ||
-    renderEmailSubmitted ||
-    renderVerified ||
-    renderConfirmationError;
+  const renderContent = useMemo(
+    () =>
+      renderLoginError ||
+      renderEmailForm ||
+      renderEmailSubmitted ||
+      renderVerified ||
+      renderConfirmationError,
+    [
+      renderLoginError,
+      renderEmailForm,
+      renderEmailSubmitted,
+      renderVerified,
+      renderConfirmationError,
+    ],
+  );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('verify-account:title'),
+    },
     topNavbarProps: {
       header: t('verify-account:header'),
       emoji: '✅',
@@ -233,23 +301,16 @@ const VerifyAccountPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   };
 
   if (loading) {
-    return <LoadingTemplate seoProps={seoProps} />;
+    return <LoadingTemplate />;
   }
 
   return <FormTemplate {...layoutProps}>{renderContent}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'verify-account');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['verify-account'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['verify-account'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
-
-export default withUserMe(VerifyAccountPage);
+export default withAuthRequired(VerifyAccountPage);

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Close from '@material-ui/icons/Close';
 import { useNotificationsContext } from 'context';
 import Router from 'next/router';
-import React, { SyntheticEvent } from 'react';
+import React, { SyntheticEvent, useCallback, useMemo } from 'react';
 import { BOTTOM_NAVBAR_HEIGHT } from 'styles';
 
 const useStyles = makeStyles(({ breakpoints }) => ({
@@ -30,11 +30,14 @@ export const Notifications: React.FC = () => {
   const { notification, toggleNotification } = useNotificationsContext();
   Router.events.on('routeChangeComplete', () => toggleNotification(null));
 
-  const handleClose = (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
-    if (reason !== 'clickaway') {
-      toggleNotification(null);
-    }
-  };
+  const handleClose = useCallback(
+    (_e: SyntheticEvent | MouseEvent, reason?: string): void => {
+      if (reason !== 'clickaway') {
+        toggleNotification(null);
+      }
+    },
+    [toggleNotification],
+  );
 
   const anchorOrigin: SnackbarOrigin = {
     vertical: 'bottom',
@@ -45,17 +48,23 @@ export const Notifications: React.FC = () => {
     'aria-describedby': 'message-id',
   };
 
-  const renderMessage = (
-    <Typography className="truncate-text" component="span">
-      {notification}
-    </Typography>
+  const renderMessage = useMemo(
+    () => (
+      <Typography className="truncate-text" component="span">
+        {notification}
+      </Typography>
+    ),
+    [notification],
   );
 
-  const renderAction = [
-    <IconButton key="close" color="inherit" onClick={handleClose}>
-      <Close />
-    </IconButton>,
-  ];
+  const renderAction = useMemo(
+    () => [
+      <IconButton key="close" color="inherit" onClick={handleClose}>
+        <Close />
+      </IconButton>,
+    ],
+    [handleClose],
+  );
 
   return (
     <Snackbar

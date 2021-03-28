@@ -7,9 +7,4 @@ export type CustomTablePaginationProps = Pick<
   'page' | 'count' | 'rowsPerPage' | 'onChangePage' | 'onChangeRowsPerPage'
 >;
 
-export interface TableRowProps {
-  dense?: boolean;
-  key: number;
-}
-
 export type ColSpan = Partial<Record<Breakpoint, GridSize>>;

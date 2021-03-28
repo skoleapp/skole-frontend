@@ -1,9 +1,9 @@
 import { FormikProps } from 'formik';
-import { CommentObjectType, UserMeFieldsFragment } from 'generated';
+import { UserMeFieldsFragment } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
-import { Document } from 'react-pdf';
 
 import { ActionsDialogParams, InfoDialogParams, ShareDialogParams } from './dialogs';
+import { CreateCommentFormValues } from './forms';
 
 export interface AuthContextType {
   userMe: UserMeFieldsFragment | null;
@@ -44,40 +44,16 @@ export interface InfoContextType {
   handleCloseInfoDialog: () => void;
 }
 
-export interface PdfViewerContextType {
-  documentRef: MutableRefObject<Document>;
-  pageNumberInputRef: MutableRefObject<HTMLInputElement>;
-  drawingMode: boolean;
-  setDrawingMode: Dispatch<SetStateAction<boolean>>;
-  screenshot: string | null;
-  setScreenshot: Dispatch<SetStateAction<string | null>>;
-  rotate: number;
-  setRotate: Dispatch<SetStateAction<number>>;
-  numPages: number;
-  setNumPages: Dispatch<SetStateAction<number>>;
-  pageNumber: number;
-  setPageNumber: Dispatch<SetStateAction<number>>;
-  controlsDisabled: boolean;
-  setControlsDisabled: Dispatch<SetStateAction<boolean>>;
-  fullscreen: boolean;
-  setFullscreen: Dispatch<SetStateAction<boolean>>;
-  getMapContainerNode: () => HTMLDivElement;
-  centerHorizontalScroll: () => void;
-}
-
-export interface DiscussionContextType<T> {
-  comments: CommentObjectType[];
-  setComments: Dispatch<SetStateAction<CommentObjectType[]>>;
-  commentCount: string;
-  setCommentCount: Dispatch<SetStateAction<string>>;
+export interface ThreadContextType {
   createCommentDialogOpen: boolean;
   setCreateCommentDialogOpen: Dispatch<SetStateAction<boolean>>;
-  attachmentViewerValue: string | null;
-  setAttachmentViewerValue: Dispatch<SetStateAction<string | null>>;
-  commentAttachment: string | ArrayBuffer | null;
-  setCommentAttachment: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
-  attachmentInputRef: MutableRefObject<HTMLInputElement>;
-  formRef: MutableRefObject<FormikProps<T> | null>;
+  threadImageViewerValue: string | null;
+  setThreadImageViewerValue: Dispatch<SetStateAction<string | null>>;
+  commentImageViewerValue: string | null;
+  setCommentImageViewerValue: Dispatch<SetStateAction<string | null>>;
+  commentImage: string | ArrayBuffer | null;
+  setCommentImage: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
+  formRef: MutableRefObject<FormikProps<CreateCommentFormValues>>;
 }
 
 export interface ConfirmOptions {
@@ -108,4 +84,23 @@ export interface DarkModeContextType {
   darkMode: boolean;
   toggleDarkMode: () => void;
   dynamicPrimaryColor: 'primary' | 'secondary';
+}
+
+export interface ThreadFormParams {
+  title: string;
+}
+
+export interface ThreadFormContextType {
+  threadFormOpen: boolean;
+  handleOpenThreadForm: (params: ThreadFormParams) => void;
+  handleCloseThreadForm: () => void;
+  threadFormParams: ThreadFormParams;
+}
+
+export type Ordering = 'best' | 'newest';
+
+export interface OrderingContextType {
+  ordering: Ordering;
+  setOrdering: Dispatch<SetStateAction<Ordering>>;
+  orderingLabel: string;
 }

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
@@ -55,59 +55,85 @@ export const MarkdownTemplate: React.FC<Props> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { isTabletOrDesktop } = useMediaQueries();
+  const { smUp } = useMediaQueries();
   const { t } = useTranslation();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
-  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
+  const renderEmoji = useMemo(() => !!emoji && <Emoji emoji={emoji} />, [emoji]);
 
-  const renderHeaderTitle = (
-    <>
-      {header}
-      {renderEmoji}
-    </>
+  const renderHeaderTitle = useMemo(
+    () => (
+      <>
+        {header}
+        {renderEmoji}
+      </>
+    ),
+    [header, renderEmoji],
   );
 
-  const renderCardHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
-      }}
-      title={renderHeaderTitle}
-    />
+  const renderCardHeader = useMemo(
+    () =>
+      smUp && (
+        <CardHeader
+          classes={{
+            root: classes.cardHeaderRoot,
+            title: classes.cardHeaderTitle,
+          }}
+          title={renderHeaderTitle}
+        />
+      ),
+    [classes.cardHeaderRoot, classes.cardHeaderTitle, renderHeaderTitle, smUp],
   );
 
-  const renderCustomTopContent = customTopContent?.map((t) => t);
-  const renderMarkdownContent = <MarkdownContent>{markdownContent}</MarkdownContent>;
-  const renderCustomBottomContent = customBottomContent?.map((t) => t);
+  const renderCustomTopContent = useMemo(() => customTopContent?.map((t) => t), [customTopContent]);
 
-  const renderCardContent = (
-    <CardContent className={classes.cardContent}>
-      <Grid container justify="center">
-        <Grid item xs={12} sm={8} md={6} lg={5} xl={4}>
-          {renderCustomTopContent}
-          {renderMarkdownContent}
-          {renderCustomBottomContent}
+  const renderMarkdownContent = useMemo(
+    () => <MarkdownContent>{markdownContent}</MarkdownContent>,
+    [markdownContent],
+  );
+
+  const renderCustomBottomContent = useMemo(() => customBottomContent?.map((t) => t), [
+    customBottomContent,
+  ]);
+
+  const renderCardContent = useMemo(
+    () => (
+      <CardContent className={classes.cardContent}>
+        <Grid container justify="center">
+          <Grid item xs={12} sm={10} md={8}>
+            {renderCustomTopContent}
+            {renderMarkdownContent}
+            {renderCustomBottomContent}
+          </Grid>
         </Grid>
-      </Grid>
-    </CardContent>
+      </CardContent>
+    ),
+    [classes.cardContent, renderCustomBottomContent, renderCustomTopContent, renderMarkdownContent],
   );
 
   const feedbackHeaderText = t('common:feedbackHeader');
-  const renderFeedbackHeaderEmoji = <Emoji emoji="🤔" />;
+  const renderFeedbackHeaderEmoji = useMemo(() => <Emoji emoji="🤔" />, []);
 
-  const renderFeedback = !hideFeedback && (
-    <Grid className={classes.feedbackContainer} container direction="column" alignItems="center">
-      <Typography variant="subtitle1" gutterBottom>
-        {feedbackHeaderText}
-        {renderFeedbackHeaderEmoji}
-      </Typography>
-      <ButtonLink href={urls.contact} variant="outlined" endIcon={<ArrowForwardOutlined />}>
-        {t('common:feedbackText')}
-      </ButtonLink>
-    </Grid>
+  const renderFeedback = useMemo(
+    () =>
+      !hideFeedback && (
+        <Grid
+          className={classes.feedbackContainer}
+          container
+          direction="column"
+          alignItems="center"
+        >
+          <Typography variant="subtitle1" gutterBottom>
+            {feedbackHeaderText}
+            {renderFeedbackHeaderEmoji}
+          </Typography>
+          <ButtonLink href={urls.contact} variant="outlined" endIcon={<ArrowForwardOutlined />}>
+            {t('common:feedbackText')}
+          </ButtonLink>
+        </Grid>
+      ),
+    [classes.feedbackContainer, feedbackHeaderText, hideFeedback, renderFeedbackHeaderEmoji, t],
   );
 
   const layoutProps = {
