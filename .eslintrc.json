@@ -53,6 +53,7 @@
     "react/jsx-props-no-spreading": "off", // Allow prop spreading.
     "@typescript-eslint/naming-convention": "off", // Allows usage of e.g. underscores in variable names.
     "react-hooks/rules-of-hooks": "off", // Allow calling e.g. `useDayjs` within JSX.
+    "react/require-default-props": "off", // Allow defining default props in the signature.
     // TODO: Under this comment, remove all rule overrides and make the necessary refactors to fix the linting errors.
     "react/no-array-index-key": "off",
     "no-restricted-globals": "off",
