@@ -15,6 +15,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
   root: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)',
     zIndex: 3, // Overlap top and bottom navbars.
+    marginTop: `env(safe-area-inset-top)`,
   },
   container: {
     position: 'absolute',

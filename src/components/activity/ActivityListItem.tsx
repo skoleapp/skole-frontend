@@ -13,12 +13,11 @@ import {
 } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
-import Router from 'next/router';
 import * as R from 'ramda';
 import React, { useState } from 'react';
 import { mediaUrl, urls } from 'utils';
 
-import { TextLink } from '../shared';
+import { Link, TextLink } from '../shared';
 
 const useStyles = makeStyles({
   unread: {
@@ -31,6 +30,11 @@ const useStyles = makeStyles({
 
 interface Props {
   activity: ActivityObjectType;
+}
+
+interface PathObj {
+  pathname: string | null;
+  query: null | { comment: string };
 }
 
 export const ActivityListItem: React.FC<Props> = ({
@@ -60,13 +64,11 @@ export const ActivityListItem: React.FC<Props> = ({
     context,
   });
 
-  const handleClick = async (): Promise<void> => {
-    let pathname;
-    let query;
-
+  const getPathObj = (): PathObj => {
+    let pathname = null;
+    let query = null;
     if (comment) {
       const { course, resource, school, comment: innerComment } = comment;
-
       query = { comment: comment.id };
 
       if (innerComment?.id) {
@@ -88,12 +90,23 @@ export const ActivityListItem: React.FC<Props> = ({
     } else if (badgeProgress && badgeProgress.user.slug) {
       pathname = urls.user(badgeProgress.user.slug);
     }
+    return { pathname, query };
+  };
 
-    await markSingleActivityRead({ variables: { id, read: true } });
-
+  const getItemHref = (): string => {
+    let href = '';
+    const { pathname, query } = getPathObj();
     if (pathname) {
-      await Router.push({ pathname, query });
+      href = pathname;
+      if (query && query.comment) {
+        href = `${href}?comment=${query.comment}`;
+      }
     }
+    return href;
+  };
+
+  const handleClick = async (): Promise<void> => {
+    await markSingleActivityRead({ variables: { id, read: true } });
   };
 
   const renderAvatar = comment && (
@@ -117,9 +130,18 @@ export const ActivityListItem: React.FC<Props> = ({
     );
   } // else: activity had `badgeProgress`
 
-  const renderListItemText = (
-    <ListItemText primary={renderTargetUserLink} secondary={description} />
-  );
+  let renderListItemText = null;
+  const itemHref = getItemHref();
+
+  if (itemHref) {
+    renderListItemText = (
+      <Link href={itemHref}>
+        <ListItemText primary={renderTargetUserLink} secondary={description} />
+      </Link>
+    );
+  } else {
+    renderListItemText = <ListItemText primary={renderTargetUserLink} secondary={description} />;
+  }
 
   return (
     <ListItem onClick={handleClick} className={clsx(!read && classes.unread)} button>
