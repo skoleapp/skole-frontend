@@ -1,5 +1,5 @@
 {
-  "name": "skole",
+  "name": "skole-frontend",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:skoleapp/skole-frontend.git",
