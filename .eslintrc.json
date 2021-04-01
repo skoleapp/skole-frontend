@@ -36,8 +36,6 @@
         "paths": [
           "@material-ui/core",
           "@material-ui/icons",
-          "@material-ui/lab",
-          "@material-ui/pickers",
           "__generated__/src/graphql/common.graphql"
         ],
         "patterns": [
