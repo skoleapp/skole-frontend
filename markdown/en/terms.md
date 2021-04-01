@@ -2,7 +2,7 @@
 title: Terms
 ---
 
-Please read these Terms and conditions ("Terms") before using the Skole application (the "Application"). By using Skole you accept these Terms and conditions. These Terms govern your use of Skole. Skole is made for students to find and share the top courses, study materials and discussions.
+Please read these Terms and conditions ("Terms") before using the Skole application (the "Application"). By using Skole you accept these Terms and conditions. These Terms govern your use of Skole.
 
 ### 1. Licenses
 
@@ -37,7 +37,7 @@ These restrictions survive termination of the License.
 
 For purposes of these Terms, "Application IPR" means including but not limited to all intellectual property rights to the idea, design, source code, copyright and trademarks related to the Application.
 
-For purposes of these Terms, "Content IPR" means including but not limited to all intellectual property rights to the texts, graphics, images, audio, video, works of authorship of any kind, and information or other materials that are posted, generated, provided or otherwise made available through the Application. However, all of the content is free to use for academic purposes or public research.
+For purposes of these Terms, "Content IPR" means including but not limited to all intellectual property rights to the texts, graphics, images, audio, video, works of authorship of any kind, and information or other content that is posted, generated, provided or otherwise made available through the Application. However, all of the content is free to use for academic purposes or public research.
 
 All rights relating the Application IPR, whether protected or not, (1) are the exclusive property of Skole Oy and its licensors, (2) are protected by the applicable international and national legal provisions, and (3) are under no circumstances transferred in full or in part within the context of the Licence to use the Application.
 All rights relating to content IPR, whether protected or not, (1) are the exclusive property of You. By using the Application, You hereby transfer all user rights to such content IPR to Skole Oy and its users for the purposes of and within the context of the Terms to use the Application.
