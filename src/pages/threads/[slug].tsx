@@ -657,6 +657,16 @@ const ThreadPage: NextPage = () => {
     [classes.headerTitle, title, score],
   );
 
+  const renderMobileTitle = useMemo(
+    () =>
+      smDown && (
+        <Typography variant="subtitle1" gutterBottom>
+          {title}
+        </Typography>
+      ),
+    [title, smDown],
+  );
+
   const renderThreadImageThumbnail = useMemo(
     () =>
       !!imageThumbnail && (
@@ -687,6 +697,16 @@ const ThreadPage: NextPage = () => {
 
   const renderThreadText = useMemo(() => <Typography variant="body2">{text}</Typography>, [text]);
 
+  const renderMedia = useMemo(
+    () => (
+      <Grid container>
+        {renderThreadImageThumbnail}
+        {renderThreadText}
+      </Grid>
+    ),
+    [renderThreadImageThumbnail, renderThreadText],
+  );
+
   const renderCreatorLink = useMemo(
     () => !!creator && <TextLink href={urls.user(creator.slu)}>{creator.username}</TextLink>,
     [creator],
@@ -698,27 +718,24 @@ const ThreadPage: NextPage = () => {
     t,
   ]);
 
+  const renderCreated = useMemo(
+    () => (
+      <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
+        {t('common:createdBy')} {renderCreator} {creationTime}
+      </Typography>
+    ),
+    [creationTime, renderCreator, t, classes.creatorInfo],
+  );
+
   const renderThreadInfo = useMemo(
     () => (
       <CardContent className={classes.threadInfoCardContent}>
-        <Grid container>
-          {renderThreadImageThumbnail}
-          {renderThreadText}
-        </Grid>
-        <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
-          {t('common:createdBy')} {renderCreator} {creationTime}
-        </Typography>
+        {renderMobileTitle}
+        {renderMedia}
+        {renderCreated}
       </CardContent>
     ),
-    [
-      renderThreadImageThumbnail,
-      renderThreadText,
-      creationTime,
-      renderCreator,
-      t,
-      classes.creatorInfo,
-      classes.threadInfoCardContent,
-    ],
+    [classes.threadInfoCardContent, renderMobileTitle, renderMedia, renderCreated],
   );
 
   const renderHeaderAction = useMemo(

@@ -1,4 +1,4 @@
-import IconButton from '@material-ui/core/IconButton';
+import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
 import { useActionsContext } from 'context';
