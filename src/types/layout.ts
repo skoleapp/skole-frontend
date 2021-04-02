@@ -1,6 +1,5 @@
 import { ContainerProps } from '@material-ui/core/Container';
 import { GridProps } from '@material-ui/core/Grid';
-import { ReactNode } from 'react';
 
 export interface SeoProps {
   title?: string;
@@ -34,8 +33,8 @@ export interface FooterProps {
 }
 
 export interface MainTemplateProps extends GridProps {
-  children?: ReactNode;
-  seoProps: SeoProps;
+  children?: ContainerProps['children'];
+  seoProps?: SeoProps;
   topNavbarProps?: TopNavbarProps;
   containerProps?: CustomContainerProps;
   customTopNavbar?: JSX.Element; // Custom element for top navbar.

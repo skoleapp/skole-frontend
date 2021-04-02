@@ -1,6 +1,6 @@
 {
   "title": "Haku",
-  "coursesSubHeader": "Kurssit",
-  "noCourses": "Hakuehdoilla ei löytynyt kursseja. Voit lisätä kurssin, mikäli sitä ei vielä ole.",
-  "noCoursesLink": "Lisää kurssi täältä!"
+  "resultsInfo": "Tulokset haulle '{{ searchTerm }}'.",
+  "noThreads": "Haulla '{{ searchTerm }}' ei löytynyt lankoja.",
+  "create": "Luo '{{ searchTerm }}'"
 }

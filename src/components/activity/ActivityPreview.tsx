@@ -4,7 +4,7 @@ import { ActivityObjectType, useActivityPreviewQuery } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { LoadingBox, NotFoundBox } from '../shared';
 import { ActivityListItem } from './ActivityListItem';
@@ -22,7 +22,11 @@ export const ActivityPreview: React.FC = () => {
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivityPreviewQuery({ context });
   const activities: ActivityObjectType[] = R.propOr([], 'activityPreview', data);
-  const renderActivities = activities.map((a, i) => <ActivityListItem activity={a} key={i} />);
+
+  const renderActivities = useMemo(
+    () => activities.map((a, i) => <ActivityListItem activity={a} key={i} />),
+    [activities],
+  );
 
   if (loading) {
     return <LoadingBox />;

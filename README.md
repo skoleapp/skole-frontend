@@ -93,3 +93,4 @@ A quick look at the top-level files and directories excluding Git ignored locati
 - When settings `z-index` CSS values, document the use case so it's clear on which elements that value affects.
 - Do not use `next/link`, use our custom `Link`-component instead to make sure anchor tags are always rendered properly.
 - Generate Cypress fixtures easily by copying the request from `common.graphql` and using e.g. [Insomnia](https://insomnia.rest) to get the backend response as JSON.
+- Use `useMemo/useCallback` for all conditional rendering to optimize performance.

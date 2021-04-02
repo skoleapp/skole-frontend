@@ -11,12 +11,11 @@ import {
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { UpdateProfileMutation, useUpdateProfileMutation } from 'generated';
-import { withUserMe } from 'hocs';
+import { withAuthRequired } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { useMemo } from 'react';
-import { SeoPageProps } from 'types';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -34,12 +33,12 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const EditProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-  const { userMe, setUserMe, verified, username, title, bio, avatar } = useAuthContext();
+  const { setUserMe, verified, username, title, bio, avatar } = useAuthContext();
 
   const {
     formRef,
@@ -83,21 +82,15 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
     });
   };
 
-  const dynamicInitialValues = {
-    title,
-    username,
-    bio,
-    avatar,
-  };
-
-  // Only re-render when one of the dynamic values changes - the form values will reset every time.
   const initialValues = useMemo(
     () => ({
       ...generalFormValues,
-      ...dynamicInitialValues,
+      title,
+      username,
+      bio,
+      avatar,
     }),
-    // Ignore: ESLint cannot infer the values in the dependency array.
-    Object.values(dynamicInitialValues), // eslint-disable-line react-hooks/exhaustive-deps
+    [title, username, bio, avatar, generalFormValues],
   );
 
   const validationSchema = Yup.object().shape({
@@ -154,31 +147,26 @@ const EditProfilePage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('edit-profile:title'),
+    },
     topNavbarProps: {
       header: t('edit-profile:header'),
       emoji: '🖊️',
     },
   };
 
-  if (!userMe) {
-    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
+  if (!verified) {
+    return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
   return <SettingsTemplate {...layoutProps}>{renderForm}</SettingsTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'edit-profile');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['edit-profile'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['edit-profile'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
-
-export default withUserMe(EditProfilePage);
+export default withAuthRequired(EditProfilePage);

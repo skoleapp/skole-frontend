@@ -24,12 +24,11 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useEffect, useState } from 'react';
-import { SeoPageProps } from 'types';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { mediaUrl, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -54,7 +53,7 @@ interface LoginFormValues {
   password: string;
 }
 
-const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const LoginPage: NextPage = () => {
   const classes = useStyles();
   const { userMe } = useAuthContext();
   const { t } = useTranslation();
@@ -109,11 +108,14 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     password: Yup.string().required(t('validation:required')),
   });
 
-  const initialValues = {
-    ...generalFormValues,
-    usernameOrEmail: '',
-    password: '',
-  };
+  const initialValues = useMemo(
+    () => ({
+      ...generalFormValues,
+      usernameOrEmail: '',
+      password: '',
+    }),
+    [generalFormValues],
+  );
 
   const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
     if (login?.errors?.length) {
@@ -134,98 +136,158 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   const [loginMutation] = useLoginMutation({ onCompleted, onError, context });
 
-  const handleSubmit = async (values: LoginFormValues): Promise<void> => {
-    const { usernameOrEmail: _usernameOrEmail, password } = values;
-    const usernameOrEmail = R.propOr(_usernameOrEmail, 'email', existingUser);
+  const handleSubmit = useCallback(
+    async (values: LoginFormValues): Promise<void> => {
+      const { usernameOrEmail: _usernameOrEmail, password } = values;
+      const usernameOrEmail = R.propOr(_usernameOrEmail, 'email', existingUser);
 
-    await loginMutation({
-      variables: { usernameOrEmail, password },
-    });
-  };
+      await loginMutation({
+        variables: { usernameOrEmail, password },
+      });
+    },
+    [existingUser, loginMutation],
+  );
 
-  const handleLoginWithDifferentCredentials = (): void => {
+  const handleLoginWithDifferentCredentials = useCallback((): void => {
     localStorage.removeItem('user');
     setExistingUser(null);
     formRef.current?.resetForm();
-  };
+  }, [formRef]);
 
-  const renderExistingUserGreeting = (
-    <Grid container alignItems="center" direction="column">
-      <Avatar className={classes.avatar} src={existingUserAvatar} />
-      <Typography variant="subtitle1" gutterBottom>
-        {existingUserGreeting}
-      </Typography>
-    </Grid>
+  const renderExistingUserGreeting = useMemo(
+    () => (
+      <Grid container alignItems="center" direction="column">
+        <Avatar className={classes.avatar} src={existingUserAvatar} />
+        <Typography variant="subtitle1" gutterBottom>
+          {existingUserGreeting}
+        </Typography>
+      </Grid>
+    ),
+    [classes.avatar, existingUserAvatar, existingUserGreeting],
   );
 
-  const renderUsernameOrEmailField = !validExistingUser && (
-    <Field name="usernameOrEmail" component={TextFormField} label={t('forms:usernameOrEmail')} />
+  const renderUsernameOrEmailField = useMemo(
+    () =>
+      !validExistingUser && (
+        <Field
+          name="usernameOrEmail"
+          component={TextFormField}
+          label={t('forms:usernameOrEmail')}
+        />
+      ),
+    [t, validExistingUser],
   );
 
-  const renderPasswordField = (props: FormikProps<FormikValues>): JSX.Element => (
-    <PasswordField {...props} />
+  const renderPasswordField = useCallback(
+    (props: FormikProps<FormikValues>): JSX.Element => <PasswordField {...props} />,
+    [],
   );
 
-  const renderFormSubmitSection = (props: FormikProps<FormikValues>): JSX.Element => (
-    <FormSubmitSection submitButtonText={t('common:login')} {...props} />
+  const renderFormSubmitSection = useCallback(
+    (props: FormikProps<FormikValues>): JSX.Element => (
+      <FormSubmitSection submitButtonText={t('common:login')} {...props} />
+    ),
+    [t],
   );
 
-  const renderRegisterButton = (
-    <FormControl className={classes.link}>
-      <ButtonLink href={urls.register} variant="outlined">
-        {t('common:register')}
-      </ButtonLink>
-    </FormControl>
+  const renderRegisterButton = useMemo(
+    () => (
+      <FormControl className={classes.link}>
+        <ButtonLink href={urls.register} variant="outlined">
+          {t('common:register')}
+        </ButtonLink>
+      </FormControl>
+    ),
+    [classes.link, t],
   );
 
-  const renderForgotPasswordLink = (
-    <FormControl className={classes.link}>
-      <TextLink href={urls.resetPassword}>{t('login:forgotPassword')}</TextLink>
-    </FormControl>
+  const renderForgotPasswordLink = useMemo(
+    () => (
+      <FormControl className={classes.link}>
+        <TextLink href={urls.resetPassword}>{t('login:forgotPassword')}</TextLink>
+      </FormControl>
+    ),
+    [classes.link, t],
   );
 
-  const renderLoginWithDifferentCredentialsLink = (
-    <FormControl className={classes.link}>
-      <MaterialLink onClick={handleLoginWithDifferentCredentials}>
-        {t('login:loginWithDifferentCredentials')}
-      </MaterialLink>
-    </FormControl>
+  const renderLoginWithDifferentCredentialsLink = useMemo(
+    () => (
+      <FormControl className={classes.link}>
+        <MaterialLink onClick={handleLoginWithDifferentCredentials}>
+          {t('login:loginWithDifferentCredentials')}
+        </MaterialLink>
+      </FormControl>
+    ),
+    [classes.link, handleLoginWithDifferentCredentials, t],
   );
 
-  const renderExistingUserForm = (props: FormikProps<FormikValues>): JSX.Element => (
-    <Form>
-      {renderExistingUserGreeting}
-      {renderUsernameOrEmailField}
-      {renderPasswordField(props)}
-      {renderFormSubmitSection(props)}
-      {renderForgotPasswordLink}
-      {renderLoginWithDifferentCredentialsLink}
-    </Form>
+  const renderExistingUserForm = useMemo(
+    () => (props: FormikProps<FormikValues>): JSX.Element | false =>
+      !!validExistingUser && (
+        <Form>
+          {renderExistingUserGreeting}
+          {renderUsernameOrEmailField}
+          {renderPasswordField(props)}
+          {renderFormSubmitSection(props)}
+          {renderForgotPasswordLink}
+          {renderLoginWithDifferentCredentialsLink}
+        </Form>
+      ),
+    [
+      renderExistingUserGreeting,
+      renderForgotPasswordLink,
+      renderFormSubmitSection,
+      renderLoginWithDifferentCredentialsLink,
+      renderUsernameOrEmailField,
+      validExistingUser,
+      renderPasswordField,
+    ],
   );
 
-  const renderNewUserForm = (props: FormikProps<FormikValues>): JSX.Element => (
-    <Form>
-      {renderUsernameOrEmailField}
-      {renderPasswordField(props)}
-      {renderFormSubmitSection(props)}
-      {renderRegisterButton}
-      {renderForgotPasswordLink}
-    </Form>
+  const renderNewUserForm = useMemo(
+    () => (props: FormikProps<FormikValues>): JSX.Element => (
+      <Form>
+        {renderUsernameOrEmailField}
+        {renderPasswordField(props)}
+        {renderFormSubmitSection(props)}
+        {renderRegisterButton}
+        {renderForgotPasswordLink}
+      </Form>
+    ),
+    [
+      renderForgotPasswordLink,
+      renderFormSubmitSection,
+      renderRegisterButton,
+      renderUsernameOrEmailField,
+      renderPasswordField,
+    ],
   );
 
-  const renderForm = (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-      innerRef={formRef}
-    >
-      {validExistingUser ? renderExistingUserForm : renderNewUserForm}
-    </Formik>
+  const renderForm = useMemo(
+    () => (
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+        innerRef={formRef}
+      >
+        {renderExistingUserForm || renderNewUserForm}
+      </Formik>
+    ),
+    [
+      formRef,
+      handleSubmit,
+      initialValues,
+      renderExistingUserForm,
+      renderNewUserForm,
+      validationSchema,
+    ],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('login:title'),
+    },
     topNavbarProps: {
       header: t('login:header'),
       emoji: '👋',
@@ -242,18 +304,10 @@ const LoginPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'login');
-
-  return {
-    props: {
-      _ns: await loadNamespaces(['login'], locale),
-      seoProps: {
-        title: t('title'),
-        description: t('description'),
-      },
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['login'], locale),
+  },
+});
 
 export default withUserMe(LoginPage);

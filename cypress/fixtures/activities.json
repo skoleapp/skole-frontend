@@ -8,36 +8,37 @@
       "count": 3,
       "objects": [
         {
-          "id": "3",
-          "description": "commented on your resource",
+          "id": "8",
+          "description": "You received the 'Staff' badge.",
           "read": false,
           "causingUser": {
-            "slug": "testuser5",
-            "username": "testuser5",
+            "slug": "admin",
+            "username": "admin",
             "avatarThumbnail": ""
           },
-          "course": null,
-          "resource": {
-            "slug": "sample-exam-1-2012-12-12"
-          },
-          "comment": null
+          "comment": null,
+          "badgeProgress": {
+            "badge": {
+              "tier": "DIAMOND"
+            }
+          }
         },
         {
           "id": "2",
-          "description": "commented on your course",
+          "description": "commented on your thread",
           "read": false,
           "causingUser": {
             "slug": "testuser3",
             "username": "testuser3",
             "avatarThumbnail": ""
           },
-          "course": {
-            "slug": "test-engineering-course-1-test0001"
-          },
-          "resource": null,
           "comment": {
-            "id": "1"
-          }
+            "id": "1",
+            "thread": {
+              "slug": "test-thread-1"
+            }
+          },
+          "badgeProgress": null
         },
         {
           "id": "1",
@@ -48,13 +49,13 @@
             "username": "testuser3",
             "avatarThumbnail": ""
           },
-          "course": {
-            "slug": "test-engineering-course-1-test0001"
-          },
-          "resource": null,
           "comment": {
-            "id": "4"
-          }
+            "id": "4",
+            "thread": {
+              "slug": "test-thread-1"
+            }
+          },
+          "badgeProgress": null
         }
       ]
     }

@@ -1,6 +1,6 @@
 {
   "data": {
-    "starredCourses": {
+    "starredThreads": {
       "page": 1,
       "pages": 1,
       "hasPrev": false,
@@ -8,86 +8,46 @@
       "count": 2,
       "objects": [
         {
-          "slug": "test-engineering-course-1-test0001",
-          "name": "Test Engineering Course 1",
-          "codes": "TEST0001",
-          "score": 0,
-          "starCount": 1,
-          "resourceCount": 15,
-          "commentCount": 18,
+          "id": "1",
+          "slug": "test-thread-1",
+          "title": "Test Thread 1",
+          "text": "Test thread 1 text.",
+          "image": "/media/uploads/attachments/test_image.png",
+          "imageThumbnail": "/media/CACHE/images/uploads/attachments/test_image/5015cd33f3fb226758e9dd72309fb84f.jpg",
+          "modified": "2020-01-01T12:00:00+00:00",
           "created": "2020-01-01T12:00:00+00:00",
+          "score": 0,
+          "starred": true,
+          "starCount": 1,
+          "commentCount": 26,
+          "vote": null,
           "user": {
+            "id": "2",
             "slug": "testuser2",
             "username": "testuser2"
-          },
-          "courseSchool": {
-            "slug": "university-of-turku"
           }
         },
         {
-          "slug": "test-engineering-course-2-test0002",
-          "name": "Test Engineering Course 2",
-          "codes": "TEST0002",
-          "score": 1,
-          "starCount": 1,
-          "resourceCount": 0,
-          "commentCount": 1,
+          "id": "2",
+          "slug": "test-thread-2",
+          "title": "Test Thread 2",
+          "text": "Test thread 2 text.",
+          "image": "/media/uploads/attachments/test_image.png",
+          "imageThumbnail": "/media/CACHE/images/uploads/attachments/test_image/5015cd33f3fb226758e9dd72309fb84f.jpg",
+          "modified": "2020-01-01T12:00:00+00:00",
           "created": "2020-01-01T12:00:00+00:00",
+          "score": -1,
+          "starred": true,
+          "starCount": 1,
+          "commentCount": 1,
+          "vote": {
+            "id": "8",
+            "status": -1
+          },
           "user": {
+            "id": "3",
             "slug": "testuser3",
             "username": "testuser3"
-          },
-          "courseSchool": {
-            "slug": "university-of-turku"
-          }
-        }
-      ]
-    },
-    "starredResources": {
-      "page": 1,
-      "pages": 1,
-      "hasNext": false,
-      "hasPrev": false,
-      "count": 2,
-      "objects": [
-        {
-          "slug": "sample-exam-1-2012-12-12",
-          "title": "Sample Exam 1",
-          "score": 0,
-          "date": "2012-12-12",
-          "starCount": 1,
-          "commentCount": 4,
-          "downloads": 0,
-          "created": "2020-01-01T12:00:00+00:00",
-          "resourceType": {
-            "name": "Exercise"
-          },
-          "user": {
-            "slug": "testuser2",
-            "username": "testuser2"
-          },
-          "resourceCourse": {
-            "slug": "test-engineering-course-1-test0001"
-          }
-        },
-        {
-          "slug": "sample-exam-2-2012-12-12",
-          "title": "Sample Exam 2",
-          "score": 0,
-          "date": "2012-12-12",
-          "starCount": 1,
-          "commentCount": 1,
-          "downloads": 0,
-          "created": "2020-01-01T12:00:00+00:00",
-          "resourceType": {
-            "name": "Exercise"
-          },
-          "user": {
-            "slug": "testuser10",
-            "username": "testuser10"
-          },
-          "resourceCourse": {
-            "slug": "test-engineering-course-1-test0001"
           }
         }
       ]

@@ -14,10 +14,10 @@ import {
 import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { mediaUrl, urls } from 'utils';
 
-import { Link, TextLink } from '../shared';
+import { BadgeTierIcon, TextLink } from '../shared';
 
 const useStyles = makeStyles({
   unread: {
@@ -51,7 +51,6 @@ export const ActivityListItem: React.FC<Props> = ({
     if (markActivityAsRead?.errors?.length) {
       toggleUnexpectedErrorNotification();
     } else if (markActivityAsRead?.activity?.read != null) {
-      // Use the abstract equality to compare against both `null` and `undefined` values.
       setRead(markActivityAsRead.activity.read);
     } else {
       toggleUnexpectedErrorNotification();
@@ -64,43 +63,22 @@ export const ActivityListItem: React.FC<Props> = ({
     context,
   });
 
-  const getPathObj = (): PathObj => {
-    let pathname = null;
-    let query = null;
-    if (comment) {
-      const { course, resource, school, comment: innerComment } = comment;
-      query = { comment: comment.id };
+  const handleClick = async (): Promise<void> => {
+    let pathname;
+    let query;
 
-      if (innerComment?.id) {
-        if (innerComment?.course?.slug) {
-          pathname = urls.course(innerComment.course.slug);
-        } else if (innerComment?.resource?.slug) {
-          pathname = urls.resource(innerComment.resource.slug);
-        } else if (innerComment?.school?.slug) {
-          pathname = urls.school(innerComment.school.slug);
-        }
-        query = { comment: innerComment.id };
-      } else if (course?.slug) {
-        pathname = urls.course(course.slug);
-      } else if (resource?.slug) {
-        pathname = urls.resource(resource.slug);
-      } else if (school?.slug) {
-        pathname = urls.school(school.slug);
-      }
-    } else if (badgeProgress && badgeProgress.user.slug) {
+    if (comment?.thread) {
+      pathname = urls.thread(comment.thread.slug || '');
+    } else if (badgeProgress?.user.slug) {
       pathname = urls.user(badgeProgress.user.slug);
     }
     return { pathname, query };
   };
 
-  const getItemHref = (): string => {
-    let href = '';
-    const { pathname, query } = getPathObj();
-    if (pathname) {
-      href = pathname;
-      if (query && query.comment) {
-        href = `${href}?comment=${query.comment}`;
-      }
+    if (comment) {
+      query = {
+        comment: comment.id,
+      };
     }
     return href;
   };
@@ -109,39 +87,60 @@ export const ActivityListItem: React.FC<Props> = ({
     await markSingleActivityRead({ variables: { id, read: true } });
   };
 
-  const renderAvatar = comment && (
-    <ListItemAvatar>
-      <Avatar src={mediaUrl(avatarThumbnail)} />
-    </ListItemAvatar>
+  const avatarSrc = (!!comment && mediaUrl(avatarThumbnail)) || '';
+
+  const renderAvatarIcon = useMemo(
+    () => badgeProgress && <BadgeTierIcon tier={badgeProgress.badge.tier} />,
+    [badgeProgress],
   );
 
-  let renderTargetUserLink = null;
-  if (causingUser) {
-    renderTargetUserLink = (
-      <TextLink href={urls.user(R.prop('slug', causingUser))}>
-        {R.prop('username', causingUser)}
-      </TextLink>
-    );
-  } else if (comment) {
-    renderTargetUserLink = (
-      <Typography variant="body2" color="textSecondary">
-        {t('common:communityUser')}
-      </Typography>
-    );
-  } // else: activity had `badgeProgress`
+  const renderAvatar = useMemo(
+    () => (
+      <ListItemAvatar>
+        <Avatar src={avatarSrc}>{renderAvatarIcon}</Avatar>
+      </ListItemAvatar>
+    ),
+    [avatarSrc, renderAvatarIcon],
+  );
 
-  let renderListItemText = null;
-  const itemHref = getItemHref();
+  const renderAvatar = useMemo(
+    () => (
+      <ListItemAvatar>
+        <Avatar src={avatarSrc}>{renderAvatarIcon}</Avatar>
+      </ListItemAvatar>
+    ),
+    [avatarSrc, renderAvatarIcon],
+  );
 
-  if (itemHref) {
-    renderListItemText = (
-      <Link href={itemHref}>
-        <ListItemText primary={renderTargetUserLink} secondary={description} />
-      </Link>
-    );
-  } else {
-    renderListItemText = <ListItemText primary={renderTargetUserLink} secondary={description} />;
-  }
+  const renderUserLink = useMemo(
+    () =>
+      !!causingUser && (
+        <TextLink href={urls.user(R.prop('slug', causingUser))}>
+          {R.prop('username', causingUser)}
+        </TextLink>
+      ),
+    [causingUser],
+  );
+
+  const renderCommunityUser = useMemo(
+    () =>
+      !!comment && (
+        <Typography variant="body2" color="textSecondary">
+          {t('common:communityUser')}
+        </Typography>
+      ),
+    [comment, t],
+  );
+
+  const renderTargetUserLink = useMemo(() => renderUserLink || renderCommunityUser, [
+    renderCommunityUser,
+    renderUserLink,
+  ]);
+
+  const renderListItemText = useMemo(
+    () => <ListItemText primary={renderTargetUserLink} secondary={description} />,
+    [description, renderTargetUserLink],
+  );
 
   return (
     <ListItem onClick={handleClick} className={clsx(!read && classes.unread)} button>

@@ -1,12 +1,11 @@
-import Box from '@material-ui/core/Box';
+import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import { useAuthContext } from 'context';
 import { useTranslation } from 'lib';
-import Image from 'next/image';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FooterProps } from 'types';
 import { isNotNativeApp, urls } from 'utils';
 
@@ -17,16 +16,12 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     backgroundColor: palette.primary.main,
     paddingTop: spacing(8),
     paddingBottom: spacing(8),
-    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(2)})`,
-    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(2)})`,
+    paddingLeft: `env(safe-area-inset-left)`,
+    paddingRight: `env(safe-area-inset-right)`,
   },
   header: {
     fontWeight: 'bold',
     marginBottom: spacing(4),
-  },
-  socialMediaIcon: {
-    color: palette.secondary.main,
-    padding: `${spacing(2)} !important`,
   },
   bottomRow: {
     marginTop: spacing(8),
@@ -50,209 +45,205 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
 
-  const handleClickSocialMediaLink = (name: string) => (): void =>
-    sa_event(`click_${name}_footer_link`);
-
-  const renderSkoleHeader = (
-    <Typography className={classes.header} variant="subtitle1" color="secondary">
-      SKOLE
-    </Typography>
-  );
-
-  const renderGetStartedLink = !userMe && (
-    <TextLink href={urls.index} color="secondary">
-      {t('common:getStarted')}
-    </TextLink>
-  );
-
-  const renderGuidelinesLink = (
-    <TextLink href={urls.guidelines} color="secondary">
-      {t('common:guidelines')}
-    </TextLink>
-  );
-
-  const renderScoreLink = (
-    <TextLink href={urls.score} color="secondary">
-      {t('common:score')}
-    </TextLink>
-  );
-
-  const renderBadgesLink = (
-    <TextLink href={urls.badges} color="secondary">
-      {t('common:badges')}
-    </TextLink>
-  );
-
-  const renderFeedbackLink = (
-    <TextLink href={urls.contact} color="secondary">
-      {t('common:feedback')}
-    </TextLink>
-  );
-
-  const renderSkole = (
-    <Grid
-      className={classes.container}
-      item
-      xs={4}
-      container
-      direction="column"
-      alignItems="flex-start"
-    >
-      {renderSkoleHeader}
-      {renderGetStartedLink}
-      {renderGuidelinesLink}
-      {renderScoreLink}
-      {renderBadgesLink}
-      {renderFeedbackLink}
-    </Grid>
-  );
-
-  const renderCompanyHeader = (
-    <Typography className={classes.header} variant="subtitle1" color="secondary">
-      {t('common:company').toUpperCase()}
-    </Typography>
-  );
-
-  const renderContactLink = (
-    <TextLink href={urls.contact} color="secondary">
-      {t('common:contact')}
-    </TextLink>
-  );
-
-  const renderValuesLink = (
-    <TextLink href={urls.values} color="secondary">
-      {t('common:values')}
-    </TextLink>
-  );
-
-  const renderCompany = (
-    <Grid
-      className={classes.container}
-      item
-      xs={4}
-      container
-      direction="column"
-      alignItems="flex-start"
-    >
-      {renderCompanyHeader}
-      {renderContactLink}
-      {renderValuesLink}
-    </Grid>
-  );
-
-  const socialMediaLinks = [
-    {
-      href: 'https://www.facebook.com/skoleofficial',
-      name: 'facebook',
-    },
-    {
-      href: 'https://www.instagram.com/skoleofficial/',
-      name: 'instagram',
-    },
-    {
-      href: 'https://twitter.com/skoleofficial',
-      name: 'twitter',
-    },
-    {
-      href: 'https://www.linkedin.com/company/skole-inc',
-      name: 'linkedin',
-    },
-  ];
-
-  const mapSocialMediaLinks = socialMediaLinks.map(({ href, name }, i) => (
-    <Typography
-      component="a"
-      target="_blank"
-      rel="noreferrer"
-      href={href}
-      onClick={handleClickSocialMediaLink(name)}
-      key={i}
-    >
-      <Image
-        className={classes.socialMediaIcon}
-        src={`/images/footer-social-media-icons/${name}.svg`}
-        width={40}
-        height={40}
-      />
-    </Typography>
-  ));
-
-  const renderSocialMediaLinks = (
-    <Grid
-      className={classes.container}
-      item
-      xs={4}
-      container
-      direction="column"
-      alignItems="center"
-    >
+  const renderSkoleHeader = useMemo(
+    () => (
       <Typography className={classes.header} variant="subtitle1" color="secondary">
-        #studyinskole
+        SKOLE
       </Typography>
-      <Box>{mapSocialMediaLinks}</Box>
-    </Grid>
+    ),
+    [classes.header],
   );
 
-  const renderCopyright = (
-    <Grid className={classes.container} item xs={4} container alignItems="center">
-      <Typography variant="subtitle1" color="secondary">
-        © {new Date().getFullYear()} Skole
-      </Typography>
-    </Grid>
+  const renderGetStartedLink = useMemo(
+    () =>
+      !userMe && (
+        <TextLink href={urls.index} color="secondary">
+          {t('common:getStarted')}
+        </TextLink>
+      ),
+    [t, userMe],
   );
 
-  const renderTermsLink = (
-    <TextLink href={urls.terms} color="secondary">
-      {t('common:terms')}
-    </TextLink>
+  const renderGuidelinesLink = useMemo(
+    () => (
+      <TextLink href={urls.guidelines} color="secondary">
+        {t('common:guidelines')}
+      </TextLink>
+    ),
+    [t],
   );
 
-  const renderPrivacyLink = (
-    <TextLink className={classes.privacyLink} href={urls.privacy} color="secondary">
-      {t('common:privacy')}
-    </TextLink>
+  const renderScoreLink = useMemo(
+    () => (
+      <TextLink href={urls.score} color="secondary">
+        {t('common:score')}
+      </TextLink>
+    ),
+    [t],
   );
 
-  const renderLegal = (
-    <Grid className={classes.container} item xs={4} container alignItems="center">
-      {renderTermsLink}
-      {renderPrivacyLink}
-    </Grid>
+  const renderBadgesLink = useMemo(
+    () => (
+      <TextLink href={urls.badges} color="secondary">
+        {t('common:badges')}
+      </TextLink>
+    ),
+    [t],
   );
 
-  const renderAppStoreBadges = isNotNativeApp && !hideAppStoreBadges && (
-    <Grid
-      className={clsx(classes.container, classes.appStoreBadgeContainer)}
-      item
-      xs={4}
-      container
-      justify="center"
-    >
-      <Grid className={classes.appStoreBadgeImageContainer} container justify="center">
-        <Grid item xs={6}>
-          <AppStoreBadge />
-        </Grid>
-        <Grid item xs={6}>
-          <GooglePlayBadge />
-        </Grid>
+  const renderSkole = useMemo(
+    () => (
+      <Grid
+        className={classes.container}
+        item
+        xs={3}
+        container
+        direction="column"
+        alignItems="flex-start"
+      >
+        {renderSkoleHeader}
+        {renderGetStartedLink}
+        {renderGuidelinesLink}
+        {renderScoreLink}
+        {renderBadgesLink}
       </Grid>
-    </Grid>
+    ),
+    [
+      classes.container,
+      renderBadgesLink,
+      renderGetStartedLink,
+      renderGuidelinesLink,
+      renderScoreLink,
+      renderSkoleHeader,
+    ],
+  );
+
+  const renderCompanyHeader = useMemo(
+    () => (
+      <Typography className={classes.header} variant="subtitle1" color="secondary">
+        {t('common:company').toUpperCase()}
+      </Typography>
+    ),
+    [classes.header, t],
+  );
+
+  const renderContactLink = useMemo(
+    () => (
+      <TextLink href={urls.contact} color="secondary">
+        {t('common:contact')}
+      </TextLink>
+    ),
+    [t],
+  );
+
+  const renderValuesLink = useMemo(
+    () => (
+      <TextLink href={urls.values} color="secondary">
+        {t('common:values')}
+      </TextLink>
+    ),
+    [t],
+  );
+
+  const renderCompany = useMemo(
+    () => (
+      <Grid
+        className={classes.container}
+        item
+        xs={3}
+        container
+        direction="column"
+        alignItems="flex-start"
+      >
+        {renderCompanyHeader}
+        {renderContactLink}
+        {renderValuesLink}
+      </Grid>
+    ),
+    [classes.container, renderCompanyHeader, renderContactLink, renderValuesLink],
+  );
+
+  const renderCopyright = useMemo(
+    () => (
+      <Grid className={classes.container} item xs={3} container alignItems="center">
+        <Typography variant="subtitle1" color="secondary">
+          © {new Date().getFullYear()} Skole
+        </Typography>
+      </Grid>
+    ),
+    [classes.container],
+  );
+
+  const renderTermsLink = useMemo(
+    () => (
+      <TextLink href={urls.terms} color="secondary">
+        {t('common:terms')}
+      </TextLink>
+    ),
+    [t],
+  );
+
+  const renderPrivacyLink = useMemo(
+    () => (
+      <TextLink className={classes.privacyLink} href={urls.privacy} color="secondary">
+        {t('common:privacy')}
+      </TextLink>
+    ),
+    [classes.privacyLink, t],
+  );
+
+  const renderLegal = useMemo(
+    () => (
+      <Grid className={classes.container} item xs={3} container alignItems="center">
+        {renderTermsLink}
+        {renderPrivacyLink}
+      </Grid>
+    ),
+    [classes.container, renderPrivacyLink, renderTermsLink],
+  );
+
+  const renderAppStoreBadges = useMemo(
+    () =>
+      isNotNativeApp &&
+      !hideAppStoreBadges && (
+        <Grid
+          className={clsx(classes.container, classes.appStoreBadgeContainer)}
+          item
+          xs={6}
+          container
+          justify="center"
+        >
+          <Grid className={classes.appStoreBadgeImageContainer} container justify="center">
+            <Grid item xs={6}>
+              <AppStoreBadge />
+            </Grid>
+            <Grid item xs={6}>
+              <GooglePlayBadge />
+            </Grid>
+          </Grid>
+        </Grid>
+      ),
+    [
+      classes.appStoreBadgeContainer,
+      classes.appStoreBadgeImageContainer,
+      classes.container,
+      hideAppStoreBadges,
+    ],
   );
 
   return (
     <Grid container className={classes.root} justify="center">
-      <Grid item xs={12} xl={8} container>
-        <Grid item xs={12} container>
+      <Container>
+        <Grid container>
           {renderSkole}
           {renderCompany}
-          {renderSocialMediaLinks}
         </Grid>
-        <Grid className={classes.bottomRow} item xs={12} container>
+        <Grid className={classes.bottomRow} container>
           {renderCopyright}
           {renderLegal}
           {renderAppStoreBadges}
         </Grid>
-      </Grid>
+      </Container>
     </Grid>
   );
 };

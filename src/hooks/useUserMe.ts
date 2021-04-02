@@ -1,12 +1,12 @@
 import { useAuthContext } from 'context';
-import { UserMeFieldsFragment, UserMeQueryHookResult, useUserMeQuery } from 'generated';
+import { UserFieldsFragment, UserMeQueryHookResult, useUserMeQuery } from 'generated';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 
 interface UseUserMeQuery extends Omit<UserMeQueryHookResult, 'data' | 'loading' | 'error'> {
-  userMe: UserMeFieldsFragment | null;
+  userMe: UserFieldsFragment | null;
   authLoading: boolean;
   authNetworkError: boolean;
 }

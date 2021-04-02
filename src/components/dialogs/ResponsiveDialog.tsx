@@ -3,7 +3,7 @@ import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DialogHeaderProps, SkoleDialogProps } from 'types';
 
 import { DialogHeader } from './DialogHeader';
@@ -30,32 +30,44 @@ export const ResponsiveDialog: React.FC<Props> = ({
   dialogHeaderProps,
   ...dialogProps
 }) => {
-  const { isMobile } = useMediaQueries();
+  const { smDown } = useMediaQueries();
   const classes = useStyles();
-  const renderDialogHeader = <DialogHeader {...dialogHeaderProps} />;
+
+  const renderDialogHeader = useMemo(() => <DialogHeader {...dialogHeaderProps} />, [
+    dialogHeaderProps,
+  ]);
 
   // Disable padding for dialog content of lists.
-  const renderDialogContent = (
-    <DialogContent
-      className={clsx(dialogProps.list ? classes.listDialogContent : classes.dialogContent)}
-    >
-      {children}
-    </DialogContent>
+  const renderDialogContent = useMemo(
+    () => (
+      <DialogContent
+        className={clsx(dialogProps.list ? classes.listDialogContent : classes.dialogContent)}
+      >
+        {children}
+      </DialogContent>
+    ),
+    [children, classes.dialogContent, classes.listDialogContent, dialogProps.list],
   );
 
-  const renderDrawer = (
-    <Drawer anchor="bottom" {...dialogProps}>
-      {renderDialogHeader}
-      {children}
-    </Drawer>
+  const renderDrawer = useMemo(
+    () => (
+      <Drawer anchor="bottom" {...dialogProps}>
+        {renderDialogHeader}
+        {children}
+      </Drawer>
+    ),
+    [children, dialogProps, renderDialogHeader],
   );
 
-  const renderDialog = (
-    <SkoleDialog {...dialogProps}>
-      {renderDialogHeader}
-      {renderDialogContent}
-    </SkoleDialog>
+  const renderDialog = useMemo(
+    () => (
+      <SkoleDialog {...dialogProps}>
+        {renderDialogHeader}
+        {renderDialogContent}
+      </SkoleDialog>
+    ),
+    [dialogProps, renderDialogContent, renderDialogHeader],
   );
 
-  return isMobile ? renderDrawer : renderDialog;
+  return smDown ? renderDrawer : renderDialog;
 };

@@ -12,7 +12,6 @@ This document explains the need for every top level dependency the project has.
 | [@cypress/code-coverage](https://www.npmjs.com/package/@cypress/code-coverage)       | Code coverage for Cypress.                                                                    |
 | [@material-ui/core](https://www.npmjs.com/package/@material-ui/core)                 | Core package for Material UI components.                                                      |
 | [@material-ui/icons](https://www.npmjs.com/package/@material-ui/icons)               | Library for using [Material Icons](https://fonts.google.com/icons).                           |
-| [@material-ui/lab](https://www.npmjs.com/package/@material-ui/lab)                   | Material UI extension for more experimental components.                                       |
 | [apollo-upload-client](https://www.npmjs.com/package/apollo-upload-client)           | Allows file uploads with GraphQL mutations.                                                   |
 | [babel-plugin-istanbul](https://www.npmjs.com/package/babel-plugin-istanbul)         | Babel plugin for instrumenting code for code coverage.                                        |
 | [browser-image-compression](https://www.npmjs.com/package/browser-image-compression) | Used for resizing uploaded images.                                                            |
@@ -21,12 +20,10 @@ This document explains the need for every top level dependency the project has.
 | [formik](https://www.npmjs.com/package/formik)                                       | Provides useful and extensible form logic.                                                    |
 | [graphql](https://www.npmjs.com/package/graphql)                                     | Only used for getting useful GraphQL typings.                                                 |
 | [gray-matter](https://www.npmjs.com/package/gray-matter)                             | Parse content from Markdown files.                                                            |
-| [lodash.throttle](https://www.npmjs.com/package/lodash.thorttle)                     | Single utility function from [Lodash](https://www.npmjs.com/package/lodash).                  |
 | [next](https://www.npmjs.com/package/next)                                           | Rendering framework for [React](https://www.npmjs.com/package/react).                         |
 | [next-offline](https://www.npmjs.com/package/next-offline)                           | Offline support for [Next.js](https://www.npmjs.com/package/next).                            |
 | [next-translate](https://www.npmjs.com/package/next-translate)                       | I18n support for [Next.js](https://www.npmjs.com/package/next).                               |
 | [nprogress](https://www.npmjs.com/package/nprogress)                                 | Provides the loading bar.                                                                     |
-| [print-js](https://www.npmjs.com/package/print-js)                                   | Used for printing single resources.                                                           |
 | [ramda](https://www.npmjs.com/package/ramda)                                         | Our go-to utility library.                                                                    |
 | [react](https://www.npmjs.com/package/react)                                         | Duh.                                                                                          |
 | [react-dom](https://www.npmjs.com/package/react-dom)                                 | Duh.                                                                                          |

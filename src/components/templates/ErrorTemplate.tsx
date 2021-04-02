@@ -3,9 +3,8 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
-import { SeoProps } from 'types';
 
 import { Emoji, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
@@ -27,36 +26,38 @@ const useStyles = makeStyles(({ breakpoints }) => ({
 
 interface Props {
   variant: 'error' | 'offline' | 'not-found';
-  seoProps: SeoProps;
 }
 
-export const ErrorTemplate: React.FC<Props> = ({ variant, seoProps }) => {
+export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { isTabletOrDesktop } = useMediaQueries();
+  const { smUp } = useMediaQueries();
   const title = t(`${variant}:title`);
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);
   const emoji = '⚠️';
 
-  const renderEmoji = <Emoji emoji={emoji} />;
+  const renderEmoji = useMemo(() => <Emoji emoji={emoji} />, []);
 
-  const renderTitle = (
-    <>
-      {header}
-      {renderEmoji}
-    </>
+  const renderTitle = useMemo(
+    () => (
+      <>
+        {header}
+        {renderEmoji}
+      </>
+    ),
+    [header, renderEmoji],
   );
 
-  const renderCardHeader = isTabletOrDesktop && (
-    <CardHeader className={classes.cardHeader} title={renderTitle} />
+  const renderCardHeader = useMemo(
+    () => smUp && <CardHeader className={classes.cardHeader} title={renderTitle} />,
+    [classes.cardHeader, renderTitle, smUp],
   );
 
-  const renderContent = <NotFoundBox text={text} />;
+  const renderContent = useMemo(() => <NotFoundBox text={text} />, [text]);
 
   const layoutProps = {
     seoProps: {
-      ...seoProps,
       title,
     },
     topNavbarProps: {

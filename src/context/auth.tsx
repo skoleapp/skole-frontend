@@ -1,11 +1,8 @@
 import {
   BadgeProgressObjectType,
   PaginatedActivityObjectType,
-  SchoolObjectType,
-  SubjectObjectType,
-  UserMeFieldsFragment,
+  UserFieldsFragment,
 } from 'generated';
-import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { createContext, useContext, useState } from 'react';
 import { AuthContextType } from 'types';
@@ -20,29 +17,25 @@ interface UseAuthContext extends AuthContextType {
   fcmToken: string;
   username: string;
   email: string;
+  backupEmail: string;
   title: string;
   bio: string;
   avatarThumbnail: string;
   avatar: string;
   rank: string;
   score: string;
-  school: SchoolObjectType | null;
-  subject: SubjectObjectType | null;
   badgeProgresses: BadgeProgressObjectType[];
   selectedBadgeProgress: BadgeProgressObjectType | null;
   commentReplyEmailPermission: boolean;
-  courseCommentEmailPermission: boolean;
-  resourceCommentEmailPermission: boolean;
+  threadCommentEmailPermission: boolean;
+  newBadgeEmailPermission: boolean;
   commentReplyPushPermission: boolean;
-  courseCommentPushPermission: boolean;
-  resourceCommentPushPermission: boolean;
-  loginRequiredTooltip: string | false;
-  verificationRequiredTooltip: string | false;
+  threadCommentPushPermission: boolean;
+  newBadgePushPermission: boolean;
   profileUrl: string;
 }
 
 export const useAuthContext = (): UseAuthContext => {
-  const { t } = useTranslation();
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
   const verified = R.prop('verified', userMe);
   const unreadActivityCount = R.prop('unreadActivityCount', userMe);
@@ -50,27 +43,22 @@ export const useAuthContext = (): UseAuthContext => {
   const fcmToken = R.prop('fcmToken', userMe);
   const username = R.prop('username', userMe);
   const email = R.prop('email', userMe);
+  const backupEmail = R.prop('backupEmail', userMe);
   const title = R.prop('title', userMe);
   const bio = R.prop('bio', userMe);
   const rank = R.prop('rank', userMe);
   const score = R.prop('score', userMe);
   const avatarThumbnail = mediaUrl(R.prop('avatarThumbnail', userMe));
   const avatar = mediaUrl(R.prop('avatar', userMe));
-  const school = R.prop('school', userMe);
-  const subject = R.prop('subject', userMe);
   const badgeProgresses = R.propOr([], 'badgeProgresses', userMe);
   const selectedBadgeProgress = R.prop('selectedBadgeProgress', userMe);
   const commentReplyEmailPermission = R.prop('commentReplyEmailPermission', userMe);
-  const courseCommentEmailPermission = R.prop('courseCommentEmailPermission', userMe);
-  const resourceCommentEmailPermission = R.prop('resourceCommentEmailPermission', userMe);
+  const threadCommentEmailPermission = R.prop('threadCommentEmailPermission', userMe);
+  const newBadgeEmailPermission = R.prop('newBadgeEmailPermission', userMe);
   const commentReplyPushPermission = R.prop('commentReplyPushPermission', userMe);
-  const courseCommentPushPermission = R.prop('courseCommentPushPermission', userMe);
-  const resourceCommentPushPermission = R.prop('resourceCommentPushPermission', userMe);
-  const loginRequiredTooltip: string | false = !userMe && t('common-tooltips:loginRequired');
+  const threadCommentPushPermission = R.prop('threadCommentPushPermission', userMe);
+  const newBadgePushPermission = R.prop('newBadgePushPermission', userMe);
   const profileUrl = urls.user(slug);
-
-  const verificationRequiredTooltip: string | false =
-    verified === false && t('common-tooltips:verificationRequired');
 
   return {
     userMe,
@@ -80,31 +68,28 @@ export const useAuthContext = (): UseAuthContext => {
     fcmToken,
     username,
     email,
+    backupEmail,
     title,
     bio,
     rank,
     score,
     avatarThumbnail,
     avatar,
-    school,
-    subject,
     badgeProgresses,
     selectedBadgeProgress,
     commentReplyEmailPermission,
-    courseCommentEmailPermission,
-    resourceCommentEmailPermission,
+    threadCommentEmailPermission,
+    newBadgeEmailPermission,
     commentReplyPushPermission,
-    courseCommentPushPermission,
-    resourceCommentPushPermission,
-    verificationRequiredTooltip,
-    loginRequiredTooltip,
+    threadCommentPushPermission,
+    newBadgePushPermission,
     profileUrl,
     ...authContext,
   };
 };
 
 export const AuthContextProvider: React.FC = ({ children }) => {
-  const [userMe, setUserMe] = useState<UserMeFieldsFragment | null>(null);
+  const [userMe, setUserMe] = useState<UserFieldsFragment | null>(null);
   const [authNetworkError, setAuthNetworkError] = useState(false);
   const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
 

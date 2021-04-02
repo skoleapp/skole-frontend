@@ -1,10 +1,8 @@
 {
   "title": "Rekisteröidy",
-  "description": "Rekisteröidy Skoleen.",
   "header": "Rekisteröidy",
   "emailHelperText": "Sähköpostisi, jota käytämme sitä sinun tunnistamiseen. Se näkyy vain sinulle. Emme lähetä sinulle roskapostia.",
   "usernameHelperText": "Käyttäjätunnus tai sähköposti",
   "termsHelperText": "Rekisteröitymällä hyväksyt",
-  "updateAccountSettingsHelperTextText": "Lähes Valmista! Lisäämällä koulun ja oppiaineen voimme näyttää sinulle automaattisesti sisältöä perustuen niihin. Voit lisätä nämä myös myöhemmin.",
   "registerCompleteText": "Valmista! Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi."
 }

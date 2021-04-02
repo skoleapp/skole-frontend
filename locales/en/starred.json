@@ -1,6 +1,5 @@
 {
-  "title": "Starred",
-  "header": "Starred",
-  "noResources": "You have no starred materials. All materials that you star will show up here.",
-  "noCourses": "You have no starred courses. All courses that you star will show up here."
+  "title": "Starred Threads",
+  "header": "Starred Threads",
+  "noThreads": "You have no starred threads. All threads that you star will show up here."
 }

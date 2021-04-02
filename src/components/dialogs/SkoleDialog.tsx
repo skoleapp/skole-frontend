@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { TransitionProps } from '@material-ui/core/transitions';
 import clsx from 'clsx';
 import { useMediaQueries } from 'hooks';
-import React, { forwardRef, Ref, SyntheticEvent } from 'react';
+import React, { forwardRef, Ref } from 'react';
 import { BORDER_RADIUS } from 'styles';
 import { SkoleDialogProps } from 'types';
 
@@ -29,24 +29,29 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 }));
 
 // A simple wrapper around MUI dialog to provide responsive styles consistently for all dialogs.
-export const SkoleDialog: React.FC<SkoleDialogProps> = ({ fullScreen, list, ...props }) => {
+export const SkoleDialog: React.FC<SkoleDialogProps> = ({
+  fullScreen,
+  list,
+  paperClasses,
+  ...props
+}) => {
   const classes = useStyles();
-  const { isMobile, isTabletOrDesktop } = useMediaQueries();
-  const handleClick = (e: SyntheticEvent): void => e.stopPropagation();
+  const { smDown, smUp } = useMediaQueries();
 
   const PaperProps = {
     className: clsx(
       classes.paper,
       list && classes.list,
       fullScreen === false && classes.alwaysBorderRadius,
+      paperClasses,
     ),
   };
 
   return (
     <Dialog
-      onClick={handleClick}
-      fullScreen={fullScreen === false ? fullScreen : isMobile}
-      fullWidth={isTabletOrDesktop}
+      onClick={(e): void => e.stopPropagation()}
+      fullScreen={fullScreen === false ? fullScreen : smDown}
+      fullWidth={smUp}
       TransitionComponent={Transition}
       PaperProps={PaperProps}
       {...props}

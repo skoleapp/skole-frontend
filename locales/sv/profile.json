@@ -1,17 +1,12 @@
 {
-  "description": "Visa Skole-profilen för användaren {{ username }}.",
   "score": "poäng",
-  "courses": "kurser",
-  "resources": "materialer",
+  "threads": "trådar",
   "rank": "Rang",
   "badges": "Märken",
   "nextBadge": "Nästa märke",
   "editProfile": "Redigera Profil",
-  "viewStarred": "Visa stjärnmärkta",
-  "ownProfileNoCourses": "Du har inte lagt till några kurser. Alla kurser som du tillagt kommer att visas här.",
-  "ownProfileNoResources": "Du har inte laddat upp några materialer. Alla materialer som du laddar upp visas här.",
+  "ownProfileNoThreads": "Du har inte lagt till några trådar. Alla trådar som du tillagt kommer att visas här.",
   "ownProfileNoComments": "Du har inte lagt till några kommentarer. Alla kommentarer som du tillagt kommer att visas här.",
-  "noCourses": "Denna användare har inte lagt till några kurser.",
-  "noResources": "Den här användaren har inte laddat upp några materialer.",
+  "noThreads": "Denna användare har inte lagt till några trådar.",
   "noComments": "Denna användare har inte lagt till några kommentarer."
 }

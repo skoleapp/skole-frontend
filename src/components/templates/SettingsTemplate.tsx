@@ -5,12 +5,11 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 
-import { SettingsButton, SettingsList } from '../settings';
-import { Emoji } from '../shared';
+import { Emoji, SettingsButton, SettingsList } from '../shared';
 import { MainTemplate } from './MainTemplate';
 
 const useStyles = makeStyles(({ breakpoints, palette }) => ({
@@ -44,82 +43,109 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { isTabletOrDesktop } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const settingsHeaderText = t('common:settings');
   const mainHeaderText = topNavbarProps?.header;
 
-  const renderSettingsEmoji = <Emoji emoji="⚙️" />;
-  const renderMainEmojiEmoji = topNavbarProps?.emoji && <Emoji emoji={topNavbarProps.emoji} />;
-  const renderHeaderRight = <SettingsButton />;
+  const renderSettingsEmoji = useMemo(() => <Emoji emoji="⚙️" />, []);
 
-  const settingsHeaderTitle = (
-    <>
-      {settingsHeaderText}
-      {renderSettingsEmoji}
-    </>
+  const renderMainEmojiEmoji = useMemo(
+    () => topNavbarProps?.emoji && <Emoji emoji={topNavbarProps.emoji} />,
+    [topNavbarProps?.emoji],
   );
 
-  const renderSettingsHeader = (
-    <CardHeader
-      classes={{
-        root: classes.cardHeaderRoot,
-        title: classes.cardHeaderTitle,
-      }}
-      title={settingsHeaderTitle}
-    />
+  const renderHeaderRight = useMemo(() => <SettingsButton />, []);
+
+  const settingsHeaderTitle = useMemo(
+    () => (
+      <>
+        {settingsHeaderText}
+        {renderSettingsEmoji}
+      </>
+    ),
+    [renderSettingsEmoji, settingsHeaderText],
   );
 
-  const renderSettingsList = <SettingsList />;
-
-  const renderSettingsCard = isTabletOrDesktop && (
-    <Grid item xs={12} md={4} lg={3} className={classes.container}>
-      <Paper className={classes.paper}>
-        {renderSettingsHeader}
-        {renderSettingsList}
-      </Paper>
-    </Grid>
+  const renderSettingsHeader = useMemo(
+    () => (
+      <CardHeader
+        classes={{
+          root: classes.cardHeaderRoot,
+          title: classes.cardHeaderTitle,
+        }}
+        title={settingsHeaderTitle}
+      />
+    ),
+    [classes.cardHeaderRoot, classes.cardHeaderTitle, settingsHeaderTitle],
   );
 
-  const renderMainHeaderTitle = (
-    <>
-      {mainHeaderText}
-      {renderMainEmojiEmoji}
-    </>
-  );
+  const renderSettingsList = useMemo(() => <SettingsList />, []);
 
-  const renderHeader = isTabletOrDesktop && (
-    <CardHeader
-      classes={{ root: classes.cardHeaderRoot, title: classes.cardHeaderTitle }}
-      title={renderMainHeaderTitle}
-    />
-  );
-
-  const renderContent = (
-    <CardContent className={classes.container}>
-      <Grid container justify="center" className={classes.container}>
-        <Grid
-          item
-          container
-          direction="column"
-          xs={12}
-          sm={8}
-          lg={5}
-          xl={4}
-          className={classes.container}
-        >
-          {children}
+  const renderSettingsCard = useMemo(
+    () =>
+      mdUp && (
+        <Grid item xs={12} md={4} className={classes.container}>
+          <Paper className={classes.paper}>
+            {renderSettingsHeader}
+            {renderSettingsList}
+          </Paper>
         </Grid>
-      </Grid>
-    </CardContent>
+      ),
+    [classes.container, classes.paper, renderSettingsHeader, renderSettingsList, mdUp],
   );
 
-  const renderContentCard = (
-    <Grid item xs={12} md={8} lg={9} container className={classes.container}>
-      <Paper className={classes.paper}>
-        {renderHeader}
-        {renderContent}
-      </Paper>
-    </Grid>
+  const renderMainHeaderTitle = useMemo(
+    () => (
+      <>
+        {mainHeaderText}
+        {renderMainEmojiEmoji}
+      </>
+    ),
+    [mainHeaderText, renderMainEmojiEmoji],
+  );
+
+  const renderHeader = useMemo(
+    () =>
+      mdUp && (
+        <CardHeader
+          classes={{ root: classes.cardHeaderRoot, title: classes.cardHeaderTitle }}
+          title={renderMainHeaderTitle}
+        />
+      ),
+    [classes.cardHeaderRoot, classes.cardHeaderTitle, renderMainHeaderTitle, mdUp],
+  );
+
+  const renderContent = useMemo(
+    () => (
+      <CardContent className={classes.container}>
+        <Grid container justify="center" className={classes.container}>
+          <Grid
+            item
+            container
+            direction="column"
+            xs={12}
+            sm={10}
+            lg={8}
+            className={classes.container}
+          >
+            {children}
+          </Grid>
+        </Grid>
+      </CardContent>
+    ),
+    [children, classes.container],
+  );
+
+  const renderContentCard = useMemo(
+    () => (
+      <Grid item xs={12} md={8} container className={classes.container}>
+        <Paper className={classes.paper}>
+          {renderHeader}
+          {renderContent}
+        </Paper>
+      </Grid>
+    ),
+    [classes.container, classes.paper, renderContent, renderHeader],
   );
 
   const layoutProps = {
@@ -132,7 +158,7 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
 
   return (
     <MainTemplate {...layoutProps}>
-      <Grid container spacing={isTabletOrDesktop ? 2 : 0} className={classes.root}>
+      <Grid container spacing={mdUp ? 2 : 0} className={classes.root}>
         {renderSettingsCard}
         {renderContentCard}
       </Grid>

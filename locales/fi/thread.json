@@ -1,0 +1,14 @@
+{
+  "noComments": "Tällä langalla ei ole kommentteja.",
+  "comments": "{{ commentCount }} kommenttia",
+  "sortedBy": "järjestyksessä",
+  "shareThreadText": "Luonut {{ creatorUsername }}. {{ commentCount }} kommenttia.",
+  "shareThread": "Jaa lanka",
+  "deleteThread": "Poista lanka",
+  "confirmDeleteThread": "Haluatko varmasti poistaa tämän langan?",
+  "deleteComment": "Poista kommentti",
+  "confirmDeleteComment": "Haluatko varmasti poistaa tämän kommentin?",
+  "shareCommentTitle": "{{ creatorUsername }} Skolessa",
+  "shareComment": "Jaa kommentti",
+  "postingComment": "Lähetetään kommenttia..."
+}

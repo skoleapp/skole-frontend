@@ -5,16 +5,15 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext } from 'context';
 import { useGraphQlLogoutMutation } from 'generated';
-import { withUserMe } from 'hocs';
+import { withAuthRequired } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { SeoPageProps } from 'types';
+import React, { useEffect, useMemo } from 'react';
 import { LS_LOGOUT_KEY, urls } from 'utils';
 
-const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const LogoutPage: NextPage = () => {
   const apolloClient = useApolloClient();
   const { t } = useTranslation();
   const { query } = useRouter();
@@ -37,37 +36,37 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     logout();
   }, [logout]);
 
-  const renderLoggedOutText = (
-    <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t('logout:loggedOut')}
-      </Typography>
-    </FormControl>
+  const renderLoggedOutText = useMemo(
+    () => (
+      <FormControl>
+        <Typography variant="subtitle1" align="center">
+          {t('logout:loggedOut')}
+        </Typography>
+      </FormControl>
+    ),
+    [t],
   );
 
-  const renderLoginAgainButton = (
-    <FormControl>
-      <ButtonLink
-        href={urls.login}
-        color="primary"
-        variant="contained"
-        endIcon={<ArrowForwardOutlined />}
-      >
-        {t('logout:logInAgain')}
-      </ButtonLink>
-    </FormControl>
-  );
-
-  const renderBackToHomeButton = (
-    <FormControl>
-      <ButtonLink href={urls.home} variant="outlined">
-        {t('common:backToHome')}
-      </ButtonLink>
-    </FormControl>
+  const renderLoginAgainButton = useMemo(
+    () => (
+      <FormControl>
+        <ButtonLink
+          href={urls.login}
+          color="primary"
+          variant="contained"
+          endIcon={<ArrowForwardOutlined />}
+        >
+          {t('logout:logInAgain')}
+        </ButtonLink>
+      </FormControl>
+    ),
+    [t],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('logout:title'),
+    },
     topNavbarProps: {
       header: t('logout:header'),
       emoji: '👋',
@@ -77,37 +76,29 @@ const LogoutPage: NextPage<SeoPageProps> = ({ seoProps }) => {
 
   // Show loading screen when loading the next page that the user will be automatically redirected to.
   if (loading || !!query.next) {
-    return <LoadingTemplate seoProps={seoProps} />;
+    return <LoadingTemplate />;
   }
 
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" seoProps={seoProps} />;
+    return <ErrorTemplate variant="error" />;
   }
 
   return (
     <FormTemplate {...layoutProps}>
       {renderLoggedOutText}
       {renderLoginAgainButton}
-      {renderBackToHomeButton}
     </FormTemplate>
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'logout');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['logout'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['logout'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
-
-export default withUserMe(LogoutPage);
+export default withAuthRequired(LogoutPage);

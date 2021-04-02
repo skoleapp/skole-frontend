@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { ErrorMessage, FormikProps, FormikValues } from 'formik';
 import * as R from 'ramda';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { LoadingBox } from '../shared';
 import { FormErrorMessage } from './FormErrorMessage';
@@ -30,20 +30,26 @@ export const FormSubmitSection = <T extends FormikValues>({
     </FormControl>
   );
 
-  const renderGeneralFormError = <ErrorMessage name="general" component={FormErrorMessage} />;
+  const renderGeneralFormError = useMemo(
+    () => <ErrorMessage name="general" component={FormErrorMessage} />,
+    [],
+  );
 
-  const renderSubmitButton = (
-    <FormControl>
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        variant={variant || 'contained'}
-        endIcon={endIcon || <ArrowForwardOutlined />}
-        color="primary"
-      >
-        {submitButtonText}
-      </Button>
-    </FormControl>
+  const renderSubmitButton = useMemo(
+    () => (
+      <FormControl>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          variant={variant || 'contained'}
+          endIcon={endIcon || <ArrowForwardOutlined />}
+          color="primary"
+        >
+          {submitButtonText}
+        </Button>
+      </FormControl>
+    ),
+    [endIcon, isSubmitting, submitButtonText, variant],
   );
 
   return (

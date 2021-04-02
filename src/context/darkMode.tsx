@@ -19,10 +19,15 @@ export const DarkModeContextProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem('dark-mode');
+    let darkMode = prefersDarkMode;
 
-    setDarkMode(
-      (savedDarkMode === 'false' && false) || (savedDarkMode === 'true' && true) || prefersDarkMode,
-    );
+    if (savedDarkMode === 'false') {
+      darkMode = false;
+    } else if (savedDarkMode === 'true') {
+      darkMode = true;
+    }
+
+    setDarkMode(darkMode);
   }, [prefersDarkMode]);
 
   const value = {
