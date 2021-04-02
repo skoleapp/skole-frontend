@@ -1,7 +1,7 @@
 import {
   BadgeProgressObjectType,
   PaginatedActivityObjectType,
-  UserMeFieldsFragment,
+  UserFieldsFragment,
 } from 'generated';
 import * as R from 'ramda';
 import React, { createContext, useContext, useState } from 'react';
@@ -89,7 +89,7 @@ export const useAuthContext = (): UseAuthContext => {
 };
 
 export const AuthContextProvider: React.FC = ({ children }) => {
-  const [userMe, setUserMe] = useState<UserMeFieldsFragment | null>(null);
+  const [userMe, setUserMe] = useState<UserFieldsFragment | null>(null);
   const [authNetworkError, setAuthNetworkError] = useState(false);
   const [activities, setActivities] = useState<PaginatedActivityObjectType | null>(null);
 
