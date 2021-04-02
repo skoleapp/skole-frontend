@@ -1,13 +1,13 @@
 import { FormikProps } from 'formik';
-import { UserMeFieldsFragment } from 'generated';
+import { UserFieldsFragment } from 'generated';
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import { ActionsDialogParams, InfoDialogParams, ShareDialogParams } from './dialogs';
 import { CreateCommentFormValues } from './forms';
 
 export interface AuthContextType {
-  userMe: UserMeFieldsFragment | null;
-  setUserMe: Dispatch<SetStateAction<UserMeFieldsFragment | null>>;
+  userMe: UserFieldsFragment | null;
+  setUserMe: Dispatch<SetStateAction<UserFieldsFragment | null>>;
   authNetworkError: boolean;
   setAuthNetworkError: Dispatch<SetStateAction<boolean>>;
 }
