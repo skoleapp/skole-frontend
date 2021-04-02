@@ -5,6 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,7 +13,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddOutlined from '@material-ui/icons/AddOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
+import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
 import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
+import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
 import clsx from 'clsx';
 import {
   ActionRequiredTemplate,
@@ -164,7 +167,7 @@ const ThreadPage: NextPage = () => {
   const initialVote = R.prop('vote', thread);
   const initialStarred = R.prop('starred', thread);
   const creator = R.prop('user', thread);
-  const isOwner = !!creator && userMe?.id === creator.id;
+  const isOwn = !!creator && userMe?.id === creator.id;
   const created = R.prop('created', thread);
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', thread);
   const emoji = '💬';
@@ -181,10 +184,15 @@ const ThreadPage: NextPage = () => {
     setThreadImageViewerValue,
   } = useThreadContext();
 
-  const { renderUpvoteButton, renderDownvoteButton, score } = useVotes({
+  const {
+    score,
+    upvoteButtonProps,
+    downvoteButtonProps,
+    upvoteTooltip,
+    downvoteTooltip,
+  } = useVotes({
     initialVote,
     initialScore,
-    isOwner,
     variables: { thread: id },
     upvoteTooltip: t('thread-tooltips:upvoteThread'),
     removeUpvoteTooltip: t('thread-tooltips:removeThreadUpvote'),
@@ -355,9 +363,9 @@ const ThreadPage: NextPage = () => {
         disabled: verified === false,
       },
       shareText: t('thread:shareThread'),
-      hideDeleteAction: !isOwner,
+      hideDeleteAction: !isOwn,
     }),
-    [handleDeleteThread, isOwner, shareDialogParams, t, verified],
+    [handleDeleteThread, isOwn, shareDialogParams, t, verified],
   );
 
   const handleClickReplyButton = useMemo(
@@ -394,6 +402,38 @@ const ThreadPage: NextPage = () => {
     [actionsDialogParams, t],
   );
 
+  // Only render for verified user who are not owners.
+  const renderUpvoteButton = useMemo(
+    () =>
+      !!verified &&
+      !isOwn && (
+        <Tooltip title={upvoteTooltip}>
+          <Typography component="span">
+            <IconButton {...upvoteButtonProps}>
+              <ThumbUpOutlined />
+            </IconButton>
+          </Typography>
+        </Tooltip>
+      ),
+    [isOwn, upvoteButtonProps, upvoteTooltip, verified],
+  );
+
+  // Only render for verified user who are not owners.
+  const renderDownvoteButton = useMemo(
+    () =>
+      !!verified &&
+      !isOwn && (
+        <Tooltip title={downvoteTooltip}>
+          <Typography component="span">
+            <IconButton {...downvoteButtonProps}>
+              <ThumbDownOutlined />
+            </IconButton>
+          </Typography>
+        </Tooltip>
+      ),
+    [downvoteButtonProps, downvoteTooltip, isOwn, verified],
+  );
+
   const renderScore = useMemo(
     () =>
       !!verified && (
@@ -406,8 +446,8 @@ const ThreadPage: NextPage = () => {
 
   // Only render for non-verified users and owners to make the score more clear.
   const renderScoreIcon = useMemo(
-    () => (!verified || isOwner) && <ThumbsUpDownOutlined color="disabled" />,
-    [verified, isOwner],
+    () => (!verified || isOwn) && <ThumbsUpDownOutlined color="disabled" />,
+    [verified, isOwn],
   );
 
   const renderInputArea = useMemo(
