@@ -14,30 +14,17 @@ interface UseVotesParams {
   initialVote: VoteObjectType | null;
   initialScore: string;
   variables: VoteVariables;
-  upvoteTooltip: string;
-  removeUpvoteTooltip: string;
-  downvoteTooltip: string;
-  removeDownvoteTooltip: string;
 }
 
 interface UseVotes {
   score: string;
   upvoteButtonProps: Partial<IconButtonProps>;
   downvoteButtonProps: Partial<IconButtonProps>;
-  upvoteTooltip: string;
-  downvoteTooltip: string;
+  currentVote: VoteObjectType | null;
 }
 
-export const useVotes = ({
-  initialVote,
-  initialScore,
-  variables,
-  removeUpvoteTooltip,
-  upvoteTooltip: _upvoteTooltip,
-  removeDownvoteTooltip,
-  downvoteTooltip: _downvoteTooltip,
-}: UseVotesParams): UseVotes => {
-  const [currentVote, setCurrentVote] = useState(initialVote);
+export const useVotes = ({ initialVote, initialScore, variables }: UseVotesParams): UseVotes => {
+  const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
   const [score, setScore] = useState(initialScore);
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
   const { dynamicPrimaryColor } = useDarkModeContext();
@@ -50,12 +37,6 @@ export const useVotes = ({
   useEffect(() => {
     setScore(initialScore);
   }, [initialScore]);
-
-  // Show a dynamic tooltip based on the vote status.
-  const upvoteTooltip = (currentVote?.status === 1 && removeUpvoteTooltip) || _upvoteTooltip;
-
-  // Show a dynamic tooltip based on the vote status.
-  const downvoteTooltip = (currentVote?.status === -1 && removeDownvoteTooltip) || _downvoteTooltip;
 
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote?.errors?.length) {
@@ -92,7 +73,7 @@ export const useVotes = ({
     () => ({
       ...commonVoteButtonProps,
       onClick: handleVote(1),
-      color: !!currentVote && currentVote.status === 1 ? dynamicPrimaryColor : 'default',
+      color: currentVote?.status === 1 ? dynamicPrimaryColor : 'default',
     }),
     [commonVoteButtonProps, currentVote, dynamicPrimaryColor, handleVote],
   );
@@ -101,7 +82,7 @@ export const useVotes = ({
     () => ({
       ...commonVoteButtonProps,
       onClick: handleVote(-1),
-      color: !!currentVote && currentVote.status === -1 ? dynamicPrimaryColor : 'default',
+      color: currentVote?.status === -1 ? dynamicPrimaryColor : 'default',
     }),
     [commonVoteButtonProps, currentVote, dynamicPrimaryColor, handleVote],
   );
@@ -110,7 +91,6 @@ export const useVotes = ({
     score,
     upvoteButtonProps,
     downvoteButtonProps,
-    upvoteTooltip,
-    downvoteTooltip,
+    currentVote,
   };
 };
