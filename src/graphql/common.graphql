@@ -279,6 +279,7 @@ fragment commentFields on CommentObjectType {
   created
   score
   replyCount
+  isOwn
   user {
     id
     slug
