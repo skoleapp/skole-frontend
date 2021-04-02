@@ -5,7 +5,7 @@ import {
   ErrorType,
   Maybe,
   ThreadObjectType,
-  UserMeFieldsFragment,
+  UserFieldsFragment,
 } from 'generated';
 import { RefObject } from 'react';
 
@@ -34,7 +34,7 @@ export interface ContactFormValues {
 }
 
 export interface CreateCommentFormValues {
-  user: UserMeFieldsFragment | null;
+  user: UserFieldsFragment | null;
   text: string;
   image: string | null;
   thread: ThreadObjectType | null;
