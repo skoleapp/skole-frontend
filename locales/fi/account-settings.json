@@ -2,6 +2,8 @@
   "title": "Tilin asetukset",
   "header": "Tilin asetukset",
   "emailSettings": "Sähköpostiasetukset",
+  "backupEmail": "Varasähköposti",
+  "backupEmailHelperText": "Vaihtoehtoinen sähköpostiosoite, jota voit käyttää vaikka menettäisit pääsyn oletussähköpostiisi.",
   "emailNotifications": "Sähköposti-ilmoitukset",
   "pushNotifications": "Push-ilmoitukset"
 }

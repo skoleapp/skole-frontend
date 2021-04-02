@@ -240,6 +240,7 @@ fragment userMeFields on UserObjectType {
   slug
   username
   email
+  backupEmail
   title
   bio
   avatar
@@ -439,6 +440,7 @@ mutation UpdateProfile($username: String!, $title: String, $bio: String, $avatar
 
 mutation UpdateAccountSettings(
   $email: String!
+  $backupEmail: String!
   $commentReplyEmailPermission: Boolean
   $threadCommentEmailPermission: Boolean
   $newBadgeEmailPermission: Boolean
@@ -449,6 +451,7 @@ mutation UpdateAccountSettings(
   updateAccountSettings(
     input: {
       email: $email
+      backupEmail: $backupEmail
       commentReplyEmailPermission: $commentReplyEmailPermission
       threadCommentEmailPermission: $threadCommentEmailPermission
       newBadgeEmailPermission: $newBadgeEmailPermission

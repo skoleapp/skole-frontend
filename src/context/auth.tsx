@@ -17,6 +17,7 @@ interface UseAuthContext extends AuthContextType {
   fcmToken: string;
   username: string;
   email: string;
+  backupEmail: string;
   title: string;
   bio: string;
   avatarThumbnail: string;
@@ -42,6 +43,7 @@ export const useAuthContext = (): UseAuthContext => {
   const fcmToken = R.prop('fcmToken', userMe);
   const username = R.prop('username', userMe);
   const email = R.prop('email', userMe);
+  const backupEmail = R.prop('backupEmail', userMe);
   const title = R.prop('title', userMe);
   const bio = R.prop('bio', userMe);
   const rank = R.prop('rank', userMe);
@@ -66,6 +68,7 @@ export const useAuthContext = (): UseAuthContext => {
     fcmToken,
     username,
     email,
+    backupEmail,
     title,
     bio,
     rank,
