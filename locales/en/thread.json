@@ -1,4 +1,6 @@
 {
+  "star": "Star",
+  "unstar": "Unstar",
   "noComments": "This thread has no comments.",
   "comments": "{{ commentCount }} comments",
   "sortedBy": "sorted by",
@@ -10,5 +12,9 @@
   "confirmDeleteComment": "Are you sure you want to delete this comment?",
   "shareCommentTitle": "{{ creatorUsername }} on Skole",
   "shareComment": "Share Comment",
-  "postingComment": "Posting comment..."
+  "postingComment": "Posting comment...",
+  "upvote": "Upvote",
+  "upvoted": "Upvoted",
+  "downvote": "Downvote",
+  "downvoted": "Downvoted"
 }

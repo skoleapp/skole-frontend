@@ -1,12 +1,5 @@
 {
-  "starThread": "Stjärna den här tråden.",
-  "unstarThread": "Avmarkera den här tråden.",
-  "upvoteThread": "Upprösta den här tråden.",
-  "removeThreadUpvote": "Ta bort upprösten från den här tråden.",
-  "downvoteThread": "Nedrösta den här tråden.",
-  "removeThreadDownvote": "Ta bort nedrösten från den här tråden.",
   "shareThread": "Dela den här tråden.",
-  "threadInfo": "Visa tråddetaljer.",
   "threadActions": "Visa trådmeny.",
   "threadImage": "Visa trådbild.",
   "upvoteComment": "Upprösta den här kommentaren.",
