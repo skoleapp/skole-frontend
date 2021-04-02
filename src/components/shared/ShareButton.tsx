@@ -12,9 +12,9 @@ interface Props {
 }
 
 export const ShareButton: React.FC<Props> = ({ tooltip, shareDialogParams }) => {
-  const { isMobile } = useMediaQueries();
+  const { smDown } = useMediaQueries();
   const { handleOpenShareDialog } = useShareContext();
-  const color = isMobile ? 'secondary' : 'default';
+  const color = smDown ? 'secondary' : 'default';
   const handleClick = (): void => handleOpenShareDialog(shareDialogParams);
 
   return (

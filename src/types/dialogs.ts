@@ -12,6 +12,7 @@ export interface DialogHeaderProps {
 
 export interface SkoleDialogProps extends DialogProps {
   list?: boolean; // Specify whether a list is rendered with modified spacings.
+  paperClasses?: string;
 }
 
 export interface ShareDialogParams {

@@ -2,7 +2,8 @@
   "title": "Account Settings",
   "header": "Account Settings",
   "emailSettings": "Email Settings",
+  "backupEmail": "Backup Email",
+  "backupEmailHelperText": "An alternative email address which you can use even if you would lose access to your primary email.",
   "emailNotifications": "Email Notifications",
-  "pushNotifications": "Push Notifications",
-  "backToProfile": "Back to profile"
+  "pushNotifications": "Push Notifications"
 }

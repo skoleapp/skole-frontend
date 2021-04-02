@@ -2,10 +2,10 @@ import Chip, { ChipProps } from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import clsx from 'clsx';
-import { BadgeObjectType, BadgeTier } from 'generated';
-import React from 'react';
+import { BadgeObjectType } from 'generated';
+import React, { useMemo } from 'react';
 
-import { Emoji } from './Emoji';
+import { BadgeTierIcon } from './BadgeTierIcon';
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
@@ -25,7 +25,7 @@ interface Props extends ChipProps {
 }
 
 export const Badge: React.FC<Props> = ({
-  badge,
+  badge: { name, tier, description },
   progress,
   steps,
   noTooltip = false,
@@ -34,41 +34,20 @@ export const Badge: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
 
-  // TODO: Change the emoji's to better looking SVG icons.
-  const renderBadgeTier = (tier: BadgeTier): JSX.Element | void => {
-    switch (tier) {
-      case BadgeTier.Diamond: {
-        return <Emoji emoji="💎" noSpace />;
-      }
-
-      case BadgeTier.Gold: {
-        return <Emoji emoji="🟡" noSpace />;
-      }
-
-      case BadgeTier.Silver: {
-        return <Emoji emoji="⚪" noSpace />;
-      }
-
-      case BadgeTier.Bronze: {
-        return <Emoji emoji="🟤" noSpace />;
-      }
-
-      default: {
-        break;
-      }
-    }
-  };
   const progressText =
     progress !== undefined && steps !== undefined ? ` (${progress}/${steps})` : '';
 
-  const renderBadgeLabel = (
-    <>
-      {renderBadgeTier(badge.tier)} {`${badge.name}${progressText}`}
-    </>
+  const renderBadgeLabel = useMemo(
+    () => (
+      <>
+        <BadgeTierIcon tier={tier} /> {`${name}${progressText}`}
+      </>
+    ),
+    [name, tier, progressText],
   );
 
   return (
-    <Tooltip title={noTooltip ? '' : badge.description}>
+    <Tooltip title={noTooltip ? '' : description}>
       <Chip
         className={clsx(classes.root, hoverable && classes.hoverable)}
         size="small"

@@ -1,2 +1,2 @@
-export { ActivityListItem } from './ActivityListItem';
-export { ActivityPreview } from './ActivityPreview';
+export * from './ActivityListItem';
+export * from './ActivityPreview';

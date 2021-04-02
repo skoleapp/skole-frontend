@@ -26,7 +26,7 @@ import { useAuthContext, useDarkModeContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
@@ -94,7 +94,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { asPath } = useRouter();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { isMobile, isTabletOrDesktop, isDesktop } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueries();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
@@ -114,192 +114,296 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     null,
   );
 
-  const handleActivityButtonClick = (e: MouseEvent<HTMLButtonElement>): void => {
-    setActivityPopperAnchorEl(e.currentTarget);
-    setActivityPopperOpen(!activityPopperOpen);
-  };
-
-  const renderBackButton = !hideBackButton && <BackButton />;
-  const renderEmoji = !!emoji && <Emoji emoji={emoji} />;
-
-  const renderHeader = !!header && (
-    <Typography variant="h6" className="truncate-text">
-      {header}
-      {renderEmoji}
-    </Typography>
+  const handleActivityButtonClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>): void => {
+      setActivityPopperAnchorEl(e.currentTarget);
+      setActivityPopperOpen(!activityPopperOpen);
+    },
+    [activityPopperOpen],
   );
 
-  const renderLogo = !hideLogo && <Logo />;
-  const renderLanguageButton = !hideLanguageButton && <LanguageButton />;
+  const renderBackButton = useMemo(() => !hideBackButton && <BackButton />, [hideBackButton]);
+  const renderEmoji = useMemo(() => !!emoji && <Emoji emoji={emoji} />, [emoji]);
 
-  const renderDarkModeButton = !hideDarkModeButton && (
-    <Tooltip title={t('common-tooltips:toggleDarkMode')}>
-      <IconButton onClick={toggleDarkMode} color="secondary">
-        {darkMode ? <Brightness7Outlined /> : <Brightness6Outlined />}
-      </IconButton>
-    </Tooltip>
-  );
-
-  const renderMobileContent = isMobile && (
-    <Grid container alignItems="center">
-      <Grid item xs={dense ? 4 : 2} container justify="flex-start" alignItems="center">
-        {renderBackButton}
-        {renderHeaderLeft}
-      </Grid>
-      <Grid item xs={dense ? 4 : 8} container justify="center" alignItems="center">
-        {renderHeader || renderLogo}
-      </Grid>
-      <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
-        {renderHeaderRightSecondary}
-        {renderHeaderRight || renderLanguageButton}
-      </Grid>
-    </Grid>
-  );
-
-  const renderActivityButton = (
-    <Tooltip title={t('common-tooltips:activity', { unreadActivityCount })}>
-      <IconButton onClick={handleActivityButtonClick} color="secondary">
-        <Badge badgeContent={unreadActivityCount} color="secondary">
-          <NotificationsOutlined />
-        </Badge>
-      </IconButton>
-    </Tooltip>
-  );
-
-  const renderActivityPopper = (
-    <Popper
-      open={activityPopperOpen}
-      anchorEl={activityPopperAnchorEl}
-      placement="bottom"
-      transition
-      className={classes.activityPopper}
-    >
-      {({ TransitionProps }): JSX.Element => (
-        <Fade {...TransitionProps} timeout={500}>
-          <Box marginTop={spacing(1)}>
-            <Paper className={classes.activityPopperPaper}>
-              <Box height="20rem" width="20rem" display="flex">
-                <ActivityPreview />
-              </Box>
-              <Divider />
-              <ButtonLink
-                className={classes.seeAllButton}
-                href={urls.activity}
-                variant="outlined"
-                endIcon={<ArrowForwardOutlined />}
-                fullWidth
-              >
-                {t('common:seeAll')}
-              </ButtonLink>
-            </Paper>
-          </Box>
-        </Fade>
-      )}
-    </Popper>
-  );
-
-  const renderRankEmoji = <Emoji emoji="🎖️" />;
-
-  const renderScore = (
-    <Typography className={classes.score} variant="body2" color="textSecondary">
-      {score}
-    </Typography>
-  );
-
-  const renderRankLabel = (
-    <Grid container>
-      {rank}
-      {renderScore}
-      {renderRankEmoji}
-    </Grid>
-  );
-
-  const renderAuthenticatedButtons = !!userMe && !hideDynamicButtons && (
-    <>
-      <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
-        <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
-        >
-          {renderActivityButton}
-          {renderActivityPopper}
-        </Box>
-      </ClickAwayListener>
-      <Tooltip title={t('common-tooltips:starred')}>
-        <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
-      </Tooltip>
-      <Link href={urls.score}>
-        <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
-          <Chip className="rank-chip" label={renderRankLabel} />
-        </Tooltip>
-      </Link>
-      <Tooltip title={t('common-tooltips:profile')}>
-        <Typography component="span">
-          <Link href={profileUrl}>
-            <IconButton color="secondary">
-              <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
-            </IconButton>
-          </Link>
+  const renderHeader = useMemo(
+    () =>
+      !!header && (
+        <Typography variant="h6" className="truncate-text">
+          {header}
+          {renderEmoji}
         </Typography>
+      ),
+    [header, renderEmoji],
+  );
+
+  const renderLogo = useMemo(() => !hideLogo && <Logo />, [hideLogo]);
+  const renderLanguageButton = useMemo(() => !hideLanguageButton && <LanguageButton />, [
+    hideLanguageButton,
+  ]);
+
+  const renderDarkModeButton = useMemo(
+    () =>
+      !hideDarkModeButton && (
+        <Tooltip title={t('common-tooltips:toggleDarkMode')}>
+          <IconButton onClick={toggleDarkMode} color="secondary">
+            {darkMode ? <Brightness7Outlined /> : <Brightness6Outlined />}
+          </IconButton>
+        </Tooltip>
+      ),
+    [darkMode, hideDarkModeButton, t, toggleDarkMode],
+  );
+
+  const renderMobileContent = useMemo(
+    () =>
+      smDown && (
+        <Grid container alignItems="center">
+          <Grid item xs={dense ? 4 : 2} container justify="flex-start" alignItems="center">
+            {renderBackButton}
+            {renderHeaderLeft}
+          </Grid>
+          <Grid item xs={dense ? 4 : 8} container justify="center" alignItems="center">
+            {renderHeader || renderLogo}
+          </Grid>
+          <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
+            {renderHeaderRightSecondary}
+            {renderHeaderRight || renderLanguageButton}
+          </Grid>
+        </Grid>
+      ),
+    [
+      dense,
+      renderBackButton,
+      renderHeader,
+      renderHeaderLeft,
+      renderHeaderRight,
+      renderHeaderRightSecondary,
+      renderLanguageButton,
+      renderLogo,
+      smDown,
+    ],
+  );
+
+  const renderActivityButton = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:activity', { unreadActivityCount })}>
+        <IconButton onClick={handleActivityButtonClick} color="secondary">
+          <Badge badgeContent={unreadActivityCount} color="secondary">
+            <NotificationsOutlined />
+          </Badge>
+        </IconButton>
       </Tooltip>
-    </>
+    ),
+    [handleActivityButtonClick, t, unreadActivityCount],
   );
 
-  const renderLoginButton = isTabletOrDesktop && !hideLoginButton && (
-    <ButtonLink
-      href={{
-        pathname: urls.login,
-        query: {
-          next: asPath,
-        },
-      }}
-      color="secondary"
-      endIcon={<HowToRegOutlined />}
-    >
-      {t('common:login')}
-    </ButtonLink>
+  const renderActivityPopper = useMemo(
+    () => (
+      <Popper
+        open={activityPopperOpen}
+        anchorEl={activityPopperAnchorEl}
+        placement="bottom"
+        transition
+        className={classes.activityPopper}
+      >
+        {({ TransitionProps }): JSX.Element => (
+          <Fade {...TransitionProps} timeout={500}>
+            <Box marginTop={spacing(1)}>
+              <Paper className={classes.activityPopperPaper}>
+                <Box height="20rem" width="20rem" display="flex">
+                  <ActivityPreview />
+                </Box>
+                <Divider />
+                <ButtonLink
+                  className={classes.seeAllButton}
+                  href={urls.activity}
+                  variant="outlined"
+                  endIcon={<ArrowForwardOutlined />}
+                  fullWidth
+                >
+                  {t('common:seeAll')}
+                </ButtonLink>
+              </Paper>
+            </Box>
+          </Fade>
+        )}
+      </Popper>
+    ),
+    [
+      activityPopperAnchorEl,
+      activityPopperOpen,
+      classes.activityPopper,
+      classes.activityPopperPaper,
+      classes.seeAllButton,
+      spacing,
+      t,
+    ],
   );
 
-  const renderRegisterButton = isTabletOrDesktop && !hideRegisterButton && (
-    <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
-      {t('common:register')}
-    </ButtonLink>
+  const renderRankEmoji = useMemo(() => <Emoji emoji="🎖️" />, []);
+
+  const renderScore = useMemo(
+    () => (
+      <Typography className={classes.score} variant="body2" color="textSecondary">
+        {score}
+      </Typography>
+    ),
+    [classes.score, score],
   );
 
-  const renderGetStartedButton = !hideGetStartedButton && (
-    <ButtonLink href={urls.index} color="secondary" endIcon={<LaunchOutlined />}>
-      {t('common:getStarted')}
-    </ButtonLink>
-  );
-
-  const renderUnAuthenticatedButtons = !hideDynamicButtons && !authNetworkError && (
-    <>
-      {renderLoginButton}
-      {renderRegisterButton}
-      {renderGetStartedButton}
-    </>
-  );
-
-  const renderSearch = !hideSearch && isDesktop && <TopNavbarSearchWidget />;
-  const renderDynamicButtons = userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons;
-
-  const renderDesktopContent = isTabletOrDesktop && (
-    <Grid container alignItems="center">
-      <Grid item xs={2} container>
-        {renderLogo}
+  const renderRankLabel = useMemo(
+    () => (
+      <Grid container>
+        {rank}
+        {renderScore}
+        {renderRankEmoji}
       </Grid>
-      <Grid item xs={10} container justify="flex-end" alignItems="center">
-        {renderSearch}
-        {renderLanguageButton}
-        {renderDarkModeButton}
-        {renderDynamicButtons}
-      </Grid>
-    </Grid>
+    ),
+    [rank, renderRankEmoji, renderScore],
   );
 
-  const renderToolbar = (
-    <Toolbar className={classes.toolbar} variant="dense">
-      {renderMobileContent}
-      {renderDesktopContent}
-    </Toolbar>
+  const renderAuthenticatedButtons = useMemo(
+    () =>
+      !!userMe &&
+      !hideDynamicButtons && (
+        <>
+          <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
+            <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
+            >
+              {renderActivityButton}
+              {renderActivityPopper}
+            </Box>
+          </ClickAwayListener>
+          <Tooltip title={t('common-tooltips:starred')}>
+            <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
+          </Tooltip>
+          <Link href={urls.score}>
+            <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
+              <Chip className="rank-chip" label={renderRankLabel} />
+            </Tooltip>
+          </Link>
+          <Tooltip title={t('common-tooltips:profile')}>
+            <Typography component="span">
+              <Link href={profileUrl}>
+                <IconButton color="secondary">
+                  <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
+                </IconButton>
+              </Link>
+            </Typography>
+          </Tooltip>
+        </>
+      ),
+    [
+      avatarThumbnail,
+      hideDynamicButtons,
+      profileUrl,
+      rank,
+      renderActivityButton,
+      renderActivityPopper,
+      renderRankLabel,
+      score,
+      t,
+      userMe,
+    ],
+  );
+
+  const renderLoginButton = useMemo(
+    () =>
+      !hideLoginButton && (
+        <ButtonLink
+          href={{
+            pathname: urls.login,
+            query: {
+              next: asPath,
+            },
+          }}
+          color="secondary"
+          endIcon={<HowToRegOutlined />}
+        >
+          {t('common:login')}
+        </ButtonLink>
+      ),
+    [asPath, hideLoginButton, t],
+  );
+
+  const renderRegisterButton = useMemo(
+    () =>
+      !hideRegisterButton && (
+        <ButtonLink href={urls.register} color="secondary" endIcon={<AddCircleOutlineOutlined />}>
+          {t('common:register')}
+        </ButtonLink>
+      ),
+    [hideRegisterButton, t],
+  );
+
+  const renderGetStartedButton = useMemo(
+    () =>
+      !hideGetStartedButton && (
+        <ButtonLink href={urls.index} color="secondary" endIcon={<LaunchOutlined />}>
+          {t('common:getStarted')}
+        </ButtonLink>
+      ),
+    [hideGetStartedButton, t],
+  );
+
+  const renderUnAuthenticatedButtons = useMemo(
+    () =>
+      !hideDynamicButtons &&
+      !authNetworkError && (
+        <>
+          {renderLoginButton}
+          {renderRegisterButton}
+          {renderGetStartedButton}
+        </>
+      ),
+    [
+      authNetworkError,
+      hideDynamicButtons,
+      renderGetStartedButton,
+      renderLoginButton,
+      renderRegisterButton,
+    ],
+  );
+
+  const renderSearch = useMemo(() => !hideSearch && <TopNavbarSearchWidget />, [hideSearch]);
+
+  const renderDynamicButtons = useMemo(
+    () => (userMe ? renderAuthenticatedButtons : renderUnAuthenticatedButtons),
+    [renderAuthenticatedButtons, renderUnAuthenticatedButtons, userMe],
+  );
+
+  const renderDesktopContent = useMemo(
+    () =>
+      mdUp && (
+        <Grid container alignItems="center">
+          <Grid item xs={2} container>
+            {renderLogo}
+          </Grid>
+          <Grid item xs={10} container justify="flex-end" alignItems="center">
+            {renderSearch}
+            {renderLanguageButton}
+            {renderDarkModeButton}
+            {renderDynamicButtons}
+          </Grid>
+        </Grid>
+      ),
+    [
+      mdUp,
+      renderDarkModeButton,
+      renderDynamicButtons,
+      renderLanguageButton,
+      renderLogo,
+      renderSearch,
+    ],
+  );
+
+  const renderToolbar = useMemo(
+    () => (
+      <Toolbar className={classes.toolbar} variant="dense">
+        {renderMobileContent}
+        {renderDesktopContent}
+      </Toolbar>
+    ),
+    [classes.toolbar, renderDesktopContent, renderMobileContent],
   );
 
   return <AppBar className={classes.root}>{renderToolbar}</AppBar>;

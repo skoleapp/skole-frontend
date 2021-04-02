@@ -16,8 +16,8 @@ import { ErrorMessage, FormikProps, FormikValues } from 'formik';
 import { useOpen } from 'hooks';
 import { useTranslation } from 'lib';
 import * as R from 'ramda';
-import React, { ChangeEvent, useState } from 'react';
-import { ACCEPTED_AVATAR_FILES, MAX_AVATAR_FILE_SIZE, MAX_AVATAR_WIDTH_HEIGHT } from 'utils';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { ACCEPTED_AVATAR_FILES, MAX_AVATAR_WIDTH_HEIGHT, MAX_IMAGE_FILE_SIZE } from 'utils';
 
 import { ResponsiveDialog } from '../dialogs';
 import { FormErrorMessage } from './FormErrorMessage';
@@ -54,107 +54,134 @@ export const AvatarField = <T extends FormikValues>({
     handleClose: handleCloseDialog,
   } = useOpen();
 
-  const dialogHeaderProps = {
-    text: t('edit-profile:avatar'),
-    emoji: '🤳',
-    onCancel: handleCloseDialog,
-  };
+  const dialogHeaderProps = useMemo(
+    () => ({
+      text: t('edit-profile:avatar'),
+      emoji: '🤳',
+      onCancel: handleCloseDialog,
+    }),
+    [handleCloseDialog, t],
+  );
 
-  const setAvatar = (file: File | Blob): void => {
-    setFieldValue('avatar', file);
-    handleCloseDialog();
+  const setAvatar = useCallback(
+    (file: File | Blob): void => {
+      setFieldValue('avatar', file);
+      handleCloseDialog();
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
 
-    reader.onloadend = (): void => {
-      setPreview(String(reader.result));
-    };
-  };
+      reader.onloadend = (): void => {
+        setPreview(String(reader.result));
+      };
+    },
+    [handleCloseDialog, setFieldValue],
+  );
 
   // Automatically resize the image and update the field value.
-  const handleAvatarChange = async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
-    const file: File = R.path(['currentTarget', 'files', '0'], e);
+  const handleAvatarChange = useCallback(
+    async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+      const file: File = R.path(['currentTarget', 'files', '0'], e);
 
-    const options = {
-      maxSizeMB: MAX_AVATAR_FILE_SIZE / 1000000,
-      maxWidthOrHeight: MAX_AVATAR_WIDTH_HEIGHT,
-    };
+      const options = {
+        maxSizeMB: MAX_IMAGE_FILE_SIZE / 1000000,
+        maxWidthOrHeight: MAX_AVATAR_WIDTH_HEIGHT,
+      };
 
-    if (file.size > MAX_AVATAR_FILE_SIZE) {
-      try {
-        const compressedFile = await imageCompression(file, options);
-        setAvatar(compressedFile);
-      } catch {
-        toggleNotification(t('validation:fileSizeError'));
+      if (file.size > MAX_IMAGE_FILE_SIZE) {
+        try {
+          const compressedFile = await imageCompression(file, options);
+          setAvatar(compressedFile);
+        } catch {
+          toggleNotification(t('validation:fileSizeError'));
+        }
+      } else {
+        setAvatar(file);
       }
-    } else {
-      setAvatar(file);
-    }
-  };
+    },
+    [setAvatar, t, toggleNotification],
+  );
 
-  const handleRemoveAvatar = (): void => {
+  const handleRemoveAvatar = useCallback((): void => {
     setFieldValue('avatar', null);
     setPreview('');
     handleCloseDialog();
-  };
+  }, [handleCloseDialog, setFieldValue]);
 
   const addOrChangeAvatarText = preview
     ? t('edit-profile:changeAvatar')
     : t('edit-profile:addAvatar');
 
-  const renderAddOrChangeAvatarIcon = preview ? <EditOutlined /> : <AddCircleOutlineOutlined />;
+  const renderAddOrChangeAvatarIcon = useMemo(
+    () => (preview ? <EditOutlined /> : <AddCircleOutlineOutlined />),
+    [preview],
+  );
 
-  const renderAddOrChangeAvatar = (
-    <label htmlFor="avatar-input">
-      <MenuItem>
-        <ListItemIcon>{renderAddOrChangeAvatarIcon}</ListItemIcon>
-        <ListItemText>{addOrChangeAvatarText}</ListItemText>
+  const renderAddOrChangeAvatar = useMemo(
+    () => (
+      <label htmlFor="avatar-input">
+        <MenuItem>
+          <ListItemIcon>{renderAddOrChangeAvatarIcon}</ListItemIcon>
+          <ListItemText>{addOrChangeAvatarText}</ListItemText>
+        </MenuItem>
+      </label>
+    ),
+    [addOrChangeAvatarText, renderAddOrChangeAvatarIcon],
+  );
+
+  const renderRemoveAvatar = useMemo(
+    () => (
+      <MenuItem onClick={handleRemoveAvatar} disabled={!preview}>
+        <ListItemIcon>
+          <DeleteForeverOutlined />
+        </ListItemIcon>
+        <ListItemText>{t('edit-profile:clearAvatar')}</ListItemText>
       </MenuItem>
-    </label>
+    ),
+    [handleRemoveAvatar, preview, t],
   );
 
-  const renderRemoveAvatar = (
-    <MenuItem onClick={handleRemoveAvatar} disabled={!preview}>
-      <ListItemIcon>
-        <DeleteForeverOutlined />
-      </ListItemIcon>
-      <ListItemText>{t('edit-profile:clearAvatar')}</ListItemText>
-    </MenuItem>
+  const renderPreview = useMemo(
+    () => (
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <Avatar className={classes.avatar} src={preview} />
+        <input
+          value=""
+          id="avatar-input"
+          type="file"
+          accept={ACCEPTED_AVATAR_FILES.toString()}
+          onChange={handleAvatarChange}
+        />
+        <Button className={classes.button} onClick={handleOpenDialog} variant="text">
+          {t('edit-profile:changeAvatar')}
+        </Button>
+      </Box>
+    ),
+    [classes.avatar, classes.button, handleAvatarChange, handleOpenDialog, preview, t],
   );
 
-  const renderPreview = (
-    <Box display="flex" flexDirection="column" alignItems="center">
-      <Avatar className={classes.avatar} src={preview} />
-      <input
-        value=""
-        id="avatar-input"
-        type="file"
-        accept={ACCEPTED_AVATAR_FILES.toString()}
-        onChange={handleAvatarChange}
-      />
-      <Button className={classes.button} onClick={handleOpenDialog} variant="text">
-        {t('edit-profile:changeAvatar')}
-      </Button>
-    </Box>
+  const renderErrorMessage = useMemo(
+    () => (
+      <ErrorMessage className={classes.errorMessage} name="avatar" component={FormErrorMessage} />
+    ),
+    [classes.errorMessage],
   );
 
-  const renderErrorMessage = (
-    <ErrorMessage className={classes.errorMessage} name="avatar" component={FormErrorMessage} />
-  );
-
-  const renderDialog = (
-    <ResponsiveDialog
-      open={dialogOpen}
-      onClose={handleCloseDialog}
-      dialogHeaderProps={dialogHeaderProps}
-      list
-    >
-      <List>
-        {renderAddOrChangeAvatar}
-        {renderRemoveAvatar}
-      </List>
-    </ResponsiveDialog>
+  const renderDialog = useMemo(
+    () => (
+      <ResponsiveDialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        dialogHeaderProps={dialogHeaderProps}
+        list
+      >
+        <List>
+          {renderAddOrChangeAvatar}
+          {renderRemoveAvatar}
+        </List>
+      </ResponsiveDialog>
+    ),
+    [dialogHeaderProps, dialogOpen, handleCloseDialog, renderAddOrChangeAvatar, renderRemoveAvatar],
   );
 
   return (

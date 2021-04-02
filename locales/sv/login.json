@@ -1,6 +1,5 @@
 {
   "title": "Logga In",
-  "description": "Logga in på Skole.",
   "header": "Logga In",
   "forgotPassword": "Glömt ditt lösenord?",
   "existingUserGreeting": "Välkommen tillbaka, {{ username }}.",

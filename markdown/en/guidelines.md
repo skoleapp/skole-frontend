@@ -4,22 +4,14 @@ title: Guidelines
 
 We expect our users to follow these guidelines. The guidelines are made for maintaining a healthy community that does not violate our terms and follows all applicable laws and regulations.
 
-### Uploading Material 📚
+### Creating Threads
 
-Uploading material that violates copyrights is forbidden. You can freely upload material such as:
+You can create any study-related threads. Filling all details as accurate as possible makes it easier for others to find your thread.
+
+### Commenting
+
+You are allowed to post any kind of comments that are not offensive or illegal. Uploading content that violates copyrights is forbidden. You can freely upload content such as:
 
 - Any notes or other documents created by you
-- Material that you are given permission to upload by the author
-- Material that is not subject to copyright
-
-You must ensure all material that you upload is in no way offensive or illegal.
-
-Try not to divide the material into separate files. This makes it easier for others to read your materials. Make sure that the quality of the material is good enough so that it is easy to read. Please do not upload duplicate material, it will be removed.
-
-### Creating Courses 🎓
-
-You are allowed to create any courses that not yet exist on Skole. Please do not create duplicate courses, they will be removed. Filling all details as accurate as possible makes it easier for others to find your course.
-
-### Creating Comments 💬
-
-You are allowed to post any kind of comments that are not offensive or illegal. You can include pictures as attachments of the comments. Make sure that the attachment also comply with all requirements explained in the `Uploading Material` section of these guidelines.
+- Content that you are given permission to upload by the author
+- Content that is not subject to copyright

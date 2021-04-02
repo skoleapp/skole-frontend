@@ -1,10 +1,8 @@
 {
   "title": "Registrera",
-  "description": "Registrera dig på Skole.",
   "header": "Registrera",
   "emailHelperText": "Ditt e-postmeddelande som vi kan använda för att identifiera dig. Ditt e-postmeddelande är endast synligt för dig. Vi kommer inte att skräpposta dig.",
   "usernameHelperText": "Ditt användarnamn visas för andra användare.",
   "termsHelperText": "Genom att registrera dig godkänner du våra",
-  "updateAccountSettingsHelperTextText": "Nästan klar! Genom att ställa in din skola och ämne kan vi automatiskt visa dig innehåll baserat på dem. Du kan också lägga till dessa senare.",
   "registerCompleteText": "Klar! Kontrollera din e-postadress för en länk som du kan använda för att verifiera ditt konto."
 }

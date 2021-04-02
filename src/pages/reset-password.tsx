@@ -11,11 +11,10 @@ import {
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { SeoPageProps } from 'types';
+import React, { useCallback, useMemo, useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -28,7 +27,7 @@ interface PasswordFormValues {
   confirmNewPassword: string;
 }
 
-const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const ResetPasswordPage: NextPage = () => {
   const {
     formRef: emailFormRef,
     handleMutationErrors: handleEmailFormMutationErrors,
@@ -53,10 +52,13 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   const { toggleNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
 
-  const emailFormInitialValues = {
-    ...generalEmailFormValues,
-    email: '',
-  };
+  const emailFormInitialValues = useMemo(
+    () => ({
+      ...generalEmailFormValues,
+      email: '',
+    }),
+    [generalEmailFormValues],
+  );
 
   const emailValidationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
@@ -76,11 +78,14 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     }
   };
 
-  const passwordFormInitialValues = {
-    ...generalPasswordFormValues,
-    newPassword: '',
-    confirmNewPassword: '',
-  };
+  const passwordFormInitialValues = useMemo(
+    () => ({
+      ...generalPasswordFormValues,
+      newPassword: '',
+      confirmNewPassword: '',
+    }),
+    [generalPasswordFormValues],
+  );
 
   const passwordValidationSchema = Yup.object().shape({
     newPassword: Yup.string()
@@ -117,94 +122,149 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
     context,
   });
 
-  const handleSubmitEmail = async (values: EmailFormValues): Promise<void> => {
-    const { email } = values;
-    await sendPasswordResetEmail({ variables: { email } });
-  };
-
-  const handleSubmitPassword = async (values: PasswordFormValues): Promise<void> => {
-    const { newPassword } = values;
-    await resetPassword({ variables: { newPassword, token } });
-  };
-
-  const renderNewPasswordField = (
-    <Field
-      name="newPassword"
-      component={TextFormField}
-      label={t('forms:newPassword')}
-      type="password"
-    />
+  const handleSubmitEmail = useCallback(
+    async (values: EmailFormValues): Promise<void> => {
+      const { email } = values;
+      await sendPasswordResetEmail({ variables: { email } });
+    },
+    [sendPasswordResetEmail],
   );
 
-  const renderConfirmNewPasswordField = (
-    <Field
-      name="confirmNewPassword"
-      component={TextFormField}
-      label={t('forms:confirmNewPassword')}
-      type="password"
-    />
+  const handleSubmitPassword = useCallback(
+    async (values: PasswordFormValues): Promise<void> => {
+      const { newPassword } = values;
+      await resetPassword({ variables: { newPassword, token } });
+    },
+    [resetPassword, token],
   );
 
-  const renderFormSubmitSection = <T extends PasswordFormValues | EmailFormValues>(
-    props: FormikProps<T>,
-  ): JSX.Element => <FormSubmitSection submitButtonText={t('common:submit')} {...props} />;
-
-  const renderPasswordFormFields = (props: FormikProps<PasswordFormValues>): JSX.Element => (
-    <Form>
-      {renderNewPasswordField}
-      {renderConfirmNewPasswordField}
-      {renderFormSubmitSection<PasswordFormValues>(props)}
-    </Form>
+  const renderNewPasswordField = useMemo(
+    () => (
+      <Field
+        name="newPassword"
+        component={TextFormField}
+        label={t('forms:newPassword')}
+        type="password"
+      />
+    ),
+    [t],
   );
 
-  const renderPasswordForm = !!token && (
-    <Formik
-      initialValues={passwordFormInitialValues}
-      validationSchema={passwordValidationSchema}
-      onSubmit={handleSubmitPassword}
-      innerRef={passwordFormRef}
-    >
-      {renderPasswordFormFields}
-    </Formik>
+  const renderConfirmNewPasswordField = useMemo(
+    () => (
+      <Field
+        name="confirmNewPassword"
+        component={TextFormField}
+        label={t('forms:confirmNewPassword')}
+        type="password"
+      />
+    ),
+    [t],
   );
 
-  const renderEmailField = (
-    <Field
-      name="email"
-      component={TextFormField}
-      label={t('forms:email')}
-      helperText={t('reset-password:helpText')}
-    />
+  const renderFormSubmitSection = useCallback(
+    <T extends PasswordFormValues | EmailFormValues>(props: FormikProps<T>): JSX.Element => (
+      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
+    ),
+    [t],
   );
 
-  const renderEmailFormFields = (props: FormikProps<EmailFormValues>): JSX.Element => (
-    <Form>
-      {renderEmailField}
-      {renderFormSubmitSection<EmailFormValues>(props)}
-    </Form>
+  const renderPasswordFormFields = useCallback(
+    (props: FormikProps<PasswordFormValues>): JSX.Element => (
+      <Form>
+        {renderNewPasswordField}
+        {renderConfirmNewPasswordField}
+        {renderFormSubmitSection<PasswordFormValues>(props)}
+      </Form>
+    ),
+    [renderConfirmNewPasswordField, renderFormSubmitSection, renderNewPasswordField],
   );
 
-  const renderEmailForm = !token && !emailSubmitted && (
-    <Formik
-      initialValues={emailFormInitialValues}
-      validationSchema={emailValidationSchema}
-      onSubmit={handleSubmitEmail}
-      innerRef={emailFormRef}
-    >
-      {renderEmailFormFields}
-    </Formik>
+  const renderPasswordForm = useMemo(
+    () =>
+      !!token && (
+        <Formik
+          initialValues={passwordFormInitialValues}
+          validationSchema={passwordValidationSchema}
+          onSubmit={handleSubmitPassword}
+          innerRef={passwordFormRef}
+        >
+          {renderPasswordFormFields}
+        </Formik>
+      ),
+    [
+      handleSubmitPassword,
+      passwordFormInitialValues,
+      passwordFormRef,
+      passwordValidationSchema,
+      renderPasswordFormFields,
+      token,
+    ],
   );
 
-  const renderEmailSubmitted = !token && emailSubmitted && (
-    <FormControl>
-      <Typography variant="subtitle1" align="center">
-        {t('reset-password:emailSubmitted')}
-      </Typography>
-    </FormControl>
+  const renderEmailField = useMemo(
+    () => (
+      <Field
+        name="email"
+        component={TextFormField}
+        label={t('forms:email')}
+        helperText={t('reset-password:helpText')}
+      />
+    ),
+    [t],
+  );
+
+  const renderEmailFormFields = useMemo(
+    () => (props: FormikProps<EmailFormValues>): JSX.Element => (
+      <Form>
+        {renderEmailField}
+        {renderFormSubmitSection<EmailFormValues>(props)}
+      </Form>
+    ),
+    [renderEmailField, renderFormSubmitSection],
+  );
+
+  const renderEmailForm = useMemo(
+    () =>
+      !token &&
+      !emailSubmitted && (
+        <Formik
+          initialValues={emailFormInitialValues}
+          validationSchema={emailValidationSchema}
+          onSubmit={handleSubmitEmail}
+          innerRef={emailFormRef}
+        >
+          {renderEmailFormFields}
+        </Formik>
+      ),
+    [
+      emailFormInitialValues,
+      emailFormRef,
+      emailSubmitted,
+      emailValidationSchema,
+      handleSubmitEmail,
+      renderEmailFormFields,
+      token,
+    ],
+  );
+
+  const renderEmailSubmitted = useMemo(
+    () =>
+      !token &&
+      emailSubmitted && (
+        <FormControl>
+          <Typography variant="subtitle1" align="center">
+            {t('reset-password:emailSubmitted')}
+          </Typography>
+        </FormControl>
+      ),
+    [emailSubmitted, t, token],
   );
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('reset-password:title'),
+    },
     topNavbarProps: {
       header: t('reset-password:header'),
       emoji: '😶‍🌫️',
@@ -224,18 +284,10 @@ const ResetPasswordPage: NextPage<SeoPageProps> = ({ seoProps }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'reset-password');
-
-  return {
-    props: {
-      _ns: await loadNamespaces(['reset-password'], locale),
-      seoProps: {
-        title: t('title'),
-        description: t('description'),
-      },
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['reset-password'], locale),
+  },
+});
 
 export default withUserMe(ResetPasswordPage);

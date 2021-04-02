@@ -15,6 +15,7 @@ const initialShareDialogParams: ShareDialogParams = {
 
 export const ShareContextProvider: React.FC = ({ children }) => {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+
   const [shareDialogParams, setShareDialogParams] = useState<ShareDialogParams>(
     initialShareDialogParams,
   );

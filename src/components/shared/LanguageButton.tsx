@@ -10,8 +10,8 @@ import { LanguageFlag } from './LanguageFlag';
 export const LanguageButton: React.FC = () => {
   const { t, lang } = useTranslation();
   const { handleOpenLanguageMenu } = useLanguageContext();
-  const { isMobile } = useMediaQueries();
-  const size = isMobile ? 'small' : 'medium';
+  const { smDown } = useMediaQueries();
+  const size = smDown ? 'small' : 'medium';
 
   return (
     <Tooltip title={t('common-tooltips:language')}>

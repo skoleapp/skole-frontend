@@ -9,34 +9,13 @@ fragment activityFields on ActivityObjectType {
   }
   comment {
     id
-    comment {
-      id
-      resource {
-        slug
-      }
-      course {
-        slug
-      }
-      school {
-        slug
-      }
-    }
-    resource {
-      slug
-    }
-    course {
-      slug
-    }
-    school {
+    thread {
       slug
     }
   }
   badgeProgress {
-    user {
-      slug
-    }
     badge {
-      name
+      tier
     }
   }
 }
@@ -76,7 +55,7 @@ mutation MarkActivityAsRead($id: ID, $read: Boolean) {
   }
 }
 
-# Need to come up with some other name as `MarkAllActivitiesAsRead` since the GraphQL code generator creates duplicate identifiers if we use that one.
+# Need to come up with some other name as `MarkAllActivitiesAsRead` since the the code generator creates duplicate identifiers if we use that one.
 mutation GraphQLMarkAllActivitiesAsRead {
   markAllActivitiesAsRead {
     errors {
@@ -89,31 +68,22 @@ mutation GraphQLMarkAllActivitiesAsRead {
   }
 }
 
-query AutocompleteCities {
-  autocompleteCities {
-    slug
-    name
-  }
-}
-
 mutation CreateComment(
   $user: ID
   $text: String!
-  $attachment: String
-  $course: ID
-  $resource: ID
+  $image: String
+  $file: String
+  $thread: ID
   $comment: ID
-  $school: ID
 ) {
   createComment(
     input: {
       user: $user
       text: $text
-      attachment: $attachment
-      course: $course
-      resource: $resource
+      image: $image
+      file: $file
+      thread: $thread
       comment: $comment
-      school: $school
     }
   ) {
     successMessage
@@ -123,13 +93,7 @@ mutation CreateComment(
     }
     comment {
       id
-      course {
-        slug
-      }
-      resource {
-        slug
-      }
-      school {
+      thread {
         slug
       }
     }
@@ -158,377 +122,100 @@ mutation CreateContactMessage($subject: String, $name: String, $email: String, $
   }
 }
 
-query AutocompleteCountries {
-  autocompleteCountries {
-    slug
-    name
-  }
-}
-
-fragment courseFields on CourseObjectType {
-  slug
-  name
-  codes
-  score
-  starCount
-  resourceCount
-  commentCount
-  created
-  user {
-    slug
-    username
-  }
-  courseSchool: school {
-    slug
-  }
-}
-
-fragment paginatedCourseFields on PaginatedCourseObjectType {
-  page
-  pages
-  hasPrev
-  hasNext
-  count
-  objects {
-    ...courseFields
-  }
-}
-
-query Courses(
-  $searchTerm: String
-  $school: String
-  $subject: String
-  $schoolType: String
-  $country: String
-  $city: String
-  $ordering: String
-  $page: Int
-  $pageSize: Int
-) {
-  courses(
-    searchTerm: $searchTerm
-    school: $school
-    subject: $subject
-    schoolType: $schoolType
-    country: $country
-    city: $city
-    ordering: $ordering
-    page: $page
-    pageSize: $pageSize
-  ) {
-    ...paginatedCourseFields
-  }
-  school(slug: $school) {
-    slug
-    name
-  }
-  subject(slug: $subject) {
-    slug
-    name
-  }
-  schoolType(slug: $schoolType) {
-    slug
-    name
-  }
-  country(slug: $country) {
-    slug
-    name
-  }
-  city(slug: $city) {
-    slug
-    name
-  }
-}
-
-fragment resourceFields on ResourceObjectType {
+fragment threadFields on ThreadObjectType {
+  id
   slug
   title
+  text
+  image
+  imageThumbnail
   score
-  date
+  starred
   starCount
   commentCount
-  downloads
   created
-  resourceType {
-    name
+  modified
+  vote {
+    id
+    status
   }
   user {
+    id
     slug
     username
   }
-  resourceCourse: course {
-    slug
-  }
 }
 
-fragment paginatedResourceFields on PaginatedResourceObjectType {
+fragment paginatedThreadFields on PaginatedThreadObjectType {
   page
   pages
-  hasNext
   hasPrev
+  hasNext
   count
   objects {
-    ...resourceFields
+    ...threadFields
   }
 }
 
-query Course($slug: String, $page: Int, $pageSize: Int) {
-  course(slug: $slug) {
-    id
-    slug
-    name
-    codes
-    modified
-    created
-    score
-    starred
-    starCount
-    commentCount
-    vote {
-      id
-      status
-    }
-    subjects {
-      slug
-    }
-    school {
-      id
-      slug
-    }
-    user {
-      id
-      slug
-      username
+query Threads($searchTerm: String, $ordering: String, $page: Int, $pageSize: Int) {
+  threads(searchTerm: $searchTerm, ordering: $ordering, page: $page, pageSize: $pageSize) {
+    ...paginatedThreadFields
+  }
+}
+
+query Thread($slug: String) {
+  thread(slug: $slug) {
+    ...threadFields
+  }
+}
+
+query ThreadComments($slug: String, $ordering: String, $page: Int, $pageSize: Int) {
+  comments(thread: $slug, ordering: $ordering, page: $page, pageSize: $pageSize) {
+    page
+    pages
+    hasNext
+    hasPrev
+    count
+    objects {
+      ...commentFields
+      replyComments {
+        ...commentFields
+      }
     }
   }
-  resources(course: $slug, page: $page, pageSize: $pageSize) {
-    ...paginatedResourceFields
-  }
 }
 
-query CourseSeoProps($slug: String) {
-  course(slug: $slug) {
-    name
-    codes
-  }
-}
-
-query CreateCourseAutocompleteData($school: String) {
-  school(slug: $school) {
-    id
-    slug
-    name
-  }
-}
-
-query AutocompleteCourses($school: String, $name: String) {
-  autocompleteCourses(school: $school, name: $name) {
-    id
-    slug
-    name
-    codes
-  }
-}
-
-mutation CreateCourse($name: String!, $codes: String, $subjects: [ID], $school: ID!) {
-  createCourse(input: { name: $name, codes: $codes, subjects: $subjects, school: $school }) {
+mutation CreateThread($title: String!, $text: String, $image: String) {
+  createThread(input: { title: $title, text: $text, image: $image }) {
     successMessage
     errors {
       field
       messages
     }
-    course {
+    thread {
       slug
     }
   }
 }
 
-mutation DeleteCourse($id: ID) {
-  deleteCourse(input: { id: $id }) {
+mutation DeleteThread($id: ID) {
+  deleteThread(input: { id: $id }) {
     successMessage
     errors {
       field
       messages
     }
-  }
-}
-
-query Resource($slug: String) {
-  resource(slug: $slug) {
-    id
-    slug
-    title
-    file
-    date
-    modified
-    created
-    score
-    starred
-    starCount
-    downloads
-    commentCount
-    resourceType {
-      name
-    }
-    school {
-      slug
-    }
-    course {
-      slug
-    }
-    user {
-      id
-      slug
-      username
-    }
-    vote {
-      id
-      status
-    }
-  }
-}
-
-query ResourceSeoProps($slug: String) {
-  resource(slug: $slug) {
-    title
-    date
-  }
-}
-
-query CreateResourceAutocompleteData($school: String, $course: String) {
-  school(slug: $school) {
-    slug
-    name
-  }
-  course(slug: $course) {
-    id
-    slug
-    name
-    codes
-  }
-}
-
-query AutocompleteResourceTypes {
-  autocompleteResourceTypes {
-    id
-    slug
-    name
-  }
-}
-
-mutation CreateResource(
-  $title: String!
-  $resourceType: ID!
-  $date: Date
-  $course: ID!
-  $file: String!
-) {
-  createResource(
-    input: { title: $title, resourceType: $resourceType, date: $date, course: $course, file: $file }
-  ) {
-    errors {
-      field
-      messages
-    }
-    successMessage
-    resource {
-      slug
-    }
-  }
-}
-
-mutation DeleteResource($id: ID) {
-  deleteResource(input: { id: $id }) {
-    successMessage
-    errors {
-      field
-      messages
-    }
-  }
-}
-
-mutation DownloadResource($id: ID) {
-  downloadResource(input: { id: $id }) {
-    errors {
-      field
-      messages
-    }
-    resource {
-      downloads
-    }
-  }
-}
-
-fragment paginatedSubjectFields on PaginatedSubjectObjectType {
-  page
-  pages
-  hasNext
-  hasPrev
-  count
-  objects {
-    slug
-    name
-    courseCount
-    resourceCount
-  }
-}
-
-query School($slug: String, $page: Int, $pageSize: Int) {
-  school(slug: $slug) {
-    id
-    slug
-    name
-    commentCount
-    city {
-      slug
-    }
-    country {
-      slug
-    }
-    schoolType {
-      slug
-    }
-  }
-  subjects(school: $slug, page: $page, pageSize: $pageSize) {
-    ...paginatedSubjectFields
-  }
-  courses(school: $slug, page: $page, pageSize: $pageSize) {
-    ...paginatedCourseFields
-  }
-}
-
-query SchoolSeoProps($slug: String) {
-  school(slug: $slug) {
-    name
-  }
-}
-
-query AutocompleteSchools($name: String) {
-  autocompleteSchools(name: $name) {
-    id
-    slug
-    name
-  }
-}
-
-query AutocompleteSchoolTypes {
-  autocompleteSchoolTypes {
-    slug
-    name
   }
 }
 
 query Starred($page: Int, $pageSize: Int) {
-  starredCourses(page: $page, pageSize: $pageSize) {
-    ...paginatedCourseFields
-  }
-  starredResources {
-    ...paginatedResourceFields
+  starredThreads(page: $page, pageSize: $pageSize) {
+    ...paginatedThreadFields
   }
 }
 
-mutation Star($course: ID, $resource: ID) {
-  star(input: { course: $course, resource: $resource }) {
+mutation Star($thread: ID!) {
+  star(input: { thread: $thread }) {
     starred
     errors {
       field
@@ -537,54 +224,48 @@ mutation Star($course: ID, $resource: ID) {
   }
 }
 
-query AutocompleteSubjects($name: String) {
-  autocompleteSubjects(name: $name) {
-    id
-    slug
-    name
-  }
+fragment badgeFields on BadgeObjectType {
+  id
+  name
+  description
+  tier
 }
 
 fragment badgeProgressFields on BadgeProgressObjectType {
   badge {
-    id
-    name
-    description
-    tier
+    ...badgeFields
   }
   progress
   steps
 }
 
-fragment userMeFields on UserObjectType {
+fragment userFields on UserObjectType {
   id
   slug
   username
   email
+  backupEmail
   title
   bio
   avatar
   avatarThumbnail
   score
-  created
+  rank
   verified
   unreadActivityCount
+  threadCount
+  commentCount
+  created
+  modified
   fcmToken
-  rank
   commentReplyEmailPermission
-  courseCommentEmailPermission
-  resourceCommentEmailPermission
+  threadCommentEmailPermission
+  newBadgeEmailPermission
   commentReplyPushPermission
-  courseCommentPushPermission
-  resourceCommentPushPermission
-  school {
-    id
-    slug
-    name
-  }
-  subject {
-    slug
-    name
+  threadCommentPushPermission
+  newBadgePushPermission
+  badges {
+    ...badgeFields
   }
   badgeProgresses {
     ...badgeProgressFields
@@ -592,65 +273,65 @@ fragment userMeFields on UserObjectType {
   selectedBadgeProgress {
     ...badgeProgressFields
   }
+  referralCodes {
+    code
+    usages
+  }
 }
 
 query UserMe {
   userMe {
-    ...userMeFields
+    ...userFields
   }
 }
 
-fragment commentFields on CommentObjectType {
+fragment _commentFields on CommentObjectType {
   id
   text
-  attachment
-  attachmentThumbnail
-  created
+  image
+  imageThumbnail
+  file
   score
   replyCount
+  isOwn
+  created
+  modified
   user {
     id
     slug
     username
     avatarThumbnail
   }
-  course {
-    slug
-    name
-  }
-  resource {
+  thread {
     slug
     title
   }
-  school {
-    slug
-    name
+  vote {
+    id
+    status
   }
 }
 
-query User($slug: String, $page: Int, $pageSize: Int) {
+fragment commentFields on CommentObjectType {
+  ..._commentFields
+  comment {
+    ..._commentFields
+  }
+}
+
+query User($slug: String) {
   user(slug: $slug) {
-    id
-    username
-    title
-    bio
-    avatar
-    score
-    created
-    verified
-    rank
-    badges {
-      name
-      description
-      tier
-    }
+    ...userFields
   }
-  courses(user: $slug, page: $page, pageSize: $pageSize) {
-    ...paginatedCourseFields
+}
+
+query UserThreads($slug: String, $page: Int, $pageSize: Int) {
+  threads(user: $slug, page: $page, pageSize: $pageSize) {
+    ...paginatedThreadFields
   }
-  resources(user: $slug, page: $page, pageSize: $pageSize) {
-    ...paginatedResourceFields
-  }
+}
+
+query UserComments($slug: String, $page: Int, $pageSize: Int) {
   comments(user: $slug, page: $page, pageSize: $pageSize) {
     page
     pages
@@ -659,27 +340,7 @@ query User($slug: String, $page: Int, $pageSize: Int) {
     count
     objects {
       ...commentFields
-      comment {
-        course {
-          slug
-          name
-        }
-        resource {
-          slug
-          title
-        }
-        school {
-          slug
-          name
-        }
-      }
     }
-  }
-}
-
-query UserSeoProps($slug: String) {
-  user(slug: $slug) {
-    username
   }
 }
 
@@ -696,7 +357,7 @@ mutation Register($username: String!, $email: String!, $password: String!) {
       messages
     }
     user {
-      ...userMeFields
+      ...userFields
     }
   }
 }
@@ -711,8 +372,7 @@ mutation Login($usernameOrEmail: String!, $password: String!) {
   }
 }
 
-# Need to come up with some other name as `Logout` since the the code generator creates duplicate
-# identifiers for non-input mutations if we use that one.
+# Need to come up with some other name as `Logout` since the the code generator creates duplicate identifiers if we use that one.
 mutation GraphQLLogout {
   logout {
     deleted
@@ -729,6 +389,7 @@ mutation GraphQLResendVerificationEmail {
   }
 }
 
+# Need to come up with some other name as `MyData` since the the code generator creates duplicate identifiers if we use that one.
 mutation GraphQLMyData {
   myData {
     successMessage
@@ -773,7 +434,7 @@ mutation UpdateProfile($username: String!, $title: String, $bio: String, $avatar
   updateProfile(input: { username: $username, title: $title, bio: $bio, avatar: $avatar }) {
     successMessage
     user {
-      ...userMeFields
+      ...userFields
     }
     errors {
       field
@@ -784,31 +445,29 @@ mutation UpdateProfile($username: String!, $title: String, $bio: String, $avatar
 
 mutation UpdateAccountSettings(
   $email: String!
-  $school: ID
-  $subject: ID
+  $backupEmail: String!
   $commentReplyEmailPermission: Boolean
-  $courseCommentEmailPermission: Boolean
-  $resourceCommentEmailPermission: Boolean
+  $threadCommentEmailPermission: Boolean
+  $newBadgeEmailPermission: Boolean
   $commentReplyPushPermission: Boolean
-  $courseCommentPushPermission: Boolean
-  $resourceCommentPushPermission: Boolean
+  $threadCommentPushPermission: Boolean
+  $newBadgePushPermission: Boolean
 ) {
   updateAccountSettings(
     input: {
       email: $email
-      school: $school
-      subject: $subject
+      backupEmail: $backupEmail
       commentReplyEmailPermission: $commentReplyEmailPermission
-      courseCommentEmailPermission: $courseCommentEmailPermission
-      resourceCommentEmailPermission: $resourceCommentEmailPermission
+      threadCommentEmailPermission: $threadCommentEmailPermission
+      newBadgeEmailPermission: $newBadgeEmailPermission
       commentReplyPushPermission: $commentReplyPushPermission
-      courseCommentPushPermission: $courseCommentPushPermission
-      resourceCommentPushPermission: $resourceCommentPushPermission
+      threadCommentPushPermission: $threadCommentPushPermission
+      newBadgePushPermission: $newBadgePushPermission
     }
   ) {
     successMessage
     user {
-      ...userMeFields
+      ...userFields
     }
     errors {
       field
@@ -837,8 +496,8 @@ mutation DeleteUser($password: String!) {
   }
 }
 
-mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
-  vote(input: { status: $status, comment: $comment, course: $course, resource: $resource }) {
+mutation Vote($status: Int!, $comment: ID, $thread: ID) {
+  vote(input: { status: $status, comment: $comment, thread: $thread }) {
     errors {
       field
       messages
@@ -847,81 +506,6 @@ mutation Vote($status: Int!, $comment: ID, $course: ID, $resource: ID) {
     vote {
       id
       status
-    }
-  }
-}
-
-query Sitemap {
-  sitemap {
-    courses {
-      slug
-      modified
-    }
-    resources {
-      slug
-      modified
-    }
-    schools {
-      slug
-      modified
-    }
-    users {
-      slug
-      modified
-    }
-  }
-}
-
-query TrendingComments {
-  trendingComments {
-    ...commentFields
-  }
-}
-
-query Discussion($course: ID, $resource: ID, $school: ID) {
-  discussion(course: $course, resource: $resource, school: $school) {
-    id
-    text
-    attachment
-    attachmentThumbnail
-    created
-    score
-    user {
-      id
-      slug
-      username
-      avatarThumbnail
-    }
-    vote {
-      id
-      status
-    }
-    course {
-      slug
-    }
-    resource {
-      slug
-    }
-    school {
-      slug
-    }
-    replyComments {
-      id
-      text
-      attachment
-      attachmentThumbnail
-      created
-      score
-      user {
-        id
-        slug
-        username
-        avatarThumbnail
-      }
-      vote {
-        id
-        status
-      }
     }
   }
 }
@@ -941,9 +525,7 @@ mutation UpdateSelectedBadge($id: ID) {
 
 query Badges {
   badges {
-    name
-    description
-    tier
+    ...badgeFields
   }
 }
 

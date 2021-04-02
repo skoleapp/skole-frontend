@@ -1,57 +1,42 @@
-import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
-import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
-import { useAuthContext, useDarkModeContext, useNotificationsContext } from 'context';
+import { IconButtonProps } from '@material-ui/core/IconButton';
+import { useDarkModeContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
-import React, { SyntheticEvent, useEffect, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
-import { useMediaQueries } from './useMediaQueries';
 
 interface VoteVariables {
-  course?: string;
-  resource?: string;
+  thread?: string;
   comment?: string;
 }
 
 interface UseVotesParams {
   initialVote: VoteObjectType | null;
   initialScore: string;
-  isOwner: boolean;
   variables: VoteVariables;
   upvoteTooltip: string;
   removeUpvoteTooltip: string;
   downvoteTooltip: string;
   removeDownvoteTooltip: string;
-  ownContentTooltip: string;
 }
 
 interface UseVotes {
   score: string;
-  renderUpvoteButton: JSX.Element | false;
-  renderDownvoteButton: JSX.Element | false;
   upvoteButtonProps: Partial<IconButtonProps>;
   downvoteButtonProps: Partial<IconButtonProps>;
   upvoteTooltip: string;
   downvoteTooltip: string;
 }
 
-// A hook that allows usage of either default vote buttons (used in course/resource details) or using props for custom vote buttons.
 export const useVotes = ({
   initialVote,
   initialScore,
-  isOwner,
   variables,
   removeUpvoteTooltip,
   upvoteTooltip: _upvoteTooltip,
   removeDownvoteTooltip,
   downvoteTooltip: _downvoteTooltip,
-  ownContentTooltip,
 }: UseVotesParams): UseVotes => {
-  const { userMe, verified, loginRequiredTooltip, verificationRequiredTooltip } = useAuthContext();
-  const { isTabletOrDesktop } = useMediaQueries();
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
@@ -66,31 +51,11 @@ export const useVotes = ({
     setScore(initialScore);
   }, [initialScore]);
 
-  // Show different tooltip for each of these cases:
-  // - User is not logged in.
-  // - User is not verified.
-  // - User is the owner of the object.
-  // - User has upvoted.
-  // - User has not upvoted.
-  const upvoteTooltip =
-    loginRequiredTooltip ||
-    verificationRequiredTooltip ||
-    (isOwner && ownContentTooltip) ||
-    (currentVote?.status === 1 && removeUpvoteTooltip) ||
-    _upvoteTooltip;
+  // Show a dynamic tooltip based on the vote status.
+  const upvoteTooltip = (currentVote?.status === 1 && removeUpvoteTooltip) || _upvoteTooltip;
 
-  // Show different tooltip for each of these cases:
-  // - User is not logged in.
-  // - User is not verified.
-  // - User is the owner of the object.
-  // - User has downvoted.
-  // - User has not downvoted.
-  const downvoteTooltip =
-    loginRequiredTooltip ||
-    verificationRequiredTooltip ||
-    (isOwner && ownContentTooltip) ||
-    (currentVote?.status === -1 && removeDownvoteTooltip) ||
-    _downvoteTooltip;
+  // Show a dynamic tooltip based on the vote status.
+  const downvoteTooltip = (currentVote?.status === -1 && removeDownvoteTooltip) || _downvoteTooltip;
 
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote?.errors?.length) {
@@ -107,56 +72,42 @@ export const useVotes = ({
     context,
   });
 
-  const handleVote = (status: number) => async (e: SyntheticEvent): Promise<void> => {
-    e.stopPropagation(); // Prevent opening comment thread for top-level comments.
-    await vote({ variables: { status, ...variables } });
-  };
-
-  const commonVoteButtonProps: IconButtonProps = {
-    size: 'small',
-    disabled: voteSubmitting || !userMe || isOwner || verified === false,
-  };
-
-  const upvoteButtonProps: IconButtonProps = {
-    ...commonVoteButtonProps,
-    onClick: handleVote(1),
-    color: !!currentVote && currentVote.status === 1 ? dynamicPrimaryColor : 'default',
-  };
-
-  const downvoteButtonProps: IconButtonProps = {
-    ...commonVoteButtonProps,
-    onClick: handleVote(-1),
-    color: !!currentVote && currentVote.status === -1 ? dynamicPrimaryColor : 'default',
-  };
-
-  // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.
-  // On mobile, do not render the button at all in these cases.
-  const renderUpvoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
-    <Tooltip title={upvoteTooltip}>
-      <Typography component="span">
-        <IconButton {...upvoteButtonProps}>
-          <ThumbUpOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
+  const handleVote = useCallback(
+    (status: number) => async (e: SyntheticEvent): Promise<void> => {
+      e.stopPropagation(); // Prevent opening comment thread for top-level comments.
+      await vote({ variables: { status, ...variables } });
+    },
+    [variables, vote],
   );
 
-  // On desktop, render a disabled button for non-verified users and for users who are the creators of the comment.
-  // On mobile, do not render the button at all in these cases.
-  const renderDownvoteButton = ((!!verified && !isOwner) || isTabletOrDesktop) && (
-    <Tooltip title={downvoteTooltip}>
-      <Typography component="span">
-        <IconButton {...downvoteButtonProps}>
-          <ThumbDownOutlined />
-        </IconButton>
-      </Typography>
-    </Tooltip>
+  const commonVoteButtonProps: IconButtonProps = useMemo(
+    () => ({
+      size: 'small',
+      disabled: voteSubmitting,
+    }),
+    [voteSubmitting],
+  );
+
+  const upvoteButtonProps: IconButtonProps = useMemo(
+    () => ({
+      ...commonVoteButtonProps,
+      onClick: handleVote(1),
+      color: !!currentVote && currentVote.status === 1 ? dynamicPrimaryColor : 'default',
+    }),
+    [commonVoteButtonProps, currentVote, dynamicPrimaryColor, handleVote],
+  );
+
+  const downvoteButtonProps: IconButtonProps = useMemo(
+    () => ({
+      ...commonVoteButtonProps,
+      onClick: handleVote(-1),
+      color: !!currentVote && currentVote.status === -1 ? dynamicPrimaryColor : 'default',
+    }),
+    [commonVoteButtonProps, currentVote, dynamicPrimaryColor, handleVote],
   );
 
   return {
     score,
-    renderUpvoteButton,
-    renderDownvoteButton,
     upvoteButtonProps,
     downvoteButtonProps,
     upvoteTooltip,

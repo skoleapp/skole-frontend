@@ -1,98 +1,75 @@
 import {
   ActionRequiredTemplate,
-  CourseTableBody,
   ErrorTemplate,
+  ListTemplate,
   LoadingBox,
   NotFoundBox,
   PaginatedTable,
-  ResourceTableBody,
-  TabTemplate,
+  ThreadTableBody,
 } from 'components';
 import { useAuthContext } from 'context';
 import { useStarredQuery } from 'generated';
-import { withUserMe } from 'hocs';
+import { withAuthRequired } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
-import { getT, loadNamespaces, useTranslation } from 'lib';
+import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React from 'react';
-import { SeoPageProps } from 'types';
+import React, { useMemo } from 'react';
 
-const StarredPage: NextPage<SeoPageProps> = ({ seoProps }) => {
+const StarredPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const variables = R.pick(['page', 'pageSize'], query);
   const context = useLanguageHeaderContext();
+  const { verified } = useAuthContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
-  const { userMe } = useAuthContext();
-  const courses = R.pathOr([], ['starredCourses', 'objects'], data);
-  const resources = R.pathOr([], ['starredResources', 'objects'], data);
-  const courseCount = R.path(['starredCourses', 'count'], data);
-  const resourceCount = R.path(['starredResources', 'count'], data);
+  const threads = R.pathOr([], ['starredThreads', 'objects'], data);
+  const threadCount = R.path(['starredThreads', 'count'], data);
 
-  const renderLoading = <LoadingBox />;
-  const renderResourceTableBody = <ResourceTableBody resources={resources} />;
-  const renderCourseTableBody = <CourseTableBody courses={courses} />;
-  const renderCoursesNotFound = <NotFoundBox text={t('starred:noCourses')} />;
-  const renderResourcesNotFound = <NotFoundBox text={t('starred:noResources')} />;
+  const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
+  const renderThreadTableBody = useMemo(() => <ThreadTableBody threads={threads} />, [threads]);
+  const renderThreadsNotFound = useMemo(() => <NotFoundBox text={t('starred:noThreads')} />, [t]);
 
-  const renderCourseTable = (
-    <PaginatedTable renderTableBody={renderCourseTableBody} count={courseCount} />
+  const renderThreadTable = useMemo(
+    () =>
+      threads.length && (
+        <PaginatedTable renderTableBody={renderThreadTableBody} count={threadCount} />
+      ),
+    [renderThreadTableBody, threadCount, threads.length],
   );
 
-  const renderResourceTable = (
-    <PaginatedTable renderTableBody={renderResourceTableBody} count={resourceCount} />
-  );
-
-  const renderLeftTabContent =
-    (loading && renderLoading) || (courses.length && renderCourseTable) || renderCoursesNotFound;
-
-  const renderRightTabContent =
-    (loading && renderLoading) ||
-    (resources.length && renderResourceTable) ||
-    renderResourcesNotFound;
+  const renderThreads = renderLoading || renderThreadTable || renderThreadsNotFound;
 
   const layoutProps = {
-    seoProps,
+    seoProps: {
+      title: t('starred:title'),
+    },
     topNavbarProps: {
       header: t('starred:header'),
-      emoji: '🤩',
-    },
-    tabTemplateProps: {
-      leftTabLabel: `${t('common:courses')} (${courseCount})`,
-      rightTabLabel: `${t('common:resources')} (${resourceCount})`,
-      renderLeftTabContent,
-      renderRightTabContent,
+      emoji: '⭐',
     },
   };
 
-  if (!userMe) {
-    return <ActionRequiredTemplate variant="login" {...layoutProps} />;
-  }
-
   if (!!error && !!error.networkError) {
-    return <ErrorTemplate variant="offline" seoProps={seoProps} />;
+    return <ErrorTemplate variant="offline" />;
   }
 
   if (error) {
-    return <ErrorTemplate variant="error" seoProps={seoProps} />;
+    return <ErrorTemplate variant="error" />;
   }
 
-  return <TabTemplate {...layoutProps} />;
+  if (!verified) {
+    return <ActionRequiredTemplate variant="verify-account" {...layoutProps} {...layoutProps} />;
+  }
+
+  return <ListTemplate {...layoutProps}>{renderThreads}</ListTemplate>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const t = await getT(locale, 'starred');
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+  props: {
+    _ns: await loadNamespaces(['starred'], locale),
+  },
+});
 
-  return {
-    props: {
-      _ns: await loadNamespaces(['starred'], locale),
-      seoProps: {
-        title: t('title'),
-      },
-    },
-  };
-};
-
-export default withUserMe(StarredPage);
+export default withAuthRequired(StarredPage);

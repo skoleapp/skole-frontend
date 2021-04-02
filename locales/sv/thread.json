@@ -1,0 +1,14 @@
+{
+  "noComments": "Den här tråden har inga kommentarer. Lägg till en kommentar nedan!",
+  "comments": "{{ commentCount }} kommentarer",
+  "sortedBy": "sorterade efter",
+  "shareThreadText": "Skapad av {{ creatorUsername }}. {{ commentCount }} kommentarer.",
+  "shareThread": "Dela tråd",
+  "deleteThread": "Radera tråd",
+  "confirmDeleteThread": "Är du säker på att du vill ta bort den här tråden?",
+  "deleteComment": "Radera kommentar",
+  "confirmDeleteComment": "Är du säker på att du vill ta bort den här kommentaren?",
+  "shareCommentTitle": "{{ creatorUsername }} på Skole",
+  "shareComment": "Dela kommentar",
+  "postingComment": "Skickar kommentar..."
+}

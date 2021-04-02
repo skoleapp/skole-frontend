@@ -1,6 +1,12 @@
 import { ApolloError } from '@apollo/client';
 import { FormikProps, FormikValues } from 'formik';
-import { ErrorType, Maybe } from 'generated';
+import {
+  CommentObjectType,
+  ErrorType,
+  Maybe,
+  ThreadObjectType,
+  UserFieldsFragment,
+} from 'generated';
 import { RefObject } from 'react';
 
 export type MutationFormError = Pick<ErrorType, 'field' | 'messages'>;
@@ -25,4 +31,12 @@ export interface ContactFormValues {
   name: string;
   email: string;
   message: string;
+}
+
+export interface CreateCommentFormValues {
+  user: UserFieldsFragment | null;
+  text: string;
+  image: string | null;
+  thread: ThreadObjectType | null;
+  comment: CommentObjectType | null;
 }
