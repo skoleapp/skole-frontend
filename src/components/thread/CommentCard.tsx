@@ -15,7 +15,6 @@ import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
 import clsx from 'clsx';
 import {
   useActionsContext,
-  useAuthContext,
   useConfirmContext,
   useNotificationsContext,
   useThreadContext,
@@ -123,7 +122,6 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const { query } = useRouter();
   const { t } = useTranslation();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
-  const { userMe } = useAuthContext();
   const { confirm } = useConfirmContext();
   const { handleOpenActionsDialog } = useActionsContext();
   const avatarThumbnail = R.prop('avatarThumbnail', comment.user);
@@ -136,7 +134,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const creator = R.prop('user', comment);
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
   const creatorSlug = R.prop('slug', creator);
-  const isOwner = !!creator && userMe?.id === creator.id;
+  const isOwner = R.prop('isOwn', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
 
