@@ -1,5 +1,15 @@
 FROM node:15.10.0-buster-slim@sha256:2a351dd6e7236d277f51f00266cc1807791b217837392cfd39fa64c01cb6c094 AS base
 
+RUN groupadd --gid=10001 user \
+    && useradd --gid=user --uid=10000 --create-home user
+WORKDIR /home/user/app
+RUN chown user:user /home/user/app
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+
+FROM base as dev
+
 RUN apt-get update && \
   apt-get install --no-install-recommends --assume-yes \
   libgtk2.0-0 \
@@ -14,22 +24,12 @@ RUN apt-get update && \
   xauth \
   xvfb
 
-RUN groupadd --gid=10001 user \
-    && useradd --gid=user --uid=10000 --create-home user
-WORKDIR /home/user/app
-RUN chown user:user /home/user/app
-
 USER user
-
-ENV NEXT_TELEMETRY_DISABLED=1
-
-
-FROM base as dev
-
-ENV NODE_ENV=development
 
 COPY --chown=user:user package.json .
 COPY --chown=user:user yarn.lock .
+
+ENV NODE_ENV=development
 
 RUN yarn install
 RUN mkdir .next
@@ -54,6 +54,7 @@ CMD yarn lint \
         # TODO: Enable recording and parallelism on Apr 1, 2021
         # && yarn cypress:run --record --parallel --ci-build-id=${GITHUB_RUN_NUMBER}; }
         && yarn cypress:run; }
+
 
 FROM ci as build
 
