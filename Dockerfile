@@ -51,9 +51,7 @@ CMD yarn lint \
     && yarn type-check \
     && API_URL=http://localhost:8000 yarn build \
     && { yarn start & yarn wait-on --timeout=30000 http://localhost:3001 \
-        # TODO: Enable recording and parallelism on Apr 1, 2021
-        # && yarn cypress:run --record --parallel --ci-build-id=${GITHUB_RUN_NUMBER}; }
-        && yarn cypress:run; }
+        && yarn cypress:run --record --parallel --ci-build-id=${GITHUB_RUN_NUMBER}; }
 
 
 FROM ci as build
