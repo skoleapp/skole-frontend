@@ -1,11 +1,7 @@
-import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
-import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
-import { useAuthContext, useDarkModeContext, useNotificationsContext } from 'context';
+import { IconButtonProps } from '@material-ui/core/IconButton';
+import { useDarkModeContext, useNotificationsContext } from 'context';
 import { useVoteMutation, VoteMutation, VoteObjectType } from 'generated';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLanguageHeaderContext } from './useLanguageHeaderContext';
 
@@ -17,7 +13,6 @@ interface VoteVariables {
 interface UseVotesParams {
   initialVote: VoteObjectType | null;
   initialScore: string;
-  isOwner: boolean;
   variables: VoteVariables;
   upvoteTooltip: string;
   removeUpvoteTooltip: string;
@@ -27,8 +22,6 @@ interface UseVotesParams {
 
 interface UseVotes {
   score: string;
-  renderUpvoteButton: JSX.Element | false;
-  renderDownvoteButton: JSX.Element | false;
   upvoteButtonProps: Partial<IconButtonProps>;
   downvoteButtonProps: Partial<IconButtonProps>;
   upvoteTooltip: string;
@@ -38,14 +31,12 @@ interface UseVotes {
 export const useVotes = ({
   initialVote,
   initialScore,
-  isOwner,
   variables,
   removeUpvoteTooltip,
   upvoteTooltip: _upvoteTooltip,
   removeDownvoteTooltip,
   downvoteTooltip: _downvoteTooltip,
 }: UseVotesParams): UseVotes => {
-  const { verified } = useAuthContext();
   const [currentVote, setCurrentVote] = useState(initialVote);
   const [score, setScore] = useState(initialScore);
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
@@ -115,42 +106,8 @@ export const useVotes = ({
     [commonVoteButtonProps, currentVote, dynamicPrimaryColor, handleVote],
   );
 
-  // Only render for verified user who are not owners.
-  const renderUpvoteButton = useMemo(
-    () =>
-      !!verified &&
-      !isOwner && (
-        <Tooltip title={upvoteTooltip}>
-          <Typography component="span">
-            <IconButton {...upvoteButtonProps}>
-              <ThumbUpOutlined />
-            </IconButton>
-          </Typography>
-        </Tooltip>
-      ),
-    [isOwner, upvoteButtonProps, upvoteTooltip, verified],
-  );
-
-  // Only render for verified user who are not owners.
-  const renderDownvoteButton = useMemo(
-    () =>
-      !!verified &&
-      !isOwner && (
-        <Tooltip title={downvoteTooltip}>
-          <Typography component="span">
-            <IconButton {...downvoteButtonProps}>
-              <ThumbDownOutlined />
-            </IconButton>
-          </Typography>
-        </Tooltip>
-      ),
-    [downvoteButtonProps, downvoteTooltip, isOwner, verified],
-  );
-
   return {
     score,
-    renderUpvoteButton,
-    renderDownvoteButton,
     upvoteButtonProps,
     downvoteButtonProps,
     upvoteTooltip,

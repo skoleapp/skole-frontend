@@ -15,6 +15,7 @@ import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
 import clsx from 'clsx';
 import {
   useActionsContext,
+  useAuthContext,
   useConfirmContext,
   useNotificationsContext,
   useThreadContext,
@@ -124,6 +125,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
   const { handleOpenActionsDialog } = useActionsContext();
+  const { verified } = useAuthContext();
   const avatarThumbnail = R.prop('avatarThumbnail', comment.user);
   const initialVote = R.prop('vote', comment);
   const initialScore = R.prop('score', comment);
@@ -134,7 +136,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const creator = R.prop('user', comment);
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
   const creatorSlug = R.prop('slug', creator);
-  const isOwner = R.prop('isOwn', comment);
+  const isOwn = R.prop('isOwn', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
 
@@ -147,7 +149,6 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   } = useVotes({
     initialVote,
     initialScore,
-    isOwner,
     variables: { comment: commentId },
     upvoteTooltip: t('thread-tooltips:upvoteComment'),
     removeUpvoteTooltip: t('thread-tooltips:removeCommentUpvote'),
@@ -217,7 +218,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
       handleOpenActionsDialog({
         shareText: t('thread:shareComment'),
         shareDialogParams,
-        hideDeleteAction: !isOwner,
+        hideDeleteAction: !isOwn,
         deleteActionParams,
       });
     },
@@ -227,7 +228,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
       creatorUsername,
       handleDeleteComment,
       handleOpenActionsDialog,
-      isOwner,
+      isOwn,
       t,
     ],
   );
@@ -362,32 +363,38 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     [classes.messageInfo, renderActionsButton, renderReplyCount],
   );
 
+  // Only render for verified user who are not owners.
   const renderUpvoteButton = useMemo(
-    () => (
-      <Tooltip title={upvoteTooltip}>
-        <Typography component="span">
-          <IconButton className={classes.iconButton} {...upvoteButtonProps}>
-            <KeyboardArrowUpOutlined />
-          </IconButton>
-        </Typography>
-      </Tooltip>
-    ),
-    [classes.iconButton, upvoteButtonProps, upvoteTooltip],
+    () =>
+      !isOwn &&
+      !!verified && (
+        <Tooltip title={upvoteTooltip}>
+          <Typography component="span">
+            <IconButton className={classes.iconButton} {...upvoteButtonProps}>
+              <KeyboardArrowUpOutlined />
+            </IconButton>
+          </Typography>
+        </Tooltip>
+      ),
+    [classes.iconButton, upvoteButtonProps, upvoteTooltip, isOwn, verified],
   );
 
   const renderScore = useMemo(() => <Typography variant="body2">{score}</Typography>, [score]);
 
+  // Only render for verified user who are not owners.
   const renderDownvoteButton = useMemo(
-    () => (
-      <Tooltip title={downvoteTooltip}>
-        <Typography component="span">
-          <IconButton className={classes.iconButton} {...downvoteButtonProps}>
-            <KeyboardArrowDownOutlined />
-          </IconButton>
-        </Typography>
-      </Tooltip>
-    ),
-    [classes.iconButton, downvoteButtonProps, downvoteTooltip],
+    () =>
+      !isOwn &&
+      !!verified && (
+        <Tooltip title={downvoteTooltip}>
+          <Typography component="span">
+            <IconButton className={classes.iconButton} {...downvoteButtonProps}>
+              <KeyboardArrowDownOutlined />
+            </IconButton>
+          </Typography>
+        </Tooltip>
+      ),
+    [classes.iconButton, downvoteButtonProps, downvoteTooltip, isOwn, verified],
   );
 
   const renderVoteButtons = useMemo(
