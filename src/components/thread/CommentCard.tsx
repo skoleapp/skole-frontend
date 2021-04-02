@@ -140,21 +140,22 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
 
-  const {
-    score,
-    upvoteButtonProps,
-    downvoteButtonProps,
-    upvoteTooltip,
-    downvoteTooltip,
-  } = useVotes({
+  const { score, upvoteButtonProps, downvoteButtonProps, currentVote } = useVotes({
     initialVote,
     initialScore,
     variables: { comment: commentId },
-    upvoteTooltip: t('thread-tooltips:upvoteComment'),
-    removeUpvoteTooltip: t('thread-tooltips:removeCommentUpvote'),
-    downvoteTooltip: t('thread-tooltips:downvoteComment'),
-    removeDownvoteTooltip: t('thread-tooltips:removeCommentDownvote'),
   });
+
+  // Show a dynamic tooltips based on the vote status.
+  const upvoteTooltip =
+    currentVote?.status === 1
+      ? t('thread-tooltips:removeCommentUpvote')
+      : t('thread-tooltips:upvoteComment');
+
+  const downvoteTooltip =
+    currentVote?.status === -1
+      ? t('thread-tooltips:removeCommentDownvote')
+      : t('thread-tooltips:downvoteComment');
 
   // If a comment has been provided as a query parameter, automatically scroll into the comment.
   useEffect(() => {

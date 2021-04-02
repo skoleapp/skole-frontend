@@ -24,7 +24,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 export const OrderingButton: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { ordering, setOrdering } = useOrderingContext();
+  const { ordering, orderingLabel, setOrdering } = useOrderingContext();
   const [selectionOpen, setSelectionOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -67,11 +67,11 @@ export const OrderingButton: React.FC = () => {
         endIcon={<KeyboardArrowDown color="disabled" />}
         className={classes.button}
       >
-        {ordering}
+        {orderingLabel}
         {renderOrderingEmoji}
       </Button>
     ),
-    [classes.button, handleButtonClick, ordering, renderOrderingEmoji],
+    [classes.button, handleButtonClick, orderingLabel, renderOrderingEmoji],
   );
 
   const renderPopper = useMemo(

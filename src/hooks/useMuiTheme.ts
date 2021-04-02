@@ -169,7 +169,7 @@ export const useMuiTheme = (): Theme => {
     },
     MuiCardContent: {
       root: {
-        padding: `${spacing(4)} !important`,
+        padding: spacing(4),
       },
     },
     MuiDrawer: {
@@ -189,8 +189,8 @@ export const useMuiTheme = (): Theme => {
         height: `calc(env(safe-area-inset-bottom) + ${BOTTOM_NAVBAR_HEIGHT})`,
         display: 'flex',
         paddingBottom: 'env(safe-area-inset-bottom)',
-        paddingLeft: 'env(safe-area-inset-left)',
-        paddingRight: 'env(safe-area-inset-right)',
+        paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(1)})`,
+        paddingRight: `calc(env(safe-area-inset-right) + ${spacing(1)})`,
         zIndex: 2, // Overlap form labels.
       },
     },

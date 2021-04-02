@@ -1,12 +1,5 @@
 {
-  "starThread": "Merkitse lanka tähdellä.",
-  "unstarThread": "Poista tähti langalta.",
-  "upvoteThread": "Anna langalle ylös-ääni.",
-  "removeThreadUpvote": "Poista ylös-ääni langalta.",
-  "downvoteThread": "Anna langalla alas-ääni.",
-  "removeThreadDownvote": "Poista alas-ääni langalta.",
   "shareThread": "Jaa lanka.",
-  "threadInfo": "Näytä langan tiedot.",
   "threadActions": "Näytä langan valikko.",
   "threadImage": "Näytä langan kuva.",
   "upvoteComment": "Anna kommentille ylös-ääni.",
