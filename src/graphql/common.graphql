@@ -129,12 +129,12 @@ fragment threadFields on ThreadObjectType {
   text
   image
   imageThumbnail
-  modified
-  created
   score
   starred
   starCount
   commentCount
+  created
+  modified
   vote {
     id
     status
@@ -224,18 +224,22 @@ mutation Star($thread: ID!) {
   }
 }
 
+fragment badgeFields on BadgeObjectType {
+  id
+  name
+  description
+  tier
+}
+
 fragment badgeProgressFields on BadgeProgressObjectType {
   badge {
-    id
-    name
-    description
-    tier
+    ...badgeFields
   }
   progress
   steps
 }
 
-fragment userMeFields on UserObjectType {
+fragment userFields on UserObjectType {
   id
   slug
   username
@@ -246,41 +250,52 @@ fragment userMeFields on UserObjectType {
   avatar
   avatarThumbnail
   score
-  created
+  rank
   verified
   unreadActivityCount
+  threadCount
+  commentCount
+  created
+  modified
   fcmToken
-  rank
   commentReplyEmailPermission
   threadCommentEmailPermission
   newBadgeEmailPermission
   commentReplyPushPermission
   threadCommentPushPermission
   newBadgePushPermission
+  badges {
+    ...badgeFields
+  }
   badgeProgresses {
     ...badgeProgressFields
   }
   selectedBadgeProgress {
     ...badgeProgressFields
   }
+  referralCodes {
+    code
+    usages
+  }
 }
 
 query UserMe {
   userMe {
-    ...userMeFields
+    ...userFields
   }
 }
 
-fragment commentFields on CommentObjectType {
+fragment _commentFields on CommentObjectType {
   id
   text
   image
   imageThumbnail
   file
-  created
   score
   replyCount
   isOwn
+  created
+  modified
   user {
     id
     slug
@@ -291,26 +306,22 @@ fragment commentFields on CommentObjectType {
     slug
     title
   }
+  vote {
+    id
+    status
+  }
+}
+
+fragment commentFields on CommentObjectType {
+  ..._commentFields
+  comment {
+    ..._commentFields
+  }
 }
 
 query User($slug: String) {
   user(slug: $slug) {
-    id
-    username
-    title
-    bio
-    avatar
-    score
-    created
-    verified
-    rank
-    threadCount
-    commentCount
-    badges {
-      name
-      description
-      tier
-    }
+    ...userFields
   }
 }
 
@@ -329,12 +340,6 @@ query UserComments($slug: String, $page: Int, $pageSize: Int) {
     count
     objects {
       ...commentFields
-      comment {
-        thread {
-          slug
-          title
-        }
-      }
     }
   }
 }
@@ -352,7 +357,7 @@ mutation Register($username: String!, $email: String!, $password: String!) {
       messages
     }
     user {
-      ...userMeFields
+      ...userFields
     }
   }
 }
@@ -429,7 +434,7 @@ mutation UpdateProfile($username: String!, $title: String, $bio: String, $avatar
   updateProfile(input: { username: $username, title: $title, bio: $bio, avatar: $avatar }) {
     successMessage
     user {
-      ...userMeFields
+      ...userFields
     }
     errors {
       field
@@ -462,7 +467,7 @@ mutation UpdateAccountSettings(
   ) {
     successMessage
     user {
-      ...userMeFields
+      ...userFields
     }
     errors {
       field
@@ -520,9 +525,7 @@ mutation UpdateSelectedBadge($id: ID) {
 
 query Badges {
   badges {
-    name
-    description
-    tier
+    ...badgeFields
   }
 }
 
