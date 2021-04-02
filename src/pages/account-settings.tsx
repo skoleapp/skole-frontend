@@ -25,6 +25,7 @@ import * as Yup from 'yup';
 
 interface UpdateAccountSettingsFormValues {
   email: string;
+  backupEmail: string;
   commentReplyEmailPermission: boolean;
   threadCommentEmailPermission: boolean;
   newBadgeEmailPermission: boolean;
@@ -56,6 +57,7 @@ const AccountSettingsPage: NextPage = () => {
     setUserMe,
     verified,
     email,
+    backupEmail,
     commentReplyEmailPermission,
     threadCommentEmailPermission,
     newBadgeEmailPermission,
@@ -103,6 +105,7 @@ const AccountSettingsPage: NextPage = () => {
     () => ({
       ...generalFormValues,
       email,
+      backupEmail,
       commentReplyEmailPermission,
       threadCommentEmailPermission,
       newBadgeEmailPermission,
@@ -112,6 +115,7 @@ const AccountSettingsPage: NextPage = () => {
     }),
     [
       email,
+      backupEmail,
       commentReplyEmailPermission,
       threadCommentEmailPermission,
       newBadgeEmailPermission,
@@ -124,10 +128,23 @@ const AccountSettingsPage: NextPage = () => {
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email(t('validation:invalidEmail')).required(t('validation:required')),
+    backupEmail: Yup.string().email(t('validation:invalidEmail')),
   });
 
   const renderEmailField = useMemo(
     () => <Field name="email" component={TextFormField} label={t('forms:email')} />,
+    [t],
+  );
+
+  const renderBackupEmailField = useMemo(
+    () => (
+      <Field
+        name="backupEmail"
+        component={TextFormField}
+        label={t('account-settings:backupEmail')}
+        helperText={t('account-settings:backupEmailHelperText')}
+      />
+    ),
     [t],
   );
 
@@ -239,6 +256,7 @@ const AccountSettingsPage: NextPage = () => {
     (props: FormikProps<UpdateAccountSettingsFormValues>): JSX.Element => (
       <Form>
         {renderEmailField}
+        {renderBackupEmailField}
         {renderEmailNotifications}
         {renderPushNotifications}
         {renderChangePasswordLink}
@@ -252,6 +270,7 @@ const AccountSettingsPage: NextPage = () => {
       renderChangePasswordLink,
       renderDeleteAccountLink,
       renderEmailField,
+      renderBackupEmailField,
       renderEmailNotifications,
       renderFormSubmitSection,
       renderMyDataLink,
