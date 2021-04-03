@@ -114,7 +114,7 @@ const SearchPage: NextPage = () => {
   const { verified } = useAuthContext();
   const { data, loading, error } = useThreadsQuery({ variables, context });
   const threads = R.pathOr([], ['threads', 'objects'], data);
-  const count = R.path(['threads', 'count'], data);
+  const count = R.pathOr(0, ['threads', 'count'], data);
   const searchTerm = R.prop('searchTerm', query);
   const [searchInputValue, setSearchInputValue] = useState('');
   const { handleOpenThreadForm } = useThreadFormContext();

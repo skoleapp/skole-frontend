@@ -227,11 +227,11 @@ const ProfilePage: NextPage = () => {
   const avatar = R.prop('avatar', user);
   const title = R.prop('title', user);
   const bio = R.prop('bio', user);
-  const score = R.prop('score', user);
+  const score = R.propOr(0, 'score', user);
   const isOwnProfile = !!user?.id && userMe?.id === user.id;
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
-  const threadCount = R.prop('threadCount', user);
-  const commentCount = R.prop('commentCount', user);
+  const threadCount = R.propOr(0, 'threadCount', user);
+  const commentCount = R.propOr(0, 'commentCount', user);
   const threads = R.pathOr([], ['threads', 'objects'], threadsData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
   const noThreads = isOwnProfile ? t('profile:ownProfileNoThreads') : t('profile:noThreads');

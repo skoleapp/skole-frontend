@@ -196,8 +196,8 @@ const ThreadPage: NextPage = () => {
   const text = R.prop('text', thread);
   const image = R.prop('image', thread);
   const imageThumbnail = R.prop('imageThumbnail', thread);
-  const initialScore = R.prop('score', thread);
-  const initialStars = R.prop('starCount', thread);
+  const initialScore = R.propOr(0, 'score', thread);
+  const initialStars = R.propOr(0, 'starCount', thread);
   const commentCount = R.propOr(0, 'commentCount', thread);
   const initialVote = R.prop('vote', thread);
   const initialStarred = R.prop('starred', thread);
@@ -209,7 +209,7 @@ const ThreadPage: NextPage = () => {
   const [targetThread, setTargetThread] = useState<ThreadObjectType | null>(null);
   const { dynamicPrimaryColor } = useDarkModeContext();
   const { handleOpenShareDialog } = useShareContext();
-  const [stars, setStars] = useState('0');
+  const [stars, setStars] = useState(0);
   const [starred, setStarred] = useState(false);
   const starButtonText = starred ? t('thread:unstar') : t('thread:star');
   const creationTime = useDayjs(created).startOf('day').fromNow();
@@ -290,7 +290,7 @@ const ThreadPage: NextPage = () => {
       toggleUnexpectedErrorNotification();
     } else if (star) {
       setStarred(!!star.starred);
-      setStars(String(Number(stars) + (star.starred ? 1 : -1)));
+      setStars(stars + (star.starred ? 1 : -1));
     }
   };
 
