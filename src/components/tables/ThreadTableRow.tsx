@@ -4,25 +4,46 @@ import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import { ThreadObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
+import Image from 'next/image';
 import React, { useMemo } from 'react';
 import { BORDER } from 'styles';
-import { ColSpan } from 'types';
-import { urls } from 'utils';
+import { mediaLoader, truncate, urls } from 'utils';
 
-import { Link, TextLink } from '../shared';
+import { Link, MarkdownContent, TextLink } from '../shared';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
   root: {
     borderBottom: BORDER,
-    paddingLeft: '0.3rem',
-    paddingRight: '0.3rem',
+    minHeight: '6rem',
+    padding: spacing(1),
   },
   tableCell: {
     padding: spacing(1),
     display: 'flex',
+  },
+  threadInfoContainer: {
+    overflow: 'hidden',
+  },
+  imagePreview: {
+    border: `0.1rem solid ${palette.primary.main} !important`,
+    borderRadius: '0.5rem',
+  },
+  imageThumbnailContainer: {
+    width: 'auto',
+  },
+  imageThumbnailTableCell: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    [breakpoints.up('md')]: {
+      alignItems: 'center',
+    },
+  },
+  creatorInfoTableCell: {
+    flexGrow: 'unset',
   },
 }));
 
@@ -34,10 +55,8 @@ export const ThreadTableRow: React.FC<Props> = ({
   thread: {
     slug,
     title,
-    // TODO: Add the thread text and image thumbnail to the card.
-    // text,
-    // image,
-    // imageThumbnail,
+    text,
+    imageThumbnail,
     user,
     score,
     starCount,
@@ -51,15 +70,47 @@ export const ThreadTableRow: React.FC<Props> = ({
   const scoreLabel = t('common:score').toLowerCase();
   const commentsLabel = t('common:comments').toLowerCase();
   const starsLabel = t('common:stars').toLowerCase();
+  const textPreview = (!!text && truncate(text, 200)) || '';
   const created = useDayjs(_created).startOf('day').fromNow();
 
   const renderTitle = useMemo(
     () => (
       <TableCell className={classes.tableCell}>
-        <Typography variant="subtitle1">{title}</Typography>
+        <Typography className="truncate-text" variant="subtitle1">
+          {title}
+        </Typography>
       </TableCell>
     ),
     [classes.tableCell, title],
+  );
+
+  const renderImageThumbnail = useMemo(
+    () =>
+      !!imageThumbnail && (
+        <TableCell className={clsx(classes.tableCell, classes.imageThumbnailTableCell)}>
+          <Image
+            className={classes.imagePreview}
+            loader={mediaLoader}
+            src={imageThumbnail}
+            layout="intrinsic"
+            width={75}
+            height={75}
+          />
+        </TableCell>
+      ),
+    [classes.imagePreview, classes.tableCell, classes.imageThumbnailTableCell, imageThumbnail],
+  );
+
+  const renderTextPreview = useMemo(
+    () =>
+      !!textPreview && (
+        <TableCell className={classes.tableCell}>
+          <Typography className="truncate-text" variant="body2">
+            <MarkdownContent dense>{textPreview}</MarkdownContent>
+          </Typography>
+        </TableCell>
+      ),
+    [classes.tableCell, textPreview],
   );
 
   const renderUserLink = useMemo(
@@ -69,20 +120,13 @@ export const ThreadTableRow: React.FC<Props> = ({
 
   const renderCreatorInfo = useMemo(
     () => (
-      <Typography variant="body2" color="textSecondary">
-        {t('common:createdBy')} {renderUserLink || t('common:communityUser')} {created}
-      </Typography>
+      <TableCell className={clsx(classes.tableCell, classes.creatorInfoTableCell)}>
+        <Typography variant="body2" color="textSecondary">
+          {t('common:createdBy')} {renderUserLink || t('common:communityUser')} {created}
+        </Typography>
+      </TableCell>
     ),
-    [created, renderUserLink, t],
-  );
-
-  const renderThreadInfo = useMemo(
-    () => (
-      <Grid item xs={12} container direction="column">
-        <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
-      </Grid>
-    ),
-    [classes.tableCell, renderCreatorInfo],
+    [classes.tableCell, created, renderUserLink, t, classes.creatorInfoTableCell],
   );
 
   const renderMobileThreadStats = useMemo(
@@ -111,30 +155,30 @@ export const ThreadTableRow: React.FC<Props> = ({
       <TableCell className={classes.tableCell}>
         <Grid container alignItems="center">
           <Grid item xs={4} container>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="subtitle1">{score}</Typography>
             </Grid>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="body2" color="textSecondary">
                 {scoreLabel}
               </Typography>
             </Grid>
           </Grid>
           <Grid item xs={4} container>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="subtitle1">{commentCount}</Typography>
             </Grid>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="body2" color="textSecondary">
                 {commentsLabel}
               </Typography>
             </Grid>
           </Grid>
           <Grid item xs={4} container>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="subtitle1">{starCount}</Typography>
             </Grid>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="body2" color="textSecondary">
                 {starsLabel}
               </Typography>
@@ -146,31 +190,29 @@ export const ThreadTableRow: React.FC<Props> = ({
     [classes.tableCell, commentCount, commentsLabel, score, scoreLabel, starCount, starsLabel],
   );
 
-  const statsColSpan: ColSpan = {
-    xs: 12,
-    md: 4,
-    lg: 3,
-  };
-
-  const mainColSpan: ColSpan = {
-    xs: 12,
-    md: 8,
-    lg: 9,
-  };
-
   return (
     <Link href={urls.thread(slug || '')} fullWidth>
-      <CardActionArea className={classes.root}>
-        <TableRow>
+      <CardActionArea>
+        <TableRow className={classes.root}>
           <Grid container>
-            <Grid item xs={12} container>
-              <Grid item {...mainColSpan} container>
+            <Grid item xs={12} md={8} lg={9} container wrap="nowrap">
+              <Grid
+                className={classes.threadInfoContainer}
+                item
+                container
+                direction="column"
+                wrap="nowrap"
+              >
                 {renderTitle}
-                {renderThreadInfo}
+                {renderTextPreview}
+                {renderCreatorInfo}
               </Grid>
-              <Grid item {...statsColSpan} container>
-                {renderMobileThreadStats || renderDesktopThreadStats}
+              <Grid className={classes.imageThumbnailContainer} item container>
+                {renderImageThumbnail}
               </Grid>
+            </Grid>
+            <Grid item xs={12} md={4} lg={3} container>
+              {renderMobileThreadStats || renderDesktopThreadStats}
             </Grid>
           </Grid>
         </TableRow>

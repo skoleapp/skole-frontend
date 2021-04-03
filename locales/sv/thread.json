@@ -1,4 +1,6 @@
 {
+  "star": "Stjärnmärka",
+  "unstar": "Avstjärna",
   "noComments": "Den här tråden har inga kommentarer. Lägg till en kommentar nedan!",
   "comments": "{{ commentCount }} kommentarer",
   "sortedBy": "sorterade efter",
@@ -10,5 +12,9 @@
   "confirmDeleteComment": "Är du säker på att du vill ta bort den här kommentaren?",
   "shareCommentTitle": "{{ creatorUsername }} på Skole",
   "shareComment": "Dela kommentar",
-  "postingComment": "Skickar kommentar..."
+  "postingComment": "Skickar kommentar...",
+  "upvote": "Upprösta",
+  "upvoted": "Uppröstat",
+  "downvote": "Nedrösta",
+  "downvoted": "Nedröstat"
 }

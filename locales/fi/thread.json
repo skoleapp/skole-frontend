@@ -1,4 +1,6 @@
 {
+  "star": "Merkitse tähdellä",
+  "unstar": "Poisa tähti",
   "noComments": "Tällä langalla ei ole kommentteja.",
   "comments": "{{ commentCount }} kommenttia",
   "sortedBy": "järjestyksessä",
@@ -10,5 +12,9 @@
   "confirmDeleteComment": "Haluatko varmasti poistaa tämän kommentin?",
   "shareCommentTitle": "{{ creatorUsername }} Skolessa",
   "shareComment": "Jaa kommentti",
-  "postingComment": "Lähetetään kommenttia..."
+  "postingComment": "Lähetetään kommenttia...",
+  "upvote": "Äänestä ylös",
+  "upvoted": "Äänestetty ylös",
+  "downvote": "Äänestä alas",
+  "downvoted": "Äänestetty alas"
 }
