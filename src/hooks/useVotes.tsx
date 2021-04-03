@@ -12,12 +12,12 @@ interface VoteVariables {
 
 interface UseVotesParams {
   initialVote: VoteObjectType | null;
-  initialScore: string;
+  initialScore: number;
   variables: VoteVariables;
 }
 
 interface UseVotes {
-  score: string;
+  score: number;
   upvoteButtonProps: Partial<IconButtonProps>;
   downvoteButtonProps: Partial<IconButtonProps>;
   currentVote: VoteObjectType | null;
@@ -25,7 +25,7 @@ interface UseVotes {
 
 export const useVotes = ({ initialVote, initialScore, variables }: UseVotesParams): UseVotes => {
   const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
-  const [score, setScore] = useState(initialScore);
+  const [score, setScore] = useState(0);
   const { toggleUnexpectedErrorNotification: onError } = useNotificationsContext();
   const { dynamicPrimaryColor } = useDarkModeContext();
   const context = useLanguageHeaderContext();
@@ -41,9 +41,9 @@ export const useVotes = ({ initialVote, initialScore, variables }: UseVotesParam
   const onCompleted = ({ vote }: VoteMutation): void => {
     if (vote?.errors?.length) {
       onError();
-    } else if (vote?.targetScore !== undefined) {
+    } else if (typeof vote?.targetScore === 'number') {
       setCurrentVote(vote.vote || null);
-      setScore(String(vote.targetScore));
+      setScore(vote.targetScore);
     }
   };
 

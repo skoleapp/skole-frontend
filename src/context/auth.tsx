@@ -38,7 +38,7 @@ interface UseAuthContext extends AuthContextType {
 export const useAuthContext = (): UseAuthContext => {
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
   const verified = R.prop('verified', userMe);
-  const unreadActivityCount = R.prop('unreadActivityCount', userMe);
+  const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
   const slug = R.prop('slug', userMe);
   const fcmToken = R.prop('fcmToken', userMe);
   const username = R.prop('username', userMe);
