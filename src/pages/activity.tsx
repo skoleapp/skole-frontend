@@ -40,7 +40,7 @@ const ActivityPage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
   const [activities, setActivities] = useState<ActivityObjectType[]>([]);
-  const activityCount = R.path(['activities', 'count'], data);
+  const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
   const { handleCloseActionsDialog } = useActionsContext();
 
