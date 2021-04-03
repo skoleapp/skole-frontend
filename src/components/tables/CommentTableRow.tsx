@@ -1,32 +1,31 @@
-import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
+import clsx from 'clsx';
 import { CommentObjectType } from 'generated';
 import { useDayjs, useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { useMemo } from 'react';
 import { BORDER } from 'styles';
-import { ColSpan } from 'types';
 import { mediaLoader, truncate, urls } from 'utils';
 
 import { Link, MarkdownContent, TextLink } from '../shared';
 
-const useStyles = makeStyles(({ spacing, palette }) => ({
+const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
   root: {
     borderBottom: BORDER,
-    paddingLeft: '0.3rem',
-    paddingRight: '0.3rem',
+    minHeight: '6rem',
+    padding: spacing(1),
   },
   tableCell: {
     padding: spacing(1),
     display: 'flex',
   },
-  commentPreviewTableCell: {
+  textPreviewTableCell: {
     paddingBottom: 0,
     overflow: 'hidden',
     '& *': {
@@ -35,13 +34,25 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
       textOverflow: 'ellipsis',
     },
   },
-  imagePreviewContainer: {
-    marginRight: spacing(3),
-    display: 'flex',
-  },
   imagePreview: {
     border: `0.1rem solid ${palette.primary.main} !important`,
     borderRadius: '0.5rem',
+  },
+  imageThumbnailContainer: {
+    width: 'auto',
+  },
+  imageThumbnailTableCell: {
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    [breakpoints.up('md')]: {
+      alignItems: 'center',
+    },
+  },
+  creatorInfoTableCell: {
+    flexGrow: 'unset',
+  },
+  threadLink: {
+    whiteSpace: 'nowrap',
   },
 }));
 
@@ -65,12 +76,12 @@ export const CommentTableRow: React.FC<Props> = ({
   key,
 }) => {
   const { t } = useTranslation();
-  const { smDown } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueries();
   const classes = useStyles();
   const created = useDayjs(_created).startOf('day').fromNow();
   const scoreLabel = t('common:score').toLowerCase();
   const repliesLabel = t('common:replies').toLowerCase();
-  const commentPreview = !!text && truncate(text, 50);
+  const textPreview = !!text && truncate(text, 50);
   const thread = _thread || comment?.thread;
   const pathname = urls.thread(thread?.slug || '');
 
@@ -84,41 +95,33 @@ export const CommentTableRow: React.FC<Props> = ({
     [id, pathname],
   );
 
-  const renderCommentImageThumbnail = useMemo(
+  const renderImageThumbnail = useMemo(
     () =>
       !!imageThumbnail && (
-        <Box className={classes.imagePreviewContainer}>
+        <TableCell className={clsx(classes.tableCell, classes.imageThumbnailTableCell)}>
           <Image
             className={classes.imagePreview}
             loader={mediaLoader}
             src={imageThumbnail}
-            layout="fixed"
-            width={40}
-            height={40}
+            layout="intrinsic"
+            width={75}
+            height={75}
           />
-        </Box>
+        </TableCell>
       ),
-    [classes.imagePreview, classes.imagePreviewContainer, imageThumbnail],
+    [classes.imagePreview, classes.tableCell, classes.imageThumbnailTableCell, imageThumbnail],
   );
 
-  const renderMarkdownContent = useMemo(
+  const renderTextPreview = useMemo(
     () =>
-      !!commentPreview && (
-        <Typography variant="subtitle1">
-          <MarkdownContent dense>{commentPreview}</MarkdownContent>
-        </Typography>
+      !!textPreview && (
+        <TableCell className={classes.tableCell}>
+          <Typography variant="body2">
+            <MarkdownContent dense>{textPreview}</MarkdownContent>
+          </Typography>
+        </TableCell>
       ),
-    [commentPreview],
-  );
-
-  const renderCommentPreview = useMemo(
-    () => (
-      <TableCell className={classes.tableCell}>
-        {renderCommentImageThumbnail}
-        {renderMarkdownContent}
-      </TableCell>
-    ),
-    [classes.tableCell, renderCommentImageThumbnail, renderMarkdownContent],
+    [classes.tableCell, textPreview],
   );
 
   const renderUserLink = useMemo(
@@ -126,28 +129,33 @@ export const CommentTableRow: React.FC<Props> = ({
     [user?.slug, user?.username],
   );
 
-  const renderThreadLink = useMemo(() => <TextLink href={href}>{`#${thread?.slug}`}</TextLink>, [
-    href,
-    thread?.slug,
+  const renderThreadLink = useMemo(
+    () => <TextLink className={classes.threadLink} href={href}>{`@${thread?.slug}`}</TextLink>,
+    [href, thread?.slug, classes.threadLink],
+  );
+
+  const renderDesktopThreadLink = useMemo(() => mdUp && <> {renderThreadLink}</>, [
+    mdUp,
+    renderThreadLink,
   ]);
 
   const renderCreatorInfo = useMemo(
     () => (
-      <Typography variant="body2" color="textSecondary">
-        {t('common:postedBy')} {renderUserLink || t('common:communityUser')} {created} @{' '}
-        {renderThreadLink}
-      </Typography>
+      <TableCell className={clsx(classes.tableCell, classes.creatorInfoTableCell)}>
+        <Typography variant="body2" color="textSecondary">
+          {t('common:postedBy')} {renderUserLink || t('common:communityUser')} {created}
+          {renderDesktopThreadLink}
+        </Typography>
+      </TableCell>
     ),
-    [created, renderThreadLink, renderUserLink, t],
-  );
-
-  const renderCommentInfo = useMemo(
-    () => (
-      <Grid item xs={12} container direction="column">
-        <TableCell className={classes.tableCell}>{renderCreatorInfo}</TableCell>
-      </Grid>
-    ),
-    [classes.tableCell, renderCreatorInfo],
+    [
+      classes.tableCell,
+      classes.creatorInfoTableCell,
+      created,
+      renderUserLink,
+      t,
+      renderDesktopThreadLink,
+    ],
   );
 
   const renderMobileCommentStats = useMemo(
@@ -155,39 +163,32 @@ export const CommentTableRow: React.FC<Props> = ({
       smDown && (
         <TableCell className={classes.tableCell}>
           <Typography variant="body2" color="textSecondary">
-            {score} {scoreLabel} | {replyCount} {repliesLabel}
+            {score} {scoreLabel} | {replyCount} {repliesLabel} | {renderThreadLink}
           </Typography>
         </TableCell>
       ),
-    [classes.tableCell, repliesLabel, replyCount, score, scoreLabel, smDown],
-  );
-
-  const desktopStatsColSpan: ColSpan = useMemo(
-    () => ({
-      md: 3,
-    }),
-    [],
+    [classes.tableCell, repliesLabel, replyCount, score, scoreLabel, smDown, renderThreadLink],
   );
 
   const renderDesktopCommentStats = useMemo(
     () => (
       <TableCell className={classes.tableCell}>
         <Grid container alignItems="center" justify="flex-end">
-          <Grid item {...desktopStatsColSpan} container>
-            <Grid item md={12} container justify="center">
+          <Grid item xs={6} container>
+            <Grid item xs={12} container justify="center">
               <Typography variant="subtitle1">{score}</Typography>
             </Grid>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="body2" color="textSecondary">
                 {scoreLabel}
               </Typography>
             </Grid>
           </Grid>
-          <Grid item {...desktopStatsColSpan} container>
-            <Grid item md={12} container justify="center">
+          <Grid item xs={6} container>
+            <Grid item xs={12} container justify="center">
               <Typography variant="subtitle1">{replyCount}</Typography>
             </Grid>
-            <Grid item md={12} container justify="center">
+            <Grid item xs={12} container justify="center">
               <Typography variant="body2" color="textSecondary">
                 {repliesLabel}
               </Typography>
@@ -196,34 +197,25 @@ export const CommentTableRow: React.FC<Props> = ({
         </Grid>
       </TableCell>
     ),
-    [classes.tableCell, desktopStatsColSpan, repliesLabel, replyCount, score, scoreLabel],
+    [classes.tableCell, repliesLabel, replyCount, score, scoreLabel],
   );
-
-  const statsColSpan: ColSpan = {
-    xs: 12,
-    md: 4,
-    lg: 3,
-  };
-
-  const mainColSpan: ColSpan = {
-    xs: 12,
-    md: 8,
-    lg: 9,
-  };
 
   return (
     <Link href={href} key={key} fullWidth>
-      <CardActionArea className={classes.root}>
-        <TableRow>
+      <CardActionArea>
+        <TableRow className={classes.root}>
           <Grid container>
-            <Grid item xs={12} container>
-              <Grid item {...mainColSpan} container>
-                {renderCommentPreview}
-                {renderCommentInfo}
+            <Grid item xs={12} md={10} container wrap="nowrap">
+              <Grid item container direction="column">
+                {renderTextPreview}
+                {renderCreatorInfo}
               </Grid>
-              <Grid item {...statsColSpan} container>
-                {renderMobileCommentStats || renderDesktopCommentStats}
+              <Grid className={classes.imageThumbnailContainer} item container>
+                {renderImageThumbnail}
               </Grid>
+            </Grid>
+            <Grid item xs={12} md={2} container>
+              {renderMobileCommentStats || renderDesktopCommentStats}
             </Grid>
           </Grid>
         </TableRow>
