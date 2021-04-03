@@ -17,6 +17,11 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     '& ul': {
       paddingLeft: spacing(6),
     },
+    '& *': {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
   },
   dense: {
     '& *': {
