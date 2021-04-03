@@ -91,6 +91,9 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     flexGrow: 1,
     marginLeft: spacing(2),
   },
+  headerContent: {
+    overflow: 'hidden',
+  },
   desktopActionButtonWithText: {
     textTransform: 'none',
     padding: `${spacing(1.5)} ${spacing(3)}`,
@@ -767,12 +770,12 @@ const ThreadPage: NextPage = () => {
     () =>
       mdUp && (
         <CardHeader
-          className={classes.header}
+          classes={{ root: classes.header, content: classes.headerContent }}
           title={renderHeaderTitle}
           action={renderHeaderAction}
         />
       ),
-    [mdUp, renderHeaderAction, renderHeaderTitle, classes.header],
+    [mdUp, renderHeaderAction, renderHeaderTitle, classes.header, classes.headerContent],
   );
 
   const layoutProps = {
