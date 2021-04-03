@@ -816,6 +816,10 @@ const ThreadPage: NextPage = () => {
     return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
+  if (!thread) {
+    return <ErrorTemplate variant="not-found" />;
+  }
+
   return (
     <MainTemplate {...layoutProps}>
       <Paper className={clsx(classes.container, classes.containerPadding)}>
