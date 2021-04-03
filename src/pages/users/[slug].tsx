@@ -953,6 +953,10 @@ const ProfilePage: NextPage = () => {
     return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
+  if (!user) {
+    return <ErrorTemplate variant="not-found" />;
+  }
+
   return (
     <MainTemplate {...layoutProps}>
       {renderPublicUserInfo}
