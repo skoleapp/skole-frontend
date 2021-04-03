@@ -27,6 +27,7 @@ import {
   LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
+  MarkdownContent,
   NotFoundBox,
   OrderingButton,
   PaginatedTable,
@@ -104,18 +105,19 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
   threadInfoCardContent: {
     padding: spacing(2),
-    paddingBottom: 0,
+    paddingBottom: '0 !important',
     [breakpoints.up('md')]: {
       padding: `${spacing(2)} ${spacing(4)}`,
-      paddingBottom: spacing(2),
+      paddingBottom: `${spacing(2)} !important`,
+    },
+  },
+  imageThumbnailContainer: {
+    [breakpoints.up('md')]: {
+      alignItems: 'center',
     },
   },
   creatorInfo: {
     marginTop: spacing(4),
-  },
-  imageThumbnailContainer: {
-    marginRight: spacing(3),
-    display: 'flex',
   },
   imageThumbnail: {
     border: `0.1rem solid ${
@@ -660,51 +662,39 @@ const ThreadPage: NextPage = () => {
   const renderMobileTitle = useMemo(
     () =>
       smDown && (
-        <Typography variant="subtitle1" gutterBottom>
+        <Typography className="truncate-text" variant="subtitle1" gutterBottom>
           {title}
         </Typography>
       ),
     [title, smDown],
   );
 
-  const renderThreadImageThumbnail = useMemo(
+  const renderImageThumbnail = useMemo(
     () =>
       !!imageThumbnail && (
         <Tooltip title={t('thread-tooltips:threadImage')}>
-          <Box className={classes.imageThumbnailContainer}>
-            <Image
-              className={classes.imageThumbnail}
-              onClick={(): void => setThreadImageViewerValue(image)}
-              loader={mediaLoader}
-              src={imageThumbnail}
-              layout="fixed"
-              width={60}
-              height={60}
-              alt={t('alt-texts:threadImage')}
-            />
-          </Box>
+          <Image
+            className={classes.imageThumbnail}
+            onClick={(): void => setThreadImageViewerValue(image)}
+            loader={mediaLoader}
+            src={imageThumbnail}
+            layout="intrinsic"
+            width={100}
+            height={100}
+            alt={t('alt-texts:threadImage')}
+          />
         </Tooltip>
       ),
-    [
-      classes.imageThumbnail,
-      classes.imageThumbnailContainer,
-      imageThumbnail,
-      t,
-      image,
-      setThreadImageViewerValue,
-    ],
+    [classes.imageThumbnail, imageThumbnail, t, image, setThreadImageViewerValue],
   );
 
-  const renderThreadText = useMemo(() => <Typography variant="body2">{text}</Typography>, [text]);
-
-  const renderMedia = useMemo(
+  const renderText = useMemo(
     () => (
-      <Grid container>
-        {renderThreadImageThumbnail}
-        {renderThreadText}
-      </Grid>
+      <Typography className="truncate-text" variant="body2">
+        <MarkdownContent>{text}</MarkdownContent>
+      </Typography>
     ),
-    [renderThreadImageThumbnail, renderThreadText],
+    [text],
   );
 
   const renderCreatorLink = useMemo(
@@ -729,13 +719,29 @@ const ThreadPage: NextPage = () => {
 
   const renderThreadInfo = useMemo(
     () => (
-      <CardContent className={classes.threadInfoCardContent}>
-        {renderMobileTitle}
-        {renderMedia}
-        {renderCreated}
-      </CardContent>
+      <Grid container wrap="nowrap">
+        <Grid item xs={9} container direction="column" wrap="nowrap">
+          <CardContent className={classes.threadInfoCardContent}>
+            {renderMobileTitle}
+            {renderText}
+            {renderCreated}
+          </CardContent>
+        </Grid>
+        <Grid className={classes.imageThumbnailContainer} item xs={3} container justify="flex-end">
+          <CardContent className={classes.threadInfoCardContent}>
+            {renderImageThumbnail}
+          </CardContent>
+        </Grid>
+      </Grid>
     ),
-    [classes.threadInfoCardContent, renderMobileTitle, renderMedia, renderCreated],
+    [
+      classes.threadInfoCardContent,
+      classes.imageThumbnailContainer,
+      renderMobileTitle,
+      renderText,
+      renderCreated,
+      renderImageThumbnail,
+    ],
   );
 
   const renderHeaderAction = useMemo(
