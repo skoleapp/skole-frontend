@@ -29,9 +29,11 @@ import { LoadingBox, TextLink } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
 import { CommentTextField } from './CommentTextField';
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   desktopContainer: {
-    padding: spacing(2),
+    [breakpoints.up('md')]: {
+      padding: spacing(2),
+    },
   },
   desktopTextField: {
     margin: `${spacing(2)} 0`,
@@ -85,7 +87,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const classes = useStyles();
   const { t } = useTranslation();
-  const { smDown, smUp } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueries();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
@@ -222,12 +224,12 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const renderCombinationHelperText = useMemo(
     () =>
-      smUp && (
+      mdUp && (
         <FormHelperText>
           {t('forms:newLineHelperText', { combination: 'Shift + Enter' })}
         </FormHelperText>
       ),
-    [smUp, t],
+    [mdUp, t],
   );
 
   const renderCommentImageButton = useMemo(
@@ -423,14 +425,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const renderDesktopInputArea = useCallback(
     (props: FormikProps<CreateCommentFormValues>): JSX.Element | false =>
-      smUp && (
+      mdUp && (
         <>
           {renderDesktopTopToolbar(props)}
           {renderDesktopTextField(props)}
           {renderDesktopBottomToolbar(props)}
         </>
       ),
-    [renderDesktopBottomToolbar, renderDesktopTextField, renderDesktopTopToolbar, smUp],
+    [renderDesktopBottomToolbar, renderDesktopTextField, renderDesktopTopToolbar, mdUp],
   );
 
   const renderDialogHeader = useMemo(

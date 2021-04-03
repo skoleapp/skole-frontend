@@ -10,29 +10,28 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import Typography, { TypographyProps } from '@material-ui/core/Typography';
 import AddOutlined from '@material-ui/icons/AddOutlined';
+import KeyboardArrowDownOutlined from '@material-ui/icons/KeyboardArrowDownOutlined';
+import KeyboardArrowUpOutlined from '@material-ui/icons/KeyboardArrowUpOutlined';
+import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
-import ThumbDownOutlined from '@material-ui/icons/ThumbDownOutlined';
-import ThumbsUpDownOutlined from '@material-ui/icons/ThumbsUpDownOutlined';
-import ThumbUpOutlined from '@material-ui/icons/ThumbUpOutlined';
 import clsx from 'clsx';
 import {
   ActionRequiredTemplate,
   ActionsButton,
   CommentCard,
   CreateCommentForm,
-  Emoji,
   ErrorTemplate,
-  InfoButton,
   LoadingBox,
   LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
+  MarkdownContent,
   NotFoundBox,
   OrderingButton,
   PaginatedTable,
-  ShareButton,
+  TextLink,
 } from 'components';
 import {
   useAuthContext,
@@ -40,6 +39,7 @@ import {
   useDarkModeContext,
   useNotificationsContext,
   useOrderingContext,
+  useShareContext,
   useThreadContext,
 } from 'context';
 import {
@@ -52,8 +52,8 @@ import {
   useThreadCommentsLazyQuery,
   useThreadLazyQuery,
 } from 'generated';
-import { withActions, withInfo, withThread, withUserMe } from 'hocs';
-import { useLanguageHeaderContext, useMediaQueries, useVotes } from 'hooks';
+import { withActions, withThread, withUserMe } from 'hocs';
+import { useDayjs, useLanguageHeaderContext, useMediaQueries, useVotes } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
@@ -83,18 +83,44 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   backButton: {
     marginRight: spacing(2),
   },
+  header: {
+    paddingBottom: 0,
+  },
   headerTitle: {
     color: palette.text.secondary,
     flexGrow: 1,
     marginLeft: spacing(2),
   },
-  score: {
-    marginLeft: spacing(2),
+  headerContent: {
+    overflow: 'hidden',
+  },
+  desktopActionButtonWithText: {
+    textTransform: 'none',
+    padding: `${spacing(1.5)} ${spacing(3)}`,
+  },
+  headerActionItem: {
+    [breakpoints.up('md')]: {
+      marginLeft: spacing(2),
+    },
+  },
+  starButtonLabel: {
     marginRight: spacing(2),
   },
+  threadInfoCardContent: {
+    padding: spacing(2),
+    paddingBottom: '0 !important',
+    [breakpoints.up('md')]: {
+      padding: `${spacing(2)} ${spacing(4)}`,
+      paddingBottom: `${spacing(2)} !important`,
+    },
+  },
   imageThumbnailContainer: {
-    marginRight: spacing(3),
-    display: 'flex',
+    [breakpoints.up('md')]: {
+      alignItems: 'center',
+    },
+  },
+  creatorInfo: {
+    marginTop: spacing(4),
   },
   imageThumbnail: {
     border: `0.1rem solid ${
@@ -105,6 +131,11 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
   commentsHeader: {
     padding: spacing(2),
+    paddingTop: 0,
+    [breakpoints.up('md')]: {
+      padding: `${spacing(2)} ${spacing(4)}`,
+      paddingTop: spacing(2),
+    },
   },
   replyButtonContainer: {
     padding: spacing(2),
@@ -117,6 +148,10 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     opacity: 0.7,
+  },
+  bottomNavigation: {
+    paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(1)})`,
+    paddingRight: `calc(env(safe-area-inset-right) + ${spacing(1)})`,
   },
 }));
 
@@ -132,6 +167,7 @@ const ThreadPage: NextPage = () => {
   const threadVariables = R.pick(['slug'], query);
   const commentQueryVariables = R.pick(['slug', 'page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
+  const [threadQueryCount, setThreadQueryCount] = useState(0);
 
   const commentVariables = {
     ordering,
@@ -140,13 +176,12 @@ const ThreadPage: NextPage = () => {
 
   const [
     threadQuery,
-    {
-      data: threadData,
-      loading: threadLoading,
-      error: threadError,
-      previousData: previousThreadQueryData,
-    },
-  ] = useThreadLazyQuery({ variables: threadVariables, context });
+    { data: threadData, loading: threadLoading, error: threadError },
+  ] = useThreadLazyQuery({
+    variables: threadVariables,
+    context,
+    onCompleted: () => setThreadQueryCount(threadQueryCount + 1),
+  });
 
   const [
     commentsQuery,
@@ -170,13 +205,14 @@ const ThreadPage: NextPage = () => {
   const isOwn = !!creator && userMe?.id === creator.id;
   const created = R.prop('created', thread);
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', thread);
-  const emoji = '💬';
   const [targetComment, setTargetComment] = useState<CommentObjectType | null>(null);
   const [targetThread, setTargetThread] = useState<ThreadObjectType | null>(null);
   const { dynamicPrimaryColor } = useDarkModeContext();
+  const { handleOpenShareDialog } = useShareContext();
   const [stars, setStars] = useState('0');
   const [starred, setStarred] = useState(false);
-  const tooltip = starred ? t('thread-tooltips:unstarThread') : t('thread-tooltips:starThread'); // Show a dynamic tooltip based on the starred status.
+  const starButtonText = starred ? t('thread:unstar') : t('thread:star');
+  const creationTime = useDayjs(created).startOf('day').fromNow();
 
   const {
     createCommentDialogOpen,
@@ -184,21 +220,15 @@ const ThreadPage: NextPage = () => {
     setThreadImageViewerValue,
   } = useThreadContext();
 
-  const {
-    score,
-    upvoteButtonProps,
-    downvoteButtonProps,
-    upvoteTooltip,
-    downvoteTooltip,
-  } = useVotes({
+  const { score, upvoteButtonProps, downvoteButtonProps, currentVote } = useVotes({
     initialVote,
     initialScore,
     variables: { thread: id },
-    upvoteTooltip: t('thread-tooltips:upvoteThread'),
-    removeUpvoteTooltip: t('thread-tooltips:removeThreadUpvote'),
-    downvoteTooltip: t('thread-tooltips:downvoteThread'),
-    removeDownvoteTooltip: t('thread-tooltips:removeThreadDownvote'),
   });
+
+  // Show a dynamic labels based on the vote status.
+  const upvoteLabel = currentVote?.status === 1 ? t('thread:upvoted') : t('thread:upvote');
+  const downvoteLabel = currentVote?.status === -1 ? t('thread:downvoted') : t('thread:downvote');
 
   useEffect(() => {
     setStarred(initialStarred);
@@ -274,47 +304,59 @@ const ThreadPage: NextPage = () => {
     await star({ variables: { thread: id } });
   }, [star, id]);
 
-  const infoItems = useMemo(
-    () => [
-      {
-        label: t('common:stars'),
-        value: stars,
-      },
-      {
-        label: t('common:score'),
-        value: score,
-      },
-      {
-        label: t('common:comments'),
-        value: commentCount,
-      },
-    ],
-    [commentCount, score, stars, t],
+  const starButtonTextProps: TypographyProps = useMemo(
+    () => ({
+      variant: 'body2',
+      color: starred ? 'inherit' : 'textSecondary',
+    }),
+    [starred],
   );
 
   // Only render for verified users.
-  const renderStarButton = useMemo(
+  const renderDesktopStarButton = useMemo(
     () =>
       !!verified && (
-        <Tooltip title={tooltip}>
-          <Typography component="span">
-            <Button
-              onClick={handleStar}
-              disabled={starSubmitting}
-              size="small"
-              startIcon={<StarBorderOutlined color={starred ? dynamicPrimaryColor : 'disabled'} />}
-            >
-              <Typography
-                variant="subtitle1"
-                color={starred ? dynamicPrimaryColor : 'textSecondary'}
-              >
-                {stars}
-              </Typography>
-            </Button>
+        <Button
+          className={clsx(classes.desktopActionButtonWithText, classes.headerActionItem)}
+          onClick={handleStar}
+          disabled={starSubmitting}
+          startIcon={<StarBorderOutlined color={starred ? dynamicPrimaryColor : 'disabled'} />}
+          color={starred ? dynamicPrimaryColor : 'default'}
+        >
+          <Typography className={classes.starButtonLabel} {...starButtonTextProps}>
+            {starButtonText}
           </Typography>
-        </Tooltip>
+          <Typography {...starButtonTextProps}>{stars}</Typography>
+        </Button>
       ),
-    [dynamicPrimaryColor, handleStar, starSubmitting, starred, stars, tooltip, verified],
+    [
+      handleStar,
+      starSubmitting,
+      verified,
+      starButtonText,
+      classes.desktopActionButtonWithText,
+      classes.starButtonLabel,
+      classes.headerActionItem,
+      starButtonTextProps,
+      stars,
+      starred,
+      dynamicPrimaryColor,
+    ],
+  );
+
+  // Only render for verified users.
+  const renderMobileStarButton = useMemo(
+    () => (
+      <IconButton
+        onClick={handleStar}
+        disabled={starSubmitting}
+        color={starred ? dynamicPrimaryColor : 'default'}
+        size="small"
+      >
+        <StarBorderOutlined color={starred ? dynamicPrimaryColor : 'disabled'} />
+      </IconButton>
+    ),
+    [handleStar, starSubmitting, starred, dynamicPrimaryColor],
   );
 
   const shareDialogParams = useMemo(
@@ -326,32 +368,25 @@ const ThreadPage: NextPage = () => {
     [commentCount, creatorUsername, t, title],
   );
 
+  const handleShareButtonClick = useCallback((): void => handleOpenShareDialog(shareDialogParams), [
+    shareDialogParams,
+    handleOpenShareDialog,
+  ]);
+
   const renderShareButton = useMemo(
     () => (
-      <ShareButton
-        tooltip={t('thread-tooltips:shareThread')}
-        shareDialogParams={shareDialogParams}
-      />
+      <Tooltip title={t('thread-tooltips:shareThread')}>
+        <IconButton
+          className={classes.headerActionItem}
+          onClick={handleShareButtonClick}
+          size="small"
+          color={smDown ? 'secondary' : 'default'}
+        >
+          <ShareOutlined />
+        </IconButton>
+      </Tooltip>
     ),
-    [shareDialogParams, t],
-  );
-
-  const infoDialogParams = useMemo(
-    () => ({
-      header: title,
-      emoji,
-      creator,
-      created,
-      infoItems,
-    }),
-    [created, creator, infoItems, title],
-  );
-
-  const renderInfoButton = useMemo(
-    () => (
-      <InfoButton tooltip={t('thread-tooltips:threadInfo')} infoDialogParams={infoDialogParams} />
-    ),
-    [infoDialogParams, t],
+    [t, handleShareButtonClick, classes.headerActionItem, smDown],
   );
 
   const actionsDialogParams = useMemo(
@@ -397,57 +432,100 @@ const ThreadPage: NextPage = () => {
       <ActionsButton
         tooltip={t('thread-tooltips:threadActions')}
         actionsDialogParams={actionsDialogParams}
+        className={classes.headerActionItem}
       />
     ),
-    [actionsDialogParams, t],
+    [actionsDialogParams, t, classes.headerActionItem],
   );
 
   // Only render for verified user who are not owners.
-  const renderUpvoteButton = useMemo(
+  const renderDesktopUpvoteButton = useMemo(
     () =>
       !!verified &&
       !isOwn && (
-        <Tooltip title={upvoteTooltip}>
-          <Typography component="span">
-            <IconButton {...upvoteButtonProps}>
-              <ThumbUpOutlined />
-            </IconButton>
+        <Button
+          className={classes.desktopActionButtonWithText}
+          startIcon={
+            <KeyboardArrowUpOutlined
+              color={currentVote?.status === 1 ? dynamicPrimaryColor : 'disabled'}
+            />
+          }
+          color={currentVote?.status === 1 ? dynamicPrimaryColor : 'default'}
+          {...upvoteButtonProps}
+        >
+          <Typography
+            variant="body2"
+            color={currentVote?.status === 1 ? 'inherit' : 'textSecondary'}
+          >
+            {upvoteLabel}
           </Typography>
-        </Tooltip>
+        </Button>
       ),
-    [isOwn, upvoteButtonProps, upvoteTooltip, verified],
+    [
+      isOwn,
+      upvoteButtonProps,
+      verified,
+      upvoteLabel,
+      classes.desktopActionButtonWithText,
+      currentVote,
+      dynamicPrimaryColor,
+    ],
   );
 
-  // Only render for verified user who are not owners.
-  const renderDownvoteButton = useMemo(
+  // Only render for non-owners.
+  const renderMobileUpvoteButton = useMemo(
+    () =>
+      !isOwn && (
+        <IconButton {...upvoteButtonProps}>
+          <KeyboardArrowUpOutlined />
+        </IconButton>
+      ),
+    [isOwn, upvoteButtonProps],
+  );
+
+  // Only render for non-owners.
+  const renderDesktopDownvoteButton = useMemo(
     () =>
       !!verified &&
       !isOwn && (
-        <Tooltip title={downvoteTooltip}>
-          <Typography component="span">
-            <IconButton {...downvoteButtonProps}>
-              <ThumbDownOutlined />
-            </IconButton>
+        <Button
+          className={classes.desktopActionButtonWithText}
+          startIcon={
+            <KeyboardArrowDownOutlined
+              color={currentVote?.status === -1 ? dynamicPrimaryColor : 'disabled'}
+            />
+          }
+          color={currentVote?.status === -1 ? dynamicPrimaryColor : 'default'}
+          {...downvoteButtonProps}
+        >
+          <Typography
+            variant="body2"
+            color={currentVote?.status === -1 ? 'inherit' : 'textSecondary'}
+          >
+            {downvoteLabel}
           </Typography>
-        </Tooltip>
+        </Button>
       ),
-    [downvoteButtonProps, downvoteTooltip, isOwn, verified],
+    [
+      downvoteButtonProps,
+      isOwn,
+      verified,
+      downvoteLabel,
+      classes.desktopActionButtonWithText,
+      currentVote,
+      dynamicPrimaryColor,
+    ],
   );
 
-  const renderScore = useMemo(
+  // Only render for non-owners.
+  const renderMobileDownvoteButton = useMemo(
     () =>
-      !!verified && (
-        <Typography className={classes.score} variant="subtitle1" color="textSecondary">
-          {score}
-        </Typography>
+      !isOwn && (
+        <IconButton {...downvoteButtonProps}>
+          <KeyboardArrowDownOutlined />
+        </IconButton>
       ),
-    [classes.score, score, verified],
-  );
-
-  // Only render for non-verified users and owners to make the score more clear.
-  const renderScoreIcon = useMemo(
-    () => (!verified || isOwn) && <ThumbsUpDownOutlined color="disabled" />,
-    [verified, isOwn],
+    [isOwn, downvoteButtonProps],
   );
 
   const renderInputArea = useMemo(
@@ -546,31 +624,30 @@ const ThreadPage: NextPage = () => {
     [renderCommentTable, renderCommentsNotFound, renderLoading],
   );
 
-  const renderCustomBottomNavbarContent = useMemo(
-    () => (
-      <Grid container>
-        <Grid item xs={4} container justify="flex-start" alignItems="center">
-          {renderStarButton}
-        </Grid>
-        <Grid item xs={8} container justify="flex-end" alignItems="center">
-          {renderUpvoteButton}
-          {renderScoreIcon}
-          {renderScore}
-          {renderDownvoteButton}
-        </Grid>
-      </Grid>
-    ),
-    [renderDownvoteButton, renderScore, renderScoreIcon, renderStarButton, renderUpvoteButton],
-  );
-
-  // Only render the custom bottom navbar if the user is verified since all of the actions are only available for verified users.
-  // The default bottom navbar will be automatically shown for non-verified users.
+  // Only render for verified users.
   const renderCustomBottomNavbar = useMemo(
-    () => !!verified && <BottomNavigation>{renderCustomBottomNavbarContent}</BottomNavigation>,
-    [renderCustomBottomNavbarContent, verified],
+    () =>
+      !!verified && (
+        <BottomNavigation className={classes.bottomNavigation}>
+          <Grid container>
+            <Grid item xs={4} container justify="flex-start" alignItems="center">
+              {renderMobileStarButton}
+            </Grid>
+            <Grid item xs={8} container justify="flex-end" alignItems="center">
+              {renderMobileUpvoteButton}
+              {renderMobileDownvoteButton}
+            </Grid>
+          </Grid>
+        </BottomNavigation>
+      ),
+    [
+      renderMobileDownvoteButton,
+      renderMobileStarButton,
+      renderMobileUpvoteButton,
+      verified,
+      classes.bottomNavigation,
+    ],
   );
-
-  const renderEmoji = useMemo(() => <Emoji emoji={emoji} />, []);
 
   const renderHeaderTitle = useMemo(
     () => (
@@ -579,81 +656,126 @@ const ThreadPage: NextPage = () => {
         variant="h5"
         align="left"
       >
-        {title}
-        {renderEmoji}
+        {title} ({score})
       </Typography>
     ),
-    [classes.headerTitle, renderEmoji, title],
+    [classes.headerTitle, title, score],
   );
 
-  const renderThreadImageThumbnail = useMemo(
+  const renderMobileTitle = useMemo(
+    () =>
+      smDown && (
+        <Typography className="truncate-text" variant="subtitle1" gutterBottom>
+          {title}
+        </Typography>
+      ),
+    [title, smDown],
+  );
+
+  const renderImageThumbnail = useMemo(
     () =>
       !!imageThumbnail && (
         <Tooltip title={t('thread-tooltips:threadImage')}>
-          <Box className={classes.imageThumbnailContainer}>
-            <Image
-              className={classes.imageThumbnail}
-              onClick={(): void => setThreadImageViewerValue(image)}
-              loader={mediaLoader}
-              src={imageThumbnail}
-              layout="fixed"
-              width={60}
-              height={60}
-              alt={t('alt-texts:threadImage')}
-            />
-          </Box>
+          <Image
+            className={classes.imageThumbnail}
+            onClick={(): void => setThreadImageViewerValue(image)}
+            loader={mediaLoader}
+            src={imageThumbnail}
+            layout="intrinsic"
+            width={100}
+            height={100}
+            alt={t('alt-texts:threadImage')}
+          />
         </Tooltip>
       ),
-    [
-      classes.imageThumbnail,
-      classes.imageThumbnailContainer,
-      imageThumbnail,
-      t,
-      image,
-      setThreadImageViewerValue,
-    ],
+    [classes.imageThumbnail, imageThumbnail, t, image, setThreadImageViewerValue],
   );
 
-  const renderThreadText = useMemo(() => <Typography variant="body2">{text}</Typography>, [text]);
+  const renderText = useMemo(
+    () => (
+      <Typography className="truncate-text" variant="body2">
+        <MarkdownContent>{text}</MarkdownContent>
+      </Typography>
+    ),
+    [text],
+  );
+
+  const renderCreatorLink = useMemo(
+    () => !!creator && <TextLink href={urls.user(creator.slu)}>{creator.username}</TextLink>,
+    [creator],
+  );
+
+  const renderCreator = useMemo(() => (creator ? renderCreatorLink : t('common:communityUser')), [
+    creator,
+    renderCreatorLink,
+    t,
+  ]);
+
+  const renderCreated = useMemo(
+    () => (
+      <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
+        {t('common:createdBy')} {renderCreator} {creationTime}
+      </Typography>
+    ),
+    [creationTime, renderCreator, t, classes.creatorInfo],
+  );
 
   const renderThreadInfo = useMemo(
     () => (
-      <CardContent>
-        <Grid container>
-          {renderThreadImageThumbnail}
-          {renderThreadText}
+      <Grid container wrap="nowrap">
+        <Grid item xs={9} container direction="column" wrap="nowrap">
+          <CardContent className={classes.threadInfoCardContent}>
+            {renderMobileTitle}
+            {renderText}
+            {renderCreated}
+          </CardContent>
         </Grid>
-      </CardContent>
+        <Grid className={classes.imageThumbnailContainer} item xs={3} container justify="flex-end">
+          <CardContent className={classes.threadInfoCardContent}>
+            {renderImageThumbnail}
+          </CardContent>
+        </Grid>
+      </Grid>
     ),
-    [renderThreadImageThumbnail, renderThreadText],
+    [
+      classes.threadInfoCardContent,
+      classes.imageThumbnailContainer,
+      renderMobileTitle,
+      renderText,
+      renderCreated,
+      renderImageThumbnail,
+    ],
   );
 
   const renderHeaderAction = useMemo(
     () => (
       <Grid className="MuiCardHeader-action" container alignItems="center">
-        {renderStarButton}
-        {renderUpvoteButton}
-        {renderScore}
-        {renderDownvoteButton}
+        {renderDesktopStarButton}
+        {renderDesktopUpvoteButton}
+        {renderDesktopDownvoteButton}
         {renderShareButton}
-        {renderInfoButton}
         {renderActionsButton}
       </Grid>
     ),
     [
       renderActionsButton,
-      renderDownvoteButton,
-      renderInfoButton,
-      renderScore,
       renderShareButton,
-      renderStarButton,
-      renderUpvoteButton,
+      renderDesktopDownvoteButton,
+      renderDesktopStarButton,
+      renderDesktopUpvoteButton,
     ],
   );
 
   const renderHeader = useMemo(
-    () => mdUp && <CardHeader title={renderHeaderTitle} action={renderHeaderAction} />,
-    [mdUp, renderHeaderAction, renderHeaderTitle],
+    () =>
+      mdUp && (
+        <CardHeader
+          classes={{ root: classes.header, content: classes.headerContent }}
+          title={renderHeaderTitle}
+          action={renderHeaderAction}
+        />
+      ),
+    [mdUp, renderHeaderAction, renderHeaderTitle, classes.header, classes.headerContent],
   );
 
   const layoutProps = {
@@ -662,13 +784,12 @@ const ThreadPage: NextPage = () => {
     },
     topNavbarProps: {
       renderHeaderRight: renderActionsButton,
-      renderHeaderRightSecondary: renderInfoButton,
     },
     customBottomNavbar: renderCustomBottomNavbar,
   };
 
   // Render full screen loading screen only for the thread query during the initial load.
-  if (threadLoading && !previousThreadQueryData) {
+  if (threadLoading && threadQueryCount === 0) {
     return <LoadingTemplate />;
   }
 
@@ -723,6 +844,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   revalidate: MAX_REVALIDATION_INTERVAL,
 });
 
-const withWrappers = R.compose(withUserMe, withActions, withInfo, withThread);
+const withWrappers = R.compose(withUserMe, withActions, withThread);
 
 export default withWrappers(ThreadPage);

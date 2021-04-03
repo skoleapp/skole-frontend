@@ -1,12 +1,5 @@
 {
-  "starThread": "Star this thread.",
-  "unstarThread": "Unstar this thread.",
-  "upvoteThread": "Upvote this thread.",
-  "removeThreadUpvote": "Remove upvote from this thread.",
-  "downvoteThread": "Downvote this thread.",
-  "removeThreadDownvote": "Remove downvote from this thread.",
   "shareThread": "Share this thread.",
-  "threadInfo": "Show thread details.",
   "threadActions": "Show thread menu.",
   "threadImage": "View thread image.",
   "upvoteComment": "Upvote this comment.",
