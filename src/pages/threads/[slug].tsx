@@ -167,6 +167,7 @@ const ThreadPage: NextPage = () => {
   const threadVariables = R.pick(['slug'], query);
   const commentQueryVariables = R.pick(['slug', 'page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
+  const [threadQueryCount, setThreadQueryCount] = useState(0);
 
   const commentVariables = {
     ordering,
@@ -175,13 +176,12 @@ const ThreadPage: NextPage = () => {
 
   const [
     threadQuery,
-    {
-      data: threadData,
-      loading: threadLoading,
-      error: threadError,
-      previousData: previousThreadQueryData,
-    },
-  ] = useThreadLazyQuery({ variables: threadVariables, context });
+    { data: threadData, loading: threadLoading, error: threadError },
+  ] = useThreadLazyQuery({
+    variables: threadVariables,
+    context,
+    onCompleted: () => setThreadQueryCount(threadQueryCount + 1),
+  });
 
   const [
     commentsQuery,
@@ -789,7 +789,7 @@ const ThreadPage: NextPage = () => {
   };
 
   // Render full screen loading screen only for the thread query during the initial load.
-  if (threadLoading && !previousThreadQueryData) {
+  if (threadLoading && threadQueryCount === 0) {
     return <LoadingTemplate />;
   }
 
