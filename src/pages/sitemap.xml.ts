@@ -55,7 +55,6 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     urls.register,
     urls.resetPassword,
     urls.terms,
-    urls.values,
   ];
 
   const paths = staticPaths.map((path) => ({ path, modified }));

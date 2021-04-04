@@ -9,7 +9,6 @@ export const urls = {
   contact: '/contact',
   deleteAccount: '/delete-account',
   editProfile: '/edit-profile',
-  guidelines: '/guidelines',
   home: '/home',
   index: '/',
   login: '/login',
@@ -23,6 +22,5 @@ export const urls = {
   starred: '/starred',
   terms: '/terms',
   threads: '/threads',
-  values: '/values',
   verifyAccount: '/verify-account',
 };
