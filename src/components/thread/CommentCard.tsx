@@ -17,6 +17,7 @@ import {
   useActionsContext,
   useAuthContext,
   useConfirmContext,
+  useDarkModeContext,
   useNotificationsContext,
   useThreadContext,
 } from 'context';
@@ -139,6 +140,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const isOwn = R.prop('isOwn', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
+  const { dynamicPrimaryColor } = useDarkModeContext();
 
   const { score, upvoteButtonProps, downvoteButtonProps, currentVote } = useVotes({
     initialVote,
@@ -372,12 +374,22 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
         <Tooltip title={upvoteTooltip}>
           <Typography component="span">
             <IconButton className={classes.iconButton} {...upvoteButtonProps}>
-              <KeyboardArrowUpOutlined />
+              <KeyboardArrowUpOutlined
+                color={currentVote?.status === 1 ? dynamicPrimaryColor : 'disabled'}
+              />
             </IconButton>
           </Typography>
         </Tooltip>
       ),
-    [classes.iconButton, upvoteButtonProps, upvoteTooltip, isOwn, verified],
+    [
+      classes.iconButton,
+      upvoteButtonProps,
+      upvoteTooltip,
+      isOwn,
+      verified,
+      currentVote,
+      dynamicPrimaryColor,
+    ],
   );
 
   const renderScore = useMemo(() => <Typography variant="body2">{score}</Typography>, [score]);
@@ -390,12 +402,22 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
         <Tooltip title={downvoteTooltip}>
           <Typography component="span">
             <IconButton className={classes.iconButton} {...downvoteButtonProps}>
-              <KeyboardArrowDownOutlined />
+              <KeyboardArrowDownOutlined
+                color={currentVote?.status === -1 ? dynamicPrimaryColor : 'disabled'}
+              />
             </IconButton>
           </Typography>
         </Tooltip>
       ),
-    [classes.iconButton, downvoteButtonProps, downvoteTooltip, isOwn, verified],
+    [
+      classes.iconButton,
+      downvoteButtonProps,
+      downvoteTooltip,
+      isOwn,
+      verified,
+      currentVote,
+      dynamicPrimaryColor,
+    ],
   );
 
   const renderVoteButtons = useMemo(
