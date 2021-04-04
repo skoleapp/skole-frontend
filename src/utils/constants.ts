@@ -1,8 +1,6 @@
 import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
 import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
-import DescriptionOutlined from '@material-ui/icons/DescriptionOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
-import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import PolicyOutlined from '@material-ui/icons/PolicyOutlined';
 import ScoreOutlined from '@material-ui/icons/ScoreOutlined';
 import VpnKeyOutlined from '@material-ui/icons/VpnKeyOutlined';
@@ -83,19 +81,9 @@ export const ABOUT_ITEMS = [
     href: urls.contact,
   },
   {
-    icon: HelpOutlineOutlined,
-    text: 'common:guidelines',
-    href: urls.guidelines,
-  },
-  {
     icon: ScoreOutlined,
     text: 'common:score',
     href: urls.score,
-  },
-  {
-    icon: DescriptionOutlined,
-    text: 'common:values',
-    href: urls.values,
   },
   {
     icon: PolicyOutlined,
