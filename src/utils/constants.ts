@@ -1,4 +1,5 @@
 import AccountCircleOutlined from '@material-ui/icons/AccountCircleOutlined';
+import CakeOutlinedIcon from '@material-ui/icons/CakeOutlined';
 import ContactSupportOutlined from '@material-ui/icons/ContactSupportOutlined';
 import EditOutlined from '@material-ui/icons/EditOutlined';
 import PolicyOutlined from '@material-ui/icons/PolicyOutlined';
@@ -84,6 +85,11 @@ export const ABOUT_ITEMS = [
     icon: ScoreOutlined,
     text: 'common:score',
     href: urls.score,
+  },
+  {
+    icon: CakeOutlinedIcon,
+    text: 'common:badges',
+    href: urls.badges,
   },
   {
     icon: PolicyOutlined,
