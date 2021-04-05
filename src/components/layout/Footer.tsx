@@ -26,9 +26,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
   bottomRow: {
     marginTop: spacing(8),
   },
-  privacyLink: {
-    marginLeft: spacing(2),
-  },
   appStoreBadgeContainer: {
     position: 'relative',
   },
@@ -82,6 +79,15 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     [t],
   );
 
+  const renderContactLink = useMemo(
+    () => (
+      <TextLink href={urls.contact} color="secondary">
+        {t('common:contact')}
+      </TextLink>
+    ),
+    [t],
+  );
+
   const renderSkole = useMemo(
     () => (
       <Grid
@@ -93,58 +99,29 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
         alignItems="flex-start"
       >
         {renderSkoleHeader}
+        {renderContactLink}
         {renderGetStartedLink}
         {renderScoreLink}
         {renderBadgesLink}
       </Grid>
     ),
-    [classes.container, renderBadgesLink, renderGetStartedLink, renderScoreLink, renderSkoleHeader],
+    [
+      classes.container,
+      renderContactLink,
+      renderBadgesLink,
+      renderGetStartedLink,
+      renderScoreLink,
+      renderSkoleHeader,
+    ],
   );
 
-  const renderCompanyHeader = useMemo(
+  const renderLegalHeader = useMemo(
     () => (
       <Typography className={classes.header} variant="subtitle1" color="secondary">
-        {t('common:company').toUpperCase()}
+        {t('common:legal').toUpperCase()}
       </Typography>
     ),
     [classes.header, t],
-  );
-
-  const renderContactLink = useMemo(
-    () => (
-      <TextLink href={urls.contact} color="secondary">
-        {t('common:contact')}
-      </TextLink>
-    ),
-    [t],
-  );
-
-  const renderCompany = useMemo(
-    () => (
-      <Grid
-        className={classes.container}
-        item
-        xs={3}
-        container
-        direction="column"
-        alignItems="flex-start"
-      >
-        {renderCompanyHeader}
-        {renderContactLink}
-      </Grid>
-    ),
-    [classes.container, renderCompanyHeader, renderContactLink],
-  );
-
-  const renderCopyright = useMemo(
-    () => (
-      <Grid className={classes.container} item xs={3} container alignItems="center">
-        <Typography variant="subtitle1" color="secondary">
-          © {new Date().getFullYear()} Skole
-        </Typography>
-      </Grid>
-    ),
-    [classes.container],
   );
 
   const renderTermsLink = useMemo(
@@ -158,21 +135,40 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
 
   const renderPrivacyLink = useMemo(
     () => (
-      <TextLink className={classes.privacyLink} href={urls.privacy} color="secondary">
+      <TextLink href={urls.privacy} color="secondary">
         {t('common:privacy')}
       </TextLink>
     ),
-    [classes.privacyLink, t],
+    [t],
   );
 
   const renderLegal = useMemo(
     () => (
-      <Grid className={classes.container} item xs={3} container alignItems="center">
+      <Grid
+        className={classes.container}
+        item
+        xs={3}
+        container
+        direction="column"
+        alignItems="flex-start"
+      >
+        {renderLegalHeader}
         {renderTermsLink}
         {renderPrivacyLink}
       </Grid>
     ),
-    [classes.container, renderPrivacyLink, renderTermsLink],
+    [classes.container, renderLegalHeader, renderTermsLink, renderPrivacyLink],
+  );
+
+  const renderCopyright = useMemo(
+    () => (
+      <Grid className={classes.container} item xs={3} container alignItems="center">
+        <Typography variant="subtitle1" color="secondary">
+          © {new Date().getFullYear()} Skole
+        </Typography>
+      </Grid>
+    ),
+    [classes.container],
   );
 
   const renderAppStoreBadges = useMemo(
@@ -184,9 +180,15 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
           item
           xs={6}
           container
-          justify="center"
+          justify="flex-end"
         >
-          <Grid className={classes.appStoreBadgeImageContainer} container justify="center">
+          <Grid
+            className={classes.appStoreBadgeImageContainer}
+            container
+            item
+            xs={12}
+            justify="center"
+          >
             <Grid item xs={6}>
               <AppStoreBadge />
             </Grid>
@@ -209,12 +211,11 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
       <Container>
         <Grid container>
           {renderSkole}
-          {renderCompany}
+          {renderLegal}
+          {renderAppStoreBadges}
         </Grid>
         <Grid className={classes.bottomRow} container>
           {renderCopyright}
-          {renderLegal}
-          {renderAppStoreBadges}
         </Grid>
       </Container>
     </Grid>
