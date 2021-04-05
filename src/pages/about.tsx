@@ -3,7 +3,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Link, ListTemplate } from 'components';
-import { withUserMe } from 'hocs';
+import { withAuthRequired } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React, { useMemo } from 'react';
@@ -50,4 +50,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withUserMe(AboutPage);
+export default withAuthRequired(AboutPage);
