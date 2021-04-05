@@ -64,15 +64,6 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     [t, userMe],
   );
 
-  const renderGuidelinesLink = useMemo(
-    () => (
-      <TextLink href={urls.guidelines} color="secondary">
-        {t('common:guidelines')}
-      </TextLink>
-    ),
-    [t],
-  );
-
   const renderScoreLink = useMemo(
     () => (
       <TextLink href={urls.score} color="secondary">
@@ -103,19 +94,11 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
       >
         {renderSkoleHeader}
         {renderGetStartedLink}
-        {renderGuidelinesLink}
         {renderScoreLink}
         {renderBadgesLink}
       </Grid>
     ),
-    [
-      classes.container,
-      renderBadgesLink,
-      renderGetStartedLink,
-      renderGuidelinesLink,
-      renderScoreLink,
-      renderSkoleHeader,
-    ],
+    [classes.container, renderBadgesLink, renderGetStartedLink, renderScoreLink, renderSkoleHeader],
   );
 
   const renderCompanyHeader = useMemo(
@@ -136,15 +119,6 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
     [t],
   );
 
-  const renderValuesLink = useMemo(
-    () => (
-      <TextLink href={urls.values} color="secondary">
-        {t('common:values')}
-      </TextLink>
-    ),
-    [t],
-  );
-
   const renderCompany = useMemo(
     () => (
       <Grid
@@ -157,10 +131,9 @@ export const Footer: React.FC<FooterProps> = ({ hideAppStoreBadges }) => {
       >
         {renderCompanyHeader}
         {renderContactLink}
-        {renderValuesLink}
       </Grid>
     ),
-    [classes.container, renderCompanyHeader, renderContactLink, renderValuesLink],
+    [classes.container, renderCompanyHeader, renderContactLink],
   );
 
   const renderCopyright = useMemo(
