@@ -1,6 +1,9 @@
 {
   "title": "Account Settings",
   "header": "Account Settings",
+  "needToVerifyAccount": "Please verify your account",
+  "needToVerifyBackupEmail": "Please verify your backup email",
+  "hereLink": "here.",
   "emailSettings": "Email Settings",
   "backupEmail": "Backup Email",
   "backupEmailHelperText": "An alternative email address which you can use even if you would lose access to your primary email.",

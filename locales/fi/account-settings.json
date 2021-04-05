@@ -1,6 +1,9 @@
 {
   "title": "Tilin asetukset",
   "header": "Tilin asetukset",
+  "needToVerifyAccount": "Vahvista tilisi",
+  "needToVerifyBackupEmail": "Vahvista varasähköpostisi",
+  "hereLink": "täältä.",
   "emailSettings": "Sähköpostiasetukset",
   "backupEmail": "Varasähköposti",
   "backupEmailHelperText": "Vaihtoehtoinen sähköpostiosoite, jota voit käyttää vaikka menettäisit pääsyn oletussähköpostiisi.",

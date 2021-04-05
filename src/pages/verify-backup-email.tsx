@@ -5,10 +5,10 @@ import { ButtonLink, FormSubmitSection, FormTemplate, LoadingTemplate } from 'co
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Form, Formik, FormikProps, FormikValues } from 'formik';
 import {
-  GraphQlResendVerificationEmailMutation,
-  useGraphQlResendVerificationEmailMutation,
-  useVerifyAccountMutation,
-  VerifyAccountMutation,
+  GraphQlResendBackupEmailVerificationEmailMutation,
+  useGraphQlResendBackupEmailVerificationEmailMutation,
+  useVerifyBackupEmailMutation,
+  VerifyBackupEmailMutation,
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { urls } from 'utils';
 
-const VerifyAccountPage: NextPage = () => {
+const VerifyBackupEmailPage: NextPage = () => {
   const {
     formRef,
     handleMutationErrors,
@@ -30,7 +30,7 @@ const VerifyAccountPage: NextPage = () => {
 
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { userMe, verified: initialVerified } = useAuthContext();
+  const { userMe, verifiedBackupEmail: initialVerifiedBackupEmail } = useAuthContext();
   const token = query.token ? String(query.token) : '';
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [verified, setVerified] = useState<boolean | null>(false);
@@ -42,7 +42,7 @@ const VerifyAccountPage: NextPage = () => {
     () => ({
       pathname: urls.login,
       query: {
-        next: urls.verifyAccount,
+        next: urls.verifyBackupEmail,
       },
     }),
     [],
@@ -50,58 +50,58 @@ const VerifyAccountPage: NextPage = () => {
 
   // Update state whenever context value changes.
   useEffect(() => {
-    setVerified(initialVerified);
-  }, [initialVerified]);
+    setVerified(initialVerifiedBackupEmail);
+  }, [initialVerifiedBackupEmail]);
 
   const handleUnexpectedConfirmationError = (): void =>
     setConfirmationError(t('validation:setUnexpectedFormError'));
 
-  const onConfirmationFormCompleted = ({ verifyAccount }: VerifyAccountMutation): void => {
-    if (verifyAccount?.errors?.length) {
-      verifyAccount.errors.map((e) => {
+  const onConfirmationFormCompleted = ({ verifyBackupEmail }: VerifyBackupEmailMutation): void => {
+    if (verifyBackupEmail?.errors?.length) {
+      verifyBackupEmail.errors.map((e) => {
         if (e?.field === '__all__') {
           setConfirmationError(!e ? null : formatFormError(e));
         }
       });
-    } else if (verifyAccount?.successMessage) {
-      toggleNotification(verifyAccount.successMessage);
+    } else if (verifyBackupEmail?.successMessage) {
+      toggleNotification(verifyBackupEmail.successMessage);
       setVerified(true);
     } else {
       handleUnexpectedConfirmationError();
     }
   };
 
-  const [verifyAccount, { loading, called }] = useVerifyAccountMutation({
+  const [verifyBackupEmail, { loading, called }] = useVerifyBackupEmailMutation({
     onCompleted: onConfirmationFormCompleted,
     onError: handleUnexpectedConfirmationError,
     context,
   });
 
   useEffect(() => {
-    const handleVerifyAccount = async (): Promise<void> => {
-      await verifyAccount({ variables: { token } });
+    const handleVerifyBackupEmail = async (): Promise<void> => {
+      await verifyBackupEmail({ variables: { token } });
     };
 
-    if (!!token && !verified && !initialVerified && !called) {
-      handleVerifyAccount();
+    if (!!token && !verified && !initialVerifiedBackupEmail && !called) {
+      handleVerifyBackupEmail();
     }
-  }, [token, verified, initialVerified, verifyAccount, called]);
+  }, [token, verified, initialVerifiedBackupEmail, verifyBackupEmail, called]);
 
   const onCompleted = ({
-    resendVerificationEmail,
-  }: GraphQlResendVerificationEmailMutation): void => {
-    if (resendVerificationEmail?.errors?.length) {
-      handleMutationErrors(resendVerificationEmail.errors);
-    } else if (resendVerificationEmail?.successMessage) {
+    resendBackupEmailVerificationEmail,
+  }: GraphQlResendBackupEmailVerificationEmailMutation): void => {
+    if (resendBackupEmailVerificationEmail?.errors?.length) {
+      handleMutationErrors(resendBackupEmailVerificationEmail.errors);
+    } else if (resendBackupEmailVerificationEmail?.successMessage) {
       formRef.current?.resetForm();
-      toggleNotification(resendVerificationEmail.successMessage);
+      toggleNotification(resendBackupEmailVerificationEmail.successMessage);
       setEmailSubmitted(true);
     } else {
       setUnexpectedFormError();
     }
   };
 
-  const [resendVerificationEmail] = useGraphQlResendVerificationEmailMutation({
+  const [resendVerificationEmail] = useGraphQlResendBackupEmailVerificationEmailMutation({
     onCompleted,
     onError,
     context,
@@ -115,7 +115,7 @@ const VerifyAccountPage: NextPage = () => {
     () => (
       <FormControl>
         <ButtonLink
-          href={urls.home}
+          href={urls.accountSettings}
           endIcon={<ArrowForwardOutlined />}
           color="primary"
           variant="contained"
@@ -147,7 +147,7 @@ const VerifyAccountPage: NextPage = () => {
     () => (
       <FormControl>
         <Typography className="form-text" variant="subtitle1">
-          {t('verify-account:verified')}
+          {t('verify-backup-email:verified')}
         </Typography>
       </FormControl>
     ),
@@ -169,7 +169,7 @@ const VerifyAccountPage: NextPage = () => {
     () => (
       <FormControl>
         <Typography className="form-text" variant="subtitle1">
-          {t('verify-account:loginText')}
+          {t('verify-backup-email:loginText')}
         </Typography>
       </FormControl>
     ),
@@ -181,7 +181,7 @@ const VerifyAccountPage: NextPage = () => {
       <Form>
         <FormControl>
           <Typography className="form-text" variant="subtitle1">
-            {t('verify-account:emailHelpText')}
+            {t('verify-backup-email:emailHelpText')}
           </Typography>
         </FormControl>
         <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
@@ -228,7 +228,7 @@ const VerifyAccountPage: NextPage = () => {
     () => (
       <FormControl>
         <Typography className="form-text" variant="subtitle1">
-          {t('verify-account:emailSubmitted')}
+          {t('verify-backup-email:emailSubmitted')}
         </Typography>
       </FormControl>
     ),
@@ -292,10 +292,10 @@ const VerifyAccountPage: NextPage = () => {
 
   const layoutProps = {
     seoProps: {
-      title: t('verify-account:title'),
+      title: t('verify-backup-email:title'),
     },
     topNavbarProps: {
-      header: t('verify-account:header'),
+      header: t('verify-backup-email:header'),
       emoji: '✅',
     },
   };
@@ -309,8 +309,8 @@ const VerifyAccountPage: NextPage = () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   props: {
-    _ns: await loadNamespaces(['verify-account'], locale),
+    _ns: await loadNamespaces(['verify-backup-email'], locale),
   },
 });
 
-export default withUserMe(VerifyAccountPage);
+export default withUserMe(VerifyBackupEmailPage);

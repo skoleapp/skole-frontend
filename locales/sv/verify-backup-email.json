@@ -1,0 +1,9 @@
+{
+  "title": "Verifiera reserv-e-post",
+  "header": "Verifiera reserv-e-post",
+  "emailHelpText": "Klicka på knappen nedan så skickar vi en länk via e-post som du kan använda för att verifiera din reserv-e-post.",
+  "confirmationHelpText": "Bra! Klicka nu på knappen nedan för att avsluta verifieringen.",
+  "emailSubitted": "Nästan klar! Kontrollera din primära e-post för en verifieringslänk.",
+  "verified": "Din reserv-e-postadress är verifierad! Du kan fortsätta använda Skole.",
+  "loginText": "Leta efter en länk från din primära e-post som du kan använda för att verifiera din reserv-e-post. Om du inte har en länk kan du logga in och begära en ny länk."
+}

@@ -42,7 +42,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   notificationSettingsLabel: {
     marginBottom: spacing(2),
   },
-  link: {
+  deleteAccountLink: {
     textAlign: 'center',
     marginTop: spacing(4),
   },
@@ -57,6 +57,7 @@ const AccountSettingsPage: NextPage = () => {
   const {
     setUserMe,
     verified,
+    verifiedBackupEmail,
     email,
     backupEmail,
     commentReplyEmailPermission,
@@ -75,6 +76,26 @@ const AccountSettingsPage: NextPage = () => {
     generalFormValues,
   } = useForm<UpdateAccountSettingsFormValues>();
 
+  const initialErrors = useMemo(() => {
+    const renderNeedToVerifyAccountError = (
+      <>
+        {t('account-settings:needToVerifyAccount')}{' '}
+        <TextLink href={urls.verifyAccount}>{t('account-settings:hereLink')}</TextLink>
+      </>
+    );
+    const renderNeedToVerifyBackupEmailError = (
+      <>
+        {t('account-settings:needToVerifyBackupEmail')}{' '}
+        <TextLink href={urls.verifyBackupEmail}>{t('account-settings:hereLink')}</TextLink>
+      </>
+    );
+
+    return {
+      ...(verified === false && { email: renderNeedToVerifyAccountError }),
+      ...(!verifiedBackupEmail && { backupEmail: renderNeedToVerifyBackupEmailError }),
+    };
+  }, [verified, verifiedBackupEmail, t]);
+
   const onCompleted = ({ updateAccountSettings }: UpdateAccountSettingsMutation): void => {
     if (updateAccountSettings?.errors?.length) {
       handleMutationErrors(updateAccountSettings.errors);
@@ -82,6 +103,8 @@ const AccountSettingsPage: NextPage = () => {
       formRef.current?.setSubmitting(false);
       toggleNotification(updateAccountSettings.successMessage);
       setUserMe(updateAccountSettings.user);
+      // @ts-ignore: Error messages should be strings but JSX.Elements at least seem to work fine here.
+      formRef.current?.setErrors(initialErrors);
     } else {
       setUnexpectedFormError();
     }
@@ -125,6 +148,14 @@ const AccountSettingsPage: NextPage = () => {
       newBadgePushPermission,
       generalFormValues,
     ],
+  );
+
+  const initialTouched = useMemo(
+    () => ({
+      ...(verified === false && { email: true }),
+      ...(!verifiedBackupEmail && { backupEmail: true }),
+    }),
+    [verified, verifiedBackupEmail],
   );
 
   const validationSchema = Yup.object().shape({
@@ -234,23 +265,13 @@ const AccountSettingsPage: NextPage = () => {
     [t],
   );
 
-  const renderVerifyAccountLink = useMemo(
-    () =>
-      verified === false && (
-        <FormControl className={classes.link}>
-          <TextLink href={urls.verifyAccount}>{t('common:verifyAccount')}</TextLink>
-        </FormControl>
-      ),
-    [classes.link, t, verified],
-  );
-
   const renderDeleteAccountLink = useMemo(
     () => (
-      <FormControl className={classes.link}>
+      <FormControl className={classes.deleteAccountLink}>
         <TextLink href={urls.deleteAccount}>{t('common:deleteAccount')}</TextLink>
       </FormControl>
     ),
-    [classes.link, t],
+    [classes.deleteAccountLink, t],
   );
 
   const renderFormFields = useCallback(
@@ -263,7 +284,6 @@ const AccountSettingsPage: NextPage = () => {
         {renderChangePasswordLink}
         {renderMyDataLink}
         {renderFormSubmitSection(props)}
-        {renderVerifyAccountLink}
         {renderDeleteAccountLink}
       </Form>
     ),
@@ -276,7 +296,6 @@ const AccountSettingsPage: NextPage = () => {
       renderFormSubmitSection,
       renderMyDataLink,
       renderPushNotifications,
-      renderVerifyAccountLink,
     ],
   );
 
@@ -284,6 +303,9 @@ const AccountSettingsPage: NextPage = () => {
     () => (
       <Formik
         initialValues={initialValues}
+        // @ts-ignore: Error messages should be strings but JSX.Elements at least seem to work fine here.
+        initialErrors={initialErrors}
+        initialTouched={initialTouched}
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
         innerRef={formRef}
@@ -292,7 +314,15 @@ const AccountSettingsPage: NextPage = () => {
         {renderFormFields}
       </Formik>
     ),
-    [formRef, handleSubmit, initialValues, renderFormFields, validationSchema],
+    [
+      formRef,
+      handleSubmit,
+      initialValues,
+      initialErrors,
+      initialTouched,
+      renderFormFields,
+      validationSchema,
+    ],
   );
 
   const layoutProps = {

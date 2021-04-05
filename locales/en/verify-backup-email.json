@@ -1,0 +1,9 @@
+{
+  "title": "Verify Backup Email",
+  "header": "Verify Backup Email",
+  "emailHelpText": "Please click the button below and we will send you a link to your primary email that you can use to verify your new backup email.",
+  "confirmationHelpText": "Good! Now click the button below to finish the verification.",
+  "emailSubmitted": "Almost done! Please check your primary email for a verification link.",
+  "verified": "Your backup email is verified! You can continue using Skole.",
+  "loginText": "Please look for a link from your primary email that you can use to verify your backup email. If you don't have a link, you may log in and request a new link."
+}

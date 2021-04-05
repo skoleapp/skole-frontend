@@ -252,6 +252,7 @@ fragment userFields on UserObjectType {
   score
   rank
   verified
+  verifiedBackupEmail
   unreadActivityCount
   threadCount
   commentCount
@@ -371,8 +372,20 @@ mutation GraphQLLogout {
   }
 }
 
+# Need to come up with some other name as `resendVerificationEmail` since the the code generator creates duplicate identifiers if we use that one.
 mutation GraphQLResendVerificationEmail {
   resendVerificationEmail {
+    successMessage
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+# Need to come up with some other name as `resendBackupEmailVerificationEmail` since the the code generator creates duplicate identifiers if we use that one.
+mutation GraphQLResendBackupEmailVerificationEmail {
+  resendBackupEmailVerificationEmail {
     successMessage
     errors {
       field
@@ -394,6 +407,16 @@ mutation GraphQLMyData {
 
 mutation VerifyAccount($token: String) {
   verifyAccount(input: { token: $token }) {
+    successMessage
+    errors {
+      field
+      messages
+    }
+  }
+}
+
+mutation VerifyBackupEmail($token: String) {
+  verifyBackupEmail(input: { token: $token }) {
     successMessage
     errors {
       field
