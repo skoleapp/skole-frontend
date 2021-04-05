@@ -5,7 +5,7 @@ import React from 'react';
 
 const useStyles = makeStyles({
   image: {
-    // the Google Play badge has a border in the image so we want to compensate for that.
+    // The Google Play badge has a border in the image so we want to compensate for that.
     // https://stackoverflow.com/q/34941473/9835872
     padding: '0.15rem !important',
   },
@@ -19,7 +19,7 @@ export const AppStoreBadge: React.FC = () => {
     <Typography
       onClick={handleClick}
       component="a"
-      href="https://apps.apple.com/app/skole-for-students/id1547995609"
+      href="https://apps.apple.com/app/skole-app/id1547995609"
       target="_blank"
       rel="noreferrer"
     >
