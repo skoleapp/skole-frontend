@@ -786,6 +786,7 @@ const ThreadPage: NextPage = () => {
       renderHeaderRight: renderActionsButton,
     },
     customBottomNavbar: renderCustomBottomNavbar,
+    hideBottomNavbar: !userMe,
   };
 
   // Render full screen loading screen only for the thread query during the initial load.

@@ -7,21 +7,17 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const PrivacyPage: NextPage<MarkdownPageProps> = ({
-  data: { title },
-  content: markdownContent,
-}) => {
+const ValuesPage: NextPage<MarkdownPageProps> = ({ data: { title }, content: markdownContent }) => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
 
   const layoutProps = {
     seoProps: {
-      title: t('privacy:title'),
+      title: t('values:title'),
     },
     topNavbarProps: {
       header: title,
-      emoji: '🔒',
-      hideLanguageButton: true,
+      emoji: '💂',
     },
     markdownContent,
     hideBottomNavbar: !userMe,
@@ -31,8 +27,8 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const _ns = await loadNamespaces(['privacy'], locale);
-  const { data, content } = await loadMarkdown('privacy');
+  const _ns = await loadNamespaces(['values'], locale);
+  const { data, content } = await loadMarkdown('values', locale);
 
   return {
     props: {
@@ -43,4 +39,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default withUserMe(PrivacyPage);
+export default withUserMe(ValuesPage);

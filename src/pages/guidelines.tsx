@@ -7,7 +7,7 @@ import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
 import { MarkdownPageProps } from 'types';
 
-const PrivacyPage: NextPage<MarkdownPageProps> = ({
+const GuidelinesPage: NextPage<MarkdownPageProps> = ({
   data: { title },
   content: markdownContent,
 }) => {
@@ -16,12 +16,11 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({
 
   const layoutProps = {
     seoProps: {
-      title: t('privacy:title'),
+      title: t('guidelines:title'),
     },
     topNavbarProps: {
       header: title,
-      emoji: '🔒',
-      hideLanguageButton: true,
+      emoji: '🗺️',
     },
     markdownContent,
     hideBottomNavbar: !userMe,
@@ -31,8 +30,8 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  const _ns = await loadNamespaces(['privacy'], locale);
-  const { data, content } = await loadMarkdown('privacy');
+  const _ns = await loadNamespaces(['guidelines'], locale);
+  const { data, content } = await loadMarkdown('guidelines', locale);
 
   return {
     props: {
@@ -43,4 +42,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default withUserMe(PrivacyPage);
+export default withUserMe(GuidelinesPage);

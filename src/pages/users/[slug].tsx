@@ -931,6 +931,7 @@ const ProfilePage: NextPage = () => {
       header: username,
       renderHeaderRight,
     },
+    hideBottomNavbar: !userMe,
   };
 
   if (userLoading) {

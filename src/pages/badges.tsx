@@ -1,5 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import { Badge, ErrorTemplate, LoadingTemplate, MarkdownTemplate } from 'components';
+import { useAuthContext } from 'context';
 import { BadgeObjectType, useBadgesQuery } from 'generated';
 import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -13,6 +14,7 @@ import { MarkdownPageProps } from 'types';
 const BadgesPage: NextPage<MarkdownPageProps> = ({ data: { title }, content: markdownContent }) => {
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
+  const { userMe } = useAuthContext();
   const { data, loading, error } = useBadgesQuery({ context });
   const badges: BadgeObjectType[] = R.propOr([], 'badges', data);
 
@@ -46,6 +48,7 @@ const BadgesPage: NextPage<MarkdownPageProps> = ({ data: { title }, content: mar
     },
     markdownContent,
     customBottomContent: [renderBadgesHeader, renderBadges],
+    hideBottomNavbar: !userMe,
   };
 
   if (loading) {
