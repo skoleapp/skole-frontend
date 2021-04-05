@@ -64,5 +64,6 @@
   "best": "Best",
   "newest": "Newest",
   "createThread": "Create Thread",
-  "linkCopied": "Link copied to clipboard!"
+  "linkCopied": "Link copied to clipboard!",
+  "inviteTitle": "Your friend {{ username }} invited you to join Skole"
 }

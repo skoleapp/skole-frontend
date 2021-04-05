@@ -23,7 +23,9 @@ export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
 export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
+export const INVITE_PROMPT_KEY = 'SKOLE_INVITE';
 export const MAX_REVALIDATION_INTERVAL = 1; // Seconds.
+export const SLOGAN = 'Next-gen study forum. 🎓';
 
 export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
