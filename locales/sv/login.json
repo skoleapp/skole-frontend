@@ -3,5 +3,6 @@
   "header": "Logga In",
   "forgotPassword": "Glömt ditt lösenord?",
   "existingUserGreeting": "Välkommen tillbaka, {{ username }}.",
-  "loginWithDifferentCredentials": "Logga in med olika referenser"
+  "loginWithDifferentCredentials": "Logga in med olika referenser",
+  "registerLinkText": "Har du inte ett konto ännu?"
 }

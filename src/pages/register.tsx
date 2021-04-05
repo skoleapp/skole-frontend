@@ -22,6 +22,13 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
 
+const useStyles = makeStyles(({ spacing }) => ({
+  link: {
+    textAlign: 'center',
+    marginTop: spacing(4),
+  },
+}));
+
 interface RegisterFormValues {
   username: string;
   email: string;
@@ -161,15 +168,13 @@ const RegisterPage: NextPage = () => {
     [t],
   );
 
-  const renderLoginButton = useMemo(
+  const renderLoginLink = useMemo(
     () => (
-      <FormControl>
-        <ButtonLink href={urls.login} variant="outlined" fullWidth>
-          {t('common:login')}
-        </ButtonLink>
+      <FormControl className={classes.link}>
+        <TextLink href={urls.login}>{t('register:loginLinkText')}</TextLink>
       </FormControl>
     ),
-    [t],
+    [t, classes.link],
   );
 
   const renderRegisterFormFields = useCallback(
@@ -182,13 +187,13 @@ const RegisterPage: NextPage = () => {
         {renderConfirmPasswordField}
         {renderTermsLink}
         {renderRegisterFormSubmitSection(props)}
-        {renderLoginButton}
+        {renderLoginLink}
       </Form>
     ),
     [
       renderConfirmPasswordField,
       renderEmailField,
-      renderLoginButton,
+      renderLoginLink,
       renderRegisterFormSubmitSection,
       renderTermsLink,
       renderUsernameField,

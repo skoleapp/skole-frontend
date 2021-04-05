@@ -190,12 +190,10 @@ const LoginPage: NextPage = () => {
     [t],
   );
 
-  const renderRegisterButton = useMemo(
+  const renderRegisterLink = useMemo(
     () => (
       <FormControl className={classes.link}>
-        <ButtonLink href={urls.register} variant="outlined">
-          {t('common:register')}
-        </ButtonLink>
+        <TextLink href={urls.register}>{t('login:registerLinkText')}</TextLink>
       </FormControl>
     ),
     [classes.link, t],
@@ -250,14 +248,14 @@ const LoginPage: NextPage = () => {
         {renderUsernameOrEmailField}
         {renderPasswordField(props)}
         {renderFormSubmitSection(props)}
-        {renderRegisterButton}
+        {renderRegisterLink}
         {renderForgotPasswordLink}
       </Form>
     ),
     [
       renderForgotPasswordLink,
       renderFormSubmitSection,
-      renderRegisterButton,
+      renderRegisterLink,
       renderUsernameOrEmailField,
       renderPasswordField,
     ],
