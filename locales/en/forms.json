@@ -25,5 +25,6 @@
   "newLineHelperText": "{{ combination }} to add a new line.",
   "selected": "{{ fileName }} selected.",
   "uploadImage": "Upload Image",
-  "create": "Create"
+  "create": "Create",
+  "code": "Code"
 }

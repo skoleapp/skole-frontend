@@ -108,7 +108,7 @@ export const ActionRequiredTemplate: React.FC<Props> = ({
 
   const layoutProps = {
     topNavbarProps: {
-      ...topNavbarProps,
+      ...R.omit(['emoji'], topNavbarProps),
       header: renderHeader,
     },
     ...props,

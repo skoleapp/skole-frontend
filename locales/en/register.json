@@ -4,6 +4,8 @@
   "emailHelperText": "Your email that we can use to identify you. Your email is only visible for you. We will not spam you.",
   "usernameHelperText": "Your username will show to other users.",
   "termsHelperText": "By registering you agree to our",
-  "registerCompleteText": "Done! Please check your email for a link that you can use to verify your account."
   "loginLinkText": "Already have an account?",
+  "inviteCodeHelperText": "Pass in the invite code from an existing user to complete the registration.",
+  "secondaryInviteCodeHelperText": "Don't have an invite code? Don't worry, you've been assigned to a wait list. We'll let you know when there's room for you to join!",
+  "verifyAccountText": "Done! Check your email for a link that you can use to verify your account."
 }

@@ -25,5 +25,6 @@
   "newLineHelperText": "{{ combination }} för att lägga till en ny rad.",
   "selected": "{{ fileName }} vald.",
   "uploadImage": "Ladda upp bild",
-  "create": "Skapa"
+  "create": "Skapa",
+  "code": "Kod"
 }

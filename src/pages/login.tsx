@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
   ActionRequiredTemplate,
-  ButtonLink,
   FormSubmitSection,
   FormTemplate,
   PasswordField,
@@ -219,8 +218,8 @@ const LoginPage: NextPage = () => {
     [classes.link, handleLoginWithDifferentCredentials, t],
   );
 
-  const renderExistingUserForm = useMemo(
-    () => (props: FormikProps<FormikValues>): JSX.Element | false =>
+  const renderExistingUserFormFields = useCallback(
+    (props: FormikProps<FormikValues>): JSX.Element | false =>
       !!validExistingUser && (
         <Form>
           {renderExistingUserGreeting}
@@ -237,13 +236,13 @@ const LoginPage: NextPage = () => {
       renderFormSubmitSection,
       renderLoginWithDifferentCredentialsLink,
       renderUsernameOrEmailField,
-      validExistingUser,
       renderPasswordField,
+      validExistingUser,
     ],
   );
 
-  const renderNewUserForm = useMemo(
-    () => (props: FormikProps<FormikValues>): JSX.Element => (
+  const renderNewUserFormFields = useCallback(
+    (props: FormikProps<FormikValues>): JSX.Element => (
       <Form>
         {renderUsernameOrEmailField}
         {renderPasswordField(props)}
@@ -261,6 +260,11 @@ const LoginPage: NextPage = () => {
     ],
   );
 
+  const renderFormFields = useMemo(() => renderExistingUserFormFields || renderNewUserFormFields, [
+    renderExistingUserFormFields,
+    renderNewUserFormFields,
+  ]);
+
   const renderForm = useMemo(
     () => (
       <Formik
@@ -269,17 +273,10 @@ const LoginPage: NextPage = () => {
         onSubmit={handleSubmit}
         innerRef={formRef}
       >
-        {renderExistingUserForm || renderNewUserForm}
+        {renderFormFields}
       </Formik>
     ),
-    [
-      formRef,
-      handleSubmit,
-      initialValues,
-      renderExistingUserForm,
-      renderNewUserForm,
-      validationSchema,
-    ],
+    [formRef, handleSubmit, initialValues, validationSchema, renderFormFields],
   );
 
   const layoutProps = {

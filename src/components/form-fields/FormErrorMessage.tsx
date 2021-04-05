@@ -4,12 +4,12 @@ import clsx from 'clsx';
 import React from 'react';
 
 const useStyles = makeStyles({
-  errorMessage: {
+  root: {
     whiteSpace: 'pre-line', // Break lines at '\n' characters.
   },
 });
 
 export const FormErrorMessage: React.FC = (props) => {
   const classes = useStyles();
-  return <FormHelperText className={clsx(classes.errorMessage, 'form-text')} error {...props} />;
+  return <FormHelperText className={clsx(classes.root, 'form-text')} error {...props} />;
 };

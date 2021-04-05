@@ -137,6 +137,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   );
 
   const renderLogo = useMemo(() => !hideLogo && <Logo />, [hideLogo]);
+
   const renderLanguageButton = useMemo(() => !hideLanguageButton && <LanguageButton />, [
     hideLanguageButton,
   ]);
