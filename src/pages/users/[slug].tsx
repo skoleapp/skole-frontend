@@ -234,8 +234,6 @@ const ProfilePage: NextPage = () => {
   const commentCount = R.propOr(0, 'commentCount', user);
   const threads = R.pathOr([], ['threads', 'objects'], threadsData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
-  const noThreads = isOwnProfile ? t('profile:ownProfileNoThreads') : t('profile:noThreads');
-  const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
   const _created = R.prop('created', user);
   const joined = useDayjs(_created).startOf('m').fromNow();
 
@@ -246,6 +244,16 @@ const ProfilePage: NextPage = () => {
   const rankTooltip = isOwnProfile
     ? t('common-tooltips:ownRank', { rank, score })
     : t('common-tooltips:rank', { rank, score });
+
+  const noThreads =
+    (verified === false && t('profile:verificationRequiredThreads')) ||
+    (isOwnProfile && t('profile:ownProfileNoThreads')) ||
+    t('profile:noThreads');
+
+  const noComments =
+    (verified === false && t('profile:verificationRequiredComments')) ||
+    (isOwnProfile && t('profile:ownProfileNoComments')) ||
+    t('profile:noComments');
 
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
@@ -334,10 +342,7 @@ const ProfilePage: NextPage = () => {
     [updateSelectedBadge],
   );
 
-  const renderHeaderRight = useMemo(() => isOwnProfile && !!verified && <SettingsButton />, [
-    isOwnProfile,
-    verified,
-  ]);
+  const renderHeaderRight = useMemo(() => isOwnProfile && <SettingsButton />, [isOwnProfile]);
 
   const renderAvatar = useMemo(() => <Avatar className={classes.avatar} src={mediaUrl(avatar)} />, [
     avatar,
@@ -605,17 +610,6 @@ const ProfilePage: NextPage = () => {
     [classes.badgeContainer, isOwnProfile, renderNextBadge, renderNextBadgeLabel],
   );
 
-  const renderVerifyAccountLink = useMemo(
-    () =>
-      isOwnProfile &&
-      verified === false && (
-        <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
-          {t('common:verifyAccount')}
-        </TextLink>
-      ),
-    [classes.verifyAccount, isOwnProfile, t, verified],
-  );
-
   const renderProfileStrengthHeader = useMemo(
     () => (
       <Typography variant="body2" color="textSecondary">
@@ -730,7 +724,6 @@ const ProfilePage: NextPage = () => {
           {renderRank}
           {renderBadges}
           {renderBadgeTracking}
-          {renderVerifyAccountLink}
           {renderProfileStrength}
           {renderJoined}
         </>
@@ -742,7 +735,6 @@ const ProfilePage: NextPage = () => {
       renderJoined,
       renderProfileStrength,
       renderRank,
-      renderVerifyAccountLink,
       mdUp,
     ],
   );
@@ -797,7 +789,6 @@ const ProfilePage: NextPage = () => {
           {renderRank}
           {renderBadges}
           {renderBadgeTracking}
-          {renderVerifyAccountLink}
           {renderJoined}
         </Grid>
       ),
@@ -809,7 +800,6 @@ const ProfilePage: NextPage = () => {
       renderRank,
       renderTitle,
       renderUsername,
-      renderVerifyAccountLink,
       smDown,
     ],
   );
@@ -950,7 +940,7 @@ const ProfilePage: NextPage = () => {
     return <LoginRequiredTemplate {...layoutProps}>{renderPublicUserInfo}</LoginRequiredTemplate>;
   }
 
-  if (!verified) {
+  if (!verified && !isOwnProfile) {
     return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 

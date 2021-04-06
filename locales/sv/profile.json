@@ -8,5 +8,7 @@
   "ownProfileNoThreads": "Du har inte lagt till några trådar. Alla trådar som du tillagt kommer att visas här.",
   "ownProfileNoComments": "Du har inte lagt till några kommentarer. Alla kommentarer som du tillagt kommer att visas här.",
   "noThreads": "Denna användare har inte lagt till några trådar.",
-  "noComments": "Denna användare har inte lagt till några kommentarer."
+  "noComments": "Denna användare har inte lagt till några kommentarer.",
+  "verificationRequiredThreads": "Verifiera ditt konto för att se trådar.",
+  "verificationRequiredComments": "Verifiera ditt konto för att se kommentarer."
 }

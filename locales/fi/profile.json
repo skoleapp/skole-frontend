@@ -8,5 +8,7 @@
   "ownProfileNoThreads": "Et ole lisännyt yhtään lankaa. Kaikki lisäämäsi langat ilmestyvät tänne.",
   "ownProfileNoComments": "Et ole lisännyt yhtään kommenttia. Kaikki lisäämäsi kommentit ilmestyvät tänne.",
   "noThreads": "Tämä käyttäjä ei ole lisännyt yhtään lankaa.",
-  "noComments": "Tämä käyttäjä ei ole lisännyt yhtään kommenttia."
+  "noComments": "Tämä käyttäjä ei ole lisännyt yhtään kommenttia.",
+  "verificationRequiredThreads": "Vahvista tilisi nähdäksesi langat.",
+  "verificationRequiredComments": "Vahvista tilisi nähdäksesi kommentit."
 }

@@ -8,5 +8,7 @@
   "ownProfileNoThreads": "You have not added any threads. All threads that you add will show up here.",
   "ownProfileNoComments": "You have not added any comments. All comments that you add will show up here.",
   "noThreads": "This user has not added any threads.",
-  "noComments": "This user has not added any comments."
+  "noComments": "This user has not added any comments.",
+  "verificationRequiredThreads": "Verify you account to see threads.",
+  "verificationRequiredComments": "Verify you account to see comments."
 }
