@@ -18,7 +18,7 @@ You agree not to do any of the following:
 
 2.3 Access, tamper with or use non-public areas of the Application, servers, or the technical delivery systems of the Application providers;
 
-2.4 Breach, avoid, bypass, remove, deactivate, impair or otherwise circumvent any technological measure implemented to protect the Application (eg. authentication measures);
+2.4 Breach, avoid, bypass, remove, deactivate, impair or otherwise circumvent any technological measure implemented to protect the Application (e.g. authentication measures);
 
 2.5 Use the Application for any commercial purpose or the benefit of any third party or in any manner not permitted by these Terms;
 
@@ -42,7 +42,7 @@ For purposes of these Terms, "Content IPR" means including but not limited to al
 All rights relating the Application IPR, whether protected or not, (1) are the exclusive property of Skole Oy and its licensors, (2) are protected by the applicable international and national legal provisions, and (3) are under no circumstances transferred in full or in part within the context of the Licence to use the Application.
 All rights relating to content IPR, whether protected or not, (1) are the exclusive property of You. By using the Application, You hereby transfer all user rights to such content IPR to Skole Oy and its users for the purposes of and within the context of the Terms to use the Application.
 
-You also retain all the copyrights to your content. You are responsible for owning all the required copyrights for any content you upload. You are also responsible that all of your content complies with all applicable laws. If your copyrighted content has been uploaded without your permission and you wish for it to be removed, please contact us at contact@skoleapp.com.
+You also retain all the copyrights to your content. You are responsible for owning all the required copyrights for any content you upload. You are also responsible that all of your content complies with all applicable laws. If your copyrighted content has been uploaded without your permission and you wish for it to be removed, please contact us at [hello@skoleapp.com](mailto:hello@skoleapp.com).
 
 By using the Application, you undertake to respect Application IPR and content IPR, as well as those intellectual property rights owned by third parties. You agree not to remove or alter any copyright, trademark, service mark or other proprietary rights incorporated in the Application IPR or content IPR.
 Subject to your compliance with these Terms, you are granted a limited, non-exclusive, non-transferable, non-sublicensable license to download, install, view, copy and display the content solely in connection with your permitted use of the Application and solely for your personal and non-commercial purposes.
@@ -70,15 +70,17 @@ The application is provided "as is" and the use of and reliance upon the Applica
 Under no circumstances will Skole Oy be liable for any consequential, direct, incidental, indirect, punitive or special damage related to the use, the inability to use and/or errors or omissions in the contents and functions of the Application.
 Indemnification
 
-You agree to indemnify, defend, and hold Skole Oy and its agents, directors, employees, information providers, licensors, licensees, officers and/or affiliates harmless from and against any and all liability and costs, including attorneys' fees and costs, incurred in connection with any claim arising out of any breach by you of these Terms. You will cooperate as fully as reasonably required in the defence of any such claim.
+You agree to indemnify, defend, and hold Skole Oy and its agents, directors, employees, information providers, licensors, licensees, officers and/or affiliates harmless from and against any and all liability and costs, including attorneys' fees and costs, incurred in connection with any claim arising out of any breach by you of these Terms. You will cooperate as fully as reasonably required in the defense of any such claim.
 
 ### 8. Termination
 
 These Terms shall be effective until terminated. Skole Oy may, in its sole and absolute discretion, at any time and for any or no reason, disable the Application or suspend or terminate these Terms and the rights afforded to you, with or without prior notice or other action by Skole Oy.
 Upon the termination of these Terms, you shall cease all use of the Application. Skole Oy shall not be liable to you or any third party for compensation, indemnity, or damages of any sort as a result of terminating these Terms. You may at any time cease to use the Application and this way terminate these Terms.
-Updates
+
+### 9. Updates
+
 Skole Oy reserves the right, at its discretion, to change, modify, add or remove portions of these Terms by updating the changed Terms in the Application. You will be deemed to have accepted such changes by continuing to use the Application.
 
-### 9. Applicable law
+### 10. Applicable law
 
 These Terms and the use of the Application are governed by and construed in accordance with the laws of Finland.

@@ -2,7 +2,7 @@
 title: Privacy Policy
 ---
 
-This is a registry and privacy policy in accordance with the EU General Data Protection Regulation (GDPR). Last updated on 2020-12-12.
+This is a registry and privacy policy in accordance with the EU General Data Protection Regulation (GDPR). Last updated on 2021-04-06.
 
 ### 1. General
 
@@ -35,8 +35,8 @@ The above information must be provided in order for us to provide the service to
 
 When you use the service with a registered account we collect and process your:
 
-- Actions that you do in the application and timestamps of them. This includes for example the comments you have made and the material you have uploaded.
-- Optional additional information that you have added to your user profile, such as an avatar, a title, a bio, your school, and your subject.
+- Actions that you do in the application and timestamps of them. This includes for example the comments you have made and the images you have uploaded.
+- Optional additional information that you have added to your user profile, such as your avatar and title.
 
 In addition, some basic request information (e.g. IP-addresses, access times, and user agents) might be collected by us or our hosting provider.
 
@@ -50,7 +50,7 @@ We make sure that we always have a legal basis for processing your personal info
 
 Your personal data is processed by persons belonging to our company's personnel in the performance of their duties. In this case, we take care, among other things, by agreements that the confidentiality of your information is maintained, and that the information is processed in a lawful manner.
 
-We may disclose your information to our contractual partners and/or subcontractors when it is necessary in order to provide our service. These partners include our hosting provider ([AWS](https://aws.amazon.com)), email ([Google](https://www.google.com)) and image processing ([Cloudmersive](https://cloudmersive.com)) services. In these situations, we will take the necessary steps to protect your information, e.g. by signing appropriate data processing agreements with the processors.
+We may disclose your information to our contractual partners and/or subcontractors when it is necessary in order to provide our service. These partners include our hosting provider ([AWS](https://aws.amazon.com)), email and notifications ([Google](https://www.google.com)), and image processing ([Cloudmersive](https://cloudmersive.com)) services. In these situations, we will take the necessary steps to protect your information, e.g. by signing appropriate data processing agreements with the processors.
 
 To get critical information about the behavior of our visitors, we use [Simple Analytics](https://simpleanalytics.com). This analytics software gives us insight about our visitors only in general, but not about individuals per say, as it does not track visitors and does not store any personal identifiable information. [Go to their documentation](https://docs.simpleanalytics.com/what-we-collect) to find out what Simple Analytics collects (and most importantly what they don't).
 
@@ -92,7 +92,7 @@ We don't use cookies provided by third parties.
 
 ### 11. How can I exercise my rights?
 
-You can exercise your rights described above by emailing us at [contact@skoleapp.com](mailto:contact@skoleapp.com).
+You can exercise your rights described above by emailing us at [hello@skoleapp.com](mailto:hello@skoleapp.com).
 
 To access your stored information in the application, log in and open your user profile. From there you can view, edit, and delete your data.
 
@@ -103,4 +103,4 @@ We may make updates to this privacy policy as our operations or privacy policies
 ### 13. Who can I contact about data protection issues?
 
 Skole Oy (3165553-6) \
-[contact@skoleapp.com](mailto:contact@skoleapp.com)
+[hello@skoleapp.com](mailto:hello@skoleapp.com)
