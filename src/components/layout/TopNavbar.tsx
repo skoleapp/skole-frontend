@@ -167,7 +167,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </Grid>
           <Grid item xs={dense ? 4 : 2} container justify="flex-end" alignItems="center">
             {renderHeaderRightSecondary}
-            {renderHeaderRight || renderLanguageButton}
+            {renderHeaderRight}
           </Grid>
         </Grid>
       ),
@@ -178,7 +178,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       renderHeaderLeft,
       renderHeaderRight,
       renderHeaderRightSecondary,
-      renderLanguageButton,
       renderLogo,
       smDown,
     ],
