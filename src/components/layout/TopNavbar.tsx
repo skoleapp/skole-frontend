@@ -25,7 +25,6 @@ import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import { useAuthContext, useDarkModeContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
-import { useRouter } from 'next/router';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { TopNavbarProps } from 'types';
@@ -91,7 +90,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   renderHeaderLeft,
 }) => {
   const classes = useStyles();
-  const { asPath } = useRouter();
   const { spacing } = useTheme();
   const { t } = useTranslation();
   const { smDown, mdUp } = useMediaQueries();
@@ -309,20 +307,11 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderLoginButton = useMemo(
     () =>
       !hideLoginButton && (
-        <ButtonLink
-          href={{
-            pathname: urls.login,
-            query: {
-              next: asPath,
-            },
-          }}
-          color="secondary"
-          endIcon={<HowToRegOutlined />}
-        >
+        <ButtonLink href={urls.login} color="secondary" endIcon={<HowToRegOutlined />}>
           {t('common:login')}
         </ButtonLink>
       ),
-    [asPath, hideLoginButton, t],
+    [hideLoginButton, t],
   );
 
   const renderRegisterButton = useMemo(
