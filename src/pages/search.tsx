@@ -38,7 +38,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { withThreadForm } from 'src/hocs/withThreadForm';
 import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { getPaginationQuery, urls } from 'utils';
 
@@ -329,6 +328,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-const withWrappers = R.compose(withAuthRequired, withThreadForm);
-
-export default withWrappers(SearchPage);
+export default withAuthRequired(SearchPage);

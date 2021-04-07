@@ -32,7 +32,6 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { withThreadForm } from 'src/hocs/withThreadForm';
 import { BORDER, BORDER_RADIUS } from 'styles';
 import { INVITE_PROMPT_KEY } from 'utils';
 
@@ -242,6 +241,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-const withWrappers = R.compose(withAuthRequired, withThreadForm);
-
-export default withWrappers(HomePage);
+export default withAuthRequired(HomePage);
