@@ -2,7 +2,7 @@
 title: Privacy Policy
 ---
 
-This is a registry and privacy policy in accordance with the EU General Data Protection Regulation (GDPR). Last updated on 2021-04-06.
+This is a registry and privacy policy in accordance with the EU General Data Protection Regulation (GDPR). Last updated on 2021-04-07.
 
 ### 1. General
 
@@ -35,8 +35,8 @@ The above information must be provided in order for us to provide the service to
 
 When you use the service with a registered account we collect and process your:
 
-- Actions that you do in the application and timestamps of them. This includes for example the comments you have made and the images you have uploaded.
-- Optional additional information that you have added to your user profile, such as your avatar and title.
+- Actions that you do in the application and timestamps of them. This includes for example the comments you have made and the content you have uploaded.
+- Optional additional information that you have added to your user profile, such as your avatar, title, and bio.
 
 In addition, some basic request information (e.g. IP-addresses, access times, and user agents) might be collected by us or our hosting provider.
 
