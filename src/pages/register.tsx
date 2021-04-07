@@ -9,6 +9,7 @@ import {
   FormSubmitSection,
   FormTemplate,
   PasswordField,
+  PrimaryEmailField,
   TextFormField,
   TextLink,
 } from 'components';
@@ -182,22 +183,15 @@ const RegisterPage: NextPage = () => {
         label={t('forms:username')}
         name="username"
         component={TextFormField}
-        helperText={t('register:usernameHelperText')}
+        helperText={t('forms:usernameHelperText')}
       />
     ),
     [t],
   );
 
-  const renderEmailField = useMemo(
-    () => (
-      <Field
-        label={t('forms:email')}
-        name="email"
-        component={TextFormField}
-        helperText={t('register:emailHelperText')}
-      />
-    ),
-    [t],
+  const renderEmailField = useCallback(
+    (props: FormikProps<RegisterFormValues>) => <PrimaryEmailField {...props} />,
+    [],
   );
 
   const renderInviteCodeHelperText = useMemo(
@@ -239,7 +233,7 @@ const RegisterPage: NextPage = () => {
     () => (
       <FormControl>
         <FormHelperText>
-          {t('register:termsHelperText')}{' '}
+          {t('forms:termsHelperText')}{' '}
           <TextLink href={urls.terms} target="_blank">
             {t('common:terms')}
           </TextLink>
@@ -277,7 +271,7 @@ const RegisterPage: NextPage = () => {
     (props: FormikProps<RegisterFormValues>): JSX.Element => (
       <Form>
         {renderUsernameField}
-        {renderEmailField}
+        {renderEmailField(props)}
         {renderPasswordField(props)}
         {renderConfirmPasswordField(props)}
         {renderConfirmPasswordField}

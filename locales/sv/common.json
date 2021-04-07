@@ -67,5 +67,7 @@
   "linkCopied": "Länk kopierad till urklipp!",
   "inviteCodeText": "Här är din inbjudningskod:",
   "inviteButtonText": "Bjud in nu",
-  "inviteCodeCopied": "Bjud in kod kopierad till urklipp!"
+  "inviteCodeCopied": "Bjud in kod kopierad till urklipp!",
+  "primaryEmailDialogText": "Tillåtna domäner för din primära e-postadress är:",
+  "gotIt": "Fick det!"
 }

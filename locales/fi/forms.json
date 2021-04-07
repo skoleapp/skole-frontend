@@ -26,5 +26,8 @@
   "selected": "{{ fileName }} valittu.",
   "uploadImage": "Lisää kuva",
   "create": "Luo",
-  "code": "Koodi"
+  "code": "Koodi",
+  "primaryEmailHelperText": "Koulusähköpostisi, jota käytämme sitä sinun tunnistamiseen. Se näkyy vain sinulle. Emme lähetä sinulle roskapostia.",
+  "usernameHelperText": "Käyttäjätunnus tai sähköposti",
+  "termsHelperText": "Rekisteröitymällä hyväksyt"
 }

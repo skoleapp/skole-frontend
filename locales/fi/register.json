@@ -1,9 +1,6 @@
 {
   "title": "Rekisteröidy",
   "header": "Rekisteröidy",
-  "emailHelperText": "Sähköpostisi, jota käytämme sitä sinun tunnistamiseen. Se näkyy vain sinulle. Emme lähetä sinulle roskapostia.",
-  "usernameHelperText": "Käyttäjätunnus tai sähköposti",
-  "termsHelperText": "Rekisteröitymällä hyväksyt",
   "loginLinkText": "Onko sinulla jo tili?",
   "inviteCodeHelperText": "Pass in the invite code from an existing user to complete the registration.",
   "secondaryInviteCodeHelperText": "Don't have an invite code? Don't worry, you've been assigned to a wait list. We'll let you know when there's room for you to join!",

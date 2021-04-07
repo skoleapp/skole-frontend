@@ -7,6 +7,7 @@ import VpnKeyOutlined from '@material-ui/icons/VpnKeyOutlined';
 import {
   ButtonLink,
   FormSubmitSection,
+  PrimaryEmailField,
   SettingsTemplate,
   SwitchFormField,
   TextFormField,
@@ -131,9 +132,9 @@ const AccountSettingsPage: NextPage = () => {
     backupEmail: Yup.string().email(t('validation:invalidEmail')),
   });
 
-  const renderEmailField = useMemo(
-    () => <Field name="email" component={TextFormField} label={t('forms:email')} />,
-    [t],
+  const renderEmailField = useCallback(
+    (props: FormikProps<UpdateAccountSettingsFormValues>) => <PrimaryEmailField {...props} />,
+    [],
   );
 
   const renderBackupEmailField = useMemo(
@@ -255,7 +256,7 @@ const AccountSettingsPage: NextPage = () => {
   const renderFormFields = useCallback(
     (props: FormikProps<UpdateAccountSettingsFormValues>): JSX.Element => (
       <Form>
-        {renderEmailField}
+        {renderEmailField(props)}
         {renderBackupEmailField}
         {renderEmailNotifications}
         {renderPushNotifications}

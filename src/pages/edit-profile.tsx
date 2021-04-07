@@ -126,8 +126,8 @@ const EditProfilePage: NextPage = () => {
   const renderFormFields = (props: FormikProps<UpdateProfileFormValues>): JSX.Element => (
     <Form>
       {renderAvatarField(props)}
-      {renderTitleField}
       {renderUsernameField}
+      {renderTitleField}
       {renderBioField}
       {renderFormSubmitSection(props)}
       {renderVerifyAccountLink}

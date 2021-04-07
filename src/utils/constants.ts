@@ -163,3 +163,20 @@ export const SCHOOL_LOGOS = [
     alt: 'Uniarts Helsinki',
   },
 ];
+
+export const ALLOWED_EMAIL_DOMAINS = [
+  'utu.fi',
+  'abo.fi',
+  'aalto.fi',
+  'helsinki.fi',
+  'tuni.fi',
+  'student.lut.fi',
+  'student.jyu.fi',
+  'hanken.fi',
+  'student.oulu.fi',
+  'student.uwasa.fi',
+  'student.uef.fi',
+  'ulapland.fi',
+  'mil.fi',
+  'uniarts.fi',
+];

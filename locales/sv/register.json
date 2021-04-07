@@ -1,9 +1,6 @@
 {
   "title": "Registrera",
   "header": "Registrera",
-  "emailHelperText": "Ditt e-postmeddelande som vi kan använda för att identifiera dig. Ditt e-postmeddelande är endast synligt för dig. Vi kommer inte att skräpposta dig.",
-  "usernameHelperText": "Ditt användarnamn visas för andra användare.",
-  "termsHelperText": "Genom att registrera dig godkänner du våra",
   "loginLinkText": "Har du redan ett konto?",
   "inviteCodeHelperText": "Skicka in inbjudningskoden från en befintlig användare för att slutföra registreringen.",
   "secondaryInviteCodeHelperText": "Har du ingen inbjudningskod? Oroa dig inte, du har tilldelats en väntelista. Vi meddelar dig när det finns plats för dig att gå med!",
