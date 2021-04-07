@@ -63,10 +63,6 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
     topNavbarProps: {
       header,
       emoji,
-      hideSearch: true,
-      hideDynamicButtons: true,
-      hideLanguageButton: true,
-      hideDarkModeButton: true,
     },
   };
 
