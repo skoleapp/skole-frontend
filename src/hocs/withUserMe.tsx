@@ -101,11 +101,11 @@ export const withUserMe = <T extends Record<string, unknown>>(
       return <ErrorTemplate variant="offline" />;
     }
 
-    if (!authLoading && !authNetworkError) {
-      return <PageComponent {...pageProps} />;
+    if (authLoading) {
+      return <LoadingTemplate />;
     }
 
-    return <LoadingTemplate />;
+    return <PageComponent {...pageProps} />;
   };
 
   return withCommonContexts(WithUserMe);
