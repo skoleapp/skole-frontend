@@ -104,3 +104,9 @@ export interface OrderingContextType {
   setOrdering: Dispatch<SetStateAction<Ordering>>;
   orderingLabel: string;
 }
+
+export interface InviteContextType {
+  inviteDialogOpen: boolean;
+  handleOpenInviteDialog: () => void;
+  handleCloseInviteDialog: () => void;
+}

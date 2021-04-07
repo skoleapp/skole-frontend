@@ -10,5 +10,7 @@
   "noThreads": "This user has not added any threads.",
   "noComments": "This user has not added any comments.",
   "verificationRequiredThreads": "Verify you account to see threads.",
-  "verificationRequiredComments": "Verify you account to see comments."
+  "verificationRequiredComments": "Verify you account to see comments.",
+  "inviteDialogHeader": "Invite Your Friends! 🤝",
+  "inviteText": "You can use your personal invite code to let your friends join Skole too! Your code has {{ inviteCodeUsages }} usages left."
 }

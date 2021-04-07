@@ -64,5 +64,8 @@
   "best": "Bästa",
   "newest": "Nyaste",
   "createThread": "Skapa tråd",
-  "linkCopied": "Länk kopierad till urklipp!"
+  "linkCopied": "Länk kopierad till urklipp!",
+  "inviteCodeText": "Här är din inbjudningskod:",
+  "inviteButtonText": "Bjud in nu",
+  "inviteCodeCopied": "Bjud in kod kopierad till urklipp!"
 }

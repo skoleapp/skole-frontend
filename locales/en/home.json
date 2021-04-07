@@ -1,8 +1,5 @@
 {
   "title": "Home",
-  "inviteHeader": "Congratulations {{ username }}!",
-  "inviteText": "You are the user number {{ id }}. As a reward, you will get a code that you can use to invite 2 of your friends!",
-  "inviteCodeText": "Here's your invite code:",
-  "inviteButtonText": "Invite Now",
-  "inviteCodeCopied": "Invite code copied to clipboard!"
+  "inviteDialogHeader": "Congratulations! 🎉",
+  "inviteText": "Welcome to Skole, {{ username }}! You are the user number {{ id }}. As a reward, you will get a personal code that you can use to invite {{ inviteCodeUsages }} of your friends!"
 }

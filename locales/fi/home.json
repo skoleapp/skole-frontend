@@ -1,8 +1,5 @@
 {
   "title": "Koti",
-  "inviteHeader": "Onneksi olkoon {{ username }}!",
-  "inviteText": "Olet käyttäjä numero {{ id }}. Palkinnoksi saat koodin, jolla voit kutsua kaksi ystävääsi!",
-  "inviteCodeText": "Tässä on kutsukoodisi:",
-  "inviteButtonText": "Kutsu nyt",
-  "inviteCodeCopied": "Kutsukoodi kopioitu leikepöydälle!"
+  "inviteDialogHeader": "Onneksi olkoon! 🎉",
+  "inviteText": "Tervetuloa Skoleen, {{ username }}! Olet käyttäjä numero {{ id }}. Palkinnoksi saat henkilökohtaiseen koodin, jolla voit kutsua {{ inviteCodeUsages }} ystävääsi!"
 }

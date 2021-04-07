@@ -29,7 +29,7 @@ interface UseAuthContext extends AuthContextType {
   badgeProgresses: BadgeProgressObjectType[];
   selectedBadgeProgress: BadgeProgressObjectType | null;
   inviteCode: string;
-  inviteCodeUsages: string;
+  inviteCodeUsages: number;
   commentReplyEmailPermission: boolean;
   threadCommentEmailPermission: boolean;
   newBadgeEmailPermission: boolean;

@@ -1,8 +1,5 @@
 {
   "title": "Hemsida",
   "inviteHeader": "Grattis {{ username }}!",
-  "inviteText": "Du är användarnumret {{ id }}. Som belöning får du en kod som du kan använda för att bjuda in 2 av dina vänner!",
-  "inviteCodeText": "Här är din inbjudningskod:",
-  "inviteButtonText": "Bjud in nu",
-  "inviteCodeCopied": "Bjud in kod kopierad till urklipp!"
+  "inviteText": "Du är användarnumret {{ id }}. Som belöning får du en kod som du kan använda för att bjuda in 2 av dina vänner!"
 }

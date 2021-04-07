@@ -3,8 +3,10 @@ import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import MaterialLink from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -26,6 +28,7 @@ import {
   DialogHeader,
   Emoji,
   ErrorTemplate,
+  InviteDialog,
   Link,
   LoadingBox,
   LoadingTemplate,
@@ -39,7 +42,7 @@ import {
   TextLink,
   ThreadTableBody,
 } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useAuthContext, useInviteContext, useNotificationsContext } from 'context';
 import {
   BadgeObjectType,
   BadgeProgressFieldsFragment,
@@ -165,7 +168,8 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 
 interface ProfileStrengthStep {
   label: string;
-  href: string;
+  href?: string;
+  handleClick?: () => void;
   completed: boolean;
 }
 
@@ -175,12 +179,14 @@ const ProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
+  const { handleOpenInviteDialog } = useInviteContext();
 
   const {
     userMe,
     badgeProgresses,
     selectedBadgeProgress: initialSelectedBadgeProgress,
     verified,
+    inviteCodeUsages,
   } = useAuthContext();
 
   const [
@@ -269,8 +275,8 @@ const ProfilePage: NextPage = () => {
     },
     {
       label: t('profile-strength:step3'),
-      href: '#', // TODO: Implement invite logic here.
-      completed: false,
+      completed: inviteCodeUsages === 0,
+      handleClick: handleOpenInviteDialog,
     },
   ].sort((prev) => (prev.completed ? -1 : 1));
 
@@ -622,18 +628,20 @@ const ProfilePage: NextPage = () => {
   const renderProfileStrengthStepLabel = ({
     label,
     href,
+    handleClick,
     completed,
   }: ProfileStrengthStep): JSX.Element =>
     useMemo(
       () =>
-        !completed ? (
-          <TextLink href={href}>{label}</TextLink>
-        ) : (
+        (!completed &&
+          ((href && <TextLink href={href}>{label}</TextLink>) || (
+            <MaterialLink onClick={handleClick}>{label}</MaterialLink>
+          ))) || (
           <Typography variant="body2" color="textSecondary">
             {label}
           </Typography>
         ),
-      [completed, href, label],
+      [completed, href, label, handleClick],
     );
 
   // Render uncompleted items as links and completed ones as regular text.
@@ -913,6 +921,26 @@ const ProfilePage: NextPage = () => {
     ],
   );
 
+  const renderInviteDialogText = useMemo(
+    () => (
+      <DialogContentText>
+        <Typography variant="body2">{t('profile:inviteText', { inviteCodeUsages })}</Typography>
+      </DialogContentText>
+    ),
+    [t, inviteCodeUsages],
+  );
+
+  const renderInviteDialog = useMemo(
+    () =>
+      isOwnProfile && (
+        <InviteDialog
+          header={t('profile:inviteDialogHeader')}
+          dynamicContent={[renderInviteDialogText]}
+        />
+      ),
+    [isOwnProfile, renderInviteDialogText, t],
+  );
+
   const layoutProps = {
     seoProps: {
       title: username,
@@ -954,6 +982,7 @@ const ProfilePage: NextPage = () => {
       {renderMobileActionsCard}
       {renderCreatedContent}
       {renderSelectBadgeDialog}
+      {renderInviteDialog}
     </MainTemplate>
   );
 };
