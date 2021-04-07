@@ -964,16 +964,16 @@ const ProfilePage: NextPage = () => {
     return <ErrorTemplate variant="error" />;
   }
 
+  if (!user) {
+    return <ErrorTemplate variant="not-found" />;
+  }
+
   if (!userMe) {
     return <LoginRequiredTemplate {...layoutProps}>{renderPublicUserInfo}</LoginRequiredTemplate>;
   }
 
   if (!verified && !isOwnProfile) {
     return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
-  }
-
-  if (!user) {
-    return <ErrorTemplate variant="not-found" />;
   }
 
   return (
