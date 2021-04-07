@@ -25,6 +25,7 @@ import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { PASSWORD_MIN_LENGTH, urls } from 'utils';
 import * as Yup from 'yup';
@@ -56,9 +57,11 @@ enum RegisterPhases {
 const RegisterPage: NextPage = () => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { query } = useRouter();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
   const { userMe, setUserMe } = useAuthContext();
+  const initialCode = query.code ? String(query.code) : '';
   const [savedEmail, setSavedEmail] = useState('');
   const [savedPassword, setSavedPassword] = useState('');
 
@@ -90,9 +93,9 @@ const RegisterPage: NextPage = () => {
   const inviteCodeFormInitialValues = useMemo(
     () => ({
       ...generalInviteCodeFormValues,
-      code: '',
+      code: initialCode,
     }),
-    [generalInviteCodeFormValues],
+    [generalInviteCodeFormValues, initialCode],
   );
 
   const registerValidationSchema = Yup.object().shape({
@@ -261,10 +264,10 @@ const RegisterPage: NextPage = () => {
   const renderLoginLink = useMemo(
     () => (
       <FormControl className={classes.link}>
-        <TextLink href={urls.login}>{t('register:loginLinkText')}</TextLink>
+        <TextLink href={{ pathname: urls.login, query }}>{t('register:loginLinkText')}</TextLink>
       </FormControl>
     ),
-    [t, classes.link],
+    [t, classes.link, query],
   );
 
   const renderRegisterFormFields = useCallback(
@@ -316,6 +319,7 @@ const RegisterPage: NextPage = () => {
           validationSchema={registerValidationSchema}
           onSubmit={handleRegisterSubmit}
           innerRef={registerFormRef}
+          enableReinitialize
         >
           {renderRegisterFormFields}
         </Formik>
@@ -338,6 +342,7 @@ const RegisterPage: NextPage = () => {
           validationSchema={inviteCodeFormValidationSchema}
           onSubmit={handleInviteCodeFormSubmit}
           innerRef={inviteCodeFormRef}
+          enableReinitialize
         >
           {renderInviteCodeFormFields}
         </Formik>

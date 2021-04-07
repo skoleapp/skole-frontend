@@ -3,6 +3,7 @@
   "header": "Kirjaudu sisään",
   "forgotPassword": "Unohtuiko salasana?",
   "existingUserGreeting": "Tervetuloa takaisin, {{ username }}.",
+  "inviteCodeHelperText": "Syötä kutsukoodi nykyiseltä käyttäjältä kirjautuaksesi.",
   "loginWithDifferentCredentials": "Kirjaudu eri tunnuksilla",
   "registerLinkText": "Eikö sinulla vielä ole tiliä?"
 }

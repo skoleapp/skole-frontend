@@ -7,6 +7,7 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useDarkModeContext } from 'context';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { MainTemplateProps } from 'types';
 import { SCHOOL_LOGOS, SLOGAN, urls } from 'utils';
@@ -86,6 +87,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
   const classes = useStyles();
   const { darkMode } = useDarkModeContext();
   const { t } = useTranslation();
+  const { query } = useRouter();
   const infoText = t('common:landingPageInfo');
 
   const renderInfoTextEmoji = useMemo(() => <Emoji emoji="👇" />, []);
@@ -137,7 +139,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
     () => (
       <ButtonLink
         className={classes.ctaButton}
-        href={urls.register}
+        href={{ pathname: urls.register, query: query.code && { code: query.code } }}
         color="primary"
         variant="contained"
         endIcon={<ArrowForwardOutlined />}
@@ -145,7 +147,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
         {t('common:landingPageCta')}
       </ButtonLink>
     ),
-    [classes.ctaButton, t],
+    [classes.ctaButton, t, query],
   );
 
   const renderAppStoreBadges = useMemo(

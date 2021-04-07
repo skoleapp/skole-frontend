@@ -1,5 +1,6 @@
 import Avatar from '@material-ui/core/Avatar';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import MaterialLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -64,6 +65,7 @@ const LoginPage: NextPage = () => {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
+  const initialCode = query.code ? String(query.code) : '';
   const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
   const username = R.prop('username', existingUser);
   const email = R.prop('email', existingUser);
@@ -140,9 +142,9 @@ const LoginPage: NextPage = () => {
   const initialInviteCodeFormValues = useMemo(
     () => ({
       ...generalInviteCodeFormValues,
-      code: '',
+      code: initialCode,
     }),
-    [generalInviteCodeFormValues],
+    [generalInviteCodeFormValues, initialCode],
   );
 
   const onLoginCompleted = async ({ login }: LoginMutation): Promise<void> => {
@@ -281,10 +283,10 @@ const LoginPage: NextPage = () => {
   const renderRegisterLink = useMemo(
     () => (
       <FormControl className={classes.link}>
-        <TextLink href={urls.register}>{t('login:registerLinkText')}</TextLink>
+        <TextLink href={{ pathname: urls.register, query }}>{t('login:registerLinkText')}</TextLink>
       </FormControl>
     ),
-    [classes.link, t],
+    [classes.link, t, query],
   );
 
   const renderForgotPasswordLink = useMemo(
@@ -306,6 +308,15 @@ const LoginPage: NextPage = () => {
         </FormControl>
       ),
     [classes.link, handleLoginWithDifferentCredentials, t, validExistingUser, showInviteCodeForm],
+  );
+
+  const renderInviteCodeHelperText = useMemo(
+    () => (
+      <FormControl>
+        <FormHelperText>{t('login:inviteCodeHelperText')}</FormHelperText>
+      </FormControl>
+    ),
+    [t],
   );
 
   const renderInviteCodeField = useMemo(
@@ -344,6 +355,7 @@ const LoginPage: NextPage = () => {
           validationSchema={loginFormValidationSchema}
           onSubmit={handleLoginFormSubmit}
           innerRef={loginFormRef}
+          enableReinitialize
         >
           {renderLoginFormFields}
         </Formik>
@@ -361,12 +373,14 @@ const LoginPage: NextPage = () => {
   const renderInviteCodeFormFields = useCallback(
     (props: FormikProps<InviteCodeFormValues>) => (
       <Form>
+        {renderInviteCodeHelperText}
         {renderInviteCodeField}
         {renderInviteCodeFormSubmitSection(props)}
         {renderLoginWithDifferentCredentialsLink}
       </Form>
     ),
     [
+      renderInviteCodeHelperText,
       renderInviteCodeFormSubmitSection,
       renderInviteCodeField,
       renderLoginWithDifferentCredentialsLink,
@@ -381,6 +395,7 @@ const LoginPage: NextPage = () => {
           validationSchema={inviteCodeFormValidationSchema}
           onSubmit={handleInviteCodeFormSubmit}
           innerRef={inviteCodeFormRef}
+          enableReinitialize
         >
           {renderInviteCodeFormFields}
         </Formik>

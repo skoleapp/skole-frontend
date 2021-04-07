@@ -107,6 +107,7 @@ export const DeleteAccountPage: NextPage = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       innerRef={formRef}
+      enableReinitialize
     >
       {renderFormFields}
     </Formik>

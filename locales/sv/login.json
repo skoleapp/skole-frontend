@@ -3,6 +3,7 @@
   "header": "Logga In",
   "forgotPassword": "Glömt ditt lösenord?",
   "existingUserGreeting": "Välkommen tillbaka, {{ username }}.",
+  "inviteCodeHelperText": "Skicka in inbjudningskoden från en befintlig användare för att logga in.",
   "loginWithDifferentCredentials": "Logga in med olika referenser",
   "registerLinkText": "Har du inte ett konto ännu?"
 }
