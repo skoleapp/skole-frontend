@@ -18,6 +18,7 @@ const useStyles = makeStyles(() => ({
 
 interface Props extends LinkProps {
   fullWidth?: boolean;
+  flexGrow?: boolean;
 }
 
 export const Link: React.FC<Props> = ({ href, children, fullWidth, ...props }) => {

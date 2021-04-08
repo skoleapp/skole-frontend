@@ -2,23 +2,23 @@ import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import AddOutlined from '@material-ui/icons/AddOutlined';
 import HomeOutlined from '@material-ui/icons/HomeOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import SearchOutlined from '@material-ui/icons/SearchOutlined';
-import StarOutlineOutlined from '@material-ui/icons/StarOutlineOutlined';
-import { useAuthContext } from 'context';
+import { useAuthContext, useThreadFormContext } from 'context';
 import { useTranslation } from 'lib';
 import Router, { useRouter } from 'next/router';
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { UrlObject } from 'url';
+import React, { useMemo } from 'react';
 import { urls } from 'utils';
-
-import { Link } from '../shared';
 
 export const BottomNavbar: React.FC = () => {
   const { t } = useTranslation();
-  const { userMe, avatarThumbnail, unreadActivityCount, profileUrl } = useAuthContext();
   const { pathname, query } = useRouter();
+  const { avatarThumbnail, unreadActivityCount, profileUrl, slug } = useAuthContext();
+  const { handleOpenThreadForm } = useThreadFormContext();
+
+  const handleRedirect = (url: string) => async (): Promise<boolean> => Router.push(url);
 
   const getNavbarValue = (): void | number | null => {
     switch (pathname) {
@@ -30,16 +30,12 @@ export const BottomNavbar: React.FC = () => {
         return 2;
       }
 
-      case urls.starred: {
-        return 3;
-      }
-
       case urls.activity: {
         return 4;
       }
 
-      case '/users/[id]': {
-        if (!!userMe && query.id === userMe.id) {
+      case '/users/[slug]': {
+        if (slug === query.slug) {
           return 5;
         }
 
@@ -52,35 +48,18 @@ export const BottomNavbar: React.FC = () => {
     }
   };
 
-  const [value, setValue] = useState(getNavbarValue());
-
-  const handleChange = (_e: ChangeEvent<Record<symbol, unknown>>, newValue: number): void =>
-    setValue(newValue);
-
-  const handleRedirect = (url: string | UrlObject) => (): Promise<boolean> => Router.push(url);
-  const profileLabel = userMe ? t('common:profile') : t('common:login');
-  const authUrl = userMe ? profileUrl : urls.login;
-
-  const handleProfileActionClick = useCallback((): Promise<boolean> => Router.push(authUrl), [
-    authUrl,
-  ]);
-
   const renderAvatar = useMemo(
-    () => (
-      <Link href={authUrl}>
-        <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
-      </Link>
-    ),
-    [authUrl, avatarThumbnail],
+    () => <Avatar className="avatar-thumbnail" src={avatarThumbnail} />,
+    [avatarThumbnail],
   );
 
   const renderHomeAction = useMemo(
     () => (
       <BottomNavigationAction
         value={1}
+        onClick={handleRedirect(urls.home)}
         label={t('common:home')}
         showLabel
-        onClick={handleRedirect(urls.home)}
         icon={<HomeOutlined />}
       />
     ),
@@ -91,26 +70,26 @@ export const BottomNavbar: React.FC = () => {
     () => (
       <BottomNavigationAction
         value={2}
+        onClick={handleRedirect(urls.search)}
         label={t('common:search')}
         showLabel
-        onClick={handleRedirect(urls.search)}
         icon={<SearchOutlined />}
       />
     ),
     [t],
   );
 
-  const renderStarredAction = useMemo(
+  const renderCreateThreadAction = useMemo(
     () => (
       <BottomNavigationAction
         value={3}
-        label={t('common:starred')}
+        label={t('common:create')}
         showLabel
-        onClick={handleRedirect(urls.starred)}
-        icon={<StarOutlineOutlined />}
+        onClick={(): void => handleOpenThreadForm()}
+        icon={<AddOutlined />}
       />
     ),
-    [t],
+    [t, handleOpenThreadForm],
   );
 
   const renderActivityIcon = useMemo(
@@ -126,9 +105,9 @@ export const BottomNavbar: React.FC = () => {
     () => (
       <BottomNavigationAction
         value={4}
+        onClick={handleRedirect(urls.activity)}
         label={t('common:activity')}
         showLabel
-        onClick={handleRedirect(urls.activity)}
         icon={renderActivityIcon}
       />
     ),
@@ -139,20 +118,20 @@ export const BottomNavbar: React.FC = () => {
     () => (
       <BottomNavigationAction
         value={5}
-        label={profileLabel}
+        onClick={handleRedirect(profileUrl)}
+        label={t('common:profile')}
         showLabel
-        onClick={handleProfileActionClick}
         icon={renderAvatar}
       />
     ),
-    [handleProfileActionClick, profileLabel, renderAvatar],
+    [renderAvatar, profileUrl, t],
   );
 
   return (
-    <BottomNavigation value={value} onChange={handleChange}>
+    <BottomNavigation value={getNavbarValue()}>
       {renderHomeAction}
       {renderSearchAction}
-      {renderStarredAction}
+      {renderCreateThreadAction}
       {renderActivityAction}
       {renderProfileAction}
     </BottomNavigation>

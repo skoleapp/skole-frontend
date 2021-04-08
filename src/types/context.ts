@@ -92,7 +92,7 @@ export interface ThreadFormParams {
 
 export interface ThreadFormContextType {
   threadFormOpen: boolean;
-  handleOpenThreadForm: (params: ThreadFormParams) => void;
+  handleOpenThreadForm: (params?: ThreadFormParams) => void;
   handleCloseThreadForm: () => void;
   threadFormParams: ThreadFormParams;
 }

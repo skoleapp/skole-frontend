@@ -10,9 +10,12 @@ export const ThreadFormContextProvider: React.FC = ({ children }) => {
   const [threadFormOpen, setThreadFormOpen] = useState(false);
   const [threadFormParams, setThreadFormParams] = useState<ThreadFormParams>({ title: '' });
 
-  const handleOpenThreadForm = (params: ThreadFormParams): void => {
+  const handleOpenThreadForm = (params?: ThreadFormParams): void => {
     setThreadFormOpen(true);
-    setThreadFormParams(params);
+
+    if (params) {
+      setThreadFormParams(params);
+    }
   };
 
   const handleCloseThreadForm = (): void => setThreadFormOpen(false);

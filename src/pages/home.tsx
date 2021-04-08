@@ -8,9 +8,11 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import {
   ActionRequiredTemplate,
   ErrorTemplate,
+  IconButtonLink,
   InviteDialog,
   LoadingBox,
   MainTemplate,
@@ -20,27 +22,26 @@ import {
 } from 'components';
 import {
   useAuthContext,
+  useDarkModeContext,
   useInviteContext,
   useOrderingContext,
   useThreadFormContext,
 } from 'context';
 import { ThreadObjectType, useThreadsQuery } from 'generated';
 import { withAuthRequired } from 'hocs';
-import { useLanguageHeaderContext } from 'hooks';
+import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
-import { INVITE_PROMPT_KEY } from 'utils';
+import { INVITE_PROMPT_KEY, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   createThreadContainer: {
     padding: spacing(2),
-    [breakpoints.up('md')]: {
-      borderRadius: BORDER_RADIUS,
-    },
+    borderRadius: BORDER_RADIUS,
   },
   createThreadInputBase: {
     padding: spacing(2),
@@ -78,6 +79,7 @@ const HomePage: NextPage = () => {
   const queryVariables = R.pick(['page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const { handleOpenInviteDialog } = useInviteContext();
+  const { mdUp } = useMediaQueries();
 
   const variables = {
     ordering,
@@ -108,26 +110,43 @@ const HomePage: NextPage = () => {
     [handleOpenThreadForm, title],
   );
 
-  const renderCreateThread = useMemo(
+  const renderStarredButton = useMemo(
     () => (
-      <Paper className={classes.createThreadContainer}>
-        <form onSubmit={handleSubmitCreateThread}>
-          <Box display="flex">
-            <InputBase
-              value={title}
-              onChange={(e): void => setTitle(e.target.value)}
-              placeholder={t('forms:createThread')}
-              autoComplete="off"
-              className={classes.createThreadInputBase}
-              fullWidth
-            />
-            <Button className={classes.createThreadSubmitButton} variant="contained" type="submit">
-              <ArrowForwardOutlined />
-            </Button>
-          </Box>
-        </form>
-      </Paper>
+      <IconButtonLink
+        color="secondary"
+        size="small"
+        href={urls.starred}
+        icon={StarBorderOutlined}
+      />
     ),
+    [],
+  );
+
+  const renderCreateThread = useMemo(
+    () =>
+      mdUp && (
+        <Paper className={classes.createThreadContainer}>
+          <form onSubmit={handleSubmitCreateThread}>
+            <Box display="flex">
+              <InputBase
+                value={title}
+                onChange={(e): void => setTitle(e.target.value)}
+                placeholder={t('forms:createThread')}
+                autoComplete="off"
+                className={classes.createThreadInputBase}
+                fullWidth
+              />
+              <Button
+                className={classes.createThreadSubmitButton}
+                variant="contained"
+                type="submit"
+              >
+                <ArrowForwardOutlined />
+              </Button>
+            </Box>
+          </form>
+        </Paper>
+      ),
     [
       classes.createThreadContainer,
       classes.createThreadInputBase,
@@ -135,6 +154,7 @@ const HomePage: NextPage = () => {
       t,
       title,
       handleSubmitCreateThread,
+      mdUp,
     ],
   );
 
@@ -206,6 +226,7 @@ const HomePage: NextPage = () => {
     },
     topNavbarProps: {
       hideBackButton: true,
+      renderHeaderRight: renderStarredButton,
     },
     hideBottomNavbar: false,
     hideLogo: true,

@@ -71,5 +71,6 @@
   "inviteButtonText": "Invite Now",
   "inviteCodeCopied": "Invite code copied to clipboard!",
   "primaryEmailDialogText": "Allowed domains for your primary email are:",
-  "gotIt": "Got it!"
+  "gotIt": "Got it!",
+  "create": "Create"
 }
