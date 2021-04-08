@@ -3,8 +3,10 @@ import Box from '@material-ui/core/Box';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import MaterialLink from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -26,6 +28,7 @@ import {
   DialogHeader,
   Emoji,
   ErrorTemplate,
+  InviteDialog,
   Link,
   LoadingBox,
   LoadingTemplate,
@@ -39,7 +42,7 @@ import {
   TextLink,
   ThreadTableBody,
 } from 'components';
-import { useAuthContext, useNotificationsContext } from 'context';
+import { useAuthContext, useInviteContext, useNotificationsContext } from 'context';
 import {
   BadgeObjectType,
   BadgeProgressFieldsFragment,
@@ -165,7 +168,8 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 
 interface ProfileStrengthStep {
   label: string;
-  href: string;
+  href?: string;
+  handleClick?: () => void;
   completed: boolean;
 }
 
@@ -175,12 +179,14 @@ const ProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
+  const { handleOpenInviteDialog } = useInviteContext();
 
   const {
     userMe,
     badgeProgresses,
     selectedBadgeProgress: initialSelectedBadgeProgress,
     verified,
+    inviteCodeUsages,
   } = useAuthContext();
 
   const [
@@ -234,8 +240,6 @@ const ProfilePage: NextPage = () => {
   const commentCount = R.propOr(0, 'commentCount', user);
   const threads = R.pathOr([], ['threads', 'objects'], threadsData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
-  const noThreads = isOwnProfile ? t('profile:ownProfileNoThreads') : t('profile:noThreads');
-  const noComments = isOwnProfile ? t('profile:ownProfileNoComments') : t('profile:noComments');
   const _created = R.prop('created', user);
   const joined = useDayjs(_created).startOf('m').fromNow();
 
@@ -246,6 +250,16 @@ const ProfilePage: NextPage = () => {
   const rankTooltip = isOwnProfile
     ? t('common-tooltips:ownRank', { rank, score })
     : t('common-tooltips:rank', { rank, score });
+
+  const noThreads =
+    (verified === false && t('profile:verificationRequiredThreads')) ||
+    (isOwnProfile && t('profile:ownProfileNoThreads')) ||
+    t('profile:noThreads');
+
+  const noComments =
+    (verified === false && t('profile:verificationRequiredComments')) ||
+    (isOwnProfile && t('profile:ownProfileNoComments')) ||
+    t('profile:noComments');
 
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
@@ -261,8 +275,8 @@ const ProfilePage: NextPage = () => {
     },
     {
       label: t('profile-strength:step3'),
-      href: '#', // TODO: Implement invite logic here.
-      completed: false,
+      completed: inviteCodeUsages === 0,
+      handleClick: handleOpenInviteDialog,
     },
   ].sort((prev) => (prev.completed ? -1 : 1));
 
@@ -334,10 +348,7 @@ const ProfilePage: NextPage = () => {
     [updateSelectedBadge],
   );
 
-  const renderHeaderRight = useMemo(() => isOwnProfile && !!verified && <SettingsButton />, [
-    isOwnProfile,
-    verified,
-  ]);
+  const renderHeaderRight = useMemo(() => isOwnProfile && <SettingsButton />, [isOwnProfile]);
 
   const renderAvatar = useMemo(() => <Avatar className={classes.avatar} src={mediaUrl(avatar)} />, [
     avatar,
@@ -605,17 +616,6 @@ const ProfilePage: NextPage = () => {
     [classes.badgeContainer, isOwnProfile, renderNextBadge, renderNextBadgeLabel],
   );
 
-  const renderVerifyAccountLink = useMemo(
-    () =>
-      isOwnProfile &&
-      verified === false && (
-        <TextLink className={classes.verifyAccount} href={urls.verifyAccount} color="primary">
-          {t('common:verifyAccount')}
-        </TextLink>
-      ),
-    [classes.verifyAccount, isOwnProfile, t, verified],
-  );
-
   const renderProfileStrengthHeader = useMemo(
     () => (
       <Typography variant="body2" color="textSecondary">
@@ -628,18 +628,20 @@ const ProfilePage: NextPage = () => {
   const renderProfileStrengthStepLabel = ({
     label,
     href,
+    handleClick,
     completed,
   }: ProfileStrengthStep): JSX.Element =>
     useMemo(
       () =>
-        !completed ? (
-          <TextLink href={href}>{label}</TextLink>
-        ) : (
+        (!completed &&
+          ((href && <TextLink href={href}>{label}</TextLink>) || (
+            <MaterialLink onClick={handleClick}>{label}</MaterialLink>
+          ))) || (
           <Typography variant="body2" color="textSecondary">
             {label}
           </Typography>
         ),
-      [completed, href, label],
+      [completed, href, label, handleClick],
     );
 
   // Render uncompleted items as links and completed ones as regular text.
@@ -730,7 +732,6 @@ const ProfilePage: NextPage = () => {
           {renderRank}
           {renderBadges}
           {renderBadgeTracking}
-          {renderVerifyAccountLink}
           {renderProfileStrength}
           {renderJoined}
         </>
@@ -742,7 +743,6 @@ const ProfilePage: NextPage = () => {
       renderJoined,
       renderProfileStrength,
       renderRank,
-      renderVerifyAccountLink,
       mdUp,
     ],
   );
@@ -797,7 +797,6 @@ const ProfilePage: NextPage = () => {
           {renderRank}
           {renderBadges}
           {renderBadgeTracking}
-          {renderVerifyAccountLink}
           {renderJoined}
         </Grid>
       ),
@@ -809,7 +808,6 @@ const ProfilePage: NextPage = () => {
       renderRank,
       renderTitle,
       renderUsername,
-      renderVerifyAccountLink,
       smDown,
     ],
   );
@@ -923,6 +921,26 @@ const ProfilePage: NextPage = () => {
     ],
   );
 
+  const renderInviteDialogText = useMemo(
+    () => (
+      <DialogContentText>
+        <Typography variant="body2">{t('profile:inviteText', { inviteCodeUsages })}</Typography>
+      </DialogContentText>
+    ),
+    [t, inviteCodeUsages],
+  );
+
+  const renderInviteDialog = useMemo(
+    () =>
+      isOwnProfile && (
+        <InviteDialog
+          header={t('profile:inviteDialogHeader')}
+          dynamicContent={[renderInviteDialogText]}
+        />
+      ),
+    [isOwnProfile, renderInviteDialogText, t],
+  );
+
   const layoutProps = {
     seoProps: {
       title: username,
@@ -931,6 +949,7 @@ const ProfilePage: NextPage = () => {
       header: username,
       renderHeaderRight,
     },
+    hideBottomNavbar: !userMe,
   };
 
   if (userLoading) {
@@ -945,16 +964,16 @@ const ProfilePage: NextPage = () => {
     return <ErrorTemplate variant="error" />;
   }
 
+  if (!user) {
+    return <ErrorTemplate variant="not-found" />;
+  }
+
   if (!userMe) {
     return <LoginRequiredTemplate {...layoutProps}>{renderPublicUserInfo}</LoginRequiredTemplate>;
   }
 
-  if (!verified) {
+  if (!verified && !isOwnProfile) {
     return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
-  }
-
-  if (!user) {
-    return <ErrorTemplate variant="not-found" />;
   }
 
   return (
@@ -963,6 +982,7 @@ const ProfilePage: NextPage = () => {
       {renderMobileActionsCard}
       {renderCreatedContent}
       {renderSelectBadgeDialog}
+      {renderInviteDialog}
     </MainTemplate>
   );
 };

@@ -7,9 +7,10 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useDarkModeContext } from 'context';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { MainTemplateProps } from 'types';
-import { SCHOOL_LOGOS, urls } from 'utils';
+import { SCHOOL_LOGOS, SLOGAN, urls } from 'utils';
 
 import { AppStoreBadge, ButtonLink, Emoji, GooglePlayBadge } from '../shared';
 import { MainTemplate } from './MainTemplate';
@@ -40,7 +41,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
       height: '6rem',
     },
   },
-  description: {
+  slogan: {
     fontSize: '1.25rem',
   },
   info: {
@@ -72,7 +73,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
 }));
 
 interface Props extends MainTemplateProps {
-  hideLogoAndDescription?: boolean;
+  hideLogoAndSlogan?: boolean;
 }
 
 export const LandingPageTemplate: React.FC<Props> = ({
@@ -80,21 +81,20 @@ export const LandingPageTemplate: React.FC<Props> = ({
   topNavbarProps,
   containerProps,
   footerProps,
-  hideLogoAndDescription,
+  hideLogoAndSlogan,
   ...props
 }) => {
   const classes = useStyles();
   const { darkMode } = useDarkModeContext();
   const { t } = useTranslation();
-  const headerText = 'Next-gen study forum.';
+  const { query } = useRouter();
   const infoText = t('common:landingPageInfo');
 
-  const renderHeaderEmoji = useMemo(() => <Emoji emoji="🎓" />, []);
   const renderInfoTextEmoji = useMemo(() => <Emoji emoji="👇" />, []);
 
   const renderHeader = useMemo(
     () =>
-      !hideLogoAndDescription && (
+      !hideLogoAndSlogan && (
         <Box className={classes.logoContainer}>
           <Box className={classes.logo}>
             <Image
@@ -104,24 +104,23 @@ export const LandingPageTemplate: React.FC<Props> = ({
           </Box>
         </Box>
       ),
-    [classes.logo, classes.logoContainer, darkMode, hideLogoAndDescription],
+    [classes.logo, classes.logoContainer, darkMode, hideLogoAndSlogan],
   );
 
-  const renderDescription = useMemo(
+  const renderSlogan = useMemo(
     () =>
-      !hideLogoAndDescription && (
+      !hideLogoAndSlogan && (
         <Typography
-          className={classes.description}
+          className={classes.slogan}
           variant="subtitle1"
           color={darkMode ? 'secondary' : 'initial'}
           align="center"
           gutterBottom
         >
-          {headerText}
-          {renderHeaderEmoji}
+          {SLOGAN}
         </Typography>
       ),
-    [classes.description, darkMode, hideLogoAndDescription, renderHeaderEmoji],
+    [classes.slogan, darkMode, hideLogoAndSlogan],
   );
 
   const renderInfo = useMemo(
@@ -140,7 +139,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
     () => (
       <ButtonLink
         className={classes.ctaButton}
-        href={urls.register}
+        href={{ pathname: urls.register, query: query.code && { code: query.code } }}
         color="primary"
         variant="contained"
         endIcon={<ArrowForwardOutlined />}
@@ -148,7 +147,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
         {t('common:landingPageCta')}
       </ButtonLink>
     ),
-    [classes.ctaButton, t],
+    [classes.ctaButton, t, query],
   );
 
   const renderAppStoreBadges = useMemo(
@@ -183,11 +182,11 @@ export const LandingPageTemplate: React.FC<Props> = ({
         className={classes.container}
         container
         direction="column"
-        justify={hideLogoAndDescription ? 'flex-start' : 'center'}
+        justify={hideLogoAndSlogan ? 'flex-start' : 'center'}
         alignItems="center"
       >
         {renderHeader}
-        {renderDescription}
+        {renderSlogan}
         {renderInfo}
         {renderCta}
         {renderAppStoreBadges}
@@ -195,10 +194,10 @@ export const LandingPageTemplate: React.FC<Props> = ({
     ),
     [
       classes.container,
-      hideLogoAndDescription,
+      hideLogoAndSlogan,
       renderAppStoreBadges,
       renderCta,
-      renderDescription,
+      renderSlogan,
       renderHeader,
       renderInfo,
     ],

@@ -1,3 +1,5 @@
 {
-  "title": "Koti"
+  "title": "Koti",
+  "inviteDialogHeader": "Onneksi olkoon! 🎉",
+  "inviteText": "Tervetuloa Skoleen, {{ username }}! Olet käyttäjä numero {{ id }}. Palkinnoksi saat henkilökohtaiseen koodin, jolla voit kutsua {{ inviteCodeUsages }} ystävääsi!"
 }

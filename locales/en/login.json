@@ -3,5 +3,7 @@
   "header": "Log In",
   "forgotPassword": "Forgot password?",
   "existingUserGreeting": "Welcome back, {{ username }}.",
-  "loginWithDifferentCredentials": "Log in with different credentials"
+  "inviteCodeHelperText": "Pass in the invite code from an existing user to log in.",
+  "loginWithDifferentCredentials": "Log in with different credentials",
+  "registerLinkText": "Don't have an account yet?"
 }

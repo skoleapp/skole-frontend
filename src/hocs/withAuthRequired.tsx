@@ -10,7 +10,7 @@ import { withUserMe } from './withUserMe';
 export const withAuthRequired = <T extends Record<string, unknown>>(
   PageComponent: NextPage<T>,
 ): NextPage<T> => {
-  const WithAuthRequiredMode: NextPage<T> = (pageProps: T) => {
+  const WithAuthRequired: NextPage<T> = (pageProps: T) => {
     const { userMe } = useAuthContext();
 
     useEffect(() => {
@@ -20,12 +20,12 @@ export const withAuthRequired = <T extends Record<string, unknown>>(
     }, [userMe]);
 
     // Show loading screen while redirecting to landing page.
-    if (!userMe) {
+    if (userMe === null) {
       return <LoadingTemplate />;
     }
 
     return <PageComponent {...pageProps} />;
   };
 
-  return withUserMe(WithAuthRequiredMode);
+  return withUserMe(WithAuthRequired);
 };

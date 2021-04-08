@@ -12,6 +12,8 @@ import { mediaUrl, urls } from 'utils';
 const AuthContext = createContext<AuthContextType>({});
 
 interface UseAuthContext extends AuthContextType {
+  id: string;
+  slug: string;
   verified: boolean | null;
   unreadActivityCount: number;
   fcmToken: string;
@@ -26,6 +28,8 @@ interface UseAuthContext extends AuthContextType {
   score: string;
   badgeProgresses: BadgeProgressObjectType[];
   selectedBadgeProgress: BadgeProgressObjectType | null;
+  inviteCode: string;
+  inviteCodeUsages: number;
   commentReplyEmailPermission: boolean;
   threadCommentEmailPermission: boolean;
   newBadgeEmailPermission: boolean;
@@ -39,6 +43,7 @@ export const useAuthContext = (): UseAuthContext => {
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
   const verified = R.prop('verified', userMe);
   const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
+  const id = R.prop('id', userMe);
   const slug = R.prop('slug', userMe);
   const fcmToken = R.prop('fcmToken', userMe);
   const username = R.prop('username', userMe);
@@ -52,6 +57,8 @@ export const useAuthContext = (): UseAuthContext => {
   const avatar = mediaUrl(R.prop('avatar', userMe));
   const badgeProgresses = R.propOr([], 'badgeProgresses', userMe);
   const selectedBadgeProgress = R.prop('selectedBadgeProgress', userMe);
+  const inviteCode = R.path(['inviteCode', 'code'], userMe);
+  const inviteCodeUsages = R.path(['inviteCode', 'usages'], userMe);
   const commentReplyEmailPermission = R.prop('commentReplyEmailPermission', userMe);
   const threadCommentEmailPermission = R.prop('threadCommentEmailPermission', userMe);
   const newBadgeEmailPermission = R.prop('newBadgeEmailPermission', userMe);
@@ -63,6 +70,8 @@ export const useAuthContext = (): UseAuthContext => {
   return {
     userMe,
     setUserMe,
+    id,
+    slug,
     verified,
     unreadActivityCount,
     fcmToken,
@@ -77,6 +86,8 @@ export const useAuthContext = (): UseAuthContext => {
     avatar,
     badgeProgresses,
     selectedBadgeProgress,
+    inviteCode,
+    inviteCodeUsages,
     commentReplyEmailPermission,
     threadCommentEmailPermission,
     newBadgeEmailPermission,

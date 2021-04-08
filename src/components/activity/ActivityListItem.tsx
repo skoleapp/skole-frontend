@@ -5,7 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
-import { useNotificationsContext } from 'context';
+import { useAuthContext, useNotificationsContext } from 'context';
 import {
   ActivityObjectType,
   MarkActivityAsReadMutation,
@@ -17,7 +17,7 @@ import * as R from 'ramda';
 import React, { useMemo, useState } from 'react';
 import { mediaUrl, urls } from 'utils';
 
-import { BadgeTierIcon, TextLink } from '../shared';
+import { BadgeTierIcon, Link, TextLink } from '../shared';
 
 const useStyles = makeStyles({
   unread: {
@@ -32,11 +32,6 @@ interface Props {
   activity: ActivityObjectType;
 }
 
-interface PathObj {
-  pathname: string | null;
-  query: null | { comment: string };
-}
-
 export const ActivityListItem: React.FC<Props> = ({
   activity: { id, causingUser, comment, badgeProgress, read: initialRead, description },
 }) => {
@@ -45,6 +40,7 @@ export const ActivityListItem: React.FC<Props> = ({
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
+  const { profileUrl } = useAuthContext();
   const avatarThumbnail = R.prop('avatarThumbnail', causingUser);
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
@@ -63,24 +59,23 @@ export const ActivityListItem: React.FC<Props> = ({
     context,
   });
 
-  const handleClick = async (): Promise<void> => {
+  const getHref = (): Record<string, unknown> => {
     let pathname;
     let query;
 
     if (comment?.thread) {
       pathname = urls.thread(comment.thread.slug || '');
-    } else if (badgeProgress?.user.slug) {
-      pathname = urls.user(badgeProgress.user.slug);
+    } else if (badgeProgress) {
+      pathname = profileUrl;
     }
-    return { pathname, query };
-  };
 
     if (comment) {
       query = {
         comment: comment.id,
       };
     }
-    return href;
+
+    return { pathname, query };
   };
 
   const handleClick = async (): Promise<void> => {
@@ -92,15 +87,6 @@ export const ActivityListItem: React.FC<Props> = ({
   const renderAvatarIcon = useMemo(
     () => badgeProgress && <BadgeTierIcon tier={badgeProgress.badge.tier} />,
     [badgeProgress],
-  );
-
-  const renderAvatar = useMemo(
-    () => (
-      <ListItemAvatar>
-        <Avatar src={avatarSrc}>{renderAvatarIcon}</Avatar>
-      </ListItemAvatar>
-    ),
-    [avatarSrc, renderAvatarIcon],
   );
 
   const renderAvatar = useMemo(
@@ -143,9 +129,11 @@ export const ActivityListItem: React.FC<Props> = ({
   );
 
   return (
-    <ListItem onClick={handleClick} className={clsx(!read && classes.unread)} button>
-      {renderAvatar}
-      {renderListItemText}
-    </ListItem>
+    <Link href={getHref()} fullWidth>
+      <ListItem onClick={handleClick} className={clsx(!read && classes.unread)} button>
+        {renderAvatar}
+        {renderListItemText}
+      </ListItem>
+    </Link>
   );
 };

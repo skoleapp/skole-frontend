@@ -21,7 +21,7 @@ export const LoginRequiredTemplate: React.FC<Props> = ({ children, ...props }) =
   const classes = useStyles();
 
   return (
-    <LandingPageTemplate {...props} hideLogoAndDescription>
+    <LandingPageTemplate {...props} hideLogoAndSlogan>
       <Container disableGutters className={classes.container}>
         {children}
       </Container>

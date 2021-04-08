@@ -273,7 +273,7 @@ fragment userFields on UserObjectType {
   selectedBadgeProgress {
     ...badgeProgressFields
   }
-  referralCodes {
+  inviteCode {
     code
     usages
   }
@@ -351,20 +351,12 @@ mutation Register($username: String!, $email: String!, $password: String!) {
       messages
     }
   }
-  login(input: { usernameOrEmail: $username, password: $password }) {
-    errors {
-      field
-      messages
-    }
-    user {
-      ...userFields
-    }
-  }
 }
 
 mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
     successMessage
+    inviteCodeRequired
     errors {
       field
       messages
@@ -536,5 +528,24 @@ mutation RegisterFCMToken($token: String) {
       messages
     }
     successMessage
+  }
+}
+
+mutation UseInviteCodeAndLogin($code: String!, $usernameOrEmail: String!, $password: String!) {
+  useInviteCode(input: { code: $code, usernameOrEmail: $usernameOrEmail }) {
+    errors {
+      field
+      messages
+    }
+  }
+  login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
+    successMessage
+    errors {
+      field
+      messages
+    }
+    user {
+      ...userFields
+    }
   }
 }

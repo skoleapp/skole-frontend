@@ -53,7 +53,7 @@ export const FormSubmitSection = <T extends FormikValues>({
   );
 
   return (
-    <Grid container direction="column" alignItems="center">
+    <Grid container direction="column">
       {renderLoading}
       {renderGeneralFormError}
       {renderSubmitButton}

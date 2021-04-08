@@ -4,6 +4,7 @@ export * from './confirm';
 export * from './darkMode';
 export * from './history';
 export * from './info';
+export * from './invite';
 export * from './language';
 export * from './notifications';
 export * from './ordering';

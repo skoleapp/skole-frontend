@@ -1,12 +1,12 @@
 import Avatar from '@material-ui/core/Avatar';
 import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import MaterialLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {
   ActionRequiredTemplate,
-  ButtonLink,
   FormSubmitSection,
   FormTemplate,
   PasswordField,
@@ -14,12 +14,14 @@ import {
   TextLink,
 } from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
-import { Field, Form, Formik, FormikProps, FormikValues } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   LoginMutation,
+  UseInviteCodeAndLoginMutation,
   useLoginMutation,
   UserObjectType,
   UserQuery,
+  useUseInviteCodeAndLoginMutation,
   useUserLazyQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
@@ -53,39 +55,55 @@ interface LoginFormValues {
   password: string;
 }
 
+interface InviteCodeFormValues {
+  code: string;
+}
+
 const LoginPage: NextPage = () => {
   const classes = useStyles();
   const { userMe } = useAuthContext();
   const { t } = useTranslation();
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
+  const initialCode = query.code ? String(query.code) : '';
   const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
   const username = R.prop('username', existingUser);
   const email = R.prop('email', existingUser);
   const validExistingUser = !!username && !!email;
   const existingUserAvatar = mediaUrl(R.prop('avatar', existingUser));
   const context = useLanguageHeaderContext();
+  const [showInviteCodeForm, setShowInviteCodeForm] = useState(false);
+  const [savedUsernameOrEmail, setSavedUsernameOrEmail] = useState('');
+  const [savedPassword, setSavedPassword] = useState('');
 
   const {
-    formRef,
-    handleMutationErrors,
-    onError,
-    setUnexpectedFormError,
-    generalFormValues,
+    formRef: loginFormRef,
+    handleMutationErrors: handleLoginFormMutationErrors,
+    onError: onLoginFormError,
+    setUnexpectedFormError: setUnexpectedLoginFormError,
+    generalFormValues: generalLoginFormValues,
   } = useForm<LoginFormValues>();
+
+  const {
+    formRef: inviteCodeFormRef,
+    handleMutationErrors: handleUseInviteCodeAndLoginMutationErrors,
+    onError: onUseInviteCodeAndLoginError,
+    setUnexpectedFormError: setUnexpectedInviteCodeFormError,
+    generalFormValues: generalInviteCodeFormValues,
+  } = useForm<InviteCodeFormValues>();
 
   const existingUserGreeting = t('login:existingUserGreeting', {
     username,
   });
 
-  const handleExistingUser = (data: UserQuery): void => {
+  const handleSetExistingUser = (data: UserQuery): void => {
     if (data.user?.avatar && existingUser && existingUser?.avatar !== data.user.avatar) {
       setExistingUser({ ...existingUser, avatar: data.user.avatar });
     }
   };
 
   const [userQuery] = useUserLazyQuery({
-    onCompleted: handleExistingUser,
+    onCompleted: handleSetExistingUser,
     context,
   });
 
@@ -101,69 +119,134 @@ const LoginPage: NextPage = () => {
     })();
   }, [userQuery]);
 
-  const validationSchema = Yup.object().shape({
+  const loginFormValidationSchema = Yup.object().shape({
     usernameOrEmail: !validExistingUser
       ? Yup.string().required(t('validation:required'))
       : Yup.string(),
     password: Yup.string().required(t('validation:required')),
   });
 
-  const initialValues = useMemo(
+  const inviteCodeFormValidationSchema = Yup.object().shape({
+    code: Yup.string().required(t('validation:required')),
+  });
+
+  const initialLoginFormValues = useMemo(
     () => ({
-      ...generalFormValues,
+      ...generalLoginFormValues,
       usernameOrEmail: '',
       password: '',
     }),
-    [generalFormValues],
+    [generalLoginFormValues],
   );
 
-  const onCompleted = async ({ login }: LoginMutation): Promise<void> => {
+  const initialInviteCodeFormValues = useMemo(
+    () => ({
+      ...generalInviteCodeFormValues,
+      code: initialCode,
+    }),
+    [generalInviteCodeFormValues, initialCode],
+  );
+
+  const onLoginCompleted = async ({ login }: LoginMutation): Promise<void> => {
     if (login?.errors?.length) {
-      handleMutationErrors(login.errors);
+      handleLoginFormMutationErrors(login.errors);
+
+      if (login?.inviteCodeRequired && loginFormRef.current) {
+        const { usernameOrEmail, password } = loginFormRef.current.values;
+        setSavedUsernameOrEmail(usernameOrEmail);
+        setSavedPassword(password);
+        setShowInviteCodeForm(true);
+      }
     } else if (login?.successMessage) {
       try {
-        formRef.current?.resetForm();
+        loginFormRef.current?.resetForm();
         toggleNotification(login.successMessage);
         const nextUrl = query.next ? String(query.next) : urls.home;
         await Router.push(nextUrl);
       } catch {
-        setUnexpectedFormError();
+        setUnexpectedLoginFormError();
       }
     } else {
-      setUnexpectedFormError();
+      setUnexpectedLoginFormError();
     }
   };
 
-  const [loginMutation] = useLoginMutation({ onCompleted, onError, context });
+  const onUseInviteCodeAndLoginCompleted = async ({
+    useInviteCode,
+    login,
+  }: UseInviteCodeAndLoginMutation): Promise<void> => {
+    if (useInviteCode?.errors?.length) {
+      handleUseInviteCodeAndLoginMutationErrors(useInviteCode.errors);
+    } else if (login?.errors?.length) {
+      handleUseInviteCodeAndLoginMutationErrors(login.errors);
+    } else if (login?.successMessage) {
+      inviteCodeFormRef.current?.resetForm();
+      setSavedUsernameOrEmail('');
+      setSavedPassword('');
+      toggleNotification(login.successMessage);
+      const nextUrl = query.next ? String(query.next) : urls.home;
 
-  const handleSubmit = useCallback(
-    async (values: LoginFormValues): Promise<void> => {
-      const { usernameOrEmail: _usernameOrEmail, password } = values;
+      try {
+        await Router.push(nextUrl);
+      } catch {
+        setUnexpectedInviteCodeFormError();
+      }
+    } else {
+      setUnexpectedLoginFormError();
+    }
+  };
+
+  const [login] = useLoginMutation({
+    onCompleted: onLoginCompleted,
+    onError: onLoginFormError,
+    context,
+  });
+
+  const [useInviteCodeAndLogin] = useUseInviteCodeAndLoginMutation({
+    onCompleted: onUseInviteCodeAndLoginCompleted,
+    onError: onUseInviteCodeAndLoginError,
+    context,
+  });
+
+  const handleLoginFormSubmit = useCallback(
+    async ({ usernameOrEmail: _usernameOrEmail, password }: LoginFormValues): Promise<void> => {
       const usernameOrEmail = R.propOr(_usernameOrEmail, 'email', existingUser);
 
-      await loginMutation({
+      await login({
         variables: { usernameOrEmail, password },
       });
     },
-    [existingUser, loginMutation],
+    [existingUser, login],
+  );
+
+  const handleInviteCodeFormSubmit = useCallback(
+    async ({ code }: InviteCodeFormValues): Promise<void> => {
+      await useInviteCodeAndLogin({
+        variables: { code, usernameOrEmail: savedUsernameOrEmail, password: savedPassword },
+      });
+    },
+    [useInviteCodeAndLogin, savedUsernameOrEmail, savedPassword],
   );
 
   const handleLoginWithDifferentCredentials = useCallback((): void => {
     localStorage.removeItem('user');
     setExistingUser(null);
-    formRef.current?.resetForm();
-  }, [formRef]);
+    setShowInviteCodeForm(false);
+    loginFormRef.current?.resetForm();
+    inviteCodeFormRef.current?.resetForm();
+  }, [loginFormRef, inviteCodeFormRef]);
 
   const renderExistingUserGreeting = useMemo(
-    () => (
-      <Grid container alignItems="center" direction="column">
-        <Avatar className={classes.avatar} src={existingUserAvatar} />
-        <Typography variant="subtitle1" gutterBottom>
-          {existingUserGreeting}
-        </Typography>
-      </Grid>
-    ),
-    [classes.avatar, existingUserAvatar, existingUserGreeting],
+    () =>
+      !!validExistingUser && (
+        <Grid container alignItems="center" direction="column">
+          <Avatar className={classes.avatar} src={existingUserAvatar} />
+          <Typography variant="subtitle1" gutterBottom>
+            {existingUserGreeting}
+          </Typography>
+        </Grid>
+      ),
+    [classes.avatar, existingUserAvatar, existingUserGreeting, validExistingUser],
   );
 
   const renderUsernameOrEmailField = useMemo(
@@ -179,26 +262,31 @@ const LoginPage: NextPage = () => {
   );
 
   const renderPasswordField = useCallback(
-    (props: FormikProps<FormikValues>): JSX.Element => <PasswordField {...props} />,
+    (props: FormikProps<LoginFormValues>): JSX.Element => <PasswordField {...props} />,
     [],
   );
 
-  const renderFormSubmitSection = useCallback(
-    (props: FormikProps<FormikValues>): JSX.Element => (
+  const renderLoginFormSubmitSection = useCallback(
+    (props: FormikProps<LoginFormValues>): JSX.Element => (
       <FormSubmitSection submitButtonText={t('common:login')} {...props} />
     ),
     [t],
   );
 
-  const renderRegisterButton = useMemo(
+  const renderInviteCodeFormSubmitSection = useCallback(
+    (props: FormikProps<InviteCodeFormValues>): JSX.Element => (
+      <FormSubmitSection submitButtonText={t('common:login')} {...props} />
+    ),
+    [t],
+  );
+
+  const renderRegisterLink = useMemo(
     () => (
       <FormControl className={classes.link}>
-        <ButtonLink href={urls.register} variant="outlined">
-          {t('common:register')}
-        </ButtonLink>
+        <TextLink href={{ pathname: urls.register, query }}>{t('login:registerLinkText')}</TextLink>
       </FormControl>
     ),
-    [classes.link, t],
+    [classes.link, t, query],
   );
 
   const renderForgotPasswordLink = useMemo(
@@ -211,78 +299,121 @@ const LoginPage: NextPage = () => {
   );
 
   const renderLoginWithDifferentCredentialsLink = useMemo(
+    () =>
+      (!!validExistingUser || showInviteCodeForm) && (
+        <FormControl className={classes.link}>
+          <MaterialLink onClick={handleLoginWithDifferentCredentials}>
+            {t('login:loginWithDifferentCredentials')}
+          </MaterialLink>
+        </FormControl>
+      ),
+    [classes.link, handleLoginWithDifferentCredentials, t, validExistingUser, showInviteCodeForm],
+  );
+
+  const renderInviteCodeHelperText = useMemo(
     () => (
-      <FormControl className={classes.link}>
-        <MaterialLink onClick={handleLoginWithDifferentCredentials}>
-          {t('login:loginWithDifferentCredentials')}
-        </MaterialLink>
+      <FormControl>
+        <FormHelperText>{t('login:inviteCodeHelperText')}</FormHelperText>
       </FormControl>
     ),
-    [classes.link, handleLoginWithDifferentCredentials, t],
+    [t],
   );
 
-  const renderExistingUserForm = useMemo(
-    () => (props: FormikProps<FormikValues>): JSX.Element | false =>
-      !!validExistingUser && (
-        <Form>
-          {renderExistingUserGreeting}
-          {renderUsernameOrEmailField}
-          {renderPasswordField(props)}
-          {renderFormSubmitSection(props)}
-          {renderForgotPasswordLink}
-          {renderLoginWithDifferentCredentialsLink}
-        </Form>
-      ),
-    [
-      renderExistingUserGreeting,
-      renderForgotPasswordLink,
-      renderFormSubmitSection,
-      renderLoginWithDifferentCredentialsLink,
-      renderUsernameOrEmailField,
-      validExistingUser,
-      renderPasswordField,
-    ],
+  const renderInviteCodeField = useMemo(
+    () => <Field label={t('forms:code')} name="code" component={TextFormField} />,
+    [t],
   );
 
-  const renderNewUserForm = useMemo(
-    () => (props: FormikProps<FormikValues>): JSX.Element => (
+  const renderLoginFormFields = useCallback(
+    (props: FormikProps<LoginFormValues>): JSX.Element => (
       <Form>
+        {renderExistingUserGreeting}
         {renderUsernameOrEmailField}
         {renderPasswordField(props)}
-        {renderFormSubmitSection(props)}
-        {renderRegisterButton}
+        {renderLoginFormSubmitSection(props)}
         {renderForgotPasswordLink}
+        {renderLoginWithDifferentCredentialsLink}
+        {renderRegisterLink}
       </Form>
     ),
     [
       renderForgotPasswordLink,
-      renderFormSubmitSection,
-      renderRegisterButton,
+      renderLoginFormSubmitSection,
+      renderRegisterLink,
       renderUsernameOrEmailField,
       renderPasswordField,
+      renderLoginWithDifferentCredentialsLink,
+      renderExistingUserGreeting,
     ],
   );
 
-  const renderForm = useMemo(
-    () => (
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        innerRef={formRef}
-      >
-        {renderExistingUserForm || renderNewUserForm}
-      </Formik>
-    ),
+  const renderLoginForm = useMemo(
+    () =>
+      !showInviteCodeForm && (
+        <Formik
+          initialValues={initialLoginFormValues}
+          validationSchema={loginFormValidationSchema}
+          onSubmit={handleLoginFormSubmit}
+          innerRef={loginFormRef}
+          enableReinitialize
+        >
+          {renderLoginFormFields}
+        </Formik>
+      ),
     [
-      formRef,
-      handleSubmit,
-      initialValues,
-      renderExistingUserForm,
-      renderNewUserForm,
-      validationSchema,
+      loginFormRef,
+      handleLoginFormSubmit,
+      initialLoginFormValues,
+      loginFormValidationSchema,
+      renderLoginFormFields,
+      showInviteCodeForm,
     ],
   );
+
+  const renderInviteCodeFormFields = useCallback(
+    (props: FormikProps<InviteCodeFormValues>) => (
+      <Form>
+        {renderInviteCodeHelperText}
+        {renderInviteCodeField}
+        {renderInviteCodeFormSubmitSection(props)}
+        {renderLoginWithDifferentCredentialsLink}
+      </Form>
+    ),
+    [
+      renderInviteCodeHelperText,
+      renderInviteCodeFormSubmitSection,
+      renderInviteCodeField,
+      renderLoginWithDifferentCredentialsLink,
+    ],
+  );
+
+  const renderInviteCodeForm = useMemo(
+    () =>
+      showInviteCodeForm && (
+        <Formik
+          initialValues={initialInviteCodeFormValues}
+          validationSchema={inviteCodeFormValidationSchema}
+          onSubmit={handleInviteCodeFormSubmit}
+          innerRef={inviteCodeFormRef}
+          enableReinitialize
+        >
+          {renderInviteCodeFormFields}
+        </Formik>
+      ),
+    [
+      showInviteCodeForm,
+      inviteCodeFormRef,
+      initialInviteCodeFormValues,
+      inviteCodeFormValidationSchema,
+      handleInviteCodeFormSubmit,
+      renderInviteCodeFormFields,
+    ],
+  );
+
+  const renderForm = useMemo(() => renderLoginForm || renderInviteCodeForm, [
+    renderInviteCodeForm,
+    renderLoginForm,
+  ]);
 
   const layoutProps = {
     seoProps: {
@@ -295,6 +426,7 @@ const LoginPage: NextPage = () => {
       hideGetStartedButton: true,
       hideSearch: true,
     },
+    hideBottomNavbar: true,
   };
 
   if (userMe) {

@@ -1,21 +1,29 @@
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CardHeader from '@material-ui/core/CardHeader';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import {
   ActionRequiredTemplate,
   ErrorTemplate,
+  InviteDialog,
   LoadingBox,
   MainTemplate,
   OrderingButton,
   PaginatedTable,
   ThreadTableBody,
 } from 'components';
-import { useAuthContext, useOrderingContext, useThreadFormContext } from 'context';
+import {
+  useAuthContext,
+  useInviteContext,
+  useOrderingContext,
+  useThreadFormContext,
+} from 'context';
 import { ThreadObjectType, useThreadsQuery } from 'generated';
 import { withAuthRequired } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -23,9 +31,9 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useCallback, useMemo, useState } from 'react';
-import { withThreadForm } from 'src/hocs/withThreadForm';
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
+import { INVITE_PROMPT_KEY } from 'utils';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   createThreadContainer: {
@@ -61,7 +69,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
 
 const HomePage: NextPage = () => {
   const classes = useStyles();
-  const { verified } = useAuthContext();
+  const { verified, id, username, inviteCodeUsages } = useAuthContext();
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { handleOpenThreadForm } = useThreadFormContext();
@@ -69,6 +77,7 @@ const HomePage: NextPage = () => {
   const [title, setTitle] = useState('');
   const queryVariables = R.pick(['page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
+  const { handleOpenInviteDialog } = useInviteContext();
 
   const variables = {
     ordering,
@@ -83,6 +92,12 @@ const HomePage: NextPage = () => {
 
   const threads: ThreadObjectType[] = R.pathOr([], ['threads', 'objects'], data);
   const threadCount = R.pathOr(0, ['threads', 'count'], data);
+
+  useEffect(() => {
+    if (!!inviteCodeUsages && !localStorage.getItem(INVITE_PROMPT_KEY)) {
+      handleOpenInviteDialog();
+    }
+  }, [inviteCodeUsages, handleOpenInviteDialog]);
 
   const handleSubmitCreateThread = useCallback(
     (e: SyntheticEvent): void => {
@@ -161,6 +176,30 @@ const HomePage: NextPage = () => {
     [classes.threadsPaper, renderThreadsHeader, renderLoading, renderThreadsTable],
   );
 
+  const renderInviteDialogText = useMemo(
+    () => (
+      <DialogContentText>
+        <Typography variant="body2">
+          {t('home:inviteText', { id, username, inviteCodeUsages })}
+        </Typography>
+      </DialogContentText>
+    ),
+    [t, id, username, inviteCodeUsages],
+  );
+
+  const renderInvitePrompt = useMemo(
+    () => (
+      <InviteDialog
+        header={t('home:inviteDialogHeader')}
+        dynamicContent={[renderInviteDialogText]}
+        handleCloseCallback={(): void =>
+          localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now()))
+        }
+      />
+    ),
+    [renderInviteDialogText, t],
+  );
+
   const layoutProps = {
     seoProps: {
       title: t('home:title'),
@@ -189,6 +228,7 @@ const HomePage: NextPage = () => {
     <MainTemplate {...layoutProps}>
       {renderCreateThread}
       {renderThreads}
+      {renderInvitePrompt}
     </MainTemplate>
   );
 };
@@ -201,6 +241,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-const withWrappers = R.compose(withAuthRequired, withThreadForm);
-
-export default withWrappers(HomePage);
+export default withAuthRequired(HomePage);

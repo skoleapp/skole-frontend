@@ -14,7 +14,7 @@ const ContactPage: NextPage = () => {
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
-  const { email } = useAuthContext();
+  const { userMe, email } = useAuthContext();
 
   const {
     formRef,
@@ -111,6 +111,7 @@ const ContactPage: NextPage = () => {
       header: t('contact:header'),
       emoji: '🗣️',
     },
+    hideBottomNavbar: !userMe,
   };
 
   return <FormTemplate {...layoutProps}>{renderForm}</FormTemplate>;

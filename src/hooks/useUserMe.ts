@@ -23,14 +23,18 @@ export const useUserMe = (): UseUserMeQuery => {
   const authNetworkError = R.prop('networkError', error); // We only care about about network error.
 
   useEffect(() => {
-    setUserMe(userMe);
+    if (error) {
+      setUserMe(null);
+    } else {
+      setUserMe(userMe);
+    }
 
     if (userMe) {
       localStorage.setItem('user', JSON.stringify(userMe));
     } else if (authNetworkError) {
       setAuthNetworkError(true);
     }
-  }, [userMe, error, authNetworkError, setAuthNetworkError, setUserMe]);
+  }, [userMe, authNetworkError, setAuthNetworkError, setUserMe, error]);
 
   return { userMe, authLoading, authNetworkError, ...result };
 };

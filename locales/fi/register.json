@@ -1,8 +1,8 @@
 {
   "title": "Rekisteröidy",
   "header": "Rekisteröidy",
-  "emailHelperText": "Sähköpostisi, jota käytämme sitä sinun tunnistamiseen. Se näkyy vain sinulle. Emme lähetä sinulle roskapostia.",
-  "usernameHelperText": "Käyttäjätunnus tai sähköposti",
-  "termsHelperText": "Rekisteröitymällä hyväksyt",
-  "registerCompleteText": "Valmista! Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi."
+  "loginLinkText": "Onko sinulla jo tili?",
+  "inviteCodeHelperText": "Syötä kutsukoodi nykyiseltä käyttäjältä viimeistelläksesi rekisteröinti.",
+  "secondaryInviteCodeHelperText": "Eikö sinulla ole koodia? Älä huoli, lisäsimme sinut odotuslistalle. Kerromme kun sinulle vapautuu paikka!",
+  "verifyAccountText": "Valmista! Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi."
 }

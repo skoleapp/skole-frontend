@@ -64,5 +64,10 @@
   "best": "Parhaat",
   "newest": "Uusimmat",
   "createThread": "Luo lanka",
-  "linkCopied": "Linkki kopioitu leikepöydälle!"
+  "linkCopied": "Linkki kopioitu leikepöydälle!",
+  "inviteCodeText": "Tässä on kutsukoodisi:",
+  "inviteButtonText": "Kutsu nyt",
+  "inviteCodeCopied": "Kutsukoodi kopioitu leikepöydälle!",
+  "primaryEmailDialogText": "Sallitut päätteet ensijaiselle sähköpostiosoitteellesi ovat:",
+  "gotIt": "Ymmärsin!"
 }
