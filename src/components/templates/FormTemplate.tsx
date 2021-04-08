@@ -3,6 +3,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import React, { useMemo } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
@@ -33,6 +34,7 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
 }) => {
   const classes = useStyles();
   const { smUp } = useMediaQueries();
+  const { userMe } = useAuthContext();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
@@ -77,6 +79,7 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
 
   const layoutProps = {
     topNavbarProps,
+    hideBottomNavbar: !userMe,
     ...props,
   };
 

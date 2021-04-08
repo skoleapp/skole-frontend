@@ -31,7 +31,7 @@ interface Props {
 export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { smUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const title = t(`${variant}:title`);
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);
@@ -50,8 +50,8 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   );
 
   const renderCardHeader = useMemo(
-    () => smUp && <CardHeader className={classes.cardHeader} title={renderTitle} />,
-    [classes.cardHeader, renderTitle, smUp],
+    () => mdUp && <CardHeader className={classes.cardHeader} title={renderTitle} />,
+    [classes.cardHeader, renderTitle, mdUp],
   );
 
   const renderContent = useMemo(() => <NotFoundBox text={text} />, [text]);

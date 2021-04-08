@@ -426,7 +426,6 @@ const LoginPage: NextPage = () => {
       hideGetStartedButton: true,
       hideSearch: true,
     },
-    hideBottomNavbar: true,
   };
 
   if (userMe) {

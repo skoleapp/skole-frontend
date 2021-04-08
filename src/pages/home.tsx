@@ -228,9 +228,6 @@ const HomePage: NextPage = () => {
       hideBackButton: true,
       renderHeaderRight: renderStarredButton,
     },
-    hideBottomNavbar: false,
-    hideLogo: true,
-    hideAppStoreBadges: true,
   };
 
   if (!!error && !!error.networkError) {

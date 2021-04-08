@@ -245,7 +245,6 @@ export const LandingPageTemplate: React.FC<Props> = ({
       dense: true,
       ...containerProps,
     },
-    hideBottomNavbar: true,
     footerProps: {
       hideAppStoreBadges: true,
       ...footerProps,

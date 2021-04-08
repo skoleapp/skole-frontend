@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import { useAuthContext } from 'context';
 import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useMemo } from 'react';
@@ -57,6 +58,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
   const classes = useStyles();
   const { smUp } = useMediaQueries();
   const { t } = useTranslation();
+  const { userMe } = useAuthContext();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
 
@@ -138,6 +140,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
 
   const layoutProps = {
     topNavbarProps,
+    hideBottomNavbar: !userMe,
     ...props,
   };
 

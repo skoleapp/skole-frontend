@@ -392,7 +392,6 @@ const RegisterPage: NextPage = () => {
       hideRegisterButton: true,
       hideGetStartedButton: true,
     },
-    hideBottomNavbar: true,
   };
 
   if (!!userMe && phase === RegisterPhases.REGISTER) {

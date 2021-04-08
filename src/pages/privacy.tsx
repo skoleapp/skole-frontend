@@ -1,5 +1,4 @@
 import { MarkdownTemplate } from 'components';
-import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
@@ -12,7 +11,6 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({
   content: markdownContent,
 }) => {
   const { t } = useTranslation();
-  const { userMe } = useAuthContext();
 
   const layoutProps = {
     seoProps: {
@@ -24,7 +22,6 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({
       hideLanguageButton: true,
     },
     markdownContent,
-    hideBottomNavbar: !userMe,
   };
 
   return <MarkdownTemplate {...layoutProps} />;
