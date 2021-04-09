@@ -181,7 +181,7 @@ const ThreadPage: NextPage = () => {
   const { userMe, verified } = useAuthContext();
   const context = useLanguageHeaderContext();
   const threadVariables = R.pick(['slug'], query);
-  const commentQueryVariables = R.pick(['slug', 'page', 'pageSize'], query);
+  const commentQueryVariables = R.pick(['slug', 'comment', 'page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const [threadQueryCount, setThreadQueryCount] = useState(0);
   const { handleOpenInviteDialog } = useInviteContext();
