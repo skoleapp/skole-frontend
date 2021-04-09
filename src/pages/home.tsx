@@ -34,7 +34,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
 import { INVITE_PROMPT_KEY, SLOGAN, urls } from 'utils';
 
@@ -75,7 +75,6 @@ const HomePage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const { handleOpenThreadForm } = useThreadFormContext();
   const { query } = useRouter();
-  const [title, setTitle] = useState('');
   const queryVariables = R.pick(['page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const { handleOpenInviteDialog } = useInviteContext();
@@ -111,15 +110,6 @@ const HomePage: NextPage = () => {
     }
   }, [inviteCodeUsages, handleOpenInviteDialog]);
 
-  const handleSubmitCreateThread = useCallback(
-    (e: SyntheticEvent): void => {
-      e.preventDefault();
-      handleOpenThreadForm({ title });
-      setTitle('');
-    },
-    [handleOpenThreadForm, title],
-  );
-
   const handleCloseInviteDialogCallback = useCallback(
     (): void => localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now())),
     [],
@@ -141,25 +131,17 @@ const HomePage: NextPage = () => {
     () =>
       mdUp && (
         <Paper className={classes.createThreadContainer}>
-          <form onSubmit={handleSubmitCreateThread}>
-            <Box display="flex">
-              <InputBase
-                value={title}
-                onChange={(e): void => setTitle(e.target.value)}
-                placeholder={t('forms:createThread')}
-                autoComplete="off"
-                className={classes.createThreadInputBase}
-                fullWidth
-              />
-              <Button
-                className={classes.createThreadSubmitButton}
-                variant="contained"
-                type="submit"
-              >
-                <ArrowForwardOutlined />
-              </Button>
-            </Box>
-          </form>
+          <Box display="flex" onClick={(): void => handleOpenThreadForm()}>
+            <InputBase
+              placeholder={t('forms:createThread')}
+              autoComplete="off"
+              className={classes.createThreadInputBase}
+              fullWidth
+            />
+            <Button className={classes.createThreadSubmitButton} variant="contained">
+              <ArrowForwardOutlined />
+            </Button>
+          </Box>
         </Paper>
       ),
     [
@@ -167,9 +149,8 @@ const HomePage: NextPage = () => {
       classes.createThreadInputBase,
       classes.createThreadSubmitButton,
       t,
-      title,
-      handleSubmitCreateThread,
       mdUp,
+      handleOpenThreadForm,
     ],
   );
 

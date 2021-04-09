@@ -97,7 +97,7 @@ export const ThreadFormDialog: React.FC = () => {
   );
 
   const renderTitleField = useMemo(
-    () => <Field name="title" label={t('forms:title')} component={TextFormField} />,
+    () => <Field name="title" label={t('forms:title')} component={TextFormField} autoFocus />,
     [t],
   );
 
