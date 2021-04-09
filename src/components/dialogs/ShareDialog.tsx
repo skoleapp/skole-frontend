@@ -36,7 +36,7 @@ export const ShareDialog: React.FC = () => {
   } = useShareContext();
 
   const dialogHeaderProps = {
-    onCancel: handleCloseShareDialog,
+    onClose: handleCloseShareDialog,
     text: header,
     emoji: '📤',
   };
@@ -67,7 +67,7 @@ ${url}`;
   const handleClickSeeAll = useCallback(async (): Promise<void> => {
     const { navigator } = window;
 
-    if (!!navigator && !!navigator.share) {
+    if (navigator?.share) {
       try {
         await navigator.share({
           title,

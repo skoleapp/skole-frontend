@@ -54,7 +54,7 @@ export const PrimaryEmailField = <T extends FormikValues>(
   const renderDialog = useMemo(
     () => (
       <SkoleDialog open={dialogOpen} fullScreen={false}>
-        <DialogHeader onCancel={handleCloseDialog} />
+        <DialogHeader onClose={handleCloseDialog} />
         <DialogContent>
           <DialogContentText color="textPrimary">
             <Typography variant="subtitle1">{t('common:primaryEmailDialogText')}</Typography>

@@ -249,6 +249,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
       hideAppStoreBadges: true,
       ...footerProps,
     },
+    hideBottomNavbar: true,
     ...props,
   };
 

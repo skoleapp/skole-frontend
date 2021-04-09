@@ -3,6 +3,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,7 +23,9 @@ import {
   ActionsButton,
   CommentCard,
   CreateCommentForm,
+  Emoji,
   ErrorTemplate,
+  InviteDialog,
   LoadingBox,
   LoadingTemplate,
   LoginRequiredTemplate,
@@ -37,6 +40,7 @@ import {
   useAuthContext,
   useConfirmContext,
   useDarkModeContext,
+  useInviteContext,
   useNotificationsContext,
   useOrderingContext,
   useShareContext,
@@ -168,6 +172,8 @@ const ThreadPage: NextPage = () => {
   const commentQueryVariables = R.pick(['slug', 'page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const [threadQueryCount, setThreadQueryCount] = useState(0);
+  const { handleOpenInviteDialog } = useInviteContext();
+  const [inviteDialogOpenedCounter, setInviteDialogOpenedCounter] = useState(0);
 
   const commentVariables = {
     ordering,
@@ -253,6 +259,14 @@ const ThreadPage: NextPage = () => {
       setTargetThread(thread);
     }
   }, [createCommentDialogOpen, thread]);
+
+  // Open invite dialog if `invite` has been provided as a query parameter.
+  useEffect(() => {
+    if (typeof query.invite !== 'undefined' && inviteDialogOpenedCounter < 1) {
+      handleOpenInviteDialog();
+      setInviteDialogOpenedCounter(inviteDialogOpenedCounter + 1);
+    }
+  }, [query, handleOpenInviteDialog, inviteDialogOpenedCounter, setInviteDialogOpenedCounter]);
 
   const deleteThreadCompleted = async ({ deleteThread }: DeleteThreadMutation): Promise<void> => {
     if (deleteThread?.errors?.length) {
@@ -361,11 +375,11 @@ const ThreadPage: NextPage = () => {
 
   const shareDialogParams = useMemo(
     () => ({
-      header: t('thread:shareThread'),
-      title,
-      text: t('thread:shareThreadText', { creatorUsername, commentCount }),
+      header: t('thread:shareHeader'),
+      title: `${title} 💬`,
+      text: t('thread:shareText', { creatorUsername, commentCount }),
     }),
-    [commentCount, creatorUsername, t, title],
+    [t, title, creatorUsername, commentCount],
   );
 
   const handleShareButtonClick = useCallback((): void => handleOpenShareDialog(shareDialogParams), [
@@ -375,7 +389,7 @@ const ThreadPage: NextPage = () => {
 
   const renderShareButton = useMemo(
     () => (
-      <Tooltip title={t('thread-tooltips:shareThread')}>
+      <Tooltip title={t('thread-tooltips:share')}>
         <IconButton
           className={classes.headerActionItem}
           onClick={handleShareButtonClick}
@@ -397,7 +411,7 @@ const ThreadPage: NextPage = () => {
         callback: handleDeleteThread,
         disabled: verified === false,
       },
-      shareText: t('thread:shareThread'),
+      shareText: t('thread:shareHeader'),
       hideDeleteAction: !isOwn,
     }),
     [handleDeleteThread, isOwn, shareDialogParams, t, verified],
@@ -428,14 +442,24 @@ const ThreadPage: NextPage = () => {
   }, [commentsQuery, threadQuery]);
 
   const renderActionsButton = useMemo(
+    () =>
+      !!isOwn && (
+        <ActionsButton
+          tooltip={t('thread-tooltips:threadActions')}
+          actionsDialogParams={actionsDialogParams}
+          className={classes.headerActionItem}
+        />
+      ),
+    [actionsDialogParams, t, classes.headerActionItem, isOwn],
+  );
+
+  const renderMobileShareButton = useMemo(
     () => (
-      <ActionsButton
-        tooltip={t('thread-tooltips:threadActions')}
-        actionsDialogParams={actionsDialogParams}
-        className={classes.headerActionItem}
-      />
+      <IconButton color="secondary" size="small" onClick={handleShareButtonClick}>
+        <ShareOutlined />
+      </IconButton>
     ),
-    [actionsDialogParams, t, classes.headerActionItem],
+    [handleShareButtonClick],
   );
 
   // Only render for verified user who are not owners.
@@ -778,12 +802,43 @@ const ThreadPage: NextPage = () => {
     [mdUp, renderHeaderAction, renderHeaderTitle, classes.header, classes.headerContent],
   );
 
+  const renderInviteDialogHeader = useMemo(
+    () => (
+      <>
+        Wohoo!
+        <Emoji emoji="🥳" />
+      </>
+    ),
+    [],
+  );
+
+  const renderInviteDialogText = useMemo(
+    () => (
+      <DialogContentText>
+        <Typography variant="body2">{t('thread:inviteDialogText', { title })}</Typography>
+      </DialogContentText>
+    ),
+    [t, title],
+  );
+
+  const renderInviteDialog = useMemo(
+    () => (
+      <InviteDialog
+        header={renderInviteDialogHeader}
+        dynamicContent={[renderInviteDialogText]}
+        shareDialogParams={shareDialogParams}
+        hideInviteCode
+      />
+    ),
+    [renderInviteDialogHeader, renderInviteDialogText, shareDialogParams],
+  );
+
   const layoutProps = {
     seoProps: {
       title,
     },
     topNavbarProps: {
-      renderHeaderRight: renderActionsButton,
+      renderHeaderRight: renderActionsButton || renderMobileShareButton,
     },
     customBottomNavbar: renderCustomBottomNavbar,
     hideBottomNavbar: !userMe,
@@ -830,6 +885,7 @@ const ThreadPage: NextPage = () => {
         {renderCommentsHeader}
         {renderComments}
         {renderCreateCommentButton}
+        {renderInviteDialog}
       </Paper>
     </MainTemplate>
   );

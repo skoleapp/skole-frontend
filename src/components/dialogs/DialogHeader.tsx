@@ -25,7 +25,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
 export const DialogHeader: React.FC<DialogHeaderProps> = ({
   text,
   emoji,
-  onCancel,
+  onClose,
   renderHeaderLeft,
   headerCenter,
   renderHeaderRight,
@@ -36,12 +36,12 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   const renderCloseButton = useMemo(
     () => (
       <Tooltip title={t('common-tooltips:closeMenu')}>
-        <IconButton onClick={onCancel} size="small">
+        <IconButton onClick={onClose} size="small">
           <CloseOutlined />
         </IconButton>
       </Tooltip>
     ),
-    [onCancel, t],
+    [onClose, t],
   );
 
   const renderEmoji = useMemo(() => !!emoji && <Emoji emoji={emoji} />, [emoji]);

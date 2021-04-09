@@ -1,3 +1,5 @@
+import { useMediaQueries } from 'hooks';
+import { useRouter } from 'next/router';
 import React, { createContext, useContext, useState } from 'react';
 import { ShareContextType, ShareDialogParams } from 'types';
 
@@ -14,15 +16,34 @@ const initialShareDialogParams: ShareDialogParams = {
 };
 
 export const ShareContextProvider: React.FC = ({ children }) => {
+  const { smDown } = useMediaQueries();
+  const { asPath } = useRouter();
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
 
   const [shareDialogParams, setShareDialogParams] = useState<ShareDialogParams>(
     initialShareDialogParams,
   );
 
-  const handleOpenShareDialog = (newShareDialogParams: ShareDialogParams): void => {
-    setShareDialogParams({ ...shareDialogParams, ...newShareDialogParams });
-    setShareDialogOpen(true);
+  const handleOpenShareDialog = async (newShareDialogParams: ShareDialogParams): Promise<void> => {
+    if (smDown) {
+      const { navigator } = window;
+      const { title, text, linkSuffix } = newShareDialogParams;
+
+      if (navigator?.share) {
+        try {
+          await navigator.share({
+            title,
+            text,
+            url: `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`,
+          });
+        } catch {
+          // User cancelled.
+        }
+      }
+    } else {
+      setShareDialogParams({ ...shareDialogParams, ...newShareDialogParams });
+      setShareDialogOpen(true);
+    }
   };
 
   const handleCloseShareDialog = (): void => {

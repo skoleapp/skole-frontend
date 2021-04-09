@@ -44,7 +44,13 @@ export const ThreadFormDialog: React.FC = () => {
       formRef.current?.resetForm();
       toggleNotification(createThread.successMessage);
       handleCloseThreadForm();
-      await Router.push(urls.thread(createThread.thread.slug));
+
+      await Router.push({
+        pathname: urls.thread(createThread.thread.slug),
+        query: {
+          invite: '',
+        },
+      });
     } else {
       onError();
     }
@@ -85,7 +91,7 @@ export const ThreadFormDialog: React.FC = () => {
 
   const renderHeader = useMemo(
     () => (
-      <DialogHeader onCancel={handleCloseThreadForm} text={t('common:createThread')} emoji="💬" />
+      <DialogHeader onClose={handleCloseThreadForm} text={t('common:createThread')} emoji="💬" />
     ),
     [handleCloseThreadForm, t],
   );

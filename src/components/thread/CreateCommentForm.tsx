@@ -440,7 +440,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       <DialogHeader
         text={t('common:addComment')}
         emoji="💬"
-        onCancel={handleCloseCreateCommentDialog}
+        onClose={handleCloseCreateCommentDialog}
       />
     ),
     [handleCloseCreateCommentDialog, t],

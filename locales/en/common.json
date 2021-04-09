@@ -66,7 +66,7 @@
   "newest": "Newest",
   "createThread": "Create Thread",
   "linkCopied": "Link copied to clipboard!",
-  "inviteTitle": "Your friend {{ username }} invited you to join Skole",
+  "inviteTitle": "Your friend {{ username }} invited you to Skole",
   "inviteCodeText": "Here's your invite code:",
   "inviteButtonText": "Invite Now",
   "inviteCodeCopied": "Invite code copied to clipboard!",

@@ -30,7 +30,7 @@ export const LanguageSelectorDialog: React.FC = () => {
   const dialogHeaderProps = {
     text: t('common:changeLanguage'),
     emoji: '🌐',
-    onCancel: handleCloseLanguageMenu,
+    onClose: handleCloseLanguageMenu,
   };
 
   const renderLanguages = useMemo(

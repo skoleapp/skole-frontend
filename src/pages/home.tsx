@@ -11,6 +11,7 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import {
   ActionRequiredTemplate,
+  Emoji,
   ErrorTemplate,
   IconButtonLink,
   InviteDialog,
@@ -22,7 +23,6 @@ import {
 } from 'components';
 import {
   useAuthContext,
-  useDarkModeContext,
   useInviteContext,
   useOrderingContext,
   useThreadFormContext,
@@ -36,7 +36,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { BORDER, BORDER_RADIUS } from 'styles';
-import { INVITE_PROMPT_KEY, urls } from 'utils';
+import { INVITE_PROMPT_KEY, SLOGAN, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   createThreadContainer: {
@@ -70,7 +70,7 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
 
 const HomePage: NextPage = () => {
   const classes = useStyles();
-  const { verified, id, username, inviteCodeUsages } = useAuthContext();
+  const { verified, id, username, inviteCodeUsages, inviteCode } = useAuthContext();
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { handleOpenThreadForm } = useThreadFormContext();
@@ -95,6 +95,16 @@ const HomePage: NextPage = () => {
   const threads: ThreadObjectType[] = R.pathOr([], ['threads', 'objects'], data);
   const threadCount = R.pathOr(0, ['threads', 'count'], data);
 
+  const shareDialogParams = useMemo(
+    () => ({
+      header: t('home:shareDialogHeader'),
+      title: t('common:inviteTitle'),
+      text: SLOGAN,
+      linkSuffix: `?code=${inviteCode}`,
+    }),
+    [t, inviteCode],
+  );
+
   useEffect(() => {
     if (!!inviteCodeUsages && !localStorage.getItem(INVITE_PROMPT_KEY)) {
       handleOpenInviteDialog();
@@ -108,6 +118,11 @@ const HomePage: NextPage = () => {
       setTitle('');
     },
     [handleOpenThreadForm, title],
+  );
+
+  const handleCloseInviteDialogCallback = useCallback(
+    (): void => localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now())),
+    [],
   );
 
   const renderStarredButton = useMemo(
@@ -186,6 +201,15 @@ const HomePage: NextPage = () => {
     [ordering, renderThreadTableBody, threadCount],
   );
 
+  const renderInviteDialogHeader = useMemo(
+    () => (
+      <>
+        {t('home:inviteDialogHeader')} <Emoji emoji="🎉" />
+      </>
+    ),
+    [t],
+  );
+
   const renderThreads = useMemo(
     () => (
       <Paper className={classes.threadsPaper}>
@@ -210,14 +234,18 @@ const HomePage: NextPage = () => {
   const renderInvitePrompt = useMemo(
     () => (
       <InviteDialog
-        header={t('home:inviteDialogHeader')}
+        header={renderInviteDialogHeader}
         dynamicContent={[renderInviteDialogText]}
-        handleCloseCallback={(): void =>
-          localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now()))
-        }
+        handleCloseCallback={handleCloseInviteDialogCallback}
+        shareDialogParams={shareDialogParams}
       />
     ),
-    [renderInviteDialogText, t],
+    [
+      renderInviteDialogText,
+      renderInviteDialogHeader,
+      handleCloseInviteDialogCallback,
+      shareDialogParams,
+    ],
   );
 
   const layoutProps = {

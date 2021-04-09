@@ -4,7 +4,7 @@ import { UserObjectType } from 'generated';
 export interface DialogHeaderProps {
   text?: JSX.Element | string;
   emoji?: string | false;
-  onCancel: () => void;
+  onClose: () => void;
   renderHeaderLeft?: JSX.Element | false;
   headerCenter?: JSX.Element | false;
   renderHeaderRight?: JSX.Element | false;

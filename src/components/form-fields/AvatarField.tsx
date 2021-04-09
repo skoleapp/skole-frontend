@@ -58,7 +58,7 @@ export const AvatarField = <T extends FormikValues>({
     () => ({
       text: t('edit-profile:avatar'),
       emoji: '🤳',
-      onCancel: handleCloseDialog,
+      onClose: handleCloseDialog,
     }),
     [handleCloseDialog, t],
   );
