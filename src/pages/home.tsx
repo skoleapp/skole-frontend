@@ -29,13 +29,13 @@ import {
 } from 'context';
 import { ThreadObjectType, useThreadsQuery } from 'generated';
 import { withAuthRequired } from 'hocs';
-import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
+import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { BORDER, BORDER_RADIUS } from 'styles';
+import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
 import { INVITE_PROMPT_KEY, SLOGAN, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({

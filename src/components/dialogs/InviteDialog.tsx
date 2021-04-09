@@ -13,10 +13,10 @@ import {
   useNotificationsContext,
   useShareContext,
 } from 'context';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
+import { useMediaQueries } from 'styles';
 import { ShareDialogParams } from 'types';
 
 import { DialogHeader } from './DialogHeader';

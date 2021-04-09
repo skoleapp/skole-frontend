@@ -4,9 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'context';
-import { useMediaQueries } from 'hooks';
 import React, { useMemo } from 'react';
-import { BORDER, BORDER_RADIUS } from 'styles';
+import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
 import { MainTemplateProps } from 'types';
 
 import { Emoji } from '../shared';

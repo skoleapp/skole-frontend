@@ -6,10 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { useAuthContext } from 'context';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useMemo } from 'react';
-import { BORDER, BORDER_RADIUS } from 'styles';
+import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 

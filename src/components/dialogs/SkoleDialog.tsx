@@ -3,9 +3,8 @@ import Slide from '@material-ui/core/Slide';
 import { makeStyles } from '@material-ui/core/styles';
 import { TransitionProps } from '@material-ui/core/transitions';
 import clsx from 'clsx';
-import { useMediaQueries } from 'hooks';
 import React, { forwardRef, Ref } from 'react';
-import { BORDER_RADIUS } from 'styles';
+import { BORDER_RADIUS, useMediaQueries } from 'styles';
 import { SkoleDialogProps } from 'types';
 
 const Transition = forwardRef((props: TransitionProps, ref: Ref<unknown>) => (

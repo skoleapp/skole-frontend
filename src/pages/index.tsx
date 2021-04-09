@@ -1,11 +1,11 @@
 import { LandingPageTemplate, LoadingTemplate } from 'components';
 import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
-import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
+import { useMediaQueries } from 'styles';
 import { urls } from 'utils';
 
 const LandingPage: NextPage = () => {

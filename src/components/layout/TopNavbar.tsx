@@ -23,10 +23,14 @@ import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import { useAuthContext, useDarkModeContext } from 'context';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
-import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
+import {
+  BORDER_RADIUS,
+  TOP_NAVBAR_HEIGHT_DESKTOP,
+  TOP_NAVBAR_HEIGHT_MOBILE,
+  useMediaQueries,
+} from 'styles';
 import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 

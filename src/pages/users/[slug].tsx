@@ -60,13 +60,13 @@ import {
   useUserThreadsQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useOpen } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { BORDER_RADIUS } from 'styles';
+import { BORDER_RADIUS, useMediaQueries } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({

@@ -2,8 +2,8 @@ import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
 import { useActionsContext } from 'context';
-import { useMediaQueries } from 'hooks';
 import React from 'react';
+import { useMediaQueries } from 'styles';
 import { ActionsDialogParams } from 'types';
 
 interface Props extends IconButtonProps {

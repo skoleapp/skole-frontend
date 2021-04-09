@@ -1,10 +1,10 @@
 import { MarkdownTemplate } from 'components';
 import { withUserMe } from 'hocs';
-import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
+import { useMediaQueries } from 'styles';
 import { MarkdownPageProps } from 'types';
 
 const ScorePage: NextPage<MarkdownPageProps> = ({ data: { title }, content: markdownContent }) => {

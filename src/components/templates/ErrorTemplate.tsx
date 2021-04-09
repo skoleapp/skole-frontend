@@ -1,10 +1,9 @@
 import CardHeader from '@material-ui/core/CardHeader';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useMemo } from 'react';
-import { BORDER, BORDER_RADIUS } from 'styles';
+import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
 
 import { Emoji, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';

@@ -1,6 +1,6 @@
-import { useMediaQueries } from 'hooks';
 import { useRouter } from 'next/router';
 import React, { createContext, useContext, useState } from 'react';
+import { useMediaQueries } from 'styles';
 import { ShareContextType, ShareDialogParams } from 'types';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.

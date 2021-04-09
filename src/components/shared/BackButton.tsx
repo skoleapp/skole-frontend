@@ -1,9 +1,9 @@
 import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import ArrowBackOutlined from '@material-ui/icons/ArrowBackOutlined';
 import { useHistoryContext } from 'context';
-import { useMediaQueries } from 'hooks';
 import Router from 'next/router';
 import React from 'react';
+import { useMediaQueries } from 'styles';
 import { urls } from 'utils';
 
 export const BackButton: React.FC<IconButtonProps> = (props) => {

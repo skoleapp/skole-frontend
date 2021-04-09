@@ -57,14 +57,14 @@ import {
   useThreadLazyQuery,
 } from 'generated';
 import { withActions, withThread, withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useMediaQueries, useVotes } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT } from 'styles';
+import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT, useMediaQueries } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaLoader, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({

@@ -16,11 +16,12 @@ import imageCompression from 'browser-image-compression';
 import { useAuthContext, useNotificationsContext, useThreadContext } from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { CreateCommentMutation, useCreateCommentMutation } from 'generated';
-import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
+import { useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useMemo, useRef } from 'react';
+import { useMediaQueries } from 'styles';
 import { CreateCommentFormValues } from 'types';
 import { ACCEPTED_COMMENT_IMAGE_FILES, MAX_IMAGE_FILE_SIZE, MAX_IMAGE_WIDTH_HEIGHT } from 'utils';
 

@@ -6,11 +6,11 @@ import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
 import { ThreadObjectType } from 'generated';
-import { useDayjs, useMediaQueries } from 'hooks';
+import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { useMemo } from 'react';
-import { BORDER } from 'styles';
+import { BORDER, useMediaQueries } from 'styles';
 import { mediaLoader, truncate, urls } from 'utils';
 
 import { Link, MarkdownContent, TextLink } from '../shared';
