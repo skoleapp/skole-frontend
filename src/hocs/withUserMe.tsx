@@ -22,7 +22,13 @@ export const withUserMe = <T extends Record<string, unknown>>(
     // Handle incoming `postMessage` events.
     const messageHandler = useCallback(
       async ({ data }: WebViewMessage): Promise<void> => {
-        const json = JSON.parse(data);
+        let json;
+        try {
+          json = JSON.parse(data);
+        } catch {
+          return;
+        }
+
         const { key } = json;
 
         switch (key) {

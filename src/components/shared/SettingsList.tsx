@@ -3,6 +3,7 @@ import List from '@material-ui/core/List';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import AlternateEmailOutlinedIcon from '@material-ui/icons/AlternateEmailOutlined';
 import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
 import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
 import ExitToAppOutlined from '@material-ui/icons/ExitToAppOutlined';
@@ -28,7 +29,7 @@ interface Props {
 }
 
 export const SettingsList: React.FC<Props> = ({ dialog }) => {
-  const { userMe, verified } = useAuthContext();
+  const { userMe, verified, verifiedBackupEmail } = useAuthContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const { handleCloseSettingsDialog } = useSettingsContext();
   const { smDown } = useMediaQueries();
@@ -79,6 +80,20 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
         </Link>
       ),
     [getSelected, handleMenuItemClick, t, verified],
+  );
+  const renderVerifyBackupEmailMenuItem = useMemo(
+    () =>
+      !verifiedBackupEmail && (
+        <Link href={urls.verifyBackupEmail} fullWidth>
+          <MenuItem onClick={handleMenuItemClick} selected={getSelected(urls.verifyBackupEmail)}>
+            <ListItemIcon>
+              <AlternateEmailOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText>{t('common:verifyBackupEmail')}</ListItemText>
+          </MenuItem>
+        </Link>
+      ),
+    [getSelected, handleMenuItemClick, t, verifiedBackupEmail],
   );
 
   const renderCommonAccountMenuItems = useMemo(
@@ -188,6 +203,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
       <List>
         {renderAccountMenuItems}
         {renderVerifyAccountMenuItem}
+        {renderVerifyBackupEmailMenuItem}
         {renderLanguageMenuItem}
         {renderDarkModeMenuItem}
         {renderAboutMenuItem}
@@ -201,6 +217,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
       renderLanguageMenuItem,
       renderLogoutMenuItem,
       renderVerifyAccountMenuItem,
+      renderVerifyBackupEmailMenuItem,
     ],
   );
 

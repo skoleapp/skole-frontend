@@ -1,0 +1,9 @@
+{
+  "title": "Vahvista varasähköposti",
+  "header": "Vahvista varasähköposti",
+  "emailHelpText": "Klikkaa alla olevaa nappulaa, niin lähetämme sinulle oletussähköpostistasi linkin, jolla voit vahvistaa uuden varasähköpostisi.",
+  "confirmationHelpText": "Hyvä! Klikkaa vielä alla olevaa nappulaa viimeistelläksesi vahvistuksen.",
+  "emailSubmitted": "Melkein valmista! Tarkista vielä oletussähköpostistasi vahvistuslinkki.",
+  "verified": "Varasähköpostisi on vahvistettu! Voit jatkaa Skolen käyttöä.",
+  "loginText": "Etsi oletussähköpostistasi linkki, jolla voit vahvistaa varasähköpostisi. Jos sinulla ei ole linkkiä, voit kirjautua sisään ja pyytää uutta linkkiä."
+}

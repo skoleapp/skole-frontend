@@ -1,8 +1,11 @@
 {
   "title": "Kontoinställningar",
   "header": "Kontoinställningar",
+  "needToVerifyAccount": "Verifiera ditt konto",
+  "needToVerifyBackupEmail": "Verifiera ditt reserv-e-post",
+  "hereLink": "härifrån.",
   "emailSettings": "E-postinställningar",
-  "backupEmail": "Reserv e-post",
+  "backupEmail": "Reserv-e-post",
   "backupEmailHelperText": "En alternativ e-postadress som du kan använda även om du tappar åtkomst till din primära e-post.",
   "emailNotifications": "E-postaviseringar",
   "pushNotifications": "Pushnotifikationer"

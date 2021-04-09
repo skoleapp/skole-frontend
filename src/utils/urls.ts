@@ -23,4 +23,5 @@ export const urls = {
   terms: '/terms',
   threads: '/threads',
   verifyAccount: '/verify-account',
+  verifyBackupEmail: '/verify-backup-email',
 };
