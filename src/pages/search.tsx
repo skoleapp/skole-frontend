@@ -25,7 +25,7 @@ import {
 import { useAuthContext, useThreadFormContext } from 'context';
 import { useThreadsQuery } from 'generated';
 import { withAuthRequired } from 'hocs';
-import { useLanguageHeaderContext, useMediaQueries } from 'hooks';
+import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router, { useRouter } from 'next/router';
@@ -38,7 +38,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
+import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE, useMediaQueries } from 'styles';
 import { getPaginationQuery, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({

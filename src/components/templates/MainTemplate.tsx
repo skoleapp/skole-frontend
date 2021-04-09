@@ -2,10 +2,14 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { useMediaQueries } from 'hooks';
 import * as R from 'ramda';
 import React, { useMemo } from 'react';
-import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
+import {
+  BOTTOM_NAVBAR_HEIGHT,
+  TOP_NAVBAR_HEIGHT_DESKTOP,
+  TOP_NAVBAR_HEIGHT_MOBILE,
+  useMediaQueries,
+} from 'styles';
 import { MainTemplateProps } from 'types';
 
 import { BottomNavbar, Footer, HeadComponent as Head, TopNavbar } from '../layout';

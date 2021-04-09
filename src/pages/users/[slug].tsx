@@ -1,5 +1,6 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
@@ -17,8 +18,8 @@ import TableBody from '@material-ui/core/TableBody';
 import Tabs from '@material-ui/core/Tabs';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
-import SettingsOutlined from '@material-ui/icons/SettingsOutlined';
+import EditOutlined from '@material-ui/icons/EditOutlined';
+import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import clsx from 'clsx';
 import {
   ActionRequiredTemplate,
@@ -42,7 +43,12 @@ import {
   TextLink,
   ThreadTableBody,
 } from 'components';
-import { useAuthContext, useInviteContext, useNotificationsContext } from 'context';
+import {
+  useAuthContext,
+  useInviteContext,
+  useNotificationsContext,
+  useShareContext,
+} from 'context';
 import {
   BadgeObjectType,
   BadgeProgressFieldsFragment,
@@ -54,13 +60,13 @@ import {
   useUserThreadsQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useMediaQueries, useOpen } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useOpen } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { BORDER_RADIUS } from 'styles';
+import { BORDER_RADIUS, useMediaQueries } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -97,9 +103,10 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     },
   },
   statsContainer: {
-    marginTop: spacing(4),
-    marginBottom: spacing(2),
     textAlign: 'center',
+  },
+  ownProfileStatsContainer: {
+    marginTop: spacing(4),
   },
   statValue: {
     marginRight: spacing(1),
@@ -108,8 +115,7 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     padding: `${spacing(6)} 0`,
   },
   step: {
-    paddingLeft: 0,
-    paddingRight: spacing(4),
+    padding: spacing(2),
   },
   bio: {
     wordBreak: 'break-word',
@@ -150,12 +156,12 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
     marginTop: spacing(2),
   },
   button: {
-    [breakpoints.down('md')]: {
-      marginTop: spacing(2),
-    },
     [breakpoints.up('md')]: {
       marginLeft: spacing(2),
     },
+  },
+  mobileShareButton: {
+    marginTop: spacing(2),
   },
   badgeCardActionArea: {
     borderRadius: '0.5rem',
@@ -180,6 +186,7 @@ const ProfilePage: NextPage = () => {
   const [tabValue, setTabValue] = useState(0);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { handleOpenInviteDialog } = useInviteContext();
+  const { handleOpenShareDialog } = useShareContext();
 
   const {
     userMe,
@@ -260,6 +267,15 @@ const ProfilePage: NextPage = () => {
     (verified === false && t('profile:verificationRequiredComments')) ||
     (isOwnProfile && t('profile:ownProfileNoComments')) ||
     t('profile:noComments');
+
+  const shareDialogParams = useMemo(
+    () => ({
+      header: t('profile:shareHeader'),
+      title: `${username} 👤`,
+      text: t('profile:shareText', { threadCount, commentCount }),
+    }),
+    [t, username, threadCount, commentCount],
+  );
 
   // Order steps so that the completed ones are first.
   const profileStrengthSteps = [
@@ -348,7 +364,10 @@ const ProfilePage: NextPage = () => {
     [updateSelectedBadge],
   );
 
-  const renderHeaderRight = useMemo(() => isOwnProfile && <SettingsButton />, [isOwnProfile]);
+  const handleShareButtonClick = useCallback((): void => handleOpenShareDialog(shareDialogParams), [
+    shareDialogParams,
+    handleOpenShareDialog,
+  ]);
 
   const renderAvatar = useMemo(() => <Avatar className={classes.avatar} src={mediaUrl(avatar)} />, [
     avatar,
@@ -378,8 +397,9 @@ const ProfilePage: NextPage = () => {
         className={classes.button}
         href={urls.editProfile}
         variant="outlined"
-        endIcon={<EditOutlinedIcon />}
+        endIcon={<EditOutlined />}
         fullWidth={smDown}
+        size={smDown ? 'medium' : 'small'}
       >
         {t('profile:editProfile')}
       </ButtonLink>
@@ -387,9 +407,42 @@ const ProfilePage: NextPage = () => {
     [classes.button, smDown, t],
   );
 
-  const renderDesktopSettingsButton = useMemo(() => <SettingsButton className={classes.button} />, [
-    classes.button,
-  ]);
+  const renderSettingsButton = useMemo(
+    () => isOwnProfile && <SettingsButton className={classes.button} />,
+    [classes.button, isOwnProfile],
+  );
+
+  const renderShareIconButton = useMemo(
+    () => (
+      <Tooltip title={t('profile-tooltips:share')}>
+        <IconButton
+          className={classes.button}
+          color={smDown ? 'secondary' : 'default'}
+          size="small"
+          onClick={handleShareButtonClick}
+        >
+          <ShareOutlined />
+        </IconButton>
+      </Tooltip>
+    ),
+    [handleShareButtonClick, t, smDown, classes.button],
+  );
+
+  const renderMobileShareButton = useMemo(
+    () =>
+      isOwnProfile && (
+        <Button
+          className={clsx(classes.button, classes.mobileShareButton)}
+          onClick={handleShareButtonClick}
+          variant="outlined"
+          endIcon={<ShareOutlined />}
+          fullWidth
+        >
+          {t('profile:share')}
+        </Button>
+      ),
+    [handleShareButtonClick, t, classes.button, classes.mobileShareButton, isOwnProfile],
+  );
 
   const renderScoreTitle = useMemo(
     () => (
@@ -529,7 +582,7 @@ const ProfilePage: NextPage = () => {
     () => ({
       text: t('profile:nextBadge'),
       emoji: '👀',
-      onCancel: handleCloseSelectBadgeDialog,
+      onClose: handleCloseSelectBadgeDialog,
     }),
     [handleCloseSelectBadgeDialog, t],
   );
@@ -568,7 +621,7 @@ const ProfilePage: NextPage = () => {
           onClick={handleOpenSelectBadgeDialog}
           className={classes.changeSelectedBadgeButton}
         >
-          <SettingsOutlined className={classes.changeSelectedBadgeIcon} />
+          <EditOutlined className={classes.changeSelectedBadgeIcon} />
         </IconButton>
       </Tooltip>
     ),
@@ -693,17 +746,27 @@ const ProfilePage: NextPage = () => {
       isOwnProfile && (
         <Grid item xs={12} container alignItems="center" spacing={4}>
           {renderEditProfileButton}
-          {renderDesktopSettingsButton}
+          {renderSettingsButton}
+          {renderShareIconButton}
         </Grid>
       ),
-    [isOwnProfile, renderDesktopSettingsButton, renderEditProfileButton, mdUp],
+    [renderSettingsButton, renderEditProfileButton, mdUp, renderShareIconButton, isOwnProfile],
   );
 
   const statsDirection = smDown ? 'column' : 'row';
 
   const renderStats = useMemo(
     () => (
-      <Grid item container xs={12} sm={8} md={5} spacing={2} className={classes.statsContainer}>
+      <Grid
+        item
+        container
+        xs={12}
+        sm={8}
+        md={5}
+        spacing={2}
+        className={clsx(classes.statsContainer, isOwnProfile && classes.ownProfileStatsContainer)}
+        alignItems="center"
+      >
         <Grid item xs={6} container direction={statsDirection}>
           {renderScoreValue}
           {renderScoreTitle}
@@ -716,25 +779,38 @@ const ProfilePage: NextPage = () => {
     ),
     [
       classes.statsContainer,
+      classes.ownProfileStatsContainer,
       renderScoreTitle,
       renderScoreValue,
       renderThreadCountTitle,
       renderThreadCountValue,
       statsDirection,
+      isOwnProfile,
     ],
+  );
+
+  const renderDesktopPublicUserShareButton = useMemo(
+    () =>
+      mdUp &&
+      !isOwnProfile && (
+        <Grid item xs={7} container>
+          {renderShareIconButton}
+        </Grid>
+      ),
+    [mdUp, renderShareIconButton, isOwnProfile],
   );
 
   const renderDesktopInfo = useMemo(
     () =>
       mdUp && (
-        <>
+        <Grid item xs={12}>
           {renderBio}
           {renderRank}
           {renderBadges}
           {renderBadgeTracking}
           {renderProfileStrength}
           {renderJoined}
-        </>
+        </Grid>
       ),
     [
       renderBadgeTracking,
@@ -762,16 +838,10 @@ const ProfilePage: NextPage = () => {
           {renderDesktopUsername}
           {renderDesktopTitle}
         </Grid>
-        <Grid
-          item
-          xs={8}
-          container
-          direction="column"
-          wrap="nowrap"
-          alignItems={smDown ? 'center' : 'flex-start'}
-        >
+        <Grid item xs={8} container alignItems="center">
           {renderDesktopActions}
           {renderStats}
+          {renderDesktopPublicUserShareButton}
           {renderDesktopInfo}
         </Grid>
       </Grid>
@@ -784,6 +854,7 @@ const ProfilePage: NextPage = () => {
       renderDesktopUsername,
       renderStats,
       smDown,
+      renderDesktopPublicUserShareButton,
     ],
   );
 
@@ -829,6 +900,7 @@ const ProfilePage: NextPage = () => {
         <Paper className={clsx(classes.paper, classes.mobileActionsCard)}>
           {renderProfileStrength}
           {renderEditProfileButton}
+          {renderMobileShareButton}
         </Paper>
       ),
     [
@@ -836,6 +908,7 @@ const ProfilePage: NextPage = () => {
       classes.paper,
       isOwnProfile,
       renderEditProfileButton,
+      renderMobileShareButton,
       renderProfileStrength,
       smDown,
     ],
@@ -930,15 +1003,26 @@ const ProfilePage: NextPage = () => {
     [t, inviteCodeUsages],
   );
 
+  const renderInviteDialogHeader = useMemo(
+    () => (
+      <>
+        {t('profile:inviteDialogHeader')}
+        <Emoji emoji="🤝" />
+      </>
+    ),
+    [t],
+  );
+
   const renderInviteDialog = useMemo(
     () =>
       isOwnProfile && (
         <InviteDialog
-          header={t('profile:inviteDialogHeader')}
+          header={renderInviteDialogHeader}
           dynamicContent={[renderInviteDialogText]}
+          shareDialogParams={shareDialogParams}
         />
       ),
-    [isOwnProfile, renderInviteDialogText, t],
+    [isOwnProfile, renderInviteDialogText, shareDialogParams, renderInviteDialogHeader],
   );
 
   const layoutProps = {
@@ -947,7 +1031,7 @@ const ProfilePage: NextPage = () => {
     },
     topNavbarProps: {
       header: username,
-      renderHeaderRight,
+      renderHeaderRight: renderSettingsButton || renderShareIconButton,
     },
     hideBottomNavbar: !userMe,
   };

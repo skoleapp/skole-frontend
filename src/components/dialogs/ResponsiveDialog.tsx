@@ -2,8 +2,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import { useMediaQueries } from 'hooks';
 import React, { useMemo } from 'react';
+import { useMediaQueries } from 'styles';
 import { DialogHeaderProps, SkoleDialogProps } from 'types';
 
 import { DialogHeader } from './DialogHeader';

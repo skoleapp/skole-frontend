@@ -1,10 +1,9 @@
 import CardHeader from '@material-ui/core/CardHeader';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React, { useMemo } from 'react';
-import { BORDER, BORDER_RADIUS } from 'styles';
+import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
 
 import { Emoji, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
@@ -31,7 +30,7 @@ interface Props {
 export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { smUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const title = t(`${variant}:title`);
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);
@@ -50,8 +49,8 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   );
 
   const renderCardHeader = useMemo(
-    () => smUp && <CardHeader className={classes.cardHeader} title={renderTitle} />,
-    [classes.cardHeader, renderTitle, smUp],
+    () => mdUp && <CardHeader className={classes.cardHeader} title={renderTitle} />,
+    [classes.cardHeader, renderTitle, mdUp],
   );
 
   const renderContent = useMemo(() => <NotFoundBox text={text} />, [text]);

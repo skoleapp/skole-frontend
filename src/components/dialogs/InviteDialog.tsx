@@ -7,10 +7,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import FileCopyOutlined from '@material-ui/icons/FileCopyOutlined';
-import { useAuthContext, useInviteContext, useNotificationsContext } from 'context';
+import {
+  useAuthContext,
+  useInviteContext,
+  useNotificationsContext,
+  useShareContext,
+} from 'context';
 import { useTranslation } from 'lib';
+import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
-import { SLOGAN, urls } from 'utils';
+import { useMediaQueries } from 'styles';
+import { ShareDialogParams } from 'types';
 
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
@@ -27,50 +34,77 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 interface Props {
-  header?: string;
+  header?: JSX.Element | string;
   dynamicContent: JSX.Element[];
   handleCloseCallback?: () => void;
+  hideInviteCode?: boolean;
+  shareDialogParams: ShareDialogParams;
 }
 
-export const InviteDialog: React.FC<Props> = ({ header, dynamicContent, handleCloseCallback }) => {
+export const InviteDialog: React.FC<Props> = ({
+  header,
+  dynamicContent,
+  handleCloseCallback,
+  hideInviteCode,
+  shareDialogParams,
+}) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { toggleNotification } = useNotificationsContext();
   const { inviteCode } = useAuthContext();
+  const { asPath } = useRouter();
+  const { mdUp } = useMediaQueries();
+  const { handleOpenShareDialog } = useShareContext();
 
   const {
     inviteDialogOpen,
-    handleCloseInviteDialog: _handleCloseInvitePrompt,
+    handleCloseInviteDialog: _handleCloseInviteDialog,
   } = useInviteContext();
 
-  const handleClose = (): void => {
-    _handleCloseInvitePrompt();
+  const handleClose = useCallback((): void => {
+    _handleCloseInviteDialog();
 
     if (handleCloseCallback) {
       handleCloseCallback();
     }
-  };
+  }, [_handleCloseInviteDialog, handleCloseCallback]);
 
   const handleClickInviteButton = useCallback(async (): Promise<void> => {
-    const { navigator } = window;
+    if (mdUp) {
+      handleClose();
+      handleOpenShareDialog(shareDialogParams);
+    } else {
+      const { navigator } = window;
+      const { title, text, linkSuffix } = shareDialogParams;
 
-    if (!!navigator && !!navigator.share) {
-      try {
-        await navigator.share({
-          title: t('common:inviteTitle'),
-          text: SLOGAN,
-          url: `${urls.index}?code=${inviteCode}`,
-        });
-      } catch {
-        // User cancelled.
+      if (navigator?.share) {
+        try {
+          await navigator.share({
+            title,
+            text,
+            url: `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`,
+          });
+        } catch {
+          // User cancelled.
+        }
       }
     }
-  }, [t, inviteCode]);
+  }, [asPath, handleOpenShareDialog, mdUp, handleClose, shareDialogParams]);
 
   const handleClickCopyCodeButton = useCallback((): void => {
     toggleNotification(t('common:inviteCodeCopied'));
     navigator.clipboard.writeText(inviteCode);
   }, [inviteCode, t, toggleNotification]);
+
+  const renderInviteCodeText = useMemo(
+    () =>
+      !hideInviteCode && (
+        <DialogContentText>
+          <Typography variant="body2">{t('common:inviteCodeText')}</Typography>
+        </DialogContentText>
+      ),
+    [t, hideInviteCode],
+  );
 
   const renderCopyCodeButton = useMemo(
     () => (
@@ -81,30 +115,41 @@ export const InviteDialog: React.FC<Props> = ({ header, dynamicContent, handleCl
     [classes.copyCodeButton, classes.copyCodeButtonIcon, handleClickCopyCodeButton],
   );
 
-  return (
-    <SkoleDialog open={inviteDialogOpen} fullScreen={false}>
-      <DialogHeader text={header} onCancel={handleClose} />
-      <DialogContent>
-        {dynamicContent.map((d) => d)}
-        <DialogContentText>
-          <Typography variant="body2">{t('common:inviteCodeText')}</Typography>
-        </DialogContentText>
+  const renderInviteCode = useMemo(
+    () =>
+      !hideInviteCode && (
         <DialogContentText color="textPrimary">
           <Typography variant="body2">
             {inviteCode} {renderCopyCodeButton}
           </Typography>
         </DialogContentText>
+      ),
+    [inviteCode, renderCopyCodeButton, hideInviteCode],
+  );
+
+  const renderInviteButton = useMemo(
+    () => (
+      <Button
+        variant="contained"
+        onClick={handleClickInviteButton}
+        endIcon={<ArrowForwardOutlined />}
+        fullWidth
+      >
+        {t('common:inviteButtonText')}
+      </Button>
+    ),
+    [handleClickInviteButton, t],
+  );
+
+  return (
+    <SkoleDialog open={inviteDialogOpen} fullScreen={false}>
+      <DialogHeader text={header} onClose={handleClose} />
+      <DialogContent>
+        {dynamicContent.map((d) => d)}
+        {renderInviteCodeText}
+        {renderInviteCode}
       </DialogContent>
-      <DialogActions>
-        <Button
-          variant="contained"
-          onClick={handleClickInviteButton}
-          endIcon={<ArrowForwardOutlined />}
-          fullWidth
-        >
-          {t('common:inviteButtonText')}
-        </Button>
-      </DialogActions>
+      <DialogActions>{renderInviteButton}</DialogActions>
     </SkoleDialog>
   );
 };

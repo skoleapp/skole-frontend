@@ -1,9 +1,9 @@
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { useLanguageContext } from 'context';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import React from 'react';
+import { useMediaQueries } from 'styles';
 
 import { LanguageFlag } from './LanguageFlag';
 

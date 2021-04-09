@@ -4,8 +4,8 @@
   "noComments": "This thread has no comments.",
   "comments": "{{ commentCount }} comments",
   "sortedBy": "sorted by",
-  "shareThreadText": "Created by {{ creatorUsername }}. {{ commentCount }} comments.",
-  "shareThread": "Share Thread",
+  "shareHeader": "Share Thread",
+  "shareText": "Created by {{ creatorUsername }}. {{ commentCount }} comments.",
   "deleteThread": "Delete Thread",
   "confirmDeleteThread": "Are you sure you want to delete this thread?",
   "deleteComment": "Delete Comment",
@@ -16,5 +16,6 @@
   "upvote": "Upvote",
   "upvoted": "Upvoted",
   "downvote": "Downvote",
-  "downvoted": "Downvoted"
+  "downvoted": "Downvoted",
+  "inviteDialogText": "{{ title }} is up and running! Let your friends know about it by inviting them!"
 }

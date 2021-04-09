@@ -1,8 +1,8 @@
 import { TextFieldProps } from '@material-ui/core/TextField';
 import { useThreadContext } from 'context';
 import { Field, FormikProps, FormikValues } from 'formik';
-import { useMediaQueries } from 'hooks';
 import React from 'react';
+import { useMediaQueries } from 'styles';
 
 import { TextFormField } from '../form-fields';
 

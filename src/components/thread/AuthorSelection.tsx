@@ -75,7 +75,7 @@ export const AuthorSelection = <T extends FormikValues>({
   const authorSelectionDialogHeaderProps = {
     text: t('common:selectAuthor'),
     emoji: '👤',
-    onCancel: handleCloseAuthorSelection,
+    onClose: handleCloseAuthorSelection,
   };
 
   const renderAuthenticatedMenuItem = (

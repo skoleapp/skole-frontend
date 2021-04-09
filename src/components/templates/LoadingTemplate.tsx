@@ -41,7 +41,6 @@ export const LoadingTemplate: React.FC = () => {
 
   const layoutProps = {
     seoProps: {},
-    hideBottomNavbar: true,
     hideFooter: true,
     topNavbarProps: {
       hideBackButton: true,
@@ -55,6 +54,7 @@ export const LoadingTemplate: React.FC = () => {
       fullWidth: true,
       dense: true,
     },
+    hideBottomNavbar: true,
   };
 
   return (

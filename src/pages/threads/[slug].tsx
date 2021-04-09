@@ -3,6 +3,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,7 +23,9 @@ import {
   ActionsButton,
   CommentCard,
   CreateCommentForm,
+  Emoji,
   ErrorTemplate,
+  InviteDialog,
   LoadingBox,
   LoadingTemplate,
   LoginRequiredTemplate,
@@ -37,6 +40,7 @@ import {
   useAuthContext,
   useConfirmContext,
   useDarkModeContext,
+  useInviteContext,
   useNotificationsContext,
   useOrderingContext,
   useShareContext,
@@ -53,14 +57,14 @@ import {
   useThreadLazyQuery,
 } from 'generated';
 import { withActions, withThread, withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useMediaQueries, useVotes } from 'hooks';
+import { useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT } from 'styles';
+import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT, useMediaQueries } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaLoader, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
@@ -84,7 +88,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     marginRight: spacing(2),
   },
   header: {
-    paddingBottom: 0,
+    paddingBottom: spacing(2),
   },
   headerTitle: {
     color: palette.text.secondary,
@@ -109,10 +113,21 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   threadInfoCardContent: {
     padding: spacing(2),
     paddingBottom: '0 !important',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
     [breakpoints.up('md')]: {
       padding: `${spacing(2)} ${spacing(4)}`,
       paddingBottom: `${spacing(2)} !important`,
     },
+  },
+  threadImageCardContent: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+  },
+  threadText: {
+    flexGrow: 1,
   },
   imageThumbnailContainer: {
     [breakpoints.up('md')]: {
@@ -168,6 +183,8 @@ const ThreadPage: NextPage = () => {
   const commentQueryVariables = R.pick(['slug', 'page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const [threadQueryCount, setThreadQueryCount] = useState(0);
+  const { handleOpenInviteDialog } = useInviteContext();
+  const [inviteDialogOpenedCounter, setInviteDialogOpenedCounter] = useState(0);
 
   const commentVariables = {
     ordering,
@@ -253,6 +270,14 @@ const ThreadPage: NextPage = () => {
       setTargetThread(thread);
     }
   }, [createCommentDialogOpen, thread]);
+
+  // Open invite dialog if `invite` has been provided as a query parameter.
+  useEffect(() => {
+    if (typeof query.invite !== 'undefined' && inviteDialogOpenedCounter < 1) {
+      handleOpenInviteDialog();
+      setInviteDialogOpenedCounter(inviteDialogOpenedCounter + 1);
+    }
+  }, [query, handleOpenInviteDialog, inviteDialogOpenedCounter, setInviteDialogOpenedCounter]);
 
   const deleteThreadCompleted = async ({ deleteThread }: DeleteThreadMutation): Promise<void> => {
     if (deleteThread?.errors?.length) {
@@ -361,11 +386,11 @@ const ThreadPage: NextPage = () => {
 
   const shareDialogParams = useMemo(
     () => ({
-      header: t('thread:shareThread'),
-      title,
-      text: t('thread:shareThreadText', { creatorUsername, commentCount }),
+      header: t('thread:shareHeader'),
+      title: `${title} 💬`,
+      text: t('thread:shareText', { creatorUsername, commentCount }),
     }),
-    [commentCount, creatorUsername, t, title],
+    [t, title, creatorUsername, commentCount],
   );
 
   const handleShareButtonClick = useCallback((): void => handleOpenShareDialog(shareDialogParams), [
@@ -375,7 +400,7 @@ const ThreadPage: NextPage = () => {
 
   const renderShareButton = useMemo(
     () => (
-      <Tooltip title={t('thread-tooltips:shareThread')}>
+      <Tooltip title={t('thread-tooltips:share')}>
         <IconButton
           className={classes.headerActionItem}
           onClick={handleShareButtonClick}
@@ -397,7 +422,7 @@ const ThreadPage: NextPage = () => {
         callback: handleDeleteThread,
         disabled: verified === false,
       },
-      shareText: t('thread:shareThread'),
+      shareText: t('thread:shareHeader'),
       hideDeleteAction: !isOwn,
     }),
     [handleDeleteThread, isOwn, shareDialogParams, t, verified],
@@ -428,14 +453,24 @@ const ThreadPage: NextPage = () => {
   }, [commentsQuery, threadQuery]);
 
   const renderActionsButton = useMemo(
+    () =>
+      !!isOwn && (
+        <ActionsButton
+          tooltip={t('thread-tooltips:threadActions')}
+          actionsDialogParams={actionsDialogParams}
+          className={classes.headerActionItem}
+        />
+      ),
+    [actionsDialogParams, t, classes.headerActionItem, isOwn],
+  );
+
+  const renderMobileShareButton = useMemo(
     () => (
-      <ActionsButton
-        tooltip={t('thread-tooltips:threadActions')}
-        actionsDialogParams={actionsDialogParams}
-        className={classes.headerActionItem}
-      />
+      <IconButton color="secondary" size="small" onClick={handleShareButtonClick}>
+        <ShareOutlined />
+      </IconButton>
     ),
-    [actionsDialogParams, t, classes.headerActionItem],
+    [handleShareButtonClick],
   );
 
   // Only render for verified user who are not owners.
@@ -693,11 +728,11 @@ const ThreadPage: NextPage = () => {
 
   const renderText = useMemo(
     () => (
-      <Typography className="truncate-text" variant="body2">
+      <Typography className={clsx('truncate-text', classes.threadText)} variant="body2">
         <MarkdownContent>{text}</MarkdownContent>
       </Typography>
     ),
-    [text],
+    [classes.threadText, text],
   );
 
   const renderCreatorLink = useMemo(
@@ -731,7 +766,9 @@ const ThreadPage: NextPage = () => {
           </CardContent>
         </Grid>
         <Grid className={classes.imageThumbnailContainer} item xs={3} container justify="flex-end">
-          <CardContent className={classes.threadInfoCardContent}>
+          <CardContent
+            className={clsx(classes.threadInfoCardContent, classes.threadImageCardContent)}
+          >
             {renderImageThumbnail}
           </CardContent>
         </Grid>
@@ -740,6 +777,7 @@ const ThreadPage: NextPage = () => {
     [
       classes.threadInfoCardContent,
       classes.imageThumbnailContainer,
+      classes.threadImageCardContent,
       renderMobileTitle,
       renderText,
       renderCreated,
@@ -778,12 +816,43 @@ const ThreadPage: NextPage = () => {
     [mdUp, renderHeaderAction, renderHeaderTitle, classes.header, classes.headerContent],
   );
 
+  const renderInviteDialogHeader = useMemo(
+    () => (
+      <>
+        Wohoo!
+        <Emoji emoji="🥳" />
+      </>
+    ),
+    [],
+  );
+
+  const renderInviteDialogText = useMemo(
+    () => (
+      <DialogContentText>
+        <Typography variant="body2">{t('thread:inviteDialogText', { title })}</Typography>
+      </DialogContentText>
+    ),
+    [t, title],
+  );
+
+  const renderInviteDialog = useMemo(
+    () => (
+      <InviteDialog
+        header={renderInviteDialogHeader}
+        dynamicContent={[renderInviteDialogText]}
+        shareDialogParams={shareDialogParams}
+        hideInviteCode
+      />
+    ),
+    [renderInviteDialogHeader, renderInviteDialogText, shareDialogParams],
+  );
+
   const layoutProps = {
     seoProps: {
       title,
     },
     topNavbarProps: {
-      renderHeaderRight: renderActionsButton,
+      renderHeaderRight: renderActionsButton || renderMobileShareButton,
     },
     customBottomNavbar: renderCustomBottomNavbar,
     hideBottomNavbar: !userMe,
@@ -830,6 +899,7 @@ const ThreadPage: NextPage = () => {
         {renderCommentsHeader}
         {renderComments}
         {renderCreateCommentButton}
+        {renderInviteDialog}
       </Paper>
     </MainTemplate>
   );

@@ -8,9 +8,12 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import {
   ActionRequiredTemplate,
+  Emoji,
   ErrorTemplate,
+  IconButtonLink,
   InviteDialog,
   LoadingBox,
   MainTemplate,
@@ -31,16 +34,14 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { BORDER, BORDER_RADIUS } from 'styles';
-import { INVITE_PROMPT_KEY } from 'utils';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
+import { INVITE_PROMPT_KEY, SLOGAN, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   createThreadContainer: {
     padding: spacing(2),
-    [breakpoints.up('md')]: {
-      borderRadius: BORDER_RADIUS,
-    },
+    borderRadius: BORDER_RADIUS,
   },
   createThreadInputBase: {
     padding: spacing(2),
@@ -69,15 +70,15 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
 
 const HomePage: NextPage = () => {
   const classes = useStyles();
-  const { verified, id, username, inviteCodeUsages } = useAuthContext();
+  const { verified, id, username, inviteCodeUsages, inviteCode } = useAuthContext();
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { handleOpenThreadForm } = useThreadFormContext();
   const { query } = useRouter();
-  const [title, setTitle] = useState('');
   const queryVariables = R.pick(['page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const { handleOpenInviteDialog } = useInviteContext();
+  const { mdUp } = useMediaQueries();
 
   const variables = {
     ordering,
@@ -93,48 +94,63 @@ const HomePage: NextPage = () => {
   const threads: ThreadObjectType[] = R.pathOr([], ['threads', 'objects'], data);
   const threadCount = R.pathOr(0, ['threads', 'count'], data);
 
+  const shareDialogParams = useMemo(
+    () => ({
+      header: t('home:shareDialogHeader'),
+      title: t('common:inviteTitle'),
+      text: SLOGAN,
+      linkSuffix: `?code=${inviteCode}`,
+    }),
+    [t, inviteCode],
+  );
+
   useEffect(() => {
     if (!!inviteCodeUsages && !localStorage.getItem(INVITE_PROMPT_KEY)) {
       handleOpenInviteDialog();
     }
   }, [inviteCodeUsages, handleOpenInviteDialog]);
 
-  const handleSubmitCreateThread = useCallback(
-    (e: SyntheticEvent): void => {
-      e.preventDefault();
-      handleOpenThreadForm({ title });
-      setTitle('');
-    },
-    [handleOpenThreadForm, title],
+  const handleCloseInviteDialogCallback = useCallback(
+    (): void => localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now())),
+    [],
+  );
+
+  const renderStarredButton = useMemo(
+    () => (
+      <IconButtonLink
+        color="secondary"
+        size="small"
+        href={urls.starred}
+        icon={StarBorderOutlined}
+      />
+    ),
+    [],
   );
 
   const renderCreateThread = useMemo(
-    () => (
-      <Paper className={classes.createThreadContainer}>
-        <form onSubmit={handleSubmitCreateThread}>
-          <Box display="flex">
+    () =>
+      mdUp && (
+        <Paper className={classes.createThreadContainer}>
+          <Box display="flex" onClick={(): void => handleOpenThreadForm()}>
             <InputBase
-              value={title}
-              onChange={(e): void => setTitle(e.target.value)}
               placeholder={t('forms:createThread')}
               autoComplete="off"
               className={classes.createThreadInputBase}
               fullWidth
             />
-            <Button className={classes.createThreadSubmitButton} variant="contained" type="submit">
+            <Button className={classes.createThreadSubmitButton} variant="contained">
               <ArrowForwardOutlined />
             </Button>
           </Box>
-        </form>
-      </Paper>
-    ),
+        </Paper>
+      ),
     [
       classes.createThreadContainer,
       classes.createThreadInputBase,
       classes.createThreadSubmitButton,
       t,
-      title,
-      handleSubmitCreateThread,
+      mdUp,
+      handleOpenThreadForm,
     ],
   );
 
@@ -166,6 +182,15 @@ const HomePage: NextPage = () => {
     [ordering, renderThreadTableBody, threadCount],
   );
 
+  const renderInviteDialogHeader = useMemo(
+    () => (
+      <>
+        {t('home:inviteDialogHeader')} <Emoji emoji="🎉" />
+      </>
+    ),
+    [t],
+  );
+
   const renderThreads = useMemo(
     () => (
       <Paper className={classes.threadsPaper}>
@@ -190,14 +215,18 @@ const HomePage: NextPage = () => {
   const renderInvitePrompt = useMemo(
     () => (
       <InviteDialog
-        header={t('home:inviteDialogHeader')}
+        header={renderInviteDialogHeader}
         dynamicContent={[renderInviteDialogText]}
-        handleCloseCallback={(): void =>
-          localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now()))
-        }
+        handleCloseCallback={handleCloseInviteDialogCallback}
+        shareDialogParams={shareDialogParams}
       />
     ),
-    [renderInviteDialogText, t],
+    [
+      renderInviteDialogText,
+      renderInviteDialogHeader,
+      handleCloseInviteDialogCallback,
+      shareDialogParams,
+    ],
   );
 
   const layoutProps = {
@@ -206,10 +235,8 @@ const HomePage: NextPage = () => {
     },
     topNavbarProps: {
       hideBackButton: true,
+      renderHeaderRight: renderStarredButton,
     },
-    hideBottomNavbar: false,
-    hideLogo: true,
-    hideAppStoreBadges: true,
   };
 
   if (!!error && !!error.networkError) {

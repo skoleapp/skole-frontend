@@ -271,7 +271,6 @@ const ResetPasswordPage: NextPage = () => {
       header: t('reset-password:header'),
       emoji: '😶‍🌫️',
     },
-    hideBottomNavbar: !userMe,
   };
 
   if (userMe) {

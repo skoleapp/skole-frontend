@@ -1,17 +1,15 @@
 import { MarkdownTemplate } from 'components';
-import { useAuthContext } from 'context';
 import { withUserMe } from 'hocs';
-import { useMediaQueries } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
+import { useMediaQueries } from 'styles';
 import { MarkdownPageProps } from 'types';
 
 const ScorePage: NextPage<MarkdownPageProps> = ({ data: { title }, content: markdownContent }) => {
   const { t } = useTranslation();
   const { smUp } = useMediaQueries();
-  const { userMe } = useAuthContext();
 
   // The emoji won't stand out from the top navbar on mobile.
   const emoji = smUp && '💯';
@@ -25,7 +23,6 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ data: { title }, content: mark
       emoji,
     },
     markdownContent,
-    hideBottomNavbar: !userMe,
   };
 
   return <MarkdownTemplate {...layoutProps} />;

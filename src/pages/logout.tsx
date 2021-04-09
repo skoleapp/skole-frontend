@@ -17,7 +17,7 @@ const LogoutPage: NextPage = () => {
   const apolloClient = useApolloClient();
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { userMe, setUserMe } = useAuthContext();
+  const { setUserMe } = useAuthContext();
   const context = useLanguageHeaderContext();
 
   const onCompleted = async (): Promise<void> => {
@@ -72,7 +72,6 @@ const LogoutPage: NextPage = () => {
       emoji: '👋',
       hideSearch: true,
     },
-    hideBottomNavbar: !userMe,
   };
 
   // Show loading screen when loading the next page that the user will be automatically redirected to.

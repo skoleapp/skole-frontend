@@ -66,6 +66,7 @@
   "newest": "Nyaste",
   "createThread": "Skapa tråd",
   "linkCopied": "Länk kopierad till urklipp!",
+  "inviteTitle": "Din vän {{ username }} bjöd in dig till Skole",
   "inviteCodeText": "Här är din inbjudningskod:",
   "inviteButtonText": "Bjud in nu",
   "inviteCodeCopied": "Bjud in kod kopierad till urklipp!",

@@ -12,7 +12,7 @@ export const SettingsDialog: React.FC = () => {
 
   return (
     <SkoleDialog open={settingsDialogOpen} onClose={handleCloseSettingsDialog} list>
-      <DialogHeader onCancel={handleCloseSettingsDialog} text={t('common:settings')} emoji="⚙️" />
+      <DialogHeader onClose={handleCloseSettingsDialog} text={t('common:settings')} emoji="⚙️" />
       <SettingsList dialog />
     </SkoleDialog>
   );

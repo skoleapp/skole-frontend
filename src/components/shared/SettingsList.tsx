@@ -16,10 +16,10 @@ import {
   useLanguageContext,
   useSettingsContext,
 } from 'context';
-import { useMediaQueries } from 'hooks';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
+import { useMediaQueries } from 'styles';
 import { SETTINGS_ITEMS, urls } from 'utils';
 
 import { Link } from './Link';

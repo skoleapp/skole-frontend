@@ -43,7 +43,7 @@ export const ActionsDialog: React.FC = () => {
   }, [deleteActionParams, handleCloseActionsDialog]);
 
   const actionsDialogHeaderProps = {
-    onCancel: handleCloseActionsDialog,
+    onClose: handleCloseActionsDialog,
   };
 
   const renderShareAction = useMemo(
