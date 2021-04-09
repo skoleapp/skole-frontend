@@ -88,7 +88,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     marginRight: spacing(2),
   },
   header: {
-    paddingBottom: 0,
+    paddingBottom: spacing(2),
   },
   headerTitle: {
     color: palette.text.secondary,
@@ -113,10 +113,21 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   threadInfoCardContent: {
     padding: spacing(2),
     paddingBottom: '0 !important',
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
     [breakpoints.up('md')]: {
       padding: `${spacing(2)} ${spacing(4)}`,
       paddingBottom: `${spacing(2)} !important`,
     },
+  },
+  threadImageCardContent: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+  },
+  threadText: {
+    flexGrow: 1,
   },
   imageThumbnailContainer: {
     [breakpoints.up('md')]: {
@@ -717,11 +728,11 @@ const ThreadPage: NextPage = () => {
 
   const renderText = useMemo(
     () => (
-      <Typography className="truncate-text" variant="body2">
+      <Typography className={clsx('truncate-text', classes.threadText)} variant="body2">
         <MarkdownContent>{text}</MarkdownContent>
       </Typography>
     ),
-    [text],
+    [classes.threadText, text],
   );
 
   const renderCreatorLink = useMemo(
@@ -755,7 +766,9 @@ const ThreadPage: NextPage = () => {
           </CardContent>
         </Grid>
         <Grid className={classes.imageThumbnailContainer} item xs={3} container justify="flex-end">
-          <CardContent className={classes.threadInfoCardContent}>
+          <CardContent
+            className={clsx(classes.threadInfoCardContent, classes.threadImageCardContent)}
+          >
             {renderImageThumbnail}
           </CardContent>
         </Grid>
@@ -764,6 +777,7 @@ const ThreadPage: NextPage = () => {
     [
       classes.threadInfoCardContent,
       classes.imageThumbnailContainer,
+      classes.threadImageCardContent,
       renderMobileTitle,
       renderText,
       renderCreated,
