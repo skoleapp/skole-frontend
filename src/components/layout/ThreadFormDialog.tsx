@@ -48,7 +48,7 @@ export const ThreadFormDialog: React.FC = () => {
       await Router.push({
         pathname: urls.thread(createThread.thread.slug),
         query: {
-          invite: '',
+          invite: true,
         },
       });
     } else {

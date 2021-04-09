@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
+import MaterialLink from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
@@ -829,7 +830,9 @@ const ThreadPage: NextPage = () => {
   const renderInviteDialogText = useMemo(
     () => (
       <DialogContentText>
-        <Typography variant="body2">{t('thread:inviteDialogText', { title })}</Typography>
+        <Typography variant="body2">
+          <MaterialLink>@{title}</MaterialLink> {t('thread:inviteDialogText')}
+        </Typography>
       </DialogContentText>
     ),
     [t, title],
