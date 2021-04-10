@@ -169,8 +169,14 @@ query Thread($slug: String) {
   }
 }
 
-query ThreadComments($slug: String, $ordering: String, $page: Int, $pageSize: Int) {
-  comments(thread: $slug, ordering: $ordering, page: $page, pageSize: $pageSize) {
+query ThreadComments($slug: String, $ordering: String, $comment: ID, $page: Int, $pageSize: Int) {
+  comments(
+    thread: $slug
+    ordering: $ordering
+    comment: $comment
+    page: $page
+    pageSize: $pageSize
+  ) {
     page
     pages
     hasNext
