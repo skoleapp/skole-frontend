@@ -11,8 +11,6 @@
   "noComments": "Denna användare har inte lagt till några kommentarer.",
   "verificationRequiredThreads": "Verifiera ditt konto för att se trådar.",
   "verificationRequiredComments": "Verifiera ditt konto för att se kommentarer.",
-  "inviteDialogHeader": "Bjud in dina vänner!",
-  "inviteText": "Du kan använda din personliga inbjudningskod för att låta dina vänner gå med i Skole också! Din kod har {{ inviteCodeUsages }} användningar kvar.",
   "shareHeader": "Dela profil",
   "shareText": "{{ threadCount }} trådar. {{ commentCount }} kommentarer.",
   "share": "Dela profil"

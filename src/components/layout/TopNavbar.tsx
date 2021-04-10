@@ -18,11 +18,12 @@ import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutline
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
 import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
+import ContactMailOutlined from '@material-ui/icons/ContactMailOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
-import { useAuthContext, useDarkModeContext } from 'context';
+import { useAuthContext, useDarkModeContext, useInviteContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import {
@@ -100,7 +101,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
-  const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
+  const { handleOpenGeneralInviteDialog } = useInviteContext();
 
   const {
     userMe,
@@ -110,11 +111,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     profileUrl,
     rank,
     score,
+    inviteCodeUsages,
   } = useAuthContext();
 
   const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(
     null,
   );
+
+  const handleActivityPopperClickAway = (): void => setActivityPopperOpen(false);
 
   const handleActivityButtonClick = useCallback(
     (e: MouseEvent<HTMLButtonElement>): void => {
@@ -268,6 +272,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       !!userMe &&
       !hideDynamicButtons && (
         <>
+          <Tooltip title={t('common-tooltips:invite', { inviteCodeUsages })}>
+            <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary">
+              <Badge badgeContent={inviteCodeUsages} color="secondary">
+                <ContactMailOutlined />
+              </Badge>
+            </IconButton>
+          </Tooltip>
           <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
             <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
             >
@@ -305,6 +316,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       score,
       t,
       userMe,
+      inviteCodeUsages,
+      handleOpenGeneralInviteDialog,
     ],
   );
 

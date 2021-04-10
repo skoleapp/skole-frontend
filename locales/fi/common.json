@@ -66,10 +66,14 @@
   "newest": "Uusimmat",
   "createThread": "Luo lanka",
   "linkCopied": "Linkki kopioitu leikepöydälle!",
+  "inviteDialogHeader": "Kutsu kavereita!",
+  "inviteDialogText": "Voit käyttää henkilökohtaista kutsukoodiasi päästääksesi kaverisi Skoleen myös! Koodillasi on {{ inviteCodeUsages }} jäljellä.",
+  "inviteDialogCodeText": "Tässä on kutsukoodisi:",
+  "inviteShareDialogHeader": "Kutsu kavereita!",
   "inviteTitle": "Ystäväsi {{ username }} kutsui sinut Skoleen",
-  "inviteCodeText": "Tässä on kutsukoodisi:",
   "inviteButtonText": "Kutsu nyt",
   "inviteCodeCopied": "Kutsukoodi kopioitu leikepöydälle!",
   "primaryEmailDialogText": "Sallitut päätteet ensijaiselle sähköpostiosoitteellesi ovat:",
-  "gotIt": "Ymmärsin!"
+  "gotIt": "Ymmärsin!",
+  "create": "Luo"
 }

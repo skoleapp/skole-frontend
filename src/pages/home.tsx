@@ -1,20 +1,23 @@
+import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import CardHeader from '@material-ui/core/CardHeader';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
+import ContactMailOutlined from '@material-ui/icons/ContactMailOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import {
   ActionRequiredTemplate,
+  CustomInviteDialog,
   Emoji,
   ErrorTemplate,
   IconButtonLink,
-  InviteDialog,
   LoadingBox,
   MainTemplate,
   OrderingButton,
@@ -36,7 +39,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
-import { INVITE_PROMPT_KEY, SLOGAN, urls } from 'utils';
+import { INVITE_PROMPT_KEY, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
   createThreadContainer: {
@@ -70,15 +73,21 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
 
 const HomePage: NextPage = () => {
   const classes = useStyles();
-  const { verified, id, username, inviteCodeUsages, inviteCode } = useAuthContext();
+  const { verified, id, username, inviteCodeUsages } = useAuthContext();
   const { t } = useTranslation();
   const context = useLanguageHeaderContext();
   const { handleOpenThreadForm } = useThreadFormContext();
   const { query } = useRouter();
   const queryVariables = R.pick(['page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
-  const { handleOpenInviteDialog } = useInviteContext();
   const { mdUp } = useMediaQueries();
+
+  const {
+    handleOpenCustomInviteDialog,
+    customInviteDialogOpen,
+    handleCloseCustomInviteDialog,
+    handleOpenGeneralInviteDialog,
+  } = useInviteContext();
 
   const variables = {
     ordering,
@@ -94,25 +103,26 @@ const HomePage: NextPage = () => {
   const threads: ThreadObjectType[] = R.pathOr([], ['threads', 'objects'], data);
   const threadCount = R.pathOr(0, ['threads', 'count'], data);
 
-  const shareDialogParams = useMemo(
-    () => ({
-      header: t('home:shareDialogHeader'),
-      title: t('common:inviteTitle'),
-      text: SLOGAN,
-      linkSuffix: `?code=${inviteCode}`,
-    }),
-    [t, inviteCode],
-  );
-
   useEffect(() => {
     if (!!inviteCodeUsages && !localStorage.getItem(INVITE_PROMPT_KEY)) {
-      handleOpenInviteDialog();
+      handleOpenCustomInviteDialog();
     }
-  }, [inviteCodeUsages, handleOpenInviteDialog]);
+  }, [inviteCodeUsages, handleOpenCustomInviteDialog]);
 
-  const handleCloseInviteDialogCallback = useCallback(
-    (): void => localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now())),
-    [],
+  const handleCloseInvitePrompt = useCallback((): void => {
+    handleCloseCustomInviteDialog();
+    localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now()));
+  }, [handleCloseCustomInviteDialog]);
+
+  const renderInviteButton = useMemo(
+    () => (
+      <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary" size="small">
+        <Badge badgeContent={inviteCodeUsages} color="secondary">
+          <ContactMailOutlined />
+        </Badge>
+      </IconButton>
+    ),
+    [handleOpenGeneralInviteDialog, inviteCodeUsages],
   );
 
   const renderStarredButton = useMemo(
@@ -182,7 +192,7 @@ const HomePage: NextPage = () => {
     [ordering, renderThreadTableBody, threadCount],
   );
 
-  const renderInviteDialogHeader = useMemo(
+  const renderInvitePromptHeader = useMemo(
     () => (
       <>
         {t('home:inviteDialogHeader')} <Emoji emoji="🎉" />
@@ -201,7 +211,7 @@ const HomePage: NextPage = () => {
     [classes.threadsPaper, renderThreadsHeader, renderLoading, renderThreadsTable],
   );
 
-  const renderInviteDialogText = useMemo(
+  const renderInvitePromptText = useMemo(
     () => (
       <DialogContentText>
         <Typography variant="body2">
@@ -214,18 +224,18 @@ const HomePage: NextPage = () => {
 
   const renderInvitePrompt = useMemo(
     () => (
-      <InviteDialog
-        header={renderInviteDialogHeader}
-        dynamicContent={[renderInviteDialogText]}
-        handleCloseCallback={handleCloseInviteDialogCallback}
-        shareDialogParams={shareDialogParams}
+      <CustomInviteDialog
+        open={customInviteDialogOpen}
+        header={renderInvitePromptHeader}
+        dynamicContent={[renderInvitePromptText]}
+        handleClose={handleCloseInvitePrompt}
       />
     ),
     [
-      renderInviteDialogText,
-      renderInviteDialogHeader,
-      handleCloseInviteDialogCallback,
-      shareDialogParams,
+      renderInvitePromptText,
+      renderInvitePromptHeader,
+      handleCloseInvitePrompt,
+      customInviteDialogOpen,
     ],
   );
 
@@ -235,6 +245,7 @@ const HomePage: NextPage = () => {
     },
     topNavbarProps: {
       hideBackButton: true,
+      renderHeaderLeft: renderInviteButton,
       renderHeaderRight: renderStarredButton,
     },
   };

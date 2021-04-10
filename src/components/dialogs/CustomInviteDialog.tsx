@@ -7,17 +7,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import FileCopyOutlined from '@material-ui/icons/FileCopyOutlined';
-import {
-  useAuthContext,
-  useInviteContext,
-  useNotificationsContext,
-  useShareContext,
-} from 'context';
+import { useAuthContext, useNotificationsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
 import { useMediaQueries } from 'styles';
 import { ShareDialogParams } from 'types';
+import { SLOGAN } from 'utils';
 
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
@@ -34,40 +30,41 @@ const useStyles = makeStyles(({ spacing }) => ({
 }));
 
 interface Props {
+  open: boolean;
   header?: JSX.Element | string;
   dynamicContent: JSX.Element[];
-  handleCloseCallback?: () => void;
+  handleClose: () => void;
+  shareDialogParams?: ShareDialogParams;
   hideInviteCode?: boolean;
-  shareDialogParams: ShareDialogParams;
 }
 
-export const InviteDialog: React.FC<Props> = ({
+export const CustomInviteDialog: React.FC<Props> = ({
+  open,
   header,
   dynamicContent,
-  handleCloseCallback,
+  handleClose,
+  shareDialogParams: _shareDialogParams,
   hideInviteCode,
-  shareDialogParams,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { toggleNotification } = useNotificationsContext();
   const { inviteCode } = useAuthContext();
   const { asPath } = useRouter();
   const { mdUp } = useMediaQueries();
   const { handleOpenShareDialog } = useShareContext();
+  const { toggleNotification } = useNotificationsContext();
+  const { username } = useAuthContext();
 
-  const {
-    inviteDialogOpen,
-    handleCloseInviteDialog: _handleCloseInviteDialog,
-  } = useInviteContext();
-
-  const handleClose = useCallback((): void => {
-    _handleCloseInviteDialog();
-
-    if (handleCloseCallback) {
-      handleCloseCallback();
-    }
-  }, [_handleCloseInviteDialog, handleCloseCallback]);
+  const shareDialogParams = useMemo(
+    () =>
+      _shareDialogParams || {
+        header: t('common:inviteShareDialogHeader'),
+        title: t('common:inviteTitle', { username }),
+        text: SLOGAN,
+        linkSuffix: `?code=${inviteCode}`,
+      },
+    [t, inviteCode, _shareDialogParams, username],
+  );
 
   const handleClickInviteButton = useCallback(async (): Promise<void> => {
     if (mdUp) {
@@ -100,7 +97,7 @@ export const InviteDialog: React.FC<Props> = ({
     () =>
       !hideInviteCode && (
         <DialogContentText>
-          <Typography variant="body2">{t('common:inviteCodeText')}</Typography>
+          <Typography variant="body2">{t('common:inviteDialogCodeText')}</Typography>
         </DialogContentText>
       ),
     [t, hideInviteCode],
@@ -142,7 +139,7 @@ export const InviteDialog: React.FC<Props> = ({
   );
 
   return (
-    <SkoleDialog open={inviteDialogOpen} fullScreen={false}>
+    <SkoleDialog open={open} fullScreen={false}>
       <DialogHeader text={header} onClose={handleClose} />
       <DialogContent>
         {dynamicContent.map((d) => d)}

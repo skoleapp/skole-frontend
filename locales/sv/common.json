@@ -66,10 +66,14 @@
   "newest": "Nyaste",
   "createThread": "Skapa tråd",
   "linkCopied": "Länk kopierad till urklipp!",
+  "inviteDialogHeader": "Bjud in vänner!",
+  "inviteDialogText": "Du kan använda din personliga inbjudningskod för att låta dina vänner gå med i Skole också! Din kod har {{ inviteCodeUsages }} användningar kvar.",
+  "inviteDialogCodeText": "Här är din inbjudningskod:",
+  "inviteShareDialogHeader": "Bjuda in vänner!",
   "inviteTitle": "Din vän {{ username }} bjöd in dig till Skole",
-  "inviteCodeText": "Här är din inbjudningskod:",
   "inviteButtonText": "Bjud in nu",
   "inviteCodeCopied": "Bjud in kod kopierad till urklipp!",
   "primaryEmailDialogText": "Tillåtna domäner för din primära e-postadress är:",
-  "gotIt": "Fick det!"
+  "gotIt": "Fick det!",
+  "create": "Skapa"
 }

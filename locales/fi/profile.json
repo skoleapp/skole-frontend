@@ -11,8 +11,6 @@
   "noComments": "Tämä käyttäjä ei ole lisännyt yhtään kommenttia.",
   "verificationRequiredThreads": "Vahvista tilisi nähdäksesi langat.",
   "verificationRequiredComments": "Vahvista tilisi nähdäksesi kommentit.",
-  "inviteDialogHeader": "Kutsu kaverisi!",
-  "inviteText": "Voit käyttää henkilökohtaista kutsukoodiasi päästääksesi kaverisi Skoleen myös! Koodillasi on {{ inviteCodeUsages }} jäljellä.",
   "shareHeader": "Jaa profiili",
   "shareText": "{{ threadCount }} lankaa. {{ commentCount }} kommenttia.",
   "share": "Jaa profiili"

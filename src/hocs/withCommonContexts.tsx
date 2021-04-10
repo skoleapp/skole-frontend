@@ -1,5 +1,6 @@
 import {
   ConfirmationDialog,
+  GeneralInviteDialog,
   LanguageSelectorDialog,
   Notifications,
   SettingsDialog,
@@ -39,6 +40,7 @@ export const withCommonContexts = <T extends Record<string, unknown>>(
                       <LanguageSelectorDialog />
                       <ShareDialog />
                       <ThreadFormDialog />
+                      <GeneralInviteDialog />
                       <Notifications />
                     </ThreadFormContextProvider>
                   </InviteContextProvider>
