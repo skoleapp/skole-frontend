@@ -36,7 +36,6 @@ export interface ActionsDialogParams {
   renderCustomActions?: Array<JSX.Element | false>;
   hideShareAction?: boolean;
   hideDeleteAction?: boolean;
-  hideReportAction?: boolean;
 }
 
 interface InfoDialogItem {
