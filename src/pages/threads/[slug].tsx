@@ -182,7 +182,7 @@ const ThreadPage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const threadVariables = R.pick(['slug'], query);
   const commentQueryVariables = R.pick(['slug', 'comment', 'page', 'pageSize'], query);
-  const { ordering } = useOrderingContext();
+  const { ordering, setOrdering } = useOrderingContext();
   const [threadQueryCount, setThreadQueryCount] = useState(0);
   const [customInviteDialogOpenedCounter, setCustomInviteDialogOpenedCounter] = useState(0);
 
@@ -463,6 +463,12 @@ const ThreadPage: NextPage = () => {
     commentsQuery();
   }, [commentsQuery, threadQuery]);
 
+  // Set the ordering to `newest` so that the newly created comment ends up as the topmost comment.
+  const handleCommentCreated = useCallback((): void => {
+    setOrdering('newest');
+    refreshThread();
+  }, [refreshThread, setOrdering]);
+
   const renderActionsButton = useMemo(
     () =>
       !!isOwn && (
@@ -581,10 +587,10 @@ const ThreadPage: NextPage = () => {
         comment={targetComment}
         placeholder={textFieldPlaceholder}
         resetTargetComment={(): void => setTargetComment(null)}
-        onCommentCreated={refreshThread}
+        onCommentCreated={handleCommentCreated}
       />
     ),
-    [textFieldPlaceholder, targetComment, setTargetComment, refreshThread, targetThread],
+    [textFieldPlaceholder, targetComment, setTargetComment, targetThread, handleCommentCreated],
   );
 
   const renderCommentsHeader = (
