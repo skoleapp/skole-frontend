@@ -19,9 +19,12 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
       paddingLeft: spacing(6),
     },
     '& blockquote': {
-      borderLeft: `0.5rem solid ${palette.grey[300]}`,
+      borderLeft: `0.25rem solid ${palette.grey[300]}`,
       paddingLeft: spacing(2),
-      marginLeft: spacing(2),
+      marginLeft: 0,
+    },
+    '& ol': {
+      paddingLeft: spacing(6),
     },
   },
   dense: {
