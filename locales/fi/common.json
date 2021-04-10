@@ -74,5 +74,6 @@
   "inviteCodeCopied": "Kutsukoodi kopioitu leikepöydälle!",
   "primaryEmailDialogText": "Rajoitamme tällä hetkellä pääsyä vain valittujen yliopistojen opiskelijoille. Sallitut päätteet ensijaiselle sähköpostiosoitteellesi ovat:",
   "gotIt": "Ymmärsin!",
-  "create": "Luo"
+  "create": "Luo",
+  "posted": "lähetti"
 }

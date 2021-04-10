@@ -304,10 +304,7 @@ fragment _commentFields on CommentObjectType {
   created
   modified
   user {
-    id
-    slug
-    username
-    avatarThumbnail
+    ...userFields
   }
   thread {
     slug
