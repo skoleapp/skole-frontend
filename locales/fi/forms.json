@@ -29,5 +29,7 @@
   "code": "Koodi",
   "primaryEmailHelperText": "Koulusähköpostisi, jota käytämme sitä sinun tunnistamiseen. Se näkyy vain sinulle. Emme lähetä sinulle roskapostia.",
   "usernameHelperText": "Käyttäjätunnus tai sähköposti",
-  "termsHelperText": "Rekisteröitymällä hyväksyt"
+  "termsHelperText": "Rekisteröitymällä hyväksyt",
+  "subjectOptional": "Aihe (valinnainen)",
+  "nameOptional": "Nimi (valinnainen)"
 }
