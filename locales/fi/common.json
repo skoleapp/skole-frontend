@@ -72,7 +72,7 @@
   "inviteTitle": "Ystäväsi {{ username }} kutsui sinut Skoleen",
   "inviteButtonText": "Kutsu nyt",
   "inviteCodeCopied": "Kutsukoodi kopioitu leikepöydälle!",
-  "primaryEmailDialogText": "Sallitut päätteet ensijaiselle sähköpostiosoitteellesi ovat:",
+  "primaryEmailDialogText": "Rajoitamme tällä hetkellä pääsyä vain valittujen yliopistojen opiskelijoille. Sallitut päätteet ensijaiselle sähköpostiosoitteellesi ovat:",
   "gotIt": "Ymmärsin!",
   "create": "Luo"
 }

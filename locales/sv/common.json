@@ -72,7 +72,7 @@
   "inviteTitle": "Din vän {{ username }} bjöd in dig till Skole",
   "inviteButtonText": "Bjud in nu",
   "inviteCodeCopied": "Bjud in kod kopierad till urklipp!",
-  "primaryEmailDialogText": "Tillåtna domäner för din primära e-postadress är:",
+  "primaryEmailDialogText": "Vi begränsar för närvarande tillgången till endast studenter från de inkluderade universiteten. Tillåtna domäner för din primära e-postadress är:",
   "gotIt": "Fick det!",
   "create": "Skapa"
 }

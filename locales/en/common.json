@@ -72,7 +72,7 @@
   "inviteTitle": "Your friend {{ username }} invited you to Skole",
   "inviteButtonText": "Invite Now",
   "inviteCodeCopied": "Invite code copied to clipboard!",
-  "primaryEmailDialogText": "Allowed domains for your primary email are:",
+  "primaryEmailDialogText": "We are currently restricting access to only students from the included universities. Allowed domains for your primary email are:",
   "gotIt": "Got it!",
   "create": "Create"
 }
