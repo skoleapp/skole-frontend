@@ -26,7 +26,7 @@ import { CreateCommentFormValues } from 'types';
 import { ACCEPTED_COMMENT_IMAGE_FILES, MAX_IMAGE_FILE_SIZE, MAX_IMAGE_WIDTH_HEIGHT } from 'utils';
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
-import { LoadingBox, TextLink } from '../shared';
+import { LoadingBox, MarkdownHelperText } from '../shared';
 import { AuthorSelection } from './AuthorSelection';
 import { CommentTextField } from './CommentTextField';
 
@@ -205,22 +205,13 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     [setImage, t, toggleNotification],
   );
 
-  const renderMarkdownLink = useMemo(
-    () => (
-      <TextLink href="https://commonmark.org/help/" target="_blank">
-        {t('forms:markdownHelperTextLink')}
-      </TextLink>
-    ),
-    [t],
-  );
-
   const renderMarkdownHelperText = useMemo(
     () => (
       <FormHelperText>
-        {t('forms:markdownHelperText')} {renderMarkdownLink}.
+        <MarkdownHelperText />
       </FormHelperText>
     ),
-    [renderMarkdownLink, t],
+    [],
   );
 
   const renderCombinationHelperText = useMemo(

@@ -24,9 +24,9 @@ import {
   ActionsButton,
   CommentCard,
   CreateCommentForm,
+  CustomInviteDialog,
   Emoji,
   ErrorTemplate,
-  InviteDialog,
   LoadingBox,
   LoadingTemplate,
   LoginRequiredTemplate,
@@ -184,8 +184,13 @@ const ThreadPage: NextPage = () => {
   const commentQueryVariables = R.pick(['slug', 'comment', 'page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const [threadQueryCount, setThreadQueryCount] = useState(0);
-  const { handleOpenInviteDialog } = useInviteContext();
-  const [inviteDialogOpenedCounter, setInviteDialogOpenedCounter] = useState(0);
+  const [customInviteDialogOpenedCounter, setCustomInviteDialogOpenedCounter] = useState(0);
+
+  const {
+    customInviteDialogOpen,
+    handleOpenCustomInviteDialog,
+    handleCloseCustomInviteDialog,
+  } = useInviteContext();
 
   const commentVariables = {
     ordering,
@@ -274,11 +279,16 @@ const ThreadPage: NextPage = () => {
 
   // Open invite dialog if `invite` has been provided as a query parameter.
   useEffect(() => {
-    if (typeof query.invite !== 'undefined' && inviteDialogOpenedCounter < 1) {
-      handleOpenInviteDialog();
-      setInviteDialogOpenedCounter(inviteDialogOpenedCounter + 1);
+    if (typeof query.invite !== 'undefined' && customInviteDialogOpenedCounter < 1) {
+      handleOpenCustomInviteDialog();
+      setCustomInviteDialogOpenedCounter(customInviteDialogOpenedCounter + 1);
     }
-  }, [query, handleOpenInviteDialog, inviteDialogOpenedCounter, setInviteDialogOpenedCounter]);
+  }, [
+    query,
+    handleOpenCustomInviteDialog,
+    customInviteDialogOpenedCounter,
+    setCustomInviteDialogOpenedCounter,
+  ]);
 
   const deleteThreadCompleted = async ({ deleteThread }: DeleteThreadMutation): Promise<void> => {
     if (deleteThread?.errors?.length) {
@@ -729,7 +739,7 @@ const ThreadPage: NextPage = () => {
 
   const renderText = useMemo(
     () => (
-      <Typography className={clsx('truncate-text', classes.threadText)} variant="body2">
+      <Typography className={classes.threadText} variant="body2">
         <MarkdownContent>{text}</MarkdownContent>
       </Typography>
     ),
@@ -840,14 +850,22 @@ const ThreadPage: NextPage = () => {
 
   const renderInviteDialog = useMemo(
     () => (
-      <InviteDialog
+      <CustomInviteDialog
+        open={customInviteDialogOpen}
+        handleClose={handleCloseCustomInviteDialog}
         header={renderInviteDialogHeader}
         dynamicContent={[renderInviteDialogText]}
         shareDialogParams={shareDialogParams}
         hideInviteCode
       />
     ),
-    [renderInviteDialogHeader, renderInviteDialogText, shareDialogParams],
+    [
+      renderInviteDialogHeader,
+      renderInviteDialogText,
+      customInviteDialogOpen,
+      handleCloseCustomInviteDialog,
+      shareDialogParams,
+    ],
   );
 
   const layoutProps = {

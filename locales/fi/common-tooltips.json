@@ -11,5 +11,6 @@
   "ownRank": "Arvosi on {{ rank }} pisteillä {{ score }}.",
   "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
   "closeMenu": "Sulje valikko.",
-  "toggleDarkMode": "Vaihda tumma/vaalea teema."
+  "toggleDarkMode": "Vaihda tumma/vaalea teema.",
+  "invite": "Sinulla on {{ inviteCodeUsages }} kutsua jäljellä."
 }

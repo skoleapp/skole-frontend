@@ -1,6 +1,5 @@
 {
   "title": "Home",
   "inviteDialogHeader": "Congratulations!",
-  "shareDialogHeader": "Invite Friends",
   "inviteText": "Welcome to Skole, {{ username }}! You are the user number {{ id }}. As a reward, you will get a personal code that you can use to invite {{ inviteCodeUsages }} of your friends!"
 }

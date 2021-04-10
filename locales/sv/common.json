@@ -21,7 +21,6 @@
   "resetPassword": "Återställ lösenord",
   "deleteAccount": "Radera konto",
   "myData": "Min data",
-  "reportAbuse": "Rapportera missbruk (på kommande)",
   "threads": "Tråden",
   "comments": "Kommentarer",
   "resultsPerPage": "Resultat per sida",
@@ -66,10 +65,14 @@
   "newest": "Nyaste",
   "createThread": "Skapa tråd",
   "linkCopied": "Länk kopierad till urklipp!",
+  "inviteDialogHeader": "Bjud in vänner!",
+  "inviteDialogText": "Du kan använda din personliga inbjudningskod för att låta dina vänner gå med i Skole också! Din kod har {{ inviteCodeUsages }} användningar kvar.",
+  "inviteDialogCodeText": "Här är din inbjudningskod:",
+  "inviteShareDialogHeader": "Bjuda in vänner!",
   "inviteTitle": "Din vän {{ username }} bjöd in dig till Skole",
-  "inviteCodeText": "Här är din inbjudningskod:",
   "inviteButtonText": "Bjud in nu",
   "inviteCodeCopied": "Bjud in kod kopierad till urklipp!",
-  "primaryEmailDialogText": "Tillåtna domäner för din primära e-postadress är:",
-  "gotIt": "Fick det!"
+  "primaryEmailDialogText": "Vi begränsar för närvarande tillgången till endast studenter från de inkluderade universiteten. Tillåtna domäner för din primära e-postadress är:",
+  "gotIt": "Fick det!",
+  "create": "Skapa"
 }

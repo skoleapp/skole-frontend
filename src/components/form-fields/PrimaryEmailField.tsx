@@ -53,11 +53,11 @@ export const PrimaryEmailField = <T extends FormikValues>(
 
   const renderDialog = useMemo(
     () => (
-      <SkoleDialog open={dialogOpen} fullScreen={false}>
+      <SkoleDialog open={dialogOpen} fullScreen={false} fullWidth={false}>
         <DialogHeader onClose={handleCloseDialog} />
         <DialogContent>
-          <DialogContentText color="textPrimary">
-            <Typography variant="subtitle1">{t('common:primaryEmailDialogText')}</Typography>
+          <DialogContentText>
+            <Typography variant="body2">{t('common:primaryEmailDialogText')}</Typography>
           </DialogContentText>
           <DialogContentText>
             {ALLOWED_EMAIL_DOMAINS.map((e) => (

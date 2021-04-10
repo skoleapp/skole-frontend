@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import MaterialLink from '@material-ui/core/Link';
@@ -29,7 +28,6 @@ import {
   DialogHeader,
   Emoji,
   ErrorTemplate,
-  InviteDialog,
   Link,
   LoadingBox,
   LoadingTemplate,
@@ -185,7 +183,7 @@ const ProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
-  const { handleOpenInviteDialog } = useInviteContext();
+  const { handleOpenGeneralInviteDialog } = useInviteContext();
   const { handleOpenShareDialog } = useShareContext();
 
   const {
@@ -292,7 +290,7 @@ const ProfilePage: NextPage = () => {
     {
       label: t('profile-strength:step3'),
       completed: inviteCodeUsages === 0,
-      handleClick: handleOpenInviteDialog,
+      handleClick: handleOpenGeneralInviteDialog,
     },
   ].sort((prev) => (prev.completed ? -1 : 1));
 
@@ -994,37 +992,6 @@ const ProfilePage: NextPage = () => {
     ],
   );
 
-  const renderInviteDialogText = useMemo(
-    () => (
-      <DialogContentText>
-        <Typography variant="body2">{t('profile:inviteText', { inviteCodeUsages })}</Typography>
-      </DialogContentText>
-    ),
-    [t, inviteCodeUsages],
-  );
-
-  const renderInviteDialogHeader = useMemo(
-    () => (
-      <>
-        {t('profile:inviteDialogHeader')}
-        <Emoji emoji="🤝" />
-      </>
-    ),
-    [t],
-  );
-
-  const renderInviteDialog = useMemo(
-    () =>
-      isOwnProfile && (
-        <InviteDialog
-          header={renderInviteDialogHeader}
-          dynamicContent={[renderInviteDialogText]}
-          shareDialogParams={shareDialogParams}
-        />
-      ),
-    [isOwnProfile, renderInviteDialogText, shareDialogParams, renderInviteDialogHeader],
-  );
-
   const layoutProps = {
     seoProps: {
       title: username,
@@ -1066,7 +1033,6 @@ const ProfilePage: NextPage = () => {
       {renderMobileActionsCard}
       {renderCreatedContent}
       {renderSelectBadgeDialog}
-      {renderInviteDialog}
     </MainTemplate>
   );
 };

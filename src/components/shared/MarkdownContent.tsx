@@ -7,6 +7,7 @@ import gfm from 'remark-gfm';
 const useStyles = makeStyles(({ palette, spacing }) => ({
   root: {
     textAlign: 'left',
+    wordBreak: 'break-word',
     '& a': {
       color: palette.type === 'dark' ? palette.secondary.main : palette.primary.main,
     },
@@ -16,11 +17,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     },
     '& ul': {
       paddingLeft: spacing(6),
-    },
-    '& *': {
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
     },
   },
   dense: {

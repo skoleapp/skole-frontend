@@ -106,7 +106,10 @@ export interface OrderingContextType {
 }
 
 export interface InviteContextType {
-  inviteDialogOpen: boolean;
-  handleOpenInviteDialog: () => void;
-  handleCloseInviteDialog: () => void;
+  generalInviteDialogOpen: boolean;
+  handleOpenGeneralInviteDialog: () => void;
+  handleCloseGeneralInviteDialog: () => void;
+  customInviteDialogOpen: boolean;
+  handleOpenCustomInviteDialog: () => void;
+  handleCloseCustomInviteDialog: () => void;
 }

@@ -3,16 +3,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import DeleteForeverOutlined from '@material-ui/icons/DeleteForeverOutlined';
-import FlagOutlined from '@material-ui/icons/FlagOutlined';
 import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import { useActionsContext, useShareContext } from 'context';
-import { useTranslation } from 'lib';
 import React, { useCallback, useMemo } from 'react';
 
 import { ResponsiveDialog } from './ResponsiveDialog';
 
 export const ActionsDialog: React.FC = () => {
-  const { t } = useTranslation();
   const { handleOpenShareDialog } = useShareContext();
 
   const {
@@ -25,7 +22,6 @@ export const ActionsDialog: React.FC = () => {
       renderCustomActions,
       hideShareAction,
       hideDeleteAction,
-      hideReportAction,
     },
   } = useActionsContext();
 
@@ -72,19 +68,6 @@ export const ActionsDialog: React.FC = () => {
     [deleteActionParams?.disabled, deleteActionParams?.text, handleClickDelete, hideDeleteAction],
   );
 
-  const renderReportAction = useMemo(
-    () =>
-      !hideReportAction && (
-        <MenuItem disabled>
-          <ListItemIcon>
-            <FlagOutlined />
-          </ListItemIcon>
-          <ListItemText>{t('common:reportAbuse')}</ListItemText>
-        </MenuItem>
-      ),
-    [hideReportAction, t],
-  );
-
   return (
     <ResponsiveDialog
       open={actionsDialogOpen}
@@ -96,7 +79,6 @@ export const ActionsDialog: React.FC = () => {
         {renderShareAction}
         {renderCustomActions}
         {renderDeleteAction}
-        {renderReportAction}
       </List>
     </ResponsiveDialog>
   );

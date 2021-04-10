@@ -6,14 +6,20 @@ const InviteContext = createContext<InviteContextType>({});
 export const useInviteContext = (): InviteContextType => useContext(InviteContext);
 
 export const InviteContextProvider: React.FC = ({ children }) => {
-  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  const handleOpenInviteDialog = (): void => setInviteDialogOpen(true);
-  const handleCloseInviteDialog = (): void => setInviteDialogOpen(false);
+  const [generalInviteDialogOpen, setGeneralInviteDialogOpen] = useState(false);
+  const handleOpenGeneralInviteDialog = (): void => setGeneralInviteDialogOpen(true);
+  const handleCloseGeneralInviteDialog = (): void => setGeneralInviteDialogOpen(false);
+  const [customInviteDialogOpen, setCustomInviteDialogOpen] = useState(false);
+  const handleOpenCustomInviteDialog = (): void => setCustomInviteDialogOpen(true);
+  const handleCloseCustomInviteDialog = (): void => setCustomInviteDialogOpen(false);
 
   const value = {
-    inviteDialogOpen,
-    handleOpenInviteDialog,
-    handleCloseInviteDialog,
+    generalInviteDialogOpen,
+    handleOpenGeneralInviteDialog,
+    handleCloseGeneralInviteDialog,
+    customInviteDialogOpen,
+    handleOpenCustomInviteDialog,
+    handleCloseCustomInviteDialog,
   };
 
   return <InviteContext.Provider value={value}>{children}</InviteContext.Provider>;

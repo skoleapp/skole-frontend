@@ -11,7 +11,7 @@ import * as Yup from 'yup';
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
 import { FormSubmitSection, ImageField, TextFormField } from '../form-fields';
-import { TextLink } from '../shared';
+import { MarkdownHelperText } from '../shared';
 
 interface CreateThreadFormValues {
   title: string;
@@ -101,32 +101,19 @@ export const ThreadFormDialog: React.FC = () => {
     [t],
   );
 
-  const renderTextFieldHelperText = useMemo(
-    () => (
-      <>
-        {t('forms:markdownHelperText')}{' '}
-        <TextLink href="https://commonmark.org/help/" target="_blank">
-          {t('forms:markdownHelperTextLink')}
-        </TextLink>
-        .
-      </>
-    ),
-    [t],
-  );
-
   const renderTextField = useMemo(
     () => (
       <Field
         name="text"
         label={t('forms:text')}
         component={TextFormField}
-        helperText={renderTextFieldHelperText}
+        helperText={<MarkdownHelperText />}
         multiline
         rowsMax="10"
         rows="4"
       />
     ),
-    [t, renderTextFieldHelperText],
+    [t],
   );
 
   const renderImageField = useMemo(() => <Field name="image" component={ImageField} />, []);

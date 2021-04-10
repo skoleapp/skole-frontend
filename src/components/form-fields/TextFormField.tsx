@@ -15,7 +15,7 @@ interface Props {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const TextFormField: React.FC<Props> = ({ field, form, ...props }) => (
   <FormControl>
-    <TextField {...field} {...props} />
+    <TextField {...field} {...props} InputLabelProps={{ shrink: !!field.value }} />
     <ErrorMessage name={field.name} component={FormErrorMessage} />
   </FormControl>
 );

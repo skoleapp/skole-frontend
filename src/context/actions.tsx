@@ -13,7 +13,6 @@ const initialActionsDialogParams: ActionsDialogParams = {
   renderCustomActions: [],
   hideShareAction: false,
   hideDeleteAction: false,
-  hideReportAction: false,
 };
 
 export const ActionsContextProvider: React.FC = ({ children }) => {

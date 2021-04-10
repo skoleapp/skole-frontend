@@ -5,7 +5,7 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import { ButtonLink, ErrorTemplate, FormTemplate, LoadingTemplate } from 'components';
 import { useAuthContext } from 'context';
 import { useGraphQlLogoutMutation } from 'generated';
-import { withAuthRequired } from 'hocs';
+import { withUserMe } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
@@ -101,4 +101,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuthRequired(LogoutPage);
+export default withUserMe(LogoutPage);

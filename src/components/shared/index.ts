@@ -13,6 +13,7 @@ export * from './Link';
 export * from './LoadingBox';
 export * from './Logo';
 export * from './MarkdownContent';
+export * from './MarkdownHelperText';
 export * from './NotFoundBox';
 export * from './OrderingButton';
 export * from './SettingsButton';
