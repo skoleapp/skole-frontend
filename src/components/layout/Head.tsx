@@ -48,6 +48,10 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
       <meta name="apple-mobile-web-app-title" content="Skole" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta
+        name="apple-itunes-app"
+        content="app-id=id1547995609" // TODO: Provide a navigational context for the native app: https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/PromotingAppswithAppBanners/PromotingAppswithAppBanners.html
+      />
     </>
   );
 
