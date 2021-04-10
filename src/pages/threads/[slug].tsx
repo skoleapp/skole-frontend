@@ -907,7 +907,7 @@ const ThreadPage: NextPage = () => {
     return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
-  if (!thread) {
+  if (!thread && !threadLoading && !commentsLoading) {
     return <ErrorTemplate variant="not-found" />;
   }
 
