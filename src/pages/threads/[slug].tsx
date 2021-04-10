@@ -729,7 +729,7 @@ const ThreadPage: NextPage = () => {
 
   const renderText = useMemo(
     () => (
-      <Typography className={clsx('truncate-text', classes.threadText)} variant="body2">
+      <Typography className={classes.threadText} variant="body2">
         <MarkdownContent>{text}</MarkdownContent>
       </Typography>
     ),
