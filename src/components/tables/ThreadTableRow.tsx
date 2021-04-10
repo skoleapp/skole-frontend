@@ -11,7 +11,7 @@ import { useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { useMemo } from 'react';
 import { BORDER, useMediaQueries } from 'styles';
-import { mediaLoader, truncate, urls } from 'utils';
+import { mediaLoader, urls } from 'utils';
 
 import { Link, MarkdownContent, TextLink } from '../shared';
 
@@ -70,7 +70,6 @@ export const ThreadTableRow: React.FC<Props> = ({
   const scoreLabel = t('common:score').toLowerCase();
   const commentsLabel = t('common:comments').toLowerCase();
   const starsLabel = t('common:stars').toLowerCase();
-  const textPreview = (!!text && truncate(text, 200)) || '';
   const created = useDayjs(_created).startOf('day').fromNow();
 
   const renderTitle = useMemo(
@@ -103,14 +102,14 @@ export const ThreadTableRow: React.FC<Props> = ({
 
   const renderTextPreview = useMemo(
     () =>
-      !!textPreview && (
+      !!text && (
         <TableCell className={classes.tableCell}>
-          <Typography className="truncate-text" variant="body2">
-            <MarkdownContent dense>{textPreview}</MarkdownContent>
+          <Typography variant="body2">
+            <MarkdownContent dense>{text}</MarkdownContent>
           </Typography>
         </TableCell>
       ),
-    [classes.tableCell, textPreview],
+    [classes.tableCell, text],
   );
 
   const renderUserLink = useMemo(
