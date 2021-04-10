@@ -18,6 +18,11 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     '& ul': {
       paddingLeft: spacing(6),
     },
+    '& blockquote': {
+      borderLeft: `0.5rem solid ${palette.grey[300]}`,
+      paddingLeft: spacing(2),
+      marginLeft: spacing(2),
+    },
   },
   dense: {
     '& *': {
