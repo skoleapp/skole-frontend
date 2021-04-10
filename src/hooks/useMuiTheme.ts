@@ -346,6 +346,10 @@ export const useMuiTheme = (): Theme => {
         "input[type='file']": {
           display: 'none',
         },
+        'input:-webkit-autofill, input:-webkit-autofill:hover,  input:-webkit-autofill:focus,  input:-webkit-autofill:active': {
+          '-webkit-box-shadow': `0 0 0 30px ${_palette.background?.paper} inset !important`,
+          borderRadius: 'unset !important',
+        },
         "input[type='submit']": {
           display: 'none',
         },
