@@ -13,7 +13,7 @@
       "created": "2020-01-01T12:00:00+00:00",
       "verified": true,
       "unreadActivityCount": 3,
-      "fcmToken": null,
+      "fcmTokens": [],
       "rank": "Freshman",
       "commentReplyEmailPermission": false,
       "threadCommentEmailPermission": false,

@@ -17,7 +17,7 @@ interface UseAuthContext extends AuthContextType {
   verified: boolean | null;
   verifiedBackupEmail: boolean;
   unreadActivityCount: number;
-  fcmToken: string;
+  fcmTokens: string[];
   username: string;
   email: string;
   backupEmail: string;
@@ -47,7 +47,7 @@ export const useAuthContext = (): UseAuthContext => {
   const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
   const id = R.prop('id', userMe);
   const slug = R.prop('slug', userMe);
-  const fcmToken = R.prop('fcmToken', userMe);
+  const fcmTokens = R.prop('fcmTokens', userMe);
   const username = R.prop('username', userMe);
   const email = R.prop('email', userMe);
   const backupEmail = R.prop('backupEmail', userMe);
@@ -77,7 +77,7 @@ export const useAuthContext = (): UseAuthContext => {
     verified,
     verifiedBackupEmail,
     unreadActivityCount,
-    fcmToken,
+    fcmTokens,
     username,
     email,
     backupEmail,

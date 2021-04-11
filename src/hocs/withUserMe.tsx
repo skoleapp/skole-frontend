@@ -14,7 +14,7 @@ export const withUserMe = <T extends Record<string, unknown>>(
 ): NextPage<T> => {
   const WithUserMe: NextPage<T> = (pageProps: T) => {
     const { authLoading, authNetworkError } = useUserMe();
-    const { fcmToken } = useAuthContext();
+    const { fcmTokens } = useAuthContext();
     const context = useLanguageHeaderContext();
     const [registerFcmToken] = useRegisterFcmTokenMutation({ context });
     const [markSingleActivityRead] = useMarkActivityAsReadMutation({ context });
@@ -35,7 +35,7 @@ export const withUserMe = <T extends Record<string, unknown>>(
           case 'REGISTER_FCM_TOKEN': {
             const { token } = json;
 
-            if (token !== fcmToken) {
+            if (!!fcmTokens && !fcmTokens.includes(token)) {
               await registerFcmToken({ variables: { token } });
             }
 
@@ -77,7 +77,7 @@ export const withUserMe = <T extends Record<string, unknown>>(
           }
         }
       },
-      [fcmToken, registerFcmToken, markSingleActivityRead],
+      [fcmTokens, registerFcmToken, markSingleActivityRead],
     );
 
     useEffect(() => {
