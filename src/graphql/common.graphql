@@ -264,7 +264,7 @@ fragment userFields on UserObjectType {
   commentCount
   created
   modified
-  fcmToken
+  fcmTokens
   commentReplyEmailPermission
   threadCommentEmailPermission
   newBadgeEmailPermission
