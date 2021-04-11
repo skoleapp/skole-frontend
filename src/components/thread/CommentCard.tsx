@@ -21,7 +21,14 @@ import {
   useNotificationsContext,
   useThreadContext,
 } from 'context';
-import { CommentObjectType, DeleteCommentMutation, useDeleteCommentMutation } from 'generated';
+import {
+  BadgeObjectType,
+  BadgeTier,
+  CommentObjectType,
+  DeleteCommentMutation,
+  useDeleteCommentMutation,
+  UserFieldsFragment,
+} from 'generated';
 import { useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
@@ -30,7 +37,7 @@ import * as R from 'ramda';
 import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
-import { MarkdownContent, TextLink } from '../shared';
+import { BadgeTierIcon, MarkdownContent, TextLink } from '../shared';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
@@ -46,8 +53,8 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     }`,
   },
   cardHeaderRoot: {
-    padding: 0,
     textAlign: 'left',
+    paddingBottom: 0,
   },
   cardHeaderContent: {
     overflow: 'hidden',
@@ -60,11 +67,23 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     fontSize: '1rem',
     whiteSpace: 'nowrap',
   },
-  cardHeaderSubheader: {
+  userLink: {
+    marginRight: spacing(1),
+  },
+  subheaderText: {
     fontSize: '0.75rem',
   },
+  subheaderEmoji: {
+    fontSize: '0.5rem',
+    marginLeft: spacing(1),
+    marginRight: spacing(0.5),
+  },
+  score: {
+    marginRight: spacing(1),
+    fontWeight: 'bold',
+  },
   cardContent: {
-    padding: `${spacing(3)} !important`,
+    padding: `${spacing(2)} !important`,
   },
   messageContent: {
     padding: `${spacing(3)} 0`,
@@ -95,18 +114,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     padding: spacing(2),
     paddingLeft: 0,
   },
-  messageInfo: {
-    // On reply comments without images, the message info has not buttons with relative positioning.
-    // In this case we must ensure the element has the sufficient height to have the actions button positioned properly.
-    minHeight: '2.35rem',
-  },
   actionsButton: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    margin: '0 auto',
-    marginBottom: spacing(3),
     width: '2.35rem',
   },
 }));
@@ -134,13 +142,18 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const replyComments = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
   const { setCommentImageViewerValue } = useThreadContext();
-  const creator = R.prop('user', comment);
+  const creator: UserFieldsFragment = R.prop('user', comment);
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
   const creatorSlug = R.prop('slug', creator);
   const isOwn = R.prop('isOwn', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
   const { dynamicPrimaryColor } = useDarkModeContext();
+  const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
+  const diamondBadges = badges.filter((b) => b.tier === BadgeTier.Diamond);
+  const goldBadges = badges.filter((b) => b.tier === BadgeTier.Gold);
+  const silverBadges = badges.filter((b) => b.tier === BadgeTier.Silver);
+  const bronzeBadges = badges.filter((b) => b.tier === BadgeTier.Bronze);
 
   const { score, upvoteButtonProps, downvoteButtonProps, currentVote } = useVotes({
     initialVote,
@@ -239,20 +252,95 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const renderCreator = useMemo(
     () =>
       comment.user ? (
-        <TextLink href={urls.user(creatorSlug)}>{creatorUsername}</TextLink>
+        <TextLink className={classes.userLink} href={urls.user(creatorSlug)}>
+          {creatorUsername}
+        </TextLink>
       ) : (
         t('common:communityUser')
       ),
-    [comment.user, creatorSlug, creatorUsername, t],
+    [comment.user, creatorSlug, creatorUsername, t, classes.userLink],
   );
 
   const renderCreatorTitle = useMemo(
     () => (
       <Typography variant="body2" color="textSecondary">
-        {renderCreator}
+        {renderCreator} {t('common:posted')} {created}
       </Typography>
     ),
-    [renderCreator],
+    [renderCreator, created, t],
+  );
+
+  const renderBadgeTierIcon = useCallback(
+    (tier: BadgeTier) => <BadgeTierIcon tier={tier} className={classes.subheaderEmoji} />,
+    [classes.subheaderEmoji],
+  );
+
+  const renderDiamondBadgeCount = useMemo(
+    () =>
+      !!diamondBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Diamond)}
+          {diamondBadges.length}
+        </>
+      ),
+    [diamondBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderGoldBadgeCount = useMemo(
+    () =>
+      !!goldBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Gold)}
+          {goldBadges.length}
+        </>
+      ),
+    [goldBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderSilverBadgeCount = useMemo(
+    () =>
+      !!silverBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Silver)}
+          {silverBadges.length}
+        </>
+      ),
+    [silverBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderBronzeBadgeCount = useMemo(
+    () =>
+      !!bronzeBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Bronze)}
+          {bronzeBadges.length}
+        </>
+      ),
+    [bronzeBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderSubheader = useMemo(
+    () =>
+      !!creator && (
+        <Grid container alignItems="center">
+          <Typography className={clsx(classes.subheaderText, classes.score)} variant="body2">
+            {creator.score}
+          </Typography>
+          <Typography className={classes.subheaderText} variant="body2">
+            {renderDiamondBadgeCount} {renderGoldBadgeCount} {renderSilverBadgeCount}{' '}
+            {renderBronzeBadgeCount}
+          </Typography>
+        </Grid>
+      ),
+    [
+      creator,
+      renderDiamondBadgeCount,
+      renderGoldBadgeCount,
+      renderSilverBadgeCount,
+      renderBronzeBadgeCount,
+      classes.score,
+      classes.subheaderText,
+    ],
   );
 
   const renderCardHeader = useMemo(
@@ -262,11 +350,10 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
           root: classes.cardHeaderRoot,
           content: classes.cardHeaderContent,
           title: classes.cardHeaderTitle,
-          subheader: classes.cardHeaderSubheader,
         }}
         avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
         title={renderCreatorTitle}
-        subheader={created}
+        subheader={renderSubheader}
       />
     ),
     [
@@ -274,10 +361,9 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
       classes.avatar,
       classes.cardHeaderContent,
       classes.cardHeaderRoot,
-      classes.cardHeaderSubheader,
       classes.cardHeaderTitle,
-      created,
       renderCreatorTitle,
+      renderSubheader,
     ],
   );
 
@@ -316,16 +402,6 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     [classes.text, comment.text],
   );
 
-  const renderMessageContent = useMemo(
-    () => (
-      <Grid className={classes.messageContent} container alignItems="center">
-        {renderImageThumbnail}
-        {renderText}
-      </Grid>
-    ),
-    [classes.messageContent, renderImageThumbnail, renderText],
-  );
-
   const renderReplyCount = useMemo(
     () =>
       topComment && (
@@ -354,16 +430,6 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
       </Tooltip>
     ),
     [classes.actionsButton, classes.iconButton, handleClickActionsButton, t],
-  );
-
-  const renderMessageInfo = useMemo(
-    () => (
-      <Grid className={classes.messageInfo} container alignItems="center">
-        {renderReplyCount}
-        {renderActionsButton}
-      </Grid>
-    ),
-    [classes.messageInfo, renderActionsButton, renderReplyCount],
   );
 
   // Only render for verified user who are not owners.
@@ -420,36 +486,63 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     ],
   );
 
-  const renderVoteButtons = useMemo(
-    () => (
-      <Grid item container xs={2} sm={1} direction="column" justify="center" alignItems="center">
-        {renderUpvoteButton}
-        {renderScore}
-        {renderDownvoteButton}
-      </Grid>
-    ),
-    [renderDownvoteButton, renderScore, renderUpvoteButton],
-  );
-
   const renderMessage = useMemo(
     () => (
-      <Grid item xs={10} sm={11}>
-        <CardContent className={classes.cardContent}>
-          {renderCardHeader}
-          {renderMessageContent}
-          {renderMessageInfo}
-        </CardContent>
-      </Grid>
+      <CardContent className={classes.cardContent}>
+        <Grid container>
+          <Grid
+            className={classes.messageContent}
+            item
+            xs={10}
+            sm={11}
+            container
+            alignItems="center"
+          >
+            {renderImageThumbnail}
+            {renderText}
+          </Grid>
+          <Grid
+            item
+            container
+            xs={2}
+            sm={1}
+            direction="column"
+            justify="center"
+            alignItems="center"
+          >
+            {renderUpvoteButton}
+            {renderScore}
+            {renderDownvoteButton}
+          </Grid>
+        </Grid>
+        <Grid container alignItems="center">
+          <Grid item xs={4}>
+            {renderReplyCount}
+          </Grid>
+          <Grid item xs={4} container justify="center">
+            {renderActionsButton}
+          </Grid>
+          <Grid item xs={4} />
+        </Grid>
+      </CardContent>
     ),
-    [classes.cardContent, renderCardHeader, renderMessageContent, renderMessageInfo],
+    [
+      classes.cardContent,
+      classes.messageContent,
+      renderDownvoteButton,
+      renderImageThumbnail,
+      renderScore,
+      renderText,
+      renderUpvoteButton,
+      renderActionsButton,
+      renderReplyCount,
+    ],
   );
 
   return (
     <Card ref={commentRef} className={clsx(classes.root, !topComment && classes.replyComment)}>
-      <Grid container>
-        {renderMessage}
-        {renderVoteButtons}
-      </Grid>
+      {renderCardHeader}
+      {renderMessage}
     </Card>
   );
 };

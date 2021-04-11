@@ -74,5 +74,6 @@
   "inviteCodeCopied": "Invite code copied to clipboard!",
   "primaryEmailDialogText": "We are currently restricting access to only students from the included universities. Allowed domains for your primary email are:",
   "gotIt": "Got it!",
-  "create": "Create"
+  "create": "Create",
+  "posted": "posted"
 }

@@ -74,5 +74,6 @@
   "inviteCodeCopied": "Bjud in kod kopierad till urklipp!",
   "primaryEmailDialogText": "Vi begränsar för närvarande tillgången till endast studenter från de inkluderade universiteten. Tillåtna domäner för din primära e-postadress är:",
   "gotIt": "Fick det!",
-  "create": "Skapa"
+  "create": "Skapa",
+  "posted": "skrev"
 }

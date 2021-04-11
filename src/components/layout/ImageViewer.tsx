@@ -2,7 +2,6 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import CloseOutlined from '@material-ui/icons/CloseOutlined';
 import { useThreadContext } from 'context';
 import { useTranslation } from 'lib';
@@ -47,7 +46,6 @@ export const ImageViewer: React.FC = () => {
   } = useThreadContext();
 
   const imageViewerValue = threadImageViewerValue || commentImageViewerValue || '';
-  const imageName = imageViewerValue.split('?')[0].split('/').pop() || '';
 
   const alt =
     (commentImageViewerValue && t('alt-text:commentImage')) ||
@@ -75,18 +73,15 @@ export const ImageViewer: React.FC = () => {
         container
         className={classes.toolbar}
         alignItems="center"
-        justify="space-between"
+        justify="flex-end"
         wrap="nowrap"
       >
-        <Typography className="truncate-text" variant="subtitle1" color="secondary">
-          {imageName}
-        </Typography>
         <IconButton size="small" onClick={handleClose} color="secondary">
           <CloseOutlined />
         </IconButton>
       </Grid>
     ),
-    [classes.toolbar, handleClose, imageName],
+    [classes.toolbar, handleClose],
   );
 
   const renderImage = useMemo(
