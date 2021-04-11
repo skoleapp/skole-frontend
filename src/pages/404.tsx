@@ -1,4 +1,5 @@
 import { ErrorTemplate } from 'components';
+import { withUserMe } from 'hocs';
 import { loadNamespaces } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
@@ -11,4 +12,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default NotFoundPage;
+export default withUserMe(NotFoundPage);
