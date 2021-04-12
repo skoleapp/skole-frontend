@@ -9,10 +9,10 @@ import { MarkdownPageProps } from 'types';
 
 const ScorePage: NextPage<MarkdownPageProps> = ({ data: { title }, content: markdownContent }) => {
   const { t } = useTranslation();
-  const { smUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
 
   // The emoji won't stand out from the top navbar on mobile.
-  const emoji = smUp && '💯';
+  const emoji = mdUp && '💯';
 
   const layoutProps = {
     seoProps: {

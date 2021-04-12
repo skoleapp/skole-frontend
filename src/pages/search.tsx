@@ -105,7 +105,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
 
 const SearchPage: NextPage = () => {
   const classes = useStyles();
-  const { smUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const { t } = useTranslation();
   const { pathname, query } = useRouter();
   const variables = R.pick(['searchTerm', 'page', 'pageSize'], query);
@@ -211,7 +211,7 @@ const SearchPage: NextPage = () => {
 
   const renderHeader = useMemo(
     () =>
-      smUp && (
+      mdUp && (
         <Grid className={clsx('MuiCardHeader-root', classes.cardHeader)} container>
           <form className={classes.searchForm} onSubmit={handleSubmitSearch}>
             <InputBase
@@ -233,7 +233,7 @@ const SearchPage: NextPage = () => {
       classes.searchForm,
       classes.searchInputBase,
       handleSubmitSearch,
-      smUp,
+      mdUp,
       searchInputValue,
       t,
       renderSearchInputEndAdornment,
