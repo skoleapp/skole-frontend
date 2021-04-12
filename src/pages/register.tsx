@@ -391,6 +391,7 @@ const RegisterPage: NextPage = () => {
       hideSearch: true,
       hideRegisterButton: true,
       hideGetStartedButton: true,
+      hideDynamicAuthButtons: true,
     },
   };
 

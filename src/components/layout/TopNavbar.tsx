@@ -84,6 +84,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   hideBackButton,
   hideSearch,
   hideDynamicButtons,
+  hideDynamicAuthButtons,
   hideLoginButton,
   hideRegisterButton,
   hideGetStartedButton,
@@ -270,7 +271,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderAuthenticatedButtons = useMemo(
     () =>
       !!userMe &&
-      !hideDynamicButtons && (
+      !hideDynamicButtons &&
+      !hideDynamicAuthButtons && (
         <>
           <Tooltip title={t('common-tooltips:invite', { inviteCodeUsages })}>
             <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary">
@@ -318,6 +320,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       userMe,
       inviteCodeUsages,
       handleOpenGeneralInviteDialog,
+      hideDynamicAuthButtons,
     ],
   );
 
