@@ -141,14 +141,22 @@ const HomePage: NextPage = () => {
     () =>
       mdUp && (
         <Paper className={classes.createThreadContainer}>
-          <Box display="flex" onClick={(): void => handleOpenThreadForm()}>
+          <Box display="flex">
             <InputBase
               placeholder={t('forms:createThread')}
               autoComplete="off"
+              onFocus={(e): void => {
+                e.target.blur();
+                handleOpenThreadForm();
+              }}
               className={classes.createThreadInputBase}
               fullWidth
             />
-            <Button className={classes.createThreadSubmitButton} variant="contained">
+            <Button
+              onClick={(): void => handleOpenThreadForm()}
+              className={classes.createThreadSubmitButton}
+              variant="contained"
+            >
               <ArrowForwardOutlined />
             </Button>
           </Box>
