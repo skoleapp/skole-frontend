@@ -15,7 +15,6 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     borderRadius: BORDER_RADIUS,
     color: palette.common.white,
     padding: `${spacing(1)} ${spacing(3)}`,
-    marginRight: spacing(2),
     '&:hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.25)',
     },
