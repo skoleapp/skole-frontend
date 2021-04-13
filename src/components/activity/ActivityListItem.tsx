@@ -41,7 +41,7 @@ export const ActivityListItem: React.FC<Props> = ({
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
   const { profileUrl } = useAuthContext();
-  const avatarThumbnail = R.prop('avatarThumbnail', causingUser);
+  const avatarThumbnail = R.propOr('', 'avatarThumbnail', causingUser);
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead?.errors?.length) {

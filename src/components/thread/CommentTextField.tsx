@@ -9,12 +9,12 @@ import { TextFormField } from '../form-fields';
 export const CommentTextField = <T extends FormikValues>(
   props: FormikProps<T> & TextFieldProps,
 ): JSX.Element => {
-  const { smUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const { formRef } = useThreadContext();
 
   // On desktop, submit form from enter key and add new line from Shift + Enter.
   const handleKeydown = (e: KeyboardEvent): void => {
-    if (smUp && e.code === 'Enter' && !e.shiftKey) {
+    if (mdUp && e.code === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       formRef.current?.submitForm();
     }

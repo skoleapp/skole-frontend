@@ -115,40 +115,50 @@ const HomePage: NextPage = () => {
   }, [handleCloseCustomInviteDialog]);
 
   const renderInviteButton = useMemo(
-    () => (
-      <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary" size="small">
-        <Badge badgeContent={inviteCodeUsages} color="secondary">
-          <ContactMailOutlined />
-        </Badge>
-      </IconButton>
-    ),
-    [handleOpenGeneralInviteDialog, inviteCodeUsages],
+    () =>
+      !!verified && (
+        <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary" size="small">
+          <Badge badgeContent={inviteCodeUsages} color="secondary">
+            <ContactMailOutlined />
+          </Badge>
+        </IconButton>
+      ),
+    [handleOpenGeneralInviteDialog, inviteCodeUsages, verified],
   );
 
   const renderStarredButton = useMemo(
-    () => (
-      <IconButtonLink
-        color="secondary"
-        size="small"
-        href={urls.starred}
-        icon={StarBorderOutlined}
-      />
-    ),
-    [],
+    () =>
+      !!verified && (
+        <IconButtonLink
+          color="secondary"
+          size="small"
+          href={urls.starred}
+          icon={StarBorderOutlined}
+        />
+      ),
+    [verified],
   );
 
   const renderCreateThread = useMemo(
     () =>
       mdUp && (
         <Paper className={classes.createThreadContainer}>
-          <Box display="flex" onClick={(): void => handleOpenThreadForm()}>
+          <Box display="flex">
             <InputBase
               placeholder={t('forms:createThread')}
               autoComplete="off"
+              onFocus={(e): void => {
+                e.target.blur();
+                handleOpenThreadForm();
+              }}
               className={classes.createThreadInputBase}
               fullWidth
             />
-            <Button className={classes.createThreadSubmitButton} variant="contained">
+            <Button
+              onClick={(): void => handleOpenThreadForm()}
+              className={classes.createThreadSubmitButton}
+              variant="contained"
+            >
               <ArrowForwardOutlined />
             </Button>
           </Box>

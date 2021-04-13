@@ -32,7 +32,7 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { smUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const { userMe } = useAuthContext();
   const header = topNavbarProps?.header;
   const emoji = topNavbarProps?.emoji;
@@ -51,7 +51,7 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
 
   const renderHeader = useMemo(
     () =>
-      smUp && (
+      mdUp && (
         <CardHeader
           classes={{
             root: classes.cardHeaderRoot,
@@ -60,7 +60,7 @@ export const FormTemplate: React.FC<MainTemplateProps> = ({
           title={renderHeaderTitle}
         />
       ),
-    [classes.cardHeaderRoot, classes.cardHeaderTitle, renderHeaderTitle, smUp],
+    [classes.cardHeaderRoot, classes.cardHeaderTitle, renderHeaderTitle, mdUp],
   );
 
   const renderForm = useMemo(

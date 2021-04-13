@@ -1,6 +1,12 @@
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
-import { ActionRequiredTemplate, FormSubmitSection, FormTemplate, TextFormField } from 'components';
+import {
+  ActionRequiredTemplate,
+  FormSubmitSection,
+  FormTemplate,
+  PasswordField,
+  TextFormField,
+} from 'components';
 import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
@@ -138,26 +144,16 @@ const ResetPasswordPage: NextPage = () => {
     [resetPassword, token],
   );
 
-  const renderNewPasswordField = useMemo(
-    () => (
-      <Field
-        name="newPassword"
-        component={TextFormField}
-        label={t('forms:newPassword')}
-        type="password"
-      />
+  const renderNewPasswordField = useCallback(
+    (props: FormikProps<PasswordFormValues>) => (
+      <PasswordField name="newPassword" label={t('forms:newPassword')} {...props} />
     ),
     [t],
   );
 
-  const renderConfirmNewPasswordField = useMemo(
-    () => (
-      <Field
-        name="confirmNewPassword"
-        component={TextFormField}
-        label={t('forms:confirmNewPassword')}
-        type="password"
-      />
+  const renderConfirmNewPasswordField = useCallback(
+    (props: FormikProps<PasswordFormValues>) => (
+      <PasswordField name="confirmNewPassword" label={t('forms:confirmNewPassword')} {...props} />
     ),
     [t],
   );
@@ -172,9 +168,9 @@ const ResetPasswordPage: NextPage = () => {
   const renderPasswordFormFields = useCallback(
     (props: FormikProps<PasswordFormValues>): JSX.Element => (
       <Form>
-        {renderNewPasswordField}
-        {renderConfirmNewPasswordField}
-        {renderFormSubmitSection<PasswordFormValues>(props)}
+        {renderNewPasswordField(props)}
+        {renderConfirmNewPasswordField(props)}
+        {renderFormSubmitSection(props)}
       </Form>
     ),
     [renderConfirmNewPasswordField, renderFormSubmitSection, renderNewPasswordField],

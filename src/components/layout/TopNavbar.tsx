@@ -23,6 +23,7 @@ import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
+import clsx from 'clsx';
 import { useAuthContext, useDarkModeContext, useInviteContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
@@ -63,6 +64,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
       paddingRight: spacing(4),
     },
   },
+  buttonSpacing: {
+    marginLeft: spacing(1),
+  },
   activityPopper: {
     zIndex: 3, // Overlap top navbar.
   },
@@ -84,6 +88,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   hideBackButton,
   hideSearch,
   hideDynamicButtons,
+  hideDynamicAuthButtons,
   hideLoginButton,
   hideRegisterButton,
   hideGetStartedButton,
@@ -102,6 +107,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const { handleOpenGeneralInviteDialog } = useInviteContext();
+  const { verified } = useAuthContext();
 
   const {
     userMe,
@@ -144,20 +150,21 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const renderLogo = useMemo(() => !hideLogo && <Logo />, [hideLogo]);
 
-  const renderLanguageButton = useMemo(() => !hideLanguageButton && <LanguageButton />, [
-    hideLanguageButton,
-  ]);
+  const renderLanguageButton = useMemo(
+    () => !hideLanguageButton && <LanguageButton className={classes.buttonSpacing} />,
+    [hideLanguageButton, classes.buttonSpacing],
+  );
 
   const renderDarkModeButton = useMemo(
     () =>
       !hideDarkModeButton && (
         <Tooltip title={t('common-tooltips:toggleDarkMode')}>
-          <IconButton onClick={toggleDarkMode} color="secondary">
+          <IconButton className={classes.buttonSpacing} onClick={toggleDarkMode} color="secondary">
             {darkMode ? <Brightness7Outlined /> : <Brightness6Outlined />}
           </IconButton>
         </Tooltip>
       ),
-    [darkMode, hideDarkModeButton, t, toggleDarkMode],
+    [darkMode, hideDarkModeButton, t, toggleDarkMode, classes.buttonSpacing],
   );
 
   const renderMobileContent = useMemo(
@@ -192,14 +199,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const renderActivityButton = useMemo(
     () => (
       <Tooltip title={t('common-tooltips:activity', { unreadActivityCount })}>
-        <IconButton onClick={handleActivityButtonClick} color="secondary">
+        <IconButton
+          className={classes.buttonSpacing}
+          onClick={handleActivityButtonClick}
+          color="secondary"
+        >
           <Badge badgeContent={unreadActivityCount} color="secondary">
             <NotificationsOutlined />
           </Badge>
         </IconButton>
       </Tooltip>
     ),
-    [handleActivityButtonClick, t, unreadActivityCount],
+    [handleActivityButtonClick, t, unreadActivityCount, classes.buttonSpacing],
   );
 
   const renderActivityPopper = useMemo(
@@ -267,57 +278,101 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     [rank, renderRankEmoji, renderScore],
   );
 
+  const renderInviteButton = useMemo(
+    () =>
+      !!verified && (
+        <Tooltip title={t('common-tooltips:invite', { inviteCodeUsages })}>
+          <IconButton
+            className={classes.buttonSpacing}
+            onClick={handleOpenGeneralInviteDialog}
+            color="secondary"
+          >
+            <Badge badgeContent={inviteCodeUsages} color="secondary">
+              <ContactMailOutlined />
+            </Badge>
+          </IconButton>
+        </Tooltip>
+      ),
+    [handleOpenGeneralInviteDialog, inviteCodeUsages, t, verified, classes.buttonSpacing],
+  );
+
+  const renderActivity = useMemo(
+    () =>
+      !!verified && (
+        <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
+          <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
+          >
+            {renderActivityButton}
+            {renderActivityPopper}
+          </Box>
+        </ClickAwayListener>
+      ),
+    [renderActivityButton, renderActivityPopper, verified],
+  );
+
+  const renderStarButton = useMemo(
+    () =>
+      !!verified && (
+        <Tooltip title={t('common-tooltips:starred')}>
+          <IconButtonLink
+            icon={StarBorderOutlined}
+            href={urls.starred}
+            className={classes.buttonSpacing}
+            color="secondary"
+          />
+        </Tooltip>
+      ),
+    [verified, t, classes.buttonSpacing],
+  );
+
+  const renderRank = useMemo(
+    () => (
+      <Link href={urls.score}>
+        <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
+          <Chip className={clsx(classes.buttonSpacing, 'rank-chip')} label={renderRankLabel} />
+        </Tooltip>
+      </Link>
+    ),
+    [t, rank, renderRankLabel, score, classes.buttonSpacing],
+  );
+
+  const renderAvatar = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:profile')}>
+        <Typography component="span">
+          <Link href={profileUrl}>
+            <IconButton className={classes.buttonSpacing} color="secondary">
+              <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
+            </IconButton>
+          </Link>
+        </Typography>
+      </Tooltip>
+    ),
+    [avatarThumbnail, profileUrl, t, classes.buttonSpacing],
+  );
+
   const renderAuthenticatedButtons = useMemo(
     () =>
       !!userMe &&
-      !hideDynamicButtons && (
+      !hideDynamicButtons &&
+      !hideDynamicAuthButtons && (
         <>
-          <Tooltip title={t('common-tooltips:invite', { inviteCodeUsages })}>
-            <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary">
-              <Badge badgeContent={inviteCodeUsages} color="secondary">
-                <ContactMailOutlined />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
-            <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
-            >
-              {renderActivityButton}
-              {renderActivityPopper}
-            </Box>
-          </ClickAwayListener>
-          <Tooltip title={t('common-tooltips:starred')}>
-            <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
-          </Tooltip>
-          <Link href={urls.score}>
-            <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
-              <Chip className="rank-chip" label={renderRankLabel} />
-            </Tooltip>
-          </Link>
-          <Tooltip title={t('common-tooltips:profile')}>
-            <Typography component="span">
-              <Link href={profileUrl}>
-                <IconButton color="secondary">
-                  <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
-                </IconButton>
-              </Link>
-            </Typography>
-          </Tooltip>
+          {renderInviteButton}
+          {renderActivity}
+          {renderStarButton}
+          {renderRank}
+          {renderAvatar}
         </>
       ),
     [
-      avatarThumbnail,
+      hideDynamicAuthButtons,
       hideDynamicButtons,
-      profileUrl,
-      rank,
-      renderActivityButton,
-      renderActivityPopper,
-      renderRankLabel,
-      score,
-      t,
+      renderActivity,
+      renderAvatar,
+      renderInviteButton,
+      renderRank,
+      renderStarButton,
       userMe,
-      inviteCodeUsages,
-      handleOpenGeneralInviteDialog,
     ],
   );
 

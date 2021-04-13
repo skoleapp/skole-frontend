@@ -35,7 +35,7 @@ export const SkoleDialog: React.FC<SkoleDialogProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { smDown, smUp } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueries();
 
   const PaperProps = {
     className: clsx(
@@ -50,7 +50,7 @@ export const SkoleDialog: React.FC<SkoleDialogProps> = ({
     <Dialog
       onClick={(e): void => e.stopPropagation()}
       fullScreen={fullScreen === false ? fullScreen : smDown}
-      fullWidth={smUp}
+      fullWidth={mdUp}
       TransitionComponent={Transition}
       PaperProps={PaperProps}
       {...props}

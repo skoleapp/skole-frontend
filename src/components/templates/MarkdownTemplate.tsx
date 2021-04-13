@@ -55,7 +55,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { smUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
   const header = topNavbarProps?.header;
@@ -75,7 +75,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
 
   const renderCardHeader = useMemo(
     () =>
-      smUp && (
+      mdUp && (
         <CardHeader
           classes={{
             root: classes.cardHeaderRoot,
@@ -84,7 +84,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
           title={renderHeaderTitle}
         />
       ),
-    [classes.cardHeaderRoot, classes.cardHeaderTitle, renderHeaderTitle, smUp],
+    [classes.cardHeaderRoot, classes.cardHeaderTitle, renderHeaderTitle, mdUp],
   );
 
   const renderCustomTopContent = useMemo(() => customTopContent?.map((t) => t), [customTopContent]);

@@ -9,10 +9,8 @@ import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import FileCopyOutlined from '@material-ui/icons/FileCopyOutlined';
 import { useAuthContext, useNotificationsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
-import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
 import { useMediaQueries } from 'styles';
-import { ShareDialogParams } from 'types';
 import { SLOGAN } from 'utils';
 
 import { DialogHeader } from './DialogHeader';
@@ -34,8 +32,8 @@ interface Props {
   header?: JSX.Element | string;
   dynamicContent: JSX.Element[];
   handleClose: () => void;
-  shareDialogParams?: ShareDialogParams;
   hideInviteCode?: boolean;
+  handleClickInviteButton?: () => void;
 }
 
 export const CustomInviteDialog: React.FC<Props> = ({
@@ -43,27 +41,28 @@ export const CustomInviteDialog: React.FC<Props> = ({
   header,
   dynamicContent,
   handleClose,
-  shareDialogParams: _shareDialogParams,
   hideInviteCode,
+  handleClickInviteButton: _handleClickInviteButton,
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { inviteCode } = useAuthContext();
-  const { asPath } = useRouter();
   const { mdUp } = useMediaQueries();
   const { handleOpenShareDialog } = useShareContext();
   const { toggleNotification } = useNotificationsContext();
   const { username } = useAuthContext();
+  const title = t('common:inviteTitle', { username });
+  const text = SLOGAN;
+  const customLink = `${process.env.FRONTEND_URL}?code=${inviteCode}`;
 
   const shareDialogParams = useMemo(
-    () =>
-      _shareDialogParams || {
-        header: t('common:inviteShareDialogHeader'),
-        title: t('common:inviteTitle', { username }),
-        text: SLOGAN,
-        linkSuffix: `?code=${inviteCode}`,
-      },
-    [t, inviteCode, _shareDialogParams, username],
+    () => ({
+      header: t('common:inviteShareDialogHeader'),
+      title,
+      text,
+      customLink,
+    }),
+    [t, text, title, customLink],
   );
 
   const handleClickInviteButton = useCallback(async (): Promise<void> => {
@@ -72,21 +71,20 @@ export const CustomInviteDialog: React.FC<Props> = ({
       handleOpenShareDialog(shareDialogParams);
     } else {
       const { navigator } = window;
-      const { title, text, linkSuffix } = shareDialogParams;
 
       if (navigator?.share) {
         try {
           await navigator.share({
             title,
             text,
-            url: `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`,
+            url: customLink,
           });
         } catch {
           // User cancelled.
         }
       }
     }
-  }, [asPath, handleOpenShareDialog, mdUp, handleClose, shareDialogParams]);
+  }, [handleOpenShareDialog, mdUp, handleClose, shareDialogParams, customLink, text, title]);
 
   const handleClickCopyCodeButton = useCallback((): void => {
     toggleNotification(t('common:inviteCodeCopied'));
@@ -128,14 +126,14 @@ export const CustomInviteDialog: React.FC<Props> = ({
     () => (
       <Button
         variant="contained"
-        onClick={handleClickInviteButton}
+        onClick={_handleClickInviteButton || handleClickInviteButton}
         endIcon={<ArrowForwardOutlined />}
         fullWidth
       >
         {t('common:inviteButtonText')}
       </Button>
     ),
-    [handleClickInviteButton, t],
+    [handleClickInviteButton, t, _handleClickInviteButton],
   );
 
   return (
