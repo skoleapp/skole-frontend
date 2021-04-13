@@ -47,7 +47,7 @@ export const useAuthContext = (): UseAuthContext => {
   const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
   const id = R.prop('id', userMe);
   const slug = R.prop('slug', userMe);
-  const fcmTokens = R.prop('fcmTokens', userMe);
+  const fcmTokens = R.propOr([], 'fcmTokens', userMe);
   const username = R.prop('username', userMe);
   const email = R.prop('email', userMe);
   const backupEmail = R.prop('backupEmail', userMe);

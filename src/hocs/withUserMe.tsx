@@ -35,7 +35,7 @@ export const withUserMe = <T extends Record<string, unknown>>(
           case 'REGISTER_FCM_TOKEN': {
             const { token } = json;
 
-            if (!!fcmTokens && !fcmTokens.includes(token)) {
+            if (!fcmTokens.includes(token)) {
               await registerFcmToken({ variables: { token } });
             }
 
