@@ -103,6 +103,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
   const { handleOpenGeneralInviteDialog } = useInviteContext();
+  const { verified } = useAuthContext();
 
   const {
     userMe,
@@ -268,59 +269,92 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     [rank, renderRankEmoji, renderScore],
   );
 
+  const renderInviteButton = useMemo(
+    () =>
+      !!verified && (
+        <Tooltip title={t('common-tooltips:invite', { inviteCodeUsages })}>
+          <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary">
+            <Badge badgeContent={inviteCodeUsages} color="secondary">
+              <ContactMailOutlined />
+            </Badge>
+          </IconButton>
+        </Tooltip>
+      ),
+    [handleOpenGeneralInviteDialog, inviteCodeUsages, t, verified],
+  );
+
+  const renderActivity = useMemo(
+    () =>
+      !!verified && (
+        <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
+          <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
+          >
+            {renderActivityButton}
+            {renderActivityPopper}
+          </Box>
+        </ClickAwayListener>
+      ),
+    [renderActivityButton, renderActivityPopper, verified],
+  );
+
+  const renderStarButton = useMemo(
+    () =>
+      !!verified && (
+        <Tooltip title={t('common-tooltips:starred')}>
+          <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
+        </Tooltip>
+      ),
+    [verified, t],
+  );
+
+  const renderRank = useMemo(
+    () => (
+      <Link href={urls.score}>
+        <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
+          <Chip className="rank-chip" label={renderRankLabel} />
+        </Tooltip>
+      </Link>
+    ),
+    [t, rank, renderRankLabel, score],
+  );
+
+  const renderAvatar = useMemo(
+    () => (
+      <Tooltip title={t('common-tooltips:profile')}>
+        <Typography component="span">
+          <Link href={profileUrl}>
+            <IconButton color="secondary">
+              <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
+            </IconButton>
+          </Link>
+        </Typography>
+      </Tooltip>
+    ),
+    [avatarThumbnail, profileUrl, t],
+  );
+
   const renderAuthenticatedButtons = useMemo(
     () =>
       !!userMe &&
       !hideDynamicButtons &&
       !hideDynamicAuthButtons && (
         <>
-          <Tooltip title={t('common-tooltips:invite', { inviteCodeUsages })}>
-            <IconButton onClick={handleOpenGeneralInviteDialog} color="secondary">
-              <Badge badgeContent={inviteCodeUsages} color="secondary">
-                <ContactMailOutlined />
-              </Badge>
-            </IconButton>
-          </Tooltip>
-          <ClickAwayListener onClickAway={handleActivityPopperClickAway}>
-            <Box // ClickAway listener requires exactly one child element that cannot be a fragment.
-            >
-              {renderActivityButton}
-              {renderActivityPopper}
-            </Box>
-          </ClickAwayListener>
-          <Tooltip title={t('common-tooltips:starred')}>
-            <IconButtonLink icon={StarBorderOutlined} href={urls.starred} color="secondary" />
-          </Tooltip>
-          <Link href={urls.score}>
-            <Tooltip title={t('common-tooltips:ownRank', { rank, score })}>
-              <Chip className="rank-chip" label={renderRankLabel} />
-            </Tooltip>
-          </Link>
-          <Tooltip title={t('common-tooltips:profile')}>
-            <Typography component="span">
-              <Link href={profileUrl}>
-                <IconButton color="secondary">
-                  <Avatar className="avatar-thumbnail" src={avatarThumbnail} />
-                </IconButton>
-              </Link>
-            </Typography>
-          </Tooltip>
+          {renderInviteButton}
+          {renderActivity}
+          {renderStarButton}
+          {renderRank}
+          {renderAvatar}
         </>
       ),
     [
-      avatarThumbnail,
-      hideDynamicButtons,
-      profileUrl,
-      rank,
-      renderActivityButton,
-      renderActivityPopper,
-      renderRankLabel,
-      score,
-      t,
-      userMe,
-      inviteCodeUsages,
-      handleOpenGeneralInviteDialog,
       hideDynamicAuthButtons,
+      hideDynamicButtons,
+      renderActivity,
+      renderAvatar,
+      renderInviteButton,
+      renderRank,
+      renderStarButton,
+      userMe,
     ],
   );
 
