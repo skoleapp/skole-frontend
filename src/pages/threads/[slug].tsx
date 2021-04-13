@@ -404,7 +404,7 @@ const ThreadPage: NextPage = () => {
     [t, title, creatorUsername, commentCount],
   );
 
-  const handleShareButtonClick = useCallback((): void => handleOpenShareDialog(shareDialogParams), [
+  const handleClickShareButton = useCallback((): void => handleOpenShareDialog(shareDialogParams), [
     shareDialogParams,
     handleOpenShareDialog,
   ]);
@@ -414,7 +414,7 @@ const ThreadPage: NextPage = () => {
       <Tooltip title={t('thread-tooltips:share')}>
         <IconButton
           className={classes.headerActionItem}
-          onClick={handleShareButtonClick}
+          onClick={handleClickShareButton}
           size="small"
           color={smDown ? 'secondary' : 'default'}
         >
@@ -422,7 +422,7 @@ const ThreadPage: NextPage = () => {
         </IconButton>
       </Tooltip>
     ),
-    [t, handleShareButtonClick, classes.headerActionItem, smDown],
+    [t, handleClickShareButton, classes.headerActionItem, smDown],
   );
 
   const actionsDialogParams = useMemo(
@@ -483,11 +483,11 @@ const ThreadPage: NextPage = () => {
 
   const renderMobileShareButton = useMemo(
     () => (
-      <IconButton color="secondary" size="small" onClick={handleShareButtonClick}>
+      <IconButton color="secondary" size="small" onClick={handleClickShareButton}>
         <ShareOutlined />
       </IconButton>
     ),
-    [handleShareButtonClick],
+    [handleClickShareButton],
   );
 
   // Only render for verified user who are not owners.
@@ -861,7 +861,7 @@ const ThreadPage: NextPage = () => {
         handleClose={handleCloseCustomInviteDialog}
         header={renderInviteDialogHeader}
         dynamicContent={[renderInviteDialogText]}
-        shareDialogParams={shareDialogParams}
+        handleClickInviteButton={handleClickShareButton}
         hideInviteCode
       />
     ),
@@ -870,7 +870,7 @@ const ThreadPage: NextPage = () => {
       renderInviteDialogText,
       customInviteDialogOpen,
       handleCloseCustomInviteDialog,
-      shareDialogParams,
+      handleClickShareButton,
     ],
   );
 
