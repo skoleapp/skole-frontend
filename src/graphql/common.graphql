@@ -335,16 +335,20 @@ query UserThreads($slug: String, $page: Int, $pageSize: Int) {
   }
 }
 
+fragment paginatedCommentFields on PaginatedCommentObjectType {
+  page
+  pages
+  hasNext
+  hasPrev
+  count
+  objects {
+    ...commentFields
+  }
+}
+
 query UserComments($slug: String, $page: Int, $pageSize: Int) {
   comments(user: $slug, page: $page, pageSize: $pageSize) {
-    page
-    pages
-    hasNext
-    hasPrev
-    count
-    objects {
-      ...commentFields
-    }
+    ...paginatedCommentFields
   }
 }
 

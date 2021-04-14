@@ -40,6 +40,7 @@ const ActivityPage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const { data, loading, error } = useActivitiesQuery({ variables, context });
   const [activities, setActivities] = useState<ActivityObjectType[]>([]);
+  const page = R.pathOr(1, ['activities', 'page'], data);
   const activityCount = R.pathOr(0, ['activities', 'count'], data);
   const markAllAsReadDisabled = !activities.length;
   const { handleCloseActionsDialog } = useActionsContext();
@@ -142,9 +143,13 @@ const ActivityPage: NextPage = () => {
   const renderTable = useMemo(
     () =>
       activities.length && (
-        <PaginatedTable renderTableBody={renderActivityTableBody} count={activityCount} />
+        <PaginatedTable
+          page={page}
+          renderTableBody={renderActivityTableBody}
+          count={activityCount}
+        />
       ),
-    [activities.length, activityCount, renderActivityTableBody],
+    [page, activities.length, activityCount, renderActivityTableBody],
   );
 
   const renderActivities = useMemo(() => renderLoading || renderTable || renderNotFound, [

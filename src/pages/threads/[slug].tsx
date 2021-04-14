@@ -214,7 +214,10 @@ const ThreadPage: NextPage = () => {
   const error = threadError || commentsError;
   const thread = R.prop('thread', threadData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
+  const page = R.pathOr(1, ['comments', 'page'], commentsData);
+  const paginationCount = R.pathOr(0, ['comments', 'count'], commentsData);
   const id = R.prop('id', thread);
+  const slug = R.prop('slug', thread);
   const title = R.prop('title', thread);
   const text = R.prop('text', thread);
   const image = R.prop('image', thread);
@@ -664,11 +667,12 @@ const ThreadPage: NextPage = () => {
       !!comments.length && (
         <PaginatedTable
           renderTableBody={renderCommentTableBody}
-          count={commentCount}
-          extraFilters={commentQueryVariables}
+          page={page}
+          count={paginationCount}
+          extraFilters={{ slug }}
         />
       ),
-    [commentCount, renderCommentTableBody, commentQueryVariables, comments.length],
+    [page, paginationCount, renderCommentTableBody, comments.length, slug],
   );
 
   const renderComments = useMemo(

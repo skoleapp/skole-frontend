@@ -233,6 +233,7 @@ const ProfilePage: NextPage = () => {
   } = useOpen();
 
   const user = R.prop('user', userData);
+  const slug = R.prop('slug', user);
   const rank = R.prop('rank', user);
   const username = R.prop('username', user);
   const avatar = R.prop('avatar', user);
@@ -244,7 +245,11 @@ const ProfilePage: NextPage = () => {
   const threadCount = R.propOr(0, 'threadCount', user);
   const commentCount = R.propOr(0, 'commentCount', user);
   const threads = R.pathOr([], ['threads', 'objects'], threadsData);
+  const threadsPaginationCount = R.pathOr(0, ['threads', 'count'], threadsData);
+  const threadsPage = R.pathOr(1, ['threads', 'page'], threadsData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
+  const commentsPaginationCount = R.pathOr(0, ['comments', 'count'], commentsData);
+  const commentsPage = R.pathOr(1, ['comments', 'page'], commentsData);
   const _created = R.prop('created', user);
   const joined = useDayjs(_created).startOf('m').fromNow();
 
@@ -932,11 +937,12 @@ const ProfilePage: NextPage = () => {
       threads.length && (
         <PaginatedTable
           renderTableBody={renderThreadTableBody}
-          count={threadCount}
-          extraFilters={variables}
+          page={threadsPage}
+          count={threadsPaginationCount}
+          extraFilters={{ slug }}
         />
       ),
-    [variables, renderThreadTableBody, threadCount, threads.length],
+    [renderThreadTableBody, threadsPaginationCount, threadsPage, threads.length, slug],
   );
 
   const renderCommentTable = useMemo(
@@ -944,11 +950,12 @@ const ProfilePage: NextPage = () => {
       comments.length && (
         <PaginatedTable
           renderTableBody={renderCommentTableBody}
-          count={commentCount}
-          extraFilters={variables}
+          page={commentsPage}
+          count={commentsPaginationCount}
+          extraFilters={{ slug }}
         />
       ),
-    [commentCount, renderCommentTableBody, variables, comments.length],
+    [commentsPaginationCount, commentsPage, renderCommentTableBody, comments.length, slug],
   );
 
   const renderThreadsNotFound = useMemo(() => <NotFoundBox text={noThreads} />, [noThreads]);

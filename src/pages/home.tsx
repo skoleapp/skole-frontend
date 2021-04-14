@@ -101,6 +101,7 @@ const HomePage: NextPage = () => {
   });
 
   const threads: ThreadObjectType[] = R.pathOr([], ['threads', 'objects'], data);
+  const page = R.pathOr(1, ['threads', 'page'], data);
   const threadCount = R.pathOr(0, ['threads', 'count'], data);
 
   useEffect(() => {
@@ -194,12 +195,13 @@ const HomePage: NextPage = () => {
   const renderThreadsTable = useMemo(
     () => (
       <PaginatedTable
+        page={page}
         count={threadCount}
         renderTableBody={renderThreadTableBody}
         extraFilters={{ ordering }}
       />
     ),
-    [ordering, renderThreadTableBody, threadCount],
+    [ordering, renderThreadTableBody, threadCount, page],
   );
 
   const renderInvitePromptHeader = useMemo(
