@@ -27,7 +27,6 @@ import {
   CustomInviteDialog,
   Emoji,
   ErrorTemplate,
-  LoadingBox,
   LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
@@ -35,6 +34,7 @@ import {
   NotFoundBox,
   OrderingButton,
   PaginatedTable,
+  SkeletonCommentList,
   TextLink,
 } from 'components';
 import {
@@ -623,12 +623,15 @@ const ThreadPage: NextPage = () => {
     [textFieldPlaceholder, targetComment, setTargetComment, targetThread, handleCommentCreated],
   );
 
-  const renderCommentsHeader = (
-    <Grid className={classes.commentsHeader} container alignItems="center">
-      <Typography variant="body2" color="textSecondary">
-        {t('thread:comments', { commentCount })} {t('thread:sortedBy')} <OrderingButton />
-      </Typography>
-    </Grid>
+  const renderCommentsHeader = useMemo(
+    () => (
+      <Grid className={classes.commentsHeader} container alignItems="center">
+        <Typography variant="body2" color="textSecondary">
+          {t('thread:comments', { commentCount })} {t('thread:sortedBy')} <OrderingButton />
+        </Typography>
+      </Grid>
+    ),
+    [classes.commentsHeader, commentCount, t],
   );
 
   const renderCreateCommentButton = useMemo(
@@ -685,7 +688,10 @@ const ThreadPage: NextPage = () => {
     [comments, mapReplyComments, renderReplyButton, renderTopComment],
   );
 
-  const renderLoading = useMemo(() => commentsLoading && <LoadingBox />, [commentsLoading]);
+  const renderLoading = useMemo(() => commentsLoading && <SkeletonCommentList />, [
+    commentsLoading,
+  ]);
+
   const renderCommentsNotFound = useMemo(() => <NotFoundBox text={t('thread:noComments')} />, [t]);
   const renderCommentTableBody = useMemo(() => <TableBody>{mapComments}</TableBody>, [mapComments]);
 

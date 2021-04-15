@@ -226,7 +226,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <Fade {...TransitionProps} timeout={500}>
             <Box marginTop={spacing(1)}>
               <Paper className={classes.activityPopperPaper}>
-                <Box height="20rem" width="20rem" display="flex">
+                <Box height="20rem" width="20rem" display="flex" flexDirection="column">
                   <ActivityPreview />
                 </Box>
                 <Divider />

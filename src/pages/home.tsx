@@ -18,10 +18,10 @@ import {
   Emoji,
   ErrorTemplate,
   IconButtonLink,
-  LoadingBox,
   MainTemplate,
   OrderingButton,
   PaginatedTable,
+  SkeletonThreadTableList,
   ThreadTableBody,
 } from 'components';
 import {
@@ -189,7 +189,7 @@ const HomePage: NextPage = () => {
     [classes.threadsCardHeader, renderThreadsHeaderTitle],
   );
 
-  const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
+  const renderLoading = useMemo(() => loading && <SkeletonThreadTableList />, [loading]);
   const renderThreadTableBody = useMemo(() => <ThreadTableBody threads={threads} />, [threads]);
 
   const renderThreadsTable = useMemo(

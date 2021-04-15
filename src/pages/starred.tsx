@@ -2,9 +2,9 @@ import {
   ActionRequiredTemplate,
   ErrorTemplate,
   ListTemplate,
-  LoadingBox,
   NotFoundBox,
   PaginatedTable,
+  SkeletonThreadTableList,
   ThreadTableBody,
 } from 'components';
 import { useAuthContext } from 'context';
@@ -28,7 +28,7 @@ const StarredPage: NextPage = () => {
   const page = R.pathOr(1, ['starredThreads', 'page'], data);
   const threadCount = R.pathOr(0, ['starredThreads', 'count'], data);
 
-  const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
+  const renderLoading = useMemo(() => loading && <SkeletonThreadTableList />, [loading]);
   const renderThreadTableBody = useMemo(() => <ThreadTableBody threads={threads} />, [threads]);
   const renderThreadsNotFound = useMemo(() => <NotFoundBox text={t('starred:noThreads')} />, [t]);
 

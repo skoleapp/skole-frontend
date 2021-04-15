@@ -6,7 +6,8 @@ import { useTranslation } from 'lib';
 import * as R from 'ramda';
 import React, { useMemo } from 'react';
 
-import { LoadingBox, NotFoundBox } from '../shared';
+import { NotFoundBox } from '../shared';
+import { SkeletonActivityPreviewList } from '../skeletons';
 import { ActivityListItem } from './ActivityListItem';
 
 const useStyles = makeStyles({
@@ -29,7 +30,11 @@ export const ActivityPreview: React.FC = () => {
   );
 
   if (loading) {
-    return <LoadingBox />;
+    return (
+      <List className={classes.list}>
+        <SkeletonActivityPreviewList />
+      </List>
+    );
   }
 
   if (error) {

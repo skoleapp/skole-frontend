@@ -29,13 +29,13 @@ import {
   Emoji,
   ErrorTemplate,
   Link,
-  LoadingBox,
   LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
   SettingsButton,
+  SkeletonCommentTableList,
   SkoleDialog,
   TabPanel,
   TextLink,
@@ -64,6 +64,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { SkeletonThreadTableList } from 'src/components/skeletons/SkeletonThreadTableList';
 import { BORDER_RADIUS, useMediaQueries } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
@@ -917,9 +918,11 @@ const ProfilePage: NextPage = () => {
     ],
   );
 
-  const renderThreadsLoading = useMemo(() => !!threadsLoading && <LoadingBox />, [threadsLoading]);
+  const renderThreadsLoading = useMemo(() => threadsLoading && <SkeletonThreadTableList />, [
+    threadsLoading,
+  ]);
 
-  const renderCommentsLoading = useMemo(() => !!commentsLoading && <LoadingBox />, [
+  const renderCommentsLoading = useMemo(() => commentsLoading && <SkeletonCommentTableList />, [
     commentsLoading,
   ]);
 
