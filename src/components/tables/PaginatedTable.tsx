@@ -8,14 +8,19 @@ import { getQueryWithPagination, RESULTS_PER_PAGE_OPTIONS } from 'utils';
 import { CustomTableFooter } from './CustomTableFooter';
 
 interface Props {
+  page: number;
   count: number;
-  extraFilters?: Record<symbol, unknown>; // Additional query parameters to the pagination params.
+  extraFilters?: Record<symbol, unknown>; // Additional query parameters to the pagination params - these are kept in the URL when changing pages etc.
   renderTableBody: JSX.Element;
 }
 
-export const PaginatedTable: React.FC<Props> = ({ count, extraFilters = {}, renderTableBody }) => {
+export const PaginatedTable: React.FC<Props> = ({
+  page,
+  count,
+  extraFilters = {},
+  renderTableBody,
+}) => {
   const { query, pathname } = useRouter();
-  const page = Number(R.propOr(1, 'page', query));
   const rowsPerPage = Number(R.propOr(RESULTS_PER_PAGE_OPTIONS[0], 'pageSize', query));
 
   const handleReloadPage = useCallback(

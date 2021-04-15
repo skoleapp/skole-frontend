@@ -113,6 +113,7 @@ const SearchPage: NextPage = () => {
   const { verified } = useAuthContext();
   const { data, loading, error } = useThreadsQuery({ variables, context });
   const threads = R.pathOr([], ['threads', 'objects'], data);
+  const page = R.pathOr(1, ['threads', 'page'], data);
   const count = R.pathOr(0, ['threads', 'count'], data);
   const searchTerm = R.prop('searchTerm', query);
   const [searchInputValue, setSearchInputValue] = useState('');
@@ -161,13 +162,14 @@ const SearchPage: NextPage = () => {
       threads.length && (
         <Box className={classes.tableContainer}>
           <PaginatedTable
+            page={page}
             count={count}
             renderTableBody={renderThreads}
             extraFilters={{ searchTerm }}
           />
         </Box>
       ),
-    [threads, classes.tableContainer, count, renderThreads, searchTerm],
+    [threads, classes.tableContainer, count, renderThreads, searchTerm, page],
   );
 
   const renderNotFound = useMemo(

@@ -25,6 +25,7 @@ const StarredPage: NextPage = () => {
   const { verified } = useAuthContext();
   const { data, loading, error } = useStarredQuery({ variables, context });
   const threads = R.pathOr([], ['starredThreads', 'objects'], data);
+  const page = R.pathOr(1, ['starredThreads', 'page'], data);
   const threadCount = R.pathOr(0, ['starredThreads', 'count'], data);
 
   const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
@@ -34,9 +35,9 @@ const StarredPage: NextPage = () => {
   const renderThreadTable = useMemo(
     () =>
       threads.length && (
-        <PaginatedTable renderTableBody={renderThreadTableBody} count={threadCount} />
+        <PaginatedTable page={page} renderTableBody={renderThreadTableBody} count={threadCount} />
       ),
-    [renderThreadTableBody, threadCount, threads.length],
+    [renderThreadTableBody, threadCount, threads.length, page],
   );
 
   const renderThreads = renderLoading || renderThreadTable || renderThreadsNotFound;

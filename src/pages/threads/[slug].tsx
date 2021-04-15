@@ -51,7 +51,11 @@ import {
   CommentObjectType,
   DeleteThreadMutation,
   StarMutation,
+  ThreadCommentsQuery,
+  ThreadCommentsQueryResult,
   ThreadObjectType,
+  ThreadQuery,
+  ThreadQueryResult,
   useDeleteThreadMutation,
   useStarMutation,
   useThreadCommentsLazyQuery,
@@ -180,11 +184,11 @@ const ThreadPage: NextPage = () => {
   const { query } = useRouter();
   const { userMe, verified } = useAuthContext();
   const context = useLanguageHeaderContext();
-  const threadVariables = R.pick(['slug'], query);
-  const commentQueryVariables = R.pick(['slug', 'comment', 'page', 'pageSize'], query);
   const { ordering, setOrdering } = useOrderingContext();
-  const [threadQueryCount, setThreadQueryCount] = useState(0);
   const [customInviteDialogOpenedCounter, setCustomInviteDialogOpenedCounter] = useState(0);
+  const commentQueryVariables = R.pick(['slug', 'comment', 'page', 'pageSize'], query);
+  const [threadData, setThreadData] = useState<ThreadQueryResult['data'] | null>(null);
+  const [commentsData, setCommentsData] = useState<ThreadCommentsQueryResult['data'] | null>(null);
 
   const {
     customInviteDialogOpen,
@@ -192,29 +196,43 @@ const ThreadPage: NextPage = () => {
     handleCloseCustomInviteDialog,
   } = useInviteContext();
 
-  const commentVariables = {
-    ordering,
-    ...commentQueryVariables,
+  const threadQueryParams = {
+    variables: R.pick(['slug'], query),
+    context,
+    onCompleted: (thread: ThreadQuery): void => setThreadData(thread),
+  };
+
+  const [threadQuery, { loading: threadLoading, error: threadError }] = useThreadLazyQuery(
+    threadQueryParams,
+  );
+
+  const [silentThreadQuery, { error: silentThreadError }] = useThreadLazyQuery(threadQueryParams);
+
+  const commentsQueryParams = {
+    variables: {
+      ordering,
+      ...commentQueryVariables,
+    },
+    context,
+    onCompleted: (threadComments: ThreadCommentsQuery): void => setCommentsData(threadComments),
   };
 
   const [
-    threadQuery,
-    { data: threadData, loading: threadLoading, error: threadError },
-  ] = useThreadLazyQuery({
-    variables: threadVariables,
-    context,
-    onCompleted: () => setThreadQueryCount(threadQueryCount + 1),
-  });
-
-  const [
     commentsQuery,
-    { data: commentsData, loading: commentsLoading, error: commentsError },
-  ] = useThreadCommentsLazyQuery({ variables: commentVariables, context });
+    { loading: commentsLoading, error: commentsError },
+  ] = useThreadCommentsLazyQuery(commentsQueryParams);
 
-  const error = threadError || commentsError;
+  const [silentCommentsQuery, { error: silentCommentsError }] = useThreadCommentsLazyQuery(
+    commentsQueryParams,
+  );
+
+  const error = threadError || silentThreadError || commentsError || silentCommentsError;
   const thread = R.prop('thread', threadData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
+  const page = R.pathOr(1, ['comments', 'page'], commentsData);
+  const paginationCount = R.pathOr(0, ['comments', 'count'], commentsData);
   const id = R.prop('id', thread);
+  const slug = R.prop('slug', thread);
   const title = R.prop('title', thread);
   const text = R.prop('text', thread);
   const image = R.prop('image', thread);
@@ -269,6 +287,11 @@ const ThreadPage: NextPage = () => {
       commentsQuery();
     }
   }, [threadQuery, commentsQuery, verified]);
+
+  // Re-fetch comments when the ordering is changed.
+  useEffect(() => {
+    commentsQuery();
+  }, [ordering, commentsQuery]);
 
   // Set the target thread state whenever mounting or the create comment dialog is closed,
   useEffect(() => {
@@ -458,16 +481,23 @@ const ThreadPage: NextPage = () => {
     [targetComment, t, title],
   );
 
-  const refreshThread = useCallback((): void => {
-    threadQuery();
-    commentsQuery();
-  }, [commentsQuery, threadQuery]);
+  const silentlyRefreshThread = useCallback((): void => {
+    silentThreadQuery();
+    silentCommentsQuery();
+  }, [silentCommentsQuery, silentThreadQuery]);
 
-  // Set the ordering to `newest` so that the newly created comment ends up as the topmost comment.
-  const handleCommentCreated = useCallback((): void => {
-    setOrdering('newest');
-    refreshThread();
-  }, [refreshThread, setOrdering]);
+  const handleCommentCreated = useCallback(
+    (topComment: boolean): void => {
+      if (topComment && ordering !== 'newest') {
+        setOrdering('newest');
+        silentThreadQuery();
+        commentsQuery();
+      } else {
+        silentlyRefreshThread();
+      }
+    },
+    [silentlyRefreshThread, setOrdering, ordering, commentsQuery, silentThreadQuery],
+  );
 
   const renderActionsButton = useMemo(
     () =>
@@ -617,17 +647,17 @@ const ThreadPage: NextPage = () => {
 
   const renderTopComment = useCallback(
     (comment: CommentObjectType, i: number): JSX.Element => (
-      <CommentCard comment={comment} onCommentDeleted={refreshThread} topComment key={i} />
+      <CommentCard comment={comment} onCommentDeleted={silentlyRefreshThread} topComment key={i} />
     ),
-    [refreshThread],
+    [silentlyRefreshThread],
   );
 
   const mapReplyComments = useCallback(
     (tc: CommentObjectType, i: number): JSX.Element[] =>
       tc.replyComments.map((rc) => (
-        <CommentCard comment={rc} onCommentDeleted={refreshThread} key={i} />
+        <CommentCard comment={rc} onCommentDeleted={silentlyRefreshThread} key={i} />
       )),
-    [refreshThread],
+    [silentlyRefreshThread],
   );
 
   const renderReplyButton = useCallback(
@@ -664,11 +694,12 @@ const ThreadPage: NextPage = () => {
       !!comments.length && (
         <PaginatedTable
           renderTableBody={renderCommentTableBody}
-          count={commentCount}
-          extraFilters={commentQueryVariables}
+          page={page}
+          count={paginationCount}
+          extraFilters={{ slug }}
         />
       ),
-    [commentCount, renderCommentTableBody, commentQueryVariables, comments.length],
+    [page, paginationCount, renderCommentTableBody, comments.length, slug],
   );
 
   const renderComments = useMemo(
@@ -885,8 +916,7 @@ const ThreadPage: NextPage = () => {
     hideBottomNavbar: !userMe,
   };
 
-  // Render full screen loading screen only for the thread query during the initial load.
-  if (threadLoading && threadQueryCount === 0) {
+  if (threadLoading) {
     return <LoadingTemplate />;
   }
 
