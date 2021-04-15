@@ -66,7 +66,7 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 }));
 
 interface CreateCommentFormProps extends Pick<CreateCommentFormValues, 'thread' | 'comment'> {
-  onCommentCreated: () => void;
+  onCommentCreated: (topComment: boolean) => void;
   placeholder: string;
   resetTargetComment: () => void;
 }
@@ -110,7 +110,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       toggleUnexpectedErrorNotification();
     } else if (createComment?.successMessage) {
       toggleNotification(createComment.successMessage);
-      onCommentCreated();
+      onCommentCreated(!createComment.comment?.comment);
       sa_event('create_comment');
     } else {
       toggleUnexpectedErrorNotification();

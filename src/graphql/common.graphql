@@ -92,10 +92,7 @@ mutation CreateComment(
       messages
     }
     comment {
-      id
-      thread {
-        slug
-      }
+      ...commentFields
     }
   }
 }
