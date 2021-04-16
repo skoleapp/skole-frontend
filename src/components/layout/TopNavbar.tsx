@@ -436,10 +436,10 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     () =>
       mdUp && (
         <Grid container alignItems="center">
-          <Grid item xs={2} container>
+          <Grid item xs={1} container>
             {renderLogo}
           </Grid>
-          <Grid item xs={10} container justify="flex-end" alignItems="center">
+          <Grid item xs={11} container justify="flex-end" alignItems="center">
             {renderSearch}
             {renderLanguageButton}
             {renderDarkModeButton}
