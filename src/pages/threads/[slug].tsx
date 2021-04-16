@@ -22,12 +22,12 @@ import clsx from 'clsx';
 import {
   ActionRequiredTemplate,
   ActionsButton,
+  BadgeTierIcon,
   CommentCard,
   CreateCommentForm,
   CustomInviteDialog,
   Emoji,
   ErrorTemplate,
-  LoadingBox,
   LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
@@ -35,6 +35,7 @@ import {
   NotFoundBox,
   OrderingButton,
   PaginatedTable,
+  SkeletonCommentList,
   TextLink,
 } from 'components';
 import {
@@ -48,6 +49,8 @@ import {
   useThreadContext,
 } from 'context';
 import {
+  BadgeObjectType,
+  BadgeTier,
   CommentObjectType,
   DeleteThreadMutation,
   StarMutation,
@@ -142,6 +145,18 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   creatorInfo: {
     marginTop: spacing(4),
   },
+  creatorInfoText: {
+    fontSize: '0.75rem',
+  },
+  creatorScore: {
+    marginRight: spacing(1),
+    fontWeight: 'bold',
+  },
+  badgeTierIcon: {
+    fontSize: '0.5rem',
+    marginLeft: spacing(1),
+    marginRight: spacing(0.5),
+  },
   imageThumbnail: {
     border: `0.1rem solid ${
       palette.type === 'dark' ? palette.secondary.main : palette.primary.main
@@ -151,10 +166,8 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
   commentsHeader: {
     padding: spacing(2),
-    paddingTop: 0,
     [breakpoints.up('md')]: {
       padding: `${spacing(2)} ${spacing(4)}`,
-      paddingTop: spacing(2),
     },
   },
   replyButtonContainer: {
@@ -243,6 +256,7 @@ const ThreadPage: NextPage = () => {
   const initialVote = R.prop('vote', thread);
   const initialStarred = R.prop('starred', thread);
   const creator = R.prop('user', thread);
+  const creatorScore = R.prop('score', creator);
   const isOwn = !!creator && userMe?.id === creator.id;
   const created = R.prop('created', thread);
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', thread);
@@ -623,12 +637,15 @@ const ThreadPage: NextPage = () => {
     [textFieldPlaceholder, targetComment, setTargetComment, targetThread, handleCommentCreated],
   );
 
-  const renderCommentsHeader = (
-    <Grid className={classes.commentsHeader} container alignItems="center">
-      <Typography variant="body2" color="textSecondary">
-        {t('thread:comments', { commentCount })} {t('thread:sortedBy')} <OrderingButton />
-      </Typography>
-    </Grid>
+  const renderCommentsHeader = useMemo(
+    () => (
+      <Grid className={classes.commentsHeader} container alignItems="center">
+        <Typography variant="body2" color="textSecondary">
+          {t('thread:comments', { commentCount })} {t('thread:sortedBy')} <OrderingButton />
+        </Typography>
+      </Grid>
+    ),
+    [classes.commentsHeader, commentCount, t],
   );
 
   const renderCreateCommentButton = useMemo(
@@ -685,7 +702,10 @@ const ThreadPage: NextPage = () => {
     [comments, mapReplyComments, renderReplyButton, renderTopComment],
   );
 
-  const renderLoading = useMemo(() => commentsLoading && <LoadingBox />, [commentsLoading]);
+  const renderLoading = useMemo(() => commentsLoading && <SkeletonCommentList />, [
+    commentsLoading,
+  ]);
+
   const renderCommentsNotFound = useMemo(() => <NotFoundBox text={t('thread:noComments')} />, [t]);
   const renderCommentTableBody = useMemo(() => <TableBody>{mapComments}</TableBody>, [mapComments]);
 
@@ -794,13 +814,94 @@ const ThreadPage: NextPage = () => {
     t,
   ]);
 
-  const renderCreated = useMemo(
+  const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
+  const diamondBadges = badges.filter((b) => b.tier === BadgeTier.Diamond);
+  const goldBadges = badges.filter((b) => b.tier === BadgeTier.Gold);
+  const silverBadges = badges.filter((b) => b.tier === BadgeTier.Silver);
+  const bronzeBadges = badges.filter((b) => b.tier === BadgeTier.Bronze);
+
+  const renderBadgeTierIcon = useCallback(
+    (tier: BadgeTier) => <BadgeTierIcon tier={tier} className={classes.badgeTierIcon} />,
+    [classes.badgeTierIcon],
+  );
+
+  const renderDiamondBadgeCount = useMemo(
+    () =>
+      !!diamondBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Diamond)}
+          {diamondBadges.length}
+        </>
+      ),
+    [diamondBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderGoldBadgeCount = useMemo(
+    () =>
+      !!goldBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Gold)}
+          {goldBadges.length}
+        </>
+      ),
+    [goldBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderSilverBadgeCount = useMemo(
+    () =>
+      !!silverBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Silver)}
+          {silverBadges.length}
+        </>
+      ),
+    [silverBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderBronzeBadgeCount = useMemo(
+    () =>
+      !!bronzeBadges.length && (
+        <>
+          {renderBadgeTierIcon(BadgeTier.Bronze)}
+          {bronzeBadges.length}
+        </>
+      ),
+    [bronzeBadges.length, renderBadgeTierIcon],
+  );
+
+  const renderCreatorInfo = useMemo(
     () => (
-      <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
-        {t('common:createdBy')} {renderCreator} {creationTime}
-      </Typography>
+      <>
+        <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
+          {renderCreator} {t('common:created')} {creationTime}
+        </Typography>
+        <Grid container alignItems="center">
+          <Typography
+            className={clsx(classes.creatorInfoText, classes.creatorScore)}
+            variant="body2"
+          >
+            {creatorScore}
+          </Typography>
+          <Typography className={classes.creatorInfoText} variant="body2" color="textSecondary">
+            {renderDiamondBadgeCount} {renderGoldBadgeCount} {renderSilverBadgeCount}{' '}
+            {renderBronzeBadgeCount}
+          </Typography>
+        </Grid>
+      </>
     ),
-    [creationTime, renderCreator, t, classes.creatorInfo],
+    [
+      creationTime,
+      renderCreator,
+      t,
+      classes.creatorInfo,
+      classes.creatorInfoText,
+      classes.creatorScore,
+      renderBronzeBadgeCount,
+      renderDiamondBadgeCount,
+      renderGoldBadgeCount,
+      renderSilverBadgeCount,
+      creatorScore,
+    ],
   );
 
   const renderThreadInfo = useMemo(
@@ -810,7 +911,7 @@ const ThreadPage: NextPage = () => {
           <CardContent className={classes.threadInfoCardContent}>
             {renderMobileTitle}
             {renderText}
-            {renderCreated}
+            {renderCreatorInfo}
           </CardContent>
         </Grid>
         <Grid className={classes.imageThumbnailContainer} item xs={3} container justify="flex-end">
@@ -828,7 +929,7 @@ const ThreadPage: NextPage = () => {
       classes.threadImageCardContent,
       renderMobileTitle,
       renderText,
-      renderCreated,
+      renderCreatorInfo,
       renderImageThumbnail,
     ],
   );

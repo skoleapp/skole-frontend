@@ -16,10 +16,10 @@ import clsx from 'clsx';
 import {
   ActionRequiredTemplate,
   ErrorTemplate,
-  LoadingBox,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
+  SkeletonThreadTableList,
   ThreadTableBody,
 } from 'components';
 import { useAuthContext, useThreadFormContext } from 'context';
@@ -154,7 +154,7 @@ const SearchPage: NextPage = () => {
     [searchTerm, classes.resultsInfo, t],
   );
 
-  const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
+  const renderLoading = useMemo(() => loading && <SkeletonThreadTableList />, [loading]);
   const renderThreads = useMemo(() => <ThreadTableBody threads={threads} />, [threads]);
 
   const renderTable = useMemo(

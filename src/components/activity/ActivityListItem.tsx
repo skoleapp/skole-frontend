@@ -130,7 +130,11 @@ export const ActivityListItem: React.FC<Props> = ({
 
   return (
     <Link href={getHref()} fullWidth>
-      <ListItem onClick={handleClick} className={clsx(!read && classes.unread)} button>
+      <ListItem
+        onClick={handleClick}
+        className={clsx('activity-li', !read && classes.unread)}
+        button
+      >
         {renderAvatar}
         {renderListItemText}
       </ListItem>

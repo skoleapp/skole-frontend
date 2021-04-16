@@ -256,6 +256,11 @@ export const useMuiTheme = (): Theme => {
         margin: 0,
       },
     },
+    MuiTableFooter: {
+      root: {
+        minHeight: '3rem',
+      },
+    },
     MuiCardHeader: {
       root: {
         padding: spacing(2),
@@ -371,6 +376,9 @@ export const useMuiTheme = (): Theme => {
         },
         '.rank-chip': {
           cursor: 'pointer !important',
+        },
+        '.activity-li': {
+          minHeight: '4.25rem',
         },
       },
     },

@@ -11,9 +11,9 @@ import {
   ErrorTemplate,
   Link,
   ListTemplate,
-  LoadingBox,
   NotFoundBox,
   PaginatedTable,
+  SkeletonActivityTableList,
 } from 'components';
 import { useActionsContext, useAuthContext, useNotificationsContext } from 'context';
 import {
@@ -75,7 +75,7 @@ const ActivityPage: NextPage = () => {
     handleCloseActionsDialog();
   }, [handleCloseActionsDialog, markAllActivitiesAsRead]);
 
-  const renderLoading = useMemo(() => loading && <LoadingBox />, [loading]);
+  const renderLoading = useMemo(() => loading && <SkeletonActivityTableList />, [loading]);
   const renderNotFound = useMemo(() => <NotFoundBox text={t('activity:noActivity')} />, [t]);
 
   const mapActivities = useMemo(

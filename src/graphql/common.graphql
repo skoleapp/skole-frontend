@@ -137,9 +137,7 @@ fragment threadFields on ThreadObjectType {
     status
   }
   user {
-    id
-    slug
-    username
+    ...userFields
   }
 }
 
