@@ -10,29 +10,31 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 FROM base as dev
 
-RUN apt-get update && \
-  apt-get install --no-install-recommends --assume-yes \
-  libgtk2.0-0 \
-  libgtk-3-0 \
-  libnotify-dev \
-  libgconf-2-4 \
-  libgbm-dev \
-  libnss3 \
-  libxss1 \
-  libasound2 \
-  libxtst6 \
-  xauth \
-  xvfb
+RUN apt-get update \
+    && apt-get install --no-install-recommends --assume-yes \
+        libgtk2.0-0 \
+        libgtk-3-0 \
+        libnotify-dev \
+        libgconf-2-4 \
+        libgbm-dev \
+        libnss3 \
+        libxss1 \
+        libasound2 \
+        libxtst6 \
+        xauth \
+        xvfb \
+    && rm -rf /var/lib/apt/lists/ /var/cache/apt/
 
 USER user
+
+RUN mkdir .next
 
 COPY --chown=user:user package.json .
 COPY --chown=user:user yarn.lock .
 
 ENV NODE_ENV=development
 
-RUN yarn install
-RUN mkdir .next
+RUN yarn install && yarn cache clean
 
 CMD ["yarn", "dev"]
 
@@ -67,7 +69,7 @@ ENV NODE_ENV=production
 RUN yarn build
 
 # Get rid of all dev dependencies.
-RUN yarn install --production --ignore-scripts --prefer-offline
+RUN yarn install --production --ignore-scripts --prefer-offline && yarn cache clean
 
 
 FROM base as prod
