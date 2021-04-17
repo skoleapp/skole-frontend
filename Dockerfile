@@ -1,4 +1,4 @@
-FROM node:15.10.0-buster-slim AS base
+FROM node:15.10.0-buster-slim@sha256:2a351dd6e7236d277f51f00266cc1807791b217837392cfd39fa64c01cb6c094 AS base
 
 RUN groupadd --gid=10001 user \
     && useradd --gid=user --uid=10000 --create-home user
