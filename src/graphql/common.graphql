@@ -130,6 +130,7 @@ fragment threadFields on ThreadObjectType {
   starred
   starCount
   commentCount
+  views
   created
   modified
   vote {
@@ -257,6 +258,7 @@ fragment userFields on UserObjectType {
   unreadActivityCount
   threadCount
   commentCount
+  views
   created
   modified
   fcmTokens

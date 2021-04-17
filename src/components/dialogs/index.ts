@@ -7,3 +7,4 @@ export * from './ResponsiveDialog';
 export * from './SettingsDialog';
 export * from './ShareDialog';
 export * from './SkoleDialog';
+export * from './VotePromptDialog';

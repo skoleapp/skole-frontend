@@ -4,4 +4,3 @@ export * from './useLanguageHeaderContext';
 export * from './useMuiTheme';
 export * from './useOpen';
 export * from './useUserMe';
-export * from './useVotes';

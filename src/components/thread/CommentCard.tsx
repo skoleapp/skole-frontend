@@ -9,15 +9,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import CommentOutlined from '@material-ui/icons/CommentOutlined';
-import KeyboardArrowDownOutlined from '@material-ui/icons/KeyboardArrowDownOutlined';
-import KeyboardArrowUpOutlined from '@material-ui/icons/KeyboardArrowUpOutlined';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
 import clsx from 'clsx';
 import {
   useActionsContext,
-  useAuthContext,
   useConfirmContext,
-  useDarkModeContext,
   useNotificationsContext,
   useThreadContext,
 } from 'context';
@@ -28,24 +24,23 @@ import {
   DeleteCommentMutation,
   useDeleteCommentMutation,
   UserFieldsFragment,
+  VoteObjectType,
 } from 'generated';
-import { useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
+import { useDayjs, useLanguageHeaderContext } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
 import { BadgeTierIcon, MarkdownContent, TextLink } from '../shared';
+import { VoteButton } from './VoteButton';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
   root: {
     borderRadius: 0,
-    overflow: 'visible',
     boxShadow: 'none',
-    position: 'relative',
-    maxWidth: '100vw',
   },
   replyComment: {
     borderLeft: `${spacing(1)} solid ${
@@ -54,6 +49,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
   cardHeaderRoot: {
     textAlign: 'left',
+    padding: spacing(3),
     paddingBottom: 0,
   },
   cardHeaderContent: {
@@ -78,12 +74,15 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     marginLeft: spacing(1),
     marginRight: spacing(0.5),
   },
-  score: {
+  creatorScore: {
     marginRight: spacing(1),
     fontWeight: 'bold',
   },
+  score: {
+    fontWeight: 'bold',
+  },
   cardContent: {
-    padding: `${spacing(2)} !important`,
+    padding: `${spacing(3)} !important`,
   },
   messageContent: {
     padding: `${spacing(3)} 0`,
@@ -105,9 +104,6 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
   icon: {
     marginRight: spacing(1),
-  },
-  iconButton: {
-    padding: spacing(2),
   },
   replyCount: {
     marginRight: spacing(1),
@@ -134,7 +130,8 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
   const { handleOpenActionsDialog } = useActionsContext();
-  const { verified } = useAuthContext();
+  const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
+  const [score, setScore] = useState(0);
   const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
   const initialVote = R.prop('vote', comment);
   const initialScore = R.prop('score', comment);
@@ -146,31 +143,22 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
   const creatorSlug = R.prop('slug', creator);
   const isOwn = R.prop('isOwn', comment);
+  const file = R.prop('file', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
-  const { dynamicPrimaryColor } = useDarkModeContext();
   const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
   const diamondBadges = badges.filter((b) => b.tier === BadgeTier.Diamond);
   const goldBadges = badges.filter((b) => b.tier === BadgeTier.Gold);
   const silverBadges = badges.filter((b) => b.tier === BadgeTier.Silver);
   const bronzeBadges = badges.filter((b) => b.tier === BadgeTier.Bronze);
 
-  const { score, upvoteButtonProps, downvoteButtonProps, currentVote } = useVotes({
-    initialVote,
-    initialScore,
-    variables: { comment: commentId },
-  });
+  useEffect(() => {
+    setCurrentVote(initialVote);
+  }, [initialVote, setCurrentVote]);
 
-  // Show a dynamic tooltips based on the vote status.
-  const upvoteTooltip =
-    currentVote?.status === 1
-      ? t('thread-tooltips:removeCommentUpvote')
-      : t('thread-tooltips:upvoteComment');
-
-  const downvoteTooltip =
-    currentVote?.status === -1
-      ? t('thread-tooltips:removeCommentDownvote')
-      : t('thread-tooltips:downvoteComment');
+  useEffect(() => {
+    setScore(initialScore);
+  }, [initialScore, setScore]);
 
   // If a comment has been provided as a query parameter, automatically scroll into the comment.
   useEffect(() => {
@@ -323,7 +311,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     () =>
       !!creator && (
         <Grid container alignItems="center">
-          <Typography className={clsx(classes.subheaderText, classes.score)} variant="body2">
+          <Typography className={clsx(classes.subheaderText, classes.creatorScore)} variant="body2">
             {creator.score}
           </Typography>
           <Typography className={classes.subheaderText} variant="body2">
@@ -338,7 +326,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
       renderGoldBadgeCount,
       renderSilverBadgeCount,
       renderBronzeBadgeCount,
-      classes.score,
+      classes.creatorScore,
       classes.subheaderText,
     ],
   );
@@ -417,73 +405,58 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     [classes.icon, classes.replyCount, replyCount, t, topComment],
   );
 
+  const renderFileLink = useMemo(
+    () =>
+      file && (
+        <TextLink href={mediaUrl(file)} target="_blank" rel="noreferrer">
+          {t('thread:viewFile')}
+        </TextLink>
+      ),
+    [t, file],
+  );
+
   const renderActionsButton = useMemo(
     () => (
       <Tooltip title={t('thread-tooltips:commentActions')}>
         <IconButton
           onClick={handleClickActionsButton}
-          className={clsx(classes.iconButton, classes.actionsButton)}
+          className={classes.actionsButton}
           color="default"
+          size="small"
         >
           <MoreHorizOutlined />
         </IconButton>
       </Tooltip>
     ),
-    [classes.actionsButton, classes.iconButton, handleClickActionsButton, t],
+    [classes.actionsButton, handleClickActionsButton, t],
   );
 
-  // Only render for verified user who are not owners.
-  const renderUpvoteButton = useMemo(
-    () =>
-      !isOwn &&
-      !!verified && (
-        <Tooltip title={upvoteTooltip}>
-          <Typography component="span">
-            <IconButton className={classes.iconButton} {...upvoteButtonProps}>
-              <KeyboardArrowUpOutlined
-                color={currentVote?.status === 1 ? dynamicPrimaryColor : 'disabled'}
-              />
-            </IconButton>
-          </Typography>
-        </Tooltip>
-      ),
-    [
-      classes.iconButton,
-      upvoteButtonProps,
-      upvoteTooltip,
-      isOwn,
-      verified,
-      currentVote,
-      dynamicPrimaryColor,
-    ],
+  const renderVoteButton = useCallback(
+    (variant) => (
+      <VoteButton
+        currentVote={currentVote}
+        setCurrentVote={setCurrentVote}
+        setScore={setScore}
+        variant={variant}
+        isOwn={isOwn}
+        variables={{ comment: commentId }}
+      />
+    ),
+    [isOwn, commentId, currentVote],
   );
 
-  const renderScore = useMemo(() => <Typography variant="body2">{score}</Typography>, [score]);
-
-  // Only render for verified user who are not owners.
-  const renderDownvoteButton = useMemo(
-    () =>
-      !isOwn &&
-      !!verified && (
-        <Tooltip title={downvoteTooltip}>
-          <Typography component="span">
-            <IconButton className={classes.iconButton} {...downvoteButtonProps}>
-              <KeyboardArrowDownOutlined
-                color={currentVote?.status === -1 ? dynamicPrimaryColor : 'disabled'}
-              />
-            </IconButton>
-          </Typography>
-        </Tooltip>
-      ),
-    [
-      classes.iconButton,
-      downvoteButtonProps,
-      downvoteTooltip,
-      isOwn,
-      verified,
-      currentVote,
-      dynamicPrimaryColor,
-    ],
+  const renderScore = useMemo(
+    () => (
+      <Typography
+        className={classes.score}
+        variant="subtitle1"
+        color="textSecondary"
+        align="center"
+      >
+        {score}
+      </Typography>
+    ),
+    [score, classes.score],
   );
 
   const renderMessage = useMemo(
@@ -508,34 +481,37 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
             sm={1}
             direction="column"
             justify="center"
-            alignItems="center"
+            alignItems="flex-end"
           >
-            {renderUpvoteButton}
-            {renderScore}
-            {renderDownvoteButton}
+            <Box display="flex" flexDirection="column">
+              {renderVoteButton('upvote')}
+              {renderScore}
+              {renderVoteButton('downvote')}
+            </Box>
           </Grid>
         </Grid>
         <Grid container alignItems="center">
-          <Grid item xs={4}>
+          <Grid item xs={5} container alignItems="center" wrap="nowrap">
             {renderReplyCount}
+            {renderFileLink}
           </Grid>
-          <Grid item xs={4} container justify="center">
+          <Grid item xs={2} container justify="center">
             {renderActionsButton}
           </Grid>
-          <Grid item xs={4} />
+          <Grid item xs={5} />
         </Grid>
       </CardContent>
     ),
     [
       classes.cardContent,
       classes.messageContent,
-      renderDownvoteButton,
       renderImageThumbnail,
       renderScore,
       renderText,
-      renderUpvoteButton,
+      renderVoteButton,
       renderActionsButton,
       renderReplyCount,
+      renderFileLink,
     ],
   );
 

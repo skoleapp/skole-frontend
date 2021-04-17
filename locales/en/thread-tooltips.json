@@ -2,15 +2,17 @@
   "share": "Share this thread.",
   "threadActions": "Show thread menu.",
   "threadImage": "View thread image.",
-  "upvoteComment": "Upvote this comment.",
-  "removeCommentUpvote": "Remove upvote from this comment.",
-  "downvoteComment": "Downvote this comment.",
-  "removeCommentDownvote": "Remove downvote from this comment.",
   "shareComment": "Share this comment.",
   "commentActions": "Show comment menu.",
   "commentImage": "View comment's image.",
   "addCommentImage": "Add an image.",
   "clearCommentImage": "Clear image.",
   "commentReplies": "{{ replyCount }} replies.",
-  "sendMessage": "Send message."
+  "sendMessage": "Send message.",
+  "upvote": "Upvote.",
+  "removeUpvote": "Remove upvote.",
+  "downvote": "Downvote.",
+  "removeDownvote": "Remove downvote.",
+  "star": "Star.",
+  "unstar": "Unstar."
 }

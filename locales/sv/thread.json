@@ -1,9 +1,10 @@
 {
-  "star": "Stjärnmärka",
-  "unstar": "Avstjärna",
   "noComments": "Den här tråden har inga kommentarer. Lägg till en kommentar nedan!",
+  "commentsError": "Virhe ladattaessa kommentteja.",
   "comments": "{{ commentCount }} kommentarer",
-  "sortedBy": "sorterade efter",
+  "stars": "{{ stars }} stjärnor",
+  "views": "{{ views }} visningar",
+  "sortedBy": "Sorterade efter",
   "shareHeader": "Dela tråd",
   "shareText": "Skapad av {{ creatorUsername }}. {{ commentCount }} kommentarer.",
   "deleteThread": "Radera tråd",
@@ -13,9 +14,6 @@
   "shareCommentTitle": "{{ creatorUsername }} på Skole",
   "shareComment": "Dela kommentar",
   "postingComment": "Skickar kommentar...",
-  "upvote": "Upprösta",
-  "upvoted": "Uppröstat",
-  "downvote": "Nedrösta",
-  "downvoted": "Nedröstat",
-  "inviteDialogText": "är igång! Låt dina vänner veta om det genom att bjuda in dem!"
+  "inviteDialogText": "är igång! Låt dina vänner veta om det genom att bjuda in dem!",
+  "viewFile": "Visa fil"
 }

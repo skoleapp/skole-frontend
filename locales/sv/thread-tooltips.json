@@ -2,15 +2,17 @@
   "share": "Dela den här tråden.",
   "threadActions": "Visa trådmeny.",
   "threadImage": "Visa trådbild.",
-  "upvoteComment": "Upprösta den här kommentaren.",
-  "removeCommentUpvote": "Ta bort upprösten från den här kommentaren.",
-  "downvoteComment": "Nedröst denna kommentar.",
-  "removeCommentDownvote": "Ta bort nedrösten från den här kommentaren.",
   "shareComment": "Dela den här kommentaren.",
   "commentActions": "Visa kommentarmenyn.",
   "commentImage": "Visa kommentarens bild.",
   "addCommentImage": "Lägg till en bild.",
   "clearCommentImage": "Rensa bilden.",
   "commentReplies": "{{ replyCount }} svarar.",
-  "sendMessage": "Skicka meddelande."
+  "sendMessage": "Skicka meddelande.",
+  "upvote": "Upprösta.",
+  "removeUpvote": "Ta bort upprösten.",
+  "downvote": "Nedrösta.",
+  "removeDownvote": "Ta bort nedrösten.",
+  "star": "Stjärnmärka",
+  "unstar": "Avstjärna"
 }

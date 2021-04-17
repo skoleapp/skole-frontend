@@ -1,9 +1,10 @@
 {
-  "star": "Merkitse tähdellä",
-  "unstar": "Poisa tähti",
   "noComments": "Tällä langalla ei ole kommentteja.",
+  "commentsError": "Virhe ladattaessa kommentteja.",
   "comments": "{{ commentCount }} kommenttia",
-  "sortedBy": "järjestyksessä",
+  "stars": "{{ stars }} tähteä",
+  "views": "{{ views }} näyttökertaa",
+  "sortedBy": "Järjestyksessä",
   "shareHeader": "Jaa lanka",
   "shareText": "Luonut {{ creatorUsername }}. {{ commentCount }} kommenttia.",
   "deleteThread": "Poista lanka",
@@ -13,9 +14,6 @@
   "shareCommentTitle": "{{ creatorUsername }} Skolessa",
   "shareComment": "Jaa kommentti",
   "postingComment": "Lähetetään kommenttia...",
-  "upvote": "Äänestä ylös",
-  "upvoted": "Äänestetty ylös",
-  "downvote": "Äänestä alas",
-  "downvoted": "Äänestetty alas",
-  "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!"
+  "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!",
+  "viewFile": "Näytä tiedosto"
 }
