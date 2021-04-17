@@ -130,6 +130,7 @@ fragment threadFields on ThreadObjectType {
   starred
   starCount
   commentCount
+  views
   created
   modified
   vote {

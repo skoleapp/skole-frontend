@@ -12,3 +12,4 @@ export * from './settings';
 export * from './share';
 export * from './thread';
 export * from './threadForm';
+export * from './vote';

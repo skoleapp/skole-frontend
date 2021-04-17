@@ -1,9 +1,10 @@
 {
-  "star": "Star",
-  "unstar": "Unstar",
   "noComments": "This thread has no comments.",
+  "commentsError": "Error while loading comments.",
   "comments": "{{ commentCount }} comments",
-  "sortedBy": "sorted by",
+  "stars": "{{ stars }} stars",
+  "views": "{{ views }} views",
+  "sortedBy": "Sorted by",
   "shareHeader": "Share Thread",
   "shareText": "Created by {{ creatorUsername }}. {{ commentCount }} comments.",
   "deleteThread": "Delete Thread",
@@ -13,9 +14,5 @@
   "shareCommentTitle": "{{ creatorUsername }} on Skole",
   "shareComment": "Share Comment",
   "postingComment": "Posting comment...",
-  "upvote": "Upvote",
-  "upvoted": "Upvoted",
-  "downvote": "Downvote",
-  "downvoted": "Downvoted",
   "inviteDialogText": "is up and running! Let your friends know about it by inviting them!"
 }

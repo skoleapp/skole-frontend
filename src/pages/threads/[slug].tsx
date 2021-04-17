@@ -12,10 +12,8 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography, { TypographyProps } from '@material-ui/core/Typography';
+import Typography from '@material-ui/core/Typography';
 import AddOutlined from '@material-ui/icons/AddOutlined';
-import KeyboardArrowDownOutlined from '@material-ui/icons/KeyboardArrowDownOutlined';
-import KeyboardArrowUpOutlined from '@material-ui/icons/KeyboardArrowUpOutlined';
 import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
@@ -37,6 +35,7 @@ import {
   PaginatedTable,
   SkeletonCommentList,
   TextLink,
+  VoteButton,
 } from 'components';
 import {
   useAuthContext,
@@ -63,9 +62,10 @@ import {
   useStarMutation,
   useThreadCommentsLazyQuery,
   useThreadLazyQuery,
+  VoteObjectType,
 } from 'generated';
 import { withActions, withThread, withUserMe } from 'hocs';
-import { useDayjs, useLanguageHeaderContext, useVotes } from 'hooks';
+import { useDayjs, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
@@ -106,27 +106,22 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   headerContent: {
     overflow: 'hidden',
   },
-  desktopActionButtonWithText: {
-    textTransform: 'none',
-    padding: `${spacing(1.5)} ${spacing(3)}`,
+  score: {
+    fontWeight: 'bold',
+    margin: `0 ${spacing(1)}`,
   },
   headerActionItem: {
     [breakpoints.up('md')]: {
-      marginLeft: spacing(2),
+      marginLeft: spacing(1),
     },
   },
-  starButtonLabel: {
-    marginRight: spacing(2),
-  },
   threadInfoCardContent: {
-    padding: spacing(2),
-    paddingBottom: '0 !important',
+    padding: `${spacing(2)} !important`,
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
     [breakpoints.up('md')]: {
-      padding: `${spacing(2)} ${spacing(4)}`,
-      paddingBottom: `${spacing(2)} !important`,
+      padding: `${spacing(4)} !important`,
     },
   },
   threadImageCardContent: {
@@ -141,9 +136,6 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     [breakpoints.up('md')]: {
       alignItems: 'center',
     },
-  },
-  creatorInfo: {
-    marginTop: spacing(4),
   },
   creatorInfoText: {
     fontSize: '0.75rem',
@@ -232,14 +224,15 @@ const ThreadPage: NextPage = () => {
 
   const [
     commentsQuery,
-    { loading: commentsLoading, error: commentsError },
+    { loading: commentsLoading, error: _commentsError },
   ] = useThreadCommentsLazyQuery(commentsQueryParams);
 
   const [silentCommentsQuery, { error: silentCommentsError }] = useThreadCommentsLazyQuery(
     commentsQueryParams,
   );
 
-  const error = threadError || silentThreadError || commentsError || silentCommentsError;
+  const error = threadError || silentThreadError;
+  const commentsError = _commentsError || silentCommentsError;
   const thread = R.prop('thread', threadData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
   const page = R.pathOr(1, ['comments', 'page'], commentsData);
@@ -255,6 +248,7 @@ const ThreadPage: NextPage = () => {
   const commentCount = R.propOr(0, 'commentCount', thread);
   const initialVote = R.prop('vote', thread);
   const initialStarred = R.prop('starred', thread);
+  const views = R.propOr(0, 'views', thread);
   const creator = R.prop('user', thread);
   const creatorScore = R.prop('score', creator);
   const isOwn = !!creator && userMe?.id === creator.id;
@@ -266,24 +260,21 @@ const ThreadPage: NextPage = () => {
   const { handleOpenShareDialog } = useShareContext();
   const [stars, setStars] = useState(0);
   const [starred, setStarred] = useState(false);
-  const starButtonText = starred ? t('thread:unstar') : t('thread:star');
+  const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
+  const [score, setScore] = useState(0);
+  const starButtonTooltip = starred ? t('thread-tooltips:unstar') : t('thread-tooltips:star');
   const creationTime = useDayjs(created).startOf('day').fromNow();
+  const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
+  const diamondBadges = badges.filter((b) => b.tier === BadgeTier.Diamond);
+  const goldBadges = badges.filter((b) => b.tier === BadgeTier.Gold);
+  const silverBadges = badges.filter((b) => b.tier === BadgeTier.Silver);
+  const bronzeBadges = badges.filter((b) => b.tier === BadgeTier.Bronze);
 
   const {
     createCommentDialogOpen,
     setCreateCommentDialogOpen,
     setThreadImageViewerValue,
   } = useThreadContext();
-
-  const { score, upvoteButtonProps, downvoteButtonProps, currentVote } = useVotes({
-    initialVote,
-    initialScore,
-    variables: { thread: id },
-  });
-
-  // Show a dynamic labels based on the vote status.
-  const upvoteLabel = currentVote?.status === 1 ? t('thread:upvoted') : t('thread:upvote');
-  const downvoteLabel = currentVote?.status === -1 ? t('thread:downvoted') : t('thread:downvote');
 
   useEffect(() => {
     setStarred(initialStarred);
@@ -292,6 +283,14 @@ const ThreadPage: NextPage = () => {
   useEffect(() => {
     setStars(initialStars);
   }, [initialStars]);
+
+  useEffect(() => {
+    setCurrentVote(initialVote);
+  }, [initialVote, setCurrentVote]);
+
+  useEffect(() => {
+    setScore(initialScore);
+  }, [initialScore, setScore]);
 
   // Fetch initial data for thread and comments.
   useEffect(() => {
@@ -377,59 +376,23 @@ const ThreadPage: NextPage = () => {
     await star({ variables: { thread: id } });
   }, [star, id]);
 
-  const starButtonTextProps: TypographyProps = useMemo(
-    () => ({
-      variant: 'body2',
-      color: starred ? 'inherit' : 'textSecondary',
-    }),
-    [starred],
-  );
-
-  // Only render for verified users.
-  const renderDesktopStarButton = useMemo(
+  const renderStarButton = useMemo(
     () =>
       !!verified && (
-        <Button
-          className={clsx(classes.desktopActionButtonWithText, classes.headerActionItem)}
-          onClick={handleStar}
-          disabled={starSubmitting}
-          startIcon={<StarBorderOutlined color={starred ? dynamicPrimaryColor : 'disabled'} />}
-          color={starred ? dynamicPrimaryColor : 'default'}
-        >
-          <Typography className={classes.starButtonLabel} {...starButtonTextProps}>
-            {starButtonText}
+        <Tooltip title={starButtonTooltip}>
+          <Typography component="span">
+            <IconButton
+              onClick={handleStar}
+              disabled={starSubmitting}
+              color={starred ? dynamicPrimaryColor : 'default'}
+              size="small"
+            >
+              <StarBorderOutlined color={starred ? dynamicPrimaryColor : 'disabled'} />
+            </IconButton>
           </Typography>
-          <Typography {...starButtonTextProps}>{stars}</Typography>
-        </Button>
+        </Tooltip>
       ),
-    [
-      handleStar,
-      starSubmitting,
-      verified,
-      starButtonText,
-      classes.desktopActionButtonWithText,
-      classes.starButtonLabel,
-      classes.headerActionItem,
-      starButtonTextProps,
-      stars,
-      starred,
-      dynamicPrimaryColor,
-    ],
-  );
-
-  // Only render for verified users.
-  const renderMobileStarButton = useMemo(
-    () => (
-      <IconButton
-        onClick={handleStar}
-        disabled={starSubmitting}
-        color={starred ? dynamicPrimaryColor : 'default'}
-        size="small"
-      >
-        <StarBorderOutlined color={starred ? dynamicPrimaryColor : 'disabled'} />
-      </IconButton>
-    ),
-    [handleStar, starSubmitting, starred, dynamicPrimaryColor],
+    [handleStar, starSubmitting, starred, dynamicPrimaryColor, verified, starButtonTooltip],
   );
 
   const shareDialogParams = useMemo(
@@ -534,94 +497,27 @@ const ThreadPage: NextPage = () => {
     [handleClickShareButton],
   );
 
-  // Only render for verified user who are not owners.
-  const renderDesktopUpvoteButton = useMemo(
-    () =>
-      !!verified &&
-      !isOwn && (
-        <Button
-          className={classes.desktopActionButtonWithText}
-          startIcon={
-            <KeyboardArrowUpOutlined
-              color={currentVote?.status === 1 ? dynamicPrimaryColor : 'disabled'}
-            />
-          }
-          color={currentVote?.status === 1 ? dynamicPrimaryColor : 'default'}
-          {...upvoteButtonProps}
-        >
-          <Typography
-            variant="body2"
-            color={currentVote?.status === 1 ? 'inherit' : 'textSecondary'}
-          >
-            {upvoteLabel}
-          </Typography>
-        </Button>
-      ),
-    [
-      isOwn,
-      upvoteButtonProps,
-      verified,
-      upvoteLabel,
-      classes.desktopActionButtonWithText,
-      currentVote,
-      dynamicPrimaryColor,
-    ],
+  const renderVoteButton = useCallback(
+    (variant) => (
+      <VoteButton
+        currentVote={currentVote}
+        setCurrentVote={setCurrentVote}
+        setScore={setScore}
+        variant={variant}
+        isOwn={isOwn}
+        variables={{ thread: id }}
+      />
+    ),
+    [isOwn, id, currentVote],
   );
 
-  // Only render for non-owners.
-  const renderMobileUpvoteButton = useMemo(
-    () =>
-      !isOwn && (
-        <IconButton {...upvoteButtonProps}>
-          <KeyboardArrowUpOutlined />
-        </IconButton>
-      ),
-    [isOwn, upvoteButtonProps],
-  );
-
-  // Only render for non-owners.
-  const renderDesktopDownvoteButton = useMemo(
-    () =>
-      !!verified &&
-      !isOwn && (
-        <Button
-          className={classes.desktopActionButtonWithText}
-          startIcon={
-            <KeyboardArrowDownOutlined
-              color={currentVote?.status === -1 ? dynamicPrimaryColor : 'disabled'}
-            />
-          }
-          color={currentVote?.status === -1 ? dynamicPrimaryColor : 'default'}
-          {...downvoteButtonProps}
-        >
-          <Typography
-            variant="body2"
-            color={currentVote?.status === -1 ? 'inherit' : 'textSecondary'}
-          >
-            {downvoteLabel}
-          </Typography>
-        </Button>
-      ),
-    [
-      downvoteButtonProps,
-      isOwn,
-      verified,
-      downvoteLabel,
-      classes.desktopActionButtonWithText,
-      currentVote,
-      dynamicPrimaryColor,
-    ],
-  );
-
-  // Only render for non-owners.
-  const renderMobileDownvoteButton = useMemo(
-    () =>
-      !isOwn && (
-        <IconButton {...downvoteButtonProps}>
-          <KeyboardArrowDownOutlined />
-        </IconButton>
-      ),
-    [isOwn, downvoteButtonProps],
+  const renderScore = useMemo(
+    () => (
+      <Typography className={classes.score} variant="subtitle1" color="textSecondary">
+        {score}
+      </Typography>
+    ),
+    [score, classes.score],
   );
 
   const renderInputArea = useMemo(
@@ -641,11 +537,11 @@ const ThreadPage: NextPage = () => {
     () => (
       <Grid className={classes.commentsHeader} container alignItems="center">
         <Typography variant="body2" color="textSecondary">
-          {t('thread:comments', { commentCount })} {t('thread:sortedBy')} <OrderingButton />
+          {t('thread:sortedBy')} <OrderingButton />
         </Typography>
       </Grid>
     ),
-    [classes.commentsHeader, commentCount, t],
+    [classes.commentsHeader, t],
   );
 
   const renderCreateCommentButton = useMemo(
@@ -706,6 +602,11 @@ const ThreadPage: NextPage = () => {
     commentsLoading,
   ]);
 
+  const renderCommentsError = useMemo(
+    () => !!commentsError && <NotFoundBox text={t('thread:commentsError')} />,
+    [t, commentsError],
+  );
+
   const renderCommentsNotFound = useMemo(() => <NotFoundBox text={t('thread:noComments')} />, [t]);
   const renderCommentTableBody = useMemo(() => <TableBody>{mapComments}</TableBody>, [mapComments]);
 
@@ -723,8 +624,8 @@ const ThreadPage: NextPage = () => {
   );
 
   const renderComments = useMemo(
-    () => renderLoading || renderCommentTable || renderCommentsNotFound,
-    [renderCommentTable, renderCommentsNotFound, renderLoading],
+    () => renderLoading || renderCommentTable || renderCommentsError || renderCommentsNotFound,
+    [renderCommentTable, renderCommentsNotFound, renderCommentsError, renderLoading],
   );
 
   // Only render for verified users.
@@ -734,22 +635,17 @@ const ThreadPage: NextPage = () => {
         <BottomNavigation className={classes.bottomNavigation}>
           <Grid container>
             <Grid item xs={4} container justify="flex-start" alignItems="center">
-              {renderMobileStarButton}
+              {renderStarButton}
             </Grid>
             <Grid item xs={8} container justify="flex-end" alignItems="center">
-              {renderMobileUpvoteButton}
-              {renderMobileDownvoteButton}
+              {renderVoteButton('upvote')}
+              {renderScore}
+              {renderVoteButton('downvote')}
             </Grid>
           </Grid>
         </BottomNavigation>
       ),
-    [
-      renderMobileDownvoteButton,
-      renderMobileStarButton,
-      renderMobileUpvoteButton,
-      verified,
-      classes.bottomNavigation,
-    ],
+    [renderVoteButton, renderStarButton, verified, classes.bottomNavigation, renderScore],
   );
 
   const renderHeaderTitle = useMemo(
@@ -759,10 +655,10 @@ const ThreadPage: NextPage = () => {
         variant="h5"
         align="left"
       >
-        {title} ({score})
+        {title}
       </Typography>
     ),
-    [classes.headerTitle, title, score],
+    [classes.headerTitle, title],
   );
 
   const renderMobileTitle = useMemo(
@@ -773,6 +669,43 @@ const ThreadPage: NextPage = () => {
         </Typography>
       ),
     [title, smDown],
+  );
+
+  const renderDesktopVoteButtonsSection = useMemo(
+    () =>
+      mdUp && (
+        <Grid item xs={1} container>
+          <CardContent className={classes.threadInfoCardContent}>
+            <Grid item container direction="column" justify="center" alignItems="center">
+              {renderVoteButton('upvote')}
+              {renderScore}
+              {renderVoteButton('downvote')}
+            </Grid>
+          </CardContent>
+        </Grid>
+      ),
+    [classes.threadInfoCardContent, mdUp, renderVoteButton, renderScore],
+  );
+
+  const renderText = useMemo(
+    () => (
+      <Typography className={classes.threadText} variant="body2">
+        <MarkdownContent>{text}</MarkdownContent>
+      </Typography>
+    ),
+    [classes.threadText, text],
+  );
+
+  const renderTitleAndTextSection = useMemo(
+    () => (
+      <Grid item xs={9} md={8} container direction="column" wrap="nowrap">
+        <CardContent className={classes.threadInfoCardContent}>
+          {renderMobileTitle}
+          {renderText}
+        </CardContent>
+      </Grid>
+    ),
+    [classes.threadInfoCardContent, renderMobileTitle, renderText],
   );
 
   const renderImageThumbnail = useMemo(
@@ -794,13 +727,22 @@ const ThreadPage: NextPage = () => {
     [classes.imageThumbnail, imageThumbnail, t, image, setThreadImageViewerValue],
   );
 
-  const renderText = useMemo(
+  const renderImageSection = useMemo(
     () => (
-      <Typography className={classes.threadText} variant="body2">
-        <MarkdownContent>{text}</MarkdownContent>
-      </Typography>
+      <Grid className={classes.imageThumbnailContainer} item xs={3} container justify="flex-end">
+        <CardContent
+          className={clsx(classes.threadInfoCardContent, classes.threadImageCardContent)}
+        >
+          {renderImageThumbnail}
+        </CardContent>
+      </Grid>
     ),
-    [classes.threadText, text],
+    [
+      classes.imageThumbnailContainer,
+      classes.threadImageCardContent,
+      classes.threadInfoCardContent,
+      renderImageThumbnail,
+    ],
   );
 
   const renderCreatorLink = useMemo(
@@ -813,12 +755,6 @@ const ThreadPage: NextPage = () => {
     renderCreatorLink,
     t,
   ]);
-
-  const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
-  const diamondBadges = badges.filter((b) => b.tier === BadgeTier.Diamond);
-  const goldBadges = badges.filter((b) => b.tier === BadgeTier.Gold);
-  const silverBadges = badges.filter((b) => b.tier === BadgeTier.Silver);
-  const bronzeBadges = badges.filter((b) => b.tier === BadgeTier.Bronze);
 
   const renderBadgeTierIcon = useCallback(
     (tier: BadgeTier) => <BadgeTierIcon tier={tier} className={classes.badgeTierIcon} />,
@@ -869,88 +805,84 @@ const ThreadPage: NextPage = () => {
     [bronzeBadges.length, renderBadgeTierIcon],
   );
 
-  const renderCreatorInfo = useMemo(
+  const renderCreatorInfoAndStatsSection = useMemo(
     () => (
-      <>
-        <Typography className={classes.creatorInfo} variant="body2" color="textSecondary">
-          {renderCreator} {t('common:created')} {creationTime}
-        </Typography>
-        <Grid container alignItems="center">
-          <Typography
-            className={clsx(classes.creatorInfoText, classes.creatorScore)}
-            variant="body2"
-          >
-            {creatorScore}
-          </Typography>
-          <Typography className={classes.creatorInfoText} variant="body2" color="textSecondary">
-            {renderDiamondBadgeCount} {renderGoldBadgeCount} {renderSilverBadgeCount}{' '}
-            {renderBronzeBadgeCount}
-          </Typography>
-        </Grid>
-      </>
-    ),
-    [
-      creationTime,
-      renderCreator,
-      t,
-      classes.creatorInfo,
-      classes.creatorInfoText,
-      classes.creatorScore,
-      renderBronzeBadgeCount,
-      renderDiamondBadgeCount,
-      renderGoldBadgeCount,
-      renderSilverBadgeCount,
-      creatorScore,
-    ],
-  );
-
-  const renderThreadInfo = useMemo(
-    () => (
-      <Grid container wrap="nowrap">
-        <Grid item xs={9} container direction="column" wrap="nowrap">
+      <Grid item xs={12} container>
+        <Grid item xs={12} md={6}>
           <CardContent className={classes.threadInfoCardContent}>
-            {renderMobileTitle}
-            {renderText}
-            {renderCreatorInfo}
+            <Typography variant="body2" color="textSecondary">
+              {renderCreator} {t('common:created')} {creationTime}
+            </Typography>
+            <Grid container alignItems="center">
+              <Typography
+                className={clsx(classes.creatorInfoText, classes.creatorScore)}
+                variant="body2"
+                color="textSecondary"
+              >
+                {creatorScore}
+              </Typography>
+              <Typography className={classes.creatorInfoText} variant="body2" color="textSecondary">
+                {renderDiamondBadgeCount} {renderGoldBadgeCount} {renderSilverBadgeCount}{' '}
+                {renderBronzeBadgeCount}
+              </Typography>
+            </Grid>
           </CardContent>
         </Grid>
-        <Grid className={classes.imageThumbnailContainer} item xs={3} container justify="flex-end">
-          <CardContent
-            className={clsx(classes.threadInfoCardContent, classes.threadImageCardContent)}
-          >
-            {renderImageThumbnail}
+        <Grid item xs={12} md={6} container alignItems="flex-end">
+          <CardContent className={classes.threadInfoCardContent}>
+            <Typography variant="body2" color="textSecondary" align={smDown ? 'left' : 'right'}>
+              {t('thread:views', { views })} | {t('thread:comments', { commentCount })} |{' '}
+              {t('thread:stars', { stars })}
+            </Typography>
           </CardContent>
         </Grid>
       </Grid>
     ),
     [
+      classes.creatorInfoText,
+      classes.creatorScore,
       classes.threadInfoCardContent,
-      classes.imageThumbnailContainer,
-      classes.threadImageCardContent,
-      renderMobileTitle,
-      renderText,
-      renderCreatorInfo,
-      renderImageThumbnail,
+      creationTime,
+      creatorScore,
+      renderBronzeBadgeCount,
+      renderCreator,
+      renderDiamondBadgeCount,
+      renderGoldBadgeCount,
+      renderSilverBadgeCount,
+      t,
+      stars,
+      smDown,
+      commentCount,
+      views,
+    ],
+  );
+
+  const renderThreadInfo = useMemo(
+    () => (
+      <Grid container>
+        {renderDesktopVoteButtonsSection}
+        {renderTitleAndTextSection}
+        {renderImageSection}
+        {renderCreatorInfoAndStatsSection}
+      </Grid>
+    ),
+    [
+      renderCreatorInfoAndStatsSection,
+      renderDesktopVoteButtonsSection,
+      renderImageSection,
+      renderTitleAndTextSection,
     ],
   );
 
   const renderHeaderAction = useMemo(
     () => (
       <Grid className="MuiCardHeader-action" container alignItems="center">
-        {renderDesktopStarButton}
-        {renderDesktopUpvoteButton}
-        {renderDesktopDownvoteButton}
+        {renderStarButton}
         {renderShareButton}
         {renderActionsButton}
       </Grid>
     ),
-    [
-      renderActionsButton,
-      renderShareButton,
-      renderDesktopDownvoteButton,
-      renderDesktopStarButton,
-      renderDesktopUpvoteButton,
-    ],
+    [renderActionsButton, renderShareButton, renderStarButton],
   );
 
   const renderHeader = useMemo(

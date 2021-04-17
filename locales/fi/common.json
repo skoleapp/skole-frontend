@@ -76,5 +76,7 @@
   "primaryEmailDialogText": "Rajoitamme tällä hetkellä pääsyä vain valittujen yliopistojen opiskelijoille. Sallitut päätteet ensijaiselle sähköpostiosoitteellesi ovat:",
   "gotIt": "Ymmärsin!",
   "create": "Luo",
-  "posted": "lähetti"
+  "posted": "lähetti",
+  "votePromptDialogHeader": "Hups!",
+  "votePromptDialogText": "Et voi äänestää omaa sisältöäsi!"
 }

@@ -113,3 +113,9 @@ export interface InviteContextType {
   handleOpenCustomInviteDialog: () => void;
   handleCloseCustomInviteDialog: () => void;
 }
+
+export interface VoteContextType {
+  votePromptOpen: boolean;
+  handleOpenVotePrompt: () => void;
+  handleCloseVotePrompt: () => void;
+}
