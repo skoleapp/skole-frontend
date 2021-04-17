@@ -143,6 +143,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
   const creatorSlug = R.prop('slug', creator);
   const isOwn = R.prop('isOwn', comment);
+  const file = R.prop('file', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
   const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
@@ -404,6 +405,16 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     [classes.icon, classes.replyCount, replyCount, t, topComment],
   );
 
+  const renderFileLink = useMemo(
+    () =>
+      file && (
+        <TextLink href={mediaUrl(file)} target="_blank" rel="noreferrer">
+          {t('thread:viewFile')}
+        </TextLink>
+      ),
+    [t, file],
+  );
+
   const renderActionsButton = useMemo(
     () => (
       <Tooltip title={t('thread-tooltips:commentActions')}>
@@ -480,13 +491,14 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
           </Grid>
         </Grid>
         <Grid container alignItems="center">
-          <Grid item xs={4}>
+          <Grid item xs={5} container alignItems="center" wrap="nowrap">
             {renderReplyCount}
+            {renderFileLink}
           </Grid>
-          <Grid item xs={4} container justify="center">
+          <Grid item xs={2} container justify="center">
             {renderActionsButton}
           </Grid>
-          <Grid item xs={4} />
+          <Grid item xs={5} />
         </Grid>
       </CardContent>
     ),
@@ -499,6 +511,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
       renderVoteButton,
       renderActionsButton,
       renderReplyCount,
+      renderFileLink,
     ],
   );
 

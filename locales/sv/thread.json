@@ -14,5 +14,6 @@
   "shareCommentTitle": "{{ creatorUsername }} på Skole",
   "shareComment": "Dela kommentar",
   "postingComment": "Skickar kommentar...",
-  "inviteDialogText": "är igång! Låt dina vänner veta om det genom att bjuda in dem!"
+  "inviteDialogText": "är igång! Låt dina vänner veta om det genom att bjuda in dem!",
+  "viewFile": "Visa fil"
 }

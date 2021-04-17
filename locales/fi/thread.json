@@ -14,5 +14,6 @@
   "shareCommentTitle": "{{ creatorUsername }} Skolessa",
   "shareComment": "Jaa kommentti",
   "postingComment": "Lähetetään kommenttia...",
-  "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!"
+  "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!",
+  "viewFile": "Näytä tiedosto"
 }
