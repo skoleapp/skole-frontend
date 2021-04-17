@@ -67,7 +67,7 @@
   "createThread": "Luo lanka",
   "linkCopied": "Linkki kopioitu leikepöydälle!",
   "inviteDialogHeader": "Kutsu kavereita!",
-  "inviteDialogText": "Voit käyttää henkilökohtaista kutsukoodiasi päästääksesi kaverisi Skoleen myös! Koodillasi on {{ inviteCodeUsages }} jäljellä.",
+  "inviteDialogText": "Voit käyttää henkilökohtaista kutsukoodiasi päästääksesi kaverisi Skoleen myös! Koodillasi on {{ inviteCodeUsages }} käyttökertaa jäljellä.",
   "inviteDialogCodeText": "Tässä on kutsukoodisi:",
   "inviteShareDialogHeader": "Kutsu kavereita!",
   "inviteTitle": "Ystäväsi {{ username }} kutsui sinut Skoleen",
