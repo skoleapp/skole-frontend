@@ -258,6 +258,7 @@ fragment userFields on UserObjectType {
   unreadActivityCount
   threadCount
   commentCount
+  views
   created
   modified
   fcmTokens

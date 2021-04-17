@@ -244,6 +244,7 @@ const ProfilePage: NextPage = () => {
   const isOwnProfile = !!user?.id && userMe?.id === user.id;
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
   const threadCount = R.propOr(0, 'threadCount', user);
+  const views = R.propOr(0, 'views', user);
   const commentCount = R.propOr(0, 'commentCount', user);
   const threads = R.pathOr([], ['threads', 'objects'], threadsData);
   const threadsPaginationCount = R.pathOr(0, ['threads', 'count'], threadsData);
@@ -466,6 +467,15 @@ const ProfilePage: NextPage = () => {
     [t],
   );
 
+  const renderViewsTitle = useMemo(
+    () => (
+      <Typography variant="body2" color="textSecondary">
+        {t('profile:views')}
+      </Typography>
+    ),
+    [t],
+  );
+
   const renderScoreValue = useMemo(
     () => (
       <Typography variant="subtitle2" className={classes.statValue}>
@@ -482,6 +492,15 @@ const ProfilePage: NextPage = () => {
       </Typography>
     ),
     [classes.statValue, threadCount],
+  );
+
+  const renderViewsValue = useMemo(
+    () => (
+      <Typography variant="subtitle2" className={classes.statValue}>
+        {views}
+      </Typography>
+    ),
+    [classes.statValue, views],
   );
 
   const renderBio = useMemo(
@@ -771,13 +790,17 @@ const ProfilePage: NextPage = () => {
         className={clsx(classes.statsContainer, isOwnProfile && classes.ownProfileStatsContainer)}
         alignItems="center"
       >
-        <Grid item xs={6} container direction={statsDirection}>
+        <Grid item xs={4} container direction={statsDirection}>
           {renderScoreValue}
           {renderScoreTitle}
         </Grid>
-        <Grid item xs={6} container direction={statsDirection}>
+        <Grid item xs={4} container direction={statsDirection}>
           {renderThreadCountValue}
           {renderThreadCountTitle}
+        </Grid>
+        <Grid item xs={4} container direction={statsDirection}>
+          {renderViewsValue}
+          {renderViewsTitle}
         </Grid>
       </Grid>
     ),
@@ -788,6 +811,8 @@ const ProfilePage: NextPage = () => {
       renderScoreValue,
       renderThreadCountTitle,
       renderThreadCountValue,
+      renderViewsTitle,
+      renderViewsValue,
       statsDirection,
       isOwnProfile,
     ],
