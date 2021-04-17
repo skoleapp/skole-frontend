@@ -2,8 +2,6 @@
 title: Score
 ---
 
-The most important activities on Skole are adding comments and creating threads, which are available for all users.
-
 Your score in Skole is a rough measurement of how much the other students trust your and like your content. Points are earned by gaining upvotes on from threads and comments. The higher your score is, the more other users trust you and the content you share. By increasing your score you will gain certain privileges such as badges that are given only for users with high enough score.
 
 ### How do I increase my score? 🤔

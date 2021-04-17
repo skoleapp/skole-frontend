@@ -2,8 +2,6 @@
 title: Pisteet
 ---
 
-Tärkeimmät Skole-toiminnot ovat kommenttien lisääminen ja ketjujen luominen, jotka ovat kaikkien käyttäjien käytettävissä.
-
 Skolen pisteet ovat karkea mittaus siitä, kuinka paljon muut opiskelijat luottavat sinun sisältösi ja pitävät siitä. Pisteitä ansaitaan saamalla ääniä ketjuista ja kommenteista. Mitä korkeammat pisteet sinulla on, sitä enemmän muut käyttäjät luottavat sinuun ja jakamaasi sisältöön. Lisäämällä pisteitäsi saat tiettyjä etuoikeuksia, kuten merkkejä, joita annetaan vain käyttäjille, joilla on riittävän korkeat pisteet.
 
 ### Kuinka voin lisätä pisteitäni? 🤔
