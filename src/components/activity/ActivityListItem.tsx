@@ -65,6 +65,8 @@ export const ActivityListItem: React.FC<Props> = ({
 
     if (comment?.thread) {
       pathname = urls.thread(comment.thread.slug || '');
+    } else if (comment?.comment?.thread) {
+      pathname = urls.thread(comment.thread?.slug || '');
     } else if (badgeProgress) {
       pathname = profileUrl;
     }
