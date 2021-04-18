@@ -110,18 +110,18 @@ export const ActivityListItem: React.FC<Props> = ({
     [causingUser],
   );
 
-  const renderCommunityUser = useMemo(
+  const renderAnonymousStudent = useMemo(
     () =>
       !!comment && (
         <Typography variant="body2" color="textSecondary">
-          {t('common:communityUser')}
+          {t('common:anonymousStudent')}
         </Typography>
       ),
     [comment, t],
   );
 
-  const renderTargetUserLink = useMemo(() => renderUserLink || renderCommunityUser, [
-    renderCommunityUser,
+  const renderTargetUserLink = useMemo(() => renderUserLink || renderAnonymousStudent, [
+    renderAnonymousStudent,
     renderUserLink,
   ]);
 

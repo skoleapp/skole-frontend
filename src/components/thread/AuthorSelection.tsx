@@ -49,7 +49,7 @@ export const AuthorSelection = <T extends FormikValues>({
     handleCloseAuthorSelection();
   };
 
-  const handleAnonymousMenuItemClick = (): void => {
+  const handleAnonymousStudentMenuItemClick = (): void => {
     setFieldValue('user', null);
     handleCloseAuthorSelection();
   };
@@ -60,14 +60,14 @@ export const AuthorSelection = <T extends FormikValues>({
     </Typography>
   ) : (
     <Typography variant="body2" align="left" color="textSecondary">
-      {t('common:communityUser')}
+      {t('common:anonymousStudent')}
     </Typography>
   );
 
   const renderAuthorSelectionText = (
     <Typography variant="body2" color="textSecondary">
       <Grid container alignItems="center">
-        {user ? t('common:postWithAccount') : t('common:postAsAnonymous')}
+        {user ? t('common:postWithAccount') : t('common:postAsAnonymousStudent')}
       </Grid>
     </Typography>
   );
@@ -87,12 +87,12 @@ export const AuthorSelection = <T extends FormikValues>({
     </MenuItem>
   );
 
-  const renderAnonymousMenuItem = (
-    <MenuItem onClick={handleAnonymousMenuItemClick}>
+  const renderAnonymousStudentMenuItem = (
+    <MenuItem onClick={handleAnonymousStudentMenuItemClick}>
       <ListItemIcon>
         <DeviceUnknownOutlined />
       </ListItemIcon>
-      <ListItemText>{t('common:postAsAnonymous')}</ListItemText>
+      <ListItemText>{t('common:postAsAnonymousStudent')}</ListItemText>
     </MenuItem>
   );
 
@@ -115,7 +115,7 @@ export const AuthorSelection = <T extends FormikValues>({
   const renderListItems = (
     <List>
       {renderAuthenticatedMenuItem}
-      {renderAnonymousMenuItem}
+      {renderAnonymousStudentMenuItem}
     </List>
   );
 

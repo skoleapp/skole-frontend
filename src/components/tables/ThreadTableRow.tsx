@@ -121,7 +121,7 @@ export const ThreadTableRow: React.FC<Props> = ({
     () => (
       <TableCell className={clsx(classes.tableCell, classes.creatorInfoTableCell)}>
         <Typography variant="body2" color="textSecondary">
-          {t('common:createdBy')} {renderUserLink || t('common:communityUser')} {created}
+          {t('common:createdBy')} {renderUserLink || t('common:anonymousStudent')} {created}
         </Typography>
       </TableCell>
     ),
