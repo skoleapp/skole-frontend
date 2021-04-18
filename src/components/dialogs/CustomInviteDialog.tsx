@@ -88,8 +88,8 @@ export const CustomInviteDialog: React.FC<Props> = ({
 
   const handleClickCopyCodeButton = useCallback((): void => {
     toggleNotification(t('common:inviteCodeCopied'));
-    navigator.clipboard.writeText(inviteCode);
-  }, [inviteCode, t, toggleNotification]);
+    navigator.clipboard.writeText(customLink);
+  }, [customLink, t, toggleNotification]);
 
   const renderInviteCodeText = useMemo(
     () =>
