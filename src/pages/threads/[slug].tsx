@@ -1,6 +1,4 @@
 import BottomNavigation from '@material-ui/core/BottomNavigation';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -159,11 +157,8 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   commentsHeader: {
     padding: spacing(2),
     [breakpoints.up('md')]: {
-      padding: `${spacing(2)} ${spacing(4)}`,
+      padding: `${spacing(2)} ${spacing(3)}`,
     },
-  },
-  replyButtonContainer: {
-    padding: spacing(2),
   },
   createCommentButton: {
     position: 'fixed',
@@ -439,8 +434,8 @@ const ThreadPage: NextPage = () => {
     [handleDeleteThread, isOwn, shareDialogParams, t, verified],
   );
 
-  const handleClickReplyButton = useMemo(
-    () => (comment: CommentObjectType) => (): void => {
+  const handleClickReplyButton = useCallback(
+    (comment: CommentObjectType): void => {
       setCreateCommentDialogOpen(true);
       setTargetComment(comment);
       setTargetThread(null);
@@ -564,10 +559,11 @@ const ThreadPage: NextPage = () => {
         comment={comment}
         onCommentDeleted={silentlyRefreshThread}
         topComment
+        handleClickReplyButton={handleClickReplyButton}
         key={comment.id}
       />
     ),
-    [silentlyRefreshThread],
+    [silentlyRefreshThread, handleClickReplyButton],
   );
 
   const mapReplyComments = useCallback(
@@ -578,29 +574,15 @@ const ThreadPage: NextPage = () => {
     [silentlyRefreshThread],
   );
 
-  const renderReplyButton = useCallback(
-    (comment: CommentObjectType): JSX.Element => (
-      <Box className={classes.replyButtonContainer}>
-        <Button onClick={handleClickReplyButton(comment)} variant="text" fullWidth>
-          {t('forms:replyTo', {
-            username: comment.user?.username?.toString() || t('common:anonymousStudent'),
-          })}
-        </Button>
-      </Box>
-    ),
-    [classes.replyButtonContainer, t, handleClickReplyButton],
-  );
-
   const mapComments = useMemo(
     () =>
       comments.map((tc) => (
         <>
           {renderTopComment(tc)}
           {mapReplyComments(tc)}
-          {renderReplyButton(tc)}
         </>
       )),
-    [comments, mapReplyComments, renderReplyButton, renderTopComment],
+    [comments, mapReplyComments, renderTopComment],
   );
 
   const renderLoading = useMemo(() => commentsLoading && <SkeletonCommentList />, [

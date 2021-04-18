@@ -78,5 +78,8 @@
   "create": "Skapa",
   "posted": "skrev",
   "votePromptDialogHeader": "Oj!",
-  "votePromptDialogText": "Att rösta ditt eget innehåll är inte tillåtet!"
+  "votePromptDialogText": "Att rösta ditt eget innehåll är inte tillåtet!",
+  "dela": "Dela",
+  "delete": "Radera",
+  "reply": "Svara"
 }

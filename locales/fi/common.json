@@ -78,5 +78,8 @@
   "create": "Luo",
   "posted": "lähetti",
   "votePromptDialogHeader": "Hups!",
-  "votePromptDialogText": "Et voi äänestää omaa sisältöäsi!"
+  "votePromptDialogText": "Et voi äänestää omaa sisältöäsi!",
+  "share": "Jaa",
+  "delete": "Poista",
+  "reply": "Vastaa"
 }

@@ -15,5 +15,6 @@
   "shareComment": "Jaa kommentti",
   "postingComment": "Lähetetään kommenttia...",
   "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!",
-  "viewFile": "Näytä tiedosto"
+  "viewFile": "Näytä tiedosto",
+  "commentReplies": "{{ replyCount }} vastausta"
 }

@@ -1,13 +1,10 @@
 {
   "share": "Dela den här tråden.",
-  "threadActions": "Visa trådmeny.",
   "threadImage": "Visa trådbild.",
-  "shareComment": "Dela den här kommentaren.",
   "commentActions": "Visa kommentarmenyn.",
   "commentImage": "Visa kommentarens bild.",
   "addCommentImage": "Lägg till en bild.",
   "clearCommentImage": "Rensa bilden.",
-  "commentReplies": "{{ replyCount }} svarar.",
   "sendMessage": "Skicka meddelande.",
   "upvote": "Upprösta.",
   "removeUpvote": "Ta bort upprösten.",
