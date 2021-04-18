@@ -12,6 +12,12 @@ fragment activityFields on ActivityObjectType {
     thread {
       slug
     }
+    comment {
+        id
+        thread {
+            slug
+        }
+    }
   }
   badgeProgress {
     badge {
