@@ -140,7 +140,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const replyCount = replyComments.length;
   const { setCommentImageViewerValue } = useThreadContext();
   const creator: UserFieldsFragment = R.prop('user', comment);
-  const creatorUsername = R.propOr(t('common:communityUser'), 'username', creator);
+  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', creator);
   const creatorSlug = R.prop('slug', creator);
   const isOwn = R.prop('isOwn', comment);
   const file = R.prop('file', comment);
@@ -244,7 +244,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
           {creatorUsername}
         </TextLink>
       ) : (
-        t('common:communityUser')
+        t('common:anonymousStudent')
       ),
     [comment.user, creatorSlug, creatorUsername, t, classes.userLink],
   );

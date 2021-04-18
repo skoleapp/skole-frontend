@@ -253,7 +253,7 @@ const ThreadPage: NextPage = () => {
   const creatorScore = R.prop('score', creator);
   const isOwn = !!creator && userMe?.id === creator.id;
   const created = R.prop('created', thread);
-  const creatorUsername = R.propOr(t('common:communityUser'), 'username', thread);
+  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', thread);
   const [targetComment, setTargetComment] = useState<CommentObjectType | null>(null);
   const [targetThread, setTargetThread] = useState<ThreadObjectType | null>(null);
   const { dynamicPrimaryColor } = useDarkModeContext();
@@ -452,7 +452,7 @@ const ThreadPage: NextPage = () => {
     () =>
       (!!targetComment &&
         t('forms:replyTo', {
-          username: targetComment.user?.username || t('common:communityUser'),
+          username: targetComment.user?.username || t('common:anonymousStudent'),
         })) ||
       t('forms:postTo', { title }),
     [targetComment, t, title],
@@ -559,16 +559,21 @@ const ThreadPage: NextPage = () => {
   );
 
   const renderTopComment = useCallback(
-    (comment: CommentObjectType, i: number): JSX.Element => (
-      <CommentCard comment={comment} onCommentDeleted={silentlyRefreshThread} topComment key={i} />
+    (comment: CommentObjectType): JSX.Element => (
+      <CommentCard
+        comment={comment}
+        onCommentDeleted={silentlyRefreshThread}
+        topComment
+        key={comment.id}
+      />
     ),
     [silentlyRefreshThread],
   );
 
   const mapReplyComments = useCallback(
-    (tc: CommentObjectType, i: number): JSX.Element[] =>
+    (tc: CommentObjectType): JSX.Element[] =>
       tc.replyComments.map((rc) => (
-        <CommentCard comment={rc} onCommentDeleted={silentlyRefreshThread} key={i} />
+        <CommentCard comment={rc} onCommentDeleted={silentlyRefreshThread} key={rc.id} />
       )),
     [silentlyRefreshThread],
   );
@@ -578,7 +583,7 @@ const ThreadPage: NextPage = () => {
       <Box className={classes.replyButtonContainer}>
         <Button onClick={handleClickReplyButton(comment)} variant="text" fullWidth>
           {t('forms:replyTo', {
-            username: comment.user?.username?.toString() || t('common:communityUser'),
+            username: comment.user?.username?.toString() || t('common:anonymousStudent'),
           })}
         </Button>
       </Box>
@@ -588,10 +593,10 @@ const ThreadPage: NextPage = () => {
 
   const mapComments = useMemo(
     () =>
-      comments.map((tc, i) => (
+      comments.map((tc) => (
         <>
-          {renderTopComment(tc, i)}
-          {mapReplyComments(tc, i)}
+          {renderTopComment(tc)}
+          {mapReplyComments(tc)}
           {renderReplyButton(tc)}
         </>
       )),
@@ -750,11 +755,10 @@ const ThreadPage: NextPage = () => {
     [creator],
   );
 
-  const renderCreator = useMemo(() => (creator ? renderCreatorLink : t('common:communityUser')), [
-    creator,
-    renderCreatorLink,
-    t,
-  ]);
+  const renderCreator = useMemo(
+    () => (creator ? renderCreatorLink : t('common:anonymousStudent')),
+    [creator, renderCreatorLink, t],
+  );
 
   const renderBadgeTierIcon = useCallback(
     (tier: BadgeTier) => <BadgeTierIcon tier={tier} className={classes.badgeTierIcon} />,

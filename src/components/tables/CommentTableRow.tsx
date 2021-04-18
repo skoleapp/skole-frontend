@@ -143,7 +143,7 @@ export const CommentTableRow: React.FC<Props> = ({
     () => (
       <TableCell className={clsx(classes.tableCell, classes.creatorInfoTableCell)}>
         <Typography variant="body2" color="textSecondary">
-          {t('common:postedBy')} {renderUserLink || t('common:communityUser')} {created}
+          {t('common:postedBy')} {renderUserLink || t('common:anonymousStudent')} {created}
           {renderDesktopThreadLink}
         </Typography>
       </TableCell>
