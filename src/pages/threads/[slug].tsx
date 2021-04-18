@@ -559,16 +559,21 @@ const ThreadPage: NextPage = () => {
   );
 
   const renderTopComment = useCallback(
-    (comment: CommentObjectType, i: number): JSX.Element => (
-      <CommentCard comment={comment} onCommentDeleted={silentlyRefreshThread} topComment key={i} />
+    (comment: CommentObjectType): JSX.Element => (
+      <CommentCard
+        comment={comment}
+        onCommentDeleted={silentlyRefreshThread}
+        topComment
+        key={comment.id}
+      />
     ),
     [silentlyRefreshThread],
   );
 
   const mapReplyComments = useCallback(
-    (tc: CommentObjectType, i: number): JSX.Element[] =>
+    (tc: CommentObjectType): JSX.Element[] =>
       tc.replyComments.map((rc) => (
-        <CommentCard comment={rc} onCommentDeleted={silentlyRefreshThread} key={i} />
+        <CommentCard comment={rc} onCommentDeleted={silentlyRefreshThread} key={rc.id} />
       )),
     [silentlyRefreshThread],
   );
@@ -588,10 +593,10 @@ const ThreadPage: NextPage = () => {
 
   const mapComments = useMemo(
     () =>
-      comments.map((tc, i) => (
+      comments.map((tc) => (
         <>
-          {renderTopComment(tc, i)}
-          {mapReplyComments(tc, i)}
+          {renderTopComment(tc)}
+          {mapReplyComments(tc)}
           {renderReplyButton(tc)}
         </>
       )),
