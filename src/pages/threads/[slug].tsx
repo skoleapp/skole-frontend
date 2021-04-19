@@ -129,6 +129,7 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
   threadText: {
     flexGrow: 1,
+    fontSize: '0.95rem',
   },
   imageThumbnailContainer: {
     [breakpoints.up('md')]: {
