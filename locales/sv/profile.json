@@ -13,6 +13,6 @@
   "verificationRequiredThreads": "Verifiera ditt konto för att se trådar.",
   "verificationRequiredComments": "Verifiera ditt konto för att se kommentarer.",
   "shareHeader": "Dela profil",
-  "shareText": "{{ threadCount }} trådar. {{ commentCount }} kommentarer.",
+  "shareText": "Kolla in profilen för {{ username }} - {{ threadCount }} trådar - {{ commentCount }} kommentarer.",
   "share": "Dela profil"
 }
