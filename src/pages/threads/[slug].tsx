@@ -257,7 +257,7 @@ const ThreadPage: NextPage = () => {
   const creatorScore = R.prop('score', creator);
   const isOwn = !!creator && userMe?.id === creator.id;
   const created = R.prop('created', thread);
-  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', thread);
+  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', creator);
   const [targetComment, setTargetComment] = useState<CommentObjectType | null>(null);
   const [targetThread, setTargetThread] = useState<ThreadObjectType | null>(null);
   const { dynamicPrimaryColor } = useDarkModeContext();
