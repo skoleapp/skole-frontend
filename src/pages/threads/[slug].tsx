@@ -742,7 +742,7 @@ const ThreadPage: NextPage = () => {
   );
 
   const renderCreatorLink = useMemo(
-    () => !!creator && <TextLink href={urls.user(creator.slu)}>{creator.username}</TextLink>,
+    () => !!creator && <TextLink href={urls.user(creator.slug)}>{creator.username}</TextLink>,
     [creator],
   );
 
