@@ -11,7 +11,6 @@ import { useAuthContext, useNotificationsContext, useShareContext } from 'contex
 import { useTranslation } from 'lib';
 import React, { useCallback, useMemo } from 'react';
 import { useMediaQueries } from 'styles';
-import { SLOGAN } from 'utils';
 
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
@@ -51,8 +50,8 @@ export const CustomInviteDialog: React.FC<Props> = ({
   const { handleOpenShareDialog } = useShareContext();
   const { toggleNotification } = useNotificationsContext();
   const { username } = useAuthContext();
-  const title = t('common:inviteTitle', { username });
-  const text = SLOGAN;
+  const title = 'Skole';
+  const text = t('common:inviteText', { username });
   const customLink = `${process.env.FRONTEND_URL}?code=${inviteCode}`;
 
   const shareDialogParams = useMemo(
