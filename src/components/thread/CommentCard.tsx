@@ -40,9 +40,13 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     boxShadow: 'none',
   },
   replyComment: {
+    paddingLeft: spacing(4),
+  },
+  replyCommentBorder: {
     borderLeft: `${spacing(1)} solid ${
       palette.type === 'dark' ? palette.secondary.main : palette.primary.main
     }`,
+    paddingLeft: spacing(2),
   },
   cardHeaderRoot: {
     textAlign: 'left',
@@ -440,7 +444,13 @@ export const CommentCard: React.FC<Props> = ({
   return (
     <Card ref={commentRef} className={clsx(classes.root, !topComment && classes.replyComment)}>
       <Grid container>
-        <Grid item xs={10} sm={11} container>
+        <Grid
+          className={clsx(!topComment && classes.replyCommentBorder)}
+          item
+          xs={10}
+          sm={11}
+          container
+        >
           <CardHeader
             classes={{
               root: classes.cardHeaderRoot,
