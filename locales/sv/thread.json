@@ -6,7 +6,7 @@
   "views": "{{ views }} visningar",
   "sortedBy": "Sorterade efter",
   "shareHeader": "Dela tråd",
-  "shareText": "Skapad av {{ creatorUsername }}. {{ commentCount }} kommentarer.",
+  "shareText": "Kolla in {{ title }} av {{ creatorUsername }} - {{ commentCount }} kommentarer.",
   "deleteThread": "Radera tråd",
   "confirmDeleteThread": "Är du säker på att du vill ta bort den här tråden?",
   "deleteComment": "Radera kommentar",

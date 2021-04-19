@@ -257,7 +257,7 @@ const ThreadPage: NextPage = () => {
   const creatorScore = R.prop('score', creator);
   const isOwn = !!creator && userMe?.id === creator.id;
   const created = R.prop('created', thread);
-  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', thread);
+  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', creator);
   const [targetComment, setTargetComment] = useState<CommentObjectType | null>(null);
   const [targetThread, setTargetThread] = useState<ThreadObjectType | null>(null);
   const { dynamicPrimaryColor } = useDarkModeContext();
@@ -403,7 +403,7 @@ const ThreadPage: NextPage = () => {
     () => ({
       header: t('thread:shareHeader'),
       title: `${title} 💬`,
-      text: t('thread:shareText', { creatorUsername, commentCount }),
+      text: t('thread:shareText', { title, creatorUsername, commentCount }),
     }),
     [t, title, creatorUsername, commentCount],
   );
@@ -742,7 +742,7 @@ const ThreadPage: NextPage = () => {
   );
 
   const renderCreatorLink = useMemo(
-    () => !!creator && <TextLink href={urls.user(creator.slu)}>{creator.username}</TextLink>,
+    () => !!creator && <TextLink href={urls.user(creator.slug)}>{creator.username}</TextLink>,
     [creator],
   );
 

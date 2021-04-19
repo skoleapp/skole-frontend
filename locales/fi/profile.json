@@ -13,6 +13,6 @@
   "verificationRequiredThreads": "Vahvista tilisi nähdäksesi langat.",
   "verificationRequiredComments": "Vahvista tilisi nähdäksesi kommentit.",
   "shareHeader": "Jaa profiili",
-  "shareText": "{{ threadCount }} lankaa. {{ commentCount }} kommenttia.",
+  "shareText": "Katso käyttäjän {{ username }} profiili - {{ threadCount }} lankaa - {{ commentCount }} kommenttia.",
   "share": "Jaa profiili"
 }

@@ -277,7 +277,7 @@ const ProfilePage: NextPage = () => {
     () => ({
       header: t('profile:shareHeader'),
       title: `${username} 👤`,
-      text: t('profile:shareText', { threadCount, commentCount }),
+      text: t('profile:shareText', { username, threadCount, commentCount }),
     }),
     [t, username, threadCount, commentCount],
   );

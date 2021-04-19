@@ -13,6 +13,6 @@
   "verificationRequiredThreads": "Verify you account to see threads.",
   "verificationRequiredComments": "Verify you account to see comments.",
   "shareHeader": "Share Profile",
-  "shareText": "{{ threadCount }} threads. {{ commentCount }} comments.",
+  "shareText": "Check profile for {{ username }} - {{ threadCount }} threads - {{ commentCount }} comments.",
   "share": "Share Profile"
 }
