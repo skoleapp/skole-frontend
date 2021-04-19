@@ -59,7 +59,7 @@ export const ThreadTableRow: React.FC<Props> = ({
     imageThumbnail,
     user,
     score,
-    starCount,
+    views,
     commentCount,
     created: _created,
   },
@@ -69,7 +69,7 @@ export const ThreadTableRow: React.FC<Props> = ({
   const classes = useStyles();
   const scoreLabel = t('common:score').toLowerCase();
   const commentsLabel = t('common:comments').toLowerCase();
-  const starsLabel = t('common:stars').toLowerCase();
+  const viewsLabel = t('common:views').toLowerCase();
   const created = useDayjs(_created).startOf('day').fromNow();
 
   const renderTitle = useMemo(
@@ -133,20 +133,11 @@ export const ThreadTableRow: React.FC<Props> = ({
       smDown && (
         <TableCell className={classes.tableCell}>
           <Typography variant="body2" color="textSecondary">
-            {score} {scoreLabel} | {commentCount} {commentsLabel} | {starCount} {starsLabel}
+            {score} {scoreLabel} | {commentCount} {commentsLabel} | {views} {viewsLabel}
           </Typography>
         </TableCell>
       ),
-    [
-      classes.tableCell,
-      commentCount,
-      commentsLabel,
-      score,
-      scoreLabel,
-      smDown,
-      starCount,
-      starsLabel,
-    ],
+    [classes.tableCell, commentCount, commentsLabel, score, scoreLabel, smDown, views, viewsLabel],
   );
 
   const renderDesktopThreadStats = useMemo(
@@ -175,18 +166,18 @@ export const ThreadTableRow: React.FC<Props> = ({
           </Grid>
           <Grid item xs={4} container>
             <Grid item xs={12} container justify="center">
-              <Typography variant="subtitle1">{starCount}</Typography>
+              <Typography variant="subtitle1">{views}</Typography>
             </Grid>
             <Grid item xs={12} container justify="center">
               <Typography variant="body2" color="textSecondary">
-                {starsLabel}
+                {viewsLabel}
               </Typography>
             </Grid>
           </Grid>
         </Grid>
       </TableCell>
     ),
-    [classes.tableCell, commentCount, commentsLabel, score, scoreLabel, starCount, starsLabel],
+    [classes.tableCell, commentCount, commentsLabel, score, scoreLabel, views, viewsLabel],
   );
 
   return (
@@ -194,7 +185,7 @@ export const ThreadTableRow: React.FC<Props> = ({
       <CardActionArea>
         <TableRow className={classes.root}>
           <Grid container>
-            <Grid item xs={12} md={8} lg={9} container wrap="nowrap">
+            <Grid item xs={12} md={8} container wrap="nowrap">
               <Grid
                 className={classes.threadInfoContainer}
                 item
@@ -210,7 +201,7 @@ export const ThreadTableRow: React.FC<Props> = ({
                 {renderImageThumbnail}
               </Grid>
             </Grid>
-            <Grid item xs={12} md={4} lg={3} container>
+            <Grid item xs={12} md={4} container>
               {renderMobileThreadStats || renderDesktopThreadStats}
             </Grid>
           </Grid>
