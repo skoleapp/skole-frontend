@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { MainTemplateProps } from 'types';
-import { SCHOOL_LOGOS, SLOGAN, urls } from 'utils';
+import { isNotNativeApp, SCHOOL_LOGOS, SLOGAN, urls } from 'utils';
 
 import { AppStoreBadge, ButtonLink, Emoji, GooglePlayBadge } from '../shared';
 import { MainTemplate } from './MainTemplate';
@@ -52,6 +52,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     minWidth: '10rem',
     padding: spacing(3),
     marginTop: spacing(8),
+    marginBottom: spacing(8),
   },
   or: {
     marginTop: spacing(4),
@@ -61,7 +62,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
     marginTop: spacing(4),
   },
   appStoreBadgeContainer: {
-    padding: `${spacing(8)} ${spacing(2)}`,
+    paddingBottom: spacing(8),
   },
   appStoreBadgeImageContainer: {
     maxWidth: '25rem',
@@ -151,28 +152,29 @@ export const LandingPageTemplate: React.FC<Props> = ({
   );
 
   const renderAppStoreBadges = useMemo(
-    () => (
-      <Grid
-        className={classes.appStoreBadgeContainer}
-        container
-        justify="center"
-        alignItems="center"
-      >
+    () =>
+      isNotNativeApp && (
         <Grid
-          className={classes.appStoreBadgeImageContainer}
+          className={classes.appStoreBadgeContainer}
           container
           justify="center"
-          spacing={4}
+          alignItems="center"
         >
-          <Grid item xs={6}>
-            <AppStoreBadge />
-          </Grid>
-          <Grid item xs={6}>
-            <GooglePlayBadge />
+          <Grid
+            className={classes.appStoreBadgeImageContainer}
+            container
+            justify="center"
+            spacing={4}
+          >
+            <Grid item xs={6}>
+              <AppStoreBadge />
+            </Grid>
+            <Grid item xs={6}>
+              <GooglePlayBadge />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-    ),
+      ),
     [classes.appStoreBadgeContainer, classes.appStoreBadgeImageContainer],
   );
 
