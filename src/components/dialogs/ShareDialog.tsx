@@ -43,7 +43,7 @@ export const ShareDialog: React.FC = () => {
 
   const url = customLink || `${process.env.FRONTEND_URL}${asPath}${linkSuffix}`;
   const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`; // Does not work from localhost.
-  const whatsAppUrl = `https://api.whatsapp.com/send?text=${url}`;
+  const whatsAppUrl = `https://api.whatsapp.com/send?text=${text} ${url}`;
   const telegramUrl = `https://t.me/share/url?url=${url}&text=${text}`;
   const redditUrl = `https://www.reddit.com/submit?url=${url}&title=${title}`;
   const twitterUrl = `https://twitter.com/share?url=${url}&text=${text}`;

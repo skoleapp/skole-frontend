@@ -1,4 +1,6 @@
+import Avatar from '@material-ui/core/Avatar';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
+import Box from '@material-ui/core/Box';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -71,7 +73,7 @@ import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT, useMediaQueries } from 'styles';
-import { MAX_REVALIDATION_INTERVAL, mediaLoader, urls } from 'utils';
+import { MAX_REVALIDATION_INTERVAL, mediaLoader, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   container: {
@@ -129,11 +131,17 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
   threadText: {
     flexGrow: 1,
+    fontSize: '0.95rem',
   },
   imageThumbnailContainer: {
     [breakpoints.up('md')]: {
       alignItems: 'center',
     },
+  },
+  avatar: {
+    width: '2rem',
+    height: '2rem',
+    marginRight: spacing(4),
   },
   creatorInfoText: {
     fontSize: '0.75rem',
@@ -245,6 +253,7 @@ const ThreadPage: NextPage = () => {
   const initialStarred = R.prop('starred', thread);
   const views = R.propOr(0, 'views', thread);
   const creator = R.prop('user', thread);
+  const creatorAvatarThumbnail = R.propOr('', 'avatarThumbnail', creator);
   const creatorScore = R.prop('score', creator);
   const isOwn = !!creator && userMe?.id === creator.id;
   const created = R.prop('created', thread);
@@ -796,22 +805,31 @@ const ThreadPage: NextPage = () => {
       <Grid item xs={12} container>
         <Grid item xs={12} md={6}>
           <CardContent className={classes.threadInfoCardContent}>
-            <Typography variant="body2" color="textSecondary">
-              {renderCreator} {t('common:created')} {creationTime}
-            </Typography>
-            <Grid container alignItems="center">
-              <Typography
-                className={clsx(classes.creatorInfoText, classes.creatorScore)}
-                variant="body2"
-                color="textSecondary"
-              >
-                {creatorScore}
-              </Typography>
-              <Typography className={classes.creatorInfoText} variant="body2" color="textSecondary">
-                {renderDiamondBadgeCount} {renderGoldBadgeCount} {renderSilverBadgeCount}{' '}
-                {renderBronzeBadgeCount}
-              </Typography>
-            </Grid>
+            <Box display="flex" alignItems="center">
+              <Avatar className={classes.avatar} src={mediaUrl(creatorAvatarThumbnail)} />
+              <Box display="flex" flexDirection="column">
+                <Typography variant="body2" color="textSecondary">
+                  {renderCreator} {t('common:created')} {creationTime}
+                </Typography>
+                <Grid container alignItems="center">
+                  <Typography
+                    className={clsx(classes.creatorInfoText, classes.creatorScore)}
+                    variant="body2"
+                    color="textSecondary"
+                  >
+                    {creatorScore}
+                  </Typography>
+                  <Typography
+                    className={classes.creatorInfoText}
+                    variant="body2"
+                    color="textSecondary"
+                  >
+                    {renderDiamondBadgeCount} {renderGoldBadgeCount} {renderSilverBadgeCount}{' '}
+                    {renderBronzeBadgeCount}
+                  </Typography>
+                </Grid>
+              </Box>
+            </Box>
           </CardContent>
         </Grid>
         <Grid item xs={12} md={6} container alignItems="flex-end">
@@ -828,6 +846,7 @@ const ThreadPage: NextPage = () => {
       classes.creatorInfoText,
       classes.creatorScore,
       classes.threadInfoCardContent,
+      classes.avatar,
       creationTime,
       creatorScore,
       renderBronzeBadgeCount,
@@ -840,6 +859,7 @@ const ThreadPage: NextPage = () => {
       smDown,
       commentCount,
       views,
+      creatorAvatarThumbnail,
     ],
   );
 

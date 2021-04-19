@@ -50,7 +50,7 @@ export const SkeletonThreadTableList: React.FC = () => {
       new Array(25).fill(0).map(() => (
         <Box height="6rem" padding={2} display="flex">
           <Grid container>
-            <Grid item xs={12} md={8} lg={9} container direction="column" justify="space-between">
+            <Grid item xs={12} md={8} container direction="column" justify="space-between">
               <Typography variant="subtitle1">
                 <Skeleton />
               </Typography>
@@ -61,7 +61,7 @@ export const SkeletonThreadTableList: React.FC = () => {
                 <Skeleton />
               </Typography>
             </Grid>
-            <Grid item xs={12} md={4} lg={3} container>
+            <Grid item xs={12} md={4} container>
               {renderMobileSkeleton || renderDesktopSkeleton}
             </Grid>
           </Grid>
