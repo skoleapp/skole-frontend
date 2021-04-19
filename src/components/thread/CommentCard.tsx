@@ -1,20 +1,17 @@
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-import CommentOutlined from '@material-ui/icons/CommentOutlined';
-import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
 import clsx from 'clsx';
 import {
-  useActionsContext,
   useConfirmContext,
   useNotificationsContext,
+  useShareContext,
   useThreadContext,
 } from 'context';
 import {
@@ -31,7 +28,7 @@ import { useTranslation } from 'lib';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
 import { BadgeTierIcon, MarkdownContent, TextLink } from '../shared';
@@ -81,15 +78,13 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   score: {
     fontWeight: 'bold',
   },
-  cardContent: {
-    padding: `${spacing(3)} !important`,
-  },
   messageContent: {
-    padding: `${spacing(3)} 0`,
+    padding: `${spacing(2)} ${spacing(3)}`,
   },
   text: {
     overflow: 'hidden',
     wordBreak: 'break-word',
+    fontSize: '0.95rem',
   },
   imagePreviewContainer: {
     marginRight: spacing(3),
@@ -102,16 +97,22 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     borderRadius: '0.5rem',
     cursor: 'pointer',
   },
-  icon: {
+  actions: {
+    padding: `0 ${spacing(3)}`,
+  },
+  voteButtons: {
+    paddingRight: spacing(3),
+  },
+  actionsText: {
     marginRight: spacing(1),
   },
-  replyCount: {
+  button: {
+    padding: `${spacing(0.25)} ${spacing(1)}`,
+    minWidth: 'auto',
+    color: palette.text.secondary,
+    textTransform: 'capitalize',
     marginRight: spacing(1),
-    padding: spacing(2),
-    paddingLeft: 0,
-  },
-  actionsButton: {
-    width: '2.35rem',
+    borderRadius: '0.25rem',
   },
 }));
 
@@ -119,9 +120,15 @@ interface Props {
   comment: CommentObjectType;
   onCommentDeleted: () => void;
   topComment?: boolean;
+  handleClickReplyButton?: (comment: CommentObjectType) => void;
 }
 
-export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topComment }) => {
+export const CommentCard: React.FC<Props> = ({
+  comment,
+  onCommentDeleted,
+  topComment,
+  handleClickReplyButton,
+}) => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const commentRef = useRef<HTMLDivElement>(null);
@@ -129,7 +136,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const { t } = useTranslation();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
-  const { handleOpenActionsDialog } = useActionsContext();
+  const { handleOpenShareDialog } = useShareContext();
   const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
   const [score, setScore] = useState(0);
   const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
@@ -190,7 +197,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     context,
   });
 
-  const handleDeleteComment = useCallback(async (): Promise<void> => {
+  const handleClickDeleteButton = useCallback(async (): Promise<void> => {
     try {
       await confirm({
         title: `${t('thread:deleteComment')}?`,
@@ -203,38 +210,15 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     }
   }, [comment.id, confirm, deleteComment, t]);
 
-  const handleClickActionsButton = useCallback(
-    (e: SyntheticEvent): void => {
-      e.stopPropagation(); // Prevent opening comment thread for top-level comments.
-
-      const shareDialogParams = {
+  const handleClickShareButton = useCallback(
+    (): void =>
+      handleOpenShareDialog({
         header: t('thread:shareComment'),
         title: t('thread:shareCommentTitle', { creatorUsername }),
         text: commentPreview,
         linkSuffix: `?comment=${commentId}`,
-      };
-
-      const deleteActionParams = {
-        text: t('thread:deleteComment'),
-        callback: handleDeleteComment,
-      };
-
-      handleOpenActionsDialog({
-        shareText: t('thread:shareComment'),
-        shareDialogParams,
-        hideDeleteAction: !isOwn,
-        deleteActionParams,
-      });
-    },
-    [
-      commentId,
-      commentPreview,
-      creatorUsername,
-      handleDeleteComment,
-      handleOpenActionsDialog,
-      isOwn,
-      t,
-    ],
+      }),
+    [commentId, commentPreview, creatorUsername, handleOpenShareDialog, t],
   );
 
   const renderCreator = useMemo(
@@ -331,30 +315,6 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     ],
   );
 
-  const renderCardHeader = useMemo(
-    () => (
-      <CardHeader
-        classes={{
-          root: classes.cardHeaderRoot,
-          content: classes.cardHeaderContent,
-          title: classes.cardHeaderTitle,
-        }}
-        avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
-        title={renderCreatorTitle}
-        subheader={renderSubheader}
-      />
-    ),
-    [
-      avatarThumbnail,
-      classes.avatar,
-      classes.cardHeaderContent,
-      classes.cardHeaderRoot,
-      classes.cardHeaderTitle,
-      renderCreatorTitle,
-      renderSubheader,
-    ],
-  );
-
   const renderImageThumbnail = useMemo(
     () =>
       !!comment.imageThumbnail && (
@@ -384,7 +344,7 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const renderText = useMemo(
     () => (
       <Typography className={classes.text} variant="body2">
-        <MarkdownContent>{comment.text}</MarkdownContent>
+        <MarkdownContent dense>{comment.text}</MarkdownContent>
       </Typography>
     ),
     [classes.text, comment.text],
@@ -393,42 +353,60 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
   const renderReplyCount = useMemo(
     () =>
       topComment && (
-        <Tooltip title={t('thread-tooltips:commentReplies', { replyCount })}>
-          <Box display="flex" className={classes.replyCount}>
-            <CommentOutlined className={classes.icon} color="disabled" />
-            <Typography variant="body2" color="textSecondary">
-              {replyCount}
-            </Typography>
-          </Box>
-        </Tooltip>
+        <Typography className={classes.actionsText} variant="body2" color="textSecondary">
+          {t('thread:commentReplies', { replyCount })}
+        </Typography>
       ),
-    [classes.icon, classes.replyCount, replyCount, t, topComment],
+    [replyCount, t, topComment, classes.actionsText],
   );
 
   const renderFileLink = useMemo(
     () =>
       file && (
-        <TextLink href={mediaUrl(file)} target="_blank" rel="noreferrer">
+        <TextLink
+          className={classes.actionsText}
+          href={mediaUrl(file)}
+          target="_blank"
+          rel="noreferrer"
+        >
           {t('thread:viewFile')}
         </TextLink>
       ),
-    [t, file],
+    [t, file, classes.actionsText],
   );
 
-  const renderActionsButton = useMemo(
-    () => (
-      <Tooltip title={t('thread-tooltips:commentActions')}>
-        <IconButton
-          onClick={handleClickActionsButton}
-          className={classes.actionsButton}
+  const renderReplyButton = useMemo(
+    () =>
+      !!topComment &&
+      !!handleClickReplyButton && (
+        <Button
+          onClick={(): void => handleClickReplyButton(comment)}
+          className={classes.button}
           color="default"
-          size="small"
         >
-          <MoreHorizOutlined />
-        </IconButton>
-      </Tooltip>
+          {t('common:reply')}
+        </Button>
+      ),
+    [classes.button, t, handleClickReplyButton, comment, topComment],
+  );
+
+  const renderShareButton = useMemo(
+    () => (
+      <Button onClick={handleClickShareButton} className={classes.button} color="default">
+        {t('common:share')}
+      </Button>
     ),
-    [classes.actionsButton, handleClickActionsButton, t],
+    [classes.button, handleClickShareButton, t],
+  );
+
+  const renderDeleteButton = useMemo(
+    () =>
+      !!isOwn && (
+        <Button onClick={handleClickDeleteButton} className={classes.button} color="default">
+          {t('common:delete')}
+        </Button>
+      ),
+    [classes.button, handleClickDeleteButton, t, isOwn],
   );
 
   const renderVoteButton = useCallback(
@@ -459,66 +437,49 @@ export const CommentCard: React.FC<Props> = ({ comment, onCommentDeleted, topCom
     [score, classes.score],
   );
 
-  const renderMessage = useMemo(
-    () => (
-      <CardContent className={classes.cardContent}>
-        <Grid container>
-          <Grid
-            className={classes.messageContent}
-            item
-            xs={10}
-            sm={11}
-            container
-            alignItems="center"
-          >
+  return (
+    <Card ref={commentRef} className={clsx(classes.root, !topComment && classes.replyComment)}>
+      <Grid container>
+        <Grid item xs={10} sm={11} container>
+          <CardHeader
+            classes={{
+              root: classes.cardHeaderRoot,
+              content: classes.cardHeaderContent,
+              title: classes.cardHeaderTitle,
+            }}
+            avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
+            title={renderCreatorTitle}
+            subheader={renderSubheader}
+          />
+          <Grid item xs={12} className={classes.messageContent} container alignItems="center">
             {renderImageThumbnail}
             {renderText}
           </Grid>
-          <Grid
-            item
-            container
-            xs={2}
-            sm={1}
-            direction="column"
-            justify="center"
-            alignItems="flex-end"
-          >
-            <Box display="flex" flexDirection="column">
-              {renderVoteButton('upvote')}
-              {renderScore}
-              {renderVoteButton('downvote')}
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid container alignItems="center">
-          <Grid item xs={5} container alignItems="center" wrap="nowrap">
+          <Grid item xs={12} className={classes.actions} container alignItems="center">
             {renderReplyCount}
             {renderFileLink}
+            {renderReplyButton}
+            {renderShareButton}
+            {renderDeleteButton}
           </Grid>
-          <Grid item xs={2} container justify="center">
-            {renderActionsButton}
-          </Grid>
-          <Grid item xs={5} />
         </Grid>
-      </CardContent>
-    ),
-    [
-      classes.cardContent,
-      classes.messageContent,
-      renderImageThumbnail,
-      renderScore,
-      renderText,
-      renderVoteButton,
-      renderActionsButton,
-      renderReplyCount,
-      renderFileLink,
-    ],
-  );
-
-  return (
-    <Card ref={commentRef} className={clsx(classes.root, !topComment && classes.replyComment)}>
-      {renderCardHeader}
-      {renderMessage}
+        <Grid
+          item
+          container
+          xs={2}
+          sm={1}
+          className={classes.voteButtons}
+          direction="column"
+          justify="center"
+          alignItems="flex-end"
+        >
+          <Box display="flex" flexDirection="column">
+            {renderVoteButton('upvote')}
+            {renderScore}
+            {renderVoteButton('downvote')}
+          </Box>
+        </Grid>
+      </Grid>
     </Card>
   );
 };

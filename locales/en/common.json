@@ -78,5 +78,8 @@
   "create": "Create",
   "posted": "posted",
   "votePromptDialogHeader": "Oops!",
-  "votePromptDialogText": "Voting your own content is not allowed!"
+  "votePromptDialogText": "Voting your own content is not allowed!",
+  "share": "Share",
+  "delete": "Delete",
+  "reply": "Reply"
 }
