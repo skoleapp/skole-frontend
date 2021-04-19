@@ -70,7 +70,7 @@
   "inviteDialogText": "Voit käyttää henkilökohtaista kutsukoodiasi päästääksesi kaverisi Skoleen myös! Koodillasi on {{ inviteCodeUsages }} käyttökertaa jäljellä.",
   "inviteDialogCodeText": "Tässä on kutsukoodisi:",
   "inviteShareDialogHeader": "Kutsu kavereita!",
-  "inviteTitle": "Ystäväsi {{ username }} kutsui sinut Skoleen",
+  "inviteText": "Ystäväsi {{ username }} kutsui sinut Skoleen",
   "inviteButtonText": "Kutsu nyt",
   "inviteCodeCopied": "Kutsukoodi kopioitu leikepöydälle!",
   "primaryEmailDialogText": "Rajoitamme tällä hetkellä pääsyä vain valittujen yliopistojen opiskelijoille. Sallitut päätteet ensijaiselle sähköpostiosoitteellesi ovat:",
