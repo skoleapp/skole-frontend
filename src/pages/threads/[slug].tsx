@@ -403,7 +403,7 @@ const ThreadPage: NextPage = () => {
     () => ({
       header: t('thread:shareHeader'),
       title: `${title} 💬`,
-      text: t('thread:shareText', { creatorUsername, commentCount }),
+      text: t('thread:shareText', { title, creatorUsername, commentCount }),
     }),
     [t, title, creatorUsername, commentCount],
   );
