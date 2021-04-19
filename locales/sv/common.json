@@ -70,7 +70,7 @@
   "inviteDialogText": "Du kan använda din personliga inbjudningskod för att låta dina vänner gå med i Skole också! Din kod har {{ inviteCodeUsages }} användningar kvar.",
   "inviteDialogCodeText": "Här är din inbjudningskod:",
   "inviteShareDialogHeader": "Bjuda in vänner!",
-  "inviteText": "Din vän {{ username }} bjöd in dig till Skole",
+  "inviteText": "Din vän {{ username }} bjöd in dig till Skole! 🎉",
   "inviteButtonText": "Bjud in nu",
   "inviteCodeCopied": "Bjud in kod kopierad till urklipp!",
   "primaryEmailDialogText": "Vi begränsar för närvarande tillgången till endast studenter från de inkluderade universiteten. Tillåtna domäner för din primära e-postadress är:",
