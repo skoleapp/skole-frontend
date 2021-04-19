@@ -40,7 +40,7 @@ export const PaginatedTable: React.FC<Props> = ({
 
   const handleChangeRowsPerPage = useCallback(
     async (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): Promise<void> => {
-      const pageSize = parseInt(e.target.value, RESULTS_PER_PAGE_OPTIONS[0]);
+      const pageSize = parseInt(e.target.value, 10);
       handleReloadPage({ ...query, pageSize });
     },
     [handleReloadPage, query],
