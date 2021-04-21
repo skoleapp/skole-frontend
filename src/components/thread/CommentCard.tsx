@@ -31,7 +31,7 @@ import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { mediaLoader, mediaUrl, truncate, urls } from 'utils';
 
-import { BadgeTierIcon, MarkdownContent, TextLink } from '../shared';
+import { BadgeTierIcon, ExternalLink, MarkdownContent, TextLink } from '../shared';
 import { VoteButton } from './VoteButton';
 
 const useStyles = makeStyles(({ spacing, palette }) => ({
@@ -367,16 +367,13 @@ export const CommentCard: React.FC<Props> = ({
   const renderFileLink = useMemo(
     () =>
       file && (
-        <TextLink
-          className={classes.actionsText}
-          href={mediaUrl(file)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          {t('thread:viewFile')}
-        </TextLink>
+        <ExternalLink href={mediaUrl(file)}>
+          <Button className={classes.button} color="default">
+            {t('thread:viewFile')}
+          </Button>
+        </ExternalLink>
       ),
-    [t, file, classes.actionsText],
+    [t, file, classes.button],
   );
 
   const renderReplyButton = useMemo(
@@ -441,6 +438,67 @@ export const CommentCard: React.FC<Props> = ({
     [score, classes.score],
   );
 
+  const renderCardHeader = useMemo(
+    () => (
+      <CardHeader
+        classes={{
+          root: classes.cardHeaderRoot,
+          content: classes.cardHeaderContent,
+          title: classes.cardHeaderTitle,
+        }}
+        avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
+        title={renderCreatorTitle}
+        subheader={renderSubheader}
+      />
+    ),
+    [
+      avatarThumbnail,
+      classes.avatar,
+      classes.cardHeaderContent,
+      classes.cardHeaderRoot,
+      classes.cardHeaderTitle,
+      renderCreatorTitle,
+      renderSubheader,
+    ],
+  );
+
+  const renderImageAndText = useMemo(
+    () =>
+      (!!comment.text || !!comment.imageThumbnail) && (
+        <Grid item xs={12} className={classes.messageContent} container alignItems="center">
+          {renderImageThumbnail}
+          {renderText}
+        </Grid>
+      ),
+    [
+      classes.messageContent,
+      comment.imageThumbnail,
+      comment.text,
+      renderImageThumbnail,
+      renderText,
+    ],
+  );
+
+  const renderButtons = useMemo(
+    () => (
+      <Grid item xs={12} className={classes.actions} container alignItems="center">
+        {renderReplyCount}
+        {renderFileLink}
+        {renderReplyButton}
+        {renderShareButton}
+        {renderDeleteButton}
+      </Grid>
+    ),
+    [
+      classes.actions,
+      renderDeleteButton,
+      renderFileLink,
+      renderReplyButton,
+      renderReplyCount,
+      renderShareButton,
+    ],
+  );
+
   return (
     <Card ref={commentRef} className={clsx(classes.root, !topComment && classes.replyComment)}>
       <Grid container>
@@ -451,27 +509,9 @@ export const CommentCard: React.FC<Props> = ({
           sm={11}
           container
         >
-          <CardHeader
-            classes={{
-              root: classes.cardHeaderRoot,
-              content: classes.cardHeaderContent,
-              title: classes.cardHeaderTitle,
-            }}
-            avatar={<Avatar className={classes.avatar} src={mediaUrl(avatarThumbnail)} />}
-            title={renderCreatorTitle}
-            subheader={renderSubheader}
-          />
-          <Grid item xs={12} className={classes.messageContent} container alignItems="center">
-            {renderImageThumbnail}
-            {renderText}
-          </Grid>
-          <Grid item xs={12} className={classes.actions} container alignItems="center">
-            {renderReplyCount}
-            {renderFileLink}
-            {renderReplyButton}
-            {renderShareButton}
-            {renderDeleteButton}
-          </Grid>
+          {renderCardHeader}
+          {renderImageAndText}
+          {renderButtons}
         </Grid>
         <Grid
           item
