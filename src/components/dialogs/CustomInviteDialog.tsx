@@ -10,7 +10,6 @@ import FileCopyOutlined from '@material-ui/icons/FileCopyOutlined';
 import { useAuthContext, useNotificationsContext, useShareContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { useCallback, useMemo } from 'react';
-import { useMediaQueries } from 'styles';
 
 import { DialogHeader } from './DialogHeader';
 import { SkoleDialog } from './SkoleDialog';
@@ -46,7 +45,6 @@ export const CustomInviteDialog: React.FC<Props> = ({
   const classes = useStyles();
   const { t } = useTranslation();
   const { inviteCode } = useAuthContext();
-  const { mdUp } = useMediaQueries();
   const { handleOpenShareDialog } = useShareContext();
   const { toggleNotification } = useNotificationsContext();
   const { username } = useAuthContext();
@@ -64,30 +62,14 @@ export const CustomInviteDialog: React.FC<Props> = ({
     [t, text, title, customLink],
   );
 
-  const handleClickInviteButton = useCallback(async (): Promise<void> => {
-    if (mdUp) {
-      handleClose();
-      handleOpenShareDialog(shareDialogParams);
-    } else {
-      const { navigator } = window;
-
-      if (navigator?.share) {
-        try {
-          await navigator.share({
-            title,
-            text,
-            url: customLink,
-          });
-        } catch {
-          // User cancelled.
-        }
-      }
-    }
-  }, [handleOpenShareDialog, mdUp, handleClose, shareDialogParams, customLink, text, title]);
+  const handleClickInviteButton = useCallback((): void => {
+    handleClose();
+    handleOpenShareDialog(shareDialogParams);
+  }, [handleOpenShareDialog, handleClose, shareDialogParams]);
 
   const handleClickCopyCodeButton = useCallback((): void => {
     toggleNotification(t('common:inviteCodeCopied'));
-    navigator.clipboard.writeText(customLink);
+    navigator.clipboard?.writeText(customLink);
   }, [customLink, t, toggleNotification]);
 
   const renderInviteCodeText = useMemo(
