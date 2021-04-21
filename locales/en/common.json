@@ -81,5 +81,6 @@
   "votePromptDialogText": "Voting your own content is not allowed!",
   "share": "Share",
   "delete": "Delete",
-  "reply": "Reply"
+  "reply": "Reply",
+  "commentFileSelected": "{{ commentFileName }} selected."
 }

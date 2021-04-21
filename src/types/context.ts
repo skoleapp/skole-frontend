@@ -53,6 +53,8 @@ export interface ThreadContextType {
   setCommentImageViewerValue: Dispatch<SetStateAction<string | null>>;
   commentImage: string | ArrayBuffer | null;
   setCommentImage: Dispatch<SetStateAction<string | ArrayBuffer | null>>;
+  commentFileName: string;
+  setCommentFileName: Dispatch<SetStateAction<string>>;
   formRef: MutableRefObject<FormikProps<CreateCommentFormValues>>;
 }
 

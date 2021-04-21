@@ -11,7 +11,8 @@ export const ThreadContextProvider: React.FC = ({ children }) => {
   const [createCommentDialogOpen, setCreateCommentDialogOpen] = useState(false);
   const [threadImageViewerValue, setThreadImageViewerValue] = useState<string | null>(null); // Image of an existing comment.
   const [commentImageViewerValue, setCommentImageViewerValue] = useState<string | null>(null); // Image of an existing comment.
-  const [commentImage, setCommentImage] = useState<string | ArrayBuffer | null>(null); // Image for comment creation form.
+  const [commentImage, setCommentImage] = useState<string | ArrayBuffer | null>(null); // Comment image preview for comment creation form.
+  const [commentFileName, setCommentFileName] = useState(''); // Comment file name preview for comment creation form.
   const formRef = useRef<FormikProps<CreateCommentFormValues>>(null!);
 
   const value = {
@@ -22,7 +23,9 @@ export const ThreadContextProvider: React.FC = ({ children }) => {
     commentImageViewerValue,
     setCommentImageViewerValue,
     commentImage,
+    commentFileName,
     setCommentImage,
+    setCommentFileName,
     formRef,
   };
 

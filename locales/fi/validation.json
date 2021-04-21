@@ -5,5 +5,5 @@
   "required": "Tämä kenttä on vaadittu.",
   "networkError": "Yhteysvirhe.",
   "fileSizeError": "Tiedosto on liian suuri!",
-  "textOrImageRequired": "Joko teksti tai kuva on vaadittu."
+  "textImageOrFileRequired": "Joko teksti, kuva tai tiedosto vaaditaan."
 }

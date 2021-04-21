@@ -9,8 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AttachFileOutlined from '@material-ui/icons/AttachFileOutlined';
-import CameraAltOutlined from '@material-ui/icons/CameraAltOutlined';
 import ClearOutlined from '@material-ui/icons/ClearOutlined';
+import ImageOutlined from '@material-ui/icons/ImageOutlined';
 import SendOutlined from '@material-ui/icons/SendOutlined';
 import imageCompression from 'browser-image-compression';
 import { useAuthContext, useNotificationsContext, useThreadContext } from 'context';
@@ -23,7 +23,13 @@ import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useMemo, useRef } from 'react';
 import { useMediaQueries } from 'styles';
 import { CreateCommentFormValues } from 'types';
-import { ACCEPTED_COMMENT_IMAGE_FILES, MAX_IMAGE_FILE_SIZE, MAX_IMAGE_WIDTH_HEIGHT } from 'utils';
+import {
+  ACCEPTED_COMMENT_IMAGE_FILES,
+  IMAGE_TYPES,
+  MAX_COMMENT_FILE_SIZE,
+  MAX_IMAGE_FILE_SIZE,
+  MAX_IMAGE_WIDTH_HEIGHT,
+} from 'utils';
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
 import { LoadingBox, MarkdownHelperText } from '../shared';
@@ -83,19 +89,26 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     setCreateCommentDialogOpen,
     setCommentImage,
     commentImage,
+    commentFileName,
+    setCommentFileName,
     formRef,
   } = useThreadContext();
 
   const classes = useStyles();
   const { t } = useTranslation();
-  const { smDown, mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueries();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();
-  const commentImageInputRef = useRef<HTMLInputElement>(null!);
+  const commentImageInputRef = useRef<HTMLInputElement | null>(null);
+  const commentFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleUploadImage = useCallback((): false | void => commentImageInputRef.current.click(), [
+  const handleUploadImage = useCallback((): false | void => commentImageInputRef.current?.click(), [
     commentImageInputRef,
+  ]);
+
+  const handleUploadFile = useCallback((): false | void => commentFileInputRef.current?.click(), [
+    commentFileInputRef,
   ]);
 
   const handleCloseCreateCommentDialog = useCallback((): void => {
@@ -125,6 +138,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     [formRef, setCommentImage],
   );
 
+  const handleClearFile = useCallback(
+    () => (): void => {
+      formRef.current?.setFieldValue('file', null);
+      setCommentFileName('');
+    },
+    [formRef, setCommentFileName],
+  );
+
   const [createCommentMutation] = useCreateCommentMutation({
     onCompleted,
     onError: toggleUnexpectedErrorNotification,
@@ -134,18 +155,19 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     user: _user,
     text,
     image,
+    file,
     thread: _thread,
     comment: _comment,
   }: CreateCommentFormValues): Promise<void> => {
-    if (!text && !image) {
-      toggleNotification(t('validation:textOrImageRequired'));
+    if (!text && !image && !file) {
+      toggleNotification(t('validation:textImageOrFileRequired'));
     } else {
       const user = R.prop('id', _user);
       const thread = R.prop('id', _thread);
       const comment = R.prop('id', _comment);
 
       await createCommentMutation({
-        variables: { user, text, image, thread, comment },
+        variables: { user, text, image, file, thread, comment },
         context,
       });
 
@@ -160,6 +182,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       user: userMe,
       text: '',
       image: null,
+      file: null,
       thread,
       comment,
     }),
@@ -181,8 +204,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     [formRef, setCommentImage, setCreateCommentDialogOpen],
   );
 
+  const setFile = useCallback(
+    (file: File | Blob): void => {
+      formRef.current?.setFieldValue('file', file);
+      setCreateCommentDialogOpen(true);
+      setCommentFileName(R.propOr('', 'name', file));
+    },
+    [formRef, setCreateCommentDialogOpen, setCommentFileName],
+  );
+
   // Automatically resize the image and update the field value.
-  const handleImageChange = useCallback(
+  const handleImageInputChange = useCallback(
     async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
       const file: File = R.path(['currentTarget', 'files', '0'], e);
 
@@ -203,6 +235,43 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       }
     },
     [setImage, t, toggleNotification],
+  );
+
+  const validateAndSetFile = useCallback(
+    (file: File | Blob): void => {
+      if (file.size > MAX_COMMENT_FILE_SIZE) {
+        toggleNotification(t('validation:fileSizeError'));
+      } else {
+        setFile(file);
+      }
+    },
+    [setFile, t, toggleNotification],
+  );
+
+  // If the file is an image, automatically resize it.
+  // Otherwise, check if it's too large and update the field value.
+  const handleFileInputChange = useCallback(
+    async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
+      const file: File = R.path(['currentTarget', 'files', '0'], e);
+
+      if (IMAGE_TYPES.includes(file.type)) {
+        const options = {
+          maxSizeMB: MAX_COMMENT_FILE_SIZE / 1000000, // Convert to megabytes.,
+          maxWidthOrHeight: MAX_IMAGE_WIDTH_HEIGHT,
+        };
+
+        try {
+          const compressedFile = await imageCompression(file, options);
+          validateAndSetFile(compressedFile);
+        } catch {
+          // Compression failed. Try to set the field value still if the image is small enough.
+          validateAndSetFile(file);
+        }
+      } else {
+        validateAndSetFile(file);
+      }
+    },
+    [validateAndSetFile],
   );
 
   const renderMarkdownHelperText = useMemo(
@@ -229,12 +298,25 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       <Tooltip title={t('thread-tooltips:addCommentImage')}>
         <Typography component="span">
           <IconButton onClick={handleUploadImage} size="small">
-            {smDown ? <CameraAltOutlined /> : <AttachFileOutlined />}
+            <ImageOutlined />
           </IconButton>
         </Typography>
       </Tooltip>
     ),
-    [handleUploadImage, smDown, t],
+    [handleUploadImage, t],
+  );
+
+  const renderCommentFileButton = useMemo(
+    () => (
+      <Tooltip title={t('thread-tooltips:addCommentFile')}>
+        <Typography component="span">
+          <IconButton onClick={handleUploadFile} size="small">
+            <AttachFileOutlined />
+          </IconButton>
+        </Typography>
+      </Tooltip>
+    ),
+    [handleUploadFile, t],
   );
 
   const renderClearCommentImageButton = useMemo(
@@ -251,6 +333,20 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     [commentImage, handleClearImage, t],
   );
 
+  const renderClearCommentFileButton = useMemo(
+    () =>
+      commentFileName && (
+        <Tooltip title={t('thread-tooltips:clearCommentFile')}>
+          <Typography component="span">
+            <IconButton onClick={handleClearFile} size="small">
+              <ClearOutlined />
+            </IconButton>
+          </Typography>
+        </Tooltip>
+      ),
+    [commentFileName, handleClearFile, t],
+  );
+
   const renderDialogTextFieldToolbar = useMemo(
     () => (
       <FormControl>
@@ -260,17 +356,21 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
             {renderCombinationHelperText}
           </Grid>
           <Grid item xs={4} container justify="flex-end">
+            {renderCommentFileButton}
             {renderCommentImageButton}
             {renderClearCommentImageButton}
+            {renderClearCommentFileButton}
           </Grid>
         </Grid>
       </FormControl>
     ),
     [
       renderClearCommentImageButton,
+      renderClearCommentFileButton,
       renderCommentImageButton,
       renderCombinationHelperText,
       renderMarkdownHelperText,
+      renderCommentFileButton,
     ],
   );
 
@@ -281,11 +381,24 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
         value=""
         type="file"
         accept={ACCEPTED_COMMENT_IMAGE_FILES.toString()}
-        onChange={handleImageChange}
+        onChange={handleImageInputChange}
         disabled={!userMe}
       />
     ),
-    [commentImageInputRef, handleImageChange, userMe],
+    [commentImageInputRef, handleImageInputChange, userMe],
+  );
+
+  const renderCommentFileInput = useMemo(
+    () => (
+      <input
+        ref={commentFileInputRef}
+        value=""
+        type="file"
+        onChange={handleFileInputChange}
+        disabled={!userMe}
+      />
+    ),
+    [commentFileInputRef, handleFileInputChange, userMe],
   );
 
   const renderImagePreview = useMemo(
@@ -303,6 +416,16 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
         </FormControl>
       ),
     [classes.imagePreview, commentImage, t],
+  );
+
+  const renderFileSelected = useMemo(
+    () =>
+      commentFileName && (
+        <FormControl>
+          <FormHelperText>{t('common:commentFileSelected', { commentFileName })}</FormHelperText>
+        </FormControl>
+      ),
+    [commentFileName, t],
   );
 
   const renderAuthorSelection = useCallback(
@@ -349,7 +472,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
             className={classes.dialogSendButton}
             size="small"
             color="primary"
-            disabled={!text && !image} // Require either text content or an image.
+            disabled={!text && !image && !commentFileName} // Require either text, image or file.
             onClick={formRef.current?.submitForm}
           >
             <SendOutlined />
@@ -357,7 +480,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
         </Typography>
       </Tooltip>
     ),
-    [classes.dialogSendButton, formRef, t],
+    [classes.dialogSendButton, formRef, t, commentFileName],
   );
 
   const renderDialogInputArea = useCallback(
@@ -409,10 +532,11 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     (props: FormikProps<CreateCommentFormValues>): JSX.Element => (
       <Grid container alignItems="center" wrap="nowrap">
         {renderCommentImageButton}
+        {renderCommentFileButton}
         {renderDesktopSendButton(props)}
       </Grid>
     ),
-    [renderCommentImageButton, renderDesktopSendButton],
+    [renderCommentImageButton, renderDesktopSendButton, renderCommentFileButton],
   );
 
   const renderDesktopInputArea = useCallback(
@@ -445,6 +569,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
           {renderImagePreview}
           {renderDialogAuthorSelection(props)}
           {renderDialogTextFieldToolbar}
+          {renderFileSelected}
           {renderDialogInputArea(props)}
         </Grid>
       </DialogContent>
@@ -455,6 +580,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       renderDialogInputArea,
       renderDialogTextFieldToolbar,
       renderImagePreview,
+      renderFileSelected,
     ],
   );
 
@@ -491,11 +617,13 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
         {renderCreateCommentDialog(props)}
         {renderLoadingDialog(props)}
         {renderCommentImageInput}
+        {renderCommentFileInput}
       </Form>
     ),
     [
       classes.desktopContainer,
       renderCommentImageInput,
+      renderCommentFileInput,
       renderCreateCommentDialog,
       renderDesktopInputArea,
       renderLoadingDialog,

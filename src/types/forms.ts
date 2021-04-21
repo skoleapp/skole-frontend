@@ -37,6 +37,7 @@ export interface CreateCommentFormValues {
   user: UserFieldsFragment | null;
   text: string;
   image: string | null;
+  file: string | null;
   thread: ThreadObjectType | null;
   comment: CommentObjectType | null;
 }

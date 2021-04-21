@@ -81,5 +81,6 @@
   "votePromptDialogText": "Et voi äänestää omaa sisältöäsi!",
   "share": "Jaa",
   "delete": "Poista",
-  "reply": "Vastaa"
+  "reply": "Vastaa",
+  "commentFileSelected": "{{ commentFileName }} valittu."
 }
