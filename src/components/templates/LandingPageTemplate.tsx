@@ -70,6 +70,7 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   schools: {
     backgroundColor: palette.grey[300],
     padding: `${spacing(4)} 0`,
+    paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
   },
 }));
 
@@ -222,7 +223,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
     [],
   );
 
-  const renderSchoolsBanner = useMemo(
+  const renderSchools = useMemo(
     () => (
       <Grid className={classes.schools} container justify="center">
         <Container disableGutters>
@@ -259,7 +260,7 @@ export const LandingPageTemplate: React.FC<Props> = ({
     <MainTemplate {...layoutProps}>
       {children}
       {renderMainContent}
-      {renderSchoolsBanner}
+      {renderSchools}
     </MainTemplate>
   );
 };
