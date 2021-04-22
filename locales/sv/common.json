@@ -39,7 +39,7 @@
   "profile": "Profil",
   "postWithAccount": "Lägg upp med ditt konto",
   "postAs": "Lägg upp som {{ användarnamn }}",
-  "postAsAnonymousStudent": "Skicka som anonym",
+  "postAsAnonymous": "Skicka som anonym",
   "selectAuthor": "Välj auktor",
   "send": "Skicka",
   "stars": "Stjärnor",

@@ -92,7 +92,7 @@ export const AuthorSelection = <T extends FormikValues>({
       <ListItemIcon>
         <DeviceUnknownOutlined />
       </ListItemIcon>
-      <ListItemText>{t('common:postAsAnonymousStudent')}</ListItemText>
+      <ListItemText>{t('common:postAsAnonymous')}</ListItemText>
     </MenuItem>
   );
 

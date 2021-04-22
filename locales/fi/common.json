@@ -39,7 +39,7 @@
   "profile": "Profiili",
   "postWithAccount": "Lähetä tilisi kanssa",
   "postAs": "Lähetä käyttäjällä {{ username }}",
-  "postAsAnonymousStudent": "Lähetä anonyyminä",
+  "postAsAnonymous": "Lähetä anonyyminä",
   "selectAuthor": "Valitse käyttäjä",
   "send": "Lähetä",
   "views": "Näyttökertaa",

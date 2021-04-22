@@ -39,7 +39,7 @@
   "profile": "Profile",
   "postWithAccount": "Post with your account",
   "postAs": "Post as {{ username }}",
-  "postAsAnonymousStudent": "Post as anonymousStudent",
+  "postAsAnonymous": "Post as anonymous",
   "selectAuthor": "Select Author",
   "send": "Send",
   "views": "Views",

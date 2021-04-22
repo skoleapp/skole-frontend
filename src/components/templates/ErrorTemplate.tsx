@@ -63,6 +63,7 @@ export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
       header,
       emoji,
     },
+    hideBottomNavbar: true,
   };
 
   return (
