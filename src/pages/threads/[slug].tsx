@@ -80,8 +80,6 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
-    paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)',
     overflow: 'hidden',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
@@ -114,6 +112,10 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     [breakpoints.up('md')]: {
       marginLeft: spacing(1),
     },
+  },
+  threadInfo: {
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
   },
   threadInfoCardContent: {
     padding: `${spacing(2)} !important`,
@@ -164,6 +166,8 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
   commentsHeader: {
     padding: spacing(2),
+    marginLeft: 'env(safe-area-inset-left)',
+    marginRight: 'env(safe-area-inset-right)',
     [breakpoints.up('md')]: {
       padding: `${spacing(2)} ${spacing(3)}`,
     },
@@ -865,7 +869,7 @@ const ThreadPage: NextPage = () => {
 
   const renderThreadInfo = useMemo(
     () => (
-      <Grid container>
+      <Grid className={classes.threadInfo} container>
         {renderDesktopVoteButtonsSection}
         {renderTitleAndTextSection}
         {renderImageSection}
@@ -877,6 +881,7 @@ const ThreadPage: NextPage = () => {
       renderDesktopVoteButtonsSection,
       renderImageSection,
       renderTitleAndTextSection,
+      classes.threadInfo,
     ],
   );
 

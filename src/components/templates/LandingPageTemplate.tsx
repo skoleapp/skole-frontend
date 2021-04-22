@@ -19,6 +19,8 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   container: {
     flexGrow: 1,
     padding: spacing(2),
+    paddingLeft: `calc(${spacing(2)} + env(safe-area-inset-left))`,
+    paddingRight: `calc(${spacing(2)} + env(safe-area-inset-left))`,
   },
   logoContainer: {
     position: 'relative',
@@ -69,7 +71,9 @@ const useStyles = makeStyles(({ spacing, breakpoints, palette }) => ({
   },
   schools: {
     backgroundColor: palette.grey[300],
-    padding: `${spacing(4)} 0`,
+    paddingTop: spacing(4),
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-left)',
     paddingBottom: `calc(${spacing(4)} + env(safe-area-inset-bottom))`,
   },
 }));

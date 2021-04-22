@@ -68,6 +68,8 @@ const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
     borderBottom: BORDER,
     color: palette.text.secondary,
     padding: spacing(3),
+    marginLeft: 'env(safe-area-inset-left)',
+    marginRight: 'env(safe-area-inset-right)',
   },
 }));
 

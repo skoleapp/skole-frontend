@@ -21,10 +21,16 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
     height: '100%',
     flexWrap: 'nowrap',
   },
+  imageContainer: {
+    position: 'relative',
+    marginBottom: 'env(safe-area-inset-bottom)',
+  },
   toolbar: {
     height: TOP_NAVBAR_HEIGHT_MOBILE,
     width: '100%',
     padding: spacing(2),
+    paddingLeft: `calc(${spacing(2)} + env(safe-area-inset-left))`,
+    paddingRight: `calc(${spacing(2)} + env(safe-area-inset-right))`,
     backgroundColor: palette.common.black,
     flexBasis: 'auto',
     [breakpoints.up('md')]: {
@@ -87,11 +93,16 @@ export const ImageViewer: React.FC = () => {
   const renderImage = useMemo(
     () =>
       !!imageViewerValue && (
-        <Grid item xs={12} container alignItems="center" justify="center">
+        <Grid
+          className={classes.imageContainer}
+          item
+          xs={12}
+          container
+          alignItems="center"
+          justify="center"
+        >
           <Image
-            width={1280}
-            height={720}
-            layout="intrinsic"
+            layout="fill"
             loader={mediaLoader}
             src={imageViewerValue}
             alt={alt}
@@ -99,7 +110,7 @@ export const ImageViewer: React.FC = () => {
           />
         </Grid>
       ),
-    [imageViewerValue, alt],
+    [imageViewerValue, alt, classes.imageContainer],
   );
 
   return (

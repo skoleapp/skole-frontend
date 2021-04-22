@@ -218,7 +218,6 @@ export const useMuiTheme = (): Theme => {
     MuiTableContainer: {
       root: {
         display: 'flex',
-        // backgroundColor: COLORS.white,
         flexGrow: 1,
         position: 'relative',
         overflow: 'hidden !important',
@@ -233,6 +232,8 @@ export const useMuiTheme = (): Theme => {
     MuiTableBody: {
       root: {
         flexGrow: 1,
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
         [_breakpoints.up('md')]: {
           overflowY: 'auto',
         },
@@ -277,11 +278,13 @@ export const useMuiTheme = (): Theme => {
       container: {
         paddingTop: 'env(safe-area-inset-top)',
       },
-      paper: {
-        overflow: 'hidden',
+      paperFullScreen: {
         paddingRight: 'env(safe-area-inset-right)',
         paddingLeft: 'env(safe-area-inset-left)',
         paddingBottom: 'env(safe-area-inset-bottom)',
+      },
+      paper: {
+        overflow: 'hidden',
         margin: spacing(4),
       },
     },
