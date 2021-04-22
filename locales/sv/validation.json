@@ -5,5 +5,5 @@
   "required": "This fält krävs.",
   "networkError": "Nätverksfel.",
   "fileSizeError": "Filen är för stor!",
-  "textOrImageRequired": "Antingen text eller en bild krävs."
+  "textImageOrFileRequired": "Antingen text, bild eller en fil krävs."
 }

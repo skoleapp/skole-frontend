@@ -101,14 +101,10 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       height: '7rem',
     },
   },
-  statsContainer: {
-    textAlign: 'center',
-  },
   ownProfileStatsContainer: {
-    marginTop: spacing(4),
-  },
-  statValue: {
-    marginRight: spacing(1),
+    [breakpoints.up('md')]: {
+      marginTop: spacing(4),
+    },
   },
   stepper: {
     padding: `${spacing(6)} 0`,
@@ -449,60 +445,6 @@ const ProfilePage: NextPage = () => {
     [handleShareButtonClick, t, classes.button, classes.mobileShareButton, isOwnProfile],
   );
 
-  const renderScoreTitle = useMemo(
-    () => (
-      <Typography variant="body2" color="textSecondary">
-        {t('profile:score')}
-      </Typography>
-    ),
-    [t],
-  );
-
-  const renderThreadCountTitle = useMemo(
-    () => (
-      <Typography variant="body2" color="textSecondary">
-        {t('profile:threads')}
-      </Typography>
-    ),
-    [t],
-  );
-
-  const renderViewsTitle = useMemo(
-    () => (
-      <Typography variant="body2" color="textSecondary">
-        {t('profile:views')}
-      </Typography>
-    ),
-    [t],
-  );
-
-  const renderScoreValue = useMemo(
-    () => (
-      <Typography variant="subtitle2" className={classes.statValue}>
-        {score}
-      </Typography>
-    ),
-    [classes.statValue, score],
-  );
-
-  const renderThreadCountValue = useMemo(
-    () => (
-      <Typography variant="subtitle2" className={classes.statValue}>
-        {threadCount}
-      </Typography>
-    ),
-    [classes.statValue, threadCount],
-  );
-
-  const renderViewsValue = useMemo(
-    () => (
-      <Typography variant="subtitle2" className={classes.statValue}>
-        {views}
-      </Typography>
-    ),
-    [classes.statValue, views],
-  );
-
   const renderBio = useMemo(
     () =>
       !!bio && (
@@ -776,46 +718,48 @@ const ProfilePage: NextPage = () => {
     [renderSettingsButton, renderEditProfileButton, mdUp, renderShareIconButton, isOwnProfile],
   );
 
-  const statsDirection = smDown ? 'column' : 'row';
+  const renderMobileStats = useMemo(
+    () =>
+      smDown && (
+        <>
+          <Typography variant="body2" color="textSecondary">
+            {score} {t('profile:score')}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {threadCount} {t('profile:threads')}
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            {views} {t('profile:views')}
+          </Typography>
+        </>
+      ),
+    [score, smDown, t, threadCount, views],
+  );
+
+  const renderDesktopStats = useMemo(
+    () =>
+      mdUp && (
+        <Typography variant="body2" color="textSecondary">
+          {score} {t('profile:score')} | {threadCount} {t('profile:threads')} | {views}{' '}
+          {t('profile:views')}
+        </Typography>
+      ),
+    [score, t, threadCount, views, mdUp],
+  );
 
   const renderStats = useMemo(
     () => (
       <Grid
         item
         container
+        direction="column"
         xs={12}
-        sm={8}
-        md={5}
-        spacing={2}
-        className={clsx(classes.statsContainer, isOwnProfile && classes.ownProfileStatsContainer)}
-        alignItems="center"
+        className={clsx(isOwnProfile && classes.ownProfileStatsContainer)}
       >
-        <Grid item xs={4} container direction={statsDirection}>
-          {renderScoreValue}
-          {renderScoreTitle}
-        </Grid>
-        <Grid item xs={4} container direction={statsDirection}>
-          {renderThreadCountValue}
-          {renderThreadCountTitle}
-        </Grid>
-        <Grid item xs={4} container direction={statsDirection}>
-          {renderViewsValue}
-          {renderViewsTitle}
-        </Grid>
+        {renderMobileStats || renderDesktopStats}
       </Grid>
     ),
-    [
-      classes.statsContainer,
-      classes.ownProfileStatsContainer,
-      renderScoreTitle,
-      renderScoreValue,
-      renderThreadCountTitle,
-      renderThreadCountValue,
-      renderViewsTitle,
-      renderViewsValue,
-      statsDirection,
-      isOwnProfile,
-    ],
+    [classes.ownProfileStatsContainer, isOwnProfile, renderMobileStats, renderDesktopStats],
   );
 
   const renderDesktopPublicUserShareButton = useMemo(
@@ -857,7 +801,9 @@ const ProfilePage: NextPage = () => {
       <Grid container>
         <Grid
           item
-          xs={4}
+          xs={5}
+          sm={3}
+          md={4}
           container
           direction="column"
           justify="center"
@@ -867,7 +813,7 @@ const ProfilePage: NextPage = () => {
           {renderDesktopUsername}
           {renderDesktopTitle}
         </Grid>
-        <Grid item xs={8} container alignItems="center">
+        <Grid item xs={7} sm={9} md={8} container alignItems="center">
           {renderDesktopActions}
           {renderStats}
           {renderDesktopPublicUserShareButton}

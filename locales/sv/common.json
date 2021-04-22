@@ -81,5 +81,6 @@
   "votePromptDialogText": "Att rösta ditt eget innehåll är inte tillåtet!",
   "dela": "Dela",
   "delete": "Radera",
-  "reply": "Svara"
+  "reply": "Svara",
+  "commentFileSelected": "{{ commentFileName }} vald."
 }

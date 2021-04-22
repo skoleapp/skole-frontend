@@ -19,6 +19,7 @@ export const ACCEPTED_AVATAR_FILES = ['image/*'];
 export const MAX_AVATAR_WIDTH_HEIGHT = 200; // Pixels.
 export const MAX_IMAGE_FILE_SIZE = 3500000; // 3.5 MB.
 export const MAX_IMAGE_WIDTH_HEIGHT = 1200; // Pixels.
+export const MAX_COMMENT_FILE_SIZE = 10000000; // 10 MB.
 export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
 export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';

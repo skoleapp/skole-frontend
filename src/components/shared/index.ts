@@ -5,6 +5,7 @@ export * from './Badge';
 export * from './BadgeTierIcon';
 export * from './ButtonLink';
 export * from './Emoji';
+export * from './ExternalLink';
 export * from './GooglePlayBadge';
 export * from './IconButtonLink';
 export * from './LanguageButton';
