@@ -55,8 +55,10 @@ export const useAuthContext = (): UseAuthContext => {
   const bio = R.prop('bio', userMe);
   const rank = R.prop('rank', userMe);
   const score = R.prop('score', userMe);
-  const avatarThumbnail = mediaUrl(R.prop('avatarThumbnail', userMe));
-  const avatar = mediaUrl(R.prop('avatar', userMe));
+  const _avatarThumbnail = R.prop('avatarThumbnail', userMe);
+  const _avatar = R.prop('avatar', userMe);
+  const avatarThumbnail = _avatarThumbnail ? mediaUrl(_avatarThumbnail) : '';
+  const avatar = _avatar ? mediaUrl(_avatar) : '';
   const badgeProgresses = R.propOr([], 'badgeProgresses', userMe);
   const selectedBadgeProgress = R.prop('selectedBadgeProgress', userMe);
   const inviteCode = R.path(['inviteCode', 'code'], userMe);

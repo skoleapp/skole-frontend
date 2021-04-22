@@ -153,11 +153,18 @@ export const AvatarField = <T extends FormikValues>({
           onChange={handleAvatarChange}
         />
         <Button className={classes.button} onClick={handleOpenDialog} variant="text">
-          {t('edit-profile:changeAvatar')}
+          {addOrChangeAvatarText}
         </Button>
       </Box>
     ),
-    [classes.avatar, classes.button, handleAvatarChange, handleOpenDialog, preview, t],
+    [
+      classes.avatar,
+      classes.button,
+      handleAvatarChange,
+      handleOpenDialog,
+      preview,
+      addOrChangeAvatarText,
+    ],
   );
 
   const renderErrorMessage = useMemo(
