@@ -10,7 +10,7 @@
   "rank": "Tämän käyttäjän arvo on {{ rank }} pisteillä {{ score }}.",
   "ownRank": "Arvosi on {{ rank }} pisteillä {{ score }}.",
   "activity": "Sinulla on {{ unreadActivityCount }} lukematonta toimintaa.",
-  "closeMenu": "Sulje valikko.",
+  "exit": "Poistu.",
   "toggleDarkMode": "Vaihda tumma/vaalea teema.",
   "invite": "Sinulla on {{ inviteCodeUsages }} kutsua jäljellä."
 }

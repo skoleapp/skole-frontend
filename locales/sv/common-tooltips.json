@@ -10,7 +10,7 @@
   "rank": "Denna användares rankning är {{ rank }} med {{ score }} poäng.",
   "ownRank": "Din rankning är {{ rank }} med {{ score }} poäng.",
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
-  "closeMenu": "Stäng menyn.",
+  "exit": "Gå bort.",
   "toggleDarkMode": "Växla mörkt/ljus läge.",
   "invite": "Du har {{ inviteCodeUsages }} inbjudningar kvar."
 }

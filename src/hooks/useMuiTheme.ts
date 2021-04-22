@@ -4,7 +4,7 @@ import createPalette, { PaletteOptions } from '@material-ui/core/styles/createPa
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'; // eslint-disable-line no-restricted-imports
 import { Overrides } from '@material-ui/core/styles/overrides'; // eslint-disable-line no-restricted-imports
 import { ComponentsProps } from '@material-ui/core/styles/props'; // eslint-disable-line no-restricted-imports
-import { useDarkModeContext } from 'context';
+import { useDarkModeContext, useScrollingContext } from 'context';
 import { useMemo } from 'react';
 import {
   BORDER,
@@ -16,6 +16,7 @@ import {
 
 export const useMuiTheme = (): Theme => {
   const { darkMode, dynamicPrimaryColor } = useDarkModeContext();
+  const { scrollingDisabled } = useScrollingContext();
 
   const palette: PaletteOptions = {
     primary: {
@@ -333,6 +334,7 @@ export const useMuiTheme = (): Theme => {
         },
         body: {
           backgroundColor: COLORS.secondary,
+          overflow: scrollingDisabled ? 'hidden' : 'inherit',
           [_breakpoints.down('md')]: {
             userSelect: 'none',
           },

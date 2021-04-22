@@ -4,13 +4,14 @@ import { ApolloProvider } from '@apollo/client';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { HistoryContextProvider } from 'context';
-import { withDarkMode } from 'hocs';
+import { withDarkMode, withScrolling } from 'hocs';
 import { useMuiTheme } from 'hooks';
 import i18nConfig from 'i18n';
 import { appWithI18n, I18nProvider, useApollo } from 'lib';
 import { AppProps } from 'next/app';
 import Router, { useRouter } from 'next/router';
 import NProgress from 'nprogress';
+import * as R from 'ramda';
 import React, { useEffect } from 'react';
 
 NProgress.configure({ showSpinner: false });
@@ -45,9 +46,11 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   );
 };
 
+const withWrappers = R.compose(withDarkMode, withScrolling);
+
 // Ignore: The `appWithI18n` types are missing the `pageProps` object.
 // @ts-ignore
-export default appWithI18n(withDarkMode(SkoleApp), {
+export default appWithI18n(withWrappers(SkoleApp), {
   ...i18nConfig,
   skipInitialProps: true, // Enable automatic static page optimization.
 });
