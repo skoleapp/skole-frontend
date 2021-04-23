@@ -114,7 +114,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     padding: `${spacing(0.25)} ${spacing(1)}`,
     minWidth: 'auto',
     color: palette.text.secondary,
-    textTransform: 'capitalize',
+    textTransform: 'unset',
     marginRight: spacing(1),
     borderRadius: '0.25rem',
   },
