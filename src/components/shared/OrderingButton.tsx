@@ -9,8 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import { useOrderingContext } from 'context';
 import { useTranslation } from 'lib';
+import { useRouter } from 'next/router';
 import React, { KeyboardEventHandler, MouseEvent, useCallback, useMemo, useState } from 'react';
-import { Ordering } from 'types';
 
 import { Emoji } from './Emoji';
 
@@ -21,9 +21,14 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-export const OrderingButton: React.FC = () => {
+interface Props {
+  pathname?: string;
+}
+
+export const OrderingButton: React.FC<Props> = ({ pathname: _pathname }) => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { pathname } = useRouter();
   const { ordering, orderingLabel, setOrdering } = useOrderingContext();
   const [selectionOpen, setSelectionOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -39,11 +44,11 @@ export const OrderingButton: React.FC = () => {
   );
 
   const handleChangeSelection = useCallback(
-    (ordering: Ordering) => async (): Promise<void> => {
+    (ordering: string) => async (): Promise<void> => {
       handleCloseSelection();
-      setOrdering(ordering);
+      setOrdering({ pathname: _pathname || pathname, ordering });
     },
-    [setOrdering],
+    [_pathname, pathname, setOrdering],
   );
 
   const handleSelectionListKeyDown: KeyboardEventHandler<HTMLUListElement> = useCallback(

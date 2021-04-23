@@ -272,6 +272,7 @@ const ThreadPage: NextPage = () => {
   const [score, setScore] = useState(0);
   const starButtonTooltip = starred ? t('thread-tooltips:unstar') : t('thread-tooltips:star');
   const creationTime = useDayjs(created).startOf('day').fromNow();
+  const orderingPathname = urls.thread(slug);
   const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
   const diamondBadges = badges.filter((b) => b.tier === BadgeTier.Diamond);
   const goldBadges = badges.filter((b) => b.tier === BadgeTier.Gold);
@@ -474,14 +475,21 @@ const ThreadPage: NextPage = () => {
   const handleCommentCreated = useCallback(
     (topComment: boolean): void => {
       if (topComment && ordering !== 'newest') {
-        setOrdering('newest');
+        setOrdering({ pathname: orderingPathname, ordering: 'newest' });
         silentThreadQuery();
         commentsQuery();
       } else {
         silentlyRefreshThread();
       }
     },
-    [silentlyRefreshThread, setOrdering, ordering, commentsQuery, silentThreadQuery],
+    [
+      silentlyRefreshThread,
+      setOrdering,
+      ordering,
+      commentsQuery,
+      silentThreadQuery,
+      orderingPathname,
+    ],
   );
 
   const renderActionsButton = useMemo(
@@ -545,11 +553,11 @@ const ThreadPage: NextPage = () => {
     () => (
       <Grid className={classes.commentsHeader} container alignItems="center">
         <Typography variant="body2" color="textSecondary">
-          {t('thread:sortedBy')} <OrderingButton />
+          {t('thread:sortedBy')} <OrderingButton pathname={orderingPathname} />
         </Typography>
       </Grid>
     ),
-    [classes.commentsHeader, t],
+    [classes.commentsHeader, t, orderingPathname],
   );
 
   const renderCreateCommentButton = useMemo(
