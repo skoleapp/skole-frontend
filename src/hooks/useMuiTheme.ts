@@ -4,7 +4,7 @@ import createPalette, { PaletteOptions } from '@material-ui/core/styles/createPa
 import { TypographyOptions } from '@material-ui/core/styles/createTypography'; // eslint-disable-line no-restricted-imports
 import { Overrides } from '@material-ui/core/styles/overrides'; // eslint-disable-line no-restricted-imports
 import { ComponentsProps } from '@material-ui/core/styles/props'; // eslint-disable-line no-restricted-imports
-import { useDarkModeContext } from 'context';
+import { useDarkModeContext, useScrollingContext } from 'context';
 import { useMemo } from 'react';
 import {
   BORDER,
@@ -16,6 +16,7 @@ import {
 
 export const useMuiTheme = (): Theme => {
   const { darkMode, dynamicPrimaryColor } = useDarkModeContext();
+  const { scrollingDisabled } = useScrollingContext();
 
   const palette: PaletteOptions = {
     primary: {
@@ -218,7 +219,6 @@ export const useMuiTheme = (): Theme => {
     MuiTableContainer: {
       root: {
         display: 'flex',
-        // backgroundColor: COLORS.white,
         flexGrow: 1,
         position: 'relative',
         overflow: 'hidden !important',
@@ -233,6 +233,8 @@ export const useMuiTheme = (): Theme => {
     MuiTableBody: {
       root: {
         flexGrow: 1,
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
         [_breakpoints.up('md')]: {
           overflowY: 'auto',
         },
@@ -277,11 +279,13 @@ export const useMuiTheme = (): Theme => {
       container: {
         paddingTop: 'env(safe-area-inset-top)',
       },
-      paper: {
-        overflow: 'hidden',
+      paperFullScreen: {
         paddingRight: 'env(safe-area-inset-right)',
         paddingLeft: 'env(safe-area-inset-left)',
         paddingBottom: 'env(safe-area-inset-bottom)',
+      },
+      paper: {
+        overflow: 'hidden',
         margin: spacing(4),
       },
     },
@@ -330,6 +334,7 @@ export const useMuiTheme = (): Theme => {
         },
         body: {
           backgroundColor: COLORS.secondary,
+          overflow: scrollingDisabled ? 'hidden' : 'inherit',
           [_breakpoints.down('md')]: {
             userSelect: 'none',
           },

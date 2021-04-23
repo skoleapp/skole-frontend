@@ -1,5 +1,6 @@
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
+import TableBody from '@material-ui/core/TableBody';
 import TableFooter from '@material-ui/core/TableFooter';
 import Typography from '@material-ui/core/Typography';
 import { Skeleton } from '@material-ui/lab';
@@ -45,28 +46,31 @@ export const SkeletonThreadTableList: React.FC = () => {
     [],
   );
 
-  const renderSkeletonList = useMemo(
-    () =>
-      new Array(25).fill(0).map(() => (
-        <Box height="6rem" padding={2} display="flex">
-          <Grid container>
-            <Grid item xs={12} md={8} container direction="column" justify="space-between">
-              <Typography variant="subtitle1">
-                <Skeleton />
-              </Typography>
-              <Typography variant="body2">
-                <Skeleton />
-              </Typography>
-              <Typography variant="body2">
-                <Skeleton />
-              </Typography>
+  const renderTableBody = useMemo(
+    () => (
+      <TableBody>
+        {new Array(25).fill(0).map(() => (
+          <Box height="6rem" padding={2} display="flex">
+            <Grid container>
+              <Grid item xs={12} md={8} container direction="column" justify="space-between">
+                <Typography variant="subtitle1">
+                  <Skeleton />
+                </Typography>
+                <Typography variant="body2">
+                  <Skeleton />
+                </Typography>
+                <Typography variant="body2">
+                  <Skeleton />
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={4} container>
+                {renderMobileSkeleton || renderDesktopSkeleton}
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={4} container>
-              {renderMobileSkeleton || renderDesktopSkeleton}
-            </Grid>
-          </Grid>
-        </Box>
-      )),
+          </Box>
+        ))}
+      </TableBody>
+    ),
     [renderDesktopSkeleton, renderMobileSkeleton],
   );
 
@@ -74,7 +78,7 @@ export const SkeletonThreadTableList: React.FC = () => {
 
   return (
     <>
-      {renderSkeletonList}
+      {renderTableBody}
       {renderTableFooter}
     </>
   );

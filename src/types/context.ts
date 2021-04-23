@@ -121,3 +121,9 @@ export interface VoteContextType {
   handleOpenVotePrompt: () => void;
   handleCloseVotePrompt: () => void;
 }
+
+export interface ScrollingContextType {
+  scrollingDisabled: boolean;
+  enableScrolling: () => void;
+  disableScrolling: () => void;
+}

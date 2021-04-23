@@ -10,7 +10,7 @@
   "rank": "This user's rank is {{ rank }} with a score of {{ score }}.",
   "ownRank": "Your rank is {{ rank }} with a score of {{ score }}.",
   "activity": "You have {{ unreadActivityCount }} unread activities.",
-  "closeMenu": "Close menu.",
+  "exit": "Exit.",
   "toggleDarkMode": "Toggle dark/light mode.",
   "invite": "You have {{ inviteCodeUsages }} invites left."
 }

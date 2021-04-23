@@ -47,8 +47,6 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -56,6 +54,8 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   topNavbar: {
     height: `calc(${TOP_NAVBAR_HEIGHT_MOBILE} + env(safe-area-inset-top))`,
     paddingTop: 0,
+    paddingLeft: 0, // Override the default safe area inset.
+    paddingRight: 0, // Override the default safe area inset.
     display: 'flex',
     justifyContent: 'flex-end',
     boxShadow: 'none',
@@ -63,6 +63,8 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
   },
   topNavbarSearchContainer: {
     padding: spacing(1),
+    paddingLeft: `calc(${spacing(1)} + env(safe-area-inset-left))`,
+    paddingRight: `calc(${spacing(1)} + env(safe-area-inset-right))`,
     minHeight: TOP_NAVBAR_HEIGHT_MOBILE,
     backgroundColor: palette.background.paper,
     display: 'flex',

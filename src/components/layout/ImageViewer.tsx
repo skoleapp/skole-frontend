@@ -2,11 +2,12 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
 import CloseOutlined from '@material-ui/icons/CloseOutlined';
-import { useThreadContext } from 'context';
+import { useScrollingContext, useThreadContext } from 'context';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { mediaLoader } from 'utils';
 
@@ -21,10 +22,16 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
     height: '100%',
     flexWrap: 'nowrap',
   },
+  imageContainer: {
+    position: 'relative',
+    marginBottom: 'env(safe-area-inset-bottom)',
+  },
   toolbar: {
     height: TOP_NAVBAR_HEIGHT_MOBILE,
     width: '100%',
     padding: spacing(2),
+    paddingLeft: `calc(${spacing(2)} + env(safe-area-inset-left))`,
+    paddingRight: `calc(${spacing(2)} + env(safe-area-inset-right))`,
     backgroundColor: palette.common.black,
     flexBasis: 'auto',
     [breakpoints.up('md')]: {
@@ -37,6 +44,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
 export const ImageViewer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
+  const { enableScrolling, disableScrolling } = useScrollingContext();
 
   const {
     commentImageViewerValue,
@@ -65,6 +73,14 @@ export const ImageViewer: React.FC = () => {
     threadImageViewerValue,
   ]);
 
+  useEffect(() => {
+    if (imageViewerValue) {
+      disableScrolling();
+    } else {
+      enableScrolling();
+    }
+  }, [enableScrolling, disableScrolling, imageViewerValue]);
+
   const renderToolbar = useMemo(
     () => (
       <Grid
@@ -76,22 +92,29 @@ export const ImageViewer: React.FC = () => {
         justify="flex-end"
         wrap="nowrap"
       >
-        <IconButton size="small" onClick={handleClose} color="secondary">
-          <CloseOutlined />
-        </IconButton>
+        <Tooltip title={t('common-tooltips:exit')}>
+          <IconButton size="small" onClick={handleClose} color="secondary">
+            <CloseOutlined />
+          </IconButton>
+        </Tooltip>
       </Grid>
     ),
-    [classes.toolbar, handleClose],
+    [classes.toolbar, handleClose, t],
   );
 
   const renderImage = useMemo(
     () =>
       !!imageViewerValue && (
-        <Grid item xs={12} container alignItems="center" justify="center">
+        <Grid
+          className={classes.imageContainer}
+          item
+          xs={12}
+          container
+          alignItems="center"
+          justify="center"
+        >
           <Image
-            width={1280}
-            height={720}
-            layout="intrinsic"
+            layout="fill"
             loader={mediaLoader}
             src={imageViewerValue}
             alt={alt}
@@ -99,7 +122,7 @@ export const ImageViewer: React.FC = () => {
           />
         </Grid>
       ),
-    [imageViewerValue, alt],
+    [imageViewerValue, alt, classes.imageContainer],
   );
 
   return (

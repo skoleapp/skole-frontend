@@ -12,6 +12,8 @@ import { CustomTablePaginationActions } from './CustomTablePaginationActions';
 const useStyles = makeStyles(({ breakpoints, spacing }) => ({
   toolbar: {
     padding: spacing(4),
+    paddingLeft: `calc(${spacing(4)} + env(safe-area-inset-left))`,
+    paddingRight: `calc(${spacing(4)} + env(safe-area-inset-right))`,
     display: 'flex',
     justifyContent: 'center',
     [breakpoints.down('sm')]: {

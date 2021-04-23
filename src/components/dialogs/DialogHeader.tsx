@@ -35,7 +35,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
 
   const renderCloseButton = useMemo(
     () => (
-      <Tooltip title={t('common-tooltips:closeMenu')}>
+      <Tooltip title={t('common-tooltips:exit')}>
         <IconButton onClick={onClose} size="small">
           <CloseOutlined />
         </IconButton>

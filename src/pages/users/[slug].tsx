@@ -77,14 +77,16 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
       borderRadius: BORDER_RADIUS,
     },
   },
+  tabs: {
+    paddingRight: 'env(safe-area-inset-right)',
+    paddingLeft: 'env(safe-area-inset-left)',
+  },
   createdContent: {
     flexGrow: 1,
     marginTop: spacing(2),
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    paddingRight: 'env(safe-area-inset-right)',
-    paddingLeft: 'env(safe-area-inset-left)',
     [breakpoints.up('md')]: {
       borderRadius: BORDER_RADIUS,
     },
@@ -949,7 +951,7 @@ const ProfilePage: NextPage = () => {
     () =>
       !!userMe && (
         <Paper className={classes.createdContent}>
-          <Tabs {...tabValueProps} onChange={handleTabChange}>
+          <Tabs className={classes.tabs} {...tabValueProps} onChange={handleTabChange}>
             <Tab label={`${t('common:threads')} (${threadCount})`} />
             <Tab label={`${t('common:comments')} (${commentCount})`} />
           </Tabs>
@@ -963,6 +965,7 @@ const ProfilePage: NextPage = () => {
       ),
     [
       classes.createdContent,
+      classes.tabs,
       commentCount,
       renderCreatedComments,
       renderCreatedThreads,

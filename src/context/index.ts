@@ -8,6 +8,7 @@ export * from './invite';
 export * from './language';
 export * from './notifications';
 export * from './ordering';
+export * from './scrolling';
 export * from './settings';
 export * from './share';
 export * from './thread';
