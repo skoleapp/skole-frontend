@@ -451,8 +451,13 @@ const ThreadPage: NextPage = () => {
   const handleClickReplyButton = useCallback(
     (comment: CommentObjectType): void => {
       setCreateCommentDialogOpen(true);
-      setTargetComment(comment);
       setTargetThread(null);
+
+      if (comment.comment) {
+        setTargetComment(comment.comment);
+      } else {
+        setTargetComment(comment);
+      }
     },
     [setCreateCommentDialogOpen],
   );
@@ -590,9 +595,14 @@ const ThreadPage: NextPage = () => {
   const mapReplyComments = useCallback(
     (tc: CommentObjectType): JSX.Element[] =>
       tc.replyComments.map((rc) => (
-        <CommentCard comment={rc} onCommentDeleted={silentlyRefreshThread} key={rc.id} />
+        <CommentCard
+          comment={rc}
+          onCommentDeleted={silentlyRefreshThread}
+          handleClickReplyButton={handleClickReplyButton}
+          key={rc.id}
+        />
       )),
-    [silentlyRefreshThread],
+    [silentlyRefreshThread, handleClickReplyButton],
   );
 
   const mapComments = useMemo(
