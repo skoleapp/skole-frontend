@@ -271,7 +271,7 @@ const ThreadPage: NextPage = () => {
   const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
   const [score, setScore] = useState(0);
   const starButtonTooltip = starred ? t('thread-tooltips:unstar') : t('thread-tooltips:star');
-  const creationTime = useDayjs(created).startOf('day').fromNow();
+  const creationTime = useDayjs(created).startOf('m').fromNow();
   const orderingPathname = urls.thread(slug);
   const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
   const diamondBadges = badges.filter((b) => b.tier === BadgeTier.Diamond);
