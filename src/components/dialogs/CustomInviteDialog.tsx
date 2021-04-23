@@ -118,7 +118,7 @@ export const CustomInviteDialog: React.FC<Props> = ({
   );
 
   return (
-    <SkoleDialog open={open} fullScreen={false}>
+    <SkoleDialog open={open} fullScreen={false} onClose={handleClose}>
       <DialogHeader text={header} onClose={handleClose} />
       <DialogContent>
         {dynamicContent.map((d) => d)}

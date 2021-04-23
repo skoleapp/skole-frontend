@@ -99,12 +99,15 @@ export interface ThreadFormContextType {
   threadFormParams: ThreadFormParams;
 }
 
-export type Ordering = 'best' | 'newest';
+export interface SetOrderingParams {
+  pathname: string;
+  ordering: string;
+}
 
 export interface OrderingContextType {
-  ordering: Ordering;
-  setOrdering: Dispatch<SetStateAction<Ordering>>;
+  ordering: string;
   orderingLabel: string;
+  setOrdering: (params: SetOrderingParams) => Promise<boolean>;
 }
 
 export interface InviteContextType {

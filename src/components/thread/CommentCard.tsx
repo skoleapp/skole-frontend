@@ -114,7 +114,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     padding: `${spacing(0.25)} ${spacing(1)}`,
     minWidth: 'auto',
     color: palette.text.secondary,
-    textTransform: 'capitalize',
+    textTransform: 'unset',
     marginRight: spacing(1),
     borderRadius: '0.25rem',
   },
@@ -378,7 +378,6 @@ export const CommentCard: React.FC<Props> = ({
 
   const renderReplyButton = useMemo(
     () =>
-      !!topComment &&
       !!handleClickReplyButton && (
         <Button
           onClick={(): void => handleClickReplyButton(comment)}
@@ -388,7 +387,7 @@ export const CommentCard: React.FC<Props> = ({
           {t('common:reply')}
         </Button>
       ),
-    [classes.button, t, handleClickReplyButton, comment, topComment],
+    [classes.button, t, handleClickReplyButton, comment],
   );
 
   const renderShareButton = useMemo(

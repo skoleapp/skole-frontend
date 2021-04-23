@@ -38,7 +38,7 @@
   "search": "Sök",
   "profile": "Profil",
   "postWithAccount": "Lägg upp med ditt konto",
-  "postAs": "Lägg upp som {{ användarnamn }}",
+  "postAs": "Lägg upp som {{ username }}",
   "postAsAnonymous": "Skicka som anonym",
   "selectAuthor": "Välj auktor",
   "send": "Skicka",
