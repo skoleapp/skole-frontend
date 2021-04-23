@@ -70,7 +70,7 @@ export const ThreadTableRow: React.FC<Props> = ({
   const scoreLabel = t('common:score').toLowerCase();
   const commentsLabel = t('common:comments').toLowerCase();
   const viewsLabel = t('common:views').toLowerCase();
-  const created = useDayjs(_created).startOf('day').fromNow();
+  const created = useDayjs(_created).startOf('m').fromNow();
 
   const renderTitle = useMemo(
     () => (
