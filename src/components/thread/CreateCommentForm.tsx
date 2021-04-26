@@ -143,6 +143,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   const [createCommentMutation] = useCreateCommentMutation({
     onCompleted,
     onError: toggleUnexpectedErrorNotification,
+    context,
   });
 
   const handleSubmit = async ({
@@ -160,11 +161,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       const thread = R.prop('id', _thread);
       const comment = R.prop('id', _comment);
 
-      await createCommentMutation({
-        variables: { user, text, image, file, thread, comment },
-        context,
-      });
+      const variables = {
+        user,
+        text,
+        image,
+        file,
+        thread,
+        comment,
+      };
 
+      // @ts-ignore: The mutation expects a string type for the `image` and `file` fields.
+      await createCommentMutation({ variables });
       formRef.current?.resetForm();
       handleCloseCreateCommentDialog();
       formRef.current?.setSubmitting(false);

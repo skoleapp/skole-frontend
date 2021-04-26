@@ -16,7 +16,7 @@ import { MarkdownHelperText } from '../shared';
 interface CreateThreadFormValues {
   title: string;
   text: string;
-  image: string;
+  image: File | null;
 }
 
 export const ThreadFormDialog: React.FC = () => {
@@ -70,6 +70,7 @@ export const ThreadFormDialog: React.FC = () => {
         image,
       };
 
+      // @ts-ignore: The mutation expects a string type for the `image` field.
       await createThread({ variables });
     },
     [createThread],
