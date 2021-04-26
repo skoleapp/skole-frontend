@@ -83,5 +83,6 @@
   "delete": "Radera",
   "reply": "Svara",
   "commentFileSelected": "{{ commentFileName }} vald.",
+  "uploadToSkole": "Ladda upp till Skole!",
   "releaseToShare": "Släpp för att dela"
 }

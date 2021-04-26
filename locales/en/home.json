@@ -1,6 +1,5 @@
 {
   "title": "Home",
   "inviteDialogHeader": "Congratulations!",
-  "inviteText": "Welcome to Skole, {{ username }}! You are the user number {{ id }}. As a reward, you will get a personal code that you can use to invite {{ inviteCodeUsages }} of your friends!",
-  "uploadToSkole": "Upload to Skole!"
+  "inviteText": "Welcome to Skole, {{ username }}! You are the user number {{ id }}. As a reward, you will get a personal code that you can use to invite {{ inviteCodeUsages }} of your friends!"
 }

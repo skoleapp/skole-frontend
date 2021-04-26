@@ -4,9 +4,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import PhotoLibraryOutlined from '@material-ui/icons/PhotoLibraryOutlined';
-import { useDragContext } from 'context';
+import { useDragContext, useNotificationsContext, useThreadFormContext } from 'context';
 import { useTranslation } from 'lib';
-import React, { DragEvent, useEffect, useMemo } from 'react';
+import React, { DragEvent, useCallback, useEffect, useMemo } from 'react';
 
 import { SkoleDialog } from './SkoleDialog';
 
@@ -24,14 +24,20 @@ const useStyles = makeStyles({
 });
 
 interface Props {
-  handleFileDrop: (e: DragEvent<HTMLDivElement>) => void;
-  title: string;
+  handleFileDrop?: (e: DragEvent<HTMLDivElement>) => void;
+  title?: string;
 }
 
-export const FileDropDialog: React.FC<Props> = ({ handleFileDrop, title }) => {
+export const FileDropDialog: React.FC<Props> = ({
+  handleFileDrop: _handleFileDrop,
+  title: _title,
+}) => {
   const { t } = useTranslation();
-  const { handleDragOver, handleDragLeave, dragOver } = useDragContext();
+  const { handleDragOver, handleDragLeave, dragOver, setDragOver } = useDragContext();
+  const { toggleNotification } = useNotificationsContext();
+  const { handleOpenThreadForm } = useThreadFormContext();
   const classes = useStyles();
+  const title = _title || t('common:uploadToSkole');
 
   useEffect(() => {
     window.addEventListener('dragover', handleDragOver);
@@ -40,6 +46,27 @@ export const FileDropDialog: React.FC<Props> = ({ handleFileDrop, title }) => {
       window.removeEventListener('dragover', handleDragOver);
     };
   }, [handleDragOver]);
+
+  const handleFileDrop =
+    _handleFileDrop ||
+    useCallback(
+      (e: DragEvent<HTMLDivElement>): void => {
+        e.preventDefault();
+        const file = e.dataTransfer?.files[0];
+
+        if (file) {
+          if (file.type.includes('image')) {
+            handleOpenThreadForm({ image: file });
+          } else {
+            handleOpenThreadForm();
+            toggleNotification(t('validation:invalidFileType'));
+          }
+        }
+
+        setDragOver(false);
+      },
+      [setDragOver, handleOpenThreadForm, toggleNotification, t],
+    );
 
   const renderDropMask = useMemo(
     () =>

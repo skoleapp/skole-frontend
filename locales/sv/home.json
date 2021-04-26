@@ -1,6 +1,5 @@
 {
   "title": "Hemsida",
   "inviteDialogHeader": "Grattis!",
-  "inviteText": "Välkommen till Skole, {{ username }}! Du är användarnumret {{ id }}. Som belöning får du en personlig kod som du kan använda för att bjuda in {{ inviteCodeUsages }} av dina vänner!",
-  "uploadToSkole": "Ladda upp till Skole!"
+  "inviteText": "Välkommen till Skole, {{ username }}! Du är användarnumret {{ id }}. Som belöning får du en personlig kod som du kan använda för att bjuda in {{ inviteCodeUsages }} av dina vänner!"
 }

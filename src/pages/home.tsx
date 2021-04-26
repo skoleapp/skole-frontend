@@ -27,9 +27,7 @@ import {
 } from 'components';
 import {
   useAuthContext,
-  useDragContext,
   useInviteContext,
-  useNotificationsContext,
   useOrderingContext,
   useThreadFormContext,
 } from 'context';
@@ -40,7 +38,7 @@ import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { DragEvent, useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { withDrag } from 'src/hocs/withDrag';
 import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
 import { INVITE_PROMPT_KEY, urls } from 'utils';
@@ -87,8 +85,6 @@ const HomePage: NextPage = () => {
   const queryVariables = R.pick(['page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
   const { mdUp } = useMediaQueries();
-  const { setDragOver } = useDragContext();
-  const { toggleNotification } = useNotificationsContext();
 
   const {
     handleOpenCustomInviteDialog,
@@ -122,25 +118,6 @@ const HomePage: NextPage = () => {
     handleCloseCustomInviteDialog();
     localStorage.setItem(INVITE_PROMPT_KEY, String(Date.now()));
   }, [handleCloseCustomInviteDialog]);
-
-  const handleFileDrop = useCallback(
-    (e: DragEvent<HTMLDivElement>): void => {
-      e.preventDefault();
-      const file = e.dataTransfer?.files[0];
-
-      if (file) {
-        if (file.type.includes('image')) {
-          handleOpenThreadForm({ image: file });
-        } else {
-          handleOpenThreadForm();
-          toggleNotification(t('validation:invalidFileType'));
-        }
-      }
-
-      setDragOver(false);
-    },
-    [setDragOver, handleOpenThreadForm, toggleNotification, t],
-  );
 
   const renderInviteButton = useMemo(
     () =>
@@ -278,10 +255,7 @@ const HomePage: NextPage = () => {
     ],
   );
 
-  const renderFileDropDialog = useMemo(
-    () => <FileDropDialog title={t('home:uploadToSkole')} handleFileDrop={handleFileDrop} />,
-    [handleFileDrop, t],
-  );
+  const renderFileDropDialog = useMemo(() => <FileDropDialog />, []);
 
   const layoutProps = {
     seoProps: {
