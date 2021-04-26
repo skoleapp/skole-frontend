@@ -185,6 +185,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const setImage = useCallback(
     (file: File | Blob): void => {
+      formRef.current?.setFieldValue('file', null);
+      setCommentFileName('');
       formRef.current?.setFieldValue('image', file);
       setCreateCommentDialogOpen(true);
 
@@ -195,16 +197,18 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
         setCommentImage(reader.result);
       };
     },
-    [formRef, setCommentImage, setCreateCommentDialogOpen],
+    [formRef, setCommentImage, setCreateCommentDialogOpen, setCommentFileName],
   );
 
   const setFile = useCallback(
     (file: File | Blob): void => {
+      formRef.current?.setFieldValue('image', null);
+      setCommentImage(null);
       formRef.current?.setFieldValue('file', file);
       setCreateCommentDialogOpen(true);
       setCommentFileName(R.propOr('', 'name', file));
     },
-    [formRef, setCreateCommentDialogOpen, setCommentFileName],
+    [formRef, setCreateCommentDialogOpen, setCommentFileName, setCommentImage],
   );
 
   // Automatically resize the image and update the field value.
