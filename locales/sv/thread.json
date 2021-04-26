@@ -17,6 +17,5 @@
   "inviteDialogText": "är igång! Låt dina vänner veta om det genom att bjuda in dem!",
   "viewFile": "Visa fil",
   "commentReplies": "{{ replyCount }} svarar",
-  "uploadToThread": "Ladda upp till {{ title }}!",
-  "releaseToShare": "Släpp för att dela"
+  "uploadToThread": "Ladda upp till {{ title }}!"
 }

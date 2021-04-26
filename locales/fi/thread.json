@@ -17,6 +17,5 @@
   "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!",
   "viewFile": "Näytä tiedosto",
   "commentReplies": "{{ replyCount }} vastausta",
-  "uploadToThread": "Lisää lankaan {{ title }}!",
-  "releaseToShare": "Irroita jakaaksesi"
+  "uploadToThread": "Lisää lankaan {{ title }}!"
 }

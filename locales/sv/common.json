@@ -82,5 +82,6 @@
   "dela": "Dela",
   "delete": "Radera",
   "reply": "Svara",
-  "commentFileSelected": "{{ commentFileName }} vald."
+  "commentFileSelected": "{{ commentFileName }} vald.",
+  "releaseToShare": "Släpp för att dela"
 }

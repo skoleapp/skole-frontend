@@ -23,7 +23,7 @@ export const ThreadFormDialog: React.FC = () => {
   const {
     threadFormOpen,
     handleCloseThreadForm,
-    threadFormParams: { title },
+    threadFormParams: { title = '', image = null },
   } = useThreadFormContext();
 
   const { t } = useTranslation();
@@ -80,9 +80,9 @@ export const ThreadFormDialog: React.FC = () => {
       ...generalFormValues,
       title,
       text: '',
-      image: '',
+      image,
     }),
-    [generalFormValues, title],
+    [generalFormValues, title, image],
   );
 
   const validationSchema = Yup.object().shape({

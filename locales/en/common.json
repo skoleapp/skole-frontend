@@ -82,5 +82,6 @@
   "share": "Share",
   "delete": "Delete",
   "reply": "Reply",
-  "commentFileSelected": "{{ commentFileName }} selected."
+  "commentFileSelected": "{{ commentFileName }} selected.",
+  "releaseToShare": "Release to share"
 }

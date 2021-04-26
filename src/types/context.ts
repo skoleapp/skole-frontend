@@ -89,7 +89,8 @@ export interface DarkModeContextType {
 }
 
 export interface ThreadFormParams {
-  title: string;
+  title?: string;
+  image?: File | null;
 }
 
 export interface ThreadFormContextType {
@@ -128,4 +129,11 @@ export interface VoteContextType {
 export interface ScrollingContextType {
   scrollingDisabled: boolean;
   setScrollingDisabled: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface DragContextType {
+  dragOver: boolean;
+  setDragOver: Dispatch<SetStateAction<boolean>>;
+  handleDragOver: (e: DragEvent) => void;
+  handleDragLeave: () => void;
 }

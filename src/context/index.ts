@@ -2,6 +2,7 @@ export * from './actions';
 export * from './auth';
 export * from './confirm';
 export * from './darkMode';
+export * from './drag';
 export * from './history';
 export * from './info';
 export * from './invite';

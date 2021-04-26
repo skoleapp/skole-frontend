@@ -2,6 +2,7 @@ export * from './ActionsDialog';
 export * from './ConfirmationDialog';
 export * from './CustomInviteDialog';
 export * from './DialogHeader';
+export * from './FileDropDialog';
 export * from './LanguageSelectorDialog';
 export * from './ResponsiveDialog';
 export * from './SettingsDialog';
