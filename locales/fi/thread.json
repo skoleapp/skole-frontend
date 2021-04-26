@@ -16,5 +16,7 @@
   "postingComment": "Lähetetään kommenttia...",
   "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!",
   "viewFile": "Näytä tiedosto",
-  "commentReplies": "{{ replyCount }} vastausta"
+  "commentReplies": "{{ replyCount }} vastausta",
+  "uploadToThread": "Lisää lankaan {{ title }}!",
+  "releaseToShare": "Irroita jakaaksesi"
 }

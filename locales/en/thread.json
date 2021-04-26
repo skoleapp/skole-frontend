@@ -16,5 +16,7 @@
   "postingComment": "Posting comment...",
   "inviteDialogText": "is up and running! Let your friends know about it by inviting them!",
   "viewFile": "View file",
-  "commentReplies": "{{ replyCount }} replies"
+  "commentReplies": "{{ replyCount }} replies",
+  "uploadToThread": "Upload to {{ title }}!",
+  "releaseToShare": "Release to share"
 }

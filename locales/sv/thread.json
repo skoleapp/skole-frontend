@@ -16,5 +16,7 @@
   "postingComment": "Skickar kommentar...",
   "inviteDialogText": "är igång! Låt dina vänner veta om det genom att bjuda in dem!",
   "viewFile": "Visa fil",
-  "commentReplies": "{{ replyCount }} svarar"
+  "commentReplies": "{{ replyCount }} svarar",
+  "uploadToThread": "Ladda upp till {{ title }}!",
+  "releaseToShare": "Släpp för att dela"
 }

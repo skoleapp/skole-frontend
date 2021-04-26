@@ -3,6 +3,7 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Box from '@material-ui/core/Box';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
@@ -14,6 +15,7 @@ import TableBody from '@material-ui/core/TableBody';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddOutlined from '@material-ui/icons/AddOutlined';
+import PhotoLibraryOutlined from '@material-ui/icons/PhotoLibraryOutlined';
 import ShareOutlined from '@material-ui/icons/ShareOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
@@ -34,6 +36,7 @@ import {
   OrderingButton,
   PaginatedTable,
   SkeletonCommentList,
+  SkoleDialog,
   TextLink,
   VoteButton,
 } from 'components';
@@ -71,7 +74,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { DragEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT, useMediaQueries } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaLoader, mediaUrl, urls } from 'utils';
 
@@ -185,6 +188,13 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
     paddingLeft: `calc(env(safe-area-inset-left) + ${spacing(1)})`,
     paddingRight: `calc(env(safe-area-inset-right) + ${spacing(1)})`,
   },
+  fileUploadIcon: {
+    width: '6rem',
+    height: '6rem',
+  },
+  fileDropDialog: {
+    pointerEvents: 'none',
+  },
 }));
 
 const ThreadPage: NextPage = () => {
@@ -270,6 +280,7 @@ const ThreadPage: NextPage = () => {
   const [starred, setStarred] = useState(false);
   const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
   const [score, setScore] = useState(0);
+  const [dragOver, setDragOver] = useState(false);
   const starButtonTooltip = starred ? t('thread-tooltips:unstar') : t('thread-tooltips:star');
   const creationTime = useDayjs(created).startOf('m').fromNow();
   const orderingPathname = urls.thread(slug);
@@ -283,7 +294,46 @@ const ThreadPage: NextPage = () => {
     createCommentDialogOpen,
     setCreateCommentDialogOpen,
     setThreadImageViewerValue,
+    formRef,
+    setCommentImage,
+    setCommentFileName,
   } = useThreadContext();
+
+  const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setDragOver(true);
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setDragOver(false);
+  }, []);
+
+  const handleFileDrop = useCallback(
+    (e: DragEvent<HTMLDivElement>): void => {
+      e.preventDefault();
+      const file = e.dataTransfer?.files[0];
+
+      if (file) {
+        setCreateCommentDialogOpen(true);
+
+        if (file.type.includes('image')) {
+          formRef.current?.setFieldValue('image', file);
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+
+          reader.onloadend = (): void => {
+            setCommentImage(reader.result);
+          };
+        } else {
+          formRef.current?.setFieldValue('file', file);
+          setCommentFileName(R.propOr('', 'name', file));
+        }
+      }
+
+      setDragOver(false);
+    },
+    [setCreateCommentDialogOpen, formRef, setCommentFileName, setCommentImage],
+  );
 
   useEffect(() => {
     setStarred(initialStarred);
@@ -967,6 +1017,44 @@ const ThreadPage: NextPage = () => {
     ],
   );
 
+  const renderFileDropDialog = (
+    <Box
+      position="fixed"
+      top="0"
+      left="0"
+      right="0"
+      bottom="0"
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleFileDrop}
+    >
+      <SkoleDialog
+        open={dragOver}
+        fullScreen={false}
+        fullWidth={false}
+        classes={{
+          root: classes.fileDropDialog,
+        }}
+      >
+        <DialogContent>
+          <Box display="flex" justifyContent="center" marginBottom={4}>
+            <PhotoLibraryOutlined color="disabled" className={classes.fileUploadIcon} />
+          </Box>
+          <DialogContentText color="textPrimary">
+            <Typography variant="h6" align="center">
+              {t('thread:uploadToThread', { title })}
+            </Typography>
+          </DialogContentText>
+          <DialogContentText>
+            <Typography variant="body2" align="center">
+              {t('thread:releaseToShare')}
+            </Typography>
+          </DialogContentText>
+        </DialogContent>
+      </SkoleDialog>
+    </Box>
+  );
+
   const layoutProps = {
     seoProps: {
       title,
@@ -1019,6 +1107,7 @@ const ThreadPage: NextPage = () => {
         {renderComments}
         {renderCreateCommentButton}
         {renderInviteDialog}
+        {renderFileDropDialog}
       </Paper>
     </MainTemplate>
   );

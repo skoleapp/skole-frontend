@@ -130,21 +130,15 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     }
   };
 
-  const handleClearImage = useCallback(
-    () => (): void => {
-      formRef.current?.setFieldValue('image', null);
-      setCommentImage(null);
-    },
-    [formRef, setCommentImage],
-  );
+  const handleClearImage = useCallback((): void => {
+    formRef.current?.setFieldValue('image', null);
+    setCommentImage(null);
+  }, [formRef, setCommentImage]);
 
-  const handleClearFile = useCallback(
-    () => (): void => {
-      formRef.current?.setFieldValue('file', null);
-      setCommentFileName('');
-    },
-    [formRef, setCommentFileName],
-  );
+  const handleClearFile = useCallback((): void => {
+    formRef.current?.setFieldValue('file', null);
+    setCommentFileName('');
+  }, [formRef, setCommentFileName]);
 
   const [createCommentMutation] = useCreateCommentMutation({
     onCompleted,

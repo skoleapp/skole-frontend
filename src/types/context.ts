@@ -127,6 +127,5 @@ export interface VoteContextType {
 
 export interface ScrollingContextType {
   scrollingDisabled: boolean;
-  enableScrolling: () => void;
-  disableScrolling: () => void;
+  setScrollingDisabled: Dispatch<SetStateAction<boolean>>;
 }
