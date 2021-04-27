@@ -26,6 +26,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   text,
   emoji,
   onClose,
+  hideCloseButton,
   renderHeaderLeft,
   headerCenter,
   renderHeaderRight,
@@ -34,14 +35,15 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   const classes = useStyles();
 
   const renderCloseButton = useMemo(
-    () => (
-      <Tooltip title={t('common-tooltips:exit')}>
-        <IconButton onClick={onClose} size="small">
-          <CloseOutlined />
-        </IconButton>
-      </Tooltip>
-    ),
-    [onClose, t],
+    () =>
+      !hideCloseButton && (
+        <Tooltip title={t('common-tooltips:exit')}>
+          <IconButton onClick={onClose} size="small">
+            <CloseOutlined />
+          </IconButton>
+        </Tooltip>
+      ),
+    [onClose, t, hideCloseButton],
   );
 
   const renderEmoji = useMemo(() => !!emoji && <Emoji emoji={emoji} />, [emoji]);

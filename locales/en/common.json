@@ -82,5 +82,7 @@
   "share": "Share",
   "delete": "Delete",
   "reply": "Reply",
-  "commentFileSelected": "{{ commentFileName }} selected."
+  "commentFileSelected": "{{ commentFileName }} selected.",
+  "uploadToSkole": "Upload to Skole!",
+  "releaseToShare": "Release to share"
 }

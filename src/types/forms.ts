@@ -36,8 +36,8 @@ export interface ContactFormValues {
 export interface CreateCommentFormValues {
   user: UserFieldsFragment | null;
   text: string;
-  image: string | null;
-  file: string | null;
+  image: File | null;
+  file: File | null;
   thread: ThreadObjectType | null;
   comment: CommentObjectType | null;
 }

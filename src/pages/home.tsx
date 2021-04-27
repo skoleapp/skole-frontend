@@ -17,6 +17,7 @@ import {
   CustomInviteDialog,
   Emoji,
   ErrorTemplate,
+  FileDropDialog,
   IconButtonLink,
   MainTemplate,
   OrderingButton,
@@ -38,6 +39,7 @@ import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo } from 'react';
+import { withDrag } from 'src/hocs/withDrag';
 import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
 import { INVITE_PROMPT_KEY, urls } from 'utils';
 
@@ -253,6 +255,8 @@ const HomePage: NextPage = () => {
     ],
   );
 
+  const renderFileDropDialog = useMemo(() => <FileDropDialog />, []);
+
   const layoutProps = {
     seoProps: {
       title: t('home:title'),
@@ -281,6 +285,7 @@ const HomePage: NextPage = () => {
       {renderCreateThread}
       {renderThreads}
       {renderInvitePrompt}
+      {renderFileDropDialog}
     </MainTemplate>
   );
 };
@@ -293,4 +298,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default withAuthRequired(HomePage);
+const withWrappers = R.compose(withDrag, withAuthRequired);
+
+export default withWrappers(HomePage);

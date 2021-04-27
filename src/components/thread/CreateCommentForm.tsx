@@ -130,25 +130,20 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     }
   };
 
-  const handleClearImage = useCallback(
-    () => (): void => {
-      formRef.current?.setFieldValue('image', null);
-      setCommentImage(null);
-    },
-    [formRef, setCommentImage],
-  );
+  const handleClearImage = useCallback((): void => {
+    formRef.current?.setFieldValue('image', null);
+    setCommentImage(null);
+  }, [formRef, setCommentImage]);
 
-  const handleClearFile = useCallback(
-    () => (): void => {
-      formRef.current?.setFieldValue('file', null);
-      setCommentFileName('');
-    },
-    [formRef, setCommentFileName],
-  );
+  const handleClearFile = useCallback((): void => {
+    formRef.current?.setFieldValue('file', null);
+    setCommentFileName('');
+  }, [formRef, setCommentFileName]);
 
   const [createCommentMutation] = useCreateCommentMutation({
     onCompleted,
     onError: toggleUnexpectedErrorNotification,
+    context,
   });
 
   const handleSubmit = async ({
@@ -166,11 +161,17 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
       const thread = R.prop('id', _thread);
       const comment = R.prop('id', _comment);
 
-      await createCommentMutation({
-        variables: { user, text, image, file, thread, comment },
-        context,
-      });
+      const variables = {
+        user,
+        text,
+        image,
+        file,
+        thread,
+        comment,
+      };
 
+      // @ts-ignore: The mutation expects a string type for the `image` and `file` fields.
+      await createCommentMutation({ variables });
       formRef.current?.resetForm();
       handleCloseCreateCommentDialog();
       formRef.current?.setSubmitting(false);
@@ -191,6 +192,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const setImage = useCallback(
     (file: File | Blob): void => {
+      formRef.current?.setFieldValue('file', null);
+      setCommentFileName('');
       formRef.current?.setFieldValue('image', file);
       setCreateCommentDialogOpen(true);
 
@@ -201,16 +204,18 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
         setCommentImage(reader.result);
       };
     },
-    [formRef, setCommentImage, setCreateCommentDialogOpen],
+    [formRef, setCommentImage, setCreateCommentDialogOpen, setCommentFileName],
   );
 
   const setFile = useCallback(
     (file: File | Blob): void => {
+      formRef.current?.setFieldValue('image', null);
+      setCommentImage(null);
       formRef.current?.setFieldValue('file', file);
       setCreateCommentDialogOpen(true);
       setCommentFileName(R.propOr('', 'name', file));
     },
-    [formRef, setCreateCommentDialogOpen, setCommentFileName],
+    [formRef, setCreateCommentDialogOpen, setCommentFileName, setCommentImage],
   );
 
   // Automatically resize the image and update the field value.

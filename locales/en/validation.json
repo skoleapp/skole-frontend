@@ -5,5 +5,6 @@
   "required": "This field is required.",
   "networkError": "Network error.",
   "fileSizeError": "File is too large!",
-  "textImageOrFileRequired": "Either text, image or a file is required."
+  "textImageOrFileRequired": "Either text, image or a file is required.",
+  "invalidFileType": "Invalid file type!"
 }

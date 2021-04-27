@@ -67,7 +67,7 @@ export const AuthorSelection = <T extends FormikValues>({
   const renderAuthorSelectionText = (
     <Typography variant="body2" color="textSecondary">
       <Grid container alignItems="center">
-        {user ? t('common:postWithAccount') : t('common:postAsAnonymousStudent')}
+        {user ? t('common:postWithAccount') : t('common:postAsAnonymous')}
       </Grid>
     </Typography>
   );

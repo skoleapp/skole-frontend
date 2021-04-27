@@ -7,13 +7,10 @@ export const useScrollingContext = (): ScrollingContextType => useContext(Scroll
 
 export const ScrollingContextProvider: React.FC = ({ children }) => {
   const [scrollingDisabled, setScrollingDisabled] = useState(false);
-  const enableScrolling = (): void => setScrollingDisabled(false);
-  const disableScrolling = (): void => setScrollingDisabled(true);
 
   const value = {
     scrollingDisabled,
-    enableScrolling,
-    disableScrolling,
+    setScrollingDisabled,
   };
 
   return <ScrollingContext.Provider value={value}>{children}</ScrollingContext.Provider>;

@@ -6,19 +6,30 @@ const ThreadFormContext = createContext<ThreadFormContextType>({});
 
 export const useThreadFormContext = (): ThreadFormContextType => useContext(ThreadFormContext);
 
+const initialThreadFormParams = {
+  title: '',
+  image: null,
+};
+
 export const ThreadFormContextProvider: React.FC = ({ children }) => {
   const [threadFormOpen, setThreadFormOpen] = useState(false);
-  const [threadFormParams, setThreadFormParams] = useState<ThreadFormParams>({ title: '' });
+
+  const [threadFormParams, setThreadFormParams] = useState<ThreadFormParams>(
+    initialThreadFormParams,
+  );
 
   const handleOpenThreadForm = (params?: ThreadFormParams): void => {
     setThreadFormOpen(true);
 
     if (params) {
-      setThreadFormParams(params);
+      setThreadFormParams({ ...threadFormParams, ...params });
     }
   };
 
-  const handleCloseThreadForm = (): void => setThreadFormOpen(false);
+  const handleCloseThreadForm = (): void => {
+    setThreadFormOpen(false);
+    setThreadFormParams(initialThreadFormParams);
+  };
 
   const value = {
     threadFormOpen,

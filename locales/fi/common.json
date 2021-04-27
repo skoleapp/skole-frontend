@@ -82,5 +82,7 @@
   "share": "Jaa",
   "delete": "Poista",
   "reply": "Vastaa",
-  "commentFileSelected": "{{ commentFileName }} valittu."
+  "commentFileSelected": "{{ commentFileName }} valittu.",
+  "uploadToSkole": "Lisää Skoleen!",
+  "releaseToShare": "Irroita jakaaksesi"
 }

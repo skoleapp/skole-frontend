@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import {
   ActionRequiredTemplate,
   ErrorTemplate,
+  FileDropDialog,
   MainTemplate,
   NotFoundBox,
   PaginatedTable,
@@ -38,6 +39,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { withDrag } from 'src/hocs/withDrag';
 import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE, useMediaQueries } from 'styles';
 import { getPaginationQuery, urls } from 'utils';
 
@@ -293,6 +295,8 @@ const SearchPage: NextPage = () => {
     ],
   );
 
+  const renderFileDropDialog = useMemo(() => <FileDropDialog />, []);
+
   const layoutProps = {
     seoProps: {
       title: t('search:title'),
@@ -321,6 +325,7 @@ const SearchPage: NextPage = () => {
         {renderHeader}
         {renderResultsInfo}
         {renderResults}
+        {renderFileDropDialog}
       </Paper>
     </MainTemplate>
   );
@@ -332,4 +337,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-export default withAuthRequired(SearchPage);
+const withWrappers = R.compose(withDrag, withAuthRequired);
+
+export default withWrappers(SearchPage);

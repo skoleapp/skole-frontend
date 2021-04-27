@@ -26,6 +26,7 @@ import {
   CustomInviteDialog,
   Emoji,
   ErrorTemplate,
+  FileDropDialog,
   LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
@@ -41,6 +42,7 @@ import {
   useAuthContext,
   useConfirmContext,
   useDarkModeContext,
+  useDragContext,
   useInviteContext,
   useNotificationsContext,
   useOrderingContext,
@@ -71,7 +73,8 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { DragEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { withDrag } from 'src/hocs/withDrag';
 import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT, useMediaQueries } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaLoader, mediaUrl, urls } from 'utils';
 
@@ -266,6 +269,7 @@ const ThreadPage: NextPage = () => {
   const [targetThread, setTargetThread] = useState<ThreadObjectType | null>(null);
   const { dynamicPrimaryColor } = useDarkModeContext();
   const { handleOpenShareDialog } = useShareContext();
+  const { setDragOver } = useDragContext();
   const [stars, setStars] = useState(0);
   const [starred, setStarred] = useState(false);
   const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
@@ -283,7 +287,37 @@ const ThreadPage: NextPage = () => {
     createCommentDialogOpen,
     setCreateCommentDialogOpen,
     setThreadImageViewerValue,
+    formRef,
+    setCommentImage,
+    setCommentFileName,
   } = useThreadContext();
+
+  const handleFileDrop = useCallback(
+    (e: DragEvent<HTMLDivElement>): void => {
+      e.preventDefault();
+      const file = e.dataTransfer?.files[0];
+
+      if (file) {
+        setCreateCommentDialogOpen(true);
+
+        if (file.type.includes('image')) {
+          formRef.current?.setFieldValue('image', file);
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+
+          reader.onloadend = (): void => {
+            setCommentImage(reader.result);
+          };
+        } else {
+          formRef.current?.setFieldValue('file', file);
+          setCommentFileName(R.propOr('', 'name', file));
+        }
+      }
+
+      setDragOver(false);
+    },
+    [setCreateCommentDialogOpen, formRef, setCommentFileName, setCommentImage, setDragOver],
+  );
 
   useEffect(() => {
     setStarred(initialStarred);
@@ -413,10 +447,10 @@ const ThreadPage: NextPage = () => {
     [t, title, creatorUsername, commentCount],
   );
 
-  const handleClickShareButton = useCallback((): void => handleOpenShareDialog(shareDialogParams), [
-    shareDialogParams,
-    handleOpenShareDialog,
-  ]);
+  const handleClickShareButton = useCallback((): void => {
+    handleCloseCustomInviteDialog();
+    handleOpenShareDialog(shareDialogParams);
+  }, [shareDialogParams, handleOpenShareDialog, handleCloseCustomInviteDialog]);
 
   const renderShareButton = useMemo(
     () => (
@@ -967,6 +1001,10 @@ const ThreadPage: NextPage = () => {
     ],
   );
 
+  const renderFileDropDialog = (
+    <FileDropDialog title={t('thread:uploadToThread', { title })} handleFileDrop={handleFileDrop} />
+  );
+
   const layoutProps = {
     seoProps: {
       title,
@@ -1019,6 +1057,7 @@ const ThreadPage: NextPage = () => {
         {renderComments}
         {renderCreateCommentButton}
         {renderInviteDialog}
+        {renderFileDropDialog}
       </Paper>
     </MainTemplate>
   );
@@ -1038,6 +1077,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   revalidate: MAX_REVALIDATION_INTERVAL,
 });
 
-const withWrappers = R.compose(withUserMe, withActions, withThread);
+const withWrappers = R.compose(withUserMe, withActions, withThread, withDrag);
 
 export default withWrappers(ThreadPage);
