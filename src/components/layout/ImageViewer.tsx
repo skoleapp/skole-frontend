@@ -44,7 +44,7 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
 export const ImageViewer: React.FC = () => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { setScrollingDisabled } = useScrollingContext();
+  const { setScrollingDisabled, setZoomingDisabled } = useScrollingContext();
 
   const {
     commentImageViewerValue,
@@ -76,10 +76,12 @@ export const ImageViewer: React.FC = () => {
   useEffect(() => {
     if (imageViewerValue) {
       setScrollingDisabled(true);
+      setZoomingDisabled(false);
     } else {
       setScrollingDisabled(false);
+      setZoomingDisabled(true);
     }
-  }, [setScrollingDisabled, imageViewerValue]);
+  }, [setScrollingDisabled, imageViewerValue, setZoomingDisabled]);
 
   const renderToolbar = useMemo(
     () => (
