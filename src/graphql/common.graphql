@@ -13,10 +13,10 @@ fragment activityFields on ActivityObjectType {
       slug
     }
     comment {
-        id
-        thread {
-            slug
-        }
+      id
+      thread {
+        slug
+      }
     }
   }
   badgeProgress {
@@ -357,6 +357,7 @@ query UserComments($slug: String, $page: Int, $pageSize: Int) {
 
 mutation Register($username: String!, $email: String!, $password: String!) {
   register(input: { username: $username, email: $email, password: $password }) {
+    invalidEmailDomain
     errors {
       field
       messages
@@ -491,6 +492,7 @@ mutation UpdateAccountSettings(
     }
   ) {
     successMessage
+    invalidEmailDomain
     user {
       ...userFields
     }
