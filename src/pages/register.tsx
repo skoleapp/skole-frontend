@@ -64,6 +64,7 @@ const RegisterPage: NextPage = () => {
   const initialCode = query.code ? String(query.code) : '';
   const [savedEmail, setSavedEmail] = useState('');
   const [savedPassword, setSavedPassword] = useState('');
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
 
   const {
     formRef: registerFormRef,
@@ -116,6 +117,10 @@ const RegisterPage: NextPage = () => {
   const onRegisterCompleted = async ({ register }: RegisterMutation): Promise<void> => {
     if (register?.errors?.length) {
       handleRegisterMutationErrors(register.errors);
+
+      if (register?.invalidEmailDomain) {
+        setEmailDialogOpen(true);
+      }
     } else if (registerFormRef.current) {
       const { email, password } = registerFormRef.current.values;
       setSavedEmail(email);
@@ -193,8 +198,14 @@ const RegisterPage: NextPage = () => {
   );
 
   const renderEmailField = useCallback(
-    (props: FormikProps<RegisterFormValues>) => <PrimaryEmailField {...props} />,
-    [],
+    (props: FormikProps<RegisterFormValues>) => (
+      <PrimaryEmailField
+        dialogOpen={emailDialogOpen}
+        setDialogOpen={setEmailDialogOpen}
+        {...props}
+      />
+    ),
+    [emailDialogOpen, setEmailDialogOpen],
   );
 
   const renderInviteCodeHelperText = useMemo(

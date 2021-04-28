@@ -20,7 +20,7 @@ import { withAuthRequired } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { urls } from 'utils';
 import * as Yup from 'yup';
 
@@ -53,6 +53,7 @@ const AccountSettingsPage: NextPage = () => {
   const classes = useStyles();
   const context = useLanguageHeaderContext();
   const { toggleNotification } = useNotificationsContext();
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
 
   const {
     setUserMe,
@@ -99,6 +100,10 @@ const AccountSettingsPage: NextPage = () => {
   const onCompleted = ({ updateAccountSettings }: UpdateAccountSettingsMutation): void => {
     if (updateAccountSettings?.errors?.length) {
       handleMutationErrors(updateAccountSettings.errors);
+
+      if (updateAccountSettings?.invalidEmailDomain) {
+        setEmailDialogOpen(true);
+      }
     } else if (!!updateAccountSettings?.successMessage && !!updateAccountSettings?.user) {
       formRef.current?.setSubmitting(false);
       toggleNotification(updateAccountSettings.successMessage);
@@ -164,8 +169,14 @@ const AccountSettingsPage: NextPage = () => {
   });
 
   const renderEmailField = useCallback(
-    (props: FormikProps<UpdateAccountSettingsFormValues>) => <PrimaryEmailField {...props} />,
-    [],
+    (props: FormikProps<UpdateAccountSettingsFormValues>) => (
+      <PrimaryEmailField
+        dialogOpen={emailDialogOpen}
+        setDialogOpen={setEmailDialogOpen}
+        {...props}
+      />
+    ),
+    [emailDialogOpen, setEmailDialogOpen],
   );
 
   const renderBackupEmailField = useMemo(

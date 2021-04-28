@@ -9,17 +9,23 @@ import Typography from '@material-ui/core/Typography';
 import HelpOutlineOutlined from '@material-ui/icons/HelpOutlineOutlined';
 import { Field, FormikProps, FormikValues } from 'formik';
 import { useTranslation } from 'lib';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import { ALLOWED_EMAIL_DOMAINS } from 'utils';
 
 import { DialogHeader, SkoleDialog } from '../dialogs';
 import { TextFormField } from './TextFormField';
 
-export const PrimaryEmailField = <T extends FormikValues>(
-  props: FormikProps<T> & TextFieldProps,
-): JSX.Element => {
+interface Props<T> extends FormikProps<T> {
+  dialogOpen: boolean;
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const PrimaryEmailField = <T extends FormikValues>({
+  dialogOpen,
+  setDialogOpen,
+  ...props
+}: Props<T> & TextFieldProps): JSX.Element => {
   const { t } = useTranslation();
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleCloseDialog = useCallback((): void => setDialogOpen(false), [setDialogOpen]);
 
