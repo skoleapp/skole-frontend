@@ -129,6 +129,8 @@ export interface VoteContextType {
 export interface ScrollingContextType {
   scrollingDisabled: boolean;
   setScrollingDisabled: Dispatch<SetStateAction<boolean>>;
+  zoomingDisabled: boolean;
+  setZoomingDisabled: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface DragContextType {

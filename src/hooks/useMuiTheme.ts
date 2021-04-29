@@ -16,7 +16,7 @@ import {
 
 export const useMuiTheme = (): Theme => {
   const { darkMode, dynamicPrimaryColor } = useDarkModeContext();
-  const { scrollingDisabled } = useScrollingContext();
+  const { scrollingDisabled, zoomingDisabled } = useScrollingContext();
 
   const palette: PaletteOptions = {
     primary: {
@@ -336,7 +336,7 @@ export const useMuiTheme = (): Theme => {
           backgroundColor: COLORS.secondary,
           overflow: scrollingDisabled ? 'hidden' : 'inherit',
           [_breakpoints.down('md')]: {
-            userSelect: 'none',
+            userSelect: zoomingDisabled ? 'none' : 'inherit',
           },
         },
         '.avatar-thumbnail': {
