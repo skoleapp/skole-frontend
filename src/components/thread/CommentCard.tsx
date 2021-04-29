@@ -90,11 +90,11 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     wordBreak: 'break-word',
     fontSize: '0.95rem',
   },
-  imagePreviewContainer: {
+  thumbnailContainer: {
     marginRight: spacing(3),
     display: 'flex',
   },
-  imagePreview: {
+  thumbnail: {
     border: `0.1rem solid ${
       palette.type === 'dark' ? palette.secondary.main : palette.primary.main
     } !important`,
@@ -154,7 +154,6 @@ export const CommentCard: React.FC<Props> = ({
   const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', creator);
   const creatorSlug = R.prop('slug', creator);
   const isOwn = R.prop('isOwn', comment);
-  const file = R.prop('file', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();
   const badges: BadgeObjectType[] = R.propOr([], 'badges', creator);
@@ -323,9 +322,9 @@ export const CommentCard: React.FC<Props> = ({
     () =>
       !!comment.imageThumbnail && (
         <Tooltip title={t('thread-tooltips:commentImage')}>
-          <Box className={classes.imagePreviewContainer}>
+          <Box className={classes.thumbnailContainer}>
             <Image
-              className={classes.imagePreview}
+              className={classes.thumbnail}
               onClick={handleClickImage}
               loader={mediaLoader}
               src={comment.imageThumbnail}
@@ -336,14 +335,31 @@ export const CommentCard: React.FC<Props> = ({
           </Box>
         </Tooltip>
       ),
-    [
-      classes.imagePreview,
-      classes.imagePreviewContainer,
-      comment.imageThumbnail,
-      handleClickImage,
-      t,
-    ],
+    [classes.thumbnail, classes.thumbnailContainer, comment.imageThumbnail, handleClickImage, t],
   );
+
+  const renderFileThumbnail = useMemo(
+    () =>
+      !!comment.fileThumbnail && (
+        <Tooltip title={t('thread-tooltips:commentFile')}>
+          <ExternalLink href={mediaUrl(comment.file)}>
+            <Box className={classes.thumbnailContainer}>
+              <Image
+                className={classes.thumbnail}
+                loader={mediaLoader}
+                src={comment.fileThumbnail}
+                layout="fixed"
+                width={60}
+                height={60}
+              />
+            </Box>
+          </ExternalLink>
+        </Tooltip>
+      ),
+    [classes.thumbnail, classes.thumbnailContainer, comment.file, comment.fileThumbnail, t],
+  );
+
+  const renderThumbnail = renderImageThumbnail || renderFileThumbnail;
 
   const renderText = useMemo(
     () => (
@@ -362,18 +378,6 @@ export const CommentCard: React.FC<Props> = ({
         </Typography>
       ),
     [replyCount, t, topComment, classes.actionsText],
-  );
-
-  const renderFileLink = useMemo(
-    () =>
-      file && (
-        <ExternalLink href={mediaUrl(file)}>
-          <Button className={classes.button} color="default">
-            {t('thread:viewFile')}
-          </Button>
-        </ExternalLink>
-      ),
-    [t, file, classes.button],
   );
 
   const renderReplyButton = useMemo(
@@ -463,39 +467,25 @@ export const CommentCard: React.FC<Props> = ({
 
   const renderImageAndText = useMemo(
     () =>
-      (!!comment.text || !!comment.imageThumbnail) && (
+      (!!comment.text || !!renderThumbnail) && (
         <Grid item xs={12} className={classes.messageContent} container alignItems="center">
-          {renderImageThumbnail}
+          {renderThumbnail}
           {renderText}
         </Grid>
       ),
-    [
-      classes.messageContent,
-      comment.imageThumbnail,
-      comment.text,
-      renderImageThumbnail,
-      renderText,
-    ],
+    [classes.messageContent, comment.text, renderThumbnail, renderText],
   );
 
   const renderButtons = useMemo(
     () => (
       <Grid item xs={12} className={classes.actions} container alignItems="center">
         {renderReplyCount}
-        {renderFileLink}
         {renderReplyButton}
         {renderShareButton}
         {renderDeleteButton}
       </Grid>
     ),
-    [
-      classes.actions,
-      renderDeleteButton,
-      renderFileLink,
-      renderReplyButton,
-      renderReplyCount,
-      renderShareButton,
-    ],
+    [classes.actions, renderDeleteButton, renderReplyButton, renderReplyCount, renderShareButton],
   );
 
   return (

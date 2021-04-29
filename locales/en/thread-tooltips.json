@@ -3,6 +3,7 @@
   "threadActions": "Show thread menu.",
   "threadImage": "View thread image.",
   "commentImage": "View comment's image.",
+  "commentFile": "View comment's file.",
   "addCommentImage": "Add an image.",
   "addCommentFile": "Add a file.",
   "clearCommentImage": "Clear image.",

@@ -301,6 +301,7 @@ fragment _commentFields on CommentObjectType {
   image
   imageThumbnail
   file
+  fileThumbnail
   score
   replyCount
   isOwn
