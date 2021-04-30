@@ -342,8 +342,8 @@ export const CommentCard: React.FC<Props> = ({
     () =>
       !!comment.fileThumbnail && (
         <Tooltip title={t('thread-tooltips:commentFile')}>
-          <ExternalLink href={mediaUrl(comment.file)}>
-            <Box className={classes.thumbnailContainer}>
+          <Box className={classes.thumbnailContainer}>
+            <ExternalLink href={mediaUrl(comment.file)}>
               <Image
                 className={classes.thumbnail}
                 loader={mediaLoader}
@@ -352,8 +352,8 @@ export const CommentCard: React.FC<Props> = ({
                 width={60}
                 height={60}
               />
-            </Box>
-          </ExternalLink>
+            </ExternalLink>
+          </Box>
         </Tooltip>
       ),
     [classes.thumbnail, classes.thumbnailContainer, comment.file, comment.fileThumbnail, t],
