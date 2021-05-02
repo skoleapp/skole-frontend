@@ -1,13 +1,15 @@
-name: Trello
+name: "Trello"
+
 on:
   pull_request:
     types: [opened, reopened, edited]
+
 jobs:
   attach-trello:
     runs-on: ubuntu-latest
-    name: Attach to Card
+    name: "Attach to Card"
     steps:
-      - uses: delivered/attach-to-trello-card-action@master
+      - uses: delivered/attach-to-trello-card-action@411e2e167af3fe356062aa48de3d63bd0fa8c5b0  # v2.0.1
         with:
           trello-key: ${{ secrets.TRELLO_KEY }}
           trello-token: ${{ secrets.TRELLO_TOKEN }}

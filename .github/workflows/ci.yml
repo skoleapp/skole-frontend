@@ -30,7 +30,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: "Set up Docker Buildx"
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@0d135e0c2fc0dba0729c1a47ecfcf5a3c7f8579e  # v1.3.0
 
     - name: "Set up Docker layer caching"
       uses: ruohola/cache@main
@@ -41,13 +41,13 @@ jobs:
           ${{ runner.os }}-buildx-
 
     - name: "Login to Dockerhub"
-      uses: docker/login-action@v1
+      uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c  # v1.9.0
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: "Build and cache the image"
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@e1b7f96249f2e4c8e4ac1519b9608c0d48944a1f  # v2.4.0
       with:
         context: .
         target: ci
@@ -74,7 +74,7 @@ jobs:
 
     - name: "Upload coverage to Codecov"
       if: ${{ github.event_name == 'pull_request' }}
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@967e2b38a85a62bd61be5529ada27ebc109948c2  # v1.4.1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./clover.xml
