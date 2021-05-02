@@ -934,8 +934,12 @@ const ProfilePage: NextPage = () => {
     [commentsPaginationCount, commentsPage, renderCommentTableBody, comments.length, slug],
   );
 
-  const renderThreadsNotFound = useMemo(() => <NotFoundBox text={noThreads} />, [noThreads]);
-  const renderCommentsNotFound = useMemo(() => <NotFoundBox text={noComments} />, [noComments]);
+  const renderThreadsNotFound = useMemo(() => noThreads && <NotFoundBox text={noThreads} />, [
+    noThreads,
+  ]);
+  const renderCommentsNotFound = useMemo(() => noComments && <NotFoundBox text={noComments} />, [
+    noComments,
+  ]);
 
   const renderCreatedThreads = useMemo(
     () => renderThreadsLoading || renderThreadTable || renderThreadsNotFound,
