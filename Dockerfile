@@ -34,7 +34,7 @@ COPY --chown=user:user yarn.lock .
 
 ENV NODE_ENV=development
 
-RUN yarn install && yarn cache clean
+RUN yarn install --frozen-lockfile && yarn cache clean
 
 CMD ["yarn", "dev"]
 
@@ -69,7 +69,7 @@ ENV NODE_ENV=production
 RUN yarn build
 
 # Get rid of all dev dependencies.
-RUN yarn install --production --ignore-scripts --prefer-offline && yarn cache clean
+RUN yarn install --frozen-lockfile --production --ignore-scripts --prefer-offline && yarn cache clean
 
 
 FROM base as prod
