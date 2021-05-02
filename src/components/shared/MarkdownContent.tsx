@@ -46,7 +46,7 @@ export const MarkdownContent: React.FC<Props> = ({ children, dense }) => {
     <ReactMarkdown
       className={clsx(classes.root, dense && classes.dense)}
       plugins={[gfm]}
-      disallowedTypes={['image']} // Do not render images.
+      disallowedElements={['img']} // Do not render images.
       linkTarget="_blank" // Open all links externally.
     >
       {children}

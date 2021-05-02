@@ -1,4 +1,4 @@
-FROM node:15.10.0-buster-slim@sha256:2a351dd6e7236d277f51f00266cc1807791b217837392cfd39fa64c01cb6c094 AS base
+FROM node:16.0-buster-slim@sha256:6f7c6ca9be1dbc58f3b8ba08545cb74cef98195f679055f5ff1db25b7c6c9222 AS base
 
 RUN groupadd --gid=10001 user \
     && useradd --gid=user --uid=10000 --create-home user
@@ -34,7 +34,7 @@ COPY --chown=user:user yarn.lock .
 
 ENV NODE_ENV=development
 
-RUN yarn install && yarn cache clean
+RUN yarn install --frozen-lockfile && yarn cache clean
 
 CMD ["yarn", "dev"]
 
@@ -69,7 +69,7 @@ ENV NODE_ENV=production
 RUN yarn build
 
 # Get rid of all dev dependencies.
-RUN yarn install --production --ignore-scripts --prefer-offline && yarn cache clean
+RUN yarn install --frozen-lockfile --production --ignore-scripts --prefer-offline && yarn cache clean
 
 
 FROM base as prod
