@@ -33,7 +33,7 @@ export const PrimaryEmailField = <T extends FormikValues>({
     () => ({
       endAdornment: (
         <InputAdornment position="end">
-          <IconButton onClick={(): void => setDialogOpen(true)}>
+          <IconButton onClick={(): void => setDialogOpen(true)} tabIndex="-1">
             <HelpOutlineOutlined />
           </IconButton>
         </InputAdornment>
