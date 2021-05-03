@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { HistoryContextProvider } from 'context';
-import { withDarkMode, withScrolling } from 'hocs';
+import { withDarkMode, withMediaQueries, withScrolling } from 'hocs';
 import { useMuiTheme } from 'hooks';
 import i18nConfig from 'i18n';
 import { appWithI18n, I18nProvider, useApollo } from 'lib';
@@ -46,7 +46,7 @@ const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   );
 };
 
-const withWrappers = R.compose(withDarkMode, withScrolling);
+const withWrappers = R.compose(withDarkMode, withScrolling, withMediaQueries);
 
 // Ignore: The `appWithI18n` types are missing the `pageProps` object.
 // @ts-ignore

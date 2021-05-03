@@ -28,6 +28,7 @@
         "paths": [
           "@material-ui/core",
           "@material-ui/icons",
+          "@material-ui/core/useMediaQuery",
           "__generated__/src/graphql/common.graphql"
         ],
         "patterns": [

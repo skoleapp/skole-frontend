@@ -4,11 +4,11 @@ import TableBody from '@material-ui/core/TableBody';
 import TableFooter from '@material-ui/core/TableFooter';
 import Typography from '@material-ui/core/Typography';
 import { Skeleton } from '@material-ui/lab';
+import { useMediaQueryContext } from 'context';
 import React, { useMemo } from 'react';
-import { useMediaQueries } from 'styles';
 
 export const SkeletonThreadTableList: React.FC = () => {
-  const { smDown } = useMediaQueries();
+  const { smDown } = useMediaQueryContext();
 
   const renderMobileSkeleton = useMemo(
     () =>

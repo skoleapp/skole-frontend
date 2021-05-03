@@ -16,8 +16,8 @@ const useStyles = makeStyles(({ palette, spacing }) => ({
     backgroundColor: palette.primary.main,
     paddingTop: spacing(8),
     paddingBottom: spacing(8),
-    paddingLeft: `env(safe-area-inset-left)`,
-    paddingRight: `env(safe-area-inset-right)`,
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
   },
   header: {
     fontWeight: 'bold',

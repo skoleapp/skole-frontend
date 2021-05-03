@@ -1,15 +1,14 @@
 import { TextFieldProps } from '@material-ui/core/TextField';
-import { useThreadContext } from 'context';
+import { useMediaQueryContext, useThreadContext } from 'context';
 import { Field, FormikProps, FormikValues } from 'formik';
 import React from 'react';
-import { useMediaQueries } from 'styles';
 
 import { TextFormField } from '../form-fields';
 
 export const CommentTextField = <T extends FormikValues>(
   props: FormikProps<T> & TextFieldProps,
 ): JSX.Element => {
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
   const { formRef } = useThreadContext();
 
   // On desktop, submit form from enter key and add new line from Shift + Enter.

@@ -1,17 +1,16 @@
 import { LandingPageTemplate, LoadingTemplate } from 'components';
-import { useAuthContext } from 'context';
+import { useAuthContext, useMediaQueryContext } from 'context';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { GetStaticProps, NextPage } from 'next';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
-import { useMediaQueries } from 'styles';
 import { urls } from 'utils';
 
 const LandingPage: NextPage = () => {
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
-  const { smDown } = useMediaQueries();
+  const { smDown } = useMediaQueryContext();
 
   // Redirect authenticated users to home page.
   useEffect(() => {

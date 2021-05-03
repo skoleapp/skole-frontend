@@ -2,14 +2,10 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import { useMediaQueryContext } from 'context';
 import * as R from 'ramda';
 import React, { useMemo } from 'react';
-import {
-  BOTTOM_NAVBAR_HEIGHT,
-  TOP_NAVBAR_HEIGHT_DESKTOP,
-  TOP_NAVBAR_HEIGHT_MOBILE,
-  useMediaQueries,
-} from 'styles';
+import { BOTTOM_NAVBAR_HEIGHT, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { MainTemplateProps } from 'types';
 
 import { BottomNavbar, Footer, HeadComponent as Head, TopNavbar } from '../layout';
@@ -65,7 +61,7 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { smDown, mdUp } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueryContext();
   const containerFullWidth = R.propOr(false, 'fullWidth', containerProps);
   const containerDense = R.propOr(false, 'dense', containerProps);
 

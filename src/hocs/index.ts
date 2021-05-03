@@ -2,6 +2,7 @@ export * from './withActions';
 export * from './withAuthRequired';
 export * from './withCommonContexts';
 export * from './withDarkMode';
+export * from './withMediaQueries';
 export * from './withScrolling';
 export * from './withThread';
 export * from './withUserMe';

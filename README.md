@@ -94,3 +94,4 @@ A quick look at the top-level files and directories excluding Git ignored locati
 - Do not use `next/link`, use our custom `Link`-component instead to make sure anchor tags are always rendered properly.
 - Generate Cypress fixtures easily by copying the request from `common.graphql` and using e.g. [Insomnia](https://insomnia.rest) to get the backend response as JSON.
 - Use `useMemo/useCallback` for all conditional rendering to optimize performance.
+- Use MUI media queries through the `useMediaQueryContext`-hook and not directly.

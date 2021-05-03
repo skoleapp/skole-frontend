@@ -1,9 +1,8 @@
 import IconButton, { IconButtonProps } from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import MoreHorizOutlined from '@material-ui/icons/MoreHorizOutlined';
-import { useActionsContext } from 'context';
+import { useActionsContext, useMediaQueryContext } from 'context';
 import React from 'react';
-import { useMediaQueries } from 'styles';
 import { ActionsDialogParams } from 'types';
 
 interface Props extends IconButtonProps {
@@ -13,7 +12,7 @@ interface Props extends IconButtonProps {
 
 export const ActionsButton: React.FC<Props> = ({ tooltip, actionsDialogParams, ...props }) => {
   const { handleOpenActionsDialog } = useActionsContext();
-  const { smDown } = useMediaQueries();
+  const { smDown } = useMediaQueryContext();
   const color = smDown ? 'secondary' : 'default';
   const handleClick = (): void => handleOpenActionsDialog(actionsDialogParams);
 

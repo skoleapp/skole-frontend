@@ -3,9 +3,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import { useMediaQueryContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { useMemo } from 'react';
-import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 
 import { Emoji, SettingsButton, SettingsList } from '../shared';
@@ -42,7 +43,7 @@ export const SettingsTemplate: React.FC<MainTemplateProps> = ({
 }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
   const settingsHeaderText = t('common:settings');
   const mainHeaderText = topNavbarProps?.header;
 

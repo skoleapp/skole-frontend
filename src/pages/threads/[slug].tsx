@@ -44,6 +44,7 @@ import {
   useDarkModeContext,
   useDragContext,
   useInviteContext,
+  useMediaQueryContext,
   useNotificationsContext,
   useOrderingContext,
   useShareContext,
@@ -75,7 +76,7 @@ import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { DragEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { withDrag } from 'src/hocs/withDrag';
-import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT, useMediaQueries } from 'styles';
+import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaLoader, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
@@ -195,7 +196,7 @@ const ThreadPage: NextPage = () => {
   const { t } = useTranslation();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const { confirm } = useConfirmContext();
-  const { mdUp, smDown } = useMediaQueries();
+  const { mdUp, smDown } = useMediaQueryContext();
   const { query } = useRouter();
   const { userMe, verified } = useAuthContext();
   const context = useLanguageHeaderContext();
@@ -891,7 +892,7 @@ const ThreadPage: NextPage = () => {
         <Grid item xs={12} md={6} container alignItems="flex-end">
           <CardContent className={classes.threadInfoCardContent}>
             <Typography variant="body2" color="textSecondary" align={smDown ? 'left' : 'right'}>
-              {t('thread:views', { views })} | {t('thread:comments', { commentCount })} |{' '}
+              {t('thread:views', { views })} |{t('thread:comments', { commentCount })} |{' '}
               {t('thread:stars', { stars })}
             </Typography>
           </CardContent>
