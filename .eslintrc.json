@@ -41,6 +41,7 @@
     "simple-import-sort/imports": "error", // Require imports to be ordered correctly.
     "simple-import-sort/exports": "error", // Require exports to be ordered correctly.
     "no-underscore-dangle": "off", // Ignore underscores in e.g. GraphQL type names etc.
+    "no-inline-comments": "off", // Allow commenting inline on JSX.
     "react/jsx-props-no-spreading": "off", // Allow prop spreading.
     "@typescript-eslint/naming-convention": "off", // Allows usage of e.g. underscores in variable names.
     "react-hooks/rules-of-hooks": "off", // Allow calling e.g. `useDayjs` within JSX.
