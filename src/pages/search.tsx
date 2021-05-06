@@ -23,7 +23,7 @@ import {
   SkeletonThreadTableList,
   ThreadTableBody,
 } from 'components';
-import { useAuthContext, useThreadFormContext } from 'context';
+import { useAuthContext, useMediaQueryContext, useThreadFormContext } from 'context';
 import { useThreadsQuery } from 'generated';
 import { withAuthRequired } from 'hocs';
 import { useLanguageHeaderContext } from 'hooks';
@@ -40,7 +40,7 @@ import React, {
   useState,
 } from 'react';
 import { withDrag } from 'src/hocs/withDrag';
-import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE, useMediaQueries } from 'styles';
+import { BORDER, BORDER_RADIUS, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { getPaginationQuery, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
@@ -109,7 +109,7 @@ const useStyles = makeStyles(({ palette, spacing, breakpoints }) => ({
 
 const SearchPage: NextPage = () => {
   const classes = useStyles();
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
   const { t } = useTranslation();
   const { pathname, query } = useRouter();
   const variables = R.pick(['searchTerm', 'page', 'pageSize'], query);

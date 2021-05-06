@@ -5,10 +5,10 @@ import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
-import { useAuthContext } from 'context';
+import { useAuthContext, useMediaQueryContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { useMemo } from 'react';
-import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { MainTemplateProps } from 'types';
 import { urls } from 'utils';
 
@@ -55,7 +55,7 @@ export const MarkdownTemplate: React.FC<Props> = ({
   ...props
 }) => {
   const classes = useStyles();
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
   const { t } = useTranslation();
   const { userMe } = useAuthContext();
   const header = topNavbarProps?.header;

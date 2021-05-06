@@ -139,3 +139,8 @@ export interface DragContextType {
   handleDragOver: (e: DragEvent) => void;
   handleDragLeave: () => void;
 }
+
+export interface MediaQueryContextType {
+  smDown: boolean;
+  mdUp: boolean;
+}

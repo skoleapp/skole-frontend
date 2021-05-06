@@ -5,12 +5,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { useMediaQueryContext } from 'context';
 import { ThreadObjectType } from 'generated';
 import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { useMemo } from 'react';
-import { BORDER, useMediaQueries } from 'styles';
+import { BORDER } from 'styles';
 import { mediaLoader, urls } from 'utils';
 
 import { Link, MarkdownContent, TextLink } from '../shared';
@@ -65,7 +66,7 @@ export const ThreadTableRow: React.FC<Props> = ({
   },
 }) => {
   const { t } = useTranslation();
-  const { smDown } = useMediaQueries();
+  const { smDown } = useMediaQueryContext();
   const classes = useStyles();
   const scoreLabel = t('common:score').toLowerCase();
   const commentsLabel = t('common:comments').toLowerCase();

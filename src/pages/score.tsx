@@ -1,15 +1,15 @@
 import { MarkdownTemplate } from 'components';
+import { useMediaQueryContext } from 'context';
 import { withUserMe } from 'hocs';
 import { loadNamespaces, useTranslation } from 'lib';
 import { loadMarkdown } from 'markdown';
 import { GetStaticProps, NextPage } from 'next';
 import React from 'react';
-import { useMediaQueries } from 'styles';
 import { MarkdownPageProps } from 'types';
 
 const ScorePage: NextPage<MarkdownPageProps> = ({ data: { title }, content: markdownContent }) => {
   const { t } = useTranslation();
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
 
   // The emoji won't stand out from the top navbar on mobile.
   const emoji = mdUp && '💯';

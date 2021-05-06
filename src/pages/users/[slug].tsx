@@ -36,6 +36,7 @@ import {
   PaginatedTable,
   SettingsButton,
   SkeletonCommentTableList,
+  SkeletonThreadTableList,
   SkoleDialog,
   TabPanel,
   TextLink,
@@ -44,6 +45,7 @@ import {
 import {
   useAuthContext,
   useInviteContext,
+  useMediaQueryContext,
   useNotificationsContext,
   useShareContext,
 } from 'context';
@@ -64,8 +66,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { SkeletonThreadTableList } from 'src/components/skeletons/SkeletonThreadTableList';
-import { BORDER_RADIUS, useMediaQueries } from 'styles';
+import { BORDER_RADIUS } from 'styles';
 import { MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
@@ -178,7 +179,7 @@ interface ProfileStrengthStep {
 
 const ProfilePage: NextPage = () => {
   const classes = useStyles();
-  const { smDown, mdUp } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueryContext();
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
@@ -639,7 +640,7 @@ const ProfilePage: NextPage = () => {
   const renderProfileStrengthHeader = useMemo(
     () => (
       <Typography variant="body2" color="textSecondary">
-        {t('profile-strength:header')}: <strong>{getProfileStrengthText()}</strong>
+        {t('profile-strength:header')}:<strong>{getProfileStrengthText()}</strong>
       </Typography>
     ),
     [getProfileStrengthText, t],

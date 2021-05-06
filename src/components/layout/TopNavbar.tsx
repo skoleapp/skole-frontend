@@ -24,15 +24,15 @@ import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
-import { useAuthContext, useDarkModeContext, useInviteContext } from 'context';
+import {
+  useAuthContext,
+  useDarkModeContext,
+  useInviteContext,
+  useMediaQueryContext,
+} from 'context';
 import { useTranslation } from 'lib';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
-import {
-  BORDER_RADIUS,
-  TOP_NAVBAR_HEIGHT_DESKTOP,
-  TOP_NAVBAR_HEIGHT_MOBILE,
-  useMediaQueries,
-} from 'styles';
+import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
 import { TopNavbarProps } from 'types';
 import { urls } from 'utils';
 
@@ -102,7 +102,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const classes = useStyles();
   const { spacing } = useTheme();
   const { t } = useTranslation();
-  const { smDown, mdUp } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueryContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);

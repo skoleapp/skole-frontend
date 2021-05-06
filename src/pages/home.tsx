@@ -28,6 +28,7 @@ import {
 import {
   useAuthContext,
   useInviteContext,
+  useMediaQueryContext,
   useOrderingContext,
   useThreadFormContext,
 } from 'context';
@@ -40,7 +41,7 @@ import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { withDrag } from 'src/hocs/withDrag';
-import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
+import { BORDER, BORDER_RADIUS } from 'styles';
 import { INVITE_PROMPT_KEY, urls } from 'utils';
 
 const useStyles = makeStyles(({ palette, breakpoints, spacing }) => ({
@@ -84,7 +85,7 @@ const HomePage: NextPage = () => {
   const { query } = useRouter();
   const queryVariables = R.pick(['page', 'pageSize'], query);
   const { ordering } = useOrderingContext();
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
 
   const {
     handleOpenCustomInviteDialog,

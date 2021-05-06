@@ -3,7 +3,12 @@
     "browser": true,
     "es6": true
   },
-  "extends": ["airbnb-typescript", "airbnb/hooks", "plugin:prettier/recommended"],
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -18,16 +23,24 @@
     "array-callback-return": "off", // Allows us not to return anything from arrow functions.
     "consistent-return": "off", // Same as above.
     "import/prefer-default-export": "off", // Allows us to use named exports.
+    "no-underscore-dangle": "off", // Ignore underscores in e.g. GraphQL type names etc.
+    "react/jsx-props-no-spreading": "off", // Allow prop spreading.
+    "react-hooks/rules-of-hooks": "off", // Allow calling e.g. `useDayjs` within JSX.
+    "react/require-default-props": "off", // Allow defining default props in the signature.
     "react/prop-types": "off", // Allows us to not use prop-types.
+    "simple-import-sort/imports": "error", // Require imports to be ordered correctly.
+    "simple-import-sort/exports": "error", // Require exports to be ordered correctly.
     "@typescript-eslint/ban-ts-comment": "off", // Allows us to make TS ignores with ignore comments.
     "@typescript-eslint/no-non-null-assertion": "off", // Allows us to make non-null assertions for e.g. ref objects that are cumbersome to use with TS.
     "@typescript-eslint/no-unused-vars": "error", // Show error instead of the default warning for unused variables.
+    "@typescript-eslint/naming-convention": "off", // Allows usage of e.g. underscores in variable names.
     "no-restricted-imports": [
       "error",
       {
         "paths": [
           "@material-ui/core",
           "@material-ui/icons",
+          "@material-ui/core/useMediaQuery",
           "__generated__/src/graphql/common.graphql"
         ],
         "patterns": [
@@ -37,19 +50,12 @@
         ]
       }
     ],
-    "simple-import-sort/imports": "error", // Require imports to be ordered correctly.
-    "simple-import-sort/exports": "error", // Require exports to be ordered correctly.
-    "no-underscore-dangle": "off", // Ignore underscores in e.g. GraphQL type names etc.
-    "react/jsx-props-no-spreading": "off", // Allow prop spreading.
-    "@typescript-eslint/naming-convention": "off", // Allows usage of e.g. underscores in variable names.
-    "react-hooks/rules-of-hooks": "off", // Allow calling e.g. `useDayjs` within JSX.
-    "react/require-default-props": "off", // Allow defining default props in the signature.
     // TODO: Under this comment, remove all rule overrides and make the necessary refactors to fix the linting errors.
     "react/no-array-index-key": "off",
     "no-restricted-globals": "off",
     "no-restricted-syntax": "off",
-    "no-await-in-loop": "off",
-    "@typescript-eslint/no-shadow": "off"
+    "@typescript-eslint/no-shadow": "off",
+    "no-await-in-loop": "off"
   },
   "overrides": [
     {

@@ -14,12 +14,12 @@ import {
   useAuthContext,
   useDarkModeContext,
   useLanguageContext,
+  useMediaQueryContext,
   useSettingsContext,
 } from 'context';
 import { useTranslation } from 'lib';
 import { useRouter } from 'next/router';
 import React, { useCallback, useMemo } from 'react';
-import { useMediaQueries } from 'styles';
 import { SETTINGS_ITEMS, urls } from 'utils';
 
 import { Link } from './Link';
@@ -32,7 +32,7 @@ export const SettingsList: React.FC<Props> = ({ dialog }) => {
   const { userMe, verified, verifiedBackupEmail } = useAuthContext();
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const { handleCloseSettingsDialog } = useSettingsContext();
-  const { smDown } = useMediaQueries();
+  const { smDown } = useMediaQueryContext();
   const { t } = useTranslation();
   const { handleOpenLanguageMenu } = useLanguageContext();
   const { pathname } = useRouter();

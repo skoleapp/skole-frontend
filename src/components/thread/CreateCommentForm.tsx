@@ -13,7 +13,12 @@ import ClearOutlined from '@material-ui/icons/ClearOutlined';
 import ImageOutlined from '@material-ui/icons/ImageOutlined';
 import SendOutlined from '@material-ui/icons/SendOutlined';
 import imageCompression from 'browser-image-compression';
-import { useAuthContext, useNotificationsContext, useThreadContext } from 'context';
+import {
+  useAuthContext,
+  useMediaQueryContext,
+  useNotificationsContext,
+  useThreadContext,
+} from 'context';
 import { Form, Formik, FormikProps } from 'formik';
 import { CreateCommentMutation, useCreateCommentMutation } from 'generated';
 import { useLanguageHeaderContext } from 'hooks';
@@ -21,7 +26,6 @@ import { useTranslation } from 'lib';
 import Image from 'next/image';
 import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useMemo, useRef } from 'react';
-import { useMediaQueries } from 'styles';
 import { CreateCommentFormValues } from 'types';
 import {
   ACCEPTED_COMMENT_IMAGE_FILES,
@@ -96,7 +100,7 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const classes = useStyles();
   const { t } = useTranslation();
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
   const context = useLanguageHeaderContext();
   const { userMe } = useAuthContext();

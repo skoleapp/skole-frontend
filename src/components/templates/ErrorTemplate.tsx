@@ -1,9 +1,10 @@
 import CardHeader from '@material-ui/core/CardHeader';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import { useMediaQueryContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { useMemo } from 'react';
-import { BORDER, BORDER_RADIUS, useMediaQueries } from 'styles';
+import { BORDER, BORDER_RADIUS } from 'styles';
 
 import { Emoji, NotFoundBox } from '../shared';
 import { MainTemplate } from './MainTemplate';
@@ -30,7 +31,7 @@ interface Props {
 export const ErrorTemplate: React.FC<Props> = ({ variant }) => {
   const classes = useStyles();
   const { t } = useTranslation();
-  const { mdUp } = useMediaQueries();
+  const { mdUp } = useMediaQueryContext();
   const title = t(`${variant}:title`);
   const header = t(`${variant}:header`);
   const text = t(`${variant}:text`);

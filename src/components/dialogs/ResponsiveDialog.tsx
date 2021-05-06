@@ -2,8 +2,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Drawer from '@material-ui/core/Drawer';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
+import { useMediaQueryContext } from 'context';
 import React, { useMemo } from 'react';
-import { useMediaQueries } from 'styles';
 import { DialogHeaderProps, SkoleDialogProps } from 'types';
 
 import { DialogHeader } from './DialogHeader';
@@ -30,7 +30,7 @@ export const ResponsiveDialog: React.FC<Props> = ({
   dialogHeaderProps,
   ...dialogProps
 }) => {
-  const { smDown } = useMediaQueries();
+  const { smDown } = useMediaQueryContext();
   const classes = useStyles();
 
   const renderDialogHeader = useMemo(() => <DialogHeader {...dialogHeaderProps} />, [

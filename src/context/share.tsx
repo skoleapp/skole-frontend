@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
 import React, { createContext, useContext, useState } from 'react';
-import { useMediaQueries } from 'styles';
 import { ShareContextType, ShareDialogParams } from 'types';
 import { isNotNativeApp, postMessageWebView } from 'utils';
+
+import { useMediaQueryContext } from './mediaQuery';
 
 // @ts-ignore: Initialize context with empty object rather than populating it with placeholder values.
 const ShareContext = createContext<ShareContextType>({});
@@ -17,7 +18,7 @@ const initialShareDialogParams: ShareDialogParams = {
 };
 
 export const ShareContextProvider: React.FC = ({ children }) => {
-  const { smDown } = useMediaQueries();
+  const { smDown } = useMediaQueryContext();
   const { asPath } = useRouter();
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
 

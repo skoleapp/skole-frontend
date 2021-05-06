@@ -7,6 +7,7 @@ export * from './history';
 export * from './info';
 export * from './invite';
 export * from './language';
+export * from './mediaQuery';
 export * from './notifications';
 export * from './ordering';
 export * from './scrolling';

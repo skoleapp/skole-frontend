@@ -5,12 +5,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import clsx from 'clsx';
+import { useMediaQueryContext } from 'context';
 import { CommentObjectType } from 'generated';
 import { useDayjs } from 'hooks';
 import { useTranslation } from 'lib';
 import Image from 'next/image';
 import React, { useMemo } from 'react';
-import { BORDER, useMediaQueries } from 'styles';
+import { BORDER } from 'styles';
 import { mediaLoader, truncate, urls } from 'utils';
 
 import { Link, MarkdownContent, TextLink } from '../shared';
@@ -76,7 +77,7 @@ export const CommentTableRow: React.FC<Props> = ({
   key,
 }) => {
   const { t } = useTranslation();
-  const { smDown, mdUp } = useMediaQueries();
+  const { smDown, mdUp } = useMediaQueryContext();
   const classes = useStyles();
   const created = useDayjs(_created).startOf('m').fromNow();
   const scoreLabel = t('common:score').toLowerCase();

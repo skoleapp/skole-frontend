@@ -1,5 +1,6 @@
 import { ButtonProps } from '@material-ui/core/Button';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+// Ignore: Fine to use the hook here since we're not dealing with breakpoints that could clash with each other.
+import useMediaQuery from '@material-ui/core/useMediaQuery'; // eslint-disable-line no-restricted-imports
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { DarkModeContextType } from 'types';
 
