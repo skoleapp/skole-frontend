@@ -988,7 +988,7 @@ const ThreadPage: NextPage = () => {
         open={customInviteDialogOpen}
         handleClose={handleCloseCustomInviteDialog}
         header={renderInviteDialogHeader}
-        dynamicContent={[renderInviteDialogText]}
+        dynamicContent={renderInviteDialogText}
         handleClickInviteButton={handleClickShareButton}
         hideInviteCode
       />
