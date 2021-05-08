@@ -53,7 +53,7 @@ CMD yarn lint \
     && yarn type-check \
     && API_URL=http://localhost:8000 yarn build \
     && { yarn start & yarn wait-on --timeout=30000 http://localhost:3001 \
-        && yarn cypress:run --record --parallel --ci-build-id=${GITHUB_RUN_NUMBER}; }
+        && yarn cypress:run --record --parallel --ci-build-id="$GITHUB_RUN_NUMBER"; }
 
 
 FROM base as build
