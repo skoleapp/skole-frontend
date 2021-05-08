@@ -144,7 +144,14 @@ fragment threadFields on ThreadObjectType {
     status
   }
   user {
-    ...userFields
+    id
+    slug
+    username
+    avatarThumbnail
+    badges {
+      ...badgeFields
+    }
+    score
   }
 }
 
@@ -295,7 +302,7 @@ query UserMe {
   }
 }
 
-fragment _commentFields on CommentObjectType {
+fragment commentFields on CommentObjectType {
   id
   text
   image
@@ -308,7 +315,14 @@ fragment _commentFields on CommentObjectType {
   created
   modified
   user {
-    ...userFields
+    id
+    slug
+    username
+    avatarThumbnail
+    badges {
+      ...badgeFields
+    }
+    score
   }
   thread {
     slug
@@ -318,12 +332,11 @@ fragment _commentFields on CommentObjectType {
     id
     status
   }
-}
-
-fragment commentFields on CommentObjectType {
-  ..._commentFields
   comment {
-    ..._commentFields
+    id
+    user {
+      username
+    }
   }
 }
 
