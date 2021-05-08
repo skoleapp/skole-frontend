@@ -244,7 +244,7 @@ const HomePage: NextPage = () => {
       <CustomInviteDialog
         open={customInviteDialogOpen}
         header={renderInvitePromptHeader}
-        dynamicContent={[renderInvitePromptText]}
+        dynamicContent={renderInvitePromptText}
         handleClose={handleCloseInvitePrompt}
       />
     ),
