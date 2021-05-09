@@ -41,7 +41,9 @@ export const ActivityListItem: React.FC<Props> = ({
   const context = useLanguageHeaderContext();
   const { t } = useTranslation();
   const { profileUrl } = useAuthContext();
-  const avatarThumbnail = R.propOr('', 'avatarThumbnail', causingUser);
+  const avatarThumbnail: string = R.propOr('', 'avatarThumbnail', causingUser);
+  const causingUserSlug: string = R.propOr('', 'slug', causingUser);
+  const causingUserUsername: string = R.propOr('', 'username', causingUser);
 
   const onCompleted = ({ markActivityAsRead }: MarkActivityAsReadMutation): void => {
     if (markActivityAsRead?.errors?.length) {
@@ -102,12 +104,11 @@ export const ActivityListItem: React.FC<Props> = ({
 
   const renderUserLink = useMemo(
     () =>
-      !!causingUser && (
-        <TextLink href={urls.user(R.prop('slug', causingUser))}>
-          {R.prop('username', causingUser)}
-        </TextLink>
+      !!causingUserSlug &&
+      !!causingUserUsername && (
+        <TextLink href={urls.user(causingUserSlug)}>{causingUserUsername}</TextLink>
       ),
-    [causingUser],
+    [causingUserSlug, causingUserUsername],
   );
 
   const renderAnonymousStudent = useMemo(

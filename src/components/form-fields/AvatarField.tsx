@@ -64,16 +64,20 @@ export const AvatarField = <T extends FormikValues>({
   );
 
   const setAvatar = useCallback(
-    (file: File | Blob): void => {
+    (file: File | null): void => {
       setFieldValue('avatar', file);
       handleCloseDialog();
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
 
-      reader.onloadend = (): void => {
-        setPreview(String(reader.result));
-      };
+        reader.onloadend = (): void => {
+          setPreview(String(reader.result));
+        };
+      } else {
+        setPreview('');
+      }
     },
     [handleCloseDialog, setFieldValue],
   );
@@ -81,14 +85,14 @@ export const AvatarField = <T extends FormikValues>({
   // Automatically resize the image and update the field value.
   const handleAvatarChange = useCallback(
     async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
-      const file: File = R.path(['currentTarget', 'files', '0'], e);
+      const file = R.pathOr<File | null>(null, ['currentTarget', 'files', '0'], e);
 
       const options = {
         maxSizeMB: MAX_IMAGE_FILE_SIZE / 1000000,
         maxWidthOrHeight: MAX_AVATAR_WIDTH_HEIGHT,
       };
 
-      if (file.size > MAX_IMAGE_FILE_SIZE) {
+      if (file?.size && file.size > MAX_IMAGE_FILE_SIZE) {
         try {
           const compressedFile = await imageCompression(file, options);
           setAvatar(compressedFile);

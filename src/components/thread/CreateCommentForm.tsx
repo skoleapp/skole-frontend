@@ -161,9 +161,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
     if (!text && !image && !file) {
       toggleNotification(t('validation:textImageOrFileRequired'));
     } else {
-      const user = R.prop('id', _user);
-      const thread = R.prop('id', _thread);
-      const comment = R.prop('id', _comment);
+      const user = R.propOr('', 'id', _user);
+      const thread = R.propOr('', 'id', _thread);
+      const comment = R.propOr('', 'id', _comment);
 
       const variables = {
         user,
@@ -195,24 +195,28 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   );
 
   const setImage = useCallback(
-    (file: File | Blob): void => {
+    (file: File | null): void => {
       formRef.current?.setFieldValue('file', null);
       setCommentFileName('');
       formRef.current?.setFieldValue('image', file);
       setCreateCommentDialogOpen(true);
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
 
-      reader.onloadend = (): void => {
-        setCommentImage(reader.result);
-      };
+        reader.onloadend = (): void => {
+          setCommentImage(reader.result);
+        };
+      } else {
+        setCommentImage('');
+      }
     },
     [formRef, setCommentImage, setCreateCommentDialogOpen, setCommentFileName],
   );
 
   const setFile = useCallback(
-    (file: File | Blob): void => {
+    (file: File | null): void => {
       formRef.current?.setFieldValue('image', null);
       setCommentImage(null);
       formRef.current?.setFieldValue('file', file);
@@ -225,14 +229,14 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   // Automatically resize the image and update the field value.
   const handleImageInputChange = useCallback(
     async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
-      const file: File = R.path(['currentTarget', 'files', '0'], e);
+      const file = R.pathOr<File | null>(null, ['currentTarget', 'files', '0'], e);
 
       const options = {
         maxSizeMB: MAX_IMAGE_FILE_SIZE / 1000000,
         maxWidthOrHeight: MAX_IMAGE_WIDTH_HEIGHT,
       };
 
-      if (file.size > MAX_IMAGE_FILE_SIZE) {
+      if (file?.size && file.size > MAX_IMAGE_FILE_SIZE) {
         try {
           const compressedFile = await imageCompression(file, options);
           setImage(compressedFile);
@@ -247,8 +251,8 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   );
 
   const validateAndSetFile = useCallback(
-    (file: File | Blob): void => {
-      if (file.size > MAX_COMMENT_FILE_SIZE) {
+    (file: File | null): void => {
+      if (file?.size && file.size > MAX_COMMENT_FILE_SIZE) {
         toggleNotification(t('validation:fileSizeError'));
       } else {
         setFile(file);
@@ -261,9 +265,9 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
   // Otherwise, check if it's too large and update the field value.
   const handleFileInputChange = useCallback(
     async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
-      const file: File = R.path(['currentTarget', 'files', '0'], e);
+      const file = R.pathOr<File | null>(null, ['currentTarget', 'files', '0'], e);
 
-      if (IMAGE_TYPES.includes(file.type)) {
+      if (!!file && IMAGE_TYPES.includes(file?.type)) {
         const options = {
           maxSizeMB: MAX_COMMENT_FILE_SIZE / 1000000, // Convert to megabytes.,
           maxWidthOrHeight: MAX_IMAGE_WIDTH_HEIGHT,

@@ -20,7 +20,7 @@ import {
   CommentObjectType,
   DeleteCommentMutation,
   useDeleteCommentMutation,
-  UserFieldsFragment,
+  UserObjectType,
   VoteObjectType,
 } from 'generated';
 import { useDayjs, useLanguageHeaderContext } from 'hooks';
@@ -143,16 +143,16 @@ export const CommentCard: React.FC<Props> = ({
   const { handleOpenShareDialog } = useShareContext();
   const [currentVote, setCurrentVote] = useState<VoteObjectType | null>(null);
   const [score, setScore] = useState(0);
-  const avatarThumbnail = R.propOr('', 'avatarThumbnail', comment.user);
-  const initialVote = R.prop('vote', comment);
-  const initialScore = R.prop('score', comment);
+  const avatarThumbnail: string = R.propOr('', 'avatarThumbnail', comment.user);
+  const initialVote: VoteObjectType = R.propOr(null, 'vote', comment);
+  const initialScore: number = R.propOr(0, 'score', comment);
   const commentId = R.prop('id', comment);
-  const replyComments = R.propOr([], 'replyComments', comment);
+  const replyComments: CommentObjectType[] = R.propOr([], 'replyComments', comment);
   const replyCount = replyComments.length;
   const { setCommentImageViewerValue } = useThreadContext();
-  const creator: UserFieldsFragment = R.prop('user', comment);
-  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', creator);
-  const creatorSlug = R.prop('slug', creator);
+  const creator: UserObjectType = R.propOr(null, 'user', comment);
+  const creatorUsername: string = R.propOr(t('common:anonymousStudent'), 'username', creator);
+  const creatorSlug: string = R.propOr('', 'slug', creator);
   const isOwn = R.prop('isOwn', comment);
   const commentPreview = truncate(comment.text, 20);
   const created = useDayjs(comment.created).startOf('m').fromNow();

@@ -62,6 +62,7 @@ import {
   ThreadQuery,
   ThreadQueryResult,
   useDeleteThreadMutation,
+  UserObjectType,
   useStarMutation,
   useThreadCommentsLazyQuery,
   useThreadLazyQuery,
@@ -244,28 +245,28 @@ const ThreadPage: NextPage = () => {
 
   const error = threadError || silentThreadError;
   const commentsError = _commentsError || silentCommentsError;
-  const thread = R.prop('thread', threadData);
+  const thread: ThreadObjectType = R.propOr(null, 'thread', threadData);
   const comments: CommentObjectType[] = R.pathOr([], ['comments', 'objects'], commentsData);
   const page = R.pathOr(1, ['comments', 'page'], commentsData);
   const paginationCount = R.pathOr(0, ['comments', 'count'], commentsData);
-  const id = R.prop('id', thread);
-  const slug = R.prop('slug', thread);
-  const title = R.prop('title', thread);
-  const text = R.prop('text', thread);
-  const image = R.prop('image', thread);
-  const imageThumbnail = R.prop('imageThumbnail', thread);
-  const initialScore = R.propOr(0, 'score', thread);
-  const initialStars = R.propOr(0, 'starCount', thread);
-  const commentCount = R.propOr(0, 'commentCount', thread);
-  const initialVote = R.prop('vote', thread);
-  const initialStarred = R.prop('starred', thread);
-  const views = R.propOr(0, 'views', thread);
-  const creator = R.prop('user', thread);
-  const creatorAvatarThumbnail = R.propOr('', 'avatarThumbnail', creator);
-  const creatorScore = R.prop('score', creator);
+  const id: string = R.propOr('', 'id', thread);
+  const slug: string = R.propOr('', 'slug', thread);
+  const title: string = R.propOr('', 'title', thread);
+  const text: string = R.propOr('', 'text', thread);
+  const image: string = R.propOr('', 'image', thread);
+  const imageThumbnail: string = R.propOr('', 'imageThumbnail', thread);
+  const initialScore: number = R.propOr(0, 'score', thread);
+  const initialStars: number = R.propOr(0, 'starCount', thread);
+  const commentCount: number = R.propOr(0, 'commentCount', thread);
+  const initialVote: VoteObjectType = R.propOr(null, 'vote', thread);
+  const initialStarred: boolean = R.propOr(false, 'starred', thread);
+  const views: number = R.propOr(0, 'views', thread);
+  const creator: UserObjectType = R.propOr(null, 'user', thread);
+  const creatorAvatarThumbnail: string = R.propOr('', 'avatarThumbnail', creator);
+  const creatorScore: number = R.propOr(0, 'score', creator);
   const isOwn = !!creator && userMe?.id === creator.id;
-  const created = R.prop('created', thread);
-  const creatorUsername = R.propOr(t('common:anonymousStudent'), 'username', creator);
+  const created: string = R.propOr('', 'created', thread);
+  const creatorUsername: string = R.propOr(t('common:anonymousStudent'), 'username', creator);
   const [targetComment, setTargetComment] = useState<CommentObjectType | null>(null);
   const [targetThread, setTargetThread] = useState<ThreadObjectType | null>(null);
   const { dynamicPrimaryColor } = useDarkModeContext();
@@ -799,7 +800,7 @@ const ThreadPage: NextPage = () => {
   );
 
   const renderCreatorLink = useMemo(
-    () => !!creator && <TextLink href={urls.user(creator.slug)}>{creator.username}</TextLink>,
+    () => !!creator.slug && <TextLink href={urls.user(creator.slug)}>{creator.username}</TextLink>,
     [creator],
   );
 

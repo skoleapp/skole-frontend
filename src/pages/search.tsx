@@ -119,7 +119,7 @@ const SearchPage: NextPage = () => {
   const threads = R.pathOr([], ['threads', 'objects'], data);
   const page = R.pathOr(1, ['threads', 'page'], data);
   const count = R.pathOr(0, ['threads', 'count'], data);
-  const searchTerm = R.prop('searchTerm', query);
+  const searchTerm: string = R.propOr('', 'searchTerm', query);
   const [searchInputValue, setSearchInputValue] = useState('');
   const { handleOpenThreadForm } = useThreadFormContext();
   const paginationQuery = getPaginationQuery(query); // Query that holds only pagination.
@@ -337,6 +337,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
   },
 });
 
-const withWrappers = R.compose(withDrag, withAuthRequired);
+const withWrappers = R.compose(withAuthRequired, withDrag);
 
 export default withWrappers(SearchPage);
