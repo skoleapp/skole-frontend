@@ -28,7 +28,7 @@ const useStyles = makeStyles(({ spacing }) => ({
 interface Props {
   open: boolean;
   header?: JSX.Element | string;
-  dynamicContent: JSX.Element[];
+  dynamicContent: JSX.Element;
   handleClose: () => void;
   hideInviteCode?: boolean;
   handleClickInviteButton?: () => void;
@@ -121,7 +121,7 @@ export const CustomInviteDialog: React.FC<Props> = ({
     <SkoleDialog open={open} fullScreen={false} onClose={handleClose}>
       <DialogHeader text={header} onClose={handleClose} />
       <DialogContent>
-        {dynamicContent.map((d) => d)}
+        {dynamicContent}
         {renderInviteCodeText}
         {renderInviteCode}
       </DialogContent>

@@ -11,8 +11,8 @@ export const SkeletonActivityTableList: React.FC = () => {
   const renderTableBody = useMemo(
     () => (
       <TableBody>
-        {new Array(25).fill(0).map(() => (
-          <ListItem className="activity-li">
+        {new Array(25).fill(0).map((_, i) => (
+          <ListItem className="activity-li" key={i}>
             <ListItemAvatar>
               <Skeleton variant="circle">
                 <Avatar />

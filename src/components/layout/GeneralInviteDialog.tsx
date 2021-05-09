@@ -38,7 +38,7 @@ export const GeneralInviteDialog: React.FC = () => {
       open={generalInviteDialogOpen}
       handleClose={handleCloseGeneralInviteDialog}
       header={renderInviteDialogHeader}
-      dynamicContent={[renderInviteDialogText]}
+      dynamicContent={renderInviteDialogText}
     />
   );
 };

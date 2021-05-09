@@ -7,8 +7,8 @@ import React from 'react';
 
 export const SkeletonActivityPreviewList: React.FC = () => (
   <>
-    {new Array(4).fill(0).map(() => (
-      <ListItem className="activity-li">
+    {new Array(4).fill(0).map((_, i) => (
+      <ListItem className="activity-li" key={i}>
         <ListItemAvatar>
           <Skeleton variant="circle">
             <Avatar />

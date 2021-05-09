@@ -46,8 +46,8 @@ export const SkeletonCommentTableList: React.FC = () => {
   const renderTableBody = useMemo(
     () => (
       <TableBody>
-        {new Array(25).fill(0).map(() => (
-          <Box height="6rem" padding={2} display="flex">
+        {new Array(25).fill(0).map((_, i) => (
+          <Box height="6rem" padding={2} display="flex" key={i}>
             <Grid container>
               <Grid item xs={12} md={10} container direction="column" justify="space-between">
                 <Typography variant="subtitle1">
