@@ -67,10 +67,11 @@ const LoginPage: NextPage = () => {
   const { toggleNotification } = useNotificationsContext();
   const initialCode = query.code ? String(query.code) : '';
   const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
-  const username = R.prop('username', existingUser);
-  const email = R.prop('email', existingUser);
+  const username: string = R.propOr('', 'username', existingUser);
+  const email = R.propOr('', 'email', existingUser);
   const validExistingUser = !!username && !!email;
-  const existingUserAvatar = mediaUrl(R.prop('avatar', existingUser));
+  const avatar: string = R.propOr('', 'avatar', existingUser);
+  const existingUserAvatar = mediaUrl(avatar);
   const context = useLanguageHeaderContext();
   const [showInviteCodeForm, setShowInviteCodeForm] = useState(false);
   const [savedUsernameOrEmail, setSavedUsernameOrEmail] = useState('');
@@ -210,7 +211,7 @@ const LoginPage: NextPage = () => {
 
   const handleLoginFormSubmit = useCallback(
     async ({ usernameOrEmail: _usernameOrEmail, password }: LoginFormValues): Promise<void> => {
-      const usernameOrEmail = R.propOr(_usernameOrEmail, 'email', existingUser);
+      const usernameOrEmail: string = R.propOr(_usernameOrEmail, 'email', existingUser);
 
       await login({
         variables: { usernameOrEmail, password },

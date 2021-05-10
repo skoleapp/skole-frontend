@@ -26,7 +26,7 @@ interface UseAuthContext extends AuthContextType {
   avatarThumbnail: string;
   avatar: string;
   rank: string;
-  score: string;
+  score: number;
   badgeProgresses: BadgeProgressObjectType[];
   selectedBadgeProgress: BadgeProgressObjectType | null;
   inviteCode: string;
@@ -42,34 +42,54 @@ interface UseAuthContext extends AuthContextType {
 
 export const useAuthContext = (): UseAuthContext => {
   const { userMe, setUserMe, ...authContext } = useContext(AuthContext);
-  const verified = R.prop('verified', userMe);
-  const verifiedBackupEmail = R.prop('verifiedBackupEmail', userMe);
-  const unreadActivityCount = R.propOr(0, 'unreadActivityCount', userMe);
-  const id = R.prop('id', userMe);
-  const slug = R.prop('slug', userMe);
-  const fcmTokens = R.propOr([], 'fcmTokens', userMe);
-  const username = R.prop('username', userMe);
-  const email = R.prop('email', userMe);
-  const backupEmail = R.prop('backupEmail', userMe);
-  const title = R.prop('title', userMe);
-  const bio = R.prop('bio', userMe);
-  const rank = R.prop('rank', userMe);
-  const score = R.prop('score', userMe);
-  const _avatarThumbnail = R.prop('avatarThumbnail', userMe);
-  const _avatar = R.prop('avatar', userMe);
+  const verified: boolean = R.propOr(false, 'verified', userMe);
+  const verifiedBackupEmail: boolean = R.propOr(false, 'verifiedBackupEmail', userMe);
+  const unreadActivityCount: number = R.propOr(0, 'unreadActivityCount', userMe);
+  const id: string = R.propOr('', 'id', userMe);
+  const slug: string = R.propOr('', 'slug', userMe);
+  const fcmTokens: string[] = R.propOr([], 'fcmTokens', userMe);
+  const username: string = R.propOr('', 'username', userMe);
+  const email: string = R.propOr('', 'email', userMe);
+  const backupEmail: string = R.propOr('', 'backupEmail', userMe);
+  const title: string = R.propOr('', 'title', userMe);
+  const bio: string = R.propOr('', 'bio', userMe);
+  const rank: string = R.propOr('', 'rank', userMe);
+  const score: number = R.propOr(0, 'score', userMe);
+  const _avatarThumbnail: string = R.propOr('', 'avatarThumbnail', userMe);
+  const _avatar: string = R.propOr('', 'avatar', userMe);
   const avatarThumbnail = _avatarThumbnail ? mediaUrl(_avatarThumbnail) : '';
   const avatar = _avatar ? mediaUrl(_avatar) : '';
-  const badgeProgresses = R.propOr([], 'badgeProgresses', userMe);
-  const selectedBadgeProgress = R.prop('selectedBadgeProgress', userMe);
-  const inviteCode = R.path(['inviteCode', 'code'], userMe);
-  const inviteCodeUsages = R.path(['inviteCode', 'usages'], userMe);
-  const commentReplyEmailPermission = R.prop('commentReplyEmailPermission', userMe);
-  const threadCommentEmailPermission = R.prop('threadCommentEmailPermission', userMe);
-  const newBadgeEmailPermission = R.prop('newBadgeEmailPermission', userMe);
-  const commentReplyPushPermission = R.prop('commentReplyPushPermission', userMe);
-  const threadCommentPushPermission = R.prop('threadCommentPushPermission', userMe);
-  const newBadgePushPermission = R.prop('newBadgePushPermission', userMe);
+  const badgeProgresses: BadgeProgressObjectType[] = R.propOr([], 'badgeProgresses', userMe);
+  const inviteCode: string = R.pathOr('', ['inviteCode', 'code'], userMe);
+  const inviteCodeUsages: number = R.pathOr(0, ['inviteCode', 'usages'], userMe);
+  const newBadgeEmailPermission: boolean = R.propOr(false, 'newBadgeEmailPermission', userMe);
+  const commentReplyPushPermission: boolean = R.propOr(false, 'commentReplyPushPermission', userMe);
+  const newBadgePushPermission: boolean = R.propOr(false, 'newBadgePushPermission', userMe);
   const profileUrl = urls.user(slug);
+
+  const selectedBadgeProgress: BadgeProgressObjectType = R.propOr(
+    null,
+    'selectedBadgeProgress',
+    userMe,
+  );
+
+  const commentReplyEmailPermission: boolean = R.propOr(
+    false,
+    'commentReplyEmailPermission',
+    userMe,
+  );
+
+  const threadCommentEmailPermission: boolean = R.propOr(
+    false,
+    'threadCommentEmailPermission',
+    userMe,
+  );
+
+  const threadCommentPushPermission: boolean = R.propOr(
+    false,
+    'threadCommentPushPermission',
+    userMe,
+  );
 
   return {
     userMe,

@@ -17,7 +17,13 @@ interface Props extends MainTemplateProps {
   variant: ActionRequiredVariant;
 }
 
-const getProps = (variant: ActionRequiredVariant): Record<string, unknown> | void => {
+interface DynamicProps {
+  text: string;
+  buttonText: string;
+  pathname: string;
+}
+
+const getProps = (variant: ActionRequiredVariant): DynamicProps => {
   switch (variant) {
     case 'verify-account': {
       return {
@@ -36,7 +42,11 @@ const getProps = (variant: ActionRequiredVariant): Record<string, unknown> | voi
     }
 
     default: {
-      break;
+      return {
+        text: '',
+        buttonText: '',
+        pathname: '',
+      };
     }
   }
 };
@@ -51,7 +61,7 @@ export const ActionRequiredTemplate: React.FC<Props> = ({
   const { asPath } = useRouter();
   const header = t('common:actionRequiredHeader');
 
-  const { text, buttonText, pathname } = R.pick(
+  const { text, buttonText, pathname } = R.pick<DynamicProps, string>(
     ['text', 'buttonText', 'pathname'],
     getProps(variant),
   );

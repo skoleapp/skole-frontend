@@ -57,13 +57,13 @@ export const MainTemplate: React.FC<MainTemplateProps> = ({
   hideBottomNavbar,
   hideFooter,
   footerProps,
-  children,
+  children = false,
   ...props
 }) => {
   const classes = useStyles();
   const { smDown, mdUp } = useMediaQueryContext();
-  const containerFullWidth = R.propOr(false, 'fullWidth', containerProps);
-  const containerDense = R.propOr(false, 'dense', containerProps);
+  const containerFullWidth: boolean = R.propOr(false, 'fullWidth', containerProps);
+  const containerDense: boolean = R.propOr(false, 'dense', containerProps);
 
   const containerClasses = clsx(
     classes.container,

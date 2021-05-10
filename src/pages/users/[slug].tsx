@@ -54,6 +54,7 @@ import {
   BadgeProgressFieldsFragment,
   CommentObjectType,
   UpdateSelectedBadgeMutation,
+  UserObjectType,
   useUpdateSelectedBadgeMutation,
   useUserCommentsQuery,
   useUserQuery,
@@ -232,19 +233,19 @@ const ProfilePage: NextPage = () => {
     handleClose: handleCloseSelectBadgeDialog,
   } = useOpen();
 
-  const user = R.prop('user', userData);
+  const user: UserObjectType = R.propOr(null, 'user', userData);
   const slug = R.prop('slug', user);
-  const rank = R.prop('rank', user);
+  const rank: string = R.propOr('', 'rank', user);
   const username = R.prop('username', user);
   const avatar = R.prop('avatar', user);
   const title = R.prop('title', user);
   const bio = R.prop('bio', user);
-  const score = R.propOr(0, 'score', user);
+  const score: number = R.propOr(0, 'score', user);
   const isOwnProfile = !!user?.id && userMe?.id === user.id;
   const badges: BadgeObjectType[] = R.propOr([], 'badges', user);
-  const threadCount = R.propOr(0, 'threadCount', user);
+  const threadCount: number = R.propOr(0, 'threadCount', user);
   const views = R.propOr(0, 'views', user);
-  const commentCount = R.propOr(0, 'commentCount', user);
+  const commentCount: number = R.propOr(0, 'commentCount', user);
   const threads = R.pathOr([], ['threads', 'objects'], threadsData);
   const threadsPaginationCount = R.pathOr(0, ['threads', 'count'], threadsData);
   const threadsPage = R.pathOr(1, ['threads', 'page'], threadsData);

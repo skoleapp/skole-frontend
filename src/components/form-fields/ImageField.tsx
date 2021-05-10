@@ -20,15 +20,15 @@ export const ImageField: React.FC<Props> = ({
   field: { name, value },
 }) => {
   const { t } = useTranslation();
-  const _fileName = R.propOr('', 'name', value);
+  const _fileName: string = R.propOr('', 'name', value);
   const fileName = truncate(_fileName, 20);
   const maxFileSize = MAX_IMAGE_FILE_SIZE / 1000000; // Convert to megabytes.
   const fileInputRef = useRef<HTMLInputElement>(null!);
   const handleFileInputClick = (): false | void => fileInputRef.current.click();
 
   const validateAndSetFile = useCallback(
-    (file: File | Blob): void => {
-      if (file.size > MAX_IMAGE_FILE_SIZE) {
+    (file: File | null): void => {
+      if (file?.size && file.size > MAX_IMAGE_FILE_SIZE) {
         setFieldError(name, t('validation:fileSizeError'));
       } else {
         setFieldValue(name, file);
@@ -40,8 +40,8 @@ export const ImageField: React.FC<Props> = ({
   // If the file is an image, automatically resize it.
   // Otherwise, check if it's too large and update the field value.
   const processFile = useCallback(
-    async (file: File): Promise<void> => {
-      if (IMAGE_TYPES.includes(file.type)) {
+    async (file: File | null): Promise<void> => {
+      if (!!file && IMAGE_TYPES.includes(file.type)) {
         const options = {
           maxSizeMB: maxFileSize,
           maxWidthOrHeight: MAX_IMAGE_WIDTH_HEIGHT,
@@ -63,7 +63,7 @@ export const ImageField: React.FC<Props> = ({
 
   const handleFileInputChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>): void => {
-      const file = R.path(['currentTarget', 'files', '0'], e);
+      const file = R.pathOr<File | null>(null, ['currentTarget', 'files', '0'], e);
       processFile(file);
     },
     [processFile],

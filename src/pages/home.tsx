@@ -299,6 +299,6 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-const withWrappers = R.compose(withDrag, withAuthRequired);
+const withWrappers = R.compose(withAuthRequired, withDrag);
 
 export default withWrappers(HomePage);

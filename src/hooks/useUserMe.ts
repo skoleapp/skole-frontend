@@ -1,5 +1,10 @@
 import { useAuthContext } from 'context';
-import { UserFieldsFragment, UserMeQueryHookResult, useUserMeQuery } from 'generated';
+import {
+  UserFieldsFragment,
+  UserMeQueryHookResult,
+  UserObjectType,
+  useUserMeQuery,
+} from 'generated';
 import * as R from 'ramda';
 import { useEffect } from 'react';
 
@@ -19,8 +24,8 @@ export const useUserMe = (): UseUserMeQuery => {
   });
 
   const { setUserMe, setAuthNetworkError } = useAuthContext();
-  const userMe = R.prop('userMe', data);
-  const authNetworkError = R.prop('networkError', error); // We only care about about network error.
+  const userMe: UserObjectType = R.propOr(null, 'userMe', data);
+  const authNetworkError: boolean = R.propOr(false, 'networkError', error);
 
   useEffect(() => {
     if (error) {

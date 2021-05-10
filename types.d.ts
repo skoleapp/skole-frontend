@@ -1,6 +1,5 @@
 declare module 'print-js';
 declare module 'lodash.throttle';
-declare module 'ramda'; // TODO: Remove this and fix all ramda typings.
 declare module 'markdown/*';
 declare module '@cypress/code-coverage/*';
 
