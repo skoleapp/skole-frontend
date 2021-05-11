@@ -24,7 +24,7 @@ export const useUserMe = (): UseUserMeQuery => {
   });
 
   const { setUserMe, setAuthNetworkError } = useAuthContext();
-  const userMe: UserObjectType = R.propOr(null, 'userMe', data);
+  const userMe: UserObjectType = R.propOr(undefined, 'userMe', data);
   const authNetworkError: boolean = R.propOr(false, 'networkError', error);
 
   useEffect(() => {
