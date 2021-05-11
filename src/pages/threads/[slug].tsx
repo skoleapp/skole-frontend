@@ -800,7 +800,9 @@ const ThreadPage: NextPage = () => {
   );
 
   const renderCreatorLink = useMemo(
-    () => !!creator.slug && <TextLink href={urls.user(creator.slug)}>{creator.username}</TextLink>,
+    () =>
+      !!creator?.slug &&
+      !!creator.username && <TextLink href={urls.user(creator.slug)}>{creator.username}</TextLink>,
     [creator],
   );
 
