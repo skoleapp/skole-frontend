@@ -14,22 +14,32 @@ import NProgress from 'nprogress';
 import * as R from 'ramda';
 import React, { useEffect } from 'react';
 
-NProgress.configure({ showSpinner: false });
-Router.events.on('routeChangeStart', () => NProgress.start());
-Router.events.on('routeChangeError', () => NProgress.done());
-Router.events.on('routeChangeComplete', () => NProgress.done());
-
 const SkoleApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   const { locale } = useRouter();
   const apolloClient = useApollo(pageProps.initialApolloState);
   const theme = useMuiTheme();
 
   useEffect(() => {
+    NProgress.configure({ showSpinner: false });
+
+    const handleChangeStart = (): NProgress.NProgress => NProgress.start();
+    const handleChangeDone = (): NProgress.NProgress => NProgress.done();
+
+    Router.events.on('routeChangeStart', handleChangeStart);
+    Router.events.on('routeChangeError', handleChangeDone);
+    Router.events.on('routeChangeComplete', handleChangeDone);
+
     const jssStyles = document.querySelector('#jss-server-side');
 
     if (jssStyles && jssStyles.parentNode) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
+
+    return (): void => {
+      Router.events.off('routeChangeStart', handleChangeStart);
+      Router.events.off('routeChangeError', handleChangeDone);
+      Router.events.off('routeChangeComplete', handleChangeDone);
+    };
   }, []);
 
   return (
