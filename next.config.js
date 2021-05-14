@@ -40,6 +40,17 @@ const config = {
       destination: '/_next/static/service-worker.js',
     },
   ],
+  headers: async () => [
+    {
+      source: '/(.*?)',
+      headers: [
+        {
+          key: 'Permissions-Policy',
+          value: 'interest-cohort=()',
+        },
+      ],
+    },
+  ],
   webpack: (config, options) => {
     config.module.rules.push({
       test: /\.graphql$/,
