@@ -671,10 +671,10 @@ const ThreadPage: NextPage = () => {
           renderTableBody={renderCommentTableBody}
           page={page}
           count={paginationCount}
-          extraFilters={{ slug }}
+          extraFilters={{ slug, ordering }}
         />
       ),
-    [page, paginationCount, renderCommentTableBody, comments.length, slug],
+    [page, paginationCount, renderCommentTableBody, comments.length, slug, ordering],
   );
 
   const renderComments = useMemo(
