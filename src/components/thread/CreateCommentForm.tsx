@@ -117,10 +117,18 @@ export const CreateCommentForm: React.FC<CreateCommentFormProps> = ({
 
   const handleCloseCreateCommentDialog = useCallback((): void => {
     formRef.current?.setFieldValue('image', null);
+    formRef.current?.setFieldValue('file', null);
     setCreateCommentDialogOpen(false);
     setCommentImage(null);
+    setCommentFileName('');
     resetTargetComment();
-  }, [formRef, resetTargetComment, setCommentImage, setCreateCommentDialogOpen]);
+  }, [
+    formRef,
+    resetTargetComment,
+    setCommentImage,
+    setCreateCommentDialogOpen,
+    setCommentFileName,
+  ]);
 
   const onCompleted = ({ createComment }: CreateCommentMutation): void => {
     if (createComment?.errors?.length) {
