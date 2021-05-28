@@ -334,6 +334,9 @@ fragment commentFields on CommentObjectType {
   }
   comment {
     id
+    thread {
+        slug
+    }
     user {
       username
     }

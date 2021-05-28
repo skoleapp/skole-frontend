@@ -35,14 +35,14 @@ const useStyles = makeStyles(({ spacing, palette, breakpoints }) => ({
       textOverflow: 'ellipsis',
     },
   },
-  imagePreview: {
+  attachmentPreview: {
     border: `0.1rem solid ${palette.primary.main} !important`,
     borderRadius: '0.5rem',
   },
-  imageThumbnailContainer: {
+  attachmentThumbnailContainer: {
     width: 'auto',
   },
-  imageThumbnailTableCell: {
+  attachmentThumbnailTableCell: {
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
     [breakpoints.up('md')]: {
@@ -67,6 +67,7 @@ export const CommentTableRow: React.FC<Props> = ({
     id,
     text,
     imageThumbnail,
+    fileThumbnail,
     created: _created,
     score,
     replyCount,
@@ -85,6 +86,7 @@ export const CommentTableRow: React.FC<Props> = ({
   const textPreview = !!text && truncate(text, 50);
   const thread = _thread || comment?.thread;
   const pathname = urls.thread(thread?.slug || '');
+  const attachmentThumbnail = imageThumbnail || fileThumbnail;
 
   const href = useMemo(
     () => ({
@@ -96,21 +98,26 @@ export const CommentTableRow: React.FC<Props> = ({
     [id, pathname],
   );
 
-  const renderImageThumbnail = useMemo(
+  const renderAttachmentThumbnail = useMemo(
     () =>
-      !!imageThumbnail && (
-        <TableCell className={clsx(classes.tableCell, classes.imageThumbnailTableCell)}>
+      !!attachmentThumbnail && (
+        <TableCell className={clsx(classes.tableCell, classes.attachmentThumbnailTableCell)}>
           <Image
-            className={classes.imagePreview}
+            className={classes.attachmentPreview}
             loader={mediaLoader}
-            src={imageThumbnail}
+            src={attachmentThumbnail}
             layout="intrinsic"
             width={75}
             height={75}
           />
         </TableCell>
       ),
-    [classes.imagePreview, classes.tableCell, classes.imageThumbnailTableCell, imageThumbnail],
+    [
+      classes.attachmentPreview,
+      classes.tableCell,
+      classes.attachmentThumbnailTableCell,
+      attachmentThumbnail,
+    ],
   );
 
   const renderTextPreview = useMemo(
@@ -211,8 +218,8 @@ export const CommentTableRow: React.FC<Props> = ({
                 {renderTextPreview}
                 {renderCreatorInfo}
               </Grid>
-              <Grid className={classes.imageThumbnailContainer} item container>
-                {renderImageThumbnail}
+              <Grid className={classes.attachmentThumbnailContainer} item container>
+                {renderAttachmentThumbnail}
               </Grid>
             </Grid>
             <Grid item xs={12} md={2} container>

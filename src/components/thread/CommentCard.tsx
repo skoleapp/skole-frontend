@@ -90,11 +90,11 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
     wordBreak: 'break-word',
     fontSize: '0.95rem',
   },
-  thumbnailContainer: {
+  attachmentThumbnailContainer: {
     marginRight: spacing(3),
     display: 'flex',
   },
-  thumbnail: {
+  attachmentThumbnail: {
     border: `0.1rem solid ${
       palette.type === 'dark' ? palette.secondary.main : palette.primary.main
     } !important`,
@@ -322,9 +322,9 @@ export const CommentCard: React.FC<Props> = ({
     () =>
       !!comment.imageThumbnail && (
         <Tooltip title={t('thread-tooltips:commentImage')}>
-          <Box className={classes.thumbnailContainer}>
+          <Box className={classes.attachmentThumbnailContainer}>
             <Image
-              className={classes.thumbnail}
+              className={classes.attachmentThumbnail}
               onClick={handleClickImage}
               loader={mediaLoader}
               src={comment.imageThumbnail}
@@ -335,17 +335,23 @@ export const CommentCard: React.FC<Props> = ({
           </Box>
         </Tooltip>
       ),
-    [classes.thumbnail, classes.thumbnailContainer, comment.imageThumbnail, handleClickImage, t],
+    [
+      classes.attachmentThumbnail,
+      classes.attachmentThumbnailContainer,
+      comment.imageThumbnail,
+      handleClickImage,
+      t,
+    ],
   );
 
   const renderFileThumbnail = useMemo(
     () =>
       !!comment.fileThumbnail && (
         <Tooltip title={t('thread-tooltips:commentFile')}>
-          <Box className={classes.thumbnailContainer}>
+          <Box className={classes.attachmentThumbnailContainer}>
             <ExternalLink href={mediaUrl(comment.file)}>
               <Image
-                className={classes.thumbnail}
+                className={classes.attachmentThumbnail}
                 loader={mediaLoader}
                 src={comment.fileThumbnail}
                 layout="fixed"
@@ -356,7 +362,13 @@ export const CommentCard: React.FC<Props> = ({
           </Box>
         </Tooltip>
       ),
-    [classes.thumbnail, classes.thumbnailContainer, comment.file, comment.fileThumbnail, t],
+    [
+      classes.attachmentThumbnail,
+      classes.attachmentThumbnailContainer,
+      comment.file,
+      comment.fileThumbnail,
+      t,
+    ],
   );
 
   const renderThumbnail = renderImageThumbnail || renderFileThumbnail;
@@ -465,7 +477,7 @@ export const CommentCard: React.FC<Props> = ({
     ],
   );
 
-  const renderImageAndText = useMemo(
+  const renderAttachmentAndText = useMemo(
     () =>
       (!!comment.text || !!renderThumbnail) && (
         <Grid item xs={12} className={classes.messageContent} container alignItems="center">
@@ -499,7 +511,7 @@ export const CommentCard: React.FC<Props> = ({
           container
         >
           {renderCardHeader}
-          {renderImageAndText}
+          {renderAttachmentAndText}
           {renderButtons}
         </Grid>
         <Grid
