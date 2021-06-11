@@ -46,6 +46,7 @@ export const DISALLOWED_PATHS = new Set([
   urls.verifyBackupEmail,
 ]);
 
+export const DYNAMIC_PATHS = ['threads', 'users'];
 export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
 export const DEFAULT_NAMESPACES = [

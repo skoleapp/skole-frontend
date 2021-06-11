@@ -1,5 +1,7 @@
+import { SitemapDocument } from 'generated';
+import { initApolloClient } from 'lib';
 import { GetServerSideProps } from 'next';
-import { LOCALE_PATHS, urls } from 'utils';
+import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
 
 const toXhtmlLink = (path: string, langName: string, langPath: string): string => {
   // If the `path` is '/sv/foo' and `langPath` is '/fi', the `hrefPath` will become '/fi/foo'.
@@ -44,6 +46,8 @@ const createSitemap = (routes: { path: string; modified: string }[]): string =>
       ${routes.map((route) => toUrl(route.path, route.modified)).join('')}
     </urlset>`;
 
+const laterDate = (other: string, date?: string): string => (!date || other > date ? other : date);
+
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const modified = process.env.BUILD_DATE || new Date().toISOString().slice(0, 10);
 
@@ -59,6 +63,20 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
   const paths = staticPaths.map((path) => ({ path, modified }));
   const translatedPaths = [];
+
+  const apolloClient = initApolloClient();
+  const { data } = await apolloClient.query({
+    query: SitemapDocument,
+  });
+
+  for (const page of DYNAMIC_PATHS) {
+    for (const entry of data.sitemap[page]) {
+      paths.push({
+        path: `/${page}/${entry.slug}`,
+        modified: laterDate(modified, entry.modified),
+      });
+    }
+  }
 
   for (const lang of LOCALE_PATHS) {
     for (const path of paths) {
