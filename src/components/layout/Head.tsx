@@ -3,16 +3,15 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { SeoProps } from 'types';
-import { urls } from 'utils';
+import { DISALLOWED_PATHS } from 'utils';
 
 export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }) => {
   const { palette } = useTheme();
   const { pathname } = useRouter();
   const title = _title ? `Skole | ${_title}` : 'Skole';
 
-  // Temporary solution to nuke all other pages except the landing page.
   const renderNoIndex = useMemo(
-    () => pathname !== urls.index && <meta name="robots" content="NONE,NOARCHIVE" />,
+    () => DISALLOWED_PATHS.has(pathname) && <meta name="robots" content="NONE,NOARCHIVE" />,
     [pathname],
   );
 

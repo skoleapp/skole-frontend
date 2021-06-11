@@ -554,6 +554,19 @@ mutation Vote($status: Int!, $comment: ID, $thread: ID) {
   }
 }
 
+query Sitemap {
+  sitemap {
+    threads {
+      slug
+      modified
+    }
+    users {
+      slug
+      modified
+    }
+  }
+}
+
 mutation UpdateSelectedBadge($id: ID) {
   updateSelectedBadge(input: { id: $id }) {
     errors {

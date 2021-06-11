@@ -28,6 +28,25 @@ export const INVITE_PROMPT_KEY = 'SKOLE_INVITE';
 export const MAX_REVALIDATION_INTERVAL = 1; // Seconds.
 export const SLOGAN = 'Next-gen study forum. 🎓';
 
+export const DISALLOWED_PATHS = new Set([
+  '/404',
+  urls.about,
+  urls.accountSettings,
+  urls.activity,
+  urls.changePassword,
+  urls.deleteAccount,
+  urls.editProfile,
+  urls.home,
+  urls.logout,
+  urls.myData,
+  urls.resetPassword,
+  urls.search,
+  urls.starred,
+  urls.verifyAccount,
+  urls.verifyBackupEmail,
+]);
+
+export const DYNAMIC_PATHS = ['threads', 'users'];
 export const LOCALE_PATHS = ['', '/fi', '/sv'];
 
 export const DEFAULT_NAMESPACES = [
