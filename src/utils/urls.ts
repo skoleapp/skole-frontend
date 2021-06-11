@@ -21,7 +21,6 @@ export const urls = {
   search: '/search',
   starred: '/starred',
   terms: '/terms',
-  threads: '/threads',
   verifyAccount: '/verify-account',
   verifyBackupEmail: '/verify-backup-email',
 };
