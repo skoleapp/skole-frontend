@@ -42,7 +42,7 @@ const config = {
   ],
   headers: async () => [
     {
-      source: '/(.*?)',
+      source: '/:path*',
       headers: [
         {
           key: 'Permissions-Policy',
