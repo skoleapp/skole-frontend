@@ -15,6 +15,7 @@ const PrivacyPage: NextPage<MarkdownPageProps> = ({
   const layoutProps = {
     seoProps: {
       title: t('privacy:title'),
+      description: t('privacy:description'),
     },
     topNavbarProps: {
       header: title,
