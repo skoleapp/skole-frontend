@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import { SeoProps } from 'types';
-import { DISALLOWED_PATHS } from 'utils';
+import { NON_INDEXABLE_PATHS } from 'utils';
 
 export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }) => {
   const { palette } = useTheme();
@@ -11,7 +11,7 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
   const title = _title ? `Skole | ${_title}` : 'Skole';
 
   const renderNoIndex = useMemo(
-    () => DISALLOWED_PATHS.has(pathname) && <meta name="robots" content="NONE,NOARCHIVE" />,
+    () => NON_INDEXABLE_PATHS.has(pathname) && <meta name="robots" content="NONE,NOARCHIVE" />,
     [pathname],
   );
 

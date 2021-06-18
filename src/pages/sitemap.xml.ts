@@ -1,7 +1,7 @@
 import { SitemapDocument } from 'generated';
 import { initApolloClient } from 'lib';
 import { GetServerSideProps } from 'next';
-import { DYNAMIC_PATHS, LOCALE_PATHS, urls } from 'utils';
+import { DYNAMIC_PATHS, LOCALE_PATHS, STATIC_PATHS } from 'utils';
 
 const toXhtmlLink = (path: string, langName: string, langPath: string): string => {
   // If the `path` is '/sv/foo' and `langPath` is '/fi', the `hrefPath` will become '/fi/foo'.
@@ -51,17 +51,7 @@ const laterDate = (other: string, date?: string): string => (!date || other > da
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const modified = process.env.BUILD_DATE || new Date().toISOString().slice(0, 10);
 
-  const staticPaths = [
-    '', // Don't want the index page to have a slash.
-    urls.contact,
-    urls.login,
-    urls.privacy,
-    urls.register,
-    urls.resetPassword,
-    urls.terms,
-  ];
-
-  const paths = staticPaths.map((path) => ({ path, modified }));
+  const paths = STATIC_PATHS.map((path) => ({ path, modified }));
   const translatedPaths = [];
 
   const apolloClient = initApolloClient();

@@ -106,6 +106,7 @@ const ContactPage: NextPage = () => {
   const layoutProps = {
     seoProps: {
       title: t('contact:title'),
+      description: t('contact:description'),
     },
     topNavbarProps: {
       header: t('contact:header'),

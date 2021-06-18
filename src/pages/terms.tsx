@@ -12,6 +12,7 @@ const TermsPage: NextPage<MarkdownPageProps> = ({ data: { title }, content: mark
   const layoutProps = {
     seoProps: {
       title: t('terms:title'),
+      description: t('terms:description'),
     },
     topNavbarProps: {
       header: title,

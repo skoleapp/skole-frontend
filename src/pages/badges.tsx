@@ -39,6 +39,7 @@ const BadgesPage: NextPage<MarkdownPageProps> = ({ data: { title }, content: mar
   const layoutProps = {
     seoProps: {
       title: t('badges:title'),
+      description: t('badges:description'),
     },
     topNavbarProps: {
       header: title,

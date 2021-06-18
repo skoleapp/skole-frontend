@@ -17,6 +17,7 @@ const ScorePage: NextPage<MarkdownPageProps> = ({ data: { title }, content: mark
   const layoutProps = {
     seoProps: {
       title: t('score:title'),
+      description: t('score:description'),
     },
     topNavbarProps: {
       header: title,
