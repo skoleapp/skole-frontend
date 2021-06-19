@@ -7,6 +7,7 @@
   "sortedBy": "Järjestyksessä",
   "shareHeader": "Jaa lanka",
   "shareText": "Katso {{ title }} käyttäjältä {{ creatorUsername }} - {{ commentCount }} kommenttia.",
+  "description": "{{ title }} käyttäjältä {{ creatorUsername }}{{ descriptionContent }}",
   "deleteThread": "Poista lanka",
   "confirmDeleteThread": "Haluatko varmasti poistaa tämän langan?",
   "deleteComment": "Poista kommentti",
