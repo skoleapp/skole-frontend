@@ -982,9 +982,11 @@ const ProfilePage: NextPage = () => {
     ],
   );
 
+  const descriptionContent = [title, bio].filter(Boolean).join(' - ');
   const layoutProps = {
     seoProps: {
       title: username,
+      description: t('profile:description', { username, descriptionContent }),
     },
     topNavbarProps: {
       header: username,

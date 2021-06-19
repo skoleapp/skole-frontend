@@ -1009,9 +1009,11 @@ const ThreadPage: NextPage = () => {
     <FileDropDialog title={t('thread:uploadToThread', { title })} handleFileDrop={handleFileDrop} />
   );
 
+  const descriptionContent = text ? ` - ${text}` : '';
   const layoutProps = {
     seoProps: {
       title,
+      description: t('thread:description', { title, creatorUsername, descriptionContent }),
     },
     topNavbarProps: {
       renderHeaderRight: renderActionsButton || renderMobileShareButton,

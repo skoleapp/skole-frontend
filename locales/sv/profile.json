@@ -14,5 +14,6 @@
   "verificationRequiredComments": "Verifiera ditt konto för att se kommentarer.",
   "shareHeader": "Dela profil",
   "shareText": "Kolla in profilen för {{ username }} - {{ threadCount }} trådar - {{ commentCount }} kommentarer.",
-  "share": "Dela profil"
+  "share": "Dela profil",
+  "description": "Profilen av {{ username }}. {{ descriptionContent }}"
 }
