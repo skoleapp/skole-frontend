@@ -5,10 +5,15 @@ import React, { useMemo } from 'react';
 import { SeoProps } from 'types';
 import { NON_INDEXABLE_PATHS } from 'utils';
 
-export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }) => {
+export const HeadComponent: React.FC<SeoProps> = ({
+  title: _title,
+  description,
+  image: _image,
+}) => {
   const { palette } = useTheme();
   const { pathname } = useRouter();
   const title = _title ? `Skole | ${_title}` : 'Skole';
+  const image = _image || `${process.env.FRONTEND_URL}/images/icons/skole-icon-og.png`;
 
   const renderNoIndex = useMemo(
     () => NON_INDEXABLE_PATHS.has(pathname) && <meta name="robots" content="NONE,NOARCHIVE" />,
@@ -61,7 +66,6 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
     </>
   );
 
-  // TODO: Add og:image tag.
   const renderOgMetaTags = useMemo(
     () => (
       <>
@@ -69,9 +73,11 @@ export const HeadComponent: React.FC<SeoProps> = ({ title: _title, description }
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Skole" />
+        <meta property="og:url" content={process.env.FRONTEND_URL} />
+        <meta property="og:image" content={image} />
       </>
     ),
-    [title, description],
+    [title, description, image],
   );
 
   const renderLinkTags = useMemo(

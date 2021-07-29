@@ -4,6 +4,7 @@ import { GridProps } from '@material-ui/core/Grid';
 export interface SeoProps {
   title?: string;
   description?: string;
+  image?: string;
 }
 
 export interface TopNavbarProps {
