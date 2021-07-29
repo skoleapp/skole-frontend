@@ -987,7 +987,7 @@ const ProfilePage: NextPage = () => {
     seoProps: {
       title: username,
       description: t('profile:description', { username, descriptionContent }),
-      image: mediaUrl(avatar),
+      image: avatar ? mediaUrl(avatar) : undefined,
     },
     topNavbarProps: {
       header: username,
