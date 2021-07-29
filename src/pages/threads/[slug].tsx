@@ -1014,6 +1014,7 @@ const ThreadPage: NextPage = () => {
     seoProps: {
       title,
       description: t('thread:description', { title, creatorUsername, descriptionContent }),
+      image: mediaUrl(image),
     },
     topNavbarProps: {
       renderHeaderRight: renderActionsButton || renderMobileShareButton,
