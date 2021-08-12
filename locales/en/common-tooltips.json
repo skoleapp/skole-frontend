@@ -11,6 +11,5 @@
   "ownRank": "Your rank is {{ rank }} with a score of {{ score }}.",
   "activity": "You have {{ unreadActivityCount }} unread activities.",
   "exit": "Exit.",
-  "toggleDarkMode": "Toggle dark/light mode.",
-  "invite": "You have {{ inviteCodeUsages }} invites left."
+  "toggleDarkMode": "Toggle dark/light mode."
 }

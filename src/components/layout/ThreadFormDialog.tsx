@@ -45,12 +45,7 @@ export const ThreadFormDialog: React.FC = () => {
       toggleNotification(createThread.successMessage);
       handleCloseThreadForm();
 
-      await Router.push({
-        pathname: urls.thread(createThread.thread.slug),
-        query: {
-          invite: true,
-        },
-      });
+      await Router.push(urls.thread(createThread.thread.slug));
     } else {
       onError();
     }

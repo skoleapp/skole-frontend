@@ -26,7 +26,6 @@
   "selected": "{{ fileName }} selected.",
   "uploadImage": "Upload Image",
   "create": "Create",
-  "code": "Code",
   "primaryEmailHelperText": "Your school email that we can use to identify you. Your email is only visible for you. We will not spam you.",
   "usernameHelperText": "Your username will show to other users.",
   "termsHelperText": "By registering you agree to our",

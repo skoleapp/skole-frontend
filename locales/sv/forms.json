@@ -26,7 +26,6 @@
   "selected": "{{ fileName }} vald.",
   "uploadImage": "Ladda upp bild",
   "create": "Skapa",
-  "code": "Kod",
   "primaryEmailHelperText": "Din skolans e-post som vi kan använda för att identifiera dig. Ditt e-postmeddelande är bara synligt för dig. Vi kommer inte att skräpposta dig.",
   "usernameHelperText": "Ditt användarnamn visas för andra användare.",
   "termsHelperText": "Genom att registrera dig godkänner du våra",

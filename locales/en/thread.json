@@ -15,7 +15,6 @@
   "shareCommentTitle": "{{ creatorUsername }} on Skole",
   "shareComment": "Share Comment",
   "postingComment": "Posting comment...",
-  "inviteDialogText": "is up and running! Let your friends know about it by inviting them!",
   "commentReplies": "{{ replyCount }} replies",
   "uploadToThread": "Upload to {{ title }}!"
 }

@@ -2,7 +2,5 @@
   "title": "Registrera",
   "header": "Registrera",
   "loginLinkText": "Har du redan ett konto?",
-  "inviteCodeHelperText": "Skicka in inbjudningskoden från en befintlig användare för att slutföra registreringen.",
-  "secondaryInviteCodeHelperText": "Har du ingen inbjudningskod? Oroa dig inte, du har tilldelats en väntelista. Vi meddelar dig när det finns plats för dig att gå med!",
   "verifyAccountText": "Klar! Kontrollera din e-postadress för en länk som du kan använda för att verifiera ditt konto."
 }
