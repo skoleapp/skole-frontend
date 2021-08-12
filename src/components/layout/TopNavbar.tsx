@@ -18,18 +18,12 @@ import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutline
 import ArrowForwardOutlined from '@material-ui/icons/ArrowForwardOutlined';
 import Brightness6Outlined from '@material-ui/icons/Brightness6Outlined';
 import Brightness7Outlined from '@material-ui/icons/Brightness7Outlined';
-import ContactMailOutlined from '@material-ui/icons/ContactMailOutlined';
 import HowToRegOutlined from '@material-ui/icons/HowToRegOutlined';
 import LaunchOutlined from '@material-ui/icons/LaunchOutlined';
 import NotificationsOutlined from '@material-ui/icons/NotificationsOutlined';
 import StarBorderOutlined from '@material-ui/icons/StarBorderOutlined';
 import clsx from 'clsx';
-import {
-  useAuthContext,
-  useDarkModeContext,
-  useInviteContext,
-  useMediaQueryContext,
-} from 'context';
+import { useAuthContext, useDarkModeContext, useMediaQueryContext } from 'context';
 import { useTranslation } from 'lib';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import { BORDER_RADIUS, TOP_NAVBAR_HEIGHT_DESKTOP, TOP_NAVBAR_HEIGHT_MOBILE } from 'styles';
@@ -106,7 +100,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const { darkMode, toggleDarkMode } = useDarkModeContext();
   const dense = !!renderHeaderLeft || !!renderHeaderRightSecondary;
   const [activityPopperOpen, setActivityPopperOpen] = useState(false);
-  const { handleOpenGeneralInviteDialog } = useInviteContext();
   const { verified } = useAuthContext();
 
   const {
@@ -117,7 +110,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     profileUrl,
     rank,
     score,
-    inviteCodeUsages,
   } = useAuthContext();
 
   const [activityPopperAnchorEl, setActivityPopperAnchorEl] = useState<HTMLButtonElement | null>(
@@ -278,24 +270,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     [rank, renderRankEmoji, renderScore],
   );
 
-  const renderInviteButton = useMemo(
-    () =>
-      !!verified && (
-        <Tooltip title={t('common-tooltips:invite', { inviteCodeUsages })}>
-          <IconButton
-            className={classes.buttonSpacing}
-            onClick={handleOpenGeneralInviteDialog}
-            color="secondary"
-          >
-            <Badge badgeContent={inviteCodeUsages} color="secondary">
-              <ContactMailOutlined />
-            </Badge>
-          </IconButton>
-        </Tooltip>
-      ),
-    [handleOpenGeneralInviteDialog, inviteCodeUsages, t, verified, classes.buttonSpacing],
-  );
-
   const renderActivity = useMemo(
     () =>
       !!verified && (
@@ -357,7 +331,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       !hideDynamicButtons &&
       !hideDynamicAuthButtons && (
         <>
-          {renderInviteButton}
           {renderActivity}
           {renderStarButton}
           {renderRank}
@@ -369,7 +342,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       hideDynamicButtons,
       renderActivity,
       renderAvatar,
-      renderInviteButton,
       renderRank,
       renderStarButton,
       userMe,

@@ -15,7 +15,6 @@
   "shareCommentTitle": "{{ creatorUsername }} Skolessa",
   "shareComment": "Jaa kommentti",
   "postingComment": "Lähetetään kommenttia...",
-  "inviteDialogText": "on toiminnassa! Kerro kavereillesi kutsumalla heidät!",
   "commentReplies": "{{ replyCount }} vastausta",
   "uploadToThread": "Lisää lankaan {{ title }}!"
 }

@@ -29,8 +29,6 @@ interface UseAuthContext extends AuthContextType {
   score: number;
   badgeProgresses: BadgeProgressObjectType[];
   selectedBadgeProgress: BadgeProgressObjectType | null;
-  inviteCode: string;
-  inviteCodeUsages: number;
   commentReplyEmailPermission: boolean;
   threadCommentEmailPermission: boolean;
   newBadgeEmailPermission: boolean;
@@ -60,8 +58,6 @@ export const useAuthContext = (): UseAuthContext => {
   const avatarThumbnail = _avatarThumbnail ? mediaUrl(_avatarThumbnail) : '';
   const avatar = _avatar ? mediaUrl(_avatar) : '';
   const badgeProgresses: BadgeProgressObjectType[] = R.propOr([], 'badgeProgresses', userMe);
-  const inviteCode: string = R.pathOr('', ['inviteCode', 'code'], userMe);
-  const inviteCodeUsages: number = R.pathOr(0, ['inviteCode', 'usages'], userMe);
   const newBadgeEmailPermission: boolean = R.propOr(false, 'newBadgeEmailPermission', userMe);
   const commentReplyPushPermission: boolean = R.propOr(false, 'commentReplyPushPermission', userMe);
   const newBadgePushPermission: boolean = R.propOr(false, 'newBadgePushPermission', userMe);
@@ -111,8 +107,6 @@ export const useAuthContext = (): UseAuthContext => {
     avatar,
     badgeProgresses,
     selectedBadgeProgress,
-    inviteCode,
-    inviteCodeUsages,
     commentReplyEmailPermission,
     threadCommentEmailPermission,
     newBadgeEmailPermission,

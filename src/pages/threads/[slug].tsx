@@ -3,11 +3,9 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Box from '@material-ui/core/Box';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Fab from '@material-ui/core/Fab';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import MaterialLink from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import TableBody from '@material-ui/core/TableBody';
@@ -23,8 +21,6 @@ import {
   BadgeTierIcon,
   CommentCard,
   CreateCommentForm,
-  CustomInviteDialog,
-  Emoji,
   ErrorTemplate,
   FileDropDialog,
   LoadingTemplate,
@@ -43,7 +39,6 @@ import {
   useConfirmContext,
   useDarkModeContext,
   useDragContext,
-  useInviteContext,
   useMediaQueryContext,
   useNotificationsContext,
   useOrderingContext,
@@ -202,16 +197,9 @@ const ThreadPage: NextPage = () => {
   const { userMe, verified } = useAuthContext();
   const context = useLanguageHeaderContext();
   const { ordering, setOrdering } = useOrderingContext();
-  const [customInviteDialogOpenedCounter, setCustomInviteDialogOpenedCounter] = useState(0);
   const commentQueryVariables = R.pick(['slug', 'comment', 'page', 'pageSize'], query);
   const [threadData, setThreadData] = useState<ThreadQueryResult['data'] | null>(null);
   const [commentsData, setCommentsData] = useState<ThreadCommentsQueryResult['data'] | null>(null);
-
-  const {
-    customInviteDialogOpen,
-    handleOpenCustomInviteDialog,
-    handleCloseCustomInviteDialog,
-  } = useInviteContext();
 
   const threadQueryParams = {
     variables: R.pick(['slug'], query),
@@ -358,19 +346,6 @@ const ThreadPage: NextPage = () => {
     }
   }, [createCommentDialogOpen, thread]);
 
-  // Open invite dialog if `invite` has been provided as a query parameter.
-  useEffect(() => {
-    if (typeof query.invite !== 'undefined' && customInviteDialogOpenedCounter < 1) {
-      handleOpenCustomInviteDialog();
-      setCustomInviteDialogOpenedCounter(customInviteDialogOpenedCounter + 1);
-    }
-  }, [
-    query,
-    handleOpenCustomInviteDialog,
-    customInviteDialogOpenedCounter,
-    setCustomInviteDialogOpenedCounter,
-  ]);
-
   const deleteThreadCompleted = async ({ deleteThread }: DeleteThreadMutation): Promise<void> => {
     if (deleteThread?.errors?.length) {
       toggleUnexpectedErrorNotification();
@@ -450,9 +425,8 @@ const ThreadPage: NextPage = () => {
   );
 
   const handleClickShareButton = useCallback((): void => {
-    handleCloseCustomInviteDialog();
     handleOpenShareDialog(shareDialogParams);
-  }, [shareDialogParams, handleOpenShareDialog, handleCloseCustomInviteDialog]);
+  }, [shareDialogParams, handleOpenShareDialog]);
 
   const renderShareButton = useMemo(
     () => (
@@ -964,47 +938,6 @@ const ThreadPage: NextPage = () => {
     [mdUp, renderHeaderAction, renderHeaderTitle, classes.header, classes.headerContent],
   );
 
-  const renderInviteDialogHeader = useMemo(
-    () => (
-      <>
-        Wohoo!
-        <Emoji emoji="🥳" />
-      </>
-    ),
-    [],
-  );
-
-  const renderInviteDialogText = useMemo(
-    () => (
-      <DialogContentText>
-        <Typography variant="body2">
-          <MaterialLink>@{title}</MaterialLink> {t('thread:inviteDialogText')}
-        </Typography>
-      </DialogContentText>
-    ),
-    [t, title],
-  );
-
-  const renderInviteDialog = useMemo(
-    () => (
-      <CustomInviteDialog
-        open={customInviteDialogOpen}
-        handleClose={handleCloseCustomInviteDialog}
-        header={renderInviteDialogHeader}
-        dynamicContent={renderInviteDialogText}
-        handleClickInviteButton={handleClickShareButton}
-        hideInviteCode
-      />
-    ),
-    [
-      renderInviteDialogHeader,
-      renderInviteDialogText,
-      customInviteDialogOpen,
-      handleCloseCustomInviteDialog,
-      handleClickShareButton,
-    ],
-  );
-
   const renderFileDropDialog = (
     <FileDropDialog title={t('thread:uploadToThread', { title })} handleFileDrop={handleFileDrop} />
   );
@@ -1063,7 +996,6 @@ const ThreadPage: NextPage = () => {
         {renderCommentsHeader}
         {renderComments}
         {renderCreateCommentButton}
-        {renderInviteDialog}
         {renderFileDropDialog}
       </Paper>
     </MainTemplate>

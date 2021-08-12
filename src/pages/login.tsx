@@ -1,6 +1,5 @@
 import Avatar from '@material-ui/core/Avatar';
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import MaterialLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,11 +16,9 @@ import { useAuthContext, useNotificationsContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import {
   LoginMutation,
-  UseInviteCodeAndLoginMutation,
   useLoginMutation,
   UserObjectType,
   UserQuery,
-  useUseInviteCodeAndLoginMutation,
   useUserLazyQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
@@ -55,17 +52,12 @@ interface LoginFormValues {
   password: string;
 }
 
-interface InviteCodeFormValues {
-  code: string;
-}
-
 const LoginPage: NextPage = () => {
   const classes = useStyles();
   const { userMe } = useAuthContext();
   const { t } = useTranslation();
   const { query } = useRouter();
   const { toggleNotification } = useNotificationsContext();
-  const initialCode = query.code ? String(query.code) : '';
   const [existingUser, setExistingUser] = useState<UserObjectType | null>(null);
   const username: string = R.propOr('', 'username', existingUser);
   const email = R.propOr('', 'email', existingUser);
@@ -73,25 +65,14 @@ const LoginPage: NextPage = () => {
   const avatar: string = R.propOr('', 'avatar', existingUser);
   const existingUserAvatar = mediaUrl(avatar);
   const context = useLanguageHeaderContext();
-  const [showInviteCodeForm, setShowInviteCodeForm] = useState(false);
-  const [savedUsernameOrEmail, setSavedUsernameOrEmail] = useState('');
-  const [savedPassword, setSavedPassword] = useState('');
 
   const {
-    formRef: loginFormRef,
-    handleMutationErrors: handleLoginFormMutationErrors,
-    onError: onLoginFormError,
-    setUnexpectedFormError: setUnexpectedLoginFormError,
-    generalFormValues: generalLoginFormValues,
+    formRef,
+    handleMutationErrors,
+    onError,
+    setUnexpectedFormError,
+    generalFormValues,
   } = useForm<LoginFormValues>();
-
-  const {
-    formRef: inviteCodeFormRef,
-    handleMutationErrors: handleUseInviteCodeAndLoginMutationErrors,
-    onError: onUseInviteCodeAndLoginError,
-    setUnexpectedFormError: setUnexpectedInviteCodeFormError,
-    generalFormValues: generalInviteCodeFormValues,
-  } = useForm<InviteCodeFormValues>();
 
   const existingUserGreeting = t('login:existingUserGreeting', {
     username,
@@ -127,85 +108,35 @@ const LoginPage: NextPage = () => {
     password: Yup.string().required(t('validation:required')),
   });
 
-  const inviteCodeFormValidationSchema = Yup.object().shape({
-    code: Yup.string().required(t('validation:required')),
-  });
-
-  const initialLoginFormValues = useMemo(
+  const initialFormValues = useMemo(
     () => ({
-      ...generalLoginFormValues,
+      ...generalFormValues,
       usernameOrEmail: '',
       password: '',
     }),
-    [generalLoginFormValues],
-  );
-
-  const initialInviteCodeFormValues = useMemo(
-    () => ({
-      ...generalInviteCodeFormValues,
-      code: initialCode,
-    }),
-    [generalInviteCodeFormValues, initialCode],
+    [generalFormValues],
   );
 
   const onLoginCompleted = async ({ login }: LoginMutation): Promise<void> => {
     if (login?.errors?.length) {
-      handleLoginFormMutationErrors(login.errors);
-
-      if (login?.inviteCodeRequired && loginFormRef.current) {
-        const { usernameOrEmail, password } = loginFormRef.current.values;
-        setSavedUsernameOrEmail(usernameOrEmail);
-        setSavedPassword(password);
-        setShowInviteCodeForm(true);
-      }
+      handleMutationErrors(login.errors);
     } else if (login?.successMessage) {
       try {
-        loginFormRef.current?.resetForm();
+        formRef.current?.resetForm();
         toggleNotification(login.successMessage);
         const nextUrl = query.next ? String(query.next) : urls.home;
         await Router.push(nextUrl);
       } catch {
-        setUnexpectedLoginFormError();
+        setUnexpectedFormError();
       }
     } else {
-      setUnexpectedLoginFormError();
-    }
-  };
-
-  const onUseInviteCodeAndLoginCompleted = async ({
-    useInviteCode,
-    login,
-  }: UseInviteCodeAndLoginMutation): Promise<void> => {
-    if (useInviteCode?.errors?.length) {
-      handleUseInviteCodeAndLoginMutationErrors(useInviteCode.errors);
-    } else if (login?.errors?.length) {
-      handleUseInviteCodeAndLoginMutationErrors(login.errors);
-    } else if (login?.successMessage) {
-      inviteCodeFormRef.current?.resetForm();
-      setSavedUsernameOrEmail('');
-      setSavedPassword('');
-      toggleNotification(login.successMessage);
-      const nextUrl = query.next ? String(query.next) : urls.home;
-
-      try {
-        await Router.push(nextUrl);
-      } catch {
-        setUnexpectedInviteCodeFormError();
-      }
-    } else {
-      setUnexpectedLoginFormError();
+      setUnexpectedFormError();
     }
   };
 
   const [login] = useLoginMutation({
     onCompleted: onLoginCompleted,
-    onError: onLoginFormError,
-    context,
-  });
-
-  const [useInviteCodeAndLogin] = useUseInviteCodeAndLoginMutation({
-    onCompleted: onUseInviteCodeAndLoginCompleted,
-    onError: onUseInviteCodeAndLoginError,
+    onError,
     context,
   });
 
@@ -220,22 +151,11 @@ const LoginPage: NextPage = () => {
     [existingUser, login],
   );
 
-  const handleInviteCodeFormSubmit = useCallback(
-    async ({ code }: InviteCodeFormValues): Promise<void> => {
-      await useInviteCodeAndLogin({
-        variables: { code, usernameOrEmail: savedUsernameOrEmail, password: savedPassword },
-      });
-    },
-    [useInviteCodeAndLogin, savedUsernameOrEmail, savedPassword],
-  );
-
   const handleLoginWithDifferentCredentials = useCallback((): void => {
     localStorage.removeItem('user');
     setExistingUser(null);
-    setShowInviteCodeForm(false);
-    loginFormRef.current?.resetForm();
-    inviteCodeFormRef.current?.resetForm();
-  }, [loginFormRef, inviteCodeFormRef]);
+    formRef.current?.resetForm();
+  }, [formRef]);
 
   const renderExistingUserGreeting = useMemo(
     () =>
@@ -274,13 +194,6 @@ const LoginPage: NextPage = () => {
     [t],
   );
 
-  const renderInviteCodeFormSubmitSection = useCallback(
-    (props: FormikProps<InviteCodeFormValues>): JSX.Element => (
-      <FormSubmitSection submitButtonText={t('common:login')} {...props} />
-    ),
-    [t],
-  );
-
   const renderRegisterLink = useMemo(
     () => (
       <FormControl className={classes.link}>
@@ -301,31 +214,17 @@ const LoginPage: NextPage = () => {
 
   const renderLoginWithDifferentCredentialsLink = useMemo(
     () =>
-      (!!validExistingUser || showInviteCodeForm) && (
+      !!validExistingUser && (
         <FormControl className={classes.link}>
           <MaterialLink onClick={handleLoginWithDifferentCredentials}>
             {t('login:loginWithDifferentCredentials')}
           </MaterialLink>
         </FormControl>
       ),
-    [classes.link, handleLoginWithDifferentCredentials, t, validExistingUser, showInviteCodeForm],
+    [classes.link, handleLoginWithDifferentCredentials, t, validExistingUser],
   );
 
-  const renderInviteCodeHelperText = useMemo(
-    () => (
-      <FormControl>
-        <FormHelperText>{t('login:inviteCodeHelperText')}</FormHelperText>
-      </FormControl>
-    ),
-    [t],
-  );
-
-  const renderInviteCodeField = useMemo(
-    () => <Field label={t('forms:code')} name="code" component={TextFormField} />,
-    [t],
-  );
-
-  const renderLoginFormFields = useCallback(
+  const renderFormFields = useCallback(
     (props: FormikProps<LoginFormValues>): JSX.Element => (
       <Form>
         {renderExistingUserGreeting}
@@ -348,73 +247,26 @@ const LoginPage: NextPage = () => {
     ],
   );
 
-  const renderLoginForm = useMemo(
-    () =>
-      !showInviteCodeForm && (
-        <Formik
-          initialValues={initialLoginFormValues}
-          validationSchema={loginFormValidationSchema}
-          onSubmit={handleLoginFormSubmit}
-          innerRef={loginFormRef}
-          enableReinitialize
-        >
-          {renderLoginFormFields}
-        </Formik>
-      ),
-    [
-      loginFormRef,
-      handleLoginFormSubmit,
-      initialLoginFormValues,
-      loginFormValidationSchema,
-      renderLoginFormFields,
-      showInviteCodeForm,
-    ],
-  );
-
-  const renderInviteCodeFormFields = useCallback(
-    (props: FormikProps<InviteCodeFormValues>) => (
-      <Form>
-        {renderInviteCodeHelperText}
-        {renderInviteCodeField}
-        {renderInviteCodeFormSubmitSection(props)}
-        {renderLoginWithDifferentCredentialsLink}
-      </Form>
+  const renderForm = useMemo(
+    () => (
+      <Formik
+        initialValues={initialFormValues}
+        validationSchema={loginFormValidationSchema}
+        onSubmit={handleLoginFormSubmit}
+        innerRef={formRef}
+        enableReinitialize
+      >
+        {renderFormFields}
+      </Formik>
     ),
     [
-      renderInviteCodeHelperText,
-      renderInviteCodeFormSubmitSection,
-      renderInviteCodeField,
-      renderLoginWithDifferentCredentialsLink,
+      initialFormValues,
+      loginFormValidationSchema,
+      handleLoginFormSubmit,
+      formRef,
+      renderFormFields,
     ],
   );
-
-  const renderInviteCodeForm = useMemo(
-    () =>
-      showInviteCodeForm && (
-        <Formik
-          initialValues={initialInviteCodeFormValues}
-          validationSchema={inviteCodeFormValidationSchema}
-          onSubmit={handleInviteCodeFormSubmit}
-          innerRef={inviteCodeFormRef}
-          enableReinitialize
-        >
-          {renderInviteCodeFormFields}
-        </Formik>
-      ),
-    [
-      showInviteCodeForm,
-      inviteCodeFormRef,
-      initialInviteCodeFormValues,
-      inviteCodeFormValidationSchema,
-      handleInviteCodeFormSubmit,
-      renderInviteCodeFormFields,
-    ],
-  );
-
-  const renderForm = useMemo(() => renderLoginForm || renderInviteCodeForm, [
-    renderInviteCodeForm,
-    renderLoginForm,
-  ]);
 
   const layoutProps = {
     seoProps: {

@@ -15,12 +15,7 @@ import {
 } from 'components';
 import { useAuthContext } from 'context';
 import { Field, Form, Formik, FormikProps } from 'formik';
-import {
-  RegisterMutation,
-  UseInviteCodeAndLoginMutation,
-  useRegisterMutation,
-  useUseInviteCodeAndLoginMutation,
-} from 'generated';
+import { RegisterAndLoginMutation, useRegisterAndLoginMutation } from 'generated';
 import { withUserMe } from 'hocs';
 import { useForm, useLanguageHeaderContext } from 'hooks';
 import { loadNamespaces, useTranslation } from 'lib';
@@ -44,13 +39,8 @@ interface RegisterFormValues {
   confirmPassword: string;
 }
 
-interface InviteCodeFormValues {
-  code: string;
-}
-
 enum RegisterPhases {
   REGISTER = 'register',
-  USE_INVITE_CODE = 'use-invite-code',
   VERIFY_ACCOUNT = 'verify-account',
 }
 
@@ -60,10 +50,7 @@ const RegisterPage: NextPage = () => {
   const { query } = useRouter();
   const [phase, setPhase] = useState(RegisterPhases.REGISTER);
   const context = useLanguageHeaderContext();
-  const { userMe, setUserMe } = useAuthContext();
-  const initialCode = query.code ? String(query.code) : '';
-  const [savedEmail, setSavedEmail] = useState('');
-  const [savedPassword, setSavedPassword] = useState('');
+  const { userMe } = useAuthContext();
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
 
   const {
@@ -72,13 +59,6 @@ const RegisterPage: NextPage = () => {
     onError: onRegisterError,
     generalFormValues: generalRegisterFormValues,
   } = useForm<RegisterFormValues>();
-
-  const {
-    formRef: inviteCodeFormRef,
-    handleMutationErrors: handleUseInviteCodeAndLoginMutationErrors,
-    onError: onUseInviteCodeAndLoginError,
-    generalFormValues: generalInviteCodeFormValues,
-  } = useForm<InviteCodeFormValues>();
 
   const registerInitialValues = useMemo(
     () => ({
@@ -89,14 +69,6 @@ const RegisterPage: NextPage = () => {
       confirmPassword: '',
     }),
     [generalRegisterFormValues],
-  );
-
-  const inviteCodeFormInitialValues = useMemo(
-    () => ({
-      ...generalInviteCodeFormValues,
-      code: initialCode,
-    }),
-    [generalInviteCodeFormValues, initialCode],
   );
 
   const registerValidationSchema = Yup.object().shape({
@@ -110,11 +82,7 @@ const RegisterPage: NextPage = () => {
       .required(t('validation:required')),
   });
 
-  const inviteCodeFormValidationSchema = Yup.object().shape({
-    code: Yup.string().required(t('validation:required')),
-  });
-
-  const onRegisterCompleted = async ({ register }: RegisterMutation): Promise<void> => {
+  const onRegisterCompleted = async ({ register }: RegisterAndLoginMutation): Promise<void> => {
     if (register?.errors?.length) {
       handleRegisterMutationErrors(register.errors);
 
@@ -122,46 +90,20 @@ const RegisterPage: NextPage = () => {
         setEmailDialogOpen(true);
       }
     } else if (registerFormRef.current) {
-      const { email, password } = registerFormRef.current.values;
-      setSavedEmail(email);
-      setSavedPassword(password);
       registerFormRef.current.resetForm();
-      setPhase(RegisterPhases.USE_INVITE_CODE);
-    }
-  };
-
-  const onUseInviteCodeAndLoginCompleted = async ({
-    useInviteCode,
-    login,
-  }: UseInviteCodeAndLoginMutation): Promise<void> => {
-    if (useInviteCode?.errors?.length) {
-      handleUseInviteCodeAndLoginMutationErrors(useInviteCode.errors);
-    } else if (login?.errors?.length) {
-      handleUseInviteCodeAndLoginMutationErrors(login.errors);
-    } else if (login?.user) {
-      inviteCodeFormRef.current?.resetForm();
-      setSavedEmail('');
-      setSavedPassword('');
-      setUserMe(login.user);
       setPhase(RegisterPhases.VERIFY_ACCOUNT);
     }
   };
 
-  const [register] = useRegisterMutation({
+  const [registerAndLogin] = useRegisterAndLoginMutation({
     onCompleted: onRegisterCompleted,
     onError: onRegisterError,
     context,
   });
 
-  const [useInviteCodeAndLogin] = useUseInviteCodeAndLoginMutation({
-    onCompleted: onUseInviteCodeAndLoginCompleted,
-    onError: onUseInviteCodeAndLoginError,
-    context,
-  });
-
   const handleRegisterSubmit = useCallback(
     async ({ username, email, password }: RegisterFormValues): Promise<void> => {
-      await register({
+      await registerAndLogin({
         variables: {
           username,
           email,
@@ -169,20 +111,7 @@ const RegisterPage: NextPage = () => {
         },
       });
     },
-    [register],
-  );
-
-  const handleInviteCodeFormSubmit = useCallback(
-    async ({ code }: InviteCodeFormValues): Promise<void> => {
-      await useInviteCodeAndLogin({
-        variables: {
-          code,
-          usernameOrEmail: savedEmail,
-          password: savedPassword,
-        },
-      });
-    },
-    [useInviteCodeAndLogin, savedEmail, savedPassword],
+    [registerAndLogin],
   );
 
   const renderUsernameField = useMemo(
@@ -206,29 +135,6 @@ const RegisterPage: NextPage = () => {
       />
     ),
     [emailDialogOpen, setEmailDialogOpen],
-  );
-
-  const renderInviteCodeHelperText = useMemo(
-    () => (
-      <FormControl>
-        <FormHelperText>{t('register:inviteCodeHelperText')}</FormHelperText>
-      </FormControl>
-    ),
-    [t],
-  );
-
-  const renderSecondaryInviteCodeHelperText = useMemo(
-    () => (
-      <FormControl>
-        <FormHelperText>{t('register:secondaryInviteCodeHelperText')}</FormHelperText>
-      </FormControl>
-    ),
-    [t],
-  );
-
-  const renderInviteCodeField = useMemo(
-    () => <Field label={t('forms:code')} name="code" component={TextFormField} />,
-    [t],
   );
 
   const renderPasswordField = useCallback(
@@ -261,13 +167,6 @@ const RegisterPage: NextPage = () => {
   const renderRegisterFormSubmitSection = useCallback(
     (props: FormikProps<RegisterFormValues>): JSX.Element => (
       <FormSubmitSection submitButtonText={t('common:register')} {...props} />
-    ),
-    [t],
-  );
-
-  const renderInviteCodeFormSubmitSection = useCallback(
-    (props: FormikProps<InviteCodeFormValues>): JSX.Element => (
-      <FormSubmitSection submitButtonText={t('common:submit')} {...props} />
     ),
     [t],
   );
@@ -305,23 +204,6 @@ const RegisterPage: NextPage = () => {
     ],
   );
 
-  const renderInviteCodeFormFields = useCallback(
-    (props: FormikProps<InviteCodeFormValues>): JSX.Element => (
-      <Form>
-        {renderInviteCodeHelperText}
-        {renderInviteCodeField}
-        {renderSecondaryInviteCodeHelperText}
-        {renderInviteCodeFormSubmitSection(props)}
-      </Form>
-    ),
-    [
-      renderInviteCodeField,
-      renderInviteCodeFormSubmitSection,
-      renderInviteCodeHelperText,
-      renderSecondaryInviteCodeHelperText,
-    ],
-  );
-
   const renderRegisterForm = useMemo(
     () =>
       phase === RegisterPhases.REGISTER && (
@@ -345,29 +227,6 @@ const RegisterPage: NextPage = () => {
     ],
   );
 
-  const renderInviteCodeForm = useMemo(
-    () =>
-      phase === RegisterPhases.USE_INVITE_CODE && (
-        <Formik
-          initialValues={inviteCodeFormInitialValues}
-          validationSchema={inviteCodeFormValidationSchema}
-          onSubmit={handleInviteCodeFormSubmit}
-          innerRef={inviteCodeFormRef}
-          enableReinitialize
-        >
-          {renderInviteCodeFormFields}
-        </Formik>
-      ),
-    [
-      phase,
-      inviteCodeFormInitialValues,
-      inviteCodeFormValidationSchema,
-      handleInviteCodeFormSubmit,
-      inviteCodeFormRef,
-      renderInviteCodeFormFields,
-    ],
-  );
-
   const renderVerifyAccount = useMemo(
     () =>
       phase === RegisterPhases.VERIFY_ACCOUNT && (
@@ -387,10 +246,10 @@ const RegisterPage: NextPage = () => {
     [t, phase],
   );
 
-  const renderForm = useMemo(
-    () => renderRegisterForm || renderInviteCodeForm || renderVerifyAccount,
-    [renderRegisterForm, renderInviteCodeForm, renderVerifyAccount],
-  );
+  const renderForm = useMemo(() => renderRegisterForm || renderVerifyAccount, [
+    renderRegisterForm,
+    renderVerifyAccount,
+  ]);
 
   const layoutProps = {
     seoProps: {

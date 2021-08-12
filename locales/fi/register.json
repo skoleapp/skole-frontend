@@ -2,7 +2,5 @@
   "title": "Rekisteröidy",
   "header": "Rekisteröidy",
   "loginLinkText": "Onko sinulla jo tili?",
-  "inviteCodeHelperText": "Syötä kutsukoodi nykyiseltä käyttäjältä viimeistelläksesi rekisteröinti.",
-  "secondaryInviteCodeHelperText": "Eikö sinulla ole koodia? Älä huoli, lisäsimme sinut odotuslistalle. Kerromme kun sinulle vapautuu paikka!",
   "verifyAccountText": "Valmista! Tarkista vielä sähköpostistasi linkki, jolla voit vahvistaa tilisi."
 }

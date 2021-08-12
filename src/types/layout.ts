@@ -13,8 +13,8 @@ export interface TopNavbarProps {
   hideBackButton?: boolean; // Hide the back button on mobile.
   hideLogo?: boolean; // Hide the logo.
   hideSearch?: boolean; // Hide search field on desktop.
-  hideDynamicButtons?: boolean; // Hide all dynamic buttons (Login, Register, Get Started, Invite, Activity, Starred, Rank, Profile) on desktop.
-  hideDynamicAuthButtons?: boolean; // Hide all dynamic buttons for authenticated users (Invite, Activity, Starred, Rank, Profile) on desktop.
+  hideDynamicButtons?: boolean; // Hide all dynamic buttons (Login, Register, Get Started, Activity, Starred, Rank, Profile) on desktop.
+  hideDynamicAuthButtons?: boolean; // Hide all dynamic buttons for authenticated users (Activity, Starred, Rank, Profile) on desktop.
   hideLoginButton?: boolean; // Hide the `Login` button on desktop.
   hideRegisterButton?: boolean; // Hide the `Register` button on desktop.
   hideGetStartedButton?: boolean; // Hide the `Get Started` button on desktop.

@@ -1,6 +1,5 @@
 import {
   ConfirmationDialog,
-  GeneralInviteDialog,
   LanguageSelectorDialog,
   Notifications,
   SettingsDialog,
@@ -10,7 +9,6 @@ import {
 import {
   AuthContextProvider,
   ConfirmContextProvider,
-  InviteContextProvider,
   LanguageContextProvider,
   NotificationsContextProvider,
   OrderingContextProvider,
@@ -32,18 +30,15 @@ export const withCommonContexts = <T extends Record<string, unknown>>(
             <ConfirmContextProvider>
               <ShareContextProvider>
                 <OrderingContextProvider>
-                  <InviteContextProvider>
-                    <ThreadFormContextProvider>
-                      <PageComponent {...pageProps} />
-                      <ConfirmationDialog />
-                      <SettingsDialog />
-                      <LanguageSelectorDialog />
-                      <ShareDialog />
-                      <ThreadFormDialog />
-                      <GeneralInviteDialog />
-                      <Notifications />
-                    </ThreadFormContextProvider>
-                  </InviteContextProvider>
+                  <ThreadFormContextProvider>
+                    <PageComponent {...pageProps} />
+                    <ConfirmationDialog />
+                    <SettingsDialog />
+                    <LanguageSelectorDialog />
+                    <ShareDialog />
+                    <ThreadFormDialog />
+                    <Notifications />
+                  </ThreadFormContextProvider>
                 </OrderingContextProvider>
               </ShareContextProvider>
             </ConfirmContextProvider>

@@ -44,7 +44,6 @@ import {
 } from 'components';
 import {
   useAuthContext,
-  useInviteContext,
   useMediaQueryContext,
   useNotificationsContext,
   useShareContext,
@@ -174,7 +173,6 @@ const useStyles = makeStyles(({ spacing, breakpoints }) => ({
 interface ProfileStrengthStep {
   label: string;
   href?: string;
-  handleClick?: () => void;
   completed: boolean;
 }
 
@@ -184,7 +182,6 @@ const ProfilePage: NextPage = () => {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
   const { toggleUnexpectedErrorNotification } = useNotificationsContext();
-  const { handleOpenGeneralInviteDialog } = useInviteContext();
   const { handleOpenShareDialog } = useShareContext();
 
   const {
@@ -192,7 +189,6 @@ const ProfilePage: NextPage = () => {
     badgeProgresses,
     selectedBadgeProgress: initialSelectedBadgeProgress,
     verified,
-    inviteCodeUsages,
   } = useAuthContext();
 
   const [
@@ -296,8 +292,7 @@ const ProfilePage: NextPage = () => {
     },
     {
       label: t('profile-strength:step3'),
-      completed: inviteCodeUsages === 0,
-      handleClick: handleOpenGeneralInviteDialog,
+      completed: comments.length > 1,
     },
   ].sort((prev) => (prev.completed ? -1 : 1));
 
@@ -650,20 +645,19 @@ const ProfilePage: NextPage = () => {
   const renderProfileStrengthStepLabel = ({
     label,
     href,
-    handleClick,
     completed,
   }: ProfileStrengthStep): JSX.Element =>
     useMemo(
       () =>
         (!completed &&
           ((href && <TextLink href={href}>{label}</TextLink>) || (
-            <MaterialLink onClick={handleClick}>{label}</MaterialLink>
+            <MaterialLink>{label}</MaterialLink>
           ))) || (
           <Typography variant="body2" color="textSecondary">
             {label}
           </Typography>
         ),
-      [completed, href, label, handleClick],
+      [completed, href, label],
     );
 
   // Render uncompleted items as links and completed ones as regular text.

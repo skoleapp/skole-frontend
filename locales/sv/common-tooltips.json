@@ -11,6 +11,5 @@
   "ownRank": "Din rankning är {{ rank }} med {{ score }} poäng.",
   "activity": "Du har {{ unreadActivityCount }} olästa aktiviteter.",
   "exit": "Gå bort.",
-  "toggleDarkMode": "Växla mörkt/ljus läge.",
-  "invite": "Du har {{ inviteCodeUsages }} inbjudningar kvar."
+  "toggleDarkMode": "Växla mörkt/ljus läge."
 }

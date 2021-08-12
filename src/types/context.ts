@@ -111,15 +111,6 @@ export interface OrderingContextType {
   setOrdering: (params: SetOrderingParams) => Promise<boolean>;
 }
 
-export interface InviteContextType {
-  generalInviteDialogOpen: boolean;
-  handleOpenGeneralInviteDialog: () => void;
-  handleCloseGeneralInviteDialog: () => void;
-  customInviteDialogOpen: boolean;
-  handleOpenCustomInviteDialog: () => void;
-  handleCloseCustomInviteDialog: () => void;
-}
-
 export interface VoteContextType {
   votePromptOpen: boolean;
   handleOpenVotePrompt: () => void;

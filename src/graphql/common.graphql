@@ -290,10 +290,6 @@ fragment userFields on UserObjectType {
   selectedBadgeProgress {
     ...badgeProgressFields
   }
-  inviteCode {
-    code
-    usages
-  }
 }
 
 query UserMe {
@@ -372,7 +368,7 @@ query UserComments($slug: String, $page: Int, $pageSize: Int) {
   }
 }
 
-mutation Register($username: String!, $email: String!, $password: String!) {
+mutation RegisterAndLogin($username: String!, $email: String!, $password: String!) {
   register(input: { username: $username, email: $email, password: $password }) {
     invalidEmailDomain
     errors {
@@ -380,12 +376,21 @@ mutation Register($username: String!, $email: String!, $password: String!) {
       messages
     }
   }
+  login(input: { usernameOrEmail: $email, password: $password }) {
+    successMessage
+    errors {
+      field
+      messages
+    }
+    user {
+      ...userFields
+    }
+  }
 }
 
 mutation Login($usernameOrEmail: String!, $password: String!) {
   login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
     successMessage
-    inviteCodeRequired
     errors {
       field
       messages
@@ -596,21 +601,3 @@ mutation RegisterFCMToken($token: String) {
   }
 }
 
-mutation UseInviteCodeAndLogin($code: String!, $usernameOrEmail: String!, $password: String!) {
-  useInviteCode(input: { code: $code, usernameOrEmail: $usernameOrEmail }) {
-    errors {
-      field
-      messages
-    }
-  }
-  login(input: { usernameOrEmail: $usernameOrEmail, password: $password }) {
-    successMessage
-    errors {
-      field
-      messages
-    }
-    user {
-      ...userFields
-    }
-  }
-}
