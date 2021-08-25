@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import Avatar from '@material-ui/core/Avatar';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import Box from '@material-ui/core/Box';
@@ -23,7 +24,6 @@ import {
   CreateCommentForm,
   ErrorTemplate,
   FileDropDialog,
-  LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
   MarkdownContent,
@@ -53,6 +53,7 @@ import {
   StarMutation,
   ThreadCommentsQuery,
   ThreadCommentsQueryResult,
+  ThreadDocument,
   ThreadObjectType,
   ThreadQuery,
   ThreadQueryResult,
@@ -65,15 +66,15 @@ import {
 } from 'generated';
 import { withActions, withThread, withUserMe } from 'hocs';
 import { useDayjs, useLanguageHeaderContext } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { initApolloClient, loadNamespaces, useTranslation } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
 import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { DragEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { withDrag } from 'src/hocs/withDrag';
 import { BORDER_RADIUS, BOTTOM_NAVBAR_HEIGHT } from 'styles';
-import { MAX_REVALIDATION_INTERVAL, mediaLoader, mediaUrl, urls } from 'utils';
+import { mediaLoader, mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   container: {
@@ -187,7 +188,12 @@ const useStyles = makeStyles(({ breakpoints, palette, spacing }) => ({
   },
 }));
 
-const ThreadPage: NextPage = () => {
+interface Props extends Record<string, unknown> {
+  threadData?: ThreadQueryResult['data'];
+  threadError?: ApolloError;
+}
+
+const ThreadPage: NextPage<Props> = ({ threadData: initialThreadData, threadError }) => {
   const classes = useStyles();
   const { t } = useTranslation();
   const { toggleNotification, toggleUnexpectedErrorNotification } = useNotificationsContext();
@@ -198,7 +204,7 @@ const ThreadPage: NextPage = () => {
   const context = useLanguageHeaderContext();
   const { ordering, setOrdering } = useOrderingContext();
   const commentQueryVariables = R.pick(['slug', 'comment', 'page', 'pageSize'], query);
-  const [threadData, setThreadData] = useState<ThreadQueryResult['data'] | null>(null);
+  const [threadData, setThreadData] = useState<ThreadQueryResult['data'] | null>(initialThreadData);
   const [commentsData, setCommentsData] = useState<ThreadCommentsQueryResult['data'] | null>(null);
 
   const threadQueryParams = {
@@ -206,10 +212,6 @@ const ThreadPage: NextPage = () => {
     context,
     onCompleted: (thread: ThreadQuery): void => setThreadData(thread),
   };
-
-  const [threadQuery, { loading: threadLoading, error: threadError }] = useThreadLazyQuery(
-    threadQueryParams,
-  );
 
   const [silentThreadQuery, { error: silentThreadError }] = useThreadLazyQuery(threadQueryParams);
 
@@ -327,12 +329,10 @@ const ThreadPage: NextPage = () => {
 
   // Fetch initial data for thread and comments.
   useEffect(() => {
-    threadQuery();
-
     if (verified) {
       commentsQuery();
     }
-  }, [threadQuery, commentsQuery, verified]);
+  }, [commentsQuery, verified]);
 
   // Re-fetch comments when the ordering is changed.
   useEffect(() => {
@@ -956,10 +956,6 @@ const ThreadPage: NextPage = () => {
     hideBottomNavbar: !userMe,
   };
 
-  if (threadLoading) {
-    return <LoadingTemplate />;
-  }
-
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" />;
   }
@@ -983,10 +979,6 @@ const ThreadPage: NextPage = () => {
     return <ActionRequiredTemplate variant="verify-account" {...layoutProps} />;
   }
 
-  if (!thread && !threadLoading && !commentsLoading) {
-    return <ErrorTemplate variant="not-found" />;
-  }
-
   return (
     <MainTemplate {...layoutProps}>
       <Paper className={clsx(classes.container, classes.containerPadding)}>
@@ -1002,19 +994,26 @@ const ThreadPage: NextPage = () => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: [],
-  fallback: 'blocking',
-});
+export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
+  const { slug } = query;
+  const apolloClient = initApolloClient();
 
-const namespaces = ['thread', 'thread-tooltips'];
+  const { data, error } = await apolloClient.query({
+    query: ThreadDocument,
+    variables: { slug },
+  });
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(namespaces, locale),
-  },
-  revalidate: MAX_REVALIDATION_INTERVAL,
-});
+  const notFound = !data?.thread && !error;
+
+  return {
+    props: {
+      _ns: await loadNamespaces(['thread', 'thread-tooltips'], locale),
+      threadData: data || null,
+      threadError: error || null,
+    },
+    notFound,
+  };
+};
 
 const withWrappers = R.compose(withUserMe, withActions, withThread, withDrag);
 

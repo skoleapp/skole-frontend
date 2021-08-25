@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -29,7 +30,6 @@ import {
   Emoji,
   ErrorTemplate,
   Link,
-  LoadingTemplate,
   LoginRequiredTemplate,
   MainTemplate,
   NotFoundBox,
@@ -53,21 +53,22 @@ import {
   BadgeProgressFieldsFragment,
   CommentObjectType,
   UpdateSelectedBadgeMutation,
+  UserDocument,
   UserObjectType,
+  UserQueryResult,
   useUpdateSelectedBadgeMutation,
   useUserCommentsQuery,
-  useUserQuery,
   useUserThreadsQuery,
 } from 'generated';
 import { withUserMe } from 'hocs';
 import { useDayjs, useLanguageHeaderContext, useOpen } from 'hooks';
-import { loadNamespaces, useTranslation } from 'lib';
-import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import { initApolloClient, loadNamespaces, useTranslation } from 'lib';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as R from 'ramda';
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { BORDER_RADIUS } from 'styles';
-import { MAX_REVALIDATION_INTERVAL, mediaUrl, urls } from 'utils';
+import { mediaUrl, urls } from 'utils';
 
 const useStyles = makeStyles(({ spacing, breakpoints }) => ({
   paper: {
@@ -176,7 +177,12 @@ interface ProfileStrengthStep {
   completed: boolean;
 }
 
-const ProfilePage: NextPage = () => {
+interface Props extends Record<string, unknown> {
+  userData?: UserQueryResult['data'];
+  userError?: ApolloError;
+}
+
+const ProfilePage: NextPage<Props> = ({ userData, userError }) => {
   const classes = useStyles();
   const { smDown, mdUp } = useMediaQueryContext();
   const { t } = useTranslation();
@@ -199,11 +205,6 @@ const ProfilePage: NextPage = () => {
   const { query } = useRouter();
   const context = useLanguageHeaderContext();
   const variables = R.pick(['slug', 'page', 'pageSize'], query);
-
-  const { data: userData, loading: userLoading, error: userError } = useUserQuery({
-    variables,
-    context,
-  });
 
   const { data: threadsData, loading: threadsLoading, error: threadsError } = useUserThreadsQuery({
     variables,
@@ -990,10 +991,6 @@ const ProfilePage: NextPage = () => {
     hideBottomNavbar: !userMe,
   };
 
-  if (userLoading) {
-    return <LoadingTemplate />;
-  }
-
   if (!!error && !!error.networkError) {
     return <ErrorTemplate variant="offline" />;
   }
@@ -1024,18 +1021,25 @@ const ProfilePage: NextPage = () => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
+  const { slug } = query;
+  const apolloClient = initApolloClient();
+
+  const { data, error } = await apolloClient.query({
+    query: UserDocument,
+    variables: { slug },
+  });
+
+  const notFound = !data?.user && !error;
+
   return {
-    paths: [],
-    fallback: 'blocking',
+    props: {
+      _ns: await loadNamespaces(['profile', 'profile-strength', 'profile-tooltips'], locale),
+      userData: data || null,
+      userError: error || null,
+    },
+    notFound,
   };
 };
-
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    _ns: await loadNamespaces(['profile', 'profile-strength', 'profile-tooltips'], locale),
-  },
-  revalidate: MAX_REVALIDATION_INTERVAL,
-});
 
 export default withUserMe(ProfilePage);
