@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL, EMAIL_ADDRESS } = process.env;
+const { API_URL, BACKEND_URL, FRONTEND_URL, SA_URL, EMAIL_ADDRESS, BUILD_DATE } = process.env;
 
 const config = {
   target: 'server',
@@ -15,6 +15,7 @@ const config = {
     FRONTEND_URL,
     SA_URL,
     EMAIL_ADDRESS,
+    BUILD_DATE,
   },
   typescript: {
     ignoreDevErrors: true,
