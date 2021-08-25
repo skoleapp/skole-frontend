@@ -107,7 +107,7 @@ export const withUserMe = <T extends Record<string, unknown>>(
       return <ErrorTemplate variant="offline" />;
     }
 
-    if (authLoading) {
+    if (authLoading && typeof window !== 'undefined') {
       return <LoadingTemplate />;
     }
 
