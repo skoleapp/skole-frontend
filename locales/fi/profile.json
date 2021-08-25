@@ -15,5 +15,5 @@
   "shareHeader": "Jaa profiili",
   "shareText": "Katso käyttäjän {{ username }} profiili - {{ threadCount }} lankaa - {{ commentCount }} kommenttia.",
   "share": "Jaa profiili",
-  "description": "{{ username }} käyttäjän profiili. {{ descriptionContent }}"
+  "description": "{{ username }} käyttäjän profiili.{{ descriptionContent }}"
 }

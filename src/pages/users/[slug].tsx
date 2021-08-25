@@ -977,7 +977,8 @@ const ProfilePage: NextPage<Props> = ({ userData, userError }) => {
     ],
   );
 
-  const descriptionContent = [title, bio].filter(Boolean).join(' - ');
+  const _descriptionContent = [title, bio].filter(Boolean).join(' - ');
+  const descriptionContent = _descriptionContent ? ` ${_descriptionContent}` : '';
   const layoutProps = {
     seoProps: {
       title: username,

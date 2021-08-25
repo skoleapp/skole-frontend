@@ -15,5 +15,5 @@
   "shareHeader": "Dela profil",
   "shareText": "Kolla in profilen för {{ username }} - {{ threadCount }} trådar - {{ commentCount }} kommentarer.",
   "share": "Dela profil",
-  "description": "Profilen av {{ username }}. {{ descriptionContent }}"
+  "description": "Profilen av {{ username }}.{{ descriptionContent }}"
 }
