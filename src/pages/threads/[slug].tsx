@@ -509,7 +509,7 @@ const ThreadPage: NextPage<Props> = ({ threadData: initialThreadData, threadErro
 
   const renderActionsButton = useMemo(
     () =>
-      !!isOwn && (
+      isOwn && (
         <ActionsButton
           tooltip={t('thread-tooltips:threadActions')}
           actionsDialogParams={actionsDialogParams}
