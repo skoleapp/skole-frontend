@@ -22,7 +22,6 @@ export const MAX_IMAGE_WIDTH_HEIGHT = 1200; // Pixels.
 export const MAX_COMMENT_FILE_SIZE = 10000000; // 10 MB.
 export const RESULTS_PER_PAGE_OPTIONS = [25, 50, 75, 100];
 export const PASSWORD_MIN_LENGTH = 10; // Should match with whatever backend is using.
-export const DATE_PICKER_FORMAT = 'DD-MM-YYYY';
 export const LS_LOGOUT_KEY = 'SKOLE_LOGOUT';
 export const SLOGAN = 'Next-gen study forum. 🎓';
 
