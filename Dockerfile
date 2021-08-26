@@ -68,6 +68,11 @@ ARG FRONTEND_URL
 ARG SA_URL
 ARG EMAIL_ADDRESS
 
+# This is only passed in when running the "prodlike" compose file locally.
+# In prod, there is no way for the frontend container to communicate directly with
+# the backend container, and instead even SSR requests are made through the public URL.
+ARG BACKEND_URL
+
 COPY --chown=user:user . .
 RUN yarn build
 

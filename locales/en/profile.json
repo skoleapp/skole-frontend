@@ -15,5 +15,5 @@
   "shareHeader": "Share Profile",
   "shareText": "Check profile for {{ username }} - {{ threadCount }} threads - {{ commentCount }} comments.",
   "share": "Share Profile",
-  "description": "Profile of {{ username }}. {{ descriptionContent }}"
+  "description": "Profile of {{ username }}.{{ descriptionContent }}"
 }
