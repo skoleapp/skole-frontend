@@ -67,7 +67,7 @@ jobs:
       if: ${{ github.event_name == 'pull_request' }}
       run: >
         docker run --name frontend-ci frontend-ci
-        && docker cp frontend-ci:/home/user/app/coverage/clover.xml .
+        && docker cp frontend-ci:/app/coverage/clover.xml .
 
     - name: "Upload coverage to Codecov"
       if: ${{ github.event_name == 'pull_request' }}

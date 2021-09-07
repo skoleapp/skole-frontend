@@ -10,6 +10,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 FROM base as dev
 
+WORKDIR /app
+
 RUN apt-get update \
     && apt-get install --no-install-recommends --assume-yes \
         libgtk2.0-0 \
@@ -25,12 +27,10 @@ RUN apt-get update \
         xvfb \
     && rm -rf /var/lib/apt/lists/ /var/cache/apt/
 
-USER user
-
 RUN mkdir .next
 
-COPY --chown=user:user package.json .
-COPY --chown=user:user yarn.lock .
+COPY package.json .
+COPY yarn.lock .
 
 ENV NODE_ENV=development
 
@@ -47,7 +47,7 @@ ARG CYPRESS_RECORD_KEY
 ENV GITHUB_RUN_NUMBER ${GITHUB_RUN_NUMBER}
 ENV CYPRESS_RECORD_KEY ${CYPRESS_RECORD_KEY}
 
-COPY --chown=user:user . .
+COPY . .
 
 CMD yarn lint \
     && yarn type-check \
@@ -57,6 +57,8 @@ CMD yarn lint \
 
 
 FROM base as build
+
+USER user
 
 # Build with dev dependencies installed so e.g. typescript transpiling works.
 COPY --chown=user:user package.json .
@@ -81,6 +83,8 @@ RUN yarn install --frozen-lockfile --production --ignore-scripts --prefer-offlin
 
 
 FROM base as prod
+
+USER user
 
 ENV NODE_ENV=production
 ENV PATH="/home/user/app/node_modules/.bin:${PATH}"
